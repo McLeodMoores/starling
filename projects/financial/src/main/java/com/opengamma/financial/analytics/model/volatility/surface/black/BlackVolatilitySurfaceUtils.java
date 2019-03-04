@@ -5,10 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.volatility.surface.black;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import it.unimi.dsi.fastutil.doubles.DoubleLinkedOpenHashSet;
-import it.unimi.dsi.fastutil.doubles.DoubleList;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +28,10 @@ import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 import com.opengamma.util.tuple.Triple;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
 
 /**
  *
@@ -207,16 +207,16 @@ public class BlackVolatilitySurfaceUtils {
       return period.getYears();
     }
     if (period.getMonths() != 0) {
-      return ((double) period.getMonths()) / 12;
+      return (double) period.getMonths() / 12;
     }
     if (period.getDays() != 0) {
-      return ((double) period.getDays()) / 365;
+      return (double) period.getDays() / 365;
     }
     throw new OpenGammaRuntimeException("Should never happen");
   }
 
   private static Number[] getDeltaValues(final Object[] quotes) {
-    final TreeSet<Object> values = new TreeSet<Object>();
+    final TreeSet<Object> values = new TreeSet<>();
     for (final Object pair : quotes) {
       values.add(((Pair<?, ?>) pair).getFirst());
     }

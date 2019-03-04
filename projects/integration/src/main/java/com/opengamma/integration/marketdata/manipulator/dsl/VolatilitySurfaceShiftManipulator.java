@@ -53,24 +53,21 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface surface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
     final double[] xValues = getXValues(valuationTime);
     final double[] yValues = getYValues(valuationTime);
     if (_shiftValues.length > 1) {
       if (_shiftType == ScenarioShiftType.ABSOLUTE) {
         return surface.withMultipleAdditiveShifts(xValues, yValues, _shiftValues);
-      } else {
-        return surface.withMultipleMultiplicativeShifts(xValues, yValues, _shiftValues);
       }
-    } else {
-      if (_shiftType == ScenarioShiftType.ABSOLUTE) {
-        return surface.withSingleAdditiveShift(xValues[0], yValues[0], _shiftValues[0]);
-      } else {
-        return surface.withSingleMultiplicativeShift(xValues[0], yValues[0], _shiftValues[0]);
-      }
+      return surface.withMultipleMultiplicativeShifts(xValues, yValues, _shiftValues);
     }
+    if (_shiftType == ScenarioShiftType.ABSOLUTE) {
+      return surface.withSingleAdditiveShift(xValues[0], yValues[0], _shiftValues[0]);
+    }
+    return surface.withSingleMultiplicativeShift(xValues[0], yValues[0], _shiftValues[0]);
   }
 
   @Override
@@ -88,7 +85,7 @@ public class VolatilitySurfaceShiftManipulator implements StructureManipulator<V
 
   @SuppressWarnings("unchecked")
   public static VolatilitySurfaceShiftManipulator create(final ScenarioShiftType shiftType,
-                                                         final List<VolatilitySurfaceShift> shifts) {
+      final List<VolatilitySurfaceShift> shifts) {
     final Object xValues = xValues(shifts);
     final Object yValues = yValues(shifts);
     final double[] shiftValues = shiftValues(shifts, shiftType);

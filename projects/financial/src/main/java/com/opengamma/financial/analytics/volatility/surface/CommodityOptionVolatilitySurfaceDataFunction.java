@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +41,8 @@ import com.opengamma.financial.convention.expirycalc.ExchangeTradedInstrumentExp
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  *
@@ -91,7 +91,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
 
     // 3. Remove empties, convert expiries from number to years, and scale vols
-    final Map<Pair<Double, Double>, Double> volValues = new HashMap<Pair<Double, Double>, Double>();
+    final Map<Pair<Double, Double>, Double> volValues = new HashMap<>();
     final DoubleArrayList tList = new DoubleArrayList();
     final DoubleArrayList kList = new DoubleArrayList();
     // SurfaceInstrumentProvider just used to get expiry calculator - find a better way as this is quite ugly.
@@ -116,7 +116,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
         }
       }
     }
-    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<Double, Double>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(),
+    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(),
         rawSurface.getTarget(), tList.toArray(new Double[0]), kList.toArray(new Double[0]), volValues);
 
     // 4. Return
@@ -128,7 +128,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
 
   /**
    * Some strikes blow up the black function - strip them out
-   * 
+   *
    * @return true if strike works with black function
    */
   private boolean isValidStrike(final ForwardCurve forwardCurve, final VolatilitySurfaceData<Number, Double> rawSurface, final double t, final Number nExpiry) {
@@ -151,7 +151,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
         break;
       }
     }
-    if ((low == null) || (high == null) || (low > forward) || (high < forward)) {
+    if (low == null || high == null || low > forward || high < forward) {
       return false;
     }
     return true;

@@ -94,10 +94,9 @@ public class MarketDataELCompiler implements OverrideOperationCompiler {
       if (result == UserExpression.NA) {
         LOGGER.debug("Evaluation failed - using original {}", original);
         return original;
-      } else {
-        LOGGER.debug("Evaluation of {} to {}", original, result);
-        return result;
       }
+      LOGGER.debug("Evaluation of {} to {}", original, result);
+      return result;
     }
 
   }

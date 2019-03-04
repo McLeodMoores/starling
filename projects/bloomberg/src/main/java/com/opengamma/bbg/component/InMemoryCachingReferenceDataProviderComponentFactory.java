@@ -50,9 +50,8 @@ public class InMemoryCachingReferenceDataProviderComponentFactory extends Abstra
   public ReferenceDataProvider getUnderlying() {
     if (_underlying == null) {
       return new NoneFoundReferenceDataProvider();
-    } else {
-      return _underlying;
     }
+    return _underlying;
   }
 
 

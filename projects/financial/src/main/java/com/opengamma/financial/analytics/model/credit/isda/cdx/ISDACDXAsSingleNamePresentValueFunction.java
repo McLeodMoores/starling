@@ -55,7 +55,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDACDXAsSingleNamePresentValueFunction extends ISDACDXAsSingleNameFunction {
   private static final AnalyticCDSPricer PRICER = new AnalyticCDSPricer();
   private static final MarketQuoteConverter POINTS_UP_FRONT_CONVERTER = new MarketQuoteConverter();
@@ -89,7 +91,7 @@ public class ISDACDXAsSingleNamePresentValueFunction extends ISDACDXAsSingleName
     }
 
     // SELL protection reverses directions of legs
-    pv = (definition.getBuySellProtection() == BuySellProtection.SELL) ? -pv : pv;
+    pv = definition.getBuySellProtection() == BuySellProtection.SELL ? -pv : pv;
 
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, pv));

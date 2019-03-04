@@ -120,9 +120,8 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
       public Collection<com.opengamma.engine.ComputationTargetSpecification> getComputationTargets(final String calcConfName) {
         if (calcConfName.equals(calculationConfigName)) {
           return Arrays.asList(ComputationTargetSpecification.of(UniqueId.of("Primitive", "Value")), _compTargetSpec);
-        } else {
-          return emptyList();
         }
+        return emptyList();
       }
 
       @Override

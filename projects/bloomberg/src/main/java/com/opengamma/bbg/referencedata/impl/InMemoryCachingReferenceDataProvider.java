@@ -19,7 +19,7 @@ import com.opengamma.bbg.referencedata.cache.AbstractValueCachingReferenceDataPr
 /**
  * In memory caching reference data provider
  */
-public class InMemoryCachingReferenceDataProvider extends AbstractValueCachingReferenceDataProvider implements ReferenceDataProvider {
+public class InMemoryCachingReferenceDataProvider extends AbstractValueCachingReferenceDataProvider {
 
   private final Map<String, ReferenceData> _refDataMap = Maps.newHashMap();
 

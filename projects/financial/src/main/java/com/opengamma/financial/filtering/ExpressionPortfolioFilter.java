@@ -165,20 +165,18 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
           } else {
             return new AnyTradeAttribute(trades);
           }
-        } else {
-          Object value = position.getAttributes().get(name);
+        }
+        Object value = position.getAttributes().get(name);
+        if (value != null) {
+          return value;
+        }
+        for (final Trade trade : position.getTrades()) {
+          value = trade.getAttributes().get(name);
           if (value != null) {
             return value;
-          } else {
-            for (final Trade trade : position.getTrades()) {
-              value = trade.getAttributes().get(name);
-              if (value != null) {
-                return value;
-              }
-            }
-            return UserExpression.NA;
           }
         }
+        return UserExpression.NA;
       } else if (object instanceof AnyTradeAttribute) {
         final AnyTradeAttribute trades = (AnyTradeAttribute) object;
         for (final Trade trade : trades.getTrades()) {
@@ -193,9 +191,8 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
         final Object value = trade.getAttributes().get(name);
         if (value != null) {
           return value;
-        } else {
-          return UserExpression.NA;
         }
+        return UserExpression.NA;
       } else {
         return UserExpression.NA;
       }

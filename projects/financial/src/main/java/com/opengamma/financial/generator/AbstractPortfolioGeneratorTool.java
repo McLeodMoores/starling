@@ -385,9 +385,8 @@ public abstract class AbstractPortfolioGeneratorTool {
         ccys[i++] = Currency.of(ccyStr.trim());
       }
       return ccys;
-    } else {
-      return null;
     }
+    return null;
   }
 
   public void run(final ToolContext context, final CommandLine commandLine) {

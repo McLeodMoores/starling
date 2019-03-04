@@ -40,7 +40,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaParallelGammaCS01CDSFunction extends StandardVanillaCS01CDSFunction {
   private static final CreditSpreadBumpersNew SPREAD_BUMPER = new CreditSpreadBumpersNew();
 

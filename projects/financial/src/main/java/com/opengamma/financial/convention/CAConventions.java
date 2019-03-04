@@ -25,7 +25,11 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Contains information used to construct standard versions of CAD instruments.
+ * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class CAConventions {
 
   /**
@@ -149,20 +153,20 @@ public class CAConventions {
         "CAD DEPOSIT 5y", act365, following, Period.ofYears(5), 2, false, ca);
 
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CDOR01 Index"), bloombergTickerSecurityId("CDOR01 RBC Index"),
-            simpleNameSecurityId("CDOR 1m"), tullettPrebonSecurityId("ASLIBCDF01L")),
-            "CDOR 1m", act365, following, Period.ofMonths(1), 2, false, ca);
+        simpleNameSecurityId("CDOR 1m"), tullettPrebonSecurityId("ASLIBCDF01L")),
+        "CDOR 1m", act365, following, Period.ofMonths(1), 2, false, ca);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CDOR02 Index"), bloombergTickerSecurityId("CDOR02 RBC Index"),
-            simpleNameSecurityId("CDOR 2m"), tullettPrebonSecurityId("ASLIBCDF02L")),
-            "CDOR 2m", act365, following, Period.ofMonths(2), 2, false, ca);
+        simpleNameSecurityId("CDOR 2m"), tullettPrebonSecurityId("ASLIBCDF02L")),
+        "CDOR 2m", act365, following, Period.ofMonths(2), 2, false, ca);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CDOR03 Index"), bloombergTickerSecurityId("CDOR03 RBC Index"),
-            simpleNameSecurityId("CDOR 3m"), tullettPrebonSecurityId("ASLIBCDF03L")),
-            "CDOR 3m", act365, following, Period.ofMonths(3), 2, false, ca);
+        simpleNameSecurityId("CDOR 3m"), tullettPrebonSecurityId("ASLIBCDF03L")),
+        "CDOR 3m", act365, following, Period.ofMonths(3), 2, false, ca);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CDOR06 Index"), bloombergTickerSecurityId("CDOR06 RBC Index"),
-            simpleNameSecurityId("CDOR 6m"), tullettPrebonSecurityId("ASLIBCDF06L")),
-            "CDOR 6m", act365, following, Period.ofMonths(6), 2, false, ca);
+        simpleNameSecurityId("CDOR 6m"), tullettPrebonSecurityId("ASLIBCDF06L")),
+        "CDOR 6m", act365, following, Period.ofMonths(6), 2, false, ca);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CDOR12 Index"), bloombergTickerSecurityId("CDOR12 RBC Index"),
-            simpleNameSecurityId("CDOR 12m"), tullettPrebonSecurityId("ASLIBCDF12L")),
-            "CDOR 12m", act365, following, Period.ofMonths(12), 2, false, ca);
+        simpleNameSecurityId("CDOR 12m"), tullettPrebonSecurityId("ASLIBCDF12L")),
+        "CDOR 12m", act365, following, Period.ofMonths(12), 2, false, ca);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CAONREPO Index"), simpleNameSecurityId("RBC OVERNIGHT REPO")),
         "RBC OVERNIGHT REPO", act365, following, Period.ofDays(1), 0, false, ca, 0);
 
@@ -211,5 +215,5 @@ public class CAConventions {
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("CA_CORPORATE_BOND_CONVENTION")), "CA_CORPORATE_BOND_CONVENTION", true, true, 0, 3,
         true);
   }
-  
+
 }

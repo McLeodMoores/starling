@@ -43,7 +43,7 @@ import com.opengamma.timeseries.TimeSeriesIntersector;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledInvoker {
   private static final double WORKING_DAYS_PER_YEAR = 252; //TODO this should not be hard-coded
@@ -78,7 +78,7 @@ public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledIn
     DoubleTimeSeries<?> assetReturnTS = ((DoubleTimeSeries<?>) assetPnLObject).divide(fairValue);
     final TimeSeriesReturnCalculator returnCalculator = getReturnCalculator(constraints.getValues(ValuePropertyNames.RETURN_CALCULATOR));
     DoubleTimeSeries<?> benchmarkReturnTS = returnCalculator.evaluate(benchmarkTSObject.getTimeSeries());
-    DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(assetReturnTS, benchmarkReturnTS);
+    final DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(assetReturnTS, benchmarkReturnTS);
     assetReturnTS = series[0];
     benchmarkReturnTS = series[1];
     final SharpeRatioCalculator calculator = getCalculator(constraints.getValues(ValuePropertyNames.EXCESS_RETURN_CALCULATOR),
@@ -109,7 +109,7 @@ public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledIn
       return null;
     }
     final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec, ValueProperties.builder()
         .withAny(ValuePropertyNames.CURRENCY)
         .with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriodName)

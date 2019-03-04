@@ -15,13 +15,12 @@ import com.opengamma.analytics.financial.forex.method.ForexOptionSingleBarrierBl
 import com.opengamma.analytics.financial.forex.method.ForexOptionVanillaBlackSmileMethod;
 import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVolatilityNodeSensitivityDataBundle;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaTermStructureDataBundle;
 
 // CSOFF
 /**
  * Calculator of the present value volatility sensitivity for Forex derivatives in the Black (Garman-Kohlhagen) world. The volatilities are given by delta-smile descriptions.
- * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
+ * @deprecated Curve builders that use and populate {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle}s are deprecated.
  */
 @Deprecated
 public final class PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator extends

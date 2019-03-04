@@ -166,9 +166,8 @@ public class MarketDataDialog extends JDialog {
         specs.add(component.getCurrentState());
       }
       return specs;
-    } else {
-      return null;
     }
+    return null;
   }
 
 

@@ -63,8 +63,9 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionConstantSpreadThetaFunction.class);
   private FinancialSecurityVisitor<InstrumentDefinition<?>> _visitor;

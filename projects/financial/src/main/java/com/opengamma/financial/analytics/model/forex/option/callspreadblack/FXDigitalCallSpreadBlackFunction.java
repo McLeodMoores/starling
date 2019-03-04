@@ -52,7 +52,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FXDigitalCallSpreadBlackFunction extends AbstractFunction.NonCompiledInvoker {
   /** The name of the calculation method */
   public static final String CALL_SPREAD_BLACK_METHOD = "CallSpreadBlackMethod";
@@ -65,6 +67,7 @@ public abstract class FXDigitalCallSpreadBlackFunction extends AbstractFunction.
     _valueRequirementName = valueRequirementName;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();

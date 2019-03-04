@@ -221,9 +221,8 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     }
     if (swapSecurity.isExchangeInitialNotional() || swapSecurity.isExchangeFinalNotional() || hasSpread) {
       return new SwapCouponFixedCouponDefinition(fixedLegDefinition, iborLegDefinition);
-    } else {
-      return new SwapFixedIborDefinition(fixedLegDefinition, iborLegDefinition);
     }
+    return new SwapFixedIborDefinition(fixedLegDefinition, iborLegDefinition);
   }
 
   private SwapDefinition getFixedOISSwapDefinition(final SwapSecurity swapSecurity, final boolean payFixed) {

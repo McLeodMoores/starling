@@ -17,7 +17,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SwapThetaDefaults extends InterestRateInstrumentDefaultPropertiesFunction {
   private final String _defaultNumberOfDays;
 

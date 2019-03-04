@@ -52,7 +52,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FixedCashFlowFunction extends AbstractFunction {
   private final String _valueRequirementName;
   private final InstrumentDefinitionVisitor<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> _cashFlowVisitor;

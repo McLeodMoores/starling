@@ -5,8 +5,6 @@
  */
 package com.opengamma.web.analytics.push;
 
-import com.opengamma.DataNotFoundException;
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.id.UniqueId;
 import com.opengamma.web.analytics.rest.MasterType;
 

@@ -45,16 +45,16 @@ public class FutureOptionMarginResolver {
    * as margined or not. If the exchange code is not one of the recognised codes
    * then an OpenGammaRuntimeException will be thrown.
    *
-   * @param exchangeCode the exchange code to derive the margin flag for
-   * @return true if the security should be margined, false if not, and an exception
-   * if the code is not recognied.
+   * @param exchangeCode
+   *          the exchange code to derive the margin flag for
+   * @return true if the security should be margined, false if not, and an
+   *         exception if the code is not recognised.
    */
   public boolean isMargined(final String exchangeCode) {
     if (EXCHANGE_CODE_MARGIN_MAPPING.containsKey(exchangeCode)) {
       return EXCHANGE_CODE_MARGIN_MAPPING.get(exchangeCode);
-    } else {
-      throw new OpenGammaRuntimeException("Cannot calculate margined flag from exchangeCode: " + exchangeCode);
     }
+    throw new OpenGammaRuntimeException("Cannot calculate margined flag from exchangeCode: " + exchangeCode);
   }
 
 }

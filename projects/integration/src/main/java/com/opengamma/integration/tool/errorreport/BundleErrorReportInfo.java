@@ -251,10 +251,9 @@ public class BundleErrorReportInfo implements Runnable {
     LOGGER.trace("Key = \"{}\", Value = \"{}\"", key, value);
     if ("AttachFiles".equalsIgnoreCase(key)) {
       return attachFiles(value);
-    } else {
-      LOGGER.warn("Unrecognised option - {}", key);
-      return 0;
     }
+    LOGGER.warn("Unrecognised option - {}", key);
+    return 0;
   }
 
   /**

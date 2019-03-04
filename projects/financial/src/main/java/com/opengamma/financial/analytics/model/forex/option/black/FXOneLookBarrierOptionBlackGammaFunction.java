@@ -18,7 +18,9 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOneLookBarrierOptionBlackGammaFunction extends FXOneLookBarrierOptionBlackFunction {
 
   public FXOneLookBarrierOptionBlackGammaFunction() {

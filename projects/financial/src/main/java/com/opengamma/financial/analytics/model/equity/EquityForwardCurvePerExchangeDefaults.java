@@ -35,8 +35,8 @@ public class EquityForwardCurvePerExchangeDefaults extends DefaultPropertyFuncti
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurvePerExchangeDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD_CURVE,
-    ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
+      ValueRequirementNames.FORWARD_CURVE,
+      ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
   };
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
@@ -56,7 +56,7 @@ public class EquityForwardCurvePerExchangeDefaults extends DefaultPropertyFuncti
     _priority = PriorityClass.valueOf(priority);
     _perExchangeConfig = new HashMap<>();
     for (int i = 0; i < perExchangeConfig.length; i += 4) {
-      final Triple<String, String, String> config = new Triple<>(perExchangeConfig[i + 1], perExchangeConfig[i + 2], perExchangeConfig[i + 3]);
+      final Triple<String, String, String> config = Triple.of(perExchangeConfig[i + 1], perExchangeConfig[i + 2], perExchangeConfig[i + 3]);
       _perExchangeConfig.put(perExchangeConfig[i].toUpperCase(), config);
     }
   }

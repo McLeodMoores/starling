@@ -12,8 +12,10 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class to generate a set of simulated default/recovery rate scenarios for a specified universe of obligors
+ * Class to generate a set of simulated default/recovery rate scenarios for a specified universe of obligors.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ScenarioGenerator {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

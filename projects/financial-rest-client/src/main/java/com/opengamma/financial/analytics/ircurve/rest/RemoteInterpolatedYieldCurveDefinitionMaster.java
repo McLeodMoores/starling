@@ -50,9 +50,8 @@ public class RemoteInterpolatedYieldCurveDefinitionMaster extends AbstractRemote
     if (uniqueId.isVersioned()) {
       final URI uri = new DataInterpolatedYieldCurveDefinitionUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(YieldCurveDefinitionDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------

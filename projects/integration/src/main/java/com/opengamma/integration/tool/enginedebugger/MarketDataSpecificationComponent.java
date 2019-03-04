@@ -285,14 +285,13 @@ public class MarketDataSpecificationComponent extends JPanel {
         marketDataSpec = new LatestHistoricalMarketDataSpecification(item);
         validSpecification(marketDataSpec);
         return;
-      } else {
-        final Date datePickerDate = outer._datePicker.getDate();
-        if (item != null && item.length() > 0 && datePickerDate != null) {
-          final LocalDate localDate = Instant.ofEpochMilli(datePickerDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-          marketDataSpec = new FixedHistoricalMarketDataSpecification(item, localDate);
-          validSpecification(marketDataSpec);
-          return;
-        }
+      }
+      final Date datePickerDate = outer._datePicker.getDate();
+      if (item.length() > 0 && datePickerDate != null) {
+        final LocalDate localDate = Instant.ofEpochMilli(datePickerDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        marketDataSpec = new FixedHistoricalMarketDataSpecification(item, localDate);
+        validSpecification(marketDataSpec);
+        return;
       }
     }
     invalidSpecification();
@@ -341,15 +340,14 @@ public class MarketDataSpecificationComponent extends JPanel {
         MarketDataSpecificationComponent.this._currentState = marketDataSpec;
         validSpecification(marketDataSpec);
         return;
-      } else {
-        final int selectedIndex = _snapshotVersionCombo.getSelectedIndex();
-        if (selectedIndex >= 0 && _snapshotVersionCombo.getModel() instanceof SnapshotMarketDataSpecificationVersionListModel) {
-          final SnapshotMarketDataSpecificationVersionListModel model = (SnapshotMarketDataSpecificationVersionListModel) _snapshotVersionCombo.getModel();
-          final UniqueId uid = model.getUniqueIdAt(selectedIndex);
-          final MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(uid);
-          validSpecification(marketDataSpec);
-          return;
-        }
+      }
+      final int selectedIndex = _snapshotVersionCombo.getSelectedIndex();
+      if (selectedIndex >= 0 && _snapshotVersionCombo.getModel() instanceof SnapshotMarketDataSpecificationVersionListModel) {
+        final SnapshotMarketDataSpecificationVersionListModel model = (SnapshotMarketDataSpecificationVersionListModel) _snapshotVersionCombo.getModel();
+        final UniqueId uid = model.getUniqueIdAt(selectedIndex);
+        final MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(uid);
+        validSpecification(marketDataSpec);
+        return;
       }
     }
     invalidSpecification();

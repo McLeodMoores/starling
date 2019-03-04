@@ -12,7 +12,9 @@ import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondCleanPriceFromCurvesFunction extends BondFromCurvesFunction {
 
   @Override

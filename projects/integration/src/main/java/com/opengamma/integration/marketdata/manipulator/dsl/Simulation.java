@@ -111,7 +111,7 @@ public class Simulation {
    * @return Execution options for each scenario in this simulation
    */
   /* package */ List<ViewCycleExecutionOptions> cycleExecutionOptions(final ViewCycleExecutionOptions baseOptions,
-                                                                      final Set<DistinctMarketDataSelector> allSelectors) {
+      final Set<DistinctMarketDataSelector> allSelectors) {
     final List<ViewCycleExecutionOptions> options = Lists.newArrayListWithCapacity(_scenarios.size());
     for (final Scenario scenario : _scenarios.values()) {
       final ScenarioDefinition definition = scenario.createDefinition();
@@ -147,15 +147,14 @@ public class Simulation {
     ArgumentChecker.notEmpty(name, "name");
     if (name.equals(_baseScenarioName)) {
       throw new IllegalArgumentException("Can't add scenario named " + name + ", a base scenario exists with " +
-                                             "that name");
+          "that name");
     }
     if (_scenarios.containsKey(name)) {
       return _scenarios.get(name);
-    } else {
-      final Scenario scenario = new Scenario(this, name);
-      _scenarios.put(name, scenario);
-      return scenario;
     }
+    final Scenario scenario = new Scenario(this, name);
+    _scenarios.put(name, scenario);
+    return scenario;
   }
 
   /**
@@ -172,7 +171,7 @@ public class Simulation {
     }
     if (_scenarios.containsKey(name)) {
       throw new IllegalArgumentException("Cannot add a base scenario named " + name + ", a scenario already exists " +
-                                             "with that name");
+          "with that name");
     }
     final Scenario base = new Scenario(this, name);
     _scenarios.put(name, base);
@@ -244,19 +243,19 @@ public class Simulation {
    * @param viewProcessor View process that will be used to execute the simulation
    */
   public void run(final UniqueId viewDefId,
-                  final List<MarketDataSpecification> marketDataSpecs,
-                  final boolean batchMode,
-                  final ViewResultListener listener,
-                  final ViewProcessor viewProcessor) {
+      final List<MarketDataSpecification> marketDataSpecs,
+      final boolean batchMode,
+      final ViewResultListener listener,
+      final ViewProcessor viewProcessor) {
     final ViewClient viewClient = viewProcessor.createViewClient(UserPrincipal.getTestUser());
     try {
       final Set<DistinctMarketDataSelector> allSelectors = allSelectors();
       final ViewCycleExecutionOptions baseOptions =
           ViewCycleExecutionOptions
-              .builder()
-              .setMarketDataSpecifications(marketDataSpecs)
-              .setMarketDataSelector(CompositeMarketDataSelector.of(allSelectors))
-              .create();
+          .builder()
+          .setMarketDataSpecifications(marketDataSpecs)
+          .setMarketDataSelector(CompositeMarketDataSelector.of(allSelectors))
+          .create();
       final List<ViewCycleExecutionOptions> cycleOptions = cycleExecutionOptions(baseOptions, allSelectors);
       final ViewCycleExecutionSequence sequence = new ArbitraryViewCycleExecutionSequence(cycleOptions);
       final EnumSet<ViewExecutionFlags> executionFlags = ExecutionFlags.none().awaitMarketData().runAsFastAsPossible().get();

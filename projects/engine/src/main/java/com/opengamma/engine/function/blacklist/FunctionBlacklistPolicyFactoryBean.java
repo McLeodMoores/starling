@@ -67,12 +67,10 @@ public class FunctionBlacklistPolicyFactoryBean extends SingletonFactoryBean<Fun
     if (flag) {
       if (entry == 0) {
         return -1;
-      } else {
-        return entry;
       }
-    } else {
-      return 0;
+      return entry;
     }
+    return 0;
   }
 
   public boolean isWildcard() {

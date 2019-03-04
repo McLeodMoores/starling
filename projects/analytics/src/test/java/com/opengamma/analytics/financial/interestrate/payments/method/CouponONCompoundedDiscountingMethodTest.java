@@ -28,7 +28,6 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.MulticurveProviderDiscountDataSets;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
@@ -42,12 +41,12 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Tests related to the pricing methods for ON Compounded coupon in the discounting method.
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class CouponONCompoundedDiscountingMethodTest {
 
-  private static final MulticurveProviderDiscount MULTICURVES = MulticurveProviderDiscountDataSets.createMulticurveEurUsd();
-  @SuppressWarnings("deprecation")
   private static final YieldCurveBundle CURVES = TestsDataSetsSABR.createCurves1();
   private static final String[] CURVES_NAMES = CURVES.getAllNames().toArray(new String[CURVES.size()]);
 
@@ -66,7 +65,6 @@ public class CouponONCompoundedDiscountingMethodTest {
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2010, 12, 27);
   private static final CouponONCompounded CPN_ON_COMPOUNDED = CPN_ON_COMPOUNDED_DEFINITION.toDerivative(REFERENCE_DATE, CURVES_NAMES);
 
-  @SuppressWarnings("deprecation")
   private static final CouponONCompoundedDiscountingMethod METHOD_CPN_ON = CouponONCompoundedDiscountingMethod.getInstance();
   private static final PresentValueCalculator PVDC = PresentValueCalculator.getInstance();
   private static final PresentValueCurveSensitivityCalculator PVCSDC = PresentValueCurveSensitivityCalculator.getInstance();
@@ -78,7 +76,6 @@ public class CouponONCompoundedDiscountingMethodTest {
 
   @Test
   public void presentValue() {
-    @SuppressWarnings("deprecation")
     final CurrencyAmount pvComputed = METHOD_CPN_ON.presentValue(CPN_ON_COMPOUNDED, CURVES);
 
     double ratio = 1.0;
@@ -125,7 +122,7 @@ public class CouponONCompoundedDiscountingMethodTest {
   }
 
   @Test
-  /* 
+  /*
    * Tests present value curve sensitivity when the valuation date is on trade date.
    */
   public void presentValueCurveSensitivity() {

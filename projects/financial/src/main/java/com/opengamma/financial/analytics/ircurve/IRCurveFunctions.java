@@ -38,6 +38,7 @@ import com.opengamma.master.config.impl.ConfigSearchIterator;
 /**
  * Function repository configuration source for the functions contained in this package.
  */
+@SuppressWarnings("deprecation")
 public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
 
   /**
@@ -106,7 +107,7 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(CurveMarketDataFunction.class, curveName));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked" })
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
 

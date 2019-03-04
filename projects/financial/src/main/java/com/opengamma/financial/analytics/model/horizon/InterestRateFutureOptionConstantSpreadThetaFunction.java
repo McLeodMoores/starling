@@ -71,7 +71,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * <p>
  * For interest rate future options, {@link PresentValueBlackCalculator} is currently used.
  * <p>
+ * @deprecated Deprecated
  */
+@Deprecated
 public class InterestRateFutureOptionConstantSpreadThetaFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionConstantSpreadThetaFunction.class);
 
@@ -156,7 +158,7 @@ public class InterestRateFutureOptionConstantSpreadThetaFunction extends Abstrac
 
   /**
    * This aids child classes to return value in different format, eg Double
-   * 
+   *
    * @param theta ConstantSpreadHorizonThetaCalculator produced MultipleCurrencyAmount
    * @param currency Allows for function to pull out specified currency
    * @return theta in desired format
@@ -207,7 +209,7 @@ public class InterestRateFutureOptionConstantSpreadThetaFunction extends Abstrac
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
       LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.addAll(YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveCalculationConfigSource));
     requirements.add(getVolatilityRequirement(surfaceName, currency));
     final HistoricalTimeSeriesResolutionResult timeSeries = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context).resolve(

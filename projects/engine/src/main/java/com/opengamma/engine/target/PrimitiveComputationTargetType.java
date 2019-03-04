@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.opengamma.core.change.ChangeManager;
-import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.target.resolver.DeepResolver;
 import com.opengamma.engine.target.resolver.IdentifierResolver;
 import com.opengamma.engine.target.resolver.ObjectResolver;
@@ -80,9 +79,8 @@ public class PrimitiveComputationTargetType<T extends UniqueIdentifiable> extend
     assert resolver != null;
     if (resolver instanceof IdentifierResolver) {
       return new IdentifierResolving<>(type, clazz, resolver, (IdentifierResolver) resolver);
-    } else {
-      return new PrimitiveComputationTargetType<>(type, clazz, resolver);
     }
+    return new PrimitiveComputationTargetType<>(type, clazz, resolver);
   }
 
   public T resolve(final UniqueId identifier) {

@@ -54,7 +54,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Calculates return series for the market instruments at the nodal points of a yield curve.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class YieldCurveNodeReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveNodeReturnSeriesFunction.class);
   private static final TimeSeriesDifferenceOperator DIFFERENCE = new TimeSeriesDifferenceOperator();

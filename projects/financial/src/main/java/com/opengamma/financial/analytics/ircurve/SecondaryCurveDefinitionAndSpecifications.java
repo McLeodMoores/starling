@@ -38,7 +38,7 @@ public class SecondaryCurveDefinitionAndSpecifications {
   private static final String SPEC_NAME = "SECONDARY";
 
   public static YieldCurveDefinition buildFundingCurve(final Currency ccy, final ExternalId region, final Tenor[] depositStrips, final Tenor[] tenorSwaps) {
-    final Collection<FixedIncomeStrip> strips = new ArrayList<FixedIncomeStrip>();
+    final Collection<FixedIncomeStrip> strips = new ArrayList<>();
     for (final Tenor depositTenor : depositStrips) {
       if (depositTenor.getPeriod().equals(Period.ofDays(30))) {
         throw new OpenGammaRuntimeException("This shouldn't happen!");
@@ -57,7 +57,7 @@ public class SecondaryCurveDefinitionAndSpecifications {
 
   public static YieldCurveDefinition buildForwardCurve(final Currency ccy, final ExternalId region, final Tenor[] liborStrips, final Tenor futureStartTenor, final int numQuarterlyFutures,
       final Tenor[] swaps, final StripInstrumentType iborType, final StripInstrumentType swapType) {
-    final Collection<FixedIncomeStrip> strips = new ArrayList<FixedIncomeStrip>();
+    final Collection<FixedIncomeStrip> strips = new ArrayList<>();
     for (final Tenor liborTenor : liborStrips) {
       strips.add(new FixedIncomeStrip(iborType, liborTenor, SPEC_NAME));
     }
@@ -78,7 +78,7 @@ public class SecondaryCurveDefinitionAndSpecifications {
 
   public static YieldCurveDefinition buildSecondaryCurve(final Currency ccy, final ExternalId region, final Tenor[] liborStrips, final Tenor futureStartTenor, final int numQuarterlyFutures,
       final Tenor[] swaps, final StripInstrumentType iborType, final StripInstrumentType swapType) {
-    final Collection<FixedIncomeStrip> strips = new ArrayList<FixedIncomeStrip>();
+    final Collection<FixedIncomeStrip> strips = new ArrayList<>();
     for (final Tenor liborTenor : liborStrips) {
       strips.add(new FixedIncomeStrip(StripInstrumentType.CASH, liborTenor, SPEC_NAME));
     }
@@ -98,7 +98,7 @@ public class SecondaryCurveDefinitionAndSpecifications {
   }
 
   private static Tenor[] makeShortEnd(final boolean includeOvernight, final boolean includeSpotNext, final boolean include2W) {
-    final List<Tenor> results = new ArrayList<Tenor>();
+    final List<Tenor> results = new ArrayList<>();
     if (includeOvernight) {
       results.add(Tenor.ofDays(1));
     }
@@ -116,7 +116,7 @@ public class SecondaryCurveDefinitionAndSpecifications {
 
   private static Tenor[] makeLongEnd(final int firstContiguousYear, final int lastContiguousYear, final int[] nonContiguousYears) {
     Assert.isTrue(firstContiguousYear <= lastContiguousYear);
-    final List<Tenor> results = new ArrayList<Tenor>();
+    final List<Tenor> results = new ArrayList<>();
     for (int i = firstContiguousYear; i <= lastContiguousYear; i++) {
       results.add(Tenor.ofYears(i));
     }
@@ -127,7 +127,7 @@ public class SecondaryCurveDefinitionAndSpecifications {
   }
 
   public static Map<String, Map<Currency, YieldCurveDefinition>> buildSecondaryCurveDefinitions() {
-    final Map<Currency, YieldCurveDefinition> singleDefinitions = new HashMap<Currency, YieldCurveDefinition>();
+    final Map<Currency, YieldCurveDefinition> singleDefinitions = new HashMap<>();
     final Currency usd = Currency.USD;
     final ExternalId usdRegion = ExternalSchemes.countryRegionId(Country.US);
     singleDefinitions.put(usd, buildSecondaryCurve(usd, usdRegion, makeShortEnd(true, false, false), null, 0, makeLongEnd(2, 10, new int[] {12, 15, 20, 25, 30, 40}), LIBOR, SWAP_3M));
@@ -167,13 +167,13 @@ public class SecondaryCurveDefinitionAndSpecifications {
     final Currency jpy = Currency.JPY;
     final ExternalId jpyRegion = ExternalSchemes.countryRegionId(Country.JP);
     singleDefinitions.put(jpy, buildSecondaryCurve(jpy, jpyRegion, makeShortEnd(true, false, false), null, 0, makeLongEnd(2, 10, new int[] {12, 15, 20, 25, 30, 40}), LIBOR, SWAP_6M));
-    final Map<String, Map<Currency, YieldCurveDefinition>> results = new HashMap<String, Map<Currency, YieldCurveDefinition>>();
+    final Map<String, Map<Currency, YieldCurveDefinition>> results = new HashMap<>();
     results.put("SECONDARY", singleDefinitions);
     return results;
   }
 
   public static Map<Currency, CurveSpecificationBuilderConfiguration> buildSyntheticCurveSpecificationBuilderConfigurations() {
-    final Map<Currency, CurveSpecificationBuilderConfiguration> configurations = new HashMap<Currency, CurveSpecificationBuilderConfiguration>();
+    final Map<Currency, CurveSpecificationBuilderConfiguration> configurations = new HashMap<>();
     final ExternalScheme scheme = ExternalSchemes.OG_SYNTHETIC_TICKER;
     configurations.put(Currency.EUR, buildSyntheticCurveSpecificationBuilderConfiguration(Currency.EUR, scheme));
     configurations.put(Currency.DKK, buildSyntheticCurveSpecificationBuilderConfiguration(Currency.DKK, scheme));
@@ -197,25 +197,25 @@ public class SecondaryCurveDefinitionAndSpecifications {
   }
 
   private static CurveSpecificationBuilderConfiguration buildSyntheticCurveSpecificationBuilderConfiguration(final Currency ccy, final ExternalScheme scheme) {
-    final Map<Tenor, CurveInstrumentProvider> cashInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> fra3MInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> fra6MInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> liborInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> euriborInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> cdorInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> ciborInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> stiborInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> futureInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> swap6MInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> swap3MInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> basisSwapInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> tenorSwapInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
-    final Map<Tenor, CurveInstrumentProvider> oisSwapInstrumentProviders = new HashMap<Tenor, CurveInstrumentProvider>();
+    final Map<Tenor, CurveInstrumentProvider> cashInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> fra3MInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> fra6MInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> liborInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> euriborInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> cdorInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> ciborInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> stiborInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> futureInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> swap6MInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> swap3MInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> basisSwapInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> tenorSwapInstrumentProviders = new HashMap<>();
+    final Map<Tenor, CurveInstrumentProvider> oisSwapInstrumentProviders = new HashMap<>();
 
     final Tenor[] tenors = new Tenor[] {Tenor.ONE_DAY, Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.SEVEN_MONTHS,
-      Tenor.EIGHT_MONTHS, Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS, Tenor.TWELVE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FOUR_YEARS,
-      Tenor.FIVE_YEARS, Tenor.ofYears(6), Tenor.ofYears(7), Tenor.ofYears(8), Tenor.ofYears(9), Tenor.ofYears(10), Tenor.ofYears(11), Tenor.ofYears(12), Tenor.ofYears(15),
-      Tenor.ofYears(20), Tenor.ofYears(25), Tenor.ofYears(30), Tenor.ofYears(40), Tenor.ofYears(50), Tenor.ofYears(80)};
+        Tenor.EIGHT_MONTHS, Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS, Tenor.TWELVE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FOUR_YEARS,
+        Tenor.FIVE_YEARS, Tenor.ofYears(6), Tenor.ofYears(7), Tenor.ofYears(8), Tenor.ofYears(9), Tenor.ofYears(10), Tenor.ofYears(11), Tenor.ofYears(12), Tenor.ofYears(15),
+        Tenor.ofYears(20), Tenor.ofYears(25), Tenor.ofYears(30), Tenor.ofYears(40), Tenor.ofYears(50), Tenor.ofYears(80)};
 
     for (final Tenor tenor : tenors) {
       cashInstrumentProviders.put(tenor, new SyntheticIdentifierCurveInstrumentProvider(ccy, StripInstrumentType.CASH, scheme));

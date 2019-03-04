@@ -30,7 +30,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Calculates the sensitivity of the present value to the SABR parameters
+ * @deprecated Deprecated
  */
+@Deprecated
 public class IRFutureOptionSABRSensitivitiesFunction extends IRFutureOptionSABRFunction {
   /** The calculator */
   private static final PresentValueSABRSensitivitySABRCalculator CALCULATOR = PresentValueSABRSensitivitySABRCalculator.getInstance();

@@ -81,11 +81,11 @@ public class ZippedPositionReader implements PositionReader {
       if (next != null) {
         return next;
 
-      // If no more rows to get in the current csv, and no more zip entries, then we've reached the end
+        // If no more rows to get in the current csv, and no more zip entries, then we've reached the end
       } else if (!_zipEntries.hasMoreElements()) {
         return null;
 
-      // More zip entries, try get another csv and return a row from it
+        // More zip entries, try get another csv and return a row from it
       } else {
         // Get the portfolio reader for this csv file
         _currentReader = getReader(_zipEntries.nextElement());
@@ -136,9 +136,8 @@ public class ZippedPositionReader implements PositionReader {
         LOGGER.warn("Could not import from " + entry.getName() + ", skipping file (exception is " + ex + ")");
         return null;
       }
-    } else {
-      return null;
     }
+    return null;
   }
 
   private void readMetaData(final String filename) {
@@ -152,7 +151,7 @@ public class ZippedPositionReader implements PositionReader {
 
         String input;
         while ((input = cfgReader.readLine()) != null && !input.equals("[securityHashes]")) {
-          ; // CSIGNORE
+          // CSIGNORE
         }
 
         while ((input = cfgReader.readLine()) != null) {

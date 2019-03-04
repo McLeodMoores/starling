@@ -16,7 +16,6 @@ import org.fudgemsg.wire.types.FudgeWireType;
 
 import com.google.common.collect.Sets;
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
-import com.opengamma.engine.value.ValueProperties;
 
 /**
  * Internal state used to implement a {@link ValueProperties} entry that has more than a small number of values.
@@ -53,9 +52,8 @@ public final class SetValueProperty extends AbstractValueProperty {
   public AbstractValueProperty withOptional(final boolean optional) {
     if (isOptional() == optional) {
       return this;
-    } else {
-      return new SetValueProperty(getKey(), optional, _values, getNext());
     }
+    return new SetValueProperty(getKey(), optional, _values, getNext());
   }
 
   // query/update self

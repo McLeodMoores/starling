@@ -81,9 +81,8 @@ public abstract class AbstractToolWithoutContext {
     final String globalConfiguration = getSystemDefaultLogbackConfiguration();
     if (globalConfiguration != null) {
       return globalConfiguration;
-    } else {
-      return TOOL_LOGBACK_XML;
     }
+    return TOOL_LOGBACK_XML;
   }
 
   /**

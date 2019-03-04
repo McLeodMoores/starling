@@ -21,9 +21,9 @@ public class InMemoryTempTargetRepository implements TempTargetRepository {
 
   private final UniqueIdSupplier _uids = new UniqueIdSupplier("TmpMem");
 
-  private final ConcurrentMap<UniqueId, TempTarget> _uid2object = new ConcurrentHashMap<UniqueId, TempTarget>();
+  private final ConcurrentMap<UniqueId, TempTarget> _uid2object = new ConcurrentHashMap<>();
 
-  private final ConcurrentMap<TempTarget, UniqueId> _object2uid = new ConcurrentHashMap<TempTarget, UniqueId>();
+  private final ConcurrentMap<TempTarget, UniqueId> _object2uid = new ConcurrentHashMap<>();
 
   // TempTargetRepository
 

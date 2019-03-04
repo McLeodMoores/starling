@@ -19,7 +19,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.transport.EndPointDescriptionProvider;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
@@ -39,7 +38,7 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
   private int _securePort = 443;
   private boolean _secure;
 
-  //-------------------------------------------------------------------------
+  // ---------------------------------------------------------- ---------------
   /**
    * Sets an absolute URI.
    *

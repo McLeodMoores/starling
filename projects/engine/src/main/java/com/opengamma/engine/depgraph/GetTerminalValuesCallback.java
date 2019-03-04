@@ -309,9 +309,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
     final Map<String, Pair<?, ?>> info = _targetDigestInfo.get(targetDigest);
     if (info != null) {
       return info.get(valueName);
-    } else {
-      return null;
     }
+    return null;
   }
 
   public void declareProduction(final ResolvedValue resolvedValue) {
@@ -725,27 +724,28 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
         }
       }
       return node;
-    } else {
-      // [PLAT-6321] The node passed in might no longer be valid. Resolution of the inputs might have caused outputs to be rewritten that will have
-      // 'updated' the logical node we're using as a reference point. The _spec2Node map will have been updated as part of that, and the reference
-      // outputs can't have changed, so the lookup below works.
-      existingNode = _spec2Node.get(existingNode.getOutputValue(0));
-      final DependencyNode newNode = DependencyNodeImpl.addInputs(existingNode, inputValues, inputNodes);
-      if (newNode != existingNode) {
-        inputCount = newNode.getInputCount();
-        for (i = 0; i < inputCount; i++) {
-          final ValueSpecification input = newNode.getInputValue(i);
-          Set<DependencyNode> usage = _spec2Usage.get(input);
-          if (usage == null) {
-            usage = new HashSet<>();
-            _spec2Usage.put(input, usage);
-          }
-          usage.remove(existingNode);
-          usage.add(newNode);
-        }
-      }
-      return newNode;
     }
+    // [PLAT-6321] The node passed in might no longer be valid. Resolution of
+    // the inputs might have caused outputs to be rewritten that will have
+    // 'updated' the logical node we're using as a reference point. The
+    // _spec2Node map will have been updated as part of that, and the reference
+    // outputs can't have changed, so the lookup below works.
+    existingNode = _spec2Node.get(existingNode.getOutputValue(0));
+    final DependencyNode newNode = DependencyNodeImpl.addInputs(existingNode, inputValues, inputNodes);
+    if (newNode != existingNode) {
+      inputCount = newNode.getInputCount();
+      for (i = 0; i < inputCount; i++) {
+        final ValueSpecification input = newNode.getInputValue(i);
+        Set<DependencyNode> usage = _spec2Usage.get(input);
+        if (usage == null) {
+          usage = new HashSet<>();
+          _spec2Usage.put(input, usage);
+        }
+        usage.remove(existingNode);
+        usage.add(newNode);
+      }
+    }
+    return newNode;
   }
 
   private DependencyNode getOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream,
@@ -939,7 +939,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
       }
       return newNode;
     }
-    return null;
+  return null;
   }
 
   private DependencyNode getOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream) {

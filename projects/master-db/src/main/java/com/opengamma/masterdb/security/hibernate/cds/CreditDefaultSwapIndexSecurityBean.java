@@ -18,7 +18,6 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.cds.CreditDefaultSwapIndexSecurity;
 import com.opengamma.masterdb.security.hibernate.BusinessDayConventionBean;
 import com.opengamma.masterdb.security.hibernate.DayCountBean;
 import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
@@ -29,7 +28,8 @@ import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 import com.opengamma.masterdb.security.hibernate.swap.NotionalBean;
 
 /**
- * A Hibernate bean representation of {@link CreditDefaultSwapIndexSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.cds.CreditDefaultSwapIndexSecurity}.
  */
 @BeanDefinition
 public class CreditDefaultSwapIndexSecurityBean extends SecurityBean {

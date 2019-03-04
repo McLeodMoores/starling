@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
@@ -44,7 +44,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
+ *
  */
 public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -74,7 +74,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> curveNames = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
-    if ((curveNames == null) || (curveNames.size() != 1)) {
+    if (curveNames == null || curveNames.size() != 1) {
       return null;
     }
     final String curveName = curveNames.iterator().next();
@@ -83,7 +83,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
     final ValueRequirement underlyingMarketDataReq = getPriceRequirement(optionSec.getUnderlyingId());
     final ValueRequirement discountCurveReq = getDiscountCurveMarketDataRequirement(optionSec.getCurrency(), curveName);
     // TODO will need a cost-of-carry model as well
-    final Set<ValueRequirement> optionRequirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> optionRequirements = new HashSet<>();
     optionRequirements.add(optionMarketDataReq);
     optionRequirements.add(underlyingMarketDataReq);
     optionRequirements.add(discountCurveReq);
@@ -127,8 +127,8 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
     final Expiry expiry = optionSec.getExpiry();
     final double years = DateUtils.getDifferenceInYears(today, expiry.getExpiry());
     final double b = discountCurve.getInterestRate(years); // TODO
-    final OptionDefinition europeanVanillaOptionDefinition = new EuropeanVanillaOptionDefinition(optionSec.getStrike(), expiry, (optionSec.getOptionType() == OptionType.CALL));
-    final Map<OptionDefinition, Double> prices = new HashMap<OptionDefinition, Double>();
+    final OptionDefinition europeanVanillaOptionDefinition = new EuropeanVanillaOptionDefinition(optionSec.getStrike(), expiry, optionSec.getOptionType() == OptionType.CALL);
+    final Map<OptionDefinition, Double> prices = new HashMap<>();
     prices.put(europeanVanillaOptionDefinition, optionPrice);
     final VolatilitySurface volatilitySurface = _volatilitySurfaceModel.getSurface(prices, new StandardOptionDataBundle(discountCurve, b, null, underlyingPrice, today));
 

@@ -21,12 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.position.Trade;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides helper methods to store a {@link Deal}'s data in a map of strings and reload it into a
- * {@link Deal} instance.  Intended to be used for storing a {@link Deal} in a {@link Trade}'s
+ * Provides helper methods to store a {@link Deal}'s data in a map of strings
+ * and reload it into a {@link Deal} instance. Intended to be used for storing a
+ * {@link Deal} in a {@link com.opengamma.core.position.Trade}'s
  * {@link Trade#getAttributes() attributes}.
  */
 public final class DealAttributeEncoder {

@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class OptionGreekUnderlyingPriceSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   //private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -54,7 +54,7 @@ public class OptionGreekUnderlyingPriceSeriesFunction extends AbstractFunction.N
     Validate.notNull(resolutionKey, "resolution key");
     _resolutionKey = resolutionKey;
     final Greek greek = AvailableGreeks.getGreekForValueRequirementName(VALUE_REQUIREMENT_NAME);
-    _underlyings = new ArrayList<Pair<UnderlyingType, String>>();
+    _underlyings = new ArrayList<>();
     final List<UnderlyingType> types = greek.getUnderlying().getUnderlyings();
     for (final UnderlyingType type : types) {
       _underlyings.add(Pairs.of(type, ValueRequirementNames.PRICE_SERIES + "_" + type));
@@ -75,7 +75,7 @@ public class OptionGreekUnderlyingPriceSeriesFunction extends AbstractFunction.N
     //final Schedule scheduleCalculator = getScheduleCalculator(scheduleCalculatorName);
     //final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
     //final LocalDate[] schedule = scheduleCalculator.getSchedule(startDate, now, true, false); //REVIEW emcleod should "fromEnd" be hard-coded?
-    final Set<ComputedValue> result = new HashSet<ComputedValue>();
+    final Set<ComputedValue> result = new HashSet<>();
     //    final ValueSpecification valueSpecification = new ValueSpecification(new ValueRequirement(greek.getUnderlying().getUnderlyings(), security), getUniqueId());
     final HistoricalTimeSeries hts = (HistoricalTimeSeries) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
     final DoubleTimeSeries<?> ts = hts.getTimeSeries();
@@ -104,7 +104,7 @@ public class OptionGreekUnderlyingPriceSeriesFunction extends AbstractFunction.N
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Set<ValueSpecification> result = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> result = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties properties = createValueProperties().get();
     for (final Pair<UnderlyingType, String> underlying : _underlyings) {
@@ -113,25 +113,25 @@ public class OptionGreekUnderlyingPriceSeriesFunction extends AbstractFunction.N
     return result;
   }
 
-//  private Period getSamplingPeriod(final Set<String> samplingPeriodNames) {
-//    if (samplingPeriodNames == null || samplingPeriodNames.isEmpty() || samplingPeriodNames.size() != 1) {
-//      throw new OpenGammaRuntimeException("Missing or non-unique sampling period name: " + samplingPeriodNames);
-//    }
-//    return Period.parse(samplingPeriodNames.iterator().next());
-//  }
-//
-//  private Schedule getScheduleCalculator(final Set<String> scheduleCalculatorNames) {
-//    if (scheduleCalculatorNames == null || scheduleCalculatorNames.isEmpty() || scheduleCalculatorNames.size() != 1) {
-//      throw new OpenGammaRuntimeException("Missing or non-unique schedule calculator name: " + scheduleCalculatorNames);
-//    }
-//    return ScheduleCalculatorFactory.getScheduleCalculator(scheduleCalculatorNames.iterator().next());
-//  }
-//
-//  private TimeSeriesSamplingFunction getSamplingFunction(final Set<String> samplingFunctionNames) {
-//    if (samplingFunctionNames == null || samplingFunctionNames.isEmpty() || samplingFunctionNames.size() != 1) {
-//      throw new OpenGammaRuntimeException("Missing or non-unique sampling function name: " + samplingFunctionNames);
-//    }
-//    return TimeSeriesSamplingFunctionFactory.getFunction(samplingFunctionNames.iterator().next());
-//  }
+  //  private Period getSamplingPeriod(final Set<String> samplingPeriodNames) {
+  //    if (samplingPeriodNames == null || samplingPeriodNames.isEmpty() || samplingPeriodNames.size() != 1) {
+  //      throw new OpenGammaRuntimeException("Missing or non-unique sampling period name: " + samplingPeriodNames);
+  //    }
+  //    return Period.parse(samplingPeriodNames.iterator().next());
+  //  }
+  //
+  //  private Schedule getScheduleCalculator(final Set<String> scheduleCalculatorNames) {
+  //    if (scheduleCalculatorNames == null || scheduleCalculatorNames.isEmpty() || scheduleCalculatorNames.size() != 1) {
+  //      throw new OpenGammaRuntimeException("Missing or non-unique schedule calculator name: " + scheduleCalculatorNames);
+  //    }
+  //    return ScheduleCalculatorFactory.getScheduleCalculator(scheduleCalculatorNames.iterator().next());
+  //  }
+  //
+  //  private TimeSeriesSamplingFunction getSamplingFunction(final Set<String> samplingFunctionNames) {
+  //    if (samplingFunctionNames == null || samplingFunctionNames.isEmpty() || samplingFunctionNames.size() != 1) {
+  //      throw new OpenGammaRuntimeException("Missing or non-unique sampling function name: " + samplingFunctionNames);
+  //    }
+  //    return TimeSeriesSamplingFunctionFactory.getFunction(samplingFunctionNames.iterator().next());
+  //  }
 
 }

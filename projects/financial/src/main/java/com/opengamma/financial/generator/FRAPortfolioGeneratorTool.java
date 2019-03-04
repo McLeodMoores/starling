@@ -13,7 +13,7 @@ import com.opengamma.financial.security.fra.FRASecurity;
 public class FRAPortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
 
   protected FRASecurityGenerator createFRASecurityGenerator() {
-    FRASecurityGenerator securities = new FRASecurityGenerator();
+    final FRASecurityGenerator securities = new FRASecurityGenerator();
     configure(securities);
     return securities;
   }
@@ -22,7 +22,7 @@ public class FRAPortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
   public PortfolioGenerator createPortfolioGenerator(final NameGenerator portfolioNameGenerator) {
     final FRASecurityGenerator securities = createFRASecurityGenerator();
     configure(securities);
-    final PositionGenerator positions = new SimplePositionGenerator<FRASecurity>(securities, getSecurityPersister(), getCounterPartyGenerator());
+    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
     final PortfolioNodeGenerator rootNode = new LeafPortfolioNodeGenerator(new StaticNameGenerator("FRAs"), positions, PORTFOLIO_SIZE);
     return new PortfolioGenerator(rootNode, portfolioNameGenerator);
   }
@@ -31,8 +31,8 @@ public class FRAPortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
   public PortfolioNodeGenerator createPortfolioNodeGenerator(final int portfolioSize) {
     final FRASecurityGenerator securities = createFRASecurityGenerator();
     configure(securities);
-    final PositionGenerator positions = new SimplePositionGenerator<FRASecurity>(securities, getSecurityPersister(), getCounterPartyGenerator());
+    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
     return new LeafPortfolioNodeGenerator(new StaticNameGenerator("FRA"), positions, portfolioSize);
   }
-  
+
 }

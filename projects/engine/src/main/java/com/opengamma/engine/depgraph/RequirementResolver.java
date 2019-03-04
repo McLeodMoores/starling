@@ -56,10 +56,9 @@ import com.opengamma.engine.value.ValueRequirement;
       }
       // A fallback task may be created during the finished call, so suppress the last result indicator for now
       return false;
-    } else {
-      // The fallback task is active so let its last result carry through
-      return true;
     }
+    // The fallback task is active so let its last result carry through
+    return true;
   }
 
   @Override

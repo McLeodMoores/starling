@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.creditdefaultswap.definition.legacy;
@@ -13,7 +13,6 @@ import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.vanilla.CreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -24,7 +23,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Definition of a Legacy recovery lock CDS (also known as a recovery swap) i.e. with the features of CDS contracts prior to the Big Bang in 2009 - WIP
- *@deprecated this will be deleted 
+ *@deprecated this will be deleted
  */
 @Deprecated
 public class LegacyRecoveryLockCreditDefaultSwapDefinition extends LegacyCreditDefaultSwapDefinition {

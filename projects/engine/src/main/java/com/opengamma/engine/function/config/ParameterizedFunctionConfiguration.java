@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  * Parameterized function configuration representation
  */
 @BeanDefinition
-public class ParameterizedFunctionConfiguration extends StaticFunctionConfiguration implements FunctionConfiguration {
+public class ParameterizedFunctionConfiguration extends StaticFunctionConfiguration {
 
   private static final long serialVersionUID = 1L;
 

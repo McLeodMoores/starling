@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.opengamma.util.rest.HttpMethodFilter;
 import com.opengamma.web.analytics.push.LongPollingServlet;
 import com.sun.jersey.api.core.ExtendedUriInfo;
 import com.sun.jersey.api.core.HttpContext;

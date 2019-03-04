@@ -109,9 +109,8 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     final Set<ValueRequirement> requirements = new HashSet<>();
     if (getRequirements(context, desiredValue, matrix, requirements, sourceCurrency, targetCurrency)) {
       return requirements;
-    } else {
-      return null;
     }
+    return null;
   }
 
   private static final class DetermineResults implements CurrencyMatrixValueVisitor<Boolean> {

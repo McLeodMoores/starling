@@ -21,7 +21,9 @@ import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureOptionBlackPresentValueFunction extends BondFutureOptionBlackFunction {
   private static final PresentValueBlackCalculator CALCULATOR = PresentValueBlackCalculator.getInstance();
 

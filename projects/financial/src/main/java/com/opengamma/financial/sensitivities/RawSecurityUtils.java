@@ -44,12 +44,10 @@ public class RawSecurityUtils {
     final RawSecurity underlyingRawSecurity = (RawSecurity) secSource.getSingle(securityEntryData.getFactorSetId().toBundle());
     if (underlyingRawSecurity != null) {
       final FudgeMsgEnvelope factorIdMsg = OpenGammaFudgeContext.getInstance().deserialize(underlyingRawSecurity.getRawData());
-      @SuppressWarnings("unchecked")
       final
       List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
       return factorExposureDataList;
-    } else {
-      throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
     }
+    throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
   }
 }

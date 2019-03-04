@@ -31,10 +31,10 @@ import com.opengamma.util.money.Currency;
 public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesDefaultPropertiesFunction.class);
   private static final String[] VALUE_NAMES = {
-    "Present Value",
-    "PV01",
-    "CS01",
-    "Yield Curve Node Sensitivities" };
+      "Present Value",
+      "PV01",
+      "CS01",
+  "Yield Curve Node Sensitivities" };
   private final Map<String, String> _currencyAndCurveConfigNames;
 
   public ExternallyProvidedSensitivitiesDefaultPropertiesFunction(final String[] currencyAndCurveConfigNames) {
@@ -42,9 +42,9 @@ public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends De
     ArgumentChecker.notNull(currencyAndCurveConfigNames, "currency and curve config names");
     final int nPairs = currencyAndCurveConfigNames.length;
     ArgumentChecker.isTrue(nPairs % 2 == 0, "Must have one curve config name per currency");
-    _currencyAndCurveConfigNames = new HashMap<String, String>();
+    _currencyAndCurveConfigNames = new HashMap<>();
     for (int i = 0; i < currencyAndCurveConfigNames.length; i += 2) {
-      _currencyAndCurveConfigNames.put(currencyAndCurveConfigNames[i], currencyAndCurveConfigNames[(i + 1)]);
+      _currencyAndCurveConfigNames.put(currencyAndCurveConfigNames[i], currencyAndCurveConfigNames[i + 1]);
     }
   }
 

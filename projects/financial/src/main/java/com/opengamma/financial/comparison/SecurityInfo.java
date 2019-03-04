@@ -26,7 +26,7 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SecurityInfo.class);
 
-  private final Map<Object, Object> _info = new HashMap<Object, Object>();
+  private final Map<Object, Object> _info = new HashMap<>();
 
   public SecurityInfo(final ComparisonContext context, final Security security) {
     super(security);
@@ -101,8 +101,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
         value = new ComparableShortArray((short[]) field.getValue());
         break;
       case FudgeWireType.SUB_MESSAGE_TYPE_ID: {
-        final Map<Object, Object> subMsg = new HashMap<Object, Object>();
-        for (FudgeField subField : (FudgeMsg) field.getValue()) {
+        final Map<Object, Object> subMsg = new HashMap<>();
+        for (final FudgeField subField : (FudgeMsg) field.getValue()) {
           addFieldToMap(subField, subMsg);
         }
         value = subMsg;
@@ -170,9 +170,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     protected boolean equalsImpl(final ComparableArray<?> o) {
       if (o instanceof ComparableByteArray) {
         return Arrays.equals(((ComparableByteArray) o).getData(), getData());
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override
@@ -192,9 +191,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     protected boolean equalsImpl(final ComparableArray<?> o) {
       if (o instanceof ComparableDoubleArray) {
         return Arrays.equals(((ComparableDoubleArray) o).getData(), getData());
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override
@@ -214,9 +212,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     protected boolean equalsImpl(final ComparableArray<?> o) {
       if (o instanceof ComparableFloatArray) {
         return Arrays.equals(((ComparableFloatArray) o).getData(), getData());
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override
@@ -236,9 +233,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     protected boolean equalsImpl(final ComparableArray<?> o) {
       if (o instanceof ComparableIntArray) {
         return Arrays.equals(((ComparableIntArray) o).getData(), getData());
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override
@@ -258,9 +254,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     protected boolean equalsImpl(final ComparableArray<?> o) {
       if (o instanceof ComparableLongArray) {
         return Arrays.equals(((ComparableLongArray) o).getData(), getData());
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override
@@ -280,9 +275,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     protected boolean equalsImpl(final ComparableArray<?> o) {
       if (o instanceof ComparableShortArray) {
         return Arrays.equals(((ComparableShortArray) o).getData(), getData());
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override

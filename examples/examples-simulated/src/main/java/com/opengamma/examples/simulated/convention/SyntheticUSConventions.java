@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -26,8 +26,12 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Synthetic US Conventions
+ * Synthetic US Conventions.
+ * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticUSConventions {
 
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
@@ -120,7 +124,7 @@ public class SyntheticUSConventions {
 
   /**
    * Adds conventions for US Treasury bonds,
-   * 
+   *
    * @param conventionMaster The convention master, not null
    */
   public static void addTreasuryBondConvention(final ConventionBundleMaster conventionMaster) {

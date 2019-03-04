@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -12,7 +12,11 @@ import com.opengamma.id.ExternalIdBundle;
 
 /**
  * In-memory convention bundle master for Synthetic tickers.
+ * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticInMemoryConventionBundleMaster extends InMemoryConventionBundleMaster {
 
   @Override

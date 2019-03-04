@@ -49,7 +49,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Contains utility methods for pricing FX options.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionFunctionUtils {
 
   /**

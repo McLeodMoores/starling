@@ -80,7 +80,7 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
-                                    final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -88,96 +88,101 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
 
     final CurveSpecification specification = (CurveSpecification) inputs.getValue(ValueRequirementNames.CURVE_SPECIFICATION);
     final SnapshotDataBundle snapshot = (SnapshotDataBundle) inputs.getValue(ValueRequirementNames.CURVE_MARKET_DATA);
-    final LocalDate spotDate = (!desiredValue.getConstraints().getValues(ISDAFunctionConstants.ISDA_CURVE_DATE).isEmpty())
+    final LocalDate spotDate = !desiredValue.getConstraints().getValues(ISDAFunctionConstants.ISDA_CURVE_DATE).isEmpty()
         ? LocalDate.parse(desiredValue.getConstraint(ISDAFunctionConstants.ISDA_CURVE_DATE))
-        : now.toLocalDate();
+            : now.toLocalDate();
 
-    DepositConvention cashConvention = null;
-    VanillaIborLegConvention floatLegConvention = null;
-    SwapFixedLegConvention fixLegConvention = null;
-    IborIndexConvention liborConvention = null;
+        DepositConvention cashConvention = null;
+        VanillaIborLegConvention floatLegConvention = null;
+        SwapFixedLegConvention fixLegConvention = null;
+        IborIndexConvention liborConvention = null;
 
-    final int nNodes = specification.getNodes().size();
-    final double[] marketDataForCurve = new double[nNodes];
-    final ISDAInstrumentTypes[] instruments = new ISDAInstrumentTypes[nNodes];
-    final Period[] tenors = new Period[nNodes];
-    int k = 0;
-    for (final CurveNodeWithIdentifier node : specification.getNodes()) {
-      final Double marketData = snapshot.getDataPoint(node.getIdentifier());
-      if (marketData == null) {
-        throw new OpenGammaRuntimeException("Could not get market data for " + node.getIdentifier());
-      }
-      marketDataForCurve[k] = marketData;
-      tenors[k] = node.getCurveNode().getResolvedMaturity().getPeriod();
-      if (node.getCurveNode() instanceof CashNode) {
-        instruments[k] = ISDAInstrumentTypes.MoneyMarket;
-        final ExternalId cashConventionId = ((CashNode) node.getCurveNode()).getConvention();
+        final int nNodes = specification.getNodes().size();
+        final double[] marketDataForCurve = new double[nNodes];
+        final ISDAInstrumentTypes[] instruments = new ISDAInstrumentTypes[nNodes];
+        final Period[] tenors = new Period[nNodes];
+        int k = 0;
+        for (final CurveNodeWithIdentifier node : specification.getNodes()) {
+          final Double marketData = snapshot.getDataPoint(node.getIdentifier());
+          if (marketData == null) {
+            throw new OpenGammaRuntimeException("Could not get market data for " + node.getIdentifier());
+          }
+          marketDataForCurve[k] = marketData;
+          tenors[k] = node.getCurveNode().getResolvedMaturity().getPeriod();
+          if (node.getCurveNode() instanceof CashNode) {
+            instruments[k] = ISDAInstrumentTypes.MoneyMarket;
+            final ExternalId cashConventionId = ((CashNode) node.getCurveNode()).getConvention();
+            if (cashConvention == null) {
+              try {
+                cashConvention = conventionSource.getSingle(cashConventionId, DepositConvention.class);
+              } catch (final DataNotFoundException ex) {
+                // ignore, continue around loop
+              }
+            } else if (!cashConvention.getExternalIdBundle().contains(cashConventionId)) {
+              throw new OpenGammaRuntimeException("Got 2 types of cash convention: " + cashConvention.getExternalIdBundle() + " " + cashConventionId);
+            }
+          } else if (node.getCurveNode() instanceof SwapNode) {
+            instruments[k] = ISDAInstrumentTypes.Swap;
+            final ExternalId payConventionId = ((SwapNode) node.getCurveNode()).getPayLegConvention();
+            final Convention payConvention = conventionSource.getSingle(payConventionId);
+            final ExternalId receiveConventionId = ((SwapNode) node.getCurveNode()).getReceiveLegConvention();
+            final Convention receiveConvention = conventionSource.getSingle(receiveConventionId);
+            if (payConvention instanceof VanillaIborLegConvention) {  // float leg
+              if (floatLegConvention == null) {
+                floatLegConvention = (VanillaIborLegConvention) payConvention;
+              } else if (!floatLegConvention.getExternalIdBundle().contains(payConventionId)) {
+                throw new OpenGammaRuntimeException("Got 2 types of float leg convention: " + payConvention.getExternalIdBundle() + " " + payConventionId);
+              }
+            } else if (payConvention instanceof SwapFixedLegConvention) {
+              if (fixLegConvention == null) {
+                fixLegConvention = (SwapFixedLegConvention) payConvention;
+              } else if (!fixLegConvention.getExternalIdBundle().contains(payConventionId)) {
+                throw new OpenGammaRuntimeException("Got 2 types of fixed leg convention: " + payConvention.getExternalIdBundle() + " " + payConventionId);
+              }
+            } else {
+              throw new OpenGammaRuntimeException("Unexpected swap convention type: " + payConvention);
+            }
+            if (receiveConvention instanceof VanillaIborLegConvention) {  // float leg
+              if (floatLegConvention == null) {
+                floatLegConvention = (VanillaIborLegConvention) receiveConvention;
+              } else if (!floatLegConvention.getExternalIdBundle().contains(receiveConventionId)) {
+                throw new OpenGammaRuntimeException("Got 2 types of float leg convention: " + receiveConvention.getExternalIdBundle() + " " + receiveConventionId);
+              }
+            } else if (receiveConvention instanceof SwapFixedLegConvention) {
+              if (fixLegConvention == null) {
+                fixLegConvention = (SwapFixedLegConvention) receiveConvention;
+              } else if (!fixLegConvention.getExternalIdBundle().contains(receiveConventionId)) {
+                throw new OpenGammaRuntimeException("Got 2 types of fixed leg convention: " + receiveConvention.getExternalIdBundle() + " " + receiveConventionId);
+              }
+            } else {
+              throw new OpenGammaRuntimeException("Unexpected swap convention type: " + receiveConvention);
+            }
+          } else {
+            throw new OpenGammaRuntimeException("Can't handle node type " + node.getCurveNode().getClass().getSimpleName() + " at node " + node);
+          }
+          k++;
+        }
         if (cashConvention == null) {
-          try {
-            cashConvention = conventionSource.getSingle(cashConventionId, DepositConvention.class);
-          } catch (DataNotFoundException ex) {
-            // ignore, continue around loop
-          }
-        } else if (!cashConvention.getExternalIdBundle().contains(cashConventionId)) {
-          throw new OpenGammaRuntimeException("Got 2 types of cash convention: " + cashConvention.getExternalIdBundle() + " " + cashConventionId);
+          throw new OpenGammaRuntimeException("A cash convention could not be found");
         }
-      } else if (node.getCurveNode() instanceof SwapNode) {
-        instruments[k] = ISDAInstrumentTypes.Swap;
-        final ExternalId payConventionId = ((SwapNode) node.getCurveNode()).getPayLegConvention();
-        final Convention payConvention = conventionSource.getSingle(payConventionId);
-        final ExternalId receiveConventionId = ((SwapNode) node.getCurveNode()).getReceiveLegConvention();
-        final Convention receiveConvention = conventionSource.getSingle(receiveConventionId);
-        if (payConvention instanceof VanillaIborLegConvention) {  // float leg
-          if (floatLegConvention == null) {
-            floatLegConvention = (VanillaIborLegConvention) payConvention;
-          } else if (!floatLegConvention.getExternalIdBundle().contains(payConventionId)) {
-            throw new OpenGammaRuntimeException("Got 2 types of float leg convention: " + payConvention.getExternalIdBundle() + " " + payConventionId);
-          }
-        } else if (payConvention instanceof SwapFixedLegConvention) {
-          if (fixLegConvention == null) {
-            fixLegConvention = (SwapFixedLegConvention) payConvention;
-          } else if (!fixLegConvention.getExternalIdBundle().contains(payConventionId)) {
-            throw new OpenGammaRuntimeException("Got 2 types of fixed leg convention: " + payConvention.getExternalIdBundle() + " " + payConventionId);
-          }
-        } else {
-          throw new OpenGammaRuntimeException("Unexpected swap convention type: " + payConvention);
+        if (floatLegConvention == null) {
+          throw new OpenGammaRuntimeException("A floating swap leg convention could not be found");
         }
-        if (receiveConvention instanceof VanillaIborLegConvention) {  // float leg
-          if (floatLegConvention == null) {
-            floatLegConvention = (VanillaIborLegConvention) receiveConvention;
-          } else if (!floatLegConvention.getExternalIdBundle().contains(receiveConventionId)) {
-            throw new OpenGammaRuntimeException("Got 2 types of float leg convention: " + receiveConvention.getExternalIdBundle() + " " + receiveConventionId);
-          }
-        } else if (receiveConvention instanceof SwapFixedLegConvention) {
-          if (fixLegConvention == null) {
-            fixLegConvention = (SwapFixedLegConvention) receiveConvention;
-          } else if (!fixLegConvention.getExternalIdBundle().contains(receiveConventionId)) {
-            throw new OpenGammaRuntimeException("Got 2 types of fixed leg convention: " + receiveConvention.getExternalIdBundle() + " " + receiveConventionId);
-          }
-        } else {
-          throw new OpenGammaRuntimeException("Unexpected swap convention type: " + receiveConvention);
+        if (fixLegConvention == null) {
+          throw new OpenGammaRuntimeException("A fixed swap leg convention could not be found");
         }
-      } else {
-        throw new OpenGammaRuntimeException("Can't handle node type " + node.getCurveNode().getClass().getSimpleName() + " at node " + node);
-      }
-      k++;
-    }
+        liborConvention = conventionSource.getSingle(floatLegConvention.getIborIndexConvention(), IborIndexConvention.class);
+        ArgumentChecker.notNull(liborConvention, floatLegConvention.getIborIndexConvention().toString());
 
-    ArgumentChecker.notNull(cashConvention, "Cash convention");
-    ArgumentChecker.notNull(floatLegConvention, "Floating leg convention");
-    ArgumentChecker.notNull(fixLegConvention, "Fixed leg convention");
-    liborConvention = conventionSource.getSingle(floatLegConvention.getIborIndexConvention(), IborIndexConvention.class);
-    ArgumentChecker.notNull(liborConvention, floatLegConvention.getIborIndexConvention().toString());
+        final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(spotDate, spotDate, instruments, tenors, marketDataForCurve, cashConvention.getDayCount(),
+            fixLegConvention.getDayCount(), fixLegConvention.getPaymentTenor().getPeriod(), ACT_365, liborConvention.getBusinessDayConvention());
 
-    final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(spotDate, spotDate, instruments, tenors, marketDataForCurve, cashConvention.getDayCount(),
-        fixLegConvention.getDayCount(), fixLegConvention.getPaymentTenor().getPeriod(), ACT_365, liborConvention.getBusinessDayConvention());
+        final ValueProperties properties = desiredValue.getConstraints().copy()
+            .with(ISDAFunctionConstants.ISDA_CURVE_DATE, spotDate.toString())
+            .get();
 
-    final ValueProperties properties = desiredValue.getConstraints().copy()
-        .with(ISDAFunctionConstants.ISDA_CURVE_DATE, spotDate.toString())
-        .get();
-
-    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), properties);
-    return Collections.singleton(new ComputedValue(spec, yieldCurve));
+        final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), properties);
+        return Collections.singleton(new ComputedValue(spec, yieldCurve));
   }
 
   @Override
@@ -194,8 +199,8 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
         .withAny(ISDAFunctionConstants.ISDA_CURVE_DATE)
         .get();
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.YIELD_CURVE,
-                                                        target.toSpecification(),
-                                                        properties));
+        target.toSpecification(),
+        properties));
   }
 
   @Override

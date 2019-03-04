@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -43,9 +43,8 @@ import com.opengamma.engine.ComputationTargetResolver;
       } finally {
         LazyResolveContext.endWrite();
       }
-    } else {
-      return simpleObject();
     }
+    return simpleObject();
   }
 
 }

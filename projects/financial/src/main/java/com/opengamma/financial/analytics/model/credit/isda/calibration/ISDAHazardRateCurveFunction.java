@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.credit.isda.calibration;
@@ -32,8 +32,10 @@ import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class ISDAHazardRateCurveFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override

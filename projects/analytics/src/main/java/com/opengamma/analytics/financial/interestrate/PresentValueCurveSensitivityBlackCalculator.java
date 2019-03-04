@@ -22,13 +22,15 @@ import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionCa
 import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionPhysicalFixedIborBlackMethod;
 import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackSwaptionBundle;
-import com.opengamma.analytics.financial.provider.calculator.blackstirfutures.PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Present value curve sensitivity calculator for interest rate instruments using the Black formula.
- * @deprecated Use {@link PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator}
+ * Present value curve sensitivity calculator for interest rate instruments
+ * using the Black formula.
+ * 
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.calculator.blackstirfutures.PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator}
  */
 @Deprecated
 public final class PresentValueCurveSensitivityBlackCalculator extends PresentValueCurveSensitivityCalculator {

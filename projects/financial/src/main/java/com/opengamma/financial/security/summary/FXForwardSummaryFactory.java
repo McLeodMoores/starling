@@ -13,10 +13,7 @@ import com.opengamma.financial.security.fx.FXForwardSecurity;
  */
 public class FXForwardSummaryFactory implements SummaryFactory<FXForwardSecurity> {
 
-  private final SecuritySource _securitySource;
-
   public FXForwardSummaryFactory(final SecuritySource securitySource) {
-    _securitySource = securitySource;
   }
 
   @Override

@@ -47,7 +47,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBlackSingleValuedFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXDigitalCallSpreadBlackPV01Function.class);
   private static final PV01ForexCalculator CALCULATOR = PV01ForexCalculator.getInstance();

@@ -36,7 +36,7 @@ public class ForexLocalVolatilityPDEPresentValueResultCollection {
   public static final String BLACK_PUT_PV = "Black Put Present Value";
   /** Label for call PV quotes calculated using the Black model */
   public static final String BLACK_CALL_PV = "Black Call Present Value";
-  private final Map<String, double[]> _pvDataMap = new TreeMap<String, double[]>();
+  private final Map<String, double[]> _pvDataMap = new TreeMap<>();
   private final double[] _strikes;
   private final int _n;
 
@@ -87,7 +87,7 @@ public class ForexLocalVolatilityPDEPresentValueResultCollection {
   public Double getPointPV(final String name, final double strike, final Interpolator1D interpolator) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(interpolator, "interpolator");
-    if (!(_pvDataMap.containsKey(name)) || _pvDataMap.get(name) == null) {
+    if (!_pvDataMap.containsKey(name) || _pvDataMap.get(name) == null) {
       return null;
     }
     final Interpolator1DDataBundle data = interpolator.getDataBundle(_strikes, _pvDataMap.get(name));

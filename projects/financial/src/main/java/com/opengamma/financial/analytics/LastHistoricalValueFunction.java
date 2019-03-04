@@ -37,7 +37,7 @@ public class LastHistoricalValueFunction extends AbstractFunction.NonCompiledInv
   private static HashMap<String, String> s_marketDataRequirementNamesMap;
 
   static {
-    s_marketDataRequirementNamesMap = new HashMap<String, String>();
+    s_marketDataRequirementNamesMap = new HashMap<>();
     s_marketDataRequirementNamesMap.put(ValueRequirementNames.DAILY_VOLUME, "VOLUME");
     s_marketDataRequirementNamesMap.put(ValueRequirementNames.DAILY_APPLIED_BETA, "APPLIED_BETA");
     s_marketDataRequirementNamesMap.put(ValueRequirementNames.DAILY_MARKET_CAP, "CUR_MKT_CAP");

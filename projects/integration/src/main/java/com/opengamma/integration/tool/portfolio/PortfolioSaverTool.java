@@ -69,7 +69,7 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
     // Construct portfolio reader
     final PositionReader positionReader = constructPortfolioReader(
         getCommandLine().getOptionValue(PORTFOLIO_NAME_OPT)
-    );
+        );
 
     // Create portfolio writer
     final PositionWriter positionWriter = constructPortfolioWriter(
@@ -77,7 +77,7 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
         getCommandLine().getOptionValue(SECURITY_TYPE_OPT),
         getCommandLine().hasOption(WRITE_OPT),
         getCommandLine().hasOption(INCLUDE_TRADES_OPT)
-    );
+        );
 
     // Construct portfolio copier
     final PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
@@ -99,7 +99,7 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
   }
 
   private static PositionWriter constructPortfolioWriter(final String filename, final String securityType, final boolean write,
-                                                          final boolean includeTrades) {
+      final boolean includeTrades) {
     if (write) {
       // Check that the file name was specified on the command line
       if (filename == null) {
@@ -107,27 +107,24 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
       }
 
       if (SheetFormat.of(filename) == SheetFormat.CSV || SheetFormat.of(filename) == SheetFormat.XLS) {
-//        if (securityType.equalsIgnoreCase("exchangetraded")) {
-//          return new SingleSheetSimplePositionWriter(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
-//        } else {
+        //        if (securityType.equalsIgnoreCase("exchangetraded")) {
+        //          return new SingleSheetSimplePositionWriter(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
+        //        } else {
 
         final RowParser rowParser = JodaBeanRowParser.newJodaBeanRowParser(securityType);
         if (rowParser != null) {
           return new SingleSheetSimplePositionWriter(filename, rowParser, includeTrades);
-        } else {
-          throw new OpenGammaRuntimeException("Could not create a row parser for security type " + securityType);
         }
-//        }
+        throw new OpenGammaRuntimeException("Could not create a row parser for security type " + securityType);
       } else if (SheetFormat.of(filename) == SheetFormat.ZIP) {
         return new ZippedPositionWriter(filename, includeTrades);
       } else {
         throw new OpenGammaRuntimeException("Input filename should end in .CSV, .XLS or .ZIP");
       }
 
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new PrettyPrintingPositionWriter(true);
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new PrettyPrintingPositionWriter(true);
   }
 
   private static PositionReader constructPortfolioReader(final String portfolioName) {
@@ -135,7 +132,7 @@ public class PortfolioSaverTool extends AbstractTool<ToolContext> {
         portfolioName, s_context.getPortfolioMaster(),
         s_context.getPositionMaster(),
         s_context.getSecuritySource()
-    );
+        );
   }
 
   @Override

@@ -11,7 +11,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedTimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculator;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
@@ -55,26 +54,38 @@ public class ExponentialWeightedMovingAverageHistoricalVolatilityCalculator exte
   private final double _lambdaM1;
 
   /**
-   * Although the return calculator can be any {@link TimeSeriesReturnCalculator}, to obtain correct results a
-   * {@link ContinuouslyCompoundedTimeSeriesReturnCalculator} should be used. The calculation mode is set to be
-   * the default (strict). Although the weight parameter can take any positive value, for most use the range should be $\lambda < 1$;
-   * if a value higher outside of this range is used then greater weight will be placed on older return values.
-   * @param lambda The weight parameter, not negative
-   * @param returnCalculator The return calculator, not null
+   * Although the return calculator can be any
+   * {@link TimeSeriesReturnCalculator}, to obtain correct results a
+   * {@link com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedTimeSeriesReturnCalculator}
+   * should be used. The calculation mode is set to be the default (strict).
+   * Although the weight parameter can take any positive value, for most use the
+   * range should be $\lambda < 1$; if a value higher outside of this range is
+   * used then greater weight will be placed on older return values.
+   * 
+   * @param lambda
+   *          The weight parameter, not negative
+   * @param returnCalculator
+   *          The return calculator, not null
    */
   public ExponentialWeightedMovingAverageHistoricalVolatilityCalculator(final double lambda, final TimeSeriesReturnCalculator returnCalculator) {
     this(lambda, returnCalculator, getDefaultCalculationMode());
   }
 
   /**
-   * Although the return calculator can be any {@link TimeSeriesReturnCalculator}, to obtain correct results
-   * a {@link ContinuouslyCompoundedTimeSeriesReturnCalculator} should be
-   * used. Although the weight parameter can take any positive value, for most use the range should be
-   * $\lambda < 1$; if a value higher outside of this range is used then
-   * greater weight will be placed on older return values.
-   * @param lambda The weight parameter, not negative
-   * @param returnCalculator The return calculator, not null
-   * @param mode The calculation mode, not null
+   * Although the return calculator can be any
+   * {@link TimeSeriesReturnCalculator}, to obtain correct results a
+   * {@link com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedTimeSeriesReturnCalculator}
+   * should be used. Although the weight parameter can take any positive value,
+   * for most use the range should be $\lambda < 1$; if a value higher outside
+   * of this range is used then greater weight will be placed on older return
+   * values.
+   * 
+   * @param lambda
+   *          The weight parameter, not negative
+   * @param returnCalculator
+   *          The return calculator, not null
+   * @param mode
+   *          The calculation mode, not null
    */
   public ExponentialWeightedMovingAverageHistoricalVolatilityCalculator(final double lambda, final TimeSeriesReturnCalculator returnCalculator,
       final CalculationMode mode) {

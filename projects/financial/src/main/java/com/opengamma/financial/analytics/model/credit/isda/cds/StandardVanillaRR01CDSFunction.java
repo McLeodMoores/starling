@@ -40,7 +40,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaRR01CDSFunction extends StandardVanillaCDSFunction {
   private static final CDSRiskFactors CALCULATOR = new CDSRiskFactors();
 

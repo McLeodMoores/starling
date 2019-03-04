@@ -16,7 +16,9 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 
 /**
  * Bond present value from curves.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondPresentValueFromCurvesFunction extends BondFromCurvesFunction {
 
   @Override

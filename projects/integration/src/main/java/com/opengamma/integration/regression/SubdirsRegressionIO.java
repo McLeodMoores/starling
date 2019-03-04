@@ -31,7 +31,7 @@ public class SubdirsRegressionIO extends RegressionIO {
 
   /**
    * Creates a new instance. If the supplied directory does not exist, it will be created.
-   * 
+   *
    * @param baseDir the directory to write the structures to - sub-directories will be created under this for each object type, not null
    * @param format the format to write each object in, not null
    * @param createIfAbsent true to create the folder if it doesn't exist (use this for writing, but probably not for reading)
@@ -48,7 +48,7 @@ public class SubdirsRegressionIO extends RegressionIO {
       }
     } else {
       if (createIfAbsent) {
-        boolean success = dir.mkdirs();
+        final boolean success = dir.mkdirs();
         if (success) {
           LOGGER.debug("Created directory {}", dir);
         } else {
@@ -63,14 +63,13 @@ public class SubdirsRegressionIO extends RegressionIO {
   protected File getTypeFolder(final String type, final boolean createIfAbsent) {
     if (type == null) {
       return getBaseFile();
-    } else {
-      final File outputDir = new File(getBaseFile(), type);
-      checkDirectory(outputDir, createIfAbsent);
-      return outputDir;
     }
+    final File outputDir = new File(getBaseFile(), type);
+    checkDirectory(outputDir, createIfAbsent);
+    return outputDir;
   }
 
-  
+
 
   // RegressionIO
 
@@ -103,12 +102,12 @@ public class SubdirsRegressionIO extends RegressionIO {
     if (files == null) {
       throw new OpenGammaRuntimeException("No files found in " + subDir);
     }
-    final List<String> identifiers = new ArrayList<String>(files.length);
-    for (File file : files) {
+    final List<String> identifiers = new ArrayList<>(files.length);
+    for (final File file : files) {
       if (file.isFile()) {
         final String name = file.getName();
         if (isIdentifierIncluded(name)) {
-          String identifier = stripIdentifierExtension(name);
+          final String identifier = stripIdentifierExtension(name);
           identifiers.add(identifier);
         }
       }
@@ -116,7 +115,7 @@ public class SubdirsRegressionIO extends RegressionIO {
     LOGGER.debug("Found {} objects", identifiers.size());
     return identifiers;
   }
-  
+
   // TODO: Bulk read operation
 
 }

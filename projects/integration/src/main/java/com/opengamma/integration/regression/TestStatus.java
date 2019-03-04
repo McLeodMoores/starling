@@ -26,8 +26,7 @@ public enum TestStatus {
   public TestStatus combine(final TestStatus other) {
     if (other.ordinal() > ordinal()) {
       return other;
-    } else {
-      return this;
     }
+    return this;
   }
 }

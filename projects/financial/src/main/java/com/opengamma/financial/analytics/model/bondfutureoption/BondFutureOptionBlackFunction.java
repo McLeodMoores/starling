@@ -68,7 +68,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base class for calculating values for a bond future option using Black.
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondFutureOptionBlackFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackFunction.class);
   private final String _valueRequirementName;

@@ -18,7 +18,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the deprecated functions in this package.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class DeprecatedFunctions extends AbstractFunctionConfigurationBean {
 
   /**

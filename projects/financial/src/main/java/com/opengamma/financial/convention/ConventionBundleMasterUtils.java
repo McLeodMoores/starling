@@ -18,8 +18,12 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Class of utility methods for adding convention bundles to a convention bundle master
+ * Class of utility methods for adding convention bundles to a convention bundle
+ * master.
+ * 
+ * @deprecated {@link ConventionBundleMaster} is deprecated
  */
+@Deprecated
 public class ConventionBundleMasterUtils {
   private final ConventionBundleMaster _master;
 

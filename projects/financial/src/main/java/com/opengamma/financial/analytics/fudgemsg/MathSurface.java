@@ -19,7 +19,7 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 
 /**
- * 
+ *
  */
 final class MathSurface {
 
@@ -89,7 +89,7 @@ final class MathSurface {
       final String name = deserializer.fieldValueToObject(String.class, message.getByName(SURFACE_NAME_FIELD_NAME));
       final Object function = deserializer.fieldValueToObject(message.getByName(SURFACE_FUNCTION_FIELD_NAME));
       if (function instanceof Function) {
-        return FunctionalDoublesSurface.from((Function) function, name);
+        return FunctionalDoublesSurface.from((Function<Double, Double>) function, name);
       }
       throw new OpenGammaRuntimeException("Expected serialized Function, got " + function);
     }

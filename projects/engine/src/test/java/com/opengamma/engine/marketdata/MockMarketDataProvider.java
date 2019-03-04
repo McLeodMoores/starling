@@ -23,7 +23,7 @@ public class MockMarketDataProvider extends AbstractMarketDataProvider {
   private final String _name;
   private final boolean _subscriptionsSucceed;
   private final CountDownLatch _responseLatch;
-  private final Map<ValueSpecification, Object> _values = new HashMap<ValueSpecification, Object>();
+  private final Map<ValueSpecification, Object> _values = new HashMap<>();
   private int _queryCount;
   private int _snapshotCount;
 

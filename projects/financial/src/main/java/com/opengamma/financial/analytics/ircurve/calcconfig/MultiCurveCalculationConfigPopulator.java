@@ -20,7 +20,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class MultiCurveCalculationConfigPopulator {
 
   public MultiCurveCalculationConfigPopulator(final ConfigMaster configMaster) {

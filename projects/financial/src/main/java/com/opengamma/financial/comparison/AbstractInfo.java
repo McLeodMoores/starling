@@ -23,7 +23,7 @@ import java.util.Collection;
 
   public void associateAdditionalUnderlying(final T underlying) {
     if (_additionalUnderlying == null) {
-      _additionalUnderlying = new ArrayList<T>();
+      _additionalUnderlying = new ArrayList<>();
     }
     _additionalUnderlying.add(underlying);
   }

@@ -24,15 +24,15 @@ import com.opengamma.util.time.Tenor;
  * Source of random, but reasonable, Cap/Floor securities.
  */
 public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurity> {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(CapFloorSecurityGenerator.class);
 
   private static final DayCount[] DAY_COUNT = new DayCount[] {DayCounts.ACT_360, DayCounts.THIRTY_U_360 };
   private static final Frequency[] FREQUENCY = new Frequency[] {SimpleFrequency.QUARTERLY, SimpleFrequency.SEMI_ANNUAL, SimpleFrequency.ANNUAL };
   private static final Tenor[] TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(10), Tenor.ofYears(20) };
-  private static final Tenor[] IBOR_TENORS = new Tenor[] {Tenor.ONE_DAY, Tenor.TWO_DAYS, Tenor.THREE_DAYS, Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21), 
-    Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.SEVEN_MONTHS, Tenor.EIGHT_MONTHS, 
-    Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS};
+  private static final Tenor[] IBOR_TENORS = new Tenor[] {Tenor.ONE_DAY, Tenor.TWO_DAYS, Tenor.THREE_DAYS, Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21),
+      Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.SEVEN_MONTHS, Tenor.EIGHT_MONTHS,
+      Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS};
 
   public static String createName(final boolean ibor, final boolean cap, final double strike, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final Frequency frequency,
       final Currency currency, final double notional) {
@@ -51,13 +51,11 @@ public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurit
     }
     if (ibor) {
       return curveSpecConfig.getLiborSecurity(tradeDate, tenor);
-    } else {
-      if (ccy.equals(Currency.USD)) {
-        return curveSpecConfig.getSwap3MSecurity(tradeDate, tenor);
-      } else {
-        return curveSpecConfig.getSwap6MSecurity(tradeDate, tenor);
-      }
     }
+    if (ccy.equals(Currency.USD)) {
+      return curveSpecConfig.getSwap3MSecurity(tradeDate, tenor);
+    }
+    return curveSpecConfig.getSwap6MSecurity(tradeDate, tenor);
   }
 
   @Override
@@ -71,13 +69,13 @@ public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurit
     final ZonedDateTime maturityDate = nextWorkingDay(startDate.plusYears(length), currency);
     final double notional = (double) getRandom(100000) * 1000;
     ExternalId underlyingIdentifier = null;
-    Tenor tenor = ibor ? getRandom(IBOR_TENORS) : getRandom(TENORS);
+    final Tenor tenor = ibor ? getRandom(IBOR_TENORS) : getRandom(TENORS);
     try {
       underlyingIdentifier = getUnderlying(currency, startDate.toLocalDate(), tenor, ibor);
       if (underlyingIdentifier == null) {
         return null;
       }
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       LOGGER.warn("Unable to obtain underlying id for " + currency + " " + startDate.toLocalDate() + " " + tenor, ex);
       return null;
     }

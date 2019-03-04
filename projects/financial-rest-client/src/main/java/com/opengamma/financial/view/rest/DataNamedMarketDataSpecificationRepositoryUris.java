@@ -13,7 +13,10 @@ import com.opengamma.engine.marketdata.NamedMarketDataSpecificationRepository;
 
 /**
  * RESTful URIs for {@link NamedMarketDataSpecificationRepository}
+ * 
+ * @deprecated {@link NamedMarketDataSpecificationRepository} is deprecated
  */
+@Deprecated
 public class DataNamedMarketDataSpecificationRepositoryUris {
 
   private static final String PATH_NAMES = "names";

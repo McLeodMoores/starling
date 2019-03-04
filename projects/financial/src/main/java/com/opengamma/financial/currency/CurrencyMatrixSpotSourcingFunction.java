@@ -64,9 +64,8 @@ public class CurrencyMatrixSpotSourcingFunction extends AbstractCurrencyMatrixSo
         }
 
       });
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
@@ -134,7 +133,7 @@ public class CurrencyMatrixSpotSourcingFunction extends AbstractCurrencyMatrixSo
 
   /**
    * Creates a requirement that will supply a value which gives the number of units of the source currency for each unit of the target currency.
-   * 
+   *
    * @param source the source currency to convert from
    * @param target the target currency to convert to
    * @return the requirement, not null
@@ -142,13 +141,13 @@ public class CurrencyMatrixSpotSourcingFunction extends AbstractCurrencyMatrixSo
   public static ValueRequirement getConversionRequirement(final Currency source, final Currency target) {
     //TODO is the reversal of the inputs intentional?
     // Yes - pending a thorough change across all currency matrix based code. Everything that refers to "source" and "target" is unfortunately back to front.
-    // "Source" should really have been "counter", and "target" should really have been "base". The ordering would then be reversed. [PLAT-3453] 
+    // "Source" should really have been "counter", and "target" should really have been "base". The ordering would then be reversed. [PLAT-3453]
     return new ValueRequirement(ValueRequirementNames.SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(target, source)));
   }
 
   /**
    * Creates a requirement that will supply a value which gives the number of units of the source currency for each unit of the target currency.
-   * 
+   *
    * @param source the source currency to convert from
    * @param target the target currency to convert to
    * @return the requirement, not null
@@ -163,7 +162,7 @@ public class CurrencyMatrixSpotSourcingFunction extends AbstractCurrencyMatrixSo
 
   /**
    * Creates a requirement that will supply a value which gives the number of units of the source currency for each unit of the target currency.
-   * 
+   *
    * @param source the source currency to convert from
    * @param target the target currency to convert to
    * @return the requirement, not null

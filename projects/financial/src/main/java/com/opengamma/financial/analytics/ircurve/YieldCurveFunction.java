@@ -67,11 +67,10 @@ public final class YieldCurveFunction {
   // TODO: these should be somewhere else
   public static String getPropertyValue(final String propertyName, final ValueRequirement requirement) {
     final Set<String> curveNames = requirement.getConstraints().getValues(propertyName);
-    if ((curveNames == null) || (curveNames.size() != 1)) {
+    if (curveNames == null || curveNames.size() != 1) {
       return null;
-    } else {
-      return curveNames.iterator().next();
     }
+    return curveNames.iterator().next();
   }
 
   // TODO: these should be somewhere else
@@ -79,7 +78,7 @@ public final class YieldCurveFunction {
     LOGGER.debug("propertyName={} requirement={}", propertyName, requirement);
     final Set<String> curveNames = requirement.getConstraints().getValues(propertyName);
     final Set<String> defaultCurves;
-    switch ((curveNames != null) ? curveNames.size() : 0) {
+    switch (curveNames != null ? curveNames.size() : 0) {
       case 0:
         // Handles both the wildcard case and the unspecified case
         LOGGER.debug("wildcard or unspecified requirement");
@@ -115,10 +114,9 @@ public final class YieldCurveFunction {
         if (foundCurve != null) {
           LOGGER.info("Default {} is {}", propertyName, foundCurve);
           return foundCurve;
-        } else {
-          LOGGER.info("None of {} declared as defaults for {}", curveNames, propertyName);
-          throw new IllegalStateException("Can't select " + propertyName + " from " + curveNames + " - none declared as default");
         }
+        LOGGER.info("None of {} declared as defaults for {}", curveNames, propertyName);
+        throw new IllegalStateException("Can't select " + propertyName + " from " + curveNames + " - none declared as default");
     }
   }
 
@@ -263,11 +261,11 @@ public final class YieldCurveFunction {
     } else {
       if (fundingCurveName == null) {
         throw new IllegalArgumentException("fundingCurveName");
-      } else {
-        if (!desiredCurveName.equals(forwardCurveName) && !desiredCurveName.equals(fundingCurveName)) {
-          //TODO put a Jira in about this stupidity
-          throw new IllegalArgumentException("curveName " + desiredCurveName + " not one of forwardCurveName=" + forwardCurveName + " or fundingCurveName=" + fundingCurveName);
-        }
+      }
+      if (!desiredCurveName.equals(forwardCurveName) && !desiredCurveName.equals(fundingCurveName)) {
+        // TODO put a Jira in about this stupidity
+        throw new IllegalArgumentException(
+            "curveName " + desiredCurveName + " not one of forwardCurveName=" + forwardCurveName + " or fundingCurveName=" + fundingCurveName);
       }
     }
     return Pairs.of(forwardCurveName, fundingCurveName);
@@ -286,7 +284,7 @@ public final class YieldCurveFunction {
           LOGGER.debug("Using {} from advisory funding", curveName);
           fundingCurveName = curveName;
         } else {
-          if ((forwardCurveName == null) && (fundingCurveName == null)) {
+          if (forwardCurveName == null && fundingCurveName == null) {
             LOGGER.debug("Using {} for both curve names", curveName);
             forwardCurveName = curveName;
             fundingCurveName = curveName;

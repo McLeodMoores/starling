@@ -20,11 +20,11 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.cds.CreditDefaultSwapIndexComponent;
 import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
 
 /**
- * A Hibernate bean representation of {@link CreditDefaultSwapIndexComponent}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.cds.CreditDefaultSwapIndexComponent}.
  */
 @BeanDefinition
 public class CDSIndexComponentBean extends DirectBean {

@@ -49,12 +49,12 @@ public class PointSelector implements DistinctMarketDataSelector {
   private final Set<String> _securityTypes;
 
   /* package */ PointSelector(final Set<String> calcConfigNames,
-                              final Set<ExternalId> ids,
-                              final ExternalScheme idMatchScheme,
-                              final Pattern idMatchPattern,
-                              final ExternalScheme idLikeScheme,
-                              final Pattern idLikePattern,
-                              final Set<String> securityTypes) {
+      final Set<ExternalId> ids,
+      final ExternalScheme idMatchScheme,
+      final Pattern idMatchPattern,
+      final ExternalScheme idLikeScheme,
+      final Pattern idLikePattern,
+      final Set<String> securityTypes) {
     if (idMatchScheme == null && idMatchPattern != null || idMatchScheme != null && idMatchPattern == null) {
       throw new IllegalArgumentException("Scheme and pattern must both be specified to pattern match on ID");
     }
@@ -77,8 +77,8 @@ public class PointSelector implements DistinctMarketDataSelector {
 
   @Override
   public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
-                                                         final String calcConfigName,
-                                                         final SelectorResolver resolver) {
+      final String calcConfigName,
+      final SelectorResolver resolver) {
     if (_calcConfigNames != null && !_calcConfigNames.contains(calcConfigName)) {
       return null;
     }
@@ -147,16 +147,15 @@ public class PointSelector implements DistinctMarketDataSelector {
   private static ExternalIdBundle createIds(final ValueSpecification valueSpecification) {
     if (valueSpecification.getProperty("Id") != null) {
       return ExternalIdBundle.of(ExternalId.parse(valueSpecification.getProperty("Id")));
-    } else {
-      // Id may not always be present - maybe with snapshots? (get External from UniqueId)
-      final UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
-      final String scheme = uniqueId.getScheme();
-      if (scheme.startsWith("ExternalId-")) {
-        return PrimitiveResolver.resolveExternalIds(uniqueId, "ExternalId-");
-      } else {
-        return ExternalIdBundle.of(scheme, uniqueId.getValue());
-      }
     }
+    // Id may not always be present - maybe with snapshots? (get External from
+    // UniqueId)
+    final UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
+    final String scheme = uniqueId.getScheme();
+    if (scheme.startsWith("ExternalId-")) {
+      return PrimitiveResolver.resolveExternalIds(uniqueId, "ExternalId-");
+    }
+    return ExternalIdBundle.of(scheme, uniqueId.getValue());
   }
 
   /* package */ Set<ExternalId> getIds() {
@@ -256,12 +255,12 @@ public class PointSelector implements DistinctMarketDataSelector {
 
     /* package */ PointSelector getSelector() {
       return new PointSelector(_scenario.getCalcConfigNames(),
-                               _ids,
-                               _idMatchScheme,
-                               _idMatchPattern,
-                               _idLikeScheme,
-                               _idLikePattern,
-                               _securityTypes);
+          _ids,
+          _idMatchScheme,
+          _idMatchPattern,
+          _idLikeScheme,
+          _idLikePattern,
+          _securityTypes);
     }
 
     /**

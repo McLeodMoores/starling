@@ -73,21 +73,21 @@ public class ExchangeTradedRowParser extends RowParser {
   public ExchangeTradedRowParser(final SecurityProvider securityProvider, final DateFormat dateFormat) {
     super(dateFormat._primaryFormatter, dateFormat._secondaryFormatter);
     ArgumentChecker.notNull(securityProvider, "securityProvider");
-   _securityProvider = securityProvider;
+    _securityProvider = securityProvider;
   }
 
   public ExchangeTradedRowParser(final SecurityProvider securityProvider, final DateTimeFormatter dateFormatter) {
     super(dateFormatter);
     ArgumentChecker.notNull(securityProvider, "securityProvider");
-   _securityProvider = securityProvider;
+    _securityProvider = securityProvider;
   }
 
   private static final ExternalScheme[] SCHEME_WATERFALL = {
-    ExternalSchemes.BLOOMBERG_TICKER,
-    ExternalSchemes.BLOOMBERG_TCM,
-    ExternalSchemes.BLOOMBERG_BUID,
-    ExternalSchemes.CUSIP,
-    ExternalSchemes.ISIN
+      ExternalSchemes.BLOOMBERG_TICKER,
+      ExternalSchemes.BLOOMBERG_TCM,
+      ExternalSchemes.BLOOMBERG_BUID,
+      ExternalSchemes.CUSIP,
+      ExternalSchemes.ISIN
   };
 
 
@@ -129,13 +129,9 @@ public class ExchangeTradedRowParser extends RowParser {
       return new ManageablePosition(
           BigDecimal.valueOf(Integer.parseInt(getWithException(row, QUANTITY))),
           security.getExternalIdBundle()
-      );
-    } else {
-      return new ManageablePosition(
-          BigDecimal.ONE,
-          security.getExternalIdBundle()
-      );
+          );
     }
+    return new ManageablePosition(BigDecimal.ONE, security.getExternalIdBundle());
   }
 
   @Override
@@ -172,9 +168,8 @@ public class ExchangeTradedRowParser extends RowParser {
       }
       return result;
 
-    } else {
-      return null;
     }
+    return null;
 
   }
 
@@ -207,7 +202,7 @@ public class ExchangeTradedRowParser extends RowParser {
       return ImmutableMap.of(
           TICKER, ticker,
           ATTRIBUTES, attributes
-      );
+          );
     }
     return null;
   }

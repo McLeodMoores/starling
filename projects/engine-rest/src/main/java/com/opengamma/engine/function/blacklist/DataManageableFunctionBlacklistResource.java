@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -46,8 +46,8 @@ public class DataManageableFunctionBlacklistResource extends DataFunctionBlackli
     final Integer ttl = request.getInt(TTL_FIELD);
     final List<FudgeField> fields = request.getAllByName(RULE_FIELD);
     if (fields.size() > 1) {
-      final Collection<FunctionBlacklistRule> rules = new ArrayList<FunctionBlacklistRule>(fields.size());
-      for (FudgeField field : fields) {
+      final Collection<FunctionBlacklistRule> rules = new ArrayList<>(fields.size());
+      for (final FudgeField field : fields) {
         rules.add(fdc.fieldValueToObject(FunctionBlacklistRule.class, field));
       }
       if (ttl != null) {
@@ -72,8 +72,8 @@ public class DataManageableFunctionBlacklistResource extends DataFunctionBlackli
     final FudgeDeserializer fdc = new FudgeDeserializer(getFudgeContext());
     final List<FudgeField> fields = request.getAllByName(RULE_FIELD);
     if (fields.size() > 1) {
-      final Collection<FunctionBlacklistRule> rules = new ArrayList<FunctionBlacklistRule>(fields.size());
-      for (FudgeField field : fields) {
+      final Collection<FunctionBlacklistRule> rules = new ArrayList<>(fields.size());
+      for (final FudgeField field : fields) {
         rules.add(fdc.fieldValueToObject(FunctionBlacklistRule.class, field));
       }
       getUnderlying().removeBlacklistRules(rules);

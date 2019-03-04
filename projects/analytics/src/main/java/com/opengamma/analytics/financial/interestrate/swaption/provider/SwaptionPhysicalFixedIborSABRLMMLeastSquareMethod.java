@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.swaption.provider;
@@ -342,7 +342,7 @@ public class SwaptionPhysicalFixedIborSABRLMMLeastSquareMethod {
     for (int loopp = 0; loopp < 2 * nbPeriods; loopp++) {
       dPvdC = dPvdC.plus(dPhidC[loopp].multipliedBy(dPvdPhi[loopp])).cleaned();
     }
-    return new Triple<>(pv, sensiSABR, dPvdC);
+    return Triple.of(pv, sensiSABR, dPvdC);
   }
 
 }

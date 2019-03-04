@@ -42,7 +42,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class YieldCurveNodeSensitivitiesHelper {
   private static final DecimalFormat FORMATTER = new DecimalFormat("##.######");
 

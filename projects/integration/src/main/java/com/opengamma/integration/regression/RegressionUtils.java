@@ -121,8 +121,7 @@ public final class RegressionUtils {
     final ConfigSearchResult<IdMappings> result = configMaster.search(request);
     if (result.getValues().size() == 1) {
       return result.getFirstValue();
-    } else {
-      return null;
     }
+    return null;
   }
 }

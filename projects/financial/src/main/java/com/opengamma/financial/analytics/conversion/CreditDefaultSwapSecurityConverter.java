@@ -45,7 +45,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitorAdapter<CreditDefaultSwapDefinition> {
 
   static final LegalEntity DUMMY_OBLIGOR_A = new ManageableLegalEntity("Dummy_A", ExternalIdBundle.of(ExternalId.of("DUMMY", "Dummy_A")));
@@ -176,9 +178,8 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
     //TODO temporary fix until securities are reloaded with references to the org master
     if (legalEntityId.getScheme().getName().equals("DbLen") && _legalEntitySource != null) {
       return _legalEntitySource.get(UniqueId.of(legalEntityId.getScheme().getName(), legalEntityId.getValue()));
-    } else {
-      return DUMMY_OBLIGOR_C;
     }
+    return DUMMY_OBLIGOR_C;
   }
 
   private LegalEntity getObligorForProtectionBuyer(final ExternalId obligorId) {

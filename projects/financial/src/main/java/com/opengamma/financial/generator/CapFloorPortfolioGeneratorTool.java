@@ -20,7 +20,7 @@ public class CapFloorPortfolioGeneratorTool extends AbstractPortfolioGeneratorTo
   public PortfolioNodeGenerator createPortfolioNodeGenerator(final int size) {
     final CapFloorSecurityGenerator securities = createCapFloorSecurityGenerator();
     configure(securities);
-    final PositionGenerator positions = new SimplePositionGenerator<CapFloorSecurity>(securities, getSecurityPersister(), getCounterPartyGenerator());
+    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
     return new LeafPortfolioNodeGenerator(new StaticNameGenerator("Cap/Floor"), positions, size);
   }
 

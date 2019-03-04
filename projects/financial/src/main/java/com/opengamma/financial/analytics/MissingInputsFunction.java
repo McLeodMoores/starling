@@ -141,10 +141,9 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
     if (underlying == getUnderlyingCompiled()) {
       LOGGER.debug("Compiling underlying on {} gives self", this);
       return this;
-    } else {
-      LOGGER.debug("Creating delegate for compiled underlying on {}", this);
-      return create(underlying);
     }
+    LOGGER.debug("Creating delegate for compiled underlying on {}", this);
+    return create(underlying);
   }
 
   @Override
@@ -324,9 +323,8 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
     final FunctionInvoker underlying = getUnderlyingCompiled().getFunctionInvoker();
     if (underlying == getUnderlyingInvoker()) {
       return this;
-    } else {
-      return create(underlying);
     }
+    return create(underlying);
   }
 
   // FunctionInvoker

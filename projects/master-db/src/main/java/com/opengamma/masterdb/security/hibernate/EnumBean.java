@@ -57,9 +57,8 @@ public abstract class EnumBean {
   public int hashCode() {
     if (_id != null) {
       return _name.hashCode();
-    } else {
-      return _id.intValue();
     }
+    return _id.intValue();
   }
 
   @Override

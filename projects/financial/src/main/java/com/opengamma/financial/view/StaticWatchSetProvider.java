@@ -35,19 +35,19 @@ public class StaticWatchSetProvider implements WatchSetProvider {
 
   /**
    * Creates a new provider. This is intended to be called from Spring configuration.
-   * 
+   *
    * @param map the map of object identifiers (either strings or {@link ObjectId} instances) to watch identifiers (either strings, {@code ObjectId} instances, or collections of either)
    */
   @SuppressWarnings("rawtypes")
   public StaticWatchSetProvider(final Map map) {
     _map = Maps.newHashMapWithExpectedSize(map.size());
-    for (Object entry : map.entrySet()) {
+    for (final Object entry : map.entrySet()) {
       final ObjectId key = toObjectId(((Map.Entry) entry).getKey());
       final Object value = ((Map.Entry) entry).getValue();
       if (value instanceof Collection) {
         final Collection valueCollection = (Collection) value;
-        final Collection<ObjectId> values = new ArrayList<ObjectId>(valueCollection.size());
-        for (Object valueEntry : valueCollection) {
+        final Collection<ObjectId> values = new ArrayList<>(valueCollection.size());
+        for (final Object valueEntry : valueCollection) {
           values.add(toObjectId(valueEntry));
         }
         _map.put(key, values);
@@ -59,9 +59,9 @@ public class StaticWatchSetProvider implements WatchSetProvider {
 
   @Override
   public Set<ObjectId> getAdditionalWatchSet(final Set<ObjectId> watchSet) {
-    final Set<ObjectId> result = new HashSet<ObjectId>();
-    for (ObjectId watch : watchSet) {
-      Collection<ObjectId> mapped = _map.get(watch);
+    final Set<ObjectId> result = new HashSet<>();
+    for (final ObjectId watch : watchSet) {
+      final Collection<ObjectId> mapped = _map.get(watch);
       if (mapped != null) {
         result.addAll(mapped);
       }

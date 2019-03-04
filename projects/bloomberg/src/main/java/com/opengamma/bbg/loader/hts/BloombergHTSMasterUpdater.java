@@ -127,7 +127,7 @@ public class BloombergHTSMasterUpdater {
    * @return whether to update this time series
    */
   protected boolean checkForUpdates(final HistoricalTimeSeriesInfoDocument doc, final Map<MetaDataKey, Set<ObjectId>> metaDataKeyMap,
-                                    final Map<LocalDate, Map<String, Map<String, Set<ExternalIdBundle>>>> bbgTSRequest) {
+      final Map<LocalDate, Map<String, Map<String, Set<ExternalIdBundle>>>> bbgTSRequest) {
     final ManageableHistoricalTimeSeriesInfo info = doc.getInfo();
     final ExternalIdBundle idBundle = info.getExternalIdBundle().toBundle();
     // select start date
@@ -240,9 +240,8 @@ public class BloombergHTSMasterUpdater {
         HistoricalTimeSeriesGetFilter.ofLatestPoint()).getTimeSeries();
     if (timeSeries.isEmpty()) {
       return DEFAULT_START_DATE;
-    } else {
-      return timeSeries.getLatestTime();
     }
+    return timeSeries.getLatestTime();
   }
 
   private boolean isUpToDate(final LocalDate latestDate, final String observationTime) {

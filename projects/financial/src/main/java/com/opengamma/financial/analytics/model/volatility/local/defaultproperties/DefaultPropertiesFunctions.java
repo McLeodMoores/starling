@@ -53,7 +53,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   }
 
-  private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<String, CurrencyInfo>();
+  private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
   private double _theta = 0.5;
   private int _nTimeSteps = 100;
   private int _nSpaceSteps = 100;

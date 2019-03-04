@@ -11,8 +11,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionWithData;
 import com.opengamma.analytics.financial.instrument.inflation.CouponInflationDefinition;
-import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponInterpolationGearingDefinition;
-import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponMonthlyGearingDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponDefinition;
 import com.opengamma.analytics.financial.instrument.payment.PaymentFixedDefinition;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondInterestIndexedSecurity;
@@ -29,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Describes a interest inflation indexed bond transaction. Both the coupon and the nominal are indexed on a price index.
- * 
+ *
  * @param <N>
  *          Type of fix payment coupon.
  * @param <C>
@@ -41,7 +39,7 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
 
   /**
    * Constructor of a interest indexed bond transaction from all the transaction details.
-   * 
+   *
    * @param underlyingBond
    *          The interest indexed bond underlying the transaction.
    * @param quantity
@@ -61,7 +59,7 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -72,7 +70,7 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -93,7 +91,7 @@ public class BondInterestIndexedTransactionDefinition<N extends PaymentFixedDefi
   public BondInterestIndexedTransaction<PaymentFixed, Coupon> toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(data, "Price index fixing time series");
-    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondPurchase = 
+    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondPurchase =
         ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond()).toDerivative(date, getSettlementDate(), data);
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
     final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondStandard = ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond())

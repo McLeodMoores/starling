@@ -74,12 +74,12 @@ public class PortfolioLoaderResource {
    * @param bloombergReferenceDataProvider  the provider, not null
    */
   public PortfolioLoaderResource(final PortfolioMaster portfolioMaster,
-                                 final PositionMaster positionMaster,
-                                 final SecurityMaster securityMaster,
-                                 final HistoricalTimeSeriesMaster historicalTimeSeriesMaster,
-                                 final SecurityProvider securityProvider,
-                                 final HistoricalTimeSeriesProvider historicalTimeSeriesProvider,
-                                 final ReferenceDataProvider bloombergReferenceDataProvider) {
+      final PositionMaster positionMaster,
+      final SecurityMaster securityMaster,
+      final HistoricalTimeSeriesMaster historicalTimeSeriesMaster,
+      final SecurityProvider securityProvider,
+      final HistoricalTimeSeriesProvider historicalTimeSeriesProvider,
+      final ReferenceDataProvider bloombergReferenceDataProvider) {
     ArgumentChecker.notNull(positionMaster, "positionMaster");
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
     ArgumentChecker.notNull(securityMaster, "securityMaster");
@@ -112,52 +112,46 @@ public class PortfolioLoaderResource {
         xmlPortfolioCopy(positionReader);
       }
       return Response.ok("Upload complete").build();
-    } else {
-      final Object fileEntity = fileBodyPart.getEntity();
-      final String fileName = fileBodyPart.getFormDataContentDisposition().getFileName();
-      final InputStream fileStream = new WorkaroundInputStream(((BodyPartEntity) fileEntity).getInputStream());
-      final String dataField = getString(formData, "dataField");
-      final String dataProvider = getString(formData, "dataProvider");
-      final String portfolioName = getString(formData, "portfolioName");
-      final String dateFormatName = getString(formData, "dateFormat");
-      // fields can be separated by whitespace or a comma with whitespace
-      final String[] dataFields = dataField.split("(\\s*,\\s*|\\s+)");
-
-      LOGGER.info("Portfolio uploaded. fileName: {}, portfolioName: {}, dataField: {}, dataProvider: {}",
-                    fileName, portfolioName, dataField, dataProvider);
-
-      if (fileEntity == null) {
-        throw new WebApplicationException(Response.Status.BAD_REQUEST);
-      }
-      final ResolvingPortfolioCopier copier = new ResolvingPortfolioCopier(_historicalTimeSeriesMaster,
-                                                                           _historicalTimeSeriesProvider,
-                                                                           _referenceDataProvider,
-                                                                           dataProvider,
-                                                                           dataFields);
-      final PositionWriter positionWriter =
-          new MasterPositionWriter(portfolioName, _portfolioMaster, _positionMaster, _securityMaster, false, false, true);
-      final SheetFormat format = getFormatForFileName(fileName);
-      final ExchangeTradedRowParser.DateFormat dateFormat = Enum.valueOf(ExchangeTradedRowParser.DateFormat.class, dateFormatName);
-      final RowParser rowParser = new ExchangeTradedRowParser(_securityProvider, dateFormat);
-      final PositionReader positionReader = new SingleSheetSimplePositionReader(format, fileStream, rowParser);
-      final StreamingOutput streamingOutput = new StreamingOutput() {
-        @Override
-        public void write(final OutputStream output) throws IOException, WebApplicationException {
-          // TODO callback for progress updates as portoflio is copied
-          copier.copy(positionReader, positionWriter);
-          output.write("Upload complete".getBytes());
-        }
-      };
-      return Response.ok(streamingOutput).build();
     }
+    final Object fileEntity = fileBodyPart.getEntity();
+    final String fileName = fileBodyPart.getFormDataContentDisposition().getFileName();
+    final InputStream fileStream = new WorkaroundInputStream(((BodyPartEntity) fileEntity).getInputStream());
+    final String dataField = getString(formData, "dataField");
+    final String dataProvider = getString(formData, "dataProvider");
+    final String portfolioName = getString(formData, "portfolioName");
+    final String dateFormatName = getString(formData, "dateFormat");
+    // fields can be separated by whitespace or a comma with whitespace
+    final String[] dataFields = dataField.split("(\\s*,\\s*|\\s+)");
+
+    LOGGER.info("Portfolio uploaded. fileName: {}, portfolioName: {}, dataField: {}, dataProvider: {}", fileName, portfolioName, dataField, dataProvider);
+
+    if (fileEntity == null) {
+      throw new WebApplicationException(Response.Status.BAD_REQUEST);
+    }
+    final ResolvingPortfolioCopier copier = new ResolvingPortfolioCopier(_historicalTimeSeriesMaster, _historicalTimeSeriesProvider, _referenceDataProvider,
+        dataProvider, dataFields);
+    final PositionWriter positionWriter = new MasterPositionWriter(portfolioName, _portfolioMaster, _positionMaster, _securityMaster, false, false, true);
+    final SheetFormat format = getFormatForFileName(fileName);
+    final ExchangeTradedRowParser.DateFormat dateFormat = Enum.valueOf(ExchangeTradedRowParser.DateFormat.class, dateFormatName);
+    final RowParser rowParser = new ExchangeTradedRowParser(_securityProvider, dateFormat);
+    final PositionReader positionReader = new SingleSheetSimplePositionReader(format, fileStream, rowParser);
+    final StreamingOutput streamingOutput = new StreamingOutput() {
+      @Override
+      public void write(final OutputStream output) throws IOException, WebApplicationException {
+        // TODO callback for progress updates as portoflio is copied
+        copier.copy(positionReader, positionWriter);
+        output.write("Upload complete".getBytes());
+      }
+    };
+    return Response.ok(streamingOutput).build();
   }
 
   private void xmlPortfolioCopy(final PositionReader positionReader) {
 
     final SimplePortfolioCopier copier = new SimplePortfolioCopier(null);
     final PositionWriter positionWriter = new MasterPositionWriter(positionReader.getPortfolioName(),
-                                                                      _portfolioMaster, _positionMaster,
-                                                                      _securityMaster, false, false, true);
+        _portfolioMaster, _positionMaster,
+        _securityMaster, false, false, true);
     // Call the portfolio loader with the supplied arguments
     copier.copy(positionReader, positionWriter);
     // close stuff
@@ -197,7 +191,7 @@ public class PortfolioLoaderResource {
     }
 
     final Response response = Response.status(Response.Status.BAD_REQUEST).entity("Portfolio upload only supports CSV/XLS " +
-                                                                                "files and Excel worksheets").build();
+        "files and Excel worksheets").build();
     throw new WebApplicationException(response);
   }
 

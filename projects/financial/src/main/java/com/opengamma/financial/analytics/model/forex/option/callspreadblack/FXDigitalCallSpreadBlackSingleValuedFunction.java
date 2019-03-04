@@ -24,7 +24,9 @@ import com.opengamma.financial.security.option.NonDeliverableFXDigitalOptionSecu
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FXDigitalCallSpreadBlackSingleValuedFunction extends FXOptionBlackSingleValuedFunction {
 
   public FXDigitalCallSpreadBlackSingleValuedFunction(final String valueRequirementName) {

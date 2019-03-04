@@ -20,7 +20,7 @@ public class CashPortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
   public PortfolioNodeGenerator createPortfolioNodeGenerator(final int size) {
     final CashSecurityGenerator securities = createCashSecurityGenerator();
     configure(securities);
-    final PositionGenerator positions = new SimplePositionGenerator<CashSecurity>(securities, getSecurityPersister());
+    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister());
     return new LeafPortfolioNodeGenerator(new StaticNameGenerator("Cash"), positions, size);
   }
 

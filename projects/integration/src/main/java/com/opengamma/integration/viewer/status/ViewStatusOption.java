@@ -234,9 +234,8 @@ public final class ViewStatusOption {
           throw new OpenGammaRuntimeException("Error parsing given snapshot date [" + snapshotDate + "]", ex.getCause());
         }
         return new FixedHistoricalMarketDataSpecification(htsKey, snapshotDate);
-      } else {
-        throw new OpenGammaRuntimeException("Given historical option [" + historicalOption + "] does not match expected format localdate/htskey");
       }
+      throw new OpenGammaRuntimeException("Given historical option [" + historicalOption + "] does not match expected format localdate/htskey");
     }
     return MarketData.live();
   }
@@ -292,7 +291,7 @@ public final class ViewStatusOption {
   /**
    * View result format
    */
-  public static enum ResultFormat {
+  public enum ResultFormat {
     /**
      * CSV
      */

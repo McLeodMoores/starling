@@ -36,9 +36,8 @@ public abstract class AbstractFailureWithRequirementsNode extends AbstractFailur
   public int getIndexOfChild(final Object child) {
     if (child.equals(_valueSpecificationToRequirementMap)) {
       return 3;
-    } else {
-      return super.getIndexOfChild(child);
     }
+    return super.getIndexOfChild(child);
   }
 
   @Override

@@ -104,9 +104,8 @@ public class IssuerProviderDiscount extends IssuerProvider {
         return getMulticurveProvider().getCurve(name);
       }
       return getIssuerProvider().getIssuerCurve(name);
-    } else {
-      throw new IllegalArgumentException("the following curve is not in the provider: " + name);
     }
+    throw new IllegalArgumentException("the following curve is not in the provider: " + name);
   }
 
   @Override

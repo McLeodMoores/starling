@@ -71,7 +71,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base class functions that calculate analytic values for interest rate future options using the SABR model.
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRFunction.class);

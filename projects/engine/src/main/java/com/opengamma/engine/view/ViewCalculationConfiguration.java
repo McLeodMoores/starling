@@ -22,8 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
-import com.opengamma.engine.function.FunctionParameters;
-import com.opengamma.engine.function.resolver.ComputationTargetFilter;
 import com.opengamma.engine.function.resolver.IdentityResolutionRuleTransform;
 import com.opengamma.engine.function.resolver.ResolutionRuleTransform;
 import com.opengamma.engine.value.ValueProperties;
@@ -504,9 +502,8 @@ public class ViewCalculationConfiguration implements Serializable {
   public String toString() {
     if (LOGGER.isDebugEnabled()) {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-    } else {
-      return "ViewCalculationConfiguration[" + getName() + "]";
     }
+    return "ViewCalculationConfiguration[" + getName() + "]";
   }
 
   /**
@@ -644,7 +641,7 @@ public class ViewCalculationConfiguration implements Serializable {
   /**
    * Enumerates the ways that aggregates can be calculated for merged outputs.
    */
-  public static enum MergedOutputAggregationType {
+  public enum MergedOutputAggregationType {
 
     /**
      * Specifies that simple, linear aggregation should be used

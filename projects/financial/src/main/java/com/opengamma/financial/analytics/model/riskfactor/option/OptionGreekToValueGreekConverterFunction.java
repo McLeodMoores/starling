@@ -60,12 +60,11 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
 
   protected ValueProperties getInputConstraint(final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
-    Set<String> currencies = constraints.getValues(ValuePropertyNames.CURRENCY);
-    if ((currencies == null) || currencies.isEmpty()) {
+    final Set<String> currencies = constraints.getValues(ValuePropertyNames.CURRENCY);
+    if (currencies == null || currencies.isEmpty()) {
       return ValueProperties.withAny(ValuePropertyNames.CURRENCY).get();
-    } else {
-      return ValueProperties.with(ValuePropertyNames.CURRENCY, currencies).get();
     }
+    return ValueProperties.with(ValuePropertyNames.CURRENCY, currencies).get();
   }
 
   // CompiledFunctionDefinition
@@ -77,7 +76,7 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    Security sec = target.getPosition().getSecurity();
+    final Security sec = target.getPosition().getSecurity();
     if (sec instanceof EquityOptionSecurity || sec instanceof EquitySecurity) {
       return true;
     }
@@ -95,7 +94,7 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
     final Security security = position.getSecurity();
     List<UnderlyingType> underlyings;
     Underlying order;
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final String underlyingGreekRequirementName = AvailableValueGreeks.getGreekRequirementNameForValueGreekName(getRequirementName());
     requirements.add(new ValueRequirement(underlyingGreekRequirementName, ComputationTargetType.SECURITY, security.getUniqueId(), getInputConstraint(desiredValue)));
     order = AvailableGreeks.getGreekForValueRequirementName(underlyingGreekRequirementName).getUnderlying();
@@ -104,7 +103,7 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
     }
     underlyings = order.getUnderlyings();
     if (underlyings.isEmpty()) {
-      ;
+
       // TODO what to do here? will only happen for the price
     } else {
       for (final UnderlyingType underlying : underlyings) {
@@ -119,7 +118,7 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ValueProperties.Builder properties = createValueProperties();
     final String underlyingGreekRequirementName = AvailableValueGreeks.getGreekRequirementNameForValueGreekName(getRequirementName());
     for (final ValueSpecification input : inputs.keySet()) {
@@ -139,7 +138,7 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
     final Position position = target.getPosition();
     final Security security = position.getSecurity();
     final GreekResultCollection greekResultCollection = new GreekResultCollection();
-    final Map<UnderlyingType, Double> underlyingData = new HashMap<UnderlyingType, Double>();
+    final Map<UnderlyingType, Double> underlyingData = new HashMap<>();
     Greek greek;
     Underlying order;
     List<UnderlyingType> underlyings;
@@ -158,13 +157,12 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
       final Double underlyingValue = (Double) inputs.getValue(UnderlyingTypeToValueRequirementMapper.getValueRequirement(underlying, security));
       if (underlyingValue == null) {
         throw new NullPointerException("Could not get value for " + underlying + " for security " + security);
-      } else {
-        underlyingData.put(underlying, underlyingValue);
       }
+      underlyingData.put(underlying, underlyingValue);
     }
     final GreekDataBundle dataBundle = new GreekDataBundle(greekResultCollection, underlyingData, tradeData);
     final Map<ValueGreek, Double> sensitivities = _converter.evaluate(dataBundle);
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     ValueGreek valueGreek;
     Double valueGreekResult;
     ValueSpecification resultSpecification;

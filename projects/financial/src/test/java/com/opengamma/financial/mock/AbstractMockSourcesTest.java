@@ -20,6 +20,7 @@ import com.opengamma.util.test.TestGroup;
 /**
  * Test harness which instantiates InMemory sources with sample data.
  */
+@SuppressWarnings("deprecation")
 @Test(groups = TestGroup.UNIT)
 public abstract class AbstractMockSourcesTest {
 

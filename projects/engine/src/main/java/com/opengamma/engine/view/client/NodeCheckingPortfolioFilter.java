@@ -81,9 +81,8 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
     if (newRoot.isPresent()) {
       final PortfolioNode node = newRoot.get();
       return node.equals(rootNode) ? portfolio : createPortfolioForNode(trimParents(node));
-    } else {
-      return new SimplePortfolio("Access Denied");
     }
+    return new SimplePortfolio("Access Denied");
   }
 
   /**
@@ -95,7 +94,7 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
   private PortfolioNode trimParents(final PortfolioNode node) {
     return node.getChildNodes().size() == 1 ?
         trimParents(node.getChildNodes().get(0)) :
-        node;
+          node;
   }
 
   private Portfolio createPortfolioForNode(final PortfolioNode node) {
@@ -116,7 +115,7 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
    * populated with the copied node tree
    */
   private Optional<? extends PortfolioNode> buildRestrictedRootNode(final PortfolioPermissionChecker checker,
-                                                                    final PortfolioNode node) {
+      final PortfolioNode node) {
 
     switch (checker.permissionCheck(node)) {
       case ALLOW:
@@ -126,15 +125,15 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
       default:
 
         final SimplePortfolioNode newRoot =
-            new SimplePortfolioNode(UniqueId.of("RESTRICTED_NODE", "PN_" + s_portfolioNodeId++),
-                                    node.getName() + " [restricted]");
+        new SimplePortfolioNode(UniqueId.of("RESTRICTED_NODE", "PN_" + s_portfolioNodeId++),
+            node.getName() + " [restricted]");
         newRoot.addPositions(node.getPositions());
 
         for (final Map.Entry<PortfolioNode, PortfolioPermission> entry : getAccessibleChildNodes(node, checker).entrySet()) {
           final PortfolioNode childNode = entry.getValue() == ALLOW ?
               entry.getKey() :
-              buildRestrictedRootNode(checker, entry.getKey()).get();
-          newRoot.addChildNode(childNode);
+                buildRestrictedRootNode(checker, entry.getKey()).get();
+              newRoot.addChildNode(childNode);
         }
 
         return Optional.of(newRoot);

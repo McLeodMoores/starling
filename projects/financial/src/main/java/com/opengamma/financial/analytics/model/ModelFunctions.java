@@ -54,6 +54,7 @@ import com.opengamma.financial.analytics.model.volatility.VolatilityFunctions;
 /**
  * Function repository configuration source for the functions contained in this package and sub-packages.
  */
+@SuppressWarnings("deprecation")
 public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   /**

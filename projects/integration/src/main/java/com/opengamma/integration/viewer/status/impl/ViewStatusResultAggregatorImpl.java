@@ -256,9 +256,8 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
   public ViewStatus getStatus(final ViewStatusKey key) {
     if (key == null) {
       return null;
-    } else {
-      return _viewStatusResult.get(ImmutableViewStatusKey.of(key));
     }
+    return _viewStatusResult.get(ImmutableViewStatusKey.of(key));
   }
 
   @Override

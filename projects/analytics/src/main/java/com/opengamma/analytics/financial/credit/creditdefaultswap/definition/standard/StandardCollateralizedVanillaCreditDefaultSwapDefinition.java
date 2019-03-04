@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.creditdefaultswap.definition.standard;
@@ -14,7 +14,6 @@ import com.opengamma.analytics.financial.credit.RestructuringClause;
 import com.opengamma.analytics.financial.credit.centralcounterparty.CentralCounterpartyDefinition;
 import com.opengamma.analytics.financial.credit.collateralmodel.CreditSupportAnnexDefinition;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -24,8 +23,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
- *@deprecated this will be deleted 
+ *
+ *@deprecated this will be deleted
  */
 @Deprecated
 public class StandardCollateralizedVanillaCreditDefaultSwapDefinition extends StandardVanillaCreditDefaultSwapDefinition {

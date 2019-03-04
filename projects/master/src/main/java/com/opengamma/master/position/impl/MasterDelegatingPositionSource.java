@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.position.Position;
-import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.position.Trade;
 import com.opengamma.core.position.impl.DelegatingPositionSource;
 import com.opengamma.id.ObjectId;
@@ -26,10 +25,13 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicSPI;
 
 /**
- * A {@code PositionSource} implemented using an underlying {@code PositionMaster} and {@code DelegatingPositionSource}.
+ * A <code>PositionSource</code> implemented using an underlying
+ * {@code PositionMaster} and {@code DelegatingPositionSource}.
  * <p>
- * The {@link PositionSource} interface provides portfolio and position to the engine via a narrow API. This class provides the
- * source on top of a standard {@link PortfolioMaster} and {@link DelegatingPositionSource}.
+ * The {@link com.opengamma.core.position.PositionSource} interface provides
+ * portfolio and position to the engine via a narrow API. This class provides
+ * the source on top of a standard {@link PortfolioMaster} and
+ * {@link DelegatingPositionSource}.
  */
 @PublicSPI
 public class MasterDelegatingPositionSource extends AbstractMasterPositionSource {

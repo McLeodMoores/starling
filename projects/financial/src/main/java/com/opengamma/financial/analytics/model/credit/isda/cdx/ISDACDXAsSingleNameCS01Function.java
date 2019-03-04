@@ -15,7 +15,9 @@ import com.opengamma.financial.analytics.model.credit.CreditInstrumentPropertyNa
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class ISDACDXAsSingleNameCS01Function extends ISDACDXAsSingleNameFunction {
 
   public ISDACDXAsSingleNameCS01Function(final String... valueRequirements) {

@@ -55,20 +55,18 @@ public class UnderlyingAggregationFunction implements AggregationFunction<String
       final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NOT_APPLICABLE;
       }
-    } else {
-      if (position.getSecurityLink().getTarget() == null) {
-        position.getSecurityLink().resolve(_secSource);
-      }
-      final FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().getTarget();
-      try {
-        final String classification = security.accept(_underlyingVisitor);
-        return classification == null ? NOT_APPLICABLE : classification;
-      } catch (final UnsupportedOperationException uoe) {
-        return NOT_APPLICABLE;
-      }
+      return NOT_APPLICABLE;
+    }
+    if (position.getSecurityLink().getTarget() == null) {
+      position.getSecurityLink().resolve(_secSource);
+    }
+    final FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().getTarget();
+    try {
+      final String classification = security.accept(_underlyingVisitor);
+      return classification == null ? NOT_APPLICABLE : classification;
+    } catch (final UnsupportedOperationException uoe) {
+      return NOT_APPLICABLE;
     }
   }
 

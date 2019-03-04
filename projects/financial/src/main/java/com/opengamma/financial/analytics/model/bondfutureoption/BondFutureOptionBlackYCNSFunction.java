@@ -42,7 +42,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureOptionBlackYCNSFunction extends BondFutureOptionBlackCurveSpecificFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackYCNSFunction.class);
   private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivityBlackCalculator.getInstance());

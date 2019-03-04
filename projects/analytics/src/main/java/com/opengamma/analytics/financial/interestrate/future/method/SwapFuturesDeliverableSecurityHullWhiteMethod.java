@@ -15,7 +15,6 @@ import com.opengamma.analytics.financial.interestrate.CashFlowEquivalentCurveSen
 import com.opengamma.analytics.financial.interestrate.InterestRateCurveSensitivity;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.future.derivative.SwapFuturesPriceDeliverableSecurity;
-import com.opengamma.analytics.financial.interestrate.future.provider.SwapFuturesPriceDeliverableSecurityHullWhiteMethod;
 import com.opengamma.analytics.financial.model.interestrate.HullWhiteOneFactorPiecewiseConstantInterestRateModel;
 import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantDataBundle;
 import com.opengamma.util.tuple.DoublesPair;
@@ -77,7 +76,7 @@ public final class SwapFuturesDeliverableSecurityHullWhiteMethod {
     }
     double price = 1.0;
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      price += (cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf]) / df[0];
+      price += cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf] / df[0];
     }
     return price;
   }
@@ -93,18 +92,18 @@ public final class SwapFuturesDeliverableSecurityHullWhiteMethod {
     }
     double price = 1.0;
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      price += (cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf]) / df[0];
+      price += cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf] / df[0];
     }
     // Backward sweep
     final double priceBar = 1.0;
     final double[] dfBar = new double[nbCf];
     dfBar[0] = -(price - cfe.getNthPayment(0).getAmount() * adjustments[0]) / df[0];
     for (int loopcf = 1; loopcf < nbCf; loopcf++) {
-      dfBar[loopcf] = (cfe.getNthPayment(loopcf).getAmount() * adjustments[loopcf]) / df[0] * priceBar;
+      dfBar[loopcf] = cfe.getNthPayment(loopcf).getAmount() * adjustments[loopcf] / df[0] * priceBar;
     }
     final double[] cfeAmountBar = new double[nbCf];
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      cfeAmountBar[loopcf] = (df[loopcf] * adjustments[loopcf]) / df[0] * priceBar;
+      cfeAmountBar[loopcf] = df[loopcf] * adjustments[loopcf] / df[0] * priceBar;
     }
     final List<DoublesPair> listDfSensi = new ArrayList<>();
     for (int loopcf = 0; loopcf < cfe.getNumberOfPayments(); loopcf++) {

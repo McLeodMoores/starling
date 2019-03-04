@@ -23,7 +23,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for DKK deals
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class DKKTest {
 
@@ -46,13 +48,13 @@ public class DKKTest {
   public void test() throws Exception {
 
     // Build the clean list of swap
-    IRSwapTradeParser tradeParser = new IRSwapTradeParser();
-    Resource resource = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Trades14Oct.csv");
-    List<IRSwapSecurity> trades = tradeParser.parseCSVFile(resource.getURL());
-    List<IRSwapSecurity> tradesClean = Lists.newArrayList();
-    for (IRSwapSecurity irSwapSecurity : trades) {
+    final IRSwapTradeParser tradeParser = new IRSwapTradeParser();
+    final Resource resource = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Trades14Oct.csv");
+    final List<IRSwapSecurity> trades = tradeParser.parseCSVFile(resource.getURL());
+    final List<IRSwapSecurity> tradesClean = Lists.newArrayList();
+    for (final IRSwapSecurity irSwapSecurity : trades) {
 
-      String currency = irSwapSecurity.getRawInput().getString(PAY_CURRENCY);
+      final String currency = irSwapSecurity.getRawInput().getString(PAY_CURRENCY);
       if (currency.equals(CURRENCY)) {
         tradesClean.add(irSwapSecurity);
       }
@@ -67,13 +69,13 @@ public class DKKTest {
     final FXMatrix fx = new FXMatrix(CCY);
     final YieldCurveBundle curvesClean = new YieldCurveBundle(fx, ccyMap);
 
-    IRCurveParser curveParser = new IRCurveParser();
-    Resource resourceCurve = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Base_Curves_20131014_Clean.csv");
-    List<InterpolatedDoublesCurve> curves = curveParser.parseCSVFile(resourceCurve.getURL());
+    final IRCurveParser curveParser = new IRCurveParser();
+    final Resource resourceCurve = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Base_Curves_20131014_Clean.csv");
+    final List<InterpolatedDoublesCurve> curves = curveParser.parseCSVFile(resourceCurve.getURL());
 
-    for (InterpolatedDoublesCurve interpolatedDoublesCurve : curves) {
+    for (final InterpolatedDoublesCurve interpolatedDoublesCurve : curves) {
 
-      String name = interpolatedDoublesCurve.getName();
+      final String name = interpolatedDoublesCurve.getName();
       if (name.equals(ON_NAME)) {
         curvesClean.setCurve(DISCOUNTING_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
@@ -85,7 +87,7 @@ public class DKKTest {
       }
     }
 
-    // Convert the swap security into a swap definition 
+    // Convert the swap security into a swap definition
     //TODO
     LOGGER.warn("Got {} trades", trades.size());
   }

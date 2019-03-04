@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.forex.option.callspreadblack;
@@ -24,7 +24,9 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function to compute the Gamma of Forex options in the Black model.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXDigitalCallSpreadBlackGammaFunction extends FXDigitalCallSpreadBlackSingleValuedFunction {
 
   public FXDigitalCallSpreadBlackGammaFunction() {

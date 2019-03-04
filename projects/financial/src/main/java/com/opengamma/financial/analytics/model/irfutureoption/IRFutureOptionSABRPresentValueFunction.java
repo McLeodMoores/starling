@@ -24,7 +24,9 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /**
  * Calculates the present value of an interest rate future option using the SABR model
+ * @deprecated Deprecated
  */
+@Deprecated
 public class IRFutureOptionSABRPresentValueFunction extends IRFutureOptionSABRFunction {
   /** The present value calculator */
   private static final PresentValueSABRCalculator CALCULATOR = PresentValueSABRCalculator.getInstance();

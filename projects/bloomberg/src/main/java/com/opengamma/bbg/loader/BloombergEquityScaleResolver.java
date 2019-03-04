@@ -95,9 +95,8 @@ public class BloombergEquityScaleResolver {
         }
       }
       return result;
-    } else {
-      return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
     }
+    return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
   }
 
 }

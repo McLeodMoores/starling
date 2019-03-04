@@ -144,9 +144,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     public synchronized Thread.State getState() {
       if (_thread != null) {
         return _thread.getState();
-      } else {
-        return _originalName != null ? Thread.State.TERMINATED : Thread.State.NEW;
       }
+      return _originalName != null ? Thread.State.TERMINATED : Thread.State.NEW;
     }
 
     public void join() throws InterruptedException {
@@ -360,7 +359,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     final MarketDataSelector executionOptionsMarketDataSelector = executionOptions != null
         ? executionOptions.getMarketDataSelector() : NoOpMarketDataSelector.getInstance();
 
-    return new MarketDataSelectionGraphManipulator(executionOptionsMarketDataSelector, specificSelectors);
+        return new MarketDataSelectionGraphManipulator(executionOptionsMarketDataSelector, specificSelectors);
   }
 
   private Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> extractSpecificSelectors(final ViewDefinition viewDefinition) {
@@ -553,14 +552,14 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         // if there are multiple worker threads that initialise snapshots concurrently.
         getProcessContext().getLiveDataOverrideInjector().setComputationTargetResolver(
             getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-              .getRawComputationTargetResolver().atVersionCorrection(versionCorrection));
+            .getRawComputationTargetResolver().atVersionCorrection(versionCorrection));
 
         try {
           snapshotManager.addMarketDataRequirements(compiledViewDefinition.getMarketDataRequirements());
           if (getExecutionOptions().getFlags().contains(ViewExecutionFlags.AWAIT_MARKET_DATA)) {
             final long timeoutMillis = getExecutionOptions().getMarketDataTimeoutMillis() != null
                 ? getExecutionOptions().getMarketDataTimeoutMillis() : DEFAULT_MARKET_DATA_TIMEOUT_MILLIS;
-            snapshotManager.initialiseSnapshotWithSubscriptionResults(timeoutMillis);
+                snapshotManager.initialiseSnapshotWithSubscriptionResults(timeoutMillis);
           } else {
             snapshotManager.initialiseSnapshot();
           }
@@ -798,8 +797,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         final PoolExecutor previousInstance = PoolExecutor.setInstance(getProcessContext().getFunctionCompilationService().getExecutorService());
         final Map<ComputationTargetReference, ComputationTargetSpecification> resolved =
             getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-               .getRawComputationTargetResolver().atVersionCorrection(VersionCorrection.of(now, now))
-               .getSpecificationResolver().getTargetSpecifications(checks.keySet());
+            .getRawComputationTargetResolver().atVersionCorrection(VersionCorrection.of(now, now))
+            .getSpecificationResolver().getTargetSpecifications(checks.keySet());
         PoolExecutor.setInstance(previousInstance);
         t += System.nanoTime();
         for (final Map.Entry<ComputationTargetReference, UniqueId> check : checks.entrySet()) {
@@ -917,14 +916,14 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         }
       };
       getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-                         .getRawComputationTargetResolver().changeManager().addChangeListener(_targetResolverChanges);
+      .getRawComputationTargetResolver().changeManager().addChangeListener(_targetResolverChanges);
     }
   }
 
   private void unsubscribeFromTargetResolverChanges() {
     if (_targetResolverChanges != null) {
       getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-                         .getRawComputationTargetResolver().changeManager().removeChangeListener(_targetResolverChanges);
+      .getRawComputationTargetResolver().changeManager().removeChangeListener(_targetResolverChanges);
       _targetResolverChanges = null;
     }
   }
@@ -958,9 +957,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           subscribeToTargetResolverChanges();
         }
         return vc.withLatestFixed(now());
-      } else {
-        vc = vc.withLatestFixed(now());
       }
+      vc = vc.withLatestFixed(now());
     } else if (vc.getVersionAsOf() == null) {
       vc = vc.withLatestFixed(now());
     }
@@ -1236,7 +1234,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     final PoolExecutor previousInstance = PoolExecutor.setInstance(getProcessContext().getFunctionCompilationService().getExecutorService());
     final Map<ComputationTargetReference, ComputationTargetSpecification> specifications =
         getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-                           .getRawComputationTargetResolver().getSpecificationResolver().getTargetSpecifications(toCheck, versionCorrection);
+        .getRawComputationTargetResolver().getSpecificationResolver().getTargetSpecifications(toCheck, versionCorrection);
     PoolExecutor.setInstance(previousInstance);
     t += System.nanoTime();
     Map<UniqueId, ComputationTargetSpecification> invalidIdentifiers = null;
@@ -1269,7 +1267,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
       final VersionCorrection versionCorrection) {
     final InvalidMarketDataDependencyNodeFilter filter =
         new InvalidMarketDataDependencyNodeFilter(getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-        .getRawComputationTargetResolver().atVersionCorrection(versionCorrection), _marketDataManager.getAvailabilityProvider());
+            .getRawComputationTargetResolver().atVersionCorrection(versionCorrection), _marketDataManager.getAvailabilityProvider());
     final Set<DependencyNode> visited = new HashSet<>();
     if (previousGraphs != null) {
       for (final Map.Entry<String, PartiallyCompiledGraph> previous : previousGraphs.entrySet()) {
@@ -1508,7 +1506,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
             compiledViewDefinition = _compilationTask.get();
             final ComputationTargetResolver.AtVersionCorrection resolver =
                 getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver()
-                  .atVersionCorrection(versionCorrection);
+                .atVersionCorrection(versionCorrection);
             compiledViewDefinition = initialiseMarketDataManipulation(compiledViewDefinition, resolver);
             cacheCompiledViewDefinition(compiledViewDefinition);
           } else {
@@ -1538,10 +1536,9 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         final String message = MessageFormat.format("Error compiling view definition {0} for time {1}", getViewDefinition().getUniqueId(), valuationTime);
         viewDefinitionCompilationFailed(valuationTime, new OpenGammaRuntimeException(message, e));
         throw new OpenGammaRuntimeException(message, e);
-      } else {
-        LOGGER.debug("Caught exception during termination", e);
-        return null;
       }
+      LOGGER.debug("Caught exception during termination", e);
+      return null;
     } finally {
       if (broadLock) {
         executionCacheLocks.getFirst().unlock();
@@ -1598,9 +1595,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
       if (!selectionsByConfig.isEmpty()) {
         LOGGER.info("Adding in market data manipulation selections: [{}] and preset function parameters: [{}]", selectionsByConfig, functionParamsByConfig);
         return compiledViewDefinition.withMarketDataManipulationSelections(newGraphsByConfig, selectionsByConfig, functionParamsByConfig);
-      } else {
-        LOGGER.info("No market data manipulation selectors matched - no manipulation to be done");
       }
+      LOGGER.info("No market data manipulation selectors matched - no manipulation to be done");
     }
     return compiledViewDefinition;
   }

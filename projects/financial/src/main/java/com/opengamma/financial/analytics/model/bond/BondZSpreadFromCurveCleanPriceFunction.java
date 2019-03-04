@@ -35,7 +35,9 @@ import com.opengamma.financial.security.bond.BondSecurity;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondZSpreadFromCurveCleanPriceFunction extends BondFromPriceFunction {
   private static final BondSecurityDiscountingMethod CALCULATOR = BondSecurityDiscountingMethod.getInstance();
 

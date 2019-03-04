@@ -8,7 +8,6 @@ package com.opengamma.analytics.financial.interestrate.payments.method;
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.CashFlowEquivalentCalculator;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFloorCMSSpread;
 import com.opengamma.analytics.financial.model.interestrate.G2ppPiecewiseConstantModel;
@@ -22,7 +21,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Method to compute the present value of CMS spread cap/floor with the G2++ model by numerical integration.
- * @deprecated {@link YieldCurveBundle} is deprecated
+ * @deprecated {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle} is deprecated
  */
 @Deprecated
 public class CapFloorCMSSpreadG2ppNumericalIntegrationMethod {
@@ -175,7 +174,7 @@ public class CapFloorCMSSpreadG2ppNumericalIntegrationMethod {
       _tau2Tp = tau2Tp;
       _rhobar = rhobar;
       _strike = strike;
-      _omega = (isCall ? 1.0 : -1.0);
+      _omega = isCall ? 1.0 : -1.0;
     }
 
     @SuppressWarnings("synthetic-access")

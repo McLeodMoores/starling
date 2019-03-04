@@ -54,7 +54,7 @@ public class StocksPutsCallsAggregationFunction implements AggregationFunction<S
 
   /**
    * Creates an instance that does not use attributes.
-   * 
+   *
    * @param secSource  the security source, not null
    */
   public StocksPutsCallsAggregationFunction(final SecuritySource secSource) {
@@ -63,7 +63,7 @@ public class StocksPutsCallsAggregationFunction implements AggregationFunction<S
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param secSource  the security source, not null
    * @param useAttributes  whether to use attributes
    */
@@ -79,103 +79,98 @@ public class StocksPutsCallsAggregationFunction implements AggregationFunction<S
       final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NA;
-      }
-    } else {
-      position.getSecurityLink().resolve(_secSource);
-      final FinancialSecurityVisitor<String> visitor = new FinancialSecurityVisitorSameValueAdapter<String>(NA) {
-        
-      
-        @Override
-        public String visitEquitySecurity(final EquitySecurity security) {
-          return STOCKS;
-        }
-
-      
-        @Override
-        public String visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
-          return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
-        }
-
-        @Override
-        public String visitEquityOptionSecurity(final EquityOptionSecurity security) {
-          return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
-        }
-
-        @Override
-        public String visitEquityBarrierOptionSecurity(final EquityBarrierOptionSecurity security) {
-          return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
-        }
-
-        @Override
-        public String visitFXOptionSecurity(final FXOptionSecurity security) {
-          return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
-        }
-
-        @Override
-        public String visitNonDeliverableFXOptionSecurity(final NonDeliverableFXOptionSecurity security) {
-          return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
-        }
-
-        @Override
-        public String visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
-          return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
-        }
-
-        @Override
-        public String visitCommodityFutureOptionSecurity(final CommodityFutureOptionSecurity security) {
-          return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
-        }
-
-        @Override
-        public String visitFxFutureOptionSecurity(final FxFutureOptionSecurity security) {
-          return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
-        }
-
-        @Override
-        public String visitEquityIndexDividendFutureOptionSecurity(
-            final EquityIndexDividendFutureOptionSecurity security) {
-          return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
-        }
-
-        @Override
-        public String visitFXBarrierOptionSecurity(final FXBarrierOptionSecurity security) {
-          return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
-        }
-
-        @Override
-        public String visitFXDigitalOptionSecurity(final FXDigitalOptionSecurity security) {
-          return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
-        }
-
-        @Override
-        public String visitNonDeliverableFXDigitalOptionSecurity(final NonDeliverableFXDigitalOptionSecurity security) {
-          return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
-        }
-
-        @Override
-        public String visitSimpleZeroDepositSecurity(final SimpleZeroDepositSecurity security) {
-          throw new UnsupportedOperationException("SimpleZeroDepositSecurity should not be used in a position");
-        }
-
-        @Override
-        public String visitPeriodicZeroDepositSecurity(final PeriodicZeroDepositSecurity security) {
-          throw new UnsupportedOperationException("PeriodicZeroDepositSecurity should not be used in a position");
-        }
-
-        @Override
-        public String visitContinuousZeroDepositSecurity(final ContinuousZeroDepositSecurity security) {
-          throw new UnsupportedOperationException("ContinuousZeroDepositSecurity should not be used in a position");
-        }
-
-      };
-      if (position.getSecurity() instanceof FinancialSecurity) {
-        final FinancialSecurity finSec = (FinancialSecurity) position.getSecurity();
-        return finSec.accept(visitor);
       }
       return NA;
     }
+    position.getSecurityLink().resolve(_secSource);
+    final FinancialSecurityVisitor<String> visitor = new FinancialSecurityVisitorSameValueAdapter<String>(NA) {
+
+      @Override
+      public String visitEquitySecurity(final EquitySecurity security) {
+        return STOCKS;
+      }
+
+      @Override
+      public String visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
+        return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
+      }
+
+      @Override
+      public String visitEquityOptionSecurity(final EquityOptionSecurity security) {
+        return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
+      }
+
+      @Override
+      public String visitEquityBarrierOptionSecurity(final EquityBarrierOptionSecurity security) {
+        return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
+      }
+
+      @Override
+      public String visitFXOptionSecurity(final FXOptionSecurity security) {
+        return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
+      }
+
+      @Override
+      public String visitNonDeliverableFXOptionSecurity(final NonDeliverableFXOptionSecurity security) {
+        return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
+      }
+
+      @Override
+      public String visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
+        return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
+      }
+
+      @Override
+      public String visitCommodityFutureOptionSecurity(final CommodityFutureOptionSecurity security) {
+        return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
+      }
+
+      @Override
+      public String visitFxFutureOptionSecurity(final FxFutureOptionSecurity security) {
+        return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
+      }
+
+      @Override
+      public String visitEquityIndexDividendFutureOptionSecurity(final EquityIndexDividendFutureOptionSecurity security) {
+        return security.getOptionType() == OptionType.CALL ? CALLS : PUTS;
+      }
+
+      @Override
+      public String visitFXBarrierOptionSecurity(final FXBarrierOptionSecurity security) {
+        return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
+      }
+
+      @Override
+      public String visitFXDigitalOptionSecurity(final FXDigitalOptionSecurity security) {
+        return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
+      }
+
+      @Override
+      public String visitNonDeliverableFXDigitalOptionSecurity(final NonDeliverableFXDigitalOptionSecurity security) {
+        return security.getCallAmount() > 0 ? CALLS : PUTS; // check this!
+      }
+
+      @Override
+      public String visitSimpleZeroDepositSecurity(final SimpleZeroDepositSecurity security) {
+        throw new UnsupportedOperationException("SimpleZeroDepositSecurity should not be used in a position");
+      }
+
+      @Override
+      public String visitPeriodicZeroDepositSecurity(final PeriodicZeroDepositSecurity security) {
+        throw new UnsupportedOperationException("PeriodicZeroDepositSecurity should not be used in a position");
+      }
+
+      @Override
+      public String visitContinuousZeroDepositSecurity(final ContinuousZeroDepositSecurity security) {
+        throw new UnsupportedOperationException("ContinuousZeroDepositSecurity should not be used in a position");
+      }
+
+    };
+    if (position.getSecurity() instanceof FinancialSecurity) {
+      final FinancialSecurity finSec = (FinancialSecurity) position.getSecurity();
+      return finSec.accept(visitor);
+    }
+    return NA;
   }
 
   @Override

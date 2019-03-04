@@ -38,22 +38,21 @@ public final class CogdaFactoryUtil {
     if (redisServer == null) {
       logger.info("No Redis Server specified in configuration so using map LKVStoreProvider.");
       return new MapLastKnownValueStoreProvider();
-    } else {
-      logger.info("Connecting Redis LKV Store Provider to {}:{} {} {}", new Object[] {redisServer, redisPort, redisPrefix, writeThrough});
-      final RedisLastKnownValueStoreProvider lkvProvider = new RedisLastKnownValueStoreProvider();
-      lkvProvider.setServer(redisServer);
-      lkvProvider.setWriteThrough(writeThrough);
-      if (redisPort == null) {
-        logger.info("No Redis port provided. Defaulting to 6379");
-        lkvProvider.setPort(6379);
-      } else {
-        lkvProvider.setPort(redisPort);
-      }
-      if (redisPrefix != null) {
-        logger.info("Setting Redis key prefix to {}", redisPrefix);
-        lkvProvider.setGlobalPrefix(redisPrefix);
-      }
-      return lkvProvider;
     }
+    logger.info("Connecting Redis LKV Store Provider to {}:{} {} {}", new Object[] { redisServer, redisPort, redisPrefix, writeThrough });
+    final RedisLastKnownValueStoreProvider lkvProvider = new RedisLastKnownValueStoreProvider();
+    lkvProvider.setServer(redisServer);
+    lkvProvider.setWriteThrough(writeThrough);
+    if (redisPort == null) {
+      logger.info("No Redis port provided. Defaulting to 6379");
+      lkvProvider.setPort(6379);
+    } else {
+      lkvProvider.setPort(redisPort);
+    }
+    if (redisPrefix != null) {
+      logger.info("Setting Redis key prefix to {}", redisPrefix);
+      lkvProvider.setGlobalPrefix(redisPrefix);
+    }
+    return lkvProvider;
   }
 }

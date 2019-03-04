@@ -216,23 +216,22 @@ public abstract class SecurityLoader {
     if (tradingHrsToken.length != 2) {
       _logger.warn("futureTradingHours not in (hh:mm-hh:mm OR hh:mm-hh:mm & hh:mm-hh:mm) format - {}", futureTradingHours);
       return null;
-    } else {
-      final String closeTime = tradingHrsToken[1];
-      String[] closeTimeTokens = closeTime.split(":");
+    }
+    final String closeTime = tradingHrsToken[1];
+    String[] closeTimeTokens = closeTime.split(":");
+    if (closeTimeTokens.length != 2) {
+      closeTimeTokens = closeTime.split("\\.");
       if (closeTimeTokens.length != 2) {
-        closeTimeTokens = closeTime.split("\\.");
-        if (closeTimeTokens.length != 2) {
-          _logger.warn("exchange close time not in hh:mm format - {}", futureTradingHours);
-          return null;
-        }
+        _logger.warn("exchange close time not in hh:mm format - {}", futureTradingHours);
+        return null;
       }
+    }
 
-      try {
-        closeHr = Integer.parseInt(closeTimeTokens[0]);
-        closeMins = Integer.parseInt(closeTimeTokens[1]);
-      } catch (final NumberFormatException ex) {
-        _logger.warn("Cannot parse futureTrading hours - {}", futureTradingHours);
-      }
+    try {
+      closeHr = Integer.parseInt(closeTimeTokens[0]);
+      closeMins = Integer.parseInt(closeTimeTokens[1]);
+    } catch (final NumberFormatException ex) {
+      _logger.warn("Cannot parse futureTrading hours - {}", futureTradingHours);
     }
     final ZonedDateTime utcDate = DateUtils.getUTCDate(expiryInLocalDate.getYear(), expiryInLocalDate.getMonthValue(), expiryInLocalDate.getDayOfMonth(), closeHr, closeMins);
     return new Expiry(utcDate, ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR);

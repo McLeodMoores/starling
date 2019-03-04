@@ -270,9 +270,8 @@ import com.opengamma.util.tuple.Triple;
         }
         if (!pushResult(context, reduced, false)) {
           return produceSubstitute(context, inputs, resolvedOutput, resolvedOutputValues);
-        } else {
-          return true;
         }
+        return true;
       }
       // TODO: only use an aggregate object if there is more than one producer; otherwise use the producer directly
       final AggregateResolvedValueProducer aggregate = new AggregateResolvedValueProducer(getValueRequirement());
@@ -327,21 +326,20 @@ import com.opengamma.util.tuple.Triple;
         final boolean result = getAdditionalRequirementsAndPushResults(context, newWorker, inputs, resolvedOutput, resolvedOutputs, false);
         newWorker.release(context);
         return result;
-      } else {
-        newWorker.release(context);
-        // An equivalent task is producing the revised value specification
-        final ResolutionSubstituteDelegate delegate = new ResolutionSubstituteDelegate(getTask()) {
-          @Override
-          protected void failedImpl(final GraphBuildingContext context) {
-            getWorker().pumpImpl(context);
-          }
-        };
-        if (setTaskState(delegate)) {
-          producer.addCallback(context, delegate);
-        }
-        producer.release(context);
-        return true;
       }
+      newWorker.release(context);
+      // An equivalent task is producing the revised value specification
+      final ResolutionSubstituteDelegate delegate = new ResolutionSubstituteDelegate(getTask()) {
+        @Override
+        protected void failedImpl(final GraphBuildingContext context) {
+          getWorker().pumpImpl(context);
+        }
+      };
+      if (setTaskState(delegate)) {
+        producer.addCallback(context, delegate);
+      }
+      producer.release(context);
+      return true;
     }
 
     private abstract class ResolutionSubstituteDelegate extends State implements ResolvedValueCallback {
@@ -576,9 +574,8 @@ import com.opengamma.util.tuple.Triple;
       if (lock.decrementAndGet() == 0) {
         LOGGER.debug("Additional requirements complete");
         return pushResult(context, substituteWorker, inputs, resolvedOutput, resolvedOutputs, lastWorkerResult);
-      } else {
-        return true;
       }
+      return true;
     }
 
     /**

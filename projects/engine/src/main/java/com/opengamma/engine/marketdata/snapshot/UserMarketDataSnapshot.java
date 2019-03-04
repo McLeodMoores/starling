@@ -113,9 +113,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
     // does not have the override values.
     if (valueSnapshot.getOverrideValue() != null) {
       return valueSnapshot.getOverrideValue();
-    } else {
-      return valueSnapshot.getMarketValue();
     }
+    return valueSnapshot.getMarketValue();
   }
 
   private static Double queryDouble(final ValueSnapshot valueSnapshot) {
@@ -124,11 +123,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
         ||
         objResult instanceof Double) {
       return (Double) objResult;
-    } else {
-      throw new OpenGammaRuntimeException(format(
-          "Double was expected in snapshot but Object instance of type %s found instead.",
-          objResult.getClass()));
     }
+    throw new OpenGammaRuntimeException(format("Double was expected in snapshot but Object instance of type %s found instead.", objResult.getClass()));
   }
 
   private static SnapshotDataBundle createSnapshotDataBundle(final UnstructuredMarketDataSnapshot values) {
@@ -252,9 +248,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
     final StructuredMarketDataHandler handler = STRUCTURED_DATA_HANDLERS.get(valueSpecification.getValueName());
     if (handler == null) {
       return _unstructured.getCurrentValue(valueSpecification);
-    } else {
-      return handler.query(valueSpecification, _snapshot);
     }
+    return handler.query(valueSpecification, _snapshot);
   }
 
   // MarketDataProvider
@@ -271,9 +266,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
         final StructuredMarketDataHandler handler = STRUCTURED_DATA_HANDLERS.get(desiredValue.getValueName());
         if (handler == null) {
           return unstructured.getAvailability(targetSpec, target, desiredValue);
-        } else {
-          return handler.resolve(targetSpec, target, desiredValue, _snapshot);
         }
+        return handler.resolve(targetSpec, target, desiredValue, _snapshot);
       }
 
       @Override
@@ -394,7 +388,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
                 surface.getInstrumentType()).with(
                     SURFACE_QUOTE_TYPE_PROPERTY,
                     surface.getQuoteType())
-                    .with(SURFACE_QUOTE_UNITS_PROPERTY, surface.getQuoteUnits()).get();
+            .with(SURFACE_QUOTE_UNITS_PROPERTY, surface.getQuoteUnits()).get();
       }
       return null;
     }
@@ -517,9 +511,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
       }
       if (properties != null) {
         return properties.get();
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -567,9 +560,8 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
       }
       if (properties != null) {
         return properties.get();
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override

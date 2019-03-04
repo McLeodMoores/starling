@@ -28,7 +28,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for CAD deals.
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class CHFTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(CHFTest.class);

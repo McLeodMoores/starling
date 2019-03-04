@@ -46,7 +46,7 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.TimeSeriesIntersector;
 
 /**
- * 
+ *
  */
 public abstract class TotalRiskAlphaFunction extends AbstractFunction.NonCompiledInvoker {
   private static final double DAYS_PER_YEAR = 365.25;
@@ -92,7 +92,7 @@ public abstract class TotalRiskAlphaFunction extends AbstractFunction.NonCompile
     final TimeSeriesReturnCalculator returnCalculator = getReturnCalculator(constraints.getValues(ValuePropertyNames.RETURN_CALCULATOR));
     DoubleTimeSeries<?> marketReturnTS = returnCalculator.evaluate(marketTSObject.getTimeSeries());
     DoubleTimeSeries<?> riskFreeReturnTS = ((DoubleTimeSeries<?>) riskFreeTSObject.getTimeSeries()).divide(DAYS_PER_YEAR * 100);
-    DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(assetReturnTS, marketReturnTS, riskFreeReturnTS);
+    final DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(assetReturnTS, marketReturnTS, riskFreeReturnTS);
     assetReturnTS = series[0];
     marketReturnTS = series[1];
     riskFreeReturnTS = series[2];
@@ -126,7 +126,7 @@ public abstract class TotalRiskAlphaFunction extends AbstractFunction.NonCompile
     final String scheduleCalculatorName = scheduleCalculatorNames.iterator().next();
     final String samplingFunctionName = samplingFunctionNames.iterator().next();
     final String returnCalculatorName = returnCalculatorNames.iterator().next();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     requirements.add(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec, ValueProperties.builder()
         .withAny(ValuePropertyNames.CURRENCY)

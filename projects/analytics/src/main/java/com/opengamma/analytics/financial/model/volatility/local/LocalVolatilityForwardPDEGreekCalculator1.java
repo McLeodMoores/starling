@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import com.opengamma.analytics.financial.greeks.BucketedGreekResultCollection;
 import com.opengamma.analytics.financial.greeks.PDEResultCollection;
@@ -30,7 +28,6 @@ import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.SurfaceArrayUtils;
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr.SmileSurfaceDataBundle;
 import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilitySurface;
-import com.opengamma.analytics.financial.model.volatility.surface.StrikeType;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurfaceInterpolator;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.DoubleQuadraticInterpolator1D;
@@ -38,13 +35,14 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDoubleQuadr
 import com.opengamma.analytics.math.surface.SurfaceShiftFunctionFactory;
 import com.opengamma.util.ArgumentChecker;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * 
- * @param <T> The strike type parameterization to be used
+ *
  * @deprecated Do not use
  */
 @Deprecated
-public class LocalVolatilityForwardPDEGreekCalculator1<T extends StrikeType> {
+public class LocalVolatilityForwardPDEGreekCalculator1<T> {
   private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = new DoubleQuadraticInterpolator1D();
   private final double _theta;
   private final int _timeSteps;
@@ -99,7 +97,7 @@ public class LocalVolatilityForwardPDEGreekCalculator1<T extends StrikeType> {
     if (localVolatility instanceof LocalVolatilitySurfaceStrike) {
       strikeLocalVolatility = (LocalVolatilitySurfaceStrike) localVolatility;
     } else if (localVolatility instanceof LocalVolatilitySurfaceMoneyness) {
-      strikeLocalVolatility = LocalVolatilitySurfaceConverter.toStrikeSurface(((LocalVolatilitySurfaceMoneyness) localVolatility));
+      strikeLocalVolatility = LocalVolatilitySurfaceConverter.toStrikeSurface((LocalVolatilitySurfaceMoneyness) localVolatility);
     } else {
       throw new IllegalArgumentException("Cannot handle surface of type " + localVolatility.getClass());
     }
@@ -115,7 +113,7 @@ public class LocalVolatilityForwardPDEGreekCalculator1<T extends StrikeType> {
     if (localVolatility instanceof LocalVolatilitySurfaceStrike) {
       strikeLocalVolatility = (LocalVolatilitySurfaceStrike) localVolatility;
     } else if (localVolatility instanceof LocalVolatilitySurfaceMoneyness) {
-      strikeLocalVolatility = LocalVolatilitySurfaceConverter.toStrikeSurface(((LocalVolatilitySurfaceMoneyness) localVolatility));
+      strikeLocalVolatility = LocalVolatilitySurfaceConverter.toStrikeSurface((LocalVolatilitySurfaceMoneyness) localVolatility);
     } else {
       throw new IllegalArgumentException("Cannot handle surface of type " + localVolatility.getClass());
     }
@@ -412,7 +410,7 @@ public class LocalVolatilityForwardPDEGreekCalculator1<T extends StrikeType> {
         if (bumpedLV instanceof LocalVolatilitySurfaceStrike) {
           bumpedLVStrike = (LocalVolatilitySurfaceStrike) bumpedLV;
         } else {
-          bumpedLVStrike = LocalVolatilitySurfaceConverter.toStrikeSurface(((LocalVolatilitySurfaceMoneyness) bumpedLV));
+          bumpedLVStrike = LocalVolatilitySurfaceConverter.toStrikeSurface((LocalVolatilitySurfaceMoneyness) bumpedLV);
         }
         final PDEFullResults1D pdeResBumped = runForwardPDESolver(forwardCurve, bumpedLVStrike, isCall, _theta, maxT,
             _maxAbsProxyDelta, _timeSteps, _spaceSteps, _timeGridBunching, _spaceGridBunching, 1.0);
@@ -454,7 +452,7 @@ public class LocalVolatilityForwardPDEGreekCalculator1<T extends StrikeType> {
     BoundaryCondition upper;
     if (isCall) {
       //call option with low strike  is worth the forward - strike, while a put is worthless
-      lower = new DirichletBoundaryCondition((1.0 - minMoneyness), minMoneyness);
+      lower = new DirichletBoundaryCondition(1.0 - minMoneyness, minMoneyness);
       upper = new DirichletBoundaryCondition(0.0, maxMoneyness);
     } else {
       lower = new DirichletBoundaryCondition(0.0, minMoneyness);
@@ -463,7 +461,7 @@ public class LocalVolatilityForwardPDEGreekCalculator1<T extends StrikeType> {
     final MeshingFunction timeMesh = new ExponentialMeshing(0.0, maxT, nTimeSteps, timeMeshLambda);
     final MeshingFunction spaceMesh = new HyperbolicMeshing(minMoneyness, maxMoneyness, centreMoneyness, nStrikeSteps, strikeMeshBunching);
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
-    final Function1D<Double, Double> initialCond = (new InitialConditionsProvider()).getForwardCallPut(isCall);
+    final Function1D<Double, Double> initialCond = new InitialConditionsProvider().getForwardCallPut(isCall);
     final PDEFullResults1D res = (PDEFullResults1D) solver.solve(new PDE1DDataBundle<>(pde, initialCond, lower, upper, grid));
     return res;
   }

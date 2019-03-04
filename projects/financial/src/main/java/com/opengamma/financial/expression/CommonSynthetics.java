@@ -18,7 +18,7 @@ import com.opengamma.util.money.Currency;
  */
 public final class CommonSynthetics {
 
-  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<ComputationTargetResolver.AtVersionCorrection>();
+  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<>();
 
   private CommonSynthetics() {
   }

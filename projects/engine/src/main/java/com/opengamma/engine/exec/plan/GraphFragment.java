@@ -418,9 +418,8 @@ import com.opengamma.engine.view.ExecutionLogMode;
     // Create the cheapest hint object
     if (localPrivateValues.size() < localSharedValues.size()) {
       return CacheSelectHint.privateValues(localPrivateValues);
-    } else {
-      return CacheSelectHint.sharedValues(localSharedValues);
     }
+    return CacheSelectHint.sharedValues(localSharedValues);
   }
 
   private PlannedJob createJob(final GraphFragmentContext context) {

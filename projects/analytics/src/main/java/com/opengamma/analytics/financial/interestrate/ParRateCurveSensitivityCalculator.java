@@ -36,17 +36,23 @@ import com.opengamma.analytics.financial.interestrate.payments.method.CouponONDi
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swap.method.SwapFixedCouponDiscountingMethod;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.CompareUtils;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * For an instrument, this calculates the sensitivity of the par rate (the exact meaning of par rate depends on the instrument - for swaps it is the par swap rate) to points on the yield
- * curve(s) (i.e. dPar/dR at every point the instrument has sensitivity). The return format is a map with curve names (String) as keys and List of DoublesPair as the values; each list holds
- * set of time (corresponding to point of the yield curve) and sensitivity pairs (i.e. dPar/dR at that time).
- * <b>Note:</b> The length of the list is instrument dependent and may have repeated times (with the understanding the sensitivities should be summed).
- * @deprecated Use the calculators that reference {@link ParameterProviderInterface}
+ * For an instrument, this calculates the sensitivity of the par rate (the exact
+ * meaning of par rate depends on the instrument - for swaps it is the par swap
+ * rate) to points on the yield curve(s) (i.e. dPar/dR at every point the
+ * instrument has sensitivity). The return format is a map with curve names
+ * (String) as keys and List of DoublesPair as the values; each list holds set
+ * of time (corresponding to point of the yield curve) and sensitivity pairs
+ * (i.e. dPar/dR at that time). <b>Note:</b> The length of the list is
+ * instrument dependent and may have repeated times (with the understanding the
+ * sensitivities should be summed).
+ * 
+ * @deprecated Use the calculators that reference
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
 @Deprecated
 public final class ParRateCurveSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Map<String, List<DoublesPair>>> {
@@ -241,7 +247,7 @@ public final class ParRateCurveSensitivityCalculator extends InstrumentDerivativ
         final List<DoublesPair> temp = new ArrayList<>();
         final List<DoublesPair> list = senseA.get(name);
         final int m = list.size();
-        for (int i = 0; i < (m - 1); i++) {
+        for (int i = 0; i < m - 1; i++) {
           final DoublesPair pair = list.get(i);
           temp.add(DoublesPair.of(pair.getFirstDouble(), factor * pair.getSecondDouble()));
         }

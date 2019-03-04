@@ -39,7 +39,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.analytics.model.fixedincome.FixedSwapLegDetails;
@@ -65,8 +64,9 @@ public class BondDetailsFunction extends BondAndBondFutureFromCurvesFunction<Iss
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ValueProperties properties = desiredValue.getConstraints();
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
+    @SuppressWarnings("unchecked")
     final BondTransactionDefinition<? extends PaymentDefinition, ? extends CouponDefinition> definition =
-        (BondTransactionDefinition<? extends PaymentDefinition, ? extends CouponDefinition>) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target, now);
+    (BondTransactionDefinition<? extends PaymentDefinition, ? extends CouponDefinition>) BondAndBondFutureFunctionUtils.getDefinition(executionContext, target, now);
     final BondSecurity<? extends Payment, ? extends Coupon> derivative = definition.toDerivative(now).getBondTransaction();
     final IssuerProviderInterface issuerCurves = (IssuerProviderInterface) inputs.getValue(CURVE_BUNDLE);
     final ValueSpecification spec = new ValueSpecification(BOND_DETAILS, target.toSpecification(), properties);

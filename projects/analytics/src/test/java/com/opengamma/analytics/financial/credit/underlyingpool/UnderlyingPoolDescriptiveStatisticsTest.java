@@ -14,7 +14,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Tests to verify the calculation of descriptive statistics for an UnderlyingPool object
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 // CSOFF
 public class UnderlyingPoolDescriptiveStatisticsTest {

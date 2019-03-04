@@ -23,7 +23,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Example annuity.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class AnnuityExample {
 
   // CSOFF

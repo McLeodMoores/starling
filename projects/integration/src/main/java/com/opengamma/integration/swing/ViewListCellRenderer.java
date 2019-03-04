@@ -21,9 +21,8 @@ public class ViewListCellRenderer extends DefaultListCellRenderer {
       final boolean cellHasFocus) {
     if (value == null) {
       return super.getListCellRendererComponent(list, "< no views >", index, isSelected, cellHasFocus);
-    } else {
-      return super.getListCellRendererComponent(list, ((ViewEntry) value).getName(), index, isSelected, cellHasFocus);
     }
+    return super.getListCellRendererComponent(list, ((ViewEntry) value).getName(), index, isSelected, cellHasFocus);
   }
 
 }

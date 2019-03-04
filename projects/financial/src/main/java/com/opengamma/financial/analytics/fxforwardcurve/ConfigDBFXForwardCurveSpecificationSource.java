@@ -29,7 +29,7 @@ public class ConfigDBFXForwardCurveSpecificationSource implements FXForwardCurve
   }
 
   public ConfigDBFXForwardCurveSpecificationSource(final ConfigSource configSource, final VersionCorrection versionCorrection) {
-    this(new ConfigSourceQuery<FXForwardCurveSpecification>(configSource, FXForwardCurveSpecification.class, versionCorrection));
+    this(new ConfigSourceQuery<>(configSource, FXForwardCurveSpecification.class, versionCorrection));
   }
 
   public ConfigDBFXForwardCurveSpecificationSource(final ConfigSourceQuery<FXForwardCurveSpecification> query) {

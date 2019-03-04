@@ -25,7 +25,6 @@ import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.AbstractSecuritySource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.timeseries.exchange.ExchangeDataProvider;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -38,7 +37,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A security source based on the Bloomberg data source.
  */
-public final class BloombergSecuritySource extends AbstractSecuritySource implements SecuritySource {
+public final class BloombergSecuritySource extends AbstractSecuritySource {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(BloombergSecuritySource.class);
@@ -101,9 +100,8 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
     final Security sec = getSingle(bundle);
     if (sec != null) {
       return Collections.<Security>singleton(getSingle(bundle));
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   @Override
@@ -119,10 +117,9 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
     final Map<ExternalIdBundle, ManageableSecurity> securities = _bloombergBulkSecurityLoader.loadSecurity(Collections.singleton(bundle));
     if (securities.size() == 1) {
       return securities.get(bundle);
-    } else {
-      LOGGER.warn("Bloomberg return security={} for id={}", securities.values(), bundle);
-      return null;
     }
+    LOGGER.warn("Bloomberg return security={} for id={}", securities.values(), bundle);
+    return null;
   }
 
   @Override

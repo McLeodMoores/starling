@@ -183,9 +183,8 @@ import com.opengamma.engine.value.ValueSpecification;
                   // Fall through so that failure is logged
                 }
                 break;
-              } else {
-                requirementFailure = _taskState.functionApplication(context).requirement(value, failure);
               }
+              requirementFailure = _taskState.functionApplication(context).requirement(value, failure);
             }
           } else {
             if (_taskState != null) {
@@ -472,9 +471,8 @@ import com.opengamma.engine.value.ValueSpecification;
         _taskState.getTask().addRef();
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

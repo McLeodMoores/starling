@@ -95,11 +95,10 @@ public class DataLegalEntitySourceResource extends AbstractDataResource {
     if (version != null) {
       final LegalEntity result = getLegalEntitySource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      final LegalEntity result = getLegalEntitySource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final LegalEntity result = getLegalEntitySource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
   @GET

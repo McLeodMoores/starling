@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 /* package */final class StackRunQueue implements RunQueue {
 
-  private final Deque<ContextRunnable> _deque = new ConcurrentLinkedDeque<ContextRunnable>();
+  private final Deque<ContextRunnable> _deque = new ConcurrentLinkedDeque<>();
 
   @Override
   public boolean isEmpty() {

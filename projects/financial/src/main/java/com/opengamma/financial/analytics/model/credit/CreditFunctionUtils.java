@@ -17,7 +17,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CreditFunctionUtils {
 
   @SuppressWarnings("rawtypes")

@@ -52,11 +52,12 @@ public class TradeFeeConverter implements TradeConverter {
    * @param trade the trade, not null
    * @return the definition, null if no fees
    */
+  @Override
   public InstrumentDefinition<?> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
-    List<CouponFixedDefinition> fees = new ArrayList<>();
-    Security security = trade.getSecurity();
-    Currency securityCcy = FinancialSecurityUtils.getCurrency(security);
+    final List<CouponFixedDefinition> fees = new ArrayList<>();
+    final Security security = trade.getSecurity();
+    final Currency securityCcy = FinancialSecurityUtils.getCurrency(security);
     for (int i = 1;; i++) {
       if (!trade.getAttributes().containsKey(String.format(FEE_DATE, i))) {
         break;
@@ -72,9 +73,8 @@ public class TradeFeeConverter implements TradeConverter {
     }
     if (!fees.isEmpty()) {
       return new AnnuityDefinition<>(fees.toArray(new CouponFixedDefinition[fees.size()]), new MondayToFridayCalendar(""));
-    } else {
-      return null;
     }
+    return null;
   }
 
 

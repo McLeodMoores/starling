@@ -17,8 +17,9 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOneLookBarrierOptionBlackCurveSensitivityFunction extends FXOneLookBarrierOptionBlackFunction {
 
   public FXOneLookBarrierOptionBlackCurveSensitivityFunction() {

@@ -44,7 +44,7 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.TimeSeriesIntersector;
 
 /**
- * 
+ *
  */
 public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledInvoker {
   private static final double DAYS_PER_YEAR = 365.25; //TODO
@@ -83,7 +83,7 @@ public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledI
     final double fairValue = (Double) assetFairValueObject;
     DoubleTimeSeries<?> assetReturnTS = ((DoubleTimeSeries<?>) assetPnLObject).divide(fairValue);
     DoubleTimeSeries<?> riskFreeReturnTS = riskFreeRateTSObject.getTimeSeries().divide(100 * DAYS_PER_YEAR);
-    DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(riskFreeReturnTS, assetReturnTS);
+    final DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(riskFreeReturnTS, assetReturnTS);
     riskFreeReturnTS = series[0];
     assetReturnTS = series[1];
     final TreynorRatioCalculator calculator = getCalculator(constraints.getValues(ValuePropertyNames.EXCESS_RETURN_CALCULATOR));
@@ -94,7 +94,7 @@ public abstract class TreynorRatioFunction extends AbstractFunction.NonCompiledI
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> result = new HashSet<>();
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> samplingPeriodNames = constraints.getValues(ValuePropertyNames.SAMPLING_PERIOD);
     if (samplingPeriodNames == null || samplingPeriodNames.size() != 1) {

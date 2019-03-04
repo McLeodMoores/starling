@@ -53,43 +53,43 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   private final ObjectId _targetId;
 
   public static CalculationResultKey forPosition(final String calcConfigName,
-                                                 final String valueName,
-                                                 final ValueProperties properties,
-                                                 final ObjectId positionId) {
+      final String valueName,
+      final ValueProperties properties,
+      final ObjectId positionId) {
     ArgumentChecker.notNull(positionId, "positionId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, positionId);
   }
 
   public static CalculationResultKey forCurrency(final String calcConfigName,
-                                                 final String valueName,
-                                                 final ValueProperties properties,
-                                                 final ObjectId currencyId) {
+      final String valueName,
+      final ValueProperties properties,
+      final ObjectId currencyId) {
     ArgumentChecker.notNull(currencyId, "currencyId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, currencyId);
   }
 
   public static CalculationResultKey forPositionWithParentNode(final String calcConfigName,
-                                                               final String valueName,
-                                                               final ValueProperties properties,
-                                                               final List<String> path,
-                                                               final ObjectId positionId) {
+      final String valueName,
+      final ValueProperties properties,
+      final List<String> path,
+      final ObjectId positionId) {
     ArgumentChecker.notNull(path, "path");
     ArgumentChecker.notNull(positionId, "positionId");
     return new CalculationResultKey(calcConfigName, valueName, properties, path, positionId);
   }
 
   public static CalculationResultKey forNode(final String calcConfigName,
-                                             final String valueName,
-                                             final ValueProperties properties,
-                                             final List<String> path) {
+      final String valueName,
+      final ValueProperties properties,
+      final List<String> path) {
     ArgumentChecker.notNull(path, "path");
     return new CalculationResultKey(calcConfigName, valueName, properties, path, null);
   }
 
   public static CalculationResultKey forTrade(final String calcConfigName,
-                                              final String valueName,
-                                              final ValueProperties properties,
-                                              final ObjectId tradeId) {
+      final String valueName,
+      final ValueProperties properties,
+      final ObjectId tradeId) {
     ArgumentChecker.notNull(tradeId, "tradeId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, tradeId);
   }
@@ -97,10 +97,10 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   // TODO can't let this be regenerated because of a joda beans bug handling nullable lists
   @ImmutableConstructor
   private CalculationResultKey(final String calcConfigName,
-                              final String valueName,
-                              final ValueProperties properties,
-                              final List<String> path,
-                              final ObjectId targetId) {
+      final String valueName,
+      final ValueProperties properties,
+      final List<String> path,
+      final ObjectId targetId) {
     ArgumentChecker.notNull(calcConfigName, "calcConfigName");
     ArgumentChecker.notNull(valueName, "valueName");
     ArgumentChecker.notNull(properties, "properties");
@@ -149,9 +149,8 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
       final int cmp = s1.compareTo(s2);
       if (cmp != 0) {
         return cmp;
-      } else {
-        return comparePaths(path1.subList(1, path1.size()), path2.subList(1, path2.size()));
       }
+      return comparePaths(path1.subList(1, path1.size()), path2.subList(1, path2.size()));
     }
   }
 

@@ -25,7 +25,11 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Standard conventions for EUR.
+ * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class EUConventions {
 
   /**
@@ -110,8 +114,8 @@ public class EUConventions {
         tullettPrebonSecurityId("ASLIBEUR02L")),
         "EURIBOR 2m", act360, modified, Period.ofMonths(2), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR003M Index"), ExternalSchemes.ricSecurityId("EURIBOR3MD="),
-            simpleNameSecurityId("EURIBOR 3m"), tullettPrebonSecurityId("ASLIBEUR03L")),
-            "EURIBOR 3m", act360, modified, Period.ofMonths(3), 2, false, eu);
+        simpleNameSecurityId("EURIBOR 3m"), tullettPrebonSecurityId("ASLIBEUR03L")),
+        "EURIBOR 3m", act360, modified, Period.ofMonths(3), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR004M Index"), simpleNameSecurityId("EURIBOR 4m"),
         tullettPrebonSecurityId("ASLIBEUR04L")),
         "EURIBOR 4m", act360, modified, Period.ofMonths(4), 2, false, eu);
@@ -119,8 +123,8 @@ public class EUConventions {
         tullettPrebonSecurityId("ASLIBEUR05L")),
         "EURIBOR 5m", act360, modified, Period.ofMonths(5), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR006M Index"), ExternalSchemes.ricSecurityId("EURIBOR6MD="),
-            simpleNameSecurityId("EURIBOR 6m"), tullettPrebonSecurityId("ASLIBEUR06L")),
-            "EURIBOR 6m", act360, modified, Period.ofMonths(6), 2, false, eu);
+        simpleNameSecurityId("EURIBOR 6m"), tullettPrebonSecurityId("ASLIBEUR06L")),
+        "EURIBOR 6m", act360, modified, Period.ofMonths(6), 2, false, eu);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("EUR007M Index"), simpleNameSecurityId("EURIBOR 7m"),
         tullettPrebonSecurityId("ASLIBEUR07L")),
         "EURIBOR 7m", act360, modified, Period.ofMonths(7), 2, false, eu);

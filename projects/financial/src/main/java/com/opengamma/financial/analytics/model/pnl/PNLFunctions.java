@@ -40,13 +40,20 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     return new PNLFunctions().getObjectCreating();
   }
 
+  /**
+   * @return  the functions
+   * @deprecated Deprecated
+   */
+  @Deprecated
   public static FunctionConfigurationSource deprecated() {
     return new DeprecatedFunctions().getObjectCreating();
   }
 
   /**
    * Function repository configuration source for the deprecated functions contained in this package.
-   */
+  * @deprecated Deprecated
+  */
+  @Deprecated
   public static class DeprecatedFunctions extends AbstractFunctionConfigurationBean {
 
     @Override
@@ -191,8 +198,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     }
 
-    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<String, CurrencyInfo>();
-    private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<Pair<String, String>, CurrencyPairInfo>();
+    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
+    private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<>();
     private String _curveName;
     private String _payCurveName;
     private String _receiveCurveName;
@@ -518,7 +525,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
         functions.add(functionConfiguration(SimpleFuturePnLDefaultPropertiesFunction.class, getCurveName(), getSamplingPeriodName(), getScheduleName(),
             getSamplingCalculatorName()));
       }
-      if ((getPayCurveName() != null) && (getReceiveCurveName() != null)) {
+      if (getPayCurveName() != null && getReceiveCurveName() != null) {
         functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(), getScheduleName(),
             getSamplingCalculatorName()));
       }

@@ -84,16 +84,14 @@ public class SingleConfigLoader {
       if (_doNotUpdateExisting) {
         LOGGER.info("Found existing convention, skipping update");
         return match.getConvention();
-      } else {
-        LOGGER.info("Found existing convention, updating it");
-        match.setConvention(convention);
-        return _conventionMaster.update(match).getConvention();
       }
-    } else {
-      LOGGER.info("No existing convention, creating a new one");
-      final ConventionDocument doc = new ConventionDocument(convention);
-      return _conventionMaster.add(doc).getConvention();
+      LOGGER.info("Found existing convention, updating it");
+      match.setConvention(convention);
+      return _conventionMaster.update(match).getConvention();
     }
+    LOGGER.info("No existing convention, creating a new one");
+    final ConventionDocument doc = new ConventionDocument(convention);
+    return _conventionMaster.add(doc).getConvention();
   }
 
   private ManageableSecurity addOrUpdateSecurity(final ManageableSecurity security) {
@@ -106,6 +104,7 @@ public class SingleConfigLoader {
     return SecurityMasterUtils.addOrUpdateSecurity(_securityMaster, security);
   }
 
+  @SuppressWarnings("deprecation")
   private ManageableMarketDataSnapshot addOrUpdateSnapshot(final ManageableMarketDataSnapshot snapshot) {
     final MarketDataSnapshotSearchRequest searchReq = new MarketDataSnapshotSearchRequest();
     searchReq.setName(snapshot.getName());
@@ -124,16 +123,14 @@ public class SingleConfigLoader {
       if (_doNotUpdateExisting) {
         LOGGER.info("Found existing market data snapshot, skipping update");
         return match.getSnapshot();
-      } else {
-        LOGGER.info("Found existing market data snapshot, updating it");
-        match.setSnapshot(snapshot);
-        return _marketDataSnapshotMaster.update(match).getSnapshot();
       }
-    } else {
-      LOGGER.info("No existing market data snapshot, creating a new one");
-      final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
-      return _marketDataSnapshotMaster.add(doc).getSnapshot();
+      LOGGER.info("Found existing market data snapshot, updating it");
+      match.setSnapshot(snapshot);
+      return _marketDataSnapshotMaster.update(match).getSnapshot();
     }
+    LOGGER.info("No existing market data snapshot, creating a new one");
+    final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
+    return _marketDataSnapshotMaster.add(doc).getSnapshot();
   }
 
   public <T> void loadConfig(final InputStream is, final Class<T> hintType) {
@@ -218,7 +215,7 @@ public class SingleConfigLoader {
     }
   }
 
-  public <T> void loadFudgeConfig(final InputStream is) {
+  public void loadFudgeConfig(final InputStream is) {
     @SuppressWarnings("resource")
     final FudgeMsgReader fmr = new FudgeMsgReader(new FudgeXMLStreamReader(FUDGE_CONTEXT, new InputStreamReader(is)));
     final FudgeMsg message = fmr.nextMessage();

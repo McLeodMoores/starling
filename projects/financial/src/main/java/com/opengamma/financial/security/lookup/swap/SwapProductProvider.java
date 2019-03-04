@@ -11,8 +11,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
-*
-*/
+ *
+ */
 public class SwapProductProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
@@ -22,8 +22,7 @@ public class SwapProductProvider implements SecurityValueProvider<SwapSecurity> 
     // fixed currency first or the pay currency first for float/float swaps
     if (currencies.getFirst().equals(currencies.getSecond())) {
       return currencies.getFirst().getCode();
-    } else {
-      return currencies.getFirst() + "/" + currencies.getSecond();
     }
+    return currencies.getFirst() + "/" + currencies.getSecond();
   }
 }

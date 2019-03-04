@@ -42,7 +42,6 @@ import com.opengamma.bbg.BloombergConstants;
 import com.opengamma.bbg.BloombergPermissions;
 import com.opengamma.bbg.SessionProvider;
 import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.provider.permission.PermissionCheckProvider;
 import com.opengamma.provider.permission.PermissionCheckProviderRequest;
 import com.opengamma.provider.permission.PermissionCheckProviderResult;
 import com.opengamma.provider.permission.impl.AbstractPermissionCheckProvider;
@@ -66,8 +65,8 @@ import com.opengamma.util.ArgumentChecker;
  * Failure at this stage returns a result with an authorization error.
  */
 public final class BloombergBpipePermissionCheckProvider
-    extends AbstractPermissionCheckProvider
-    implements PermissionCheckProvider, Lifecycle {
+extends AbstractPermissionCheckProvider
+implements Lifecycle {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(BloombergBpipePermissionCheckProvider.class);
@@ -209,13 +208,13 @@ public final class BloombergBpipePermissionCheckProvider
   private LoadingCache<IdentityCacheKey, Identity> createUserIdentityCache(final Duration identityExpiry) {
     // called from constructor - must not use instance variables in this method
     return CacheBuilder.newBuilder()
-      .expireAfterWrite(identityExpiry.getSeconds(), TimeUnit.SECONDS)
-      .build(new CacheLoader<IdentityCacheKey, Identity>() {
-        @Override
-        public Identity load(final IdentityCacheKey userCredential) throws Exception {
-          return loadUserIdentity(userCredential);
-        }
-      });
+        .expireAfterWrite(identityExpiry.getSeconds(), TimeUnit.SECONDS)
+        .build(new CacheLoader<IdentityCacheKey, Identity>() {
+          @Override
+          public Identity load(final IdentityCacheKey userCredential) throws Exception {
+            return loadUserIdentity(userCredential);
+          }
+        });
   }
 
   // called from the cache to load user identities

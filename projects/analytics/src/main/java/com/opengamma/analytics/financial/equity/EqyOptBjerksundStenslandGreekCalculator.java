@@ -14,12 +14,11 @@ import com.opengamma.analytics.financial.greeks.GreekResultCollection;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurveAffineDividends;
-import com.opengamma.analytics.financial.model.option.pricing.analytic.BaroneAdesiWhaleyModel;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.BjerksundStenslandModel;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the greeks of a commodity future option using the Barone-Adesi Whaley model {@link BaroneAdesiWhaleyModel}.
+ * Calculates the greeks of a commodity future option using the Barone-Adesi Whaley model {@link com.opengamma.analytics.financial.model.option.pricing.analytic.BaroneAdesiWhaleyModel}.
  * <p>
  * The greeks returned are delta, dual-delta, rho, carry rho, theta and vega.
  */
@@ -89,7 +88,7 @@ public final class EqyOptBjerksundStenslandGreekCalculator extends InstrumentDer
   }
 
   /**
-   * If MARKET_VALUE is available, volatility implied by Bjerksund-Stensland model is used. 
+   * If MARKET_VALUE is available, volatility implied by Bjerksund-Stensland model is used.
    * @param option Equity option
    * @param data Market data
    * @param impliedVol The implied volatility

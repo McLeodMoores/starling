@@ -84,7 +84,7 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
         context.getSecurityMaster(),
         getCommandLine().hasOption(WRITE_OPT),
         getCommandLine().hasOption(OVERWRITE_OPT)
-    );
+        );
 
     String dateFormat = "yyyy-MM-dd";
     if (getCommandLine().hasOption(DATE_FORMAT_OPT)) {
@@ -103,7 +103,7 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
         getCommandLine().getOptionValue(FILE_NAME_OPT),
         context.getSecurityProvider(),
         builder.toFormatter()
-    );
+        );
 
     // Create portfolio copier
     final ResolvingPortfolioCopier portfolioCopier = new ResolvingPortfolioCopier(
@@ -113,7 +113,7 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
         getOptionValue(TIME_SERIES_DATAPROVIDER_OPT, "CMPL"),
         getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ?
             new String[]{"PX_LAST"} : getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT)
-    );
+        );
 
     // Create visitor for verbose/quiet mode
     PortfolioCopierVisitor portfolioCopierVisitor;
@@ -146,10 +146,9 @@ public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolCo
       }
       // Create a portfolio writer to persist imported positions, trades and securities to the OG masters
       return new MasterPositionWriter(portfolioName, portfolioMaster, positionMaster, securityMaster, false, false, false);
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new PrettyPrintingPositionWriter(true);
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new PrettyPrintingPositionWriter(true);
   }
 
   // TODO take a stream as well as the file name, BBG master

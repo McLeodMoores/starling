@@ -48,7 +48,9 @@ import com.opengamma.util.money.Currency;
  * See FXBarrierOptionBlackFunction for Functions on TRUE Barriers. That is, options that knock in or out contingent on hitting a barrier,
  * at ANY time before expiry. The one-look case here only checks the barrier at expiry. <p>
  * The payoffs are thus restricted, on cannot have a Down-and-Out nor Down-and-In Calls, nor Up-and-In and Up-and-Out Puts <p>
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FXOneLookBarrierOptionBlackFunction extends FXOptionBlackSingleValuedFunction {
 
   /**

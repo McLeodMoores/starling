@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.interestrate.payments.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
@@ -54,7 +53,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Constructor from all the details.
-   * 
+   *
    * @param currency
    *          The payment currency.
    * @param paymentTime
@@ -103,7 +102,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Constructor from all the details.
-   * 
+   *
    * @param currency
    *          The payment currency.
    * @param paymentTime
@@ -145,7 +144,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the Ibor index.
-   * 
+   *
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -154,7 +153,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the fixing period start date.
-   * 
+   *
    * @return The fixing period start date.
    */
   public double getFixingPeriodStartTime() {
@@ -163,7 +162,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the fixing period end date.
-   * 
+   *
    * @return The fixing period end date.
    */
   public double getFixingPeriodEndTime() {
@@ -172,7 +171,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the fixing period accrual factor.
-   * 
+   *
    * @return The fixing period accrual factor.
    */
   public double getFixingAccrualFactor() {
@@ -181,7 +180,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the spread.
-   * 
+   *
    * @return The spread.
    */
   public double getSpread() {
@@ -190,7 +189,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the spread amount.
-   * 
+   *
    * @return The spread amount.
    */
   public double getSpreadAmount() {
@@ -199,7 +198,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the factor.
-   * 
+   *
    * @return The factor.
    */
   public double getFactor() {
@@ -208,7 +207,7 @@ public class CouponIborGearing extends CouponFloating {
 
   /**
    * Gets the forward curve name.
-   * 
+   *
    * @return the _forward curve name
    * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
    */

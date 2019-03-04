@@ -7,7 +7,6 @@ package com.opengamma.master.historicaltimeseries;
 
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.DataNotFoundException;
 import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
@@ -123,38 +122,48 @@ public interface HistoricalTimeSeriesMaster extends AbstractChangeProvidingMaste
   /**
    * Adds to the time-series by appending new data points.
    * <p>
-   * This is used to append new time-series data points.
-   * The points must be after the latest current data point.
+   * This is used to append new time-series data points. The points must be
+   * after the latest current data point.
    * <p>
-   * A full master will store detailed historic information on documents.
-   * Thus, an update does not prevent retrieval or correction of an earlier version.
+   * A full master will store detailed historic information on documents. Thus,
+   * an update does not prevent retrieval or correction of an earlier version.
    *
-   * @param objectId  the time-series data points object identifier, not null
-   * @param series  the series to add, not null
+   * @param objectId
+   *          the time-series data points object identifier, not null
+   * @param series
+   *          the series to add, not null
    * @return the new time-series unique identifier, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no document with that unique identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no document with that unique identifier
    */
   UniqueId updateTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDateDoubleTimeSeries series);
 
   /**
    * Corrects the time-series by removing data points.
    * <p>
-   * This takes each point in the specified series and applies it on top of the existing data.
-   * If the date already has a value, the value is corrected if different.
-   * If the date is not currently present, it is added.
-   * The addition occurs as though the original was added at the base version instant,
-   * which is different to just adding a point using {@link #updateTimeSeriesDataPoints(ObjectIdentifiable, LocalDateDoubleTimeSeries)}.
+   * This takes each point in the specified series and applies it on top of the
+   * existing data. If the date already has a value, the value is corrected if
+   * different. If the date is not currently present, it is added. The addition
+   * occurs as though the original was added at the base version instant, which
+   * is different to just adding a point using
+   * {@link #updateTimeSeriesDataPoints(ObjectIdentifiable, LocalDateDoubleTimeSeries)}.
    * The correction applies as of the current instant.
    * <p>
-   * A full master will store detailed historic information on documents.
-   * Thus, a correction does not prevent retrieval or correction of an earlier version.
+   * A full master will store detailed historic information on documents. Thus,
+   * a correction does not prevent retrieval or correction of an earlier
+   * version.
    *
-   * @param objectId  the time-series data points object identifier, not null
-   * @param series  the series to correct to, no null values, not null
+   * @param objectId
+   *          the time-series data points object identifier, not null
+   * @param series
+   *          the series to correct to, no null values, not null
    * @return the unique identifier of the updated document, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no document with that unique identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no document with that unique identifier
    */
   UniqueId correctTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDateDoubleTimeSeries series);
 
@@ -163,15 +172,23 @@ public interface HistoricalTimeSeriesMaster extends AbstractChangeProvidingMaste
    * <p>
    * The correction applies as of the current instant.
    * <p>
-   * A full master will store detailed historic information on documents.
-   * Thus, a correction does not prevent retrieval or correction of an earlier version.
+   * A full master will store detailed historic information on documents. Thus,
+   * a correction does not prevent retrieval or correction of an earlier
+   * version.
    *
-   * @param objectId  the time-series data points object identifier, not null
-   * @param fromDateInclusive  the inclusive start date of the points to remove, null for far past
-   * @param toDateInclusive  the inclusive end date of the points to remove, null for far future
+   * @param objectId
+   *          the time-series data points object identifier, not null
+   * @param fromDateInclusive
+   *          the inclusive start date of the points to remove, null for far
+   *          past
+   * @param toDateInclusive
+   *          the inclusive end date of the points to remove, null for far
+   *          future
    * @return the unique identifier of the updated document, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no document with that unique identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no document with that unique identifier
    */
   UniqueId removeTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDate fromDateInclusive, LocalDate toDateInclusive);
 

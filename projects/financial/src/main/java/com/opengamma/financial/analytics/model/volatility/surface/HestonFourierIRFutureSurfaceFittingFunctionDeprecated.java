@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +45,8 @@ import com.opengamma.financial.analytics.volatility.fittedresults.HestonFittedSu
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.ObjectsPair;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  *
@@ -113,7 +113,7 @@ public class HestonFourierIRFutureSurfaceFittingFunctionDeprecated extends Abstr
     final DoubleArrayList omegaList = new DoubleArrayList();
     final DoubleArrayList rhoList = new DoubleArrayList();
     final DoubleArrayList chiSqList = new DoubleArrayList();
-    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<DoublesPair, DoubleMatrix2D>();
+    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
     for (final Double t : x) {
       final List<ObjectsPair<Double, Double>> strip = volatilitySurfaceData.getYValuesForX(t);
       // FIXME This is bound to break. I changed x/t from an ordinal to an OG-Analytics Year,

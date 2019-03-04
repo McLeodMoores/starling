@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.creditdefaultswap.definition.vanilla;
@@ -13,7 +13,6 @@ import com.opengamma.analytics.financial.credit.CreditInstrumentDefinition;
 import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -24,7 +23,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  *  Definition of a generic Single Name Credit Default Swap contract (abstract class therefore different types of CDS will inherit from this)
- *@deprecated this will be deleted 
+ *@deprecated this will be deleted
  */
 @Deprecated
 public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDefinition {
@@ -134,12 +133,12 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
   // Constructor for a CDS contract object
 
   /**
-   * Create a CDS object 
+   * Create a CDS object
    * @param buySellProtection Are we buying or selling the credit protection
    * @param protectionBuyer protection buyer
    * @param protectionSeller protection seller
    * @param referenceEntity reference entity
-   * @param currency Currency 
+   * @param currency Currency
    * @param debtSeniority Debt Seniority
    * @param restructuringClause Restructuring Clause
    * @param calendar Calendar
@@ -151,13 +150,13 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
    * @param couponFrequency coupon frequency
    * @param daycountFractionConvention day-count convention
    * @param businessdayAdjustmentConvention business-day adjustment convention
-   * @param immAdjustMaturityDate if true adjust IMM maturity date - TODO check exactly what this does 
-   * @param adjustEffectiveDate if true adjust effective date for non-business days 
-   * @param adjustMaturityDate if true adjust (non-IMM) maturity date for non-business days 
-   * @param notional the notional 
+   * @param immAdjustMaturityDate if true adjust IMM maturity date - TODO check exactly what this does
+   * @param adjustEffectiveDate if true adjust effective date for non-business days
+   * @param adjustMaturityDate if true adjust (non-IMM) maturity date for non-business days
+   * @param notional the notional
    * @param recoveryRate the recovery rate (between 0 and 1.0)
    * @param includeAccruedPremium If true accrued premium must be paid in the event of default
-   * @param protectionStart if true the protection is from the start of day 
+   * @param protectionStart if true the protection is from the start of day
    */
   public CreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller, final LegalEntity referenceEntity, final Currency currency,
       final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate, final ZonedDateTime effectiveDate,
@@ -381,14 +380,14 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
     result = prime * result + _maturityDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _protectionBuyer.hashCode();
     temp = Double.doubleToLongBits(_protectionOffset);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _protectionSeller.hashCode();
     result = prime * result + (_protectionStart ? 1231 : 1237);
     temp = Double.doubleToLongBits(_recoveryRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _referenceEntity.hashCode();
     result = prime * result + _restructuringClause.hashCode();
     result = prime * result + _startDate.hashCode();

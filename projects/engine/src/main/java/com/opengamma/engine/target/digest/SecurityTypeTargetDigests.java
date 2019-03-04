@@ -106,9 +106,8 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getPositionDigest(target.getPosition());
-        } else {
-          return null;
         }
+        return null;
       }
     });
     addHandler(ComputationTargetType.TRADE, new TargetDigests() {
@@ -117,9 +116,8 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getTradeDigest(target.getTrade());
-        } else {
-          return null;
         }
+        return null;
       }
     });
     addHandler(ComputationTargetType.SECURITY, new TargetDigests() {
@@ -128,9 +126,8 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getSecurityDigest(target.getSecurity());
-        } else {
-          return null;
         }
+        return null;
       }
     });
   }

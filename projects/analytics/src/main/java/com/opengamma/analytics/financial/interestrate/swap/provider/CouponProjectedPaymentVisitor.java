@@ -18,7 +18,6 @@ import com.opengamma.analytics.financial.interestrate.payments.provider.IborForw
 import com.opengamma.analytics.financial.interestrate.payments.provider.OvernightForwardRateProvider;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.util.money.CurrencyAmount;
-import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
@@ -71,7 +70,7 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
       rateAccrued += forwardON[loopfwd] * delta[loopfwd];
     }
     // Does not use the payment accrual factor.
-    return CurrencyAmount.of(payment.getCurrency(), (rateAccrued * payment.getNotional() + payment.getSpreadAmount()));
+    return CurrencyAmount.of(payment.getCurrency(), rateAccrued * payment.getNotional() + payment.getSpreadAmount());
   }
 
   @Override
@@ -95,7 +94,7 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
 
   @Override
   public CurrencyAmount visitCouponFixedCompounding(final CouponFixedCompounding payment, final MulticurveProviderInterface curves) {
-    return CurrencyAmount.of(payment.getCurrency(), (payment.getNotionalAccrued() - payment.getNotional()));
+    return CurrencyAmount.of(payment.getCurrency(), payment.getNotionalAccrued() - payment.getNotional());
   }
 
 }

@@ -36,9 +36,8 @@ public final class ViewExecutionCacheKey implements Serializable {
   private static Serializable getMarketDataSelectorCacheHintKey(final MarketDataSelectionGraphManipulator graphManipulations) {
     if (graphManipulations == null) {
       return "No-op";
-    } else {
-      return graphManipulations.getCacheHintKey();
     }
+    return graphManipulations.getCacheHintKey();
   }
 
   /**

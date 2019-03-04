@@ -28,7 +28,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for CZK deals.
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class CZKTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(CZKTest.class);

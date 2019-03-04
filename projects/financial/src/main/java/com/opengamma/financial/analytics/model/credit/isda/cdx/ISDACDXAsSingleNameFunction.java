@@ -63,8 +63,10 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
 //TODO rename to make clear that these functions use the ISDA methodology (specifically, for effective dates)
+@Deprecated
 public abstract class ISDACDXAsSingleNameFunction extends AbstractFunction.NonCompiledInvoker {
   private final String[] _valueRequirements;
 

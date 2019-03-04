@@ -28,7 +28,6 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.equity.ScenarioPnLPropertyNamesAndValues;
-import com.opengamma.financial.analytics.model.volatility.surface.black.EquityBlackVolatilitySurfaceFromSinglePriceFunction;
 
 /**
  *
@@ -40,7 +39,7 @@ public class ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction extends Listed
    * The model is chosen to be consistent with {@link EquityBlackVolatilitySurfaceFromSinglePriceFunction}
    */
   private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
-//  private static final EqyOptRollGeskeWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptRollGeskeWhaleyPresentValueCalculator.getInstance();
+  //  private static final EqyOptRollGeskeWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptRollGeskeWhaleyPresentValueCalculator.getInstance();
 
   /** Default constructor */
   public ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction() {
@@ -164,9 +163,8 @@ public class ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction extends Listed
     // If defaults have been added, this adds additional copy of the Function into dep graph with the adjusted constraints
     if (scenarioDefaults != null) {
       return Collections.singleton(new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get()));
-    } else {  // Scenarios are defined, so we're satisfied
-      return superReqs;
     }
+    return superReqs;
   }
 
   @Override

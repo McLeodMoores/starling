@@ -67,9 +67,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
     public TimeSeries makeTimeSeries() {
       if (_datedResultMap.isEmpty() || Iterables.get(_datedResultMap.values(), 0) instanceof Number) {
         return makeDoubleTimeSeries();
-      } else {
-        return makeObjectTimeSeries();
       }
+      return makeObjectTimeSeries();
     }
 
     private LocalDateDoubleTimeSeries makeDoubleTimeSeries() {

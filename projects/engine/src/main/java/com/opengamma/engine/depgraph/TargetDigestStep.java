@@ -113,9 +113,8 @@ import com.opengamma.util.tuple.Triple;
             }
             functionApplication(context, resolvedOutput, Triple.of(function, matchedResult, context.simplifyTypes(results)));
             return true;
-          } else {
-            LOGGER.debug("Ignoring digest resolution {} for {}", properties, requirement);
           }
+          LOGGER.debug("Ignoring digest resolution {} for {}", properties, requirement);
         } while (_resolutions.hasNext());
       } finally {
         _timeSpent += System.nanoTime() - startTime;

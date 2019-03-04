@@ -42,9 +42,8 @@ import com.opengamma.engine.value.ValueRequirement;
     if (_refCount > 0) {
       _refCount++;
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

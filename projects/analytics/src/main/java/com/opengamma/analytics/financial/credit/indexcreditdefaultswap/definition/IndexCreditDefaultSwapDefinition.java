@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.indexcreditdefaultswap.definition;
@@ -11,7 +11,6 @@ import com.opengamma.analytics.financial.credit.BuySellProtection;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.legacy.LegacyVanillaCreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.vanilla.CreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.credit.underlyingpool.definition.UnderlyingPool;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -23,7 +22,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Definition of a generic Index Credit Default Swap contract
- *@deprecated this will be deleted 
+ *@deprecated this will be deleted
  */
 @Deprecated
 public class IndexCreditDefaultSwapDefinition {
@@ -51,7 +50,7 @@ public class IndexCreditDefaultSwapDefinition {
   // TODO : Need to sort out the quoting conventions for the different indices
   // TODO : Need to sort out the type of CDS used to construct the index (in principle would like to build the index from an arbitrary combination of CDS types)
 
-  // NOTE : The CDS index is constructed essentially like a SNCDS; we specify who the protection buyer and seller (obligors) are and we 
+  // NOTE : The CDS index is constructed essentially like a SNCDS; we specify who the protection buyer and seller (obligors) are and we
   // NOTE : then specify a 'reference entity'. In a SNCDS the reference entity is just a single obligor, in an index it is a collection
   // NOTE : of obligors bundled up into an UnderlyingPool object (which is passed into the index constructor)
 
@@ -71,7 +70,7 @@ public class IndexCreditDefaultSwapDefinition {
   // NOTE : essentially approximating the full pool with one single name CDS. The pricing analytics should be ambivalent to the
   // NOTE : number of obligors in the underlying pool i.e. the correct answer should fall out
 
-  // NOTE : A standard CDS index is uniquely identified by the three-tuple of (_index, _series, _version). This combination is sufficient to 
+  // NOTE : A standard CDS index is uniquely identified by the three-tuple of (_index, _series, _version). This combination is sufficient to
   // NOTE : identify what UnderlyingPool should be attached to the index (the UnderlyingPool object in turn will be composed of the Obligors
   // NOTE : corresponding to the index identified by the three-tuple)
 
@@ -256,7 +255,7 @@ public class IndexCreditDefaultSwapDefinition {
     _upfrontPayment = upfrontPayment;
     _indexCoupon = indexCoupon;
 
-    _indexFactor = ((double) _underlyingPool.getNumberOfDefaultedObligors()) / ((double) _underlyingPool.getNumberOfObligors());
+    _indexFactor = (double) _underlyingPool.getNumberOfDefaultedObligors() / (double) _underlyingPool.getNumberOfObligors();
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 

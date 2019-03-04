@@ -57,7 +57,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the functions contained in this package.
- */
+ * @deprecated Deprecated
+s */
+@Deprecated
 public class CreditFunctions extends AbstractFunctionConfigurationBean {
 
   /**

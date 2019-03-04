@@ -89,7 +89,6 @@ import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCountFactory;
-import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
@@ -99,7 +98,9 @@ import com.opengamma.util.time.Tenor;
 /**
  * Constructs a single yield curve and its Jacobian from an FX-implied yield curve calculation configuration and a yield curve definition that contains <b>only</b> {@link StripInstrumentType#CASH}
  * strips. The transformation of the yield curve allows risk to be displayed with respect to implied deposit rates, not FX forwards.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ImpliedDepositCurveFunction extends AbstractFunction {
   /** The calculation method property value */
   public static final String IMPLIED_DEPOSIT = "ImpliedDeposit";
@@ -249,7 +250,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
         throw new OpenGammaRuntimeException("Could not get result curve properties");
       }
       final ValueProperties resultJacobianProperties = resultCurveProperties.withoutAny(CURVE);
-      ZonedDateTime valuationDateTime = executionContext.getValuationTime().atZone(executionContext.getValuationClock().getZone());
+      final ZonedDateTime valuationDateTime = executionContext.getValuationTime().atZone(executionContext.getValuationClock().getZone());
       final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
       final Calendar calendar = CalendarUtils.getCalendar(holidaySource, _currency);
@@ -360,7 +361,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
 
     /**
      * Gets the properties of the implied yield curve.
-     * 
+     *
      * @param curveName The implied curve name
      * @return The properties
      */
@@ -373,7 +374,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
 
     /**
      * Gets the properties of the Jacobian with no values set.
-     * 
+     *
      * @return The properties.
      */
     private ValueProperties getJacobianProperties(final String curveCalculationConfig) {

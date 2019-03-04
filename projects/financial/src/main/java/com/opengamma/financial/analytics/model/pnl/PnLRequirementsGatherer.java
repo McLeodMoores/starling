@@ -16,7 +16,9 @@ import com.opengamma.financial.security.FinancialSecurity;
  * <p>
  * This is available as an interface so that it may be implemented either locally or as a remote service.
  * See {@link DefaultPnLRequirementsGatherer} for a possible implementation.
+ * @deprecated Deprecated
  */
+@Deprecated
 public interface PnLRequirementsGatherer {
 
   /**

@@ -34,7 +34,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FXOptionVannaVolgaSingleValuedFunction extends FXOptionVannaVolgaFunction {
 
   public FXOptionVannaVolgaSingleValuedFunction(final String valueRequirementName) {

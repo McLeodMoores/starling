@@ -54,7 +54,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionBlackYieldCurvesForwardSlideThetaFunction extends FXOptionBlackMultiValuedFunction {
   private static final YieldCurvesForwardSlideThetaCalculator CALCULATOR = YieldCurvesForwardSlideThetaCalculator.getInstance();
 

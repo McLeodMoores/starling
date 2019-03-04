@@ -175,9 +175,8 @@ public class SumUtils {
       final CurrencyAmount total = (CurrencyAmount) currentTotal;
       if (total.getCurrency() == currentAmount.getCurrency()) {
         return total.plus(currentAmount);
-      } else {
-        return MultipleCurrencyAmount.of(total).plus(currentAmount);
       }
+      return MultipleCurrencyAmount.of(total).plus(currentAmount);
     } else if (currentTotal instanceof MultipleCurrencyAmount) {
       return ((MultipleCurrencyAmount) currentTotal).plus(currentAmount);
     } else {

@@ -40,9 +40,8 @@ public class LatestHistoricalMarketDataSpecificationFudgeBuilder implements Fudg
     if (msg.hasField(TIME_SERIES_RESOLVER_KEY_FIELD)) {
       final String timeSeriesResolverKey = msg.getString(TIME_SERIES_RESOLVER_KEY_FIELD);
       return new LatestHistoricalMarketDataSpecification(timeSeriesResolverKey);
-    } else {
-      return new LatestHistoricalMarketDataSpecification();
     }
+    return new LatestHistoricalMarketDataSpecification();
   }
 
 }

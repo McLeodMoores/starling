@@ -240,9 +240,8 @@ import com.opengamma.engine.value.ValueSpecification;
       LOGGER.info("Reporting failure of {} from {} to blacklist maintainer", item, this);
       getDispatcher().getFunctionBlacklistMaintainer().failedJobItem(item);
       return null;
-    } else {
-      return splitJob(this, getJob());
     }
+    return splitJob(this, getJob());
   }
 
   @Override

@@ -60,10 +60,9 @@ public class BloombergRateRuleProvider implements SecurityRuleProvider {
     if (normalizationFactor == null) {
       if (_failUnknownSecurityType) {
         throw new OpenGammaRuntimeException("Unable to determine security type for " + securityUniqueId);
-      } else {
-        LOGGER.warn("Unable to determine normalization factor for " + securityUniqueId + ". Its market value will be unnormalized.");
-        return null;
       }
+      LOGGER.warn("Unable to determine normalization factor for " + securityUniqueId + ". Its market value will be unnormalized.");
+      return null;
     }
     switch (normalizationFactor) {
       case 1:

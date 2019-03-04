@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -20,12 +20,12 @@ import com.opengamma.id.UniqueId;
 /**
  * Partial implementation of a {@link GraphExecutorStatisticsGathererProvider} that delivers a per-view
  * {@link GraphExecutorStatisticsGatherer} instance.
- * 
+ *
  * @param <T>
  */
 public abstract class PerViewStatisticsGathererProvider<T extends GraphExecutorStatisticsGatherer> implements GraphExecutorStatisticsGathererProvider {
 
-  private final ConcurrentMap<UniqueId, T> _statisticsGatherers = new ConcurrentHashMap<UniqueId, T>();
+  private final ConcurrentMap<UniqueId, T> _statisticsGatherers = new ConcurrentHashMap<>();
 
   @Override
   public T getStatisticsGatherer(final UniqueId viewId) {
@@ -43,7 +43,7 @@ public abstract class PerViewStatisticsGathererProvider<T extends GraphExecutorS
   protected abstract T createStatisticsGatherer(UniqueId viewId);
 
   public List<T> getViewStatistics() {
-    return new ArrayList<T>(_statisticsGatherers.values());
+    return new ArrayList<>(_statisticsGatherers.values());
   }
 
   public void dropStatisticsBefore(final Instant dropBefore) {

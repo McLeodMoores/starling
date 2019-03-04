@@ -49,7 +49,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Calculates return series for the market instruments at the nodal points of a yield curve.
+ * @deprecated This configuration type should no longer be used.
  */
+@Deprecated
 public class FXForwardCurveNodeReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker {
 
   private static final TimeSeriesDifferenceOperator DIFFERENCE = new TimeSeriesDifferenceOperator();
@@ -132,7 +134,7 @@ public class FXForwardCurveNodeReturnSeriesFunction extends AbstractFunction.Non
     if (scheduleMethod == null || scheduleMethod.size() != 1) {
       return null;
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(HistoricalTimeSeriesFunctionUtils.createFXForwardCurveHTSRequirement(currencyPair, curveName, MarketDataRequirementNames.MARKET_VALUE, null, start, includeStart, end,
         includeEnd));
 

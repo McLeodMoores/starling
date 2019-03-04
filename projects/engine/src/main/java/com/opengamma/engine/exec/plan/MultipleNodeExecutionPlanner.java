@@ -515,10 +515,9 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
       if (graph.getSize() <= getMinimumJobItems()) {
         // If the graph is too small, run it as-is
         return createSingleNodePlan(graph, logModeSource, functionInitialisationId, sharedValues, parameters);
-      } else {
-        // Split the graph into multiple fragments
-        return createMultipleNodePlan(graph, logModeSource, functionInitialisationId, sharedValues, parameters);
       }
+      // Split the graph into multiple fragments
+      return createMultipleNodePlan(graph, logModeSource, functionInitialisationId, sharedValues, parameters);
     } finally {
       timer.finished();
     }

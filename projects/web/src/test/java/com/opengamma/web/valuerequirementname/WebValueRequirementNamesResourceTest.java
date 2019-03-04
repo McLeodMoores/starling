@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
-import org.json.JSONException;
 import org.testng.annotations.Test;
 
 import com.opengamma.util.test.TestGroup;
@@ -41,11 +40,8 @@ public class WebValueRequirementNamesResourceTest {
 
   /**
    * Tests that the list of names is sorted.
-   *
-   * @throws JSONException
-   *           if there is a problem with the JSON
    */
-  public void testSorted() throws JSONException {
+  public void testSorted() {
     final String json = RESOURCE.getJSON();
     @SuppressWarnings("unchecked")
     final Map<String, Object[]> map = (Map<String, Object[]>) JSON.parse(json);

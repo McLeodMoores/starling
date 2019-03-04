@@ -166,10 +166,9 @@ public class EquityOptionBAWScenarioPnLFunction extends EquityOptionBAWFunction 
     if (scenarioDefaults != null) {
       final ValueRequirement reqWithScenarioConstraints = new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get());
       return Sets.newHashSet(reqWithScenarioConstraints);
-    } else {  // Scenarios are defined, so we're satisfied
-      superReqs.add(basePvReq);
-      return superReqs;
     }
+    superReqs.add(basePvReq);
+    return superReqs;
   }
 
   @Override

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -24,8 +24,10 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class SyntheticDKConventions {
 
   public static void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
@@ -41,10 +43,10 @@ public class SyntheticDKConventions {
     final ExternalId dk = ExternalSchemes.financialRegionId("DK");
 
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
-    
+
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKLIBORP3M"), simpleNameSecurityId("DKK CIBOR 3m")), "DKK CIBOR 3m", act360, following, Period.ofMonths(3), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKLIBORP6M"), simpleNameSecurityId("DKK CIBOR 6m")), "DKK CIBOR 6m", act360, following, Period.ofMonths(6), 2, false, dk);
-    
+
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP1D")), "DKKCASHP1D", act360, following, Period.ofDays(1), 0, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP1M")), "DKKCASHP1M", act360, modified, Period.ofMonths(1), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP2M")), "DKKCASHP2M", act360, modified, Period.ofMonths(2), 2, false, dk);
@@ -58,7 +60,7 @@ public class SyntheticDKConventions {
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP10M")), "DKKCASHP10M", act360, modified, Period.ofMonths(10), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP11M")), "DKKCASHP11M", act360, modified, Period.ofMonths(11), 2, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP12M")), "DKKCASHP12M", act360, modified, Period.ofMonths(12), 2, false, dk);
-    
+
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("DKK_SWAP")), "DKK_SWAP", thirty360, modified, annual, 1, dk, act360,
         modified, semiAnnual, 1, simpleNameSecurityId("DKK CIBOR 6m"), dk, true);
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("DKK_3M_SWAP")), "DKK_3M_SWAP", thirty360, modified, annual, 2, dk,

@@ -9,11 +9,8 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.authz.permission.InvalidPermissionStringException;
 import org.apache.shiro.authz.permission.PermissionResolver;
 
 import com.google.common.base.Throwables;
@@ -26,18 +23,21 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An Apache Shiro {@code PermissionResolver} that resolves to OpenGamma permissions.
+ * An Apache Shiro {@code PermissionResolver} that resolves to OpenGamma
+ * permissions.
  * <p>
- * This resolver supports extended permission systems by registering a prefix for permissions.
- * If the requested permission matches a prefix then the associated registered resolver is used.
- * Otherwise, the standard permission is used.
+ * This resolver supports extended permission systems by registering a prefix
+ * for permissions. If the requested permission matches a prefix then the
+ * associated registered resolver is used. Otherwise, the standard permission is
+ * used.
  * <p>
- * For example, this could be used to check permission to access ticking data on an equity.
- * The user would be given the permission 'Data.BigDataProvider'.
- * The data would be given the permission 'Data.BigDataProvider.AnEquityIdentifier'.
- * A special permission resolver would then be registered for the 'Data.MyBigDataProvider' prefix.
- * When the prefix is seen, the resolver would return a different {@link Permission} implementation
- * that is capable of dynamically checking access to the specific equity identifier, which usually
+ * For example, this could be used to check permission to access ticking data on
+ * an equity. The user would be given the permission 'Data.BigDataProvider'. The
+ * data would be given the permission 'Data.BigDataProvider.AnEquityIdentifier'.
+ * A special permission resolver would then be registered for the
+ * 'Data.MyBigDataProvider' prefix. When the prefix is seen, the resolver would
+ * return a different {@link Permission} implementation that is capable of
+ * dynamically checking access to the specific equity identifier, which usually
  * requires contacting the big data provider.
  */
 public final class ShiroPermissionResolver implements PermissionResolver {
@@ -48,13 +48,13 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    */
   private final LoadingCache<String, Permission> _cache =
       CacheBuilder.newBuilder()
-        .maximumSize(1000)
-        .build(new CacheLoader<String, Permission>() {
-          @Override
-          public Permission load(final String permissionStr) {
-            return doResolvePermission(permissionStr);
-          }
-        });
+      .maximumSize(1000)
+      .build(new CacheLoader<String, Permission>() {
+        @Override
+        public Permission load(final String permissionStr) {
+          return doResolvePermission(permissionStr);
+        }
+      });
   /**
    * A pluggable set of resolvers by prefix.
    * Registration should occur only during startup, but still need concurrent map.

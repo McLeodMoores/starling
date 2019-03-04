@@ -8,7 +8,6 @@ package com.opengamma.transport;
 import java.io.InputStream;
 
 import org.fudgemsg.FudgeContext;
-import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.FudgeMsgEnvelope;
 import org.fudgemsg.wire.FudgeMsgReader;
 
@@ -42,6 +41,7 @@ public class InputStreamFudgeMessageDispatcher implements Runnable {
 
   /**
    * Gets the inputStream.
+   * 
    * @return the inputStream
    */
   public InputStream getInputStream() {

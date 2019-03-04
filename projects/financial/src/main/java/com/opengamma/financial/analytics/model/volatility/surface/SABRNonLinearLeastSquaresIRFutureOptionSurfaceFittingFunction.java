@@ -6,7 +6,6 @@
 package com.opengamma.financial.analytics.model.volatility.surface;
 
 import static com.opengamma.financial.analytics.model.volatility.surface.SABRFittingProperties.PROPERTY_ERROR;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -52,6 +51,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.ObjectsPair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
@@ -91,10 +92,10 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
     final DoubleArrayList nuList = new DoubleArrayList();
     final DoubleArrayList rhoList = new DoubleArrayList();
     final DoubleArrayList chiSqList = new DoubleArrayList();
-    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<DoublesPair, DoubleMatrix2D>();
-    final Map<Double, List<Double>> dataPointsForStrip = new HashMap<Double, List<Double>>();
+    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
+    final Map<Double, List<Double>> dataPointsForStrip = new HashMap<>();
     for (final Number ttm : timeValues) {
-      final List<Double> fittedPointsForStrip = new ArrayList<Double>();
+      final List<Double> fittedPointsForStrip = new ArrayList<>();
       final List<ObjectsPair<Double, Double>> strip = volatilitySurfaceData.getYValuesForX(ttm);
       final DoubleArrayList errors = new DoubleArrayList();
       final DoubleArrayList strikes = new DoubleArrayList();

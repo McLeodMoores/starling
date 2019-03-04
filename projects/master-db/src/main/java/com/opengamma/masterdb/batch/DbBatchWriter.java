@@ -656,9 +656,8 @@ public class DbBatchWriter extends AbstractDbMaster {
     final RiskRun run = findRiskRunInDb(batchId);
     if (run == null) {
       throw new DataNotFoundException("Cannot find run in database for " + batchId);
-    } else {
-      return run;
     }
+    return run;
   }
 
   protected RiskRun createRiskRunInTransaction(
@@ -1234,10 +1233,9 @@ public class DbBatchWriter extends AbstractDbMaster {
       if (existingStatusEntryInDb != null) {
         // status entry in db.
         return existingStatusEntryInDb.getStatus();
-      } else {
-        // no status entry in db.
-        return StatusEntry.Status.NOT_RUNNING;
       }
+      // no status entry in db.
+      return StatusEntry.Status.NOT_RUNNING;
     }
 
     final MapSqlParameterSource args = new MapSqlParameterSource();

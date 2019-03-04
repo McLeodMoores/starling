@@ -118,8 +118,8 @@ public class PortfolioConverter {
         } else if (!Arrays.equals(positionSecurity, tradeSecurity)) {
 
           throw new PortfolioParsingException("Security must be the same for all trades grouped into a position - " +
-                                                  "position has security: [" + positionSecurity[0] +
-                                                  "] but found trade with: [" + tradeSecurity[0] + "]");
+              "position has security: [" + positionSecurity[0] +
+              "] but found trade with: [" + tradeSecurity[0] + "]");
         }
 
         tradeTotalQuantity = tradeTotalQuantity.add(trade.getQuantity());
@@ -164,9 +164,8 @@ public class PortfolioConverter {
     if (listedSecurityDefinition != null) {
       LOGGER.debug("Extracting securities for position");
       return listedSecurityDefinition.getSecurityExtractor().extract();
-    } else {
-      return null;
     }
+    return null;
   }
 
   private ManageableSecurity[] extractSecurityFromTrade(final Trade trade, final int tradesSize) {
@@ -174,7 +173,7 @@ public class PortfolioConverter {
 
     if (tradesSize > 1 && !trade.canBePositionAggregated()) {
       throw new PortfolioParsingException("Trade type [" + trade.getClass() +
-                                              "] cannot be aggregated into positions");
+          "] cannot be aggregated into positions");
     }
 
     LOGGER.debug("Extracting securities for trade: [{}]", trade.getExternalSystemId().toExternalId());
@@ -187,9 +186,9 @@ public class PortfolioConverter {
   }
 
   private PortfolioPosition createPortfolioPosition(final Position position,
-                                                    final ManageableSecurity[] security,
-                                                    final String[] parentPath,
-                                                    final BigDecimal tradeQuantity) {
+      final ManageableSecurity[] security,
+      final String[] parentPath,
+      final BigDecimal tradeQuantity) {
     return new PortfolioPosition(convertPosition(position, security[0], tradeQuantity), security, parentPath);
   }
 
@@ -229,10 +228,10 @@ public class PortfolioConverter {
   private ManageableTrade convertTrade(final Trade trade, final Security security) {
 
     final ManageableTrade manageableTrade = new ManageableTrade(trade.getQuantity(),
-                                                          security.getExternalIdBundle(),
-                                                          trade.getTradeDate(),
-                                                          null,
-                                                          trade.getCounterparty().toExternalId());
+        security.getExternalIdBundle(),
+        trade.getTradeDate(),
+        null,
+        trade.getCounterparty().toExternalId());
 
     final ExternalId externalId = trade.getExternalSystemId().toExternalId();
 

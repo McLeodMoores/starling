@@ -75,9 +75,8 @@ public class SummingFunction extends MissingInputsFunction {
       final Portfolio portfolio = context.getPortfolio();
       if (portfolio == null || portfolio.getAttributes().get(IGNORE_ROOT_NODE) == null) {
         return true;
-      } else {
-        return target.getPortfolioNode().getParentNodeId() != null;
       }
+      return target.getPortfolioNode().getParentNodeId() != null;
     }
 
     @Override

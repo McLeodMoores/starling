@@ -148,14 +148,13 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
             }
           }
           return true;
-        } else {
-          if (_feedback != null) {
-            synchronized (_feedback) {
-              _feedback.workCompleted(1);
-            }
-          }
-          return false;
         }
+        if (_feedback != null) {
+          synchronized (_feedback) {
+            _feedback.workCompleted(1);
+          }
+        }
+        return false;
       }
 
       @Override

@@ -207,9 +207,8 @@ public abstract class DateConstraint {
     public Period periodUntil(final DateConstraint other) {
       if (other instanceof LiteralDateConstraint) {
         return _value.until(((LiteralDateConstraint) other)._value);
-      } else {
-        return super.periodUntil(other);
       }
+      return super.periodUntil(other);
     }
 
     @Override
@@ -256,12 +255,10 @@ public abstract class DateConstraint {
       if (newPeriod.isZero()) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
+        return VALUATION_TIME;
       }
+      return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
     }
 
     @Override
@@ -275,12 +272,10 @@ public abstract class DateConstraint {
       if (newPeriod.isZero()) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
+        return VALUATION_TIME;
       }
+      return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
     }
 
     @Override
@@ -295,9 +290,8 @@ public abstract class DateConstraint {
       } else if (o.equals(_underlying == null ? DateConstraint.VALUATION_TIME : _underlying)) {
         if (_plus) {
           return _period.negated();
-        } else {
-          return _period;
         }
+        return _period;
       }
       throw new IllegalArgumentException();
     }
@@ -346,12 +340,10 @@ public abstract class DateConstraint {
       if (_adjust == 1) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new WeekDayDateConstraint(_underlying, _adjust - 1);
+        return VALUATION_TIME;
       }
+      return new WeekDayDateConstraint(_underlying, _adjust - 1);
     }
 
     @Override
@@ -359,33 +351,28 @@ public abstract class DateConstraint {
       if (_adjust == -1) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new WeekDayDateConstraint(_underlying, _adjust + 1);
+        return VALUATION_TIME;
       }
+      return new WeekDayDateConstraint(_underlying, _adjust + 1);
     }
 
     private String expr(final int adjust, final String str) {
       if (adjust == 1) {
         if (_underlying != null) {
           return str + "(" + _underlying + ")";
-        } else {
-          return str;
         }
-      } else {
-        return str + "(" + expr(adjust - 1, str) + ")";
+        return str;
       }
+      return str + "(" + expr(adjust - 1, str) + ")";
     }
 
     @Override
     public String toString() {
       if (_adjust < 0) {
         return expr(-_adjust, PREVIOUS_WEEK_DAY_STRING);
-      } else {
-        return expr(_adjust, NEXT_WEEK_DAY_STRING);
       }
+      return expr(_adjust, NEXT_WEEK_DAY_STRING);
     }
 
     @Override
@@ -463,9 +450,8 @@ public abstract class DateConstraint {
       final String bracketExpr = str.substring(1, index - 1);
       if (index == str.length()) {
         return Pairs.of(bracketExpr, (String) null);
-      } else {
-        return Pairs.of(bracketExpr, str.substring(index));
       }
+      return Pairs.of(bracketExpr, str.substring(index));
     } else {
       return Pairs.of((String) null, str);
     }
@@ -508,9 +494,8 @@ public abstract class DateConstraint {
       if (str.startsWith(NOW_STRING)) {
         if (str.length() == NOW_STRING.length()) {
           return VALUATION_TIME;
-        } else {
-          return parseRight(VALUATION_TIME, str.substring(NOW_STRING.length()));
         }
+        return parseRight(VALUATION_TIME, str.substring(NOW_STRING.length()));
       } else if (str.startsWith(NULL_STRING)) {
         return NULL;
       } else if (str.charAt(0) == '-') {
@@ -527,9 +512,8 @@ public abstract class DateConstraint {
         }
         if (brackets.getSecond() != null) {
           return parseRight(left, brackets.getSecond());
-        } else {
-          return left;
         }
+        return left;
       } else if (str.startsWith(NEXT_WEEK_DAY_STRING)) {
         final Pair<String, String> brackets = parseBrackets(str.substring(NEXT_WEEK_DAY_STRING.length()));
         final DateConstraint left;
@@ -540,9 +524,8 @@ public abstract class DateConstraint {
         }
         if (brackets.getSecond() != null) {
           return parseRight(left, brackets.getSecond());
-        } else {
-          return left;
         }
+        return left;
       } else {
         return new LiteralDateConstraint(LocalDate.parse(str));
       }
@@ -571,9 +554,8 @@ public abstract class DateConstraint {
     if (str.startsWith(NOW_STRING)) {
       if (str.length() == NOW_STRING.length()) {
         return valuationTime;
-      } else {
-        return evaluateRight(valuationTime, str.substring(NOW_STRING.length()));
       }
+      return evaluateRight(valuationTime, str.substring(NOW_STRING.length()));
     } else if (str.startsWith(NULL_STRING)) {
       return null;
     } else if (str.charAt(0) == '-') {
@@ -590,9 +572,8 @@ public abstract class DateConstraint {
       }
       if (brackets.getSecond() != null) {
         return evaluateRight(left, brackets.getSecond());
-      } else {
-        return left;
       }
+      return left;
     } else if (str.startsWith(NEXT_WEEK_DAY_STRING)) {
       final Pair<String, String> brackets = parseBrackets(str.substring(NEXT_WEEK_DAY_STRING.length()));
       final LocalDate left;
@@ -603,9 +584,8 @@ public abstract class DateConstraint {
       }
       if (brackets.getSecond() != null) {
         return evaluateRight(left, brackets.getSecond());
-      } else {
-        return left;
       }
+      return left;
     } else {
       return LocalDate.parse(str);
     }

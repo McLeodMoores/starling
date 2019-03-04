@@ -87,7 +87,7 @@ public class GarmanKohlhagenFXOptionModelFunction extends BlackScholesMertonMode
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ValueProperties properties = createValueProperties().get();
     for (final String valueName : AvailableGreeks.getAllGreekNames()) {
       results.add(new ValueSpecification(valueName, targetSpec, properties));

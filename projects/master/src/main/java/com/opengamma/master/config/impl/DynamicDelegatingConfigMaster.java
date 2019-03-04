@@ -14,7 +14,6 @@ import java.util.Map;
 
 import com.google.common.base.Function;
 import com.opengamma.core.change.AggregatingChangeManager;
-import com.opengamma.core.change.BasicChangeManager;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.ObjectIdentifiable;
@@ -58,8 +57,9 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
   private final UniqueIdSchemeDelegator<ConfigMaster> _delegator;
 
   /**
-   * Default constructor that uses an in-memory master ({@link InMemoryConfigMaster}) as the default delegate and a basic change manager
-   * ({@link BasicChangeManager}).
+   * Default constructor that uses an in-memory master
+   * ({@link InMemoryConfigMaster}) as the default delegate and a basic change
+   * manager ({@link com.opengamma.core.change.BasicChangeManager}).
    */
   public DynamicDelegatingConfigMaster() {
     _changeManager = new AggregatingChangeManager();

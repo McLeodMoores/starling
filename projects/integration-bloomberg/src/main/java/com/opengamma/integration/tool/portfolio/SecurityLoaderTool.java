@@ -61,7 +61,7 @@ public class SecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
   protected void doRun() throws Exception {
 
     // build list of security ids
-    final Set<ExternalId> externalIds = new HashSet<ExternalId>();
+    final Set<ExternalId> externalIds = new HashSet<>();
     final String filename = getCommandLine().getOptionValue(FILE_NAME_OPT);
     final InputStream fileInputStream = openFile(filename);
     final CSVReader reader = new CSVReader(new InputStreamReader(fileInputStream));

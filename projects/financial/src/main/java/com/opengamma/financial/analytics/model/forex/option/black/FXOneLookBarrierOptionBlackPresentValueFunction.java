@@ -17,7 +17,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
-/** Produces the PV in Quote Currency, as opposed to Base */
+/**
+ * Produces the PV in Quote Currency, as opposed to Base.
+ * @deprecated Deprecated
+ */
+@Deprecated
 public class FXOneLookBarrierOptionBlackPresentValueFunction extends FXOneLookBarrierOptionBlackFunction {
 
   private static final PresentValueBlackSmileForexCalculator SMILE_CALCULATOR = PresentValueBlackSmileForexCalculator.getInstance();

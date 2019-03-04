@@ -54,7 +54,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionBlackVolatilitySurfaceConstantSpreadThetaFunction extends FXOptionBlackMultiValuedFunction {
   private static final VolatilitySurfaceConstantSpreadCalculator CALCULATOR = VolatilitySurfaceConstantSpreadCalculator.getInstance();
 

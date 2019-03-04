@@ -44,7 +44,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Bond present value from a quoted clean price.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondPresentValueFromCleanPriceFunction extends BondFromPriceFunction {
 
   /**

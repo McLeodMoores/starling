@@ -36,9 +36,8 @@ public class NextMonthlyExpiryAdjuster implements TemporalAdjuster {
     if (_futureQuarters.contains(date.getMonth()) &&
         date.with(DAY_OF_MONTH).isAfter(date)) { // in a quarter
       return temporal.with(date.with(DAY_OF_MONTH));
-    } else {
-      return temporal.with(date.with(NEXT_MONTH_ADJUSTER).with(DAY_OF_MONTH));
     }
+    return temporal.with(date.with(NEXT_MONTH_ADJUSTER).with(DAY_OF_MONTH));
   }
 
 }

@@ -156,9 +156,8 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
       }
       if (maintainers.isEmpty()) {
         return null;
-      } else {
-        return new MultipleFunctionBlacklistMaintainer(maintainers);
       }
+      return new MultipleFunctionBlacklistMaintainer(maintainers);
     }
 
   }
@@ -252,9 +251,8 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
       }
       if (queries.isEmpty()) {
         return null;
-      } else {
-        return new MultipleFunctionBlacklistQuery(queries);
       }
+      return new MultipleFunctionBlacklistQuery(queries);
     }
 
   }

@@ -37,7 +37,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaParSpreadCDSFunction extends StandardVanillaCDSFunction { //AbstractFunction.NonCompiledInvoker {
 
   public StandardVanillaParSpreadCDSFunction() {

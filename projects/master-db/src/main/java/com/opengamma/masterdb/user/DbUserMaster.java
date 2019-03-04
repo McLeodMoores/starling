@@ -76,8 +76,8 @@ import com.opengamma.util.tuple.Pairs;
  * This class is mutable but must be treated as immutable after configuration.
  */
 public class DbUserMaster
-    extends AbstractDbUserMaster<ManageableUser>
-    implements UserMaster {
+extends AbstractDbUserMaster<ManageableUser>
+implements UserMaster {
 
   /** Event sequence name. */
   private static final String USR_USER_EVENT_SEQ = "usr_user_event_seq";
@@ -351,9 +351,8 @@ public class DbUserMaster
     LOGGER.debug("save {}", user.getUserName());
     if (user.getUniqueId() != null) {
       return update(user);
-    } else {
-      return add(user);
     }
+    return add(user);
   }
 
   //-------------------------------------------------------------------------
@@ -411,12 +410,12 @@ public class DbUserMaster
     final PagingRequest pagingRequest = request.getPagingRequest();
     // setup args
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValueNullIgnored("user_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getUserName())))
-      .addValueNullIgnored("email_address_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getEmailAddress())))
-      .addValueNullIgnored("display_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getDisplayName())))
-      .addValueNullIgnored("alternate_id_scheme", getDialect().sqlWildcardAdjustValue(request.getAlternateIdScheme()))
-      .addValueNullIgnored("alternate_id_value", getDialect().sqlWildcardAdjustValue(request.getAlternateIdValue()))
-      .addValueNullIgnored("permission_str", request.getAssociatedPermission());
+        .addValueNullIgnored("user_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getUserName())))
+        .addValueNullIgnored("email_address_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getEmailAddress())))
+        .addValueNullIgnored("display_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getDisplayName())))
+        .addValueNullIgnored("alternate_id_scheme", getDialect().sqlWildcardAdjustValue(request.getAlternateIdScheme()))
+        .addValueNullIgnored("alternate_id_value", getDialect().sqlWildcardAdjustValue(request.getAlternateIdValue()))
+        .addValueNullIgnored("permission_str", request.getAssociatedPermission());
     if (request.getObjectIds() != null) {
       final StringBuilder buf = new StringBuilder(request.getObjectIds().size() * 10);
       for (final ObjectId objectId : request.getObjectIds()) {
@@ -495,17 +494,17 @@ public class DbUserMaster
     final String sqlSelectIdKey = getElSqlBundle().getSql("SelectIdKey");
     for (final ExternalId id : user.getAlternateIds()) {
       final DbMapSqlParameterSource assocArgs = createParameterSource()
-        .addValue("doc_id", docOid)
-        .addValue("key_scheme", id.getScheme().getName())
-        .addValue("key_value", id.getValue());
+          .addValue("doc_id", docOid)
+          .addValue("key_scheme", id.getScheme().getName())
+          .addValue("key_value", id.getValue());
       assocList.add(assocArgs);
       if (getJdbcTemplate().queryForList(sqlSelectIdKey, assocArgs).isEmpty()) {
         // select avoids creating unecessary id, but id may still not be used
         final long idKeyId = nextId("usr_user_idkey_seq");
         final DbMapSqlParameterSource idkeyArgs = createParameterSource()
-          .addValue("idkey_id", idKeyId)
-          .addValue("key_scheme", id.getScheme().getName())
-          .addValue("key_value", id.getValue());
+            .addValue("idkey_id", idKeyId)
+            .addValue("key_scheme", id.getScheme().getName())
+            .addValue("key_value", id.getValue());
         idKeyList.add(idkeyArgs);
       }
     }
@@ -519,9 +518,9 @@ public class DbUserMaster
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final String permission : user.getAssociatedPermissions()) {
       argsList.add(createParameterSource()
-        .addValue("id", nextId("usr_user_perm_seq"))
-        .addValue("doc_id", docOid)
-        .addValue("permission_str", permission));
+          .addValue("id", nextId("usr_user_perm_seq"))
+          .addValue("doc_id", docOid)
+          .addValue("permission_str", permission));
     }
     final String sql = getElSqlBundle().getSql("InsertAssocPermission");
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
@@ -531,10 +530,10 @@ public class DbUserMaster
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final Entry<String, String> entry : user.getProfile().getExtensions().entrySet()) {
       argsList.add(createParameterSource()
-        .addValue("id", nextId("usr_user_extn_seq"))
-        .addValue("doc_id", docOid)
-        .addValue("extn_key", entry.getKey())
-        .addValue("extn_value", entry.getValue()));
+          .addValue("id", nextId("usr_user_extn_seq"))
+          .addValue("doc_id", docOid)
+          .addValue("extn_key", entry.getKey())
+          .addValue("extn_value", entry.getValue()));
     }
     final String sql = getElSqlBundle().getSql("InsertExtension");
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
@@ -549,20 +548,20 @@ public class DbUserMaster
 
   private DbMapSqlParameterSource mainArgs(final long docOid, final int version, final ManageableUser user) {
     final DbMapSqlParameterSource docArgs = createParameterSource()
-      .addValue("doc_id", docOid)
-      .addValue("version", version)
-      .addValue("user_name", user.getUserName())
-      .addValue("user_name_ci", caseInsensitive(user.getUserName()))
-      .addValue("password_hash", user.getPasswordHash())
-      .addValue("status", user.getStatus().name().substring(0, 1))
-      .addValue("email_address", user.getEmailAddress())
-      .addValue("email_address_ci", caseInsensitive(user.getEmailAddress()))
-      .addValue("display_name", user.getProfile().getDisplayName())
-      .addValue("display_name_ci", caseInsensitive(user.getProfile().getDisplayName()))
-      .addValue("locale_tag", user.getProfile().getLocale().toLanguageTag())
-      .addValue("time_zone", user.getProfile().getZone().getId())
-      .addValue("date_fmt_style", user.getProfile().getDateStyle().name())
-      .addValue("time_fmt_style", user.getProfile().getTimeStyle().name());
+        .addValue("doc_id", docOid)
+        .addValue("version", version)
+        .addValue("user_name", user.getUserName())
+        .addValue("user_name_ci", caseInsensitive(user.getUserName()))
+        .addValue("password_hash", user.getPasswordHash())
+        .addValue("status", user.getStatus().name().substring(0, 1))
+        .addValue("email_address", user.getEmailAddress())
+        .addValue("email_address_ci", caseInsensitive(user.getEmailAddress()))
+        .addValue("display_name", user.getProfile().getDisplayName())
+        .addValue("display_name_ci", caseInsensitive(user.getProfile().getDisplayName()))
+        .addValue("locale_tag", user.getProfile().getLocale().toLanguageTag())
+        .addValue("time_zone", user.getProfile().getZone().getId())
+        .addValue("date_fmt_style", user.getProfile().getDateStyle().name())
+        .addValue("time_fmt_style", user.getProfile().getTimeStyle().name());
     return docArgs;
   }
 

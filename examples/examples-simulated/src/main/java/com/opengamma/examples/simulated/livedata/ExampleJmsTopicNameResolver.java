@@ -21,9 +21,8 @@ public class ExampleJmsTopicNameResolver extends AbstractResolver<JmsTopicNameRe
     final ExternalId identifier = request.getMarketDataUniqueId();
     if (ExternalSchemes.OG_SYNTHETIC_TICKER.equals(identifier.getScheme())) {
       return "LiveData" + SEPARATOR + "EXAMPLE" + SEPARATOR + identifier.getValue() + request.getNormalizationRule().getJmsTopicSuffix();
-    } else {
-      return null;
     }
+    return null;
   }
 
 }

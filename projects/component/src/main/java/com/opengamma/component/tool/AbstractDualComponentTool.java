@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.component.factory.RemoteComponentFactory;
-import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.LogUtils;
 import com.opengamma.util.StartupUtils;
@@ -270,10 +269,9 @@ public abstract class AbstractDualComponentTool {
     if (componentServerUri.contains("/")) {
       // Assume it's the full URI
       return componentServerUri;
-    } else {
-      // Assume it's host[:port]
-      return "http://" + componentServerUri + "/jax";
     }
+    // Assume it's host[:port]
+    return "http://" + componentServerUri + "/jax";
   }
 
 }

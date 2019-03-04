@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.property;
@@ -18,13 +18,10 @@ import com.google.common.collect.Sets;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.AbstractFunction;
-import com.opengamma.engine.function.CompiledFunctionDefinition;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
-import com.opengamma.engine.function.exclusion.FunctionExclusionGroups;
 import com.opengamma.engine.function.resolver.ComputationTargetResults;
-import com.opengamma.engine.function.resolver.FunctionPriority;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
@@ -42,7 +39,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   /**
    * The priority class of {@link DefaultPropertyFunction} instances, allowing them to be ordered relative to each other.
    */
-  public static enum PriorityClass {
+  public enum PriorityClass {
 
     /**
      * Must apply before the "normal" properties.
@@ -64,13 +61,13 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     private final int _level;
 
     private PriorityClass(final int level) {
-      assert (level >= MIN_ADJUST) && (level <= MAX_ADJUST);
+      assert level >= MIN_ADJUST && level <= MAX_ADJUST;
       _level = level;
     }
 
     /**
      * Returns the priority level adjuster - an integer MIN_ADJUST .. MAX_ADJUST
-     * 
+     *
      * @return priority level adjustment
      */
     public int getPriorityAdjust() {
@@ -87,7 +84,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
      */
     public static final int MIN_ADJUST = -2;
 
-  };
+  }
 
   private final ComputationTargetType _targetType;
   private final boolean _permitWithout;
@@ -118,7 +115,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     private boolean _targetUsed;
 
     private PropertyDefaults(final FunctionCompilationContext context, final ComputationTarget target) {
-      _valueName2PropertyNames = new HashMap<String, Set<String>>();
+      _valueName2PropertyNames = new HashMap<>();
       _context = context;
       _target = target;
     }
@@ -141,7 +138,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     public void addValuePropertyName(final String valueName, final String propertyName) {
       Set<String> propertyNames = _valueName2PropertyNames.get(valueName);
       if (propertyNames == null) {
-        propertyNames = new HashSet<String>();
+        propertyNames = new HashSet<>();
         _valueName2PropertyNames.put(valueName, propertyNames);
       }
       propertyNames.add(propertyName);
@@ -149,7 +146,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
 
     /**
      * Queries all available outputs on the target and adds those values to the default set if property name is defined on their finite outputs.
-     * 
+     *
      * @param propertyName the property name a default is available for, not null
      */
     public void addAllValuesPropertyName(final String propertyName) {
@@ -159,7 +156,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
       }
       for (final ValueSpecification result : resultsProvider.getPartialResults(getTarget())) {
         final Set<String> properties = result.getProperties().getProperties();
-        if ((properties != null) && properties.contains(propertyName)) {
+        if (properties != null && properties.contains(propertyName)) {
           LOGGER.debug("Found {} defined on {}", propertyName, result);
           addValuePropertyName(result.getValueName(), propertyName);
         }
@@ -178,7 +175,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
 
   /**
    * Returns the defaults that are available
-   * 
+   *
    * @param defaults the callback object to return the property and value names on, not null
    */
   protected abstract void getDefaults(PropertyDefaults defaults);
@@ -193,20 +190,19 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     if (defaults.getValueName2PropertyNames().isEmpty()) {
       LOGGER.debug("No default properties for {}", target);
       return null;
-    } else {
-      LOGGER.debug("Found {} value(s) with default properties for {}", defaults.getValueName2PropertyNames().size(), target);
-      if (!defaults.isTargetUsed()) {
-        LOGGER.info("Caching target agnostic default values for {}", getClass());
-        defaults = new PropertyDefaults(defaults);
-        _defaults = defaults;
-      }
-      return defaults;
     }
+    LOGGER.debug("Found {} value(s) with default properties for {}", defaults.getValueName2PropertyNames().size(), target);
+    if (!defaults.isTargetUsed()) {
+      LOGGER.info("Caching target agnostic default values for {}", getClass());
+      defaults = new PropertyDefaults(defaults);
+      _defaults = defaults;
+    }
+    return defaults;
   }
 
   /**
    * Returns the maximal set of value requirement names that are defined (if the defaults are not dependent on compilation context information or a target)
-   * 
+   *
    * @return the set of value requirement names, shouldn't be null
    * @throws NullPointerException if the implementation of getDefaults expected a compilation context or target
    * @deprecated this is for debugging only - it is likely to be removed or unavailable in future versions
@@ -220,7 +216,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
 
   /**
    * Returns the default value(s) to set for the property. If a default value is not available, must return null.
-   * 
+   *
    * @param context the function compilation context, not null
    * @param target the computation target, not null
    * @param desiredValue the initial requirement, lacking the property to be injected, not null
@@ -237,7 +233,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   /**
    * Performs the {@link CompiledFunctionDefinition#canApplyTo} test by checking whether any defaults are returned for the target. If the {@link #getDefaults} cost is high, then consider overloading
    * this method with something cheaper.
-   * 
+   *
    * @param context the compilation context, not null
    * @param target computation target, not null
    * @return true if applies (i.e. there are defaults available), false otherwise
@@ -249,7 +245,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
 
   /**
    * Offers sub-classes a chance to modify the constraints that will be ejected, or to abort the application.
-   * 
+   *
    * @param constraints the constraint set that will be used to form the input requirement, not null
    * @return true to proceed, false to abort the application
    */
@@ -265,7 +261,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     boolean matched = false;
     for (final String propertyName : defaults.getValueName2PropertyNames().get(desiredValue.getValueName())) {
       final Set<String> existingValues = desiredValue.getConstraints().getValues(propertyName);
-      if (isPermitWithout() || (existingValues == null) || desiredValue.getConstraints().isOptional(propertyName)) {
+      if (isPermitWithout() || existingValues == null || desiredValue.getConstraints().isOptional(propertyName)) {
         LOGGER.debug("Matched default property {} for {}", propertyName, desiredValue);
         final Set<String> defaultValues = getDefaultValue(context, target, desiredValue, propertyName);
         if (defaultValues != null) {
@@ -328,7 +324,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
       return null;
     }
     final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final Set<ValueSpecification> result = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> result = new HashSet<>();
     for (final Map.Entry<String, Set<String>> valueName2PropertyNames : defaults.getValueName2PropertyNames().entrySet()) {
       final String valueName = valueName2PropertyNames.getKey();
       if (isPermitWithout()) {
@@ -352,7 +348,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   /**
    * Returns a priority adjustment. {@link FunctionPriority} implementations may recognize {@link DefaultPropertyFunction} instances and use this to adjust the priority they would otherwise assign to
    * the function.
-   * 
+   *
    * @return the priority adjustment, defaults to {@link PriorityClass#NORMAL}
    */
   public PriorityClass getPriority() {
@@ -362,7 +358,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   /**
    * Returns a mutual function exclusion group name. A {@link FunctionExclusionGroups} implementation may recognize {@link DefaultPropertyFunction} instances and use this to declare application
    * exclusions.
-   * 
+   *
    * @return the mutual exclusion group, defaults to the function instance's class name so that any given default function is only applied once in the resolution chain
    */
   @Override

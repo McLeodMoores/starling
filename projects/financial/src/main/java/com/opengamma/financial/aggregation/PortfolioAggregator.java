@@ -150,9 +150,9 @@ public final class PortfolioAggregator {
   }
 
   public static void aggregate(final String portfolioName, final String aggregationName,
-                               final PortfolioMaster portfolioMaster, final PositionMaster positionMaster,
-                               final PositionSource positionSource, final SecuritySource secSource,
-                               final AggregationFunction<?>[] aggregationFunctions, final boolean split) {
+      final PortfolioMaster portfolioMaster, final PositionMaster positionMaster,
+      final PositionSource positionSource, final SecuritySource secSource,
+      final AggregationFunction<?>[] aggregationFunctions, final boolean split) {
     final PortfolioSearchRequest searchReq = new PortfolioSearchRequest();
     searchReq.setName(portfolioName);
     LOGGER.info("Searching for portfolio " + portfolioName + "...");
@@ -162,6 +162,7 @@ public final class PortfolioAggregator {
     if (manageablePortfolio == null) {
       LOGGER.error("Portfolio " + portfolioName + " was not found");
       System.exit(1);
+      return;
     }
     LOGGER.info("Reloading portfolio from position source...");
     final Portfolio portfolio = positionSource.getPortfolio(manageablePortfolio.getUniqueId(), VersionCorrection.LATEST);
@@ -185,6 +186,7 @@ public final class PortfolioAggregator {
     if (aggregatedPortfolio == null) {
       LOGGER.error("Portfolio " + portfolioName + " was not correctly aggregated by the Portfolio Aggregator");
       System.exit(1);
+      return;
     }
     final SavePortfolio savePortfolio = new SavePortfolio(newFixedThreadPool, portfolioMaster, positionMaster);
     if (split) {

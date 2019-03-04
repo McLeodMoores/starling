@@ -10,7 +10,12 @@ import com.opengamma.id.UniqueId;
 
 /**
  * Repository for rates and associated metadata - e.g. LIBOR/EURIBOR etc...
+ * 
+ * @deprecated ConventionBundles should no longer be used. Use
+ *             {@link com.opengamma.core.convention.Convention} and
+ *             {@link com.opengamma.master.convention.ConventionMaster}.
  */
+@Deprecated
 public interface ConventionBundleMaster {
 
   /**
@@ -24,7 +29,7 @@ public interface ConventionBundleMaster {
    * Search the master for matching convention bundles in the history
    * @param searchRequest a request object containing the historic query parameters
    * @return a search result object containing the resulting matches plus metadata
-   */  
+   */
   ConventionBundleSearchResult searchHistoricConventionBundle(ConventionBundleSearchHistoricRequest searchRequest);
 
   /**
@@ -33,7 +38,7 @@ public interface ConventionBundleMaster {
    * @return the matching convention bundle, wrapped in a metadata document
    */
   ConventionBundleDocument getConventionBundle(UniqueId uniqueId);
-  
+
   /**
    * Add a new convention bundle to the master
    * @param bundle The id bundle

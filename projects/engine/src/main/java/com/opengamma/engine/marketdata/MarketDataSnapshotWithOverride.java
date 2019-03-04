@@ -91,12 +91,10 @@ public class MarketDataSnapshotWithOverride extends AbstractMarketDataSnapshot {
           result = getUnderlying().query(value);
           if (result != null) {
             return operation.apply(getOverrideValueRequirement(value), result);
-          } else {
-            return null;
           }
-        } else {
-          return result;
+          return null;
         }
+        return result;
       }
     }
     return getUnderlying().query(value);
@@ -133,9 +131,8 @@ public class MarketDataSnapshotWithOverride extends AbstractMarketDataSnapshot {
         }
       }
       return result;
-    } else {
-      return getUnderlying().query(values);
     }
+    return getUnderlying().query(values);
   }
 
   private ValueRequirement getOverrideValueRequirement(final ValueSpecification subscription) {

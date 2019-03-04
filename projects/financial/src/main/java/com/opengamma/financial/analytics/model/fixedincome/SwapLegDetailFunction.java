@@ -74,7 +74,7 @@ public class SwapLegDetailFunction extends InterestRateInstrumentFunction {
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or {@link ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
-   * 
+   *
    * @param payLeg True if the details to be returned are for the pay leg; false returns details for receive legs.
    */
   public SwapLegDetailFunction(final String payLeg) {
@@ -83,7 +83,7 @@ public class SwapLegDetailFunction extends InterestRateInstrumentFunction {
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or {@link ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
-   * 
+   *
    * @param payLeg True if the details to be returned are for the pay leg; false returns details for receive legs.
    */
   public SwapLegDetailFunction(final boolean payLeg) {
@@ -96,6 +96,7 @@ public class SwapLegDetailFunction extends InterestRateInstrumentFunction {
     return FinancialSecurityTypes.SWAP_SECURITY;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final SwapSecurity security = (SwapSecurity) target.getSecurity();

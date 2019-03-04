@@ -32,7 +32,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaHedgeNotionalCDSFunction extends StandardVanillaCDSFunction {
 
   private static HedgeRatioCalculator s_hedgeRatioCalculator = new HedgeRatioCalculator();

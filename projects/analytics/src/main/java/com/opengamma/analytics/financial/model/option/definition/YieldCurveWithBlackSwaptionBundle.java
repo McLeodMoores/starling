@@ -10,11 +10,13 @@ import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.option.parameters.BlackFlatSwaptionParameters;
-import com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProviderDiscount;
 
 /**
- * Class describing the data required to price swaptions with Black (curves and volatility).
- * @deprecated Use {@link BlackSwaptionFlatProviderDiscount}
+ * Class describing the data required to price swaptions with Black (curves and
+ * volatility).
+ * 
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProviderDiscount}
  */
 @Deprecated
 public class YieldCurveWithBlackSwaptionBundle extends YieldCurveBundle {

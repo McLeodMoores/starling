@@ -112,11 +112,11 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
 
     // Set up the basic query arguments
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_oid", oid)
-      .addTimestamp("version_as_of_instant", vc.getVersionAsOf())
-      .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
-      .addValue("start_date", DbDateUtils.toSqlDateNullFarPast(filter.getEarliestDate()))
-      .addValue("end_date", DbDateUtils.toSqlDateNullFarFuture(filter.getLatestDate()));
+        .addValue("doc_oid", oid)
+        .addTimestamp("version_as_of_instant", vc.getVersionAsOf())
+        .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
+        .addValue("start_date", DbDateUtils.toSqlDateNullFarPast(filter.getEarliestDate()))
+        .addValue("end_date", DbDateUtils.toSqlDateNullFarFuture(filter.getLatestDate()));
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
 
     // Get version metadata from the data-points and set up a Manageable HTS accordingly
@@ -131,10 +131,9 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
         // The time series doc exists or existed at some point, it's just that there are no data-points
         result.setTimeSeries(ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
         return result;
-      } else {
-        // The time series with the supplied id never existed
-        throw new DataNotFoundException("Unable to find time-series: " + objectId);
       }
+      // The time series with the supplied id never existed
+      throw new DataNotFoundException("Unable to find time-series: " + objectId);
     }
 
     // Set up query arguments to limit the number of points to return
@@ -199,9 +198,9 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     final Long docOid = extractOid(uniqueId);
     final VersionCorrection vc = getMaster().extractTimeSeriesInstants(uniqueId);
     final DbMapSqlParameterSource queryArgs = createParameterSource()
-      .addValue("doc_oid", docOid)
-      .addTimestamp("ver_instant", vc.getVersionAsOf())
-      .addTimestamp("corr_instant", vc.getCorrectedTo());
+        .addValue("doc_oid", docOid)
+        .addTimestamp("ver_instant", vc.getVersionAsOf())
+        .addTimestamp("corr_instant", vc.getCorrectedTo());
     final String sql = getElSqlBundle().getSql("SelectMaxPointDate", queryArgs);
     final Date result = getDbConnector().getJdbcTemplate().queryForObject(sql, queryArgs, Date.class);
     if (result != null) {
@@ -233,11 +232,11 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
         throw new IllegalArgumentException("Time-series must not contain a null value");
       }
       final DbMapSqlParameterSource args = createParameterSource()
-        .addValue("doc_oid", docOid)
-        .addDate("point_date", date)
-        .addValue("ver_instant", nowTS)
-        .addValue("corr_instant", nowTS)
-        .addValue("point_value", value);
+          .addValue("doc_oid", docOid)
+          .addDate("point_date", date)
+          .addValue("ver_instant", nowTS)
+          .addValue("corr_instant", nowTS)
+          .addValue("point_value", value);
       argsList.add(args);
     }
     final String sqlInsert = getElSqlBundle().getSql("InsertDataPoint");
@@ -284,10 +283,10 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
         throw new IllegalArgumentException("Time-series must not contain a null value");
       }
       final DbMapSqlParameterSource args = createParameterSource()
-        .addValue("doc_oid", docOid)
-        .addDate("point_date", date)
-        .addValue("corr_instant", nowTS)
-        .addValue("point_value", value);
+          .addValue("doc_oid", docOid)
+          .addDate("point_date", date)
+          .addValue("corr_instant", nowTS)
+          .addValue("point_value", value);
       argsList.add(args);
     }
     final String sqlInsert = getElSqlBundle().getSql("InsertCorrectDataPoint");
@@ -328,9 +327,9 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     final Long docOid = extractOid(uniqueId);
     // query dates to remove
     final DbMapSqlParameterSource queryArgs = createParameterSource()
-      .addValue("doc_oid", docOid)
-      .addValue("start_date", DbDateUtils.toSqlDateNullFarPast(fromDateInclusive))
-      .addValue("end_date", DbDateUtils.toSqlDateNullFarFuture(toDateInclusive));
+        .addValue("doc_oid", docOid)
+        .addValue("start_date", DbDateUtils.toSqlDateNullFarPast(fromDateInclusive))
+        .addValue("end_date", DbDateUtils.toSqlDateNullFarFuture(toDateInclusive));
     final String sqlRemove = getElSqlBundle().getSql("SelectRemoveDataPoints");
     final List<Map<String, Object>> dates = getJdbcTemplate().queryForList(sqlRemove, queryArgs);
     // insert new rows to remove them
@@ -338,10 +337,10 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final Map<String, Object> date : dates) {
       final DbMapSqlParameterSource args = createParameterSource()
-        .addValue("doc_oid", docOid)
-        .addValue("point_date", date.get("POINT_DATE"))
-        .addValue("corr_instant", nowTS)
-        .addValue("point_value", null, Types.DOUBLE);
+          .addValue("doc_oid", docOid)
+          .addValue("point_date", date.get("POINT_DATE"))
+          .addValue("corr_instant", nowTS)
+          .addValue("point_value", null, Types.DOUBLE);
       argsList.add(args);
     }
     final String sqlInsert = getElSqlBundle().getSql("InsertCorrectDataPoint");
@@ -402,9 +401,9 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     final long oid = extractOid(objectId);
     versionCorrection = versionCorrection.withLatestFixed(now());
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_oid", oid)
-      .addTimestamp("version_as_of_instant", versionCorrection.getVersionAsOf())
-      .addTimestamp("corrected_to_instant", versionCorrection.getCorrectedTo());
+        .addValue("doc_oid", oid)
+        .addTimestamp("version_as_of_instant", versionCorrection.getVersionAsOf())
+        .addTimestamp("corrected_to_instant", versionCorrection.getCorrectedTo());
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
     final UniqueIdExtractor extractor = new UniqueIdExtractor(oid);
     final String sql = getElSqlBundle().getSql("SelectUniqueIdByVersionCorrection", args);

@@ -42,7 +42,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Test.
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethodTest {
 

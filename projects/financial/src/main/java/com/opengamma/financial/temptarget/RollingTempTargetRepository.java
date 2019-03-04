@@ -97,7 +97,7 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
       if (target != null) {
         return target.getTTLPeriodSeconds() / 3;
       }
-        return 0;
+      return 0;
     }
 
   }
@@ -232,9 +232,8 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
     try {
       if (uid <= _lastOldIdentifier) {
         return getOldGeneration(uid);
-      } else {
-        return getNewGeneration(uid);
       }
+      return getNewGeneration(uid);
     } finally {
       _shared.unlock();
     }

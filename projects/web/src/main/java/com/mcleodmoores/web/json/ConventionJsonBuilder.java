@@ -99,7 +99,7 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
     final T copy = getCopy(object);
     final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     final FudgeMsg fudgeMsg = FUDGE_CONTEXT.toFudgeMsg(copy).getMessage();
-    final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.BUILDER.buildMessage(serializer, attributes);
+    final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.buildMessage(serializer, attributes);
     final MutableFudgeMsg newMsg = serializer.newMessage();
     for (final FudgeField field : fudgeMsg.getAllFields()) {
       if (!ATTR_FIELD_NAME.equals(field.getName())) {
@@ -120,7 +120,6 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
    * Partial implementation of a Fudge builder for the attribute map. Only the message builder is implemented.
    */
   private static final class AttributesFudgeBuilder extends AbstractFudgeBuilder {
-    public static final AttributesFudgeBuilder BUILDER = new AttributesFudgeBuilder();
 
     /**
      * Builds the message.
@@ -128,7 +127,7 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
      * @param object  the attributes, not null
      * @return  a message
      */
-    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Map<String, String> object) {
+    public static MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Map<String, String> object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       for (final Map.Entry<String, String> entry : object.entrySet()) {
         final MutableFudgeMsg entryMsg = serializer.newMessage();

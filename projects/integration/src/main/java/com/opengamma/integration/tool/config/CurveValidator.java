@@ -76,7 +76,7 @@ public class CurveValidator {
    * @param holidayMaster the holiday master
    */
   public CurveValidator(final ConfigMaster configMaster, final ConfigSource configSource, final ConventionSource conventionSource,
-                        final RegionSource regionSource, final SecuritySource secSource, final HolidayMaster holidayMaster) {
+      final RegionSource regionSource, final SecuritySource secSource, final HolidayMaster holidayMaster) {
     _configMaster = configMaster;
     _configSource = configSource;
     _configValidationUtils = new ConfigValidationUtils(conventionSource, holidayMaster);
@@ -520,12 +520,11 @@ public class CurveValidator {
         node.getWarnings().add("Warning: Region string " + regionStr + " was region but not country");
       }
       return true;
-    } else {
-      if (!dryRun) {
-        node.getWarnings().add("Region string " + regionStr + " was not found as a region or country");
-      }
-      return false;
     }
+    if (!dryRun) {
+      node.getWarnings().add("Region string " + regionStr + " was not found as a region or country");
+    }
+    return false;
   }
 
   /**
@@ -542,17 +541,15 @@ public class CurveValidator {
       if (!checkCurrencyClass(currency)) {
         if (dryRun) {
           return false;
-        } else {
-          node.getWarnings().add("Warning: String expected to be currency parses, but is not in Currency class as constant");
-          return true;
         }
+        node.getWarnings().add("Warning: String expected to be currency parses, but is not in Currency class as constant");
+        return true;
       }
     } catch (final IllegalArgumentException iae) {
       if (dryRun) {
         return false;
-      } else {
-        node.getWarnings().add("String expected to be currency " + currencyStr + " will not parse");
       }
+      node.getWarnings().add("String expected to be currency " + currencyStr + " will not parse");
     }
     return true;
   }

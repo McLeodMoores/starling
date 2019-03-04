@@ -23,7 +23,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.financial.security.option.BarrierDirection;
 import com.opengamma.financial.security.option.BarrierType;
-import com.opengamma.financial.security.option.FXBarrierOptionSecurity;
 import com.opengamma.financial.security.option.MonitoringType;
 import com.opengamma.financial.security.option.SamplingFrequency;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
@@ -32,7 +31,8 @@ import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link FXBarrierOptionSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.option.FXBarrierOptionSecurity}.
  */
 @BeanDefinition
 public class FXBarrierOptionSecurityBean extends SecurityBean {
@@ -69,38 +69,38 @@ public class FXBarrierOptionSecurityBean extends SecurityBean {
     final FXBarrierOptionSecurityBean option = (FXBarrierOptionSecurityBean) other;
 
     return new EqualsBuilder()
-      .append(getId(), option.getId())
-      .append(getExpiry(), option.getExpiry())
-      .append(getPutCurrency(), option.getPutCurrency())
-      .append(getCallCurrency(), option.getCallCurrency())
-      .append(getCallAmount(), option.getCallAmount())
-      .append(getPutAmount(), option.getPutAmount())
-      .append(getSettlementDate(), option.getSettlementDate())
-      .append(getBarrierType(), option.getBarrierType())
-      .append(getBarrierDirection(), option.getBarrierDirection())
-      .append(getMonitoringType(), option.getMonitoringType())
-      .append(getSamplingFrequency(), option.getSamplingFrequency())
-      .append(getBarrierLevel(), option.getBarrierLevel())
-      .append(isLongShort(), option.isLongShort())
-      .isEquals();
+        .append(getId(), option.getId())
+        .append(getExpiry(), option.getExpiry())
+        .append(getPutCurrency(), option.getPutCurrency())
+        .append(getCallCurrency(), option.getCallCurrency())
+        .append(getCallAmount(), option.getCallAmount())
+        .append(getPutAmount(), option.getPutAmount())
+        .append(getSettlementDate(), option.getSettlementDate())
+        .append(getBarrierType(), option.getBarrierType())
+        .append(getBarrierDirection(), option.getBarrierDirection())
+        .append(getMonitoringType(), option.getMonitoringType())
+        .append(getSamplingFrequency(), option.getSamplingFrequency())
+        .append(getBarrierLevel(), option.getBarrierLevel())
+        .append(isLongShort(), option.isLongShort())
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
-      .append(getExpiry())
-      .append(getPutCurrency())
-      .append(getCallCurrency())
-      .append(getSettlementDate())
-      .append(getPutAmount())
-      .append(getCallAmount())
-      .append(getBarrierType())
-      .append(getBarrierDirection())
-      .append(getMonitoringType())
-      .append(getSamplingFrequency())
-      .append(getBarrierLevel())
-      .append(isLongShort())
-      .toHashCode();
+        .append(getExpiry())
+        .append(getPutCurrency())
+        .append(getCallCurrency())
+        .append(getSettlementDate())
+        .append(getPutAmount())
+        .append(getCallAmount())
+        .append(getBarrierType())
+        .append(getBarrierDirection())
+        .append(getMonitoringType())
+        .append(getSamplingFrequency())
+        .append(getBarrierLevel())
+        .append(isLongShort())
+        .toHashCode();
   }
 
   @Override

@@ -91,9 +91,8 @@ public class BloombergFXForwardScaleResolver {
         }
       }
       return result;
-    } else {
-      return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
     }
+    return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
   }
 
 }

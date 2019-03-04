@@ -15,7 +15,9 @@ import com.opengamma.financial.analytics.model.credit.CreditInstrumentPropertyNa
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class StandardVanillaCS01CDSFunction extends StandardVanillaCDSFunction {
 
   public StandardVanillaCS01CDSFunction(final String... valueRequirements) {

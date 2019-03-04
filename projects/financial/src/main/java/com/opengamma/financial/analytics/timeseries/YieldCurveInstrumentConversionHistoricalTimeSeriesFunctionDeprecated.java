@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -42,7 +42,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 /**
  * Function to source time series data from a {@link HistoricalTimeSeriesSource} attached to the execution context needed to convert each of the instruments in a curve to their OG-Analytics derivative
  * form.
- * 
+ *
  * @deprecated This is to support the two curve case rather than calc curve configurations. Remove when InterpolatedYieldCurveFunction and MarketInstrumentImpliedYieldCurveFunction no longer reference
  *             it
  */
@@ -85,15 +85,15 @@ public class YieldCurveInstrumentConversionHistoricalTimeSeriesFunctionDeprecate
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> curveNames = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
-    if ((curveNames == null) || (curveNames.size() != 1)) {
+    if (curveNames == null || curveNames.size() != 1) {
       return null;
     }
     final Set<String> forwardCurveNames = desiredValue.getConstraints().getValues(YieldCurveFunction.PROPERTY_FORWARD_CURVE);
-    if ((forwardCurveNames == null) || (forwardCurveNames.size() != 1)) {
+    if (forwardCurveNames == null || forwardCurveNames.size() != 1) {
       return null;
     }
     final Set<String> fundingCurveNames = desiredValue.getConstraints().getValues(YieldCurveFunction.PROPERTY_FUNDING_CURVE);
-    if ((fundingCurveNames == null) || (fundingCurveNames.size() != 1)) {
+    if (fundingCurveNames == null || fundingCurveNames.size() != 1) {
       return null;
     }
     return Collections.singleton(new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, target.toSpecification(), ValueProperties.with(ValuePropertyNames.CURVE, curveNames).get()));
@@ -104,7 +104,7 @@ public class YieldCurveInstrumentConversionHistoricalTimeSeriesFunctionDeprecate
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     final InterpolatedYieldCurveSpecificationWithSecurities curve = (InterpolatedYieldCurveSpecificationWithSecurities) inputs.getValue(ValueRequirementNames.YIELD_CURVE_SPEC);
-    final Set<ValueRequirement> timeSeriesRequirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> timeSeriesRequirements = new HashSet<>();
     final InterestRateInstrumentTradeOrSecurityConverter securityConverter = getSecurityConverter(executionContext);
     for (final FixedIncomeStripWithSecurity strip : curve.getStrips()) {
       final FinancialSecurity financialSecurity = (FinancialSecurity) strip.getSecurity();
@@ -117,7 +117,7 @@ public class YieldCurveInstrumentConversionHistoricalTimeSeriesFunctionDeprecate
     }
     final HistoricalTimeSeriesBundle timeSeries = new HistoricalTimeSeriesBundle();
     final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
-    for (ValueRequirement timeSeriesRequirement : timeSeriesRequirements) {
+    for (final ValueRequirement timeSeriesRequirement : timeSeriesRequirements) {
       final HistoricalTimeSeries hts = HistoricalTimeSeriesFunction.executeImpl(executionContext, timeSeriesSource,
           timeSeriesRequirement.getTargetReference().getSpecification(), timeSeriesRequirement);
       if (hts == null) {

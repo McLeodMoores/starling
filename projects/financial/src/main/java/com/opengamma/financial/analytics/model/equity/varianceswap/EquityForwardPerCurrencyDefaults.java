@@ -36,7 +36,7 @@ public class EquityForwardPerCurrencyDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardPerCurrencyDefaults.class);
   /** The value requirements for which these defaults are valid */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD
+      ValueRequirementNames.FORWARD
   };
   /** The priority of these defaults */
   private final PriorityClass _priority;
@@ -54,7 +54,7 @@ public class EquityForwardPerCurrencyDefaults extends DefaultPropertyFunction {
     final int nPairs = equityCurveConfigAndDiscountingCurveNames.length;
     ArgumentChecker.isTrue(nPairs % 3 == 0, "Must have one curve config and discounting curve name per equity");
     _priority = PriorityClass.valueOf(priority);
-    _equityCurveConfigAndDiscountingCurveNames = new HashMap<String, Pair<String, String>>();
+    _equityCurveConfigAndDiscountingCurveNames = new HashMap<>();
     for (int i = 0; i < equityCurveConfigAndDiscountingCurveNames.length; i += 3) {
       final Pair<String, String> pair = Pairs.of(equityCurveConfigAndDiscountingCurveNames[i + 1], equityCurveConfigAndDiscountingCurveNames[i + 2]);
       _equityCurveConfigAndDiscountingCurveNames.put(equityCurveConfigAndDiscountingCurveNames[i], pair);

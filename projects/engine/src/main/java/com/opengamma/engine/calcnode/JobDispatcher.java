@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import org.apache.http.concurrent.Cancellable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -219,16 +218,15 @@ public class JobDispatcher implements JobInvokerRegister {
             iterator.remove();
             getInvokers().add(jobInvoker);
             return true;
-          } else {
-            LOGGER.debug("Invoker {} refused to execute job {}", jobInvoker, job);
-            iterator.remove();
-            if (jobInvoker.notifyWhenAvailable(this)) {
-              LOGGER.info("Invoker {} requested immediate retry", jobInvoker);
-              if (retry == null) {
-                retry = new LinkedList<>();
-              }
-              retry.add(jobInvoker);
+          }
+          LOGGER.debug("Invoker {} refused to execute job {}", jobInvoker, job);
+          iterator.remove();
+          if (jobInvoker.notifyWhenAvailable(this)) {
+            LOGGER.info("Invoker {} requested immediate retry", jobInvoker);
+            if (retry == null) {
+              retry = new LinkedList<>();
             }
+            retry.add(jobInvoker);
           }
         }
       }

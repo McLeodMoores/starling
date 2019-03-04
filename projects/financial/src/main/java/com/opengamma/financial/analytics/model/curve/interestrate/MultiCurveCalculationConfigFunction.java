@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.curve.interestrate;
@@ -30,8 +30,10 @@ import com.opengamma.financial.analytics.ircurve.calcconfig.ConfigDBCurveCalcula
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfig;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class MultiCurveCalculationConfigFunction extends AbstractFunction {
 
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;

@@ -53,7 +53,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaPresentValueCDSFunction extends StandardVanillaCDSFunction {
   private static final AnalyticCDSPricer PRICER = new AnalyticCDSPricer();
   private static final MarketQuoteConverter POINTS_UP_FRONT_CONVERTER = new MarketQuoteConverter();
@@ -93,7 +95,7 @@ public class StandardVanillaPresentValueCDSFunction extends StandardVanillaCDSFu
     }
 
     // SELL protection reverses directions of legs
-   return (definition.getBuySellProtection() == BuySellProtection.SELL) ? -pv : pv;
+   return definition.getBuySellProtection() == BuySellProtection.SELL ? -pv : pv;
   }
 
   @Override

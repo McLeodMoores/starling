@@ -84,7 +84,7 @@ public class HistoricalSkewKurtosisFunction extends AbstractFunction.NonCompiled
       fisher = kurtosis;
       pearson = fisher + 3;
     }
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.SKEW, target.toSpecification(), createValueProperties().get()), skew));
     results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.PEARSON_KURTOSIS, target.toSpecification(), createValueProperties().get()), pearson));
     results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.FISHER_KURTOSIS, target.toSpecification(), createValueProperties().get()), fisher));
@@ -108,7 +108,7 @@ public class HistoricalSkewKurtosisFunction extends AbstractFunction.NonCompiled
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties properties = createValueProperties().get();
     results.add(new ValueSpecification(ValueRequirementNames.SKEW, targetSpec, properties));

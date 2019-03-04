@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -17,7 +17,6 @@ import org.fudgemsg.wire.types.FudgeWireType;
 
 import com.google.common.collect.Sets;
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
-import com.opengamma.engine.value.ValueProperties;
 
 /**
  * Internal state used to implement a {@link ValueProperties} entry which has a single value.
@@ -44,9 +43,8 @@ public final class SingletonValueProperty extends AbstractValueProperty {
   protected AbstractValueProperty withOptional(final boolean optional) {
     if (optional == isOptional()) {
       return this;
-    } else {
-      return new SingletonValueProperty(getKey(), optional, _value, getNext());
     }
+    return new SingletonValueProperty(getKey(), optional, _value, getNext());
   }
 
   // query/update self
@@ -64,31 +62,28 @@ public final class SingletonValueProperty extends AbstractValueProperty {
   protected AbstractValueProperty addValueImpl(final String value) {
     if (_value.equals(value)) {
       return this;
-    } else {
-      return new ArrayValueProperty(getKey(), isOptional(), new String[] {_value, value }, getNext());
     }
+    return new ArrayValueProperty(getKey(), isOptional(), new String[] { _value, value }, getNext());
   }
 
   @Override
   protected AbstractValueProperty addValuesImpl(final String[] values) {
-    for (String value : values) {
+    for (final String value : values) {
       if (_value.equals(value)) {
         if (values.length > ArrayValueProperty.MAX_ARRAY_LENGTH) {
           return new SetValueProperty(getKey(), isOptional(), Sets.newHashSet(values), getNext());
-        } else {
-          return new ArrayValueProperty(getKey(), isOptional(), Arrays.copyOf(values, values.length), getNext());
         }
+        return new ArrayValueProperty(getKey(), isOptional(), Arrays.copyOf(values, values.length), getNext());
       }
     }
     if (values.length > ArrayValueProperty.MAX_ARRAY_LENGTH - 1) {
       final Set<String> copy = Sets.newHashSet(values);
       copy.add(_value);
       return new SetValueProperty(getKey(), isOptional(), copy, getNext());
-    } else {
-      final String[] copy = Arrays.copyOf(values, values.length + 1);
-      copy[values.length] = _value;
-      return new ArrayValueProperty(getKey(), isOptional(), copy, getNext());
     }
+    final String[] copy = Arrays.copyOf(values, values.length + 1);
+    copy[values.length] = _value;
+    return new ArrayValueProperty(getKey(), isOptional(), copy, getNext());
   }
 
   @Override
@@ -100,18 +95,17 @@ public final class SingletonValueProperty extends AbstractValueProperty {
       } else if (size <= ArrayValueProperty.MAX_ARRAY_LENGTH) {
         return new ArrayValueProperty(getKey(), isOptional(), values.toArray(new String[size]), getNext());
       } else {
-        return new SetValueProperty(getKey(), isOptional(), new HashSet<String>(values), getNext());
+        return new SetValueProperty(getKey(), isOptional(), new HashSet<>(values), getNext());
       }
     }
     if (size > ArrayValueProperty.MAX_ARRAY_LENGTH - 1) {
-      final Set<String> copy = new HashSet<String>(values);
+      final Set<String> copy = new HashSet<>(values);
       copy.add(_value);
       return new SetValueProperty(getKey(), isOptional(), copy, getNext());
-    } else {
-      final String[] copy = values.toArray(new String[size + 1]);
-      copy[size] = _value;
-      return new ArrayValueProperty(getKey(), isOptional(), copy, getNext());
     }
+    final String[] copy = values.toArray(new String[size + 1]);
+    copy[size] = _value;
+    return new ArrayValueProperty(getKey(), isOptional(), copy, getNext());
   }
 
   @Override
@@ -173,14 +167,13 @@ public final class SingletonValueProperty extends AbstractValueProperty {
   protected AbstractValueProperty intersectSingletonValue(final SingletonValueProperty other) {
     if (_value.equals(other.getValueImpl())) {
       return withOptional(other.isOptional());
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
   protected AbstractValueProperty intersectArrayValue(final ArrayValueProperty other) {
-    for (String value : other.getValuesImpl()) {
+    for (final String value : other.getValuesImpl()) {
       if (_value.equals(value)) {
         return withOptional(other.isOptional());
       }

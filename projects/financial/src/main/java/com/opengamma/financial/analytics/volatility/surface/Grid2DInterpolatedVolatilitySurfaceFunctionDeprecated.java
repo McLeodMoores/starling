@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.Set;
@@ -40,6 +38,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.equity.varianceswap.EquityVarianceSwapStaticReplicationFunction;
 import com.opengamma.util.time.DateUtils;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  * @deprecated This has been replaced by the pair, RawEquityOptionVolatilitySurfaceDataFunction, EquityFutureOptionVolatilitySurfaceDataFunction
@@ -110,7 +110,7 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
       for (int j = 0; j < m; j++) {
         final Double strike = y[j];
         final Double vol = volatilitySurfaceData.getVolatility(xDates[i], y[j]);
-        if (time != null && strike != null && vol != null) {
+        if (strike != null && vol != null) {
           t.add(time);
           k.add(strike);
           sigma.add(vol);

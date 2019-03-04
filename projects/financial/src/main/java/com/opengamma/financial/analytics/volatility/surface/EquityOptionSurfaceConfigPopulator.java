@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -15,7 +15,7 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigMasterUtils;
 
 /**
- * 
+ *
  */
 public class EquityOptionSurfaceConfigPopulator {
 
@@ -40,7 +40,7 @@ public class EquityOptionSurfaceConfigPopulator {
       strikes[j++] = (double) i;
     }
     final VolatilitySurfaceDefinition<LocalDate, Double> usVolSurfaceDefinition =
-        new VolatilitySurfaceDefinition<LocalDate, Double>("DEFAULT_EQUITY_OPTION", UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), "DJX Index"), equityOptionExpiries, strikes);
+        new VolatilitySurfaceDefinition<>("DEFAULT_EQUITY_OPTION", UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), "DJX Index"), equityOptionExpiries, strikes);
     ConfigMasterUtils.storeByName(configMaster, makeConfig(usVolSurfaceDefinition));
   }
 

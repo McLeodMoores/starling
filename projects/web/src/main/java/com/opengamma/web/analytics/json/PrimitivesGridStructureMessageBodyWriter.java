@@ -19,7 +19,6 @@ import javax.ws.rs.ext.Provider;
 
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.analytics.GridColumnsJsonWriter;
-import com.opengamma.web.analytics.PortfolioGridStructure;
 import com.opengamma.web.analytics.PrimitivesGridStructure;
 
 /**

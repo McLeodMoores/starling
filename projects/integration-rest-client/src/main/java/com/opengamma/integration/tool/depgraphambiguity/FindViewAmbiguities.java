@@ -29,7 +29,6 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.engine.RemoteEngineContextsComponentFactory;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.config.impl.ConfigItem;
-import com.opengamma.core.position.impl.SimplePortfolioNode;
 import com.opengamma.engine.depgraph.ambiguity.FullRequirementResolution;
 import com.opengamma.engine.depgraph.ambiguity.FullRequirementResolutionPrinter;
 import com.opengamma.engine.depgraph.ambiguity.RequirementResolution;
@@ -210,8 +209,8 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
       }
       _out.println(resolution.getRequirement());
       for (final Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
-        final List<String> functions = new ArrayList<String>();
-        final List<ValueSpecification> specifications = new ArrayList<ValueSpecification>();
+        final List<String> functions = new ArrayList<>();
+        final List<ValueSpecification> specifications = new ArrayList<>();
         boolean failure = false;
         for (final RequirementResolution nestedResolution : nestedResolutions) {
           if (nestedResolution != null) {

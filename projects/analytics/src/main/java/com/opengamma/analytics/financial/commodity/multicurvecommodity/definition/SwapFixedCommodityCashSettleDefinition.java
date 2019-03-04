@@ -8,7 +8,6 @@ package com.opengamma.analytics.financial.commodity.multicurvecommodity.definiti
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.annuity.AnnuityCouponCommodityCashSettleDefinition;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponFixedDefinition;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
-import com.opengamma.analytics.financial.instrument.payment.CouponFixedDefinition;
 import com.opengamma.analytics.financial.instrument.payment.PaymentDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapDefinition;
 import com.opengamma.util.ArgumentChecker;

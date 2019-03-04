@@ -67,13 +67,11 @@ public final class Housekeeper extends AbstractHousekeeper<DependencyGraphBuilde
     if (isGraphBuilt) {
       if (builder.getScheduledSteps() > 0) {
         return getCallback().completed(builder, getData());
-      } else {
-        // Hasn't started yet -- issue as a normal tick
-        return getCallback().tick(builder, getData());
       }
-    } else {
+      // Hasn't started yet -- issue as a normal tick
       return getCallback().tick(builder, getData());
     }
+    return getCallback().tick(builder, getData());
   }
 
   @Override
@@ -81,9 +79,8 @@ public final class Housekeeper extends AbstractHousekeeper<DependencyGraphBuilde
     final Callback<Object> callback = getCallback();
     if (callback != null) {
       return callback.toString();
-    } else {
-      return "<creating>";
     }
+    return "<creating>";
   }
 
 }

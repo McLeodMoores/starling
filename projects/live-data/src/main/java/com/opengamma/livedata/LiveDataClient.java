@@ -7,7 +7,6 @@ package com.opengamma.livedata;
 
 import java.util.Collection;
 
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.livedata.entitlement.LiveDataEntitlementChecker;
 import com.opengamma.livedata.msg.LiveDataSubscriptionResponse;
 import com.opengamma.util.PublicAPI;
@@ -87,7 +86,7 @@ public interface LiveDataClient extends LiveDataEntitlementChecker {
    *          the timeout in milliseconds. If the timeout is non-positive, this
    *          method will not wait at all, so null will be returned.
    * @return the snapshot
-   * @throws OpenGammaRuntimeException
+   * @throws com.opengamma.OpenGammaRuntimeException
    *           if timeout was reached without reply from server
    */
   LiveDataSubscriptionResponse snapshot(UserPrincipal user, LiveDataSpecification requestedSpecification, long timeout);
@@ -110,7 +109,7 @@ public interface LiveDataClient extends LiveDataEntitlementChecker {
    *          method will not wait at all, so null will be returned.
    * @return the snapshot, which will be complete, with
    *         {@code requestedSpecifications.size()} entries
-   * @throws OpenGammaRuntimeException
+   * @throws com.opengamma.OpenGammaRuntimeException
    *           if timeout was reached without reply from server
    */
   Collection<LiveDataSubscriptionResponse> snapshot(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications, long timeout);

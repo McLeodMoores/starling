@@ -7,6 +7,8 @@ package com.opengamma.financial.convention.rest;
 
 import java.net.URI;
 
+import com.opengamma.core.convention.Convention;
+import com.opengamma.core.convention.impl.RemoteConventionSource;
 import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.id.ExternalId;
@@ -19,7 +21,11 @@ import com.opengamma.util.rest.UniformInterfaceException404NotFound;
  * Provides remote access to a {@link ConventionBundleSource}.
  * <p>
  * This is the client to {@link DataConventionBundleSourceResource}.
+ *
+ * @deprecated Convention bundles should not be used. Use {@link Convention} and
+ *             {@link RemoteConventionSource}.
  */
+@Deprecated
 public class RemoteConventionBundleSource extends AbstractRemoteClient implements ConventionBundleSource {
 
   public RemoteConventionBundleSource(final URI uri) {

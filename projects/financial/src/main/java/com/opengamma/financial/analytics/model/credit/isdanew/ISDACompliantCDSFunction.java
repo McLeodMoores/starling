@@ -81,8 +81,8 @@ import com.opengamma.util.time.Tenor;
 public class ISDACompliantCDSFunction extends NonCompiledInvoker {
 
   private final String[] _valueRequirements = new String[] {ValueRequirementNames.ACCRUED_DAYS, ValueRequirementNames.ACCRUED_PREMIUM,
-    ValueRequirementNames.POINTS_UPFRONT, ValueRequirementNames.CLEAN_PRESENT_VALUE, ValueRequirementNames.DIRTY_PRESENT_VALUE, ValueRequirementNames.CLEAN_PRICE,
-    ValueRequirementNames.QUOTED_SPREAD, ValueRequirementNames.UPFRONT_AMOUNT, ValueRequirementNames.BUCKETED_CS01, ValueRequirementNames.PARALLEL_CS01, ValueRequirementNames.PRINCIPAL};
+      ValueRequirementNames.POINTS_UPFRONT, ValueRequirementNames.CLEAN_PRESENT_VALUE, ValueRequirementNames.DIRTY_PRESENT_VALUE, ValueRequirementNames.CLEAN_PRICE,
+      ValueRequirementNames.QUOTED_SPREAD, ValueRequirementNames.UPFRONT_AMOUNT, ValueRequirementNames.BUCKETED_CS01, ValueRequirementNames.PARALLEL_CS01, ValueRequirementNames.PRINCIPAL};
   public static double ONE_BPS = 1e-4; // fractional 1 BPS
   private HolidaySource _holidaySource; //OpenGammaCompilationContext.getHolidaySource(context);
   private RegionSource _regionSource;
@@ -100,7 +100,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues)
-    throws AsynchronousExecution {
+      throws AsynchronousExecution {
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
     final ValueRequirement requirement = desiredValues.iterator().next();
     final ValueProperties properties = requirement.getConstraints().copy().get();
@@ -115,8 +115,8 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(
         executionContext.getSecuritySource()));
     final Object recoveryRateObject = inputs.getValue(new ValueRequirement("PX_LAST",
-                                                                     ComputationTargetType.PRIMITIVE,
-                                                                     recoveryRateIdentifier.getExternalId()));
+        ComputationTargetType.PRIMITIVE,
+        recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {
       throw new OpenGammaRuntimeException("Could not get recovery rate");
       //LOGGER.warn("Could not get recovery rate, defaulting to 0.4: " + recoveryRateIdentifier);
@@ -174,9 +174,9 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     final CDSAnalyticVisitor visitor = new CDSAnalyticVisitor(now.toLocalDate(), _holidaySource, _regionSource, recoveryRate);
     final CDSAnalytic analytic = security.accept(visitor);
     final BuySellProtection buySellProtection = security.isBuy() ? BuySellProtection.BUY : BuySellProtection.SELL;
-//    final String term = new Tenor(Period.between(security.getStartDate().toLocalDate(), security.getMaturityDate().toLocalDate())).getPeriod().toString();
-//    final Double cdsQuoteDouble = (Double) inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE,
-//        ComputationTargetType.PRIMITIVE, ExternalId.of("Tenor", term)));
+    //    final String term = new Tenor(Period.between(security.getStartDate().toLocalDate(), security.getMaturityDate().toLocalDate())).getPeriod().toString();
+    //    final Double cdsQuoteDouble = (Double) inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE,
+    //        ComputationTargetType.PRIMITIVE, ExternalId.of("Tenor", term)));
     final Double cdsQuoteDouble = (Double) inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     if (cdsQuoteDouble == null) {
       throw new OpenGammaRuntimeException("Couldn't get spread for " + security);
@@ -191,7 +191,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     final double coupon = security.getParSpread() * ONE_BPS;
     final PointsUpFront puf = getPointsUpfront(quote, buySellProtection, yieldCurve, analytic, creditCurve);
     final double accruedPremiumPrim =   isNonIMMAndFromSpread || isNonIMMFAndFromPUF ? 0 : analytic.getAccruedPremium(coupon);
-//    final double accruedPremium = isNonIMMAndFromSpread || isNonIMMFAndFromPUF ? 0 : analytic.getAccruedPremium(coupon) * notional * buySellPremiumFactor;
+    //    final double accruedPremium = isNonIMMAndFromSpread || isNonIMMFAndFromPUF ? 0 : analytic.getAccruedPremium(coupon) * notional * buySellPremiumFactor;
     final double accruedPremium = isNonIMMAndFromSpread || isNonIMMFAndFromPUF ? 0 : accruedPremiumPrim * notional * buySellPremiumFactor;
     final int accruedDays = isNonIMMAndFromSpread || isNonIMMFAndFromPUF ? 0 : analytic.getAccruedDays();
     final double quotedSpread = getQuotedSpread(quote, puf, buySellProtection, yieldCurve, analytic).getQuotedSpread();
@@ -340,9 +340,9 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
       return (PointsUpFront) quote;
     } else if (quote instanceof QuotedSpread) {
       puf = POINTS_UP_FRONT_CONVERTER.quotedSpreadToPUF(analytic,
-                                           quote.getCoupon(),
-                                           yieldCurve,
-                                           ((QuotedSpread) quote).getQuotedSpread());
+          quote.getCoupon(),
+          yieldCurve,
+          ((QuotedSpread) quote).getQuotedSpread());
     } else if (quote instanceof ParSpread) {
       puf = PRICER.pv(analytic, yieldCurve, creditCurve, ((ParSpread) quote).getCoupon());
     } else {
@@ -357,9 +357,8 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     double quotedSpread;
     if (quote instanceof QuotedSpread) {
       return (QuotedSpread) quote;
-    } else {
-      quotedSpread = POINTS_UP_FRONT_CONVERTER.pufToQuotedSpread(analytic, puf.getCoupon(), yieldCurve, puf.getPointsUpFront());
     }
+    quotedSpread = POINTS_UP_FRONT_CONVERTER.pufToQuotedSpread(analytic, puf.getCoupon(), yieldCurve, puf.getPointsUpFront());
     // SELL protection reverses directions of legs
     quotedSpread = buySellProtection == BuySellProtection.SELL ? -quotedSpread : quotedSpread;
     return new QuotedSpread(quote.getCoupon(), quotedSpread);
@@ -396,12 +395,12 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     double cs01;
     if (quote instanceof ParSpread) {
       cs01 = CALCULATOR.parallelCS01FromParSpreads(analytic,
-                                               quote.getCoupon(), // ParSpread
-                                               yieldCurve,
-                                               pillars,
-                                               pillarSpreads,
-                                               ONE_BPS,
-                                               BumpType.ADDITIVE);
+          quote.getCoupon(), // ParSpread
+          yieldCurve,
+          pillars,
+          pillarSpreads,
+          ONE_BPS,
+          BumpType.ADDITIVE);
     } else {
       cs01 = CALCULATOR.parallelCS01(analytic, quote, yieldCurve, ONE_BPS);
     }

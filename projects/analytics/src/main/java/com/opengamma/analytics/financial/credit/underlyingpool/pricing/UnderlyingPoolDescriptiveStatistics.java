@@ -21,7 +21,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class to compute basic statistics (e.g. average 5Y spread) for an underlying pool
+ * @deprecated Deprecated
  */
+@Deprecated
 public class UnderlyingPoolDescriptiveStatistics {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

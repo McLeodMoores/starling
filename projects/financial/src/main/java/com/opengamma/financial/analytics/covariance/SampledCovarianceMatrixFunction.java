@@ -217,9 +217,8 @@ public abstract class SampledCovarianceMatrixFunction extends AbstractFunction.N
     final Set<String> values = constraints.getValues(name);
     if (values == null || values.isEmpty()) {
       return null;
-    } else {
-      return values.iterator().next();
     }
+    return values.iterator().next();
   }
 
   @Override

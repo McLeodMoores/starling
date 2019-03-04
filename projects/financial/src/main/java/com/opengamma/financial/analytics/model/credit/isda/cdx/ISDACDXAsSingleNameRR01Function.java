@@ -38,7 +38,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDACDXAsSingleNameRR01Function extends ISDACDXAsSingleNameFunction {
 
   public ISDACDXAsSingleNameRR01Function() {

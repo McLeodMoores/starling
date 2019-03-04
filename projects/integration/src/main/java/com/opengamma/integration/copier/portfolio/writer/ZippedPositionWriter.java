@@ -112,10 +112,9 @@ public class ZippedPositionWriter implements PositionWriter {
     if (_currentWriter != null) {
       return _currentWriter.writePosition(position, securities);
 
-    } else {
-      LOGGER.warn("Could not identify a suitable parser for position: " + position.getName());
-      return ObjectsPair.of(null, null);
     }
+    LOGGER.warn("Could not identify a suitable parser for position: " + position.getName());
+    return ObjectsPair.of(null, null);
   }
 
   @Override

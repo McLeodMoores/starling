@@ -64,16 +64,15 @@ public class SwaptionSecurityGenerator extends SecurityGenerator<SwaptionSecurit
         getUnderlyingGenerator().setSwationExpiry(swaptionExpiry.toLocalDate());
         security = getUnderlyingGenerator().createSecurity();
       } while (security == null);
-    } while ((FinancialSecurityUtils.getCurrency(security) == null) || security.getMaturityDate().isBefore(earliestMaturity));
+    } while (FinancialSecurityUtils.getCurrency(security) == null || security.getMaturityDate().isBefore(earliestMaturity));
     return security;
   }
 
   private String lengthString(final int months) {
-    if ((months % 12) == 0) {
-      return (months / 12) + "Y";
-    } else {
-      return months + "M";
+    if (months % 12 == 0) {
+      return months / 12 + "Y";
     }
+    return months + "M";
   }
 
   protected String createName(final Currency currency, final int optionLength, final int swapLength, final double notional, final double rate) {

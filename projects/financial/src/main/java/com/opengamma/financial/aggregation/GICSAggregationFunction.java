@@ -106,9 +106,9 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
   }
 
   public GICSAggregationFunction(final SecuritySource secSource,
-                                 final LegalEntitySource legalEntitySource,
-                                 final Level level,
-                                 final boolean useAttributes) {
+      final LegalEntitySource legalEntitySource,
+      final Level level,
+      final boolean useAttributes) {
     this(secSource, legalEntitySource, level, useAttributes, true);
   }
 
@@ -121,21 +121,21 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
   }
 
   public GICSAggregationFunction(final SecuritySource secSource,
-                                 final Level level,
-                                 final boolean useAttributes) {
+      final Level level,
+      final boolean useAttributes) {
     this(secSource, level, useAttributes, true);
   }
 
   public GICSAggregationFunction(final SecuritySource secSource, final Level level,
-                                 final boolean useAttributes,
-                                 final boolean includeEmptyCategories) {
+      final boolean useAttributes,
+      final boolean includeEmptyCategories) {
     this(secSource, null, level, useAttributes, includeEmptyCategories);
   }
 
   public GICSAggregationFunction(final SecuritySource secSource,
-                                 final LegalEntitySource legalEntitySource, final Level level,
-                                 final boolean useAttributes,
-                                 final boolean includeEmptyCategories) {
+      final LegalEntitySource legalEntitySource, final Level level,
+      final boolean useAttributes,
+      final boolean includeEmptyCategories) {
     _secSource = secSource;
     _level = level;
     _useAttributes = useAttributes;
@@ -200,9 +200,8 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     public String visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
       if (_level == Level.SECTOR) {
         return security.getUnderlyingId().getValue();
-      } else {
-        return UNKNOWN;
       }
+      return UNKNOWN;
     }
   };
 
@@ -245,26 +244,19 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
       final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return UNKNOWN;
       }
-    } else {
-      final FinancialSecurityVisitor<String> visitorAdapter = FinancialSecurityVisitorAdapter.<String>builder()
-          .equitySecurityVisitor(_equitySecurityVisitor)
-          .equityOptionVisitor(_equityOptionSecurityVisitor)
-          .equityIndexOptionVisitor(_equityIndexOptionSecurityVisitor)
-          .standardVanillaCDSSecurityVisitor(_standardVanillaCdsSecurityVisitor)
-          .legacyVanillaCDSSecurityVisitor(_legacyVanillaCdsSecurityVisitor)
-          .creditDefaultSwapOptionSecurityVisitor(_cdsOptionSecurityVisitor)
-          .creditDefaultSwapIndexSecurityVisitor(_cdsIndexSecurityVisitor)
-          .create();
-      final FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().resolve(_secSource);
-      try {
-        final String classification = security.accept(visitorAdapter);
-        return classification == null ? UNKNOWN : classification;
-      } catch (final UnsupportedOperationException uoe) {
-        return UNKNOWN;
-      }
+      return UNKNOWN;
+    }
+    final FinancialSecurityVisitor<String> visitorAdapter = FinancialSecurityVisitorAdapter.<String> builder().equitySecurityVisitor(_equitySecurityVisitor)
+        .equityOptionVisitor(_equityOptionSecurityVisitor).equityIndexOptionVisitor(_equityIndexOptionSecurityVisitor)
+        .standardVanillaCDSSecurityVisitor(_standardVanillaCdsSecurityVisitor).legacyVanillaCDSSecurityVisitor(_legacyVanillaCdsSecurityVisitor)
+        .creditDefaultSwapOptionSecurityVisitor(_cdsOptionSecurityVisitor).creditDefaultSwapIndexSecurityVisitor(_cdsIndexSecurityVisitor).create();
+    final FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().resolve(_secSource);
+    try {
+      final String classification = security.accept(visitorAdapter);
+      return classification == null ? UNKNOWN : classification;
+    } catch (final UnsupportedOperationException uoe) {
+      return UNKNOWN;
     }
   }
 
@@ -293,9 +285,8 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
       }
       baseList.add(UNKNOWN);
       return baseList;
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   @Override

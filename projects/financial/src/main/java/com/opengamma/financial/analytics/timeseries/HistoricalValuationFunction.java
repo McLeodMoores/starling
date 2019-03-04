@@ -46,7 +46,6 @@ import com.opengamma.financial.view.HistoricalViewEvaluationMarketDataMode;
 import com.opengamma.financial.view.HistoricalViewEvaluationResult;
 import com.opengamma.financial.view.HistoricalViewEvaluationTarget;
 import com.opengamma.financial.view.ViewEvaluationFunction;
-import com.opengamma.financial.view.ViewEvaluationTarget;
 import com.opengamma.id.ExternalBundleIdentifiable;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -240,27 +239,27 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
     final String marketDataModeConstraint = constraints.getSingleValue(MARKET_DATA_MODE_PROPERTY);
     final HistoricalViewEvaluationMarketDataMode marketDataMode = marketDataModeConstraint != null ?
         HistoricalViewEvaluationMarketDataMode.parse(marketDataModeConstraint) : HistoricalViewEvaluationMarketDataMode.HISTORICAL;
-    Security security = null;
-    if (ComputationTargetType.SECURITY.isCompatible(target.getType())) {
-      security = target.getSecurity();
-    } else if (ComputationTargetType.POSITION.isCompatible(target.getType())) {
-      security = target.getPosition().getSecurity();
-    }
-    final Set<Currency> targetCurrencies = security != null ? ImmutableSet.copyOf(FinancialSecurityUtils.getCurrencies(security, context.getSecuritySource())) : null;
-    final ViewDefinition viewDefinition = context.getViewCalculationConfiguration().getViewDefinition();
-    final HistoricalViewEvaluationTarget tempTarget = new HistoricalViewEvaluationTarget(viewDefinition.getMarketDataUser(), startDateConstraint, includeStartConstraint, endDateConstraint,
-        includeEndConstraint, targetCurrencies, marketDataMode);
-    final ValueRequirement requirement = getNestedRequirement(context.getComputationTargetResolver(), target, desiredValue.getConstraints());
-    if (requirement == null) {
-      return null;
-    }
-    final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(tempTarget.getViewDefinition(), context.getViewCalculationConfiguration().getName());
-    calcConfig.addSpecificRequirement(requirement);
-    tempTarget.getViewDefinition().addViewCalculationConfiguration(calcConfig);
-    final TempTargetRepository targets = OpenGammaCompilationContext.getTempTargets(context);
-    final UniqueId tempTargetId = targets.locateOrStore(tempTarget);
-    return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, new ComputationTargetSpecification(TempTarget.TYPE, tempTargetId), ValueProperties.withAny(
-        ViewEvaluationFunction.PROPERTY_CALC_CONFIG).get()));
+        Security security = null;
+        if (ComputationTargetType.SECURITY.isCompatible(target.getType())) {
+          security = target.getSecurity();
+        } else if (ComputationTargetType.POSITION.isCompatible(target.getType())) {
+          security = target.getPosition().getSecurity();
+        }
+        final Set<Currency> targetCurrencies = security != null ? ImmutableSet.copyOf(FinancialSecurityUtils.getCurrencies(security, context.getSecuritySource())) : null;
+        final ViewDefinition viewDefinition = context.getViewCalculationConfiguration().getViewDefinition();
+        final HistoricalViewEvaluationTarget tempTarget = new HistoricalViewEvaluationTarget(viewDefinition.getMarketDataUser(), startDateConstraint, includeStartConstraint, endDateConstraint,
+            includeEndConstraint, targetCurrencies, marketDataMode);
+        final ValueRequirement requirement = getNestedRequirement(context.getComputationTargetResolver(), target, desiredValue.getConstraints());
+        if (requirement == null) {
+          return null;
+        }
+        final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(tempTarget.getViewDefinition(), context.getViewCalculationConfiguration().getName());
+        calcConfig.addSpecificRequirement(requirement);
+        tempTarget.getViewDefinition().addViewCalculationConfiguration(calcConfig);
+        final TempTargetRepository targets = OpenGammaCompilationContext.getTempTargets(context);
+        final UniqueId tempTargetId = targets.locateOrStore(tempTarget);
+        return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, new ComputationTargetSpecification(TempTarget.TYPE, tempTargetId), ValueProperties.withAny(
+            ViewEvaluationFunction.PROPERTY_CALC_CONFIG).get()));
   }
 
   protected ValueProperties.Builder createValueProperties(final HistoricalViewEvaluationTarget target) {
@@ -305,7 +304,7 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
               }
             }
           } else {
-            if ((targetEids != null) && targetEids.equals(requirement.getIdentifiers())) {
+            if (targetEids != null && targetEids.equals(requirement.getIdentifiers())) {
               if (ObjectUtils.equals(requirement.getParent(), targetContextSpec)) {
                 // Our target
                 return Collections.singleton(TARGET_SPECIFICATION_EXTERNAL);
@@ -355,7 +354,7 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
         }
 
       };
-      final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+      final Set<ValueSpecification> results = new HashSet<>();
       for (final ValueRequirement nestedRequirement : calcConfig.getSpecificRequirements()) {
         final Set<String> targetType = nestedRequirement.getTargetReference().accept(getTargetType);
         if (targetType != null) {
@@ -386,9 +385,8 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
         }
       }
       return results;
-    } else {
-      return null;
     }
+    return null;
   }
 
   // FunctionInvoker

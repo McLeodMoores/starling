@@ -31,11 +31,11 @@ public final class CurrencyUtils {
    * doesn't match any {@link CurrencyPairs} in the system.
    */
   public static Double getRate(final Currency currency1,
-                               final Currency currency2,
-                               final double amount1,
-                               final double amount2,
-                               final CurrencyPairsSource currencyPairsSource,
-                               final String currencyPairsName) {
+      final Currency currency2,
+      final double amount1,
+      final double amount2,
+      final CurrencyPairsSource currencyPairsSource,
+      final String currencyPairsName) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
     if (CompareUtils.closeEquals(amount1, 0) || CompareUtils.closeEquals(amount2, 0)) {
@@ -47,9 +47,8 @@ public final class CurrencyUtils {
     }
     if (pair.getBase().equals(currency1)) {
       return Math.abs(amount2 / amount1);
-    } else {
-      return Math.abs(amount1 / amount2);
     }
+    return Math.abs(amount1 / amount2);
   }
 
   // TODO should the methods below here move to CurrencyPairs?
@@ -67,10 +66,10 @@ public final class CurrencyUtils {
    * doesn't match any {@link CurrencyPairs} in the system.
    */
   public static Double getRate(final Currency currency1,
-                               final Currency currency2,
-                               final double amount1,
-                               final double amount2,
-                               final CurrencyPairs currencyPairs) {
+      final Currency currency2,
+      final double amount1,
+      final double amount2,
+      final CurrencyPairs currencyPairs) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
     ArgumentChecker.notNull(currencyPairs, "currencyPairs");
@@ -83,16 +82,15 @@ public final class CurrencyUtils {
     }
     if (pair.getBase().equals(currency1)) {
       return Math.abs(amount2 / amount1);
-    } else {
-      return Math.abs(amount1 / amount2);
     }
+    return Math.abs(amount1 / amount2);
   }
 
   public static Double getBaseAmount(final Currency currency1,
-                                     final Currency currency2,
-                                     final double amount1,
-                                     final double amount2,
-                                     final CurrencyPairs currencyPairs) {
+      final Currency currency2,
+      final double amount1,
+      final double amount2,
+      final CurrencyPairs currencyPairs) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
     ArgumentChecker.notNull(currencyPairs, "currencyPairs");
@@ -102,16 +100,15 @@ public final class CurrencyUtils {
     }
     if (pair.getBase().equals(currency1)) {
       return amount1;
-    } else {
-      return amount2;
     }
+    return amount2;
   }
 
   public static Double getCounterAmount(final Currency currency1,
-                                        final Currency currency2,
-                                        final double amount1,
-                                        final double amount2,
-                                        final CurrencyPairs currencyPairs) {
+      final Currency currency2,
+      final double amount1,
+      final double amount2,
+      final CurrencyPairs currencyPairs) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
     ArgumentChecker.notNull(currencyPairs, "currencyPairs");
@@ -121,8 +118,7 @@ public final class CurrencyUtils {
     }
     if (pair.getCounter().equals(currency1)) {
       return amount1;
-    } else {
-      return amount2;
     }
+    return amount2;
   }
 }

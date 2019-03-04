@@ -27,7 +27,7 @@ public class InMemoryLKVMarketDataProvider extends AbstractMarketDataProvider im
 
   private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryLKVMarketDataProvider.class);
 
-  private final Map<ValueSpecification, Object> _lastKnownValues = new ConcurrentHashMap<ValueSpecification, Object>();
+  private final Map<ValueSpecification, Object> _lastKnownValues = new ConcurrentHashMap<>();
   private final FixedMarketDataAvailabilityProvider _availability = new FixedMarketDataAvailabilityProvider();
   private final MarketDataPermissionProvider _permissionProvider;
 

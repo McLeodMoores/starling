@@ -38,7 +38,7 @@ import de.odysseus.el.util.SimpleResolver;
 
   /**
    * Returns the original parser.
-   * 
+   *
    * @return the parser
    */
   protected ELExpressionParser getParser() {
@@ -80,7 +80,7 @@ import de.odysseus.el.util.SimpleResolver;
 
   /**
    * Extends the parse context with evaluation state for an evaluation context.
-   * 
+   *
    * @return the context
    */
   @Override
@@ -94,24 +94,22 @@ import de.odysseus.el.util.SimpleResolver;
           final Object value = evaluator.evaluateVariable((String) property);
           if (value == NA) {
             throw new PropertyNotFoundException("Variable " + property + " not defined");
-          } else {
-            return value;
           }
+          return value;
         } else if (property instanceof String) {
           final Pair<Class<?>, Function<Object, Object>> synthetic = getParser().getSynthetic(base, (String) property);
           if (synthetic != null) {
             context.setPropertyResolved(true);
             return synthetic.getSecond().apply(base);
-          } else {
-            Object value = super.getValue(context, base, property);
-            if (!context.isPropertyResolved()) {
-              value = evaluator.evaluateAttribute(base, (String) property);
-              if (value != NA) {
-                context.setPropertyResolved(true);
-              }
-            }
-            return value;
           }
+          Object value = super.getValue(context, base, property);
+          if (!context.isPropertyResolved()) {
+            value = evaluator.evaluateAttribute(base, (String) property);
+            if (value != NA) {
+              context.setPropertyResolved(true);
+            }
+          }
+          return value;
         } else {
           return super.getValue(context, base, property);
         }
@@ -124,25 +122,23 @@ import de.odysseus.el.util.SimpleResolver;
           final Object value = evaluator.evaluateVariable((String) property);
           if (value == NA) {
             throw new PropertyNotFoundException("Variable " + property + " not defined");
-          } else {
-            return value.getClass();
           }
+          return value.getClass();
         } else if (property instanceof String) {
           final Pair<Class<?>, Function<Object, Object>> synthetic = getParser().getSynthetic(base, (String) property);
           if (synthetic != null) {
             context.setPropertyResolved(true);
             return synthetic.getFirst();
-          } else {
-            Class<?> type = super.getType(context, base, property);
-            if (!context.isPropertyResolved()) {
-              final Object value = evaluator.evaluateAttribute(base, (String) property);
-              if (value != NA) {
-                context.setPropertyResolved(true);
-                type = value.getClass();
-              }
-            }
-            return type;
           }
+          Class<?> type = super.getType(context, base, property);
+          if (!context.isPropertyResolved()) {
+            final Object value = evaluator.evaluateAttribute(base, (String) property);
+            if (value != NA) {
+              context.setPropertyResolved(true);
+              type = value.getClass();
+            }
+          }
+          return type;
         } else {
           return super.getType(context, base, property);
         }
@@ -156,9 +152,9 @@ import de.odysseus.el.util.SimpleResolver;
   protected Object evaluate(final Evaluator evaluator) {
     try {
       return getExpr().getValue((ELContext) getContext(evaluator));
-    } catch (PropertyNotFoundException e) {
+    } catch (final PropertyNotFoundException e) {
       LOGGER.debug("Property not found - {}", e.getMessage());
-    } catch (ELException e) {
+    } catch (final ELException e) {
       LOGGER.warn("EL exception", e);
     }
     return NA;

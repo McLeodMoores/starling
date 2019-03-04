@@ -15,10 +15,12 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
-//CSOFF
+
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class VanillaFXOptionConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<ForexOptionVanillaDefinition, SmileDeltaTermStructureDataBundle, Void> {
   /** Rolls down FX option data (surfaces and surface) */
   private static final ConstantSpreadFXOptionBlackRolldown FX_OPTION_ROLLDOWN = ConstantSpreadFXOptionBlackRolldown.getInstance();

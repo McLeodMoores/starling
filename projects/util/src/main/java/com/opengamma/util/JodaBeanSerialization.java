@@ -6,8 +6,6 @@
 package com.opengamma.util;
 
 import org.joda.beans.ser.JodaBeanSer;
-import org.joda.beans.ser.SerDeserializers;
-import org.joda.convert.RenameHandler;
 
 /**
  * Utilities for working with Joda-Bean serialization.

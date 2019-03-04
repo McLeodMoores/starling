@@ -29,14 +29,12 @@ public class CounterpartyAggregationFunction implements AggregationFunction<Stri
   public String classifyPosition(final Position position) {
     if (position.getTrades().size() == 0) {
       return UNKNOWN;
-    } else {
-      final Trade trade = position.getTrades().iterator().next();
-      if (trade.getCounterparty() != null) {
-        return trade.getCounterparty().getExternalId().getValue();
-      } else {
-        return UNKNOWN;
-      }
     }
+    final Trade trade = position.getTrades().iterator().next();
+    if (trade.getCounterparty() != null) {
+      return trade.getCounterparty().getExternalId().getValue();
+    }
+    return UNKNOWN;
   }
 
   @Override

@@ -94,11 +94,10 @@ public class DataSecuritySourceResource extends AbstractDataResource {
     if (version != null) {
       final Security result = getSecuritySource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      final Security result = getSecuritySource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Security result = getSecuritySource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
   @GET
@@ -133,10 +132,9 @@ public class DataSecuritySourceResource extends AbstractDataResource {
     if (versionAsOf != null || correctedTo != null) {
       final Security result = getSecuritySource().getSingle(bundle, vc);
       return responseOkObject(result);
-    } else {
-      final Security result = getSecuritySource().getSingle(bundle);
-      return responseOkObject(result);
     }
+    final Security result = getSecuritySource().getSingle(bundle);
+    return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------

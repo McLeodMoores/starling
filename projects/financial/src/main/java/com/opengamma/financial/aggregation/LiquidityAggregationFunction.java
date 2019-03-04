@@ -67,24 +67,23 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
       final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NO_LIQUIDITY;
       }
-    } else {
-      try {
-        Security sec = position.getSecurityLink().getTarget();
-        if (sec == null) {
-          sec = position.getSecurityLink().resolve(_secSource); // side effect is it updates target.
-        }
-        final Double daysToLiquidate = getDaysToLiquidate(position);
-        if (daysToLiquidate != null) {
-          return classifyLiquidity(daysToLiquidate);
-        } else {
-          return NO_LIQUIDITY;
-        }
-      } catch (final UnsupportedOperationException ex) {
-        return NO_LIQUIDITY;
+      return NO_LIQUIDITY;
+    }
+    try {
+      Security sec = position.getSecurityLink().getTarget();
+      if (sec == null) {
+        sec = position.getSecurityLink().resolve(_secSource); // side effect is
+                                                              // it updates
+                                                              // target.
       }
+      final Double daysToLiquidate = getDaysToLiquidate(position);
+      if (daysToLiquidate != null) {
+        return classifyLiquidity(daysToLiquidate);
+      }
+      return NO_LIQUIDITY;
+    } catch (final UnsupportedOperationException ex) {
+      return NO_LIQUIDITY;
     }
   }
 
@@ -106,12 +105,11 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
         _daysToLiquidateCache.put(cacheKey, daysToLiquidate);
       }
       return daysToLiquidate;
-    } else {
-      if (_caching && cacheKey != null) {
-        _daysToLiquidateCache.put(cacheKey, null);
-      }
-      return null;
     }
+    if (_caching && cacheKey != null) {
+      _daysToLiquidateCache.put(cacheKey, null);
+    }
+    return null;
   }
 
   private String classifyLiquidity(final Double daysToLiquidate) {
@@ -129,9 +127,8 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
       } else {
         return MORE_THAN_10_0;
       }
-    } else {
-      return NO_LIQUIDITY;
     }
+    return NO_LIQUIDITY;
   }
 
   @Override

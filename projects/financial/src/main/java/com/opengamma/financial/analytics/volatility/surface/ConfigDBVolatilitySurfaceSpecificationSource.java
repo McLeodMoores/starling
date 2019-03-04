@@ -16,7 +16,9 @@ import com.opengamma.id.VersionCorrection;
  * A source of yield curve definitions based on configuration.
  * <p>
  * This supplies curve definitions from a {@link ConfigSource}.
+ * @deprecated the specification source is deprecated
  */
+@Deprecated
 public class ConfigDBVolatilitySurfaceSpecificationSource implements VolatilitySurfaceSpecificationSource {
 
   /**
@@ -26,7 +28,7 @@ public class ConfigDBVolatilitySurfaceSpecificationSource implements VolatilityS
 
   /**
    * Creates an instance backed by a config source.
-   * 
+   *
    * @param configSource the source, not null
    * @deprecated Use {@link #ConfigDBVolatilitySurfaceSpecificationSource(ConfigSource, VersionCorrection)} or {@link #init} instead
    */
@@ -49,7 +51,7 @@ public class ConfigDBVolatilitySurfaceSpecificationSource implements VolatilityS
 
   /**
    * Gets the config source.
-   * 
+   *
    * @return the config source, not null
    */
   protected ConfigSource getConfigSource() {

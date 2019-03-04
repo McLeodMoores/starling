@@ -6,7 +6,6 @@
 package com.opengamma.analytics.financial.equity.variance.pricing;
 
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
-import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.ShiftedLogNormalTailExtrapolation;
 import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilitySurfaceConverter;
 import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilitySurfaceDelta;
 import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilitySurfaceLogMoneyness;
@@ -54,7 +53,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
 
   /**
    * Constructor taking a value for the tolerance and using the default integrator (Runge-Kutta).
-   * 
+   *
    * @param tol
    *          The tolerance, must be greater than 1e-15 and less than 1e-1
    */
@@ -66,7 +65,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
 
   /**
    * Constructor taking an integrator and setting a value for the tolerance (1e-9).
-   * 
+   *
    * @param integrator1d
    *          The integrator, not null
    */
@@ -78,7 +77,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
 
   /**
    * Constructor taking an integrator and tolerance.
-   * 
+   *
    * @param integrator1d
    *          The integrator, not null
    * @param tol
@@ -95,9 +94,9 @@ public class ExpectedVarianceStaticReplicationCalculator {
    * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a diffusion (i.e. no jumps) and the Black
    * volatility surface is parameterised by strike.
    * <p>
-   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link ShiftedLogNormalTailExtrapolation} can be
+   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction} can be
    * useful for this)
-   * 
+   *
    * @param forward
    *          The forward value of the underlying at expiry, must be greater than 0
    * @param expiry
@@ -143,7 +142,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
    * <p>
    * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link ShiftedLogNormalTailExtrapolation} can be
    * useful for this)
-   * 
+   *
    * @param expiry
    *          The expiry - expected variance is calculated from now (time zero) to expiry, must be greater than zero
    * @param surface
@@ -163,7 +162,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
    * <p>
    * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link ShiftedLogNormalTailExtrapolation} can be
    * useful for this)
-   * 
+   *
    * @param expiry
    *          The expiry - expected variance is calculated from now (time zero) to expiry, must be greater than zero
    * @param surface
@@ -217,7 +216,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
    * volatility surface is parameterised by delta.
    * <p>
    * Note: the Black volatility surface must be fitted externally and be well defined across the full range of delta (i.e. 0 to 1)
-   * 
+   *
    * @param forward
    *          The forward value of the underlying at expiry, must be greater than zero
    * @param expiry

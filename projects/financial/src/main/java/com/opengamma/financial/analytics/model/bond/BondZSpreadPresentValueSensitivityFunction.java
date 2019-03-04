@@ -41,8 +41,10 @@ import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondZSpreadPresentValueSensitivityFunction extends AbstractFunction.NonCompiledInvoker {
   private static final BondSecurityDiscountingMethod CALCULATOR = BondSecurityDiscountingMethod.getInstance();
   private BondSecurityConverter _visitor;

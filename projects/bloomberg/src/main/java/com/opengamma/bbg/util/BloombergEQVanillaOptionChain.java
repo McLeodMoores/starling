@@ -408,8 +408,7 @@ public class BloombergEQVanillaOptionChain {
     final ZonedDateTime zonedExpiry = expiry.atTime(dummyNow.toLocalTime()).atZone(dummyNow.getZone());
     if (expiry.isAfter(thirdSaturdayOfTargetMonth)) {
       return _dayCount.getDayCountFraction(zonedThirdSaturdayOfTargetMonth, zonedExpiry);
-    } else {
-      return _dayCount.getDayCountFraction(zonedExpiry, zonedThirdSaturdayOfTargetMonth);
     }
+    return _dayCount.getDayCountFraction(zonedExpiry, zonedThirdSaturdayOfTargetMonth);
   }
 }

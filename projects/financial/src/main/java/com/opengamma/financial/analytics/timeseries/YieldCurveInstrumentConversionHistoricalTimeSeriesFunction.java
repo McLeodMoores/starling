@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -44,7 +44,9 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 /**
  * Function to source time series data from a {@link HistoricalTimeSeriesSource} attached to the execution context needed to convert each of the instruments in a curve to their OG-Analytics derivative
  * form.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class YieldCurveInstrumentConversionHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
 
   private FixedIncomeConverterDataProvider _definitionConverter;

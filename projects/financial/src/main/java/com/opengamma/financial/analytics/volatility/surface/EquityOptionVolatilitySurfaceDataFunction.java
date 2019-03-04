@@ -9,8 +9,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,6 +57,8 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  * A function that uses information from a raw volatility surface (i.e. only that contains only market quotes,
@@ -168,7 +168,7 @@ public class EquityOptionVolatilitySurfaceDataFunction extends AbstractFunction.
     final String fullName = givenName + "_" + EquitySecurityUtils.getTrimmedTarget(((ExternalIdentifiable) target.getValue()).getExternalId());
     final VolatilitySurfaceSpecification specification =
         _volatilitySurfaceSpecificationSource.getSpecification(fullName, InstrumentTypeProperties.EQUITY_OPTION, context
-        .getComputationTargetResolver().getVersionCorrection());
+            .getComputationTargetResolver().getVersionCorrection());
     if (specification == null) {
       LOGGER.error("Could not get volatility surface specification with name " + fullName);
       return null;
@@ -319,11 +319,7 @@ public class EquityOptionVolatilitySurfaceDataFunction extends AbstractFunction.
     }
     // exercise type
     final boolean isAmerican = specification.getExerciseType() instanceof AmericanExerciseType;
-    BjerksundStenslandModel americanModel = null;
     final double spot = forwardCurve.getSpot();
-    if (isAmerican) {
-      americanModel = new BjerksundStenslandModel();
-    }
     // Main loop: Remove empties, convert expiries from number to years, and imply vols
     final Map<Pair<Double, Double>, Double> volValues = new HashMap<>();
     final DoubleArrayList tList = new DoubleArrayList();
@@ -350,6 +346,7 @@ public class EquityOptionVolatilitySurfaceDataFunction extends AbstractFunction.
             }
             final double vol;
             if (isAmerican) {
+              final BjerksundStenslandModel americanModel = new BjerksundStenslandModel();
               double modSpot = spot;
               double costOfCarry = -Math.log(zerobond) / t;
               if (forwardCurve instanceof ForwardCurveAffineDividends) {

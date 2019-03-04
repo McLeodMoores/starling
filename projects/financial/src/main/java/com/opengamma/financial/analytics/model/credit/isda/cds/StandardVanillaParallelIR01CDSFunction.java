@@ -30,7 +30,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaParallelIR01CDSFunction extends StandardVanillaIR01CDSFunction {
   private static final InterestRateSensitivityCalculator CALCULATOR = new InterestRateSensitivityCalculator();
 

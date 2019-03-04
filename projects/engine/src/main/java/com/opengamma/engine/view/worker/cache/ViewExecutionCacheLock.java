@@ -28,12 +28,12 @@ import com.opengamma.util.tuple.Pairs;
 public final class ViewExecutionCacheLock {
 
   // No harm in sharing the canonicalized forms with other instances.
-  private static final WeakInstanceCache<ViewExecutionCacheKey> KEYS = new WeakInstanceCache<ViewExecutionCacheKey>();
+  private static final WeakInstanceCache<ViewExecutionCacheKey> KEYS = new WeakInstanceCache<>();
 
   private static final class Locks {
 
     private final Lock _broad = new ReentrantLock();
-    private final Map2<VersionCorrection, Instant, Lock> _fine = new WeakValueHashMap2<VersionCorrection, Instant, Lock>(HashMap2.STRONG_KEYS);
+    private final Map2<VersionCorrection, Instant, Lock> _fine = new WeakValueHashMap2<>(HashMap2.STRONG_KEYS);
 
   }
 
@@ -55,7 +55,7 @@ public final class ViewExecutionCacheLock {
 
   /**
    * Acquires the broad lock for the view compilation.
-   * 
+   *
    * @param cacheKey the broad key that summarizes the view definition and market data providers, not null
    * @return the lock instance, not null
    */
@@ -65,7 +65,7 @@ public final class ViewExecutionCacheLock {
 
   /**
    * Acquires the broad and finer grained locks for a specific compilation of a view
-   * 
+   *
    * @param cacheKey the broad key that summarizes the view definition and market data providers, not null
    * @param valuationTime an indicative valuation time for any compilation, not null
    * @param resolverVersionCorrection the target resolver version/correction timestamp, not null

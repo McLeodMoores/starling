@@ -69,11 +69,10 @@ import com.opengamma.id.UniqueIdSupplier;
       }
       if (_uniqueIdMap.inverse().containsKey(obj)) {
         return _uniqueIdMap.inverse().get(obj);
-      } else {
-        final UniqueId uniqueId = _idSupplier.get();
-        _uniqueIdMap.put(uniqueId, obj);
-        return uniqueId;
       }
+      final UniqueId uniqueId = _idSupplier.get();
+      _uniqueIdMap.put(uniqueId, obj);
+      return uniqueId;
     } finally {
       _writeLock.unlock();
     }

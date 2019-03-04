@@ -17,16 +17,16 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
  * An ultra-simple historical data simulator, we load the initial values from a CSV file (with a header row) and the format:
- * 
+ *
  * <pre>
  *   <identification-scheme>, <identifier-value>, <datafield>, <value>
  * </pre>
@@ -45,7 +45,7 @@ public class SimulatedHistoricalData {
    */
   public static final String OG_DATA_SOURCE = "OG_DATA_SOURCE";
 
-  private final Map<Pair<ExternalId, String>, Double> _finishValues = new HashMap<Pair<ExternalId, String>, Double>();
+  private final Map<Pair<ExternalId, String>, Double> _finishValues = new HashMap<>();
 
   private static final int NUM_FIELDS = 4;
   private static final double SCALING_FACTOR = 0.005; // i.e. 0.5% * 1SD
@@ -68,7 +68,7 @@ public class SimulatedHistoricalData {
       int lineNum = 0;
       while ((line = reader.readNext()) != null) {
         lineNum++;
-        if ((line.length == 0) || line[0].startsWith("#")) {
+        if (line.length == 0 || line[0].startsWith("#")) {
           LOGGER.debug("Empty line on {}", lineNum);
         } else if (line.length != NUM_FIELDS) {
           LOGGER.error("Invalid number of fields ({}) in CSV on line {}", line.length, lineNum);
@@ -94,7 +94,7 @@ public class SimulatedHistoricalData {
   }
 
   public static double wiggleValue(final Random random, final double value, final double centre) {
-    return (9 * value + centre) / 10 + (random.nextGaussian() * (value * SCALING_FACTOR));
+    return (9 * value + centre) / 10 + random.nextGaussian() * (value * SCALING_FACTOR);
   }
 
 }

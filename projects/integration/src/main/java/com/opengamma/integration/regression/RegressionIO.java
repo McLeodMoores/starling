@@ -241,9 +241,8 @@ public abstract class RegressionIO {
     final String ext = getFormat().getLogicalFileExtension(getFormatContext());
     if (ext != null) {
       return identifier + ext;
-    } else {
-      return identifier;
     }
+    return identifier;
   }
 
   protected boolean isIdentifierIncluded(final String name) {

@@ -92,54 +92,48 @@ public class GraphExecutionStatistics {
     final long executions = getExecutedGraphs();
     if (executions > 0) {
       return (double) getExecutedNodes() / (double) executions;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   public double getAverageExecutionTime() {
     final long executions = getExecutedGraphs();
     if (executions > 0) {
       return (double) getExecutionTime() / (double) executions / 1e9;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   public double getAverageActualTime() {
     final long executions = getExecutedGraphs();
     if (executions > 0) {
       return (double) getActualTime() / (double) executions / 1e9;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   public double getAverageJobSize() {
     final long executions = getProcessedGraphs();
     if (executions > 0) {
       return (double) getProcessedJobSize() / (double) executions;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   public double getAverageJobCycleCost() {
     final long executions = getProcessedGraphs();
     if (executions > 0) {
       return (double) getProcessedJobCycleCost() / (double) executions;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   public double getAverageJobDataCost() {
     final long executions = getProcessedGraphs();
     if (executions > 0) {
       return (double) getProcessedJobDataCost() / (double) executions;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   public void recordExecution(final int nodeCount, final long executionTime, final long duration) {

@@ -80,11 +80,10 @@ public class DataHolidaySourceResource extends AbstractDataResource {
     if (version != null) {
       final Holiday result = getHolidaySource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      final Holiday result = getHolidaySource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Holiday result = getHolidaySource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
   @GET
@@ -96,8 +95,8 @@ public class DataHolidaySourceResource extends AbstractDataResource {
 
     final Collection<Holiday> result = holidayType == HolidayType.CURRENCY ?
         getHolidaySource().get(Currency.of(currencyCode)) :
-        getHolidaySource().get(holidayType, ExternalIdBundle.parse(externalIdStrs));
-    return responseOkObject(result);
+          getHolidaySource().get(holidayType, ExternalIdBundle.parse(externalIdStrs));
+        return responseOkObject(result);
   }
 
   // deprecated
@@ -115,10 +114,9 @@ public class DataHolidaySourceResource extends AbstractDataResource {
     if (holidayType == HolidayType.CURRENCY) {
       final boolean result = getHolidaySource().isHoliday(date, Currency.of(currencyCode));
       return responseOkObject(FudgeBooleanWrapper.of(result));
-    } else {
-      final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-      final boolean result = getHolidaySource().isHoliday(date, holidayType, bundle);
-      return responseOkObject(FudgeBooleanWrapper.of(result));
     }
+    final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
+    final boolean result = getHolidaySource().isHoliday(date, holidayType, bundle);
+    return responseOkObject(FudgeBooleanWrapper.of(result));
   }
 }

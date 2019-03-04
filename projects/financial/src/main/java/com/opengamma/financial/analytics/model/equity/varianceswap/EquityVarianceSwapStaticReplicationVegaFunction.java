@@ -41,8 +41,8 @@ public class EquityVarianceSwapStaticReplicationVegaFunction extends EquityVaria
     final NodalDoublesSurface vegaSurface = CALCULATOR.calcBlackVegaForEntireSurface(derivative, market);
     final Double[] xValues = vegaSurface.getXData();
     final Double[] yValues = vegaSurface.getYData();
-    final Set<Double> xSet = new HashSet<Double>(Arrays.asList(xValues));
-    final Set<Double> ySet = new HashSet<Double>(Arrays.asList(yValues));
+    final Set<Double> xSet = new HashSet<>(Arrays.asList(xValues));
+    final Set<Double> ySet = new HashSet<>(Arrays.asList(yValues));
     final Double[] uniqueX = xSet.toArray(new Double[0]);
     final Double[] uniqueY = ySet.toArray(new Double[0]);
     final double[][] values = new double[ySet.size()][xSet.size()];

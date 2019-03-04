@@ -63,8 +63,8 @@ import com.opengamma.util.tuple.Pairs;
  * This class is mutable but must be treated as immutable after configuration.
  */
 public class DbRoleMaster
-    extends AbstractDbUserMaster<ManageableRole>
-    implements RoleMaster {
+extends AbstractDbUserMaster<ManageableRole>
+implements RoleMaster {
 
   /** Event sequence name. */
   private static final String USR_ROLE_EVENT_SEQ = "usr_role_event_seq";
@@ -273,9 +273,8 @@ public class DbRoleMaster
     LOGGER.debug("save {}", role.getRoleName());
     if (role.getUniqueId() != null) {
       return update(role);
-    } else {
-      return add(role);
     }
+    return add(role);
   }
 
   //-------------------------------------------------------------------------
@@ -333,10 +332,10 @@ public class DbRoleMaster
     final PagingRequest pagingRequest = request.getPagingRequest();
     // setup args
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValueNullIgnored("role_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getRoleName())))
-      .addValueNullIgnored("assoc_user", request.getAssociatedUser())
-      .addValueNullIgnored("assoc_perm", request.getAssociatedPermission())
-      .addValueNullIgnored("assoc_role", request.getAssociatedRole());
+        .addValueNullIgnored("role_name_ci", caseInsensitive(getDialect().sqlWildcardAdjustValue(request.getRoleName())))
+        .addValueNullIgnored("assoc_user", request.getAssociatedUser())
+        .addValueNullIgnored("assoc_perm", request.getAssociatedPermission())
+        .addValueNullIgnored("assoc_role", request.getAssociatedRole());
     if (request.getObjectIds() != null) {
       final StringBuilder buf = new StringBuilder(request.getObjectIds().size() * 10);
       for (final ObjectId objectId : request.getObjectIds()) {
@@ -417,9 +416,9 @@ public class DbRoleMaster
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final String assoc : role.getAssociatedUsers()) {
       argsList.add(createParameterSource()
-        .addValue("id", nextId("usr_role_assocuser_seq"))
-        .addValue("doc_id", docOid)
-        .addValue("assoc_user", caseInsensitive(assoc)));
+          .addValue("id", nextId("usr_role_assocuser_seq"))
+          .addValue("doc_id", docOid)
+          .addValue("assoc_user", caseInsensitive(assoc)));
     }
     final String sql = getElSqlBundle().getSql("InsertAssocUser");
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
@@ -429,9 +428,9 @@ public class DbRoleMaster
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final String assoc : role.getAssociatedPermissions()) {
       argsList.add(createParameterSource()
-        .addValue("id", nextId("usr_role_assocperm_seq"))
-        .addValue("doc_id", docOid)
-        .addValue("assoc_perm", assoc));
+          .addValue("id", nextId("usr_role_assocperm_seq"))
+          .addValue("doc_id", docOid)
+          .addValue("assoc_perm", assoc));
     }
     final String sql = getElSqlBundle().getSql("InsertAssocPerm");
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
@@ -441,9 +440,9 @@ public class DbRoleMaster
     final List<DbMapSqlParameterSource> argsList = new ArrayList<>();
     for (final String assoc : role.getAssociatedRoles()) {
       argsList.add(createParameterSource()
-        .addValue("id", nextId("usr_role_assocrole_seq"))
-        .addValue("doc_id", docOid)
-        .addValue("assoc_role", caseInsensitive(assoc)));
+          .addValue("id", nextId("usr_role_assocrole_seq"))
+          .addValue("doc_id", docOid)
+          .addValue("assoc_role", caseInsensitive(assoc)));
     }
     final String sql = getElSqlBundle().getSql("InsertAssocRole");
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
@@ -458,11 +457,11 @@ public class DbRoleMaster
 
   private DbMapSqlParameterSource mainArgs(final long docOid, final int version, final ManageableRole role) {
     final DbMapSqlParameterSource docArgs = createParameterSource()
-      .addValue("doc_id", docOid)
-      .addValue("version", version)
-      .addValue("role_name", role.getRoleName())
-      .addValue("role_name_ci", caseInsensitive(role.getRoleName()))
-      .addValue("description", role.getDescription());
+        .addValue("doc_id", docOid)
+        .addValue("version", version)
+        .addValue("role_name", role.getRoleName())
+        .addValue("role_name_ci", caseInsensitive(role.getRoleName()))
+        .addValue("description", role.getDescription());
     return docArgs;
   }
 

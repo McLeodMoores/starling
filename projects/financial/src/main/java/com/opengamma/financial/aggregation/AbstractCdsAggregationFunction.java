@@ -71,9 +71,8 @@ public abstract class AbstractCdsAggregationFunction<T> implements AggregationFu
       final T extracted = _extractor.extract(cds);
       if (extracted != null) {
         return handleExtractedData(extracted);
-      } else {
-        return NOT_APPLICABLE;
       }
+      return NOT_APPLICABLE;
     }
     return NOT_APPLICABLE;
   }

@@ -17,7 +17,9 @@ import com.opengamma.util.test.TestGroup;
 // CSOFF
 /**
  * Tests to verify the correct construction of an underlying pool object
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class UnderlyingPoolTest {
 

@@ -54,7 +54,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionBlackYieldCurvesConstantSpreadThetaFunction extends FXOptionBlackMultiValuedFunction {
   private static final YieldCurvesConstantSpreadThetaCalculator CALCULATOR = YieldCurvesConstantSpreadThetaCalculator.getInstance();
 

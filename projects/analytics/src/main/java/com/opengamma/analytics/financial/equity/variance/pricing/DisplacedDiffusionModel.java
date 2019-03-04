@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
-import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.ShiftedLogNormalTailExtrapolation;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
@@ -26,7 +25,7 @@ import com.opengamma.util.CompareUtils;
  * follow a geometric Brownian motion (GBM). European options can be priced using the Black formula with forward $f \rightarrow f +\alpha$ and strike $k
  * \rightarrow k + \alpha$
  * <p>
- * <b> This should not be confused with Shifted Log-Normal</b> (see {@link ShiftedLogNormalTailExtrapolation})
+ * <b> This should not be confused with Shifted Log-Normal</b> (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction})
  */
 public class DisplacedDiffusionModel {
   /** A logger */
@@ -56,7 +55,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Build a shifted lognormal volatility model directly from model inputs.
-   * 
+   *
    * @param forward
    *          absolute level of the forward
    * @param expiry
@@ -75,7 +74,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Fit a shifted lognormal volatility model to two target points at one expiry.
-   * 
+   *
    * @param forward
    *          absolute level of the forward
    * @param expiry
@@ -110,7 +109,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Fit a Shifted Lognormal Volatility to two target points at one expiry.
-   * 
+   *
    * @param forward
    *          absolute level of the forward
    * @param expiry
@@ -131,7 +130,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Fit a Shifted Lognormal Volatility to two target points at one expiry.
-   * 
+   *
    * @param forward
    *          absolute level of the forward
    * @param expiry
@@ -209,7 +208,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the forward.
-   * 
+   *
    * @return the forward
    */
   public final double getForward() {
@@ -218,7 +217,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the forward.
-   * 
+   *
    * @param forward
    *          the forward
    */
@@ -228,7 +227,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the expiry.
-   * 
+   *
    * @return the expiry
    */
   public final double getExpiry() {
@@ -237,7 +236,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the expiry.
-   * 
+   *
    * @param expiry
    *          the expiry
    */
@@ -247,7 +246,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the vol.
-   * 
+   *
    * @return the vol
    */
   public final double getVol() {
@@ -256,7 +255,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the vol.
-   * 
+   *
    * @param vol
    *          the vol
    */
@@ -266,7 +265,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the shift.
-   * 
+   *
    * @return the shift
    */
   public final double getShift() {
@@ -275,7 +274,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the shift.
-   * 
+   *
    * @param shift
    *          the shift
    */

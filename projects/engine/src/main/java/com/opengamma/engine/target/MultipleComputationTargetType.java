@@ -246,9 +246,8 @@ import com.opengamma.util.ArgumentChecker;
     }
     if (o instanceof ComputationTargetType) {
       return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
-    } else {
-      return false;
     }
+    return false;
   }
 
 }

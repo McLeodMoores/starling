@@ -101,19 +101,19 @@ public class MarketDataSnapshotToolUtils {
 
   private static void printVersionListQuery(final SnapshotUtils snapshotUtils, final String optionValue) {
     final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
-      .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
-      .appendLiteral('-')
-      .appendValue(MONTH_OF_YEAR, 2)
-      .appendLiteral('-')
-      .appendValue(DAY_OF_MONTH, 2)
-      .appendValue(HOUR_OF_DAY, 2)
-      .appendLiteral(':')
-      .appendValue(MINUTE_OF_HOUR, 2)
-      .optionalStart()
-      .appendLiteral(':')
-      .appendValue(SECOND_OF_MINUTE, 2)
-      .appendOffsetId()
-      .toFormatter();
+        .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
+        .appendLiteral('-')
+        .appendValue(MONTH_OF_YEAR, 2)
+        .appendLiteral('-')
+        .appendValue(DAY_OF_MONTH, 2)
+        .appendValue(HOUR_OF_DAY, 2)
+        .appendLiteral(':')
+        .appendValue(MINUTE_OF_HOUR, 2)
+        .optionalStart()
+        .appendLiteral(':')
+        .appendValue(SECOND_OF_MINUTE, 2)
+        .appendOffsetId()
+        .toFormatter();
 
 
     final List<VersionInfo> snapshotVersions = snapshotUtils.snapshotVersionsByName(optionValue);
@@ -294,7 +294,7 @@ public class MarketDataSnapshotToolUtils {
 
     String surfaceY;
     if (rawOrdinates.getSecond() instanceof Pair) {
-      surfaceY = ((Pair) rawOrdinates.getSecond()).getFirst() + "|" + ((Pair) rawOrdinates.getSecond()).getSecond();
+      surfaceY = ((Pair<?, ?>) rawOrdinates.getSecond()).getFirst() + "|" + ((Pair<?, ?>) rawOrdinates.getSecond()).getSecond();
     } else if (rawOrdinates.getSecond() instanceof Tenor) {
       surfaceY = ((Tenor) rawOrdinates.getSecond()).toFormattedString();
     } else {

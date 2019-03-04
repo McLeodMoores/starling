@@ -178,7 +178,7 @@ public final class CalculationNodeProcess {
       sleep(CONFIGURATION_POLL_PERIOD);
       final String newConfiguration = getConfigurationXml(url);
       if (newConfiguration != null) {
-        if (!configuration.equals(newConfiguration)) {
+        if (!newConfiguration.equals(configuration)) {
           LOGGER.info("Configuration at {} has changed", url);
           System.exit(0);
         }

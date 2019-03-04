@@ -7,14 +7,16 @@ package com.opengamma.analytics.financial.model.option.definition;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
-import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderDiscount;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Class describing the data required to price instruments with the volatility delta and time dependent.
- * @deprecated Use {@link BlackForexSmileProviderDiscount}
+ * Class describing the data required to price instruments with the volatility
+ * delta and time dependent.
+ * 
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderDiscount}
  */
 @Deprecated
 public class SmileDeltaTermStructureDataBundle extends ForexOptionDataBundle<SmileDeltaTermStructureParametersStrikeInterpolation> {

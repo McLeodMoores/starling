@@ -7,8 +7,6 @@ package com.opengamma.analytics.financial.credit.cds;
 
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.analytics.financial.instrument.cds.ISDACDSCouponDefinition;
-import com.opengamma.analytics.financial.instrument.cds.ISDACDSPremiumDefinition;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
 import com.opengamma.util.money.Currency;
 

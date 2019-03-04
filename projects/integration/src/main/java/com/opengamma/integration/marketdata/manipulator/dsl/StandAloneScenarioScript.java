@@ -233,7 +233,7 @@ public abstract class StandAloneScenarioScript extends Script {
       LOGGER.warn("Shocks must be a list, type=" + newValue.getClass().getName() + ", value=" + newValue);
       return;
     }
-    if (((List) newValue).size() == 0) {
+    if (((List<?>) newValue).size() == 0) {
       LOGGER.warn("Shocks must have at least one value");
       return;
     }

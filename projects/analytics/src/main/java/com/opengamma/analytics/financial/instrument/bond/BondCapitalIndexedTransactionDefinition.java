@@ -11,8 +11,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionWithData;
 import com.opengamma.analytics.financial.instrument.inflation.CouponInflationDefinition;
-import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponInterpolationGearingDefinition;
-import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponMonthlyGearingDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponDefinition;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondCapitalIndexedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondCapitalIndexedTransaction;
@@ -27,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Describes a capital inflation indexed bond transaction. Both the coupon and the nominal are indexed on a price index.
- * 
+ *
  * @param <C>
  *          Type of inflation coupon. Can be {@link CouponInflationZeroCouponMonthlyGearingDefinition} or
  *          {@link CouponInflationZeroCouponInterpolationGearingDefinition}.
@@ -37,7 +35,7 @@ public class BondCapitalIndexedTransactionDefinition<C extends CouponDefinition>
 
   /**
    * Constructor of a Capital indexed bond transaction from all the transaction details.
-   * 
+   *
    * @param underlyingBond
    *          The capital indexed bond underlying the transaction.
    * @param quantity
@@ -57,7 +55,7 @@ public class BondCapitalIndexedTransactionDefinition<C extends CouponDefinition>
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -68,7 +66,7 @@ public class BondCapitalIndexedTransactionDefinition<C extends CouponDefinition>
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated

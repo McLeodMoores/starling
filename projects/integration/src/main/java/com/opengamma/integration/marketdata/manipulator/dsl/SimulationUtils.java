@@ -153,12 +153,9 @@ public final class SimulationUtils {
     }
     if (expectedType.isInstance(scriptOutput)) {
       return expectedType.cast(scriptOutput);
-    } else {
-      throw new IllegalArgumentException("Script '" + scriptReader + "' didn't create an object of the expected type. " +
-          "expected type: " + expectedType.getName() + ", " +
-          "actual type: " + scriptOutput.getClass().getName() + ", " +
-          "actual value: " + scriptOutput);
     }
+    throw new IllegalArgumentException("Script '" + scriptReader + "' didn't create an object of the expected type. " + "expected type: "
+        + expectedType.getName() + ", " + "actual type: " + scriptOutput.getClass().getName() + ", " + "actual value: " + scriptOutput);
   }
 
   /**
@@ -241,11 +238,10 @@ public final class SimulationUtils {
     final String idValue = valueSpec.getTargetSpecification().getUniqueId().getValue();
     if (targetType.equals(CurrencyPair.TYPE)) {
       return CurrencyPair.parse(idValue);
-    /*} else if (targetType.equals(ComputationTargetType.UNORDERED_CURRENCY_PAIR)) {
+      /*} else if (targetType.equals(ComputationTargetType.UNORDERED_CURRENCY_PAIR)) {
       String quotedPair = valueSpec.getProperties().getStrictValue(ConventionBasedFXRateFunction.QUOTING_CONVENTION_PROPERTY);
       return CurrencyPair.parse(quotedPair);*/
-    } else {
-      throw new IllegalArgumentException("Only currency pair target types supported. type=" + targetType);
     }
+    throw new IllegalArgumentException("Only currency pair target types supported. type=" + targetType);
   }
 }

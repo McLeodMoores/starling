@@ -42,8 +42,8 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
   private final MarketDataPermissionProvider _permissionProvider = new PermissionProvider();
 
   public HistoricalShockMarketDataProvider(final MarketDataProvider historicalProvider1,
-                                           final MarketDataProvider historicalProvider2,
-                                           final MarketDataProvider baseProvider) {
+      final MarketDataProvider historicalProvider2,
+      final MarketDataProvider baseProvider) {
     ArgumentChecker.notNull(historicalProvider1, "historicalProvider1");
     ArgumentChecker.notNull(historicalProvider2, "historicalProvider2");
     ArgumentChecker.notNull(baseProvider, "baseProvider");
@@ -161,8 +161,8 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
 
     @Override
     public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec,
-                                              final Object target,
-                                              final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
+        final Object target,
+        final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
       final ValueSpecification spec1 =
           _historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailability(targetSpec, target, desiredValue);
       final ValueSpecification spec2 =
@@ -171,9 +171,8 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
           _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailability(targetSpec, target, desiredValue);
       if (Objects.equals(spec1, spec2) && Objects.equals(spec2, spec3)) {
         return spec1;
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -184,8 +183,8 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
     @Override
     public Serializable getAvailabilityHintKey() {
       return Triple.of(_historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailabilityHintKey(),
-                       _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailabilityHintKey(),
-                       _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailabilityHintKey());
+          _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailabilityHintKey(),
+          _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailabilityHintKey());
     }
   }
 

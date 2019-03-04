@@ -17,7 +17,6 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.analytics.OpenGammaFunctionExclusions;
-import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.financial.property.StaticDefaultPropertyFunction;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -89,9 +88,8 @@ public class EquityFutureOptionSurfaceCalculationMethodDefaults extends StaticDe
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (desiredValue.getConstraints().isDefined(ValuePropertyNames.CALCULATION_METHOD)) {
       return super.getRequirements(context, target, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

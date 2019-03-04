@@ -63,9 +63,8 @@ public class WriteThroughViewComputationCacheSlowTest {
       waitIfBlocked();
       if (specification == _value2) {
         return null;
-      } else {
-        return new Object();
       }
+      return new Object();
     }
 
     @Override

@@ -301,7 +301,7 @@ public final class SecurityLinkResolver {
    * <p>
    * This is designed to be used by a single resolution pass, for the efficiency of resolving the same security multiple times.
    */
-  static class CachedSecuritySource extends AbstractSecuritySource implements SecuritySource {
+  static class CachedSecuritySource extends AbstractSecuritySource {
     private final SecuritySource _underlying;
     private final ConcurrentMap<ObjectId, Security> _objectIdCache = new ConcurrentHashMap<>();
     private final ConcurrentMap<ExternalIdBundle, Security> _weakIdCache = new ConcurrentHashMap<>();

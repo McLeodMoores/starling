@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.obligor.definition;
@@ -14,7 +14,9 @@ import com.opengamma.analytics.financial.credit.obligor.Sector;
 
 /**
  * Class to define a General Clearing Member of a CCP (an extension of the Obligor class)
+ * @deprecated Deprecated
  */
+@Deprecated
 public class GeneralClearingMember extends Obligor {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

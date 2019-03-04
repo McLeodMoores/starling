@@ -56,7 +56,7 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     if (calculationMethod == null || calculationMethod.isEmpty()) {
       return null;
     }
-    if (calculationMethod != null && calculationMethod.size() == 1) {
+    if (calculationMethod.size() == 1) {
       if (!getCalculationMethod().equals(Iterables.getOnlyElement(calculationMethod))) {
         return null;
       }
@@ -82,7 +82,6 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     if (surfaceCalculationMethods == null || surfaceCalculationMethods.size() != 1) {
       return null;
     }
-    final String surfaceCalculationMethod = Iterables.getOnlyElement(surfaceCalculationMethods);
     final Set<String> forwardCurveNames = constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_NAME);
     if (forwardCurveNames == null || forwardCurveNames.size() != 1) {
       return null;

@@ -42,9 +42,8 @@ public class ValueRequirementNode implements TreeTableNode {
   public int getChildCount() {
     if (_valueRequirement != null) {
       return 2;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override

@@ -194,7 +194,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
   protected Map<ExternalIdBundle, Security> loadUnderlyings(final Map<ExternalIdBundle, Security> providedMap) {
     // find and load dependencies
     final Set<ExternalIdBundle> underlyingIds = Sets.newHashSet();
-    final Set<Index> indices = new HashSet<Index>();
+    final Set<Index> indices = new HashSet<>();
     final UnderlyingExternalIdVisitor visitor = new UnderlyingExternalIdVisitor();
     for (final Entry<ExternalIdBundle, Security> entry : providedMap.entrySet()) {
       final Security security = entry.getValue();
@@ -234,7 +234,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
     return underlyingProvidedMap;
   }
 
-  private enum Source { EXISTING, TO_ADD, SEC_SOURCE };
+  private enum Source { EXISTING, TO_ADD, SEC_SOURCE }
 
   private void processIndices(final Set<Index> indices) {
     final SecuritySource secSource = new MasterSecuritySource(_securityMaster);
@@ -293,7 +293,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
         final ExternalId preferred = preferredExternalId(index.getExternalIdBundle());
         indexFamily.setName(index.getIndexFamilyId().getValue());
         indexFamily.setExternalIdBundle(familyBundle);
-        final SortedMap<Tenor, ExternalId> entries = new TreeMap<Tenor, ExternalId>();
+        final SortedMap<Tenor, ExternalId> entries = new TreeMap<>();
         entries.put(tenor, preferred);
         indexFamily.setMembers(entries);
         toAdd.put(familyBundle, indexFamily);

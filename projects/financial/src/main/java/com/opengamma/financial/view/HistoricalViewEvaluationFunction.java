@@ -122,7 +122,7 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
   }
 
   //-------------------------------------------------------------------------
-  private LocalDate getResultsDate(final ViewCycleExecutionOptions cycleExecutionOptions) {
+  private static LocalDate getResultsDate(final ViewCycleExecutionOptions cycleExecutionOptions) {
     // NOTE jonathan 2013-02-28 -- could imagine using constraints
     final List<MarketDataSpecification> marketDataSpecifications = cycleExecutionOptions.getMarketDataSpecifications();
     if (marketDataSpecifications.size() != 1) {
@@ -136,9 +136,8 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
       final MarketDataSpecification spec2 = ((HistoricalShockMarketDataSpecification) marketDataSpec).getHistoricalSpecification2();
       if (spec2 instanceof FixedHistoricalMarketDataSpecification) {
         return ((FixedHistoricalMarketDataSpecification) spec2).getSnapshotDate();
-      } else {
-        throw new OpenGammaRuntimeException("Unsupported inner market data specification: " + spec2);
       }
+      throw new OpenGammaRuntimeException("Unsupported inner market data specification: " + spec2);
     } else {
       throw new OpenGammaRuntimeException("Unsupported market data specification: " + marketDataSpec);
     }

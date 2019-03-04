@@ -51,9 +51,8 @@ public abstract class CurrencyMatrixValue {
     public CurrencyMatrixFixed getReciprocal() {
       if (getFixedValue() == 1.0) {
         return this;
-      } else {
-        return new CurrencyMatrixFixed(1 / getFixedValue());
       }
+      return new CurrencyMatrixFixed(1 / getFixedValue());
     }
 
     @Override

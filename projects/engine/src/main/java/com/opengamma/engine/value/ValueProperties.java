@@ -482,18 +482,16 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       }
       if (builder.hasLocalCopy()) {
         return builder.get();
-      } else {
-        return this;
       }
+      return this;
     }
 
     @Override
     /* package */ValueProperties unionSimple(final SimpleValueProperties other) {
       if (isLongerPropertyCount(other)) {
         return other.unionSimpleImpl(this);
-      } else {
-        return unionSimpleImpl(other);
       }
+      return unionSimpleImpl(other);
     }
 
     @Override
@@ -563,9 +561,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       final AbstractValueProperty property = _properties[i];
       if (property != null) {
         return property.getValues(propertyName);
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -575,9 +572,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       final AbstractValueProperty property = _properties[i];
       if (property != null) {
         return property.getStrictValue(propertyName);
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -587,9 +583,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       final AbstractValueProperty property = _properties[i];
       if (property != null) {
         return property.getSingleValue(propertyName);
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -599,9 +594,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       final AbstractValueProperty property = _properties[i];
       if (property != null) {
         return property.isOptional(propertyName);
-      } else {
-        return false;
       }
+      return false;
     }
 
     @Override
@@ -1379,10 +1373,9 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       if (_properties.contains(propertyName)) {
         // Not defined
         return null;
-      } else {
-        // Wild-card
-        return Collections.emptySet();
       }
+      // Wild-card
+      return Collections.emptySet();
     }
 
     @Override

@@ -269,9 +269,8 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
       }
       if (missing != null) {
         throw missing;
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentMap;
  * {@link ConcurrentMap}.
  * This class is internally synchronized.
  */
-public class InMemoryBinaryDataStore extends AbstractBinaryDataStore implements BinaryDataStore {
+public class InMemoryBinaryDataStore extends AbstractBinaryDataStore {
   private final ConcurrentMap<Long, byte[]> _underlyingMap = new ConcurrentHashMap<>();
 
   @Override

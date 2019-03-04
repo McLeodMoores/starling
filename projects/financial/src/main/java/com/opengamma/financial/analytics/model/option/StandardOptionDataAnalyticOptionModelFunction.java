@@ -54,12 +54,12 @@ public abstract class StandardOptionDataAnalyticOptionModelFunction extends Anal
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> curveNames = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
-    if ((curveNames == null) || (curveNames.size() != 1)) {
+    if (curveNames == null || curveNames.size() != 1) {
       return null;
     }
     final String curveName = curveNames.iterator().next();
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(getUnderlyingMarketDataRequirement(option.getUnderlyingId()));
     requirements.add(getYieldCurveMarketDataRequirement(option.getCurrency(), curveName));
     requirements.add(getVolatilitySurfaceMarketDataRequirement(option, curveName));

@@ -19,7 +19,6 @@ import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.masterdb.security.hibernate.ContractCategoryBean;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExchangeBean;
@@ -30,7 +29,8 @@ import com.opengamma.masterdb.security.hibernate.UnitBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link FutureSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.FutureSecurity}.
  */
 @BeanDefinition
 public abstract class FutureSecurityBean extends SecurityBean {

@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.position.Position;
-import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.position.Trade;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
@@ -28,10 +27,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicSPI;
 
 /**
- * A {@code PositionSource} implemented using an underlying {@code PositionMaster} and {@code PortfolioMaster}.
+ * A {@code PositionSource} implemented using an underlying
+ * {@code PositionMaster} and {@code PortfolioMaster}.
  * <p>
- * The {@link PositionSource} interface provides portfolio and position to the engine via a narrow API. This class provides the
- * source on top of a standard {@link PortfolioMaster} and
+ * The {@link com.opengamma.core.position.PositionSource} interface provides
+ * portfolio and position to the engine via a narrow API. This class provides
+ * the source on top of a standard {@link PortfolioMaster} and
  * {@link PositionMaster}.
  */
 @PublicSPI

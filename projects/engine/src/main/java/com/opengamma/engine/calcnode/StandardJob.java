@@ -203,9 +203,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
             notify._count--;
           }
           return job._notify;
-        } else {
-          return Collections.emptyList();
         }
+        return Collections.emptyList();
       }
 
       public synchronized boolean isRunnable(final CalculationJob job) {
@@ -306,38 +305,36 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
           if (receiver != null) {
             LOGGER.debug("Submitting watched job for {}", this);
             return new WatchedJob.Whole(this, getJob(), receiver);
-          } else {
-            // No result receiver means we've already completed/aborted or are about to do so
-            return null;
           }
+          // No result receiver means we've already completed/aborted or are
+          // about to do so
+          return null;
       }
-    } else {
-      // Rewrite the private/shared caching information and submit a watched job for the root. Any tail jobs will be submitted after their
-      // parent jobs complete
-      final CalculationJob job = adjustCacheHints(getJob(),
-          new HashMap<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>>());
-      LOGGER.debug("Submitting adjusted watched job for {}", this);
-      return createWholeWatchedJob(job);
     }
+    // Rewrite the private/shared caching information and submit a watched job
+    // for the root. Any tail jobs will be submitted after their
+    // parent jobs complete
+    final CalculationJob job = adjustCacheHints(getJob(),
+        new HashMap<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>>());
+    LOGGER.debug("Submitting adjusted watched job for {}", this);
+    return createWholeWatchedJob(job);
   }
 
   @Override
   protected DispatchableJob prepareRetryJob(final JobInvoker jobInvoker) {
     if (_usedJobInvoker != null && _usedJobInvoker.contains(jobInvoker.getInvokerId())) {
       return createWatchedJob();
-    } else {
-      _rescheduled++;
-      if (_rescheduled >= getDispatcher().getMaxJobAttempts()) {
-        return createWatchedJob();
-      } else {
-        LOGGER.info("Retrying job {}", this);
-        if (_usedJobInvoker == null) {
-          _usedJobInvoker = new HashSet<>();
-        }
-        _usedJobInvoker.add(jobInvoker.getInvokerId());
-        return this;
-      }
     }
+    _rescheduled++;
+    if (_rescheduled >= getDispatcher().getMaxJobAttempts()) {
+      return createWatchedJob();
+    }
+    LOGGER.info("Retrying job {}", this);
+    if (_usedJobInvoker == null) {
+      _usedJobInvoker = new HashSet<>();
+    }
+    _usedJobInvoker.add(jobInvoker.getInvokerId());
+    return this;
   }
 
   @Override

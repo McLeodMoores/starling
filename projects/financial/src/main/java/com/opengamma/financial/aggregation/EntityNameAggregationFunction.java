@@ -91,9 +91,8 @@ public class EntityNameAggregationFunction implements AggregationFunction<String
       final LegalEntity legalEntity = _legalEntitySource.getSingle(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
       if (legalEntity != null) {
         return legalEntity.getName();
-      } else {
-        return redCode;
       }
+      return redCode;
     }
 
     return NOT_APPLICABLE;

@@ -55,7 +55,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionBlackForwardSlideThetaFunction extends FXOptionBlackMultiValuedFunction {
   private static final ForwardSlideHorizonThetaCalculator CALCULATOR = ForwardSlideHorizonThetaCalculator.getInstance();
 

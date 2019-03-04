@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.property;
@@ -67,28 +67,25 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
   protected String getUniqueId(final ComputationTarget target) {
     if (target.getUniqueId() != null) {
       return target.getUniqueId().getObjectId().toString();
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected List<String> getIdentifiers(final ComputationTarget target) {
     if (target.getValue() instanceof Security) {
       final ExternalIdBundle identifiers = ((Security) target.getValue()).getExternalIdBundle();
-      final List<String> result = new ArrayList<String>(identifiers.size() + 1);
+      final List<String> result = new ArrayList<>(identifiers.size() + 1);
       result.add(getUniqueId(target));
-      for (ExternalId identifier : identifiers) {
+      for (final ExternalId identifier : identifiers) {
         result.add(identifier.toString());
       }
       return result;
-    } else {
-      final String uniqueId = getUniqueId(target);
-      if (uniqueId != null) {
-        return Collections.singletonList(uniqueId);
-      } else {
-        return null;
-      }
     }
+    final String uniqueId = getUniqueId(target);
+    if (uniqueId != null) {
+      return Collections.singletonList(uniqueId);
+    }
+    return null;
   }
 
   private String getPrefix(final FunctionCompilationContext context, final ComputationTarget target) {
@@ -100,12 +97,12 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
     final String prefix = getPrefix(defaults.getContext(), defaults.getTarget()) + ".";
     if (isIdentifier()) {
       final List<String> identifiers = getIdentifiers(defaults.getTarget());
-      final List<String> suffixes = new ArrayList<String>(identifiers.size());
-      for (String identifier : identifiers) {
+      final List<String> suffixes = new ArrayList<>(identifiers.size());
+      for (final String identifier : identifiers) {
         suffixes.add("." + identifier);
       }
-      for (String property : defaults.getContext().getViewCalculationConfiguration().getDefaultProperties().getProperties()) {
-        for (String suffix : suffixes) {
+      for (final String property : defaults.getContext().getViewCalculationConfiguration().getDefaultProperties().getProperties()) {
+        for (final String suffix : suffixes) {
           if (property.startsWith(prefix) && property.endsWith(suffix)) {
             final int i = property.indexOf(SEP, prefix.length());
             if (i > 0) {
@@ -121,7 +118,7 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
         }
       }
     } else {
-      for (String property : defaults.getContext().getViewCalculationConfiguration().getDefaultProperties().getProperties()) {
+      for (final String property : defaults.getContext().getViewCalculationConfiguration().getDefaultProperties().getProperties()) {
         if (property.startsWith(prefix)) {
           final int i = property.indexOf(SEP, prefix.length());
           if (i > 0) {
@@ -155,12 +152,12 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
       if (identifiers == null) {
         return false;
       }
-      final List<String> suffixes = new ArrayList<String>(identifiers.size());
-      for (String identifier : identifiers) {
+      final List<String> suffixes = new ArrayList<>(identifiers.size());
+      for (final String identifier : identifiers) {
         suffixes.add("." + identifier);
       }
-      for (String property : defaults.getProperties()) {
-        for (String suffix : suffixes) {
+      for (final String property : defaults.getProperties()) {
+        for (final String suffix : suffixes) {
           if (property.startsWith(prefix) && property.endsWith(suffix)) {
             final int i = property.indexOf(SEP, prefix.length());
             if (i > 0) {
@@ -170,10 +167,10 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
         }
       }
     } else {
-      for (String property : defaults.getProperties()) {
+      for (final String property : defaults.getProperties()) {
         if (property.startsWith(prefix)) {
           final int i = property.indexOf(SEP, prefix.length());
-          if ((i > 0) && (property.indexOf('.', i + 1) < 0)) {
+          if (i > 0 && property.indexOf('.', i + 1) < 0) {
             return true;
           }
         }
@@ -192,7 +189,7 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
       sbWildcard.append('.');
       final int lSpecific = sbSpecific.length();
       final int lWildcard = sbWildcard.length();
-      for (String identifier : getIdentifiers(target)) {
+      for (final String identifier : getIdentifiers(target)) {
         sbSpecific.delete(lSpecific, sbSpecific.length()).append(identifier);
         sbWildcard.delete(lWildcard, sbWildcard.length()).append(identifier);
         Set<String> values = context.getViewCalculationConfiguration().getDefaultProperties().getValues(sbSpecific.toString());
@@ -205,13 +202,12 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
         }
       }
       return null;
-    } else {
-      Set<String> values = context.getViewCalculationConfiguration().getDefaultProperties().getValues(sbSpecific.toString());
-      if (values != null) {
-        return values;
-      }
-      return context.getViewCalculationConfiguration().getDefaultProperties().getValues(sbWildcard.toString());
     }
+    final Set<String> values = context.getViewCalculationConfiguration().getDefaultProperties().getValues(sbSpecific.toString());
+    if (values != null) {
+      return values;
+    }
+    return context.getViewCalculationConfiguration().getDefaultProperties().getValues(sbWildcard.toString());
   }
 
   @Override

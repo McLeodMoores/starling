@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.config;
@@ -221,7 +221,7 @@ public class BloombergSecurityTypeDefinitionLoader {
   public void run() {
     final ConfigItem<BloombergSecurityTypeDefinition> configItem = ConfigItem.of(DEFAULT_CONFIG, _configName);
 
-    final ConfigSearchRequest<BloombergSecurityTypeDefinition> req = new ConfigSearchRequest<BloombergSecurityTypeDefinition>();
+    final ConfigSearchRequest<BloombergSecurityTypeDefinition> req = new ConfigSearchRequest<>();
     req.setType(BloombergSecurityTypeDefinition.class);
     req.setName(configItem.getName());
     final ConfigDocument configDocument = new ConfigDocument(configItem);

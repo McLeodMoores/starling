@@ -103,9 +103,8 @@ public class TargetResolverComponentFactory extends AbstractComponentFactory imp
   protected CurrencyMatrixSource createCurrencyMatrixSource() {
     if (getConfigSource() != null) {
       return new ConfigDBCurrencyMatrixSource(getConfigSource());
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected CurrencyMatrixSource getOrCreateCurrencyMatrixSource() {
@@ -118,9 +117,8 @@ public class TargetResolverComponentFactory extends AbstractComponentFactory imp
   protected VersionedCurrencyPairsSource createCurrencyPairsSource() {
     if (getConfigSource() != null) {
       return new ConfigDBCurrencyPairsSource(getConfigSource());
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected VersionedCurrencyPairsSource getOrCreateCurrencyPairsSource() {

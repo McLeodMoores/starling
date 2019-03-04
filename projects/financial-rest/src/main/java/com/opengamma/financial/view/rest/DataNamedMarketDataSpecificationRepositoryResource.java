@@ -15,7 +15,10 @@ import com.opengamma.util.rest.AbstractDataResource;
 
 /**
  * RESTful resource for {@link NamedMarketDataSpecificationRepository}
+ * 
+ * @deprecated {@link NamedMarketDataSpecificationRepository} is deprecated
  */
+@Deprecated
 public class DataNamedMarketDataSpecificationRepositoryResource extends AbstractDataResource {
 
   private static final String PATH_NAMES = "names";

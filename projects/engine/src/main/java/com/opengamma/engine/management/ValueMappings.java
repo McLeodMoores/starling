@@ -95,9 +95,8 @@ public class ValueMappings {
     final ConfigurationData configuration = _configurations.get(calcConfigName);
     if (configuration != null) {
       return configuration.getValueSpecification(valueReq);
-    } else {
-      return null;
     }
+    return null;
   }
 
 }

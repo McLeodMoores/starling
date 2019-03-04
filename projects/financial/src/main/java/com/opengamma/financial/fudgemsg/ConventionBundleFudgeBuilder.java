@@ -30,7 +30,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Fudge builder for a {@link ConventionBundle}.
+ * @deprecated Convention bundles should not be use
  */
+@Deprecated
 @GenericFudgeBuilderFor(ConventionBundle.class)
 public class ConventionBundleFudgeBuilder implements FudgeBuilder<ConventionBundle> {
 

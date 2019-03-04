@@ -68,7 +68,9 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.money.Currency;
 
 /**
+ * @deprecated Deprecated
  */
+@Deprecated
 public class InterestRateFutureOptionHestonPresentValueFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionHestonPresentValueFunction.class);
   private FixedIncomeConverterDataProvider _dataConverter;

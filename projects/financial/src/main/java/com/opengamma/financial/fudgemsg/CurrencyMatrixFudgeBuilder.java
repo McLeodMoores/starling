@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -73,9 +73,9 @@ public class CurrencyMatrixFudgeBuilder implements FudgeBuilder<CurrencyMatrix> 
     msg.add(0, CurrencyMatrix.class.getName());
     final Collection<Currency> sourceCurrencies = object.getSourceCurrencies();
     final Collection<Currency> targetCurrencies = object.getTargetCurrencies();
-    final Map<String, MutableFudgeMsg> fixedValues = new HashMap<String, MutableFudgeMsg>();
-    final Map<String, MutableFudgeMsg> crossValues = new HashMap<String, MutableFudgeMsg>();
-    final Map<String, MutableFudgeMsg> reqValues = new HashMap<String, MutableFudgeMsg>();
+    final Map<String, MutableFudgeMsg> fixedValues = new HashMap<>();
+    final Map<String, MutableFudgeMsg> crossValues = new HashMap<>();
+    final Map<String, MutableFudgeMsg> reqValues = new HashMap<>();
     for (final Currency sourceCurrency : sourceCurrencies) {
       final String sourceISO = sourceCurrency.getCode();
       for (final Currency targetCurrency : targetCurrencies) {
@@ -160,7 +160,7 @@ public class CurrencyMatrixFudgeBuilder implements FudgeBuilder<CurrencyMatrix> 
   private static class MatrixImpl extends AbstractCurrencyMatrix {
 
     private void loadFixed(final FudgeMsg message) {
-      final Map<Pair<Currency, Currency>, CurrencyMatrixValue> values = new HashMap<Pair<Currency, Currency>, CurrencyMatrixValue>();
+      final Map<Pair<Currency, Currency>, CurrencyMatrixValue> values = new HashMap<>();
       for (final FudgeField field : message) {
         final Currency source = Currency.of(field.getName());
         final FudgeMsg message2 = message.getFieldValue(FudgeMsg.class, field);
@@ -182,7 +182,7 @@ public class CurrencyMatrixFudgeBuilder implements FudgeBuilder<CurrencyMatrix> 
     }
 
     private void loadReq(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      final Map<Pair<Currency, Currency>, CurrencyMatrixValue> values = new HashMap<Pair<Currency, Currency>, CurrencyMatrixValue>();
+      final Map<Pair<Currency, Currency>, CurrencyMatrixValue> values = new HashMap<>();
       for (final FudgeField field : message) {
         final Currency source = Currency.of(field.getName());
         for (final FudgeField field2 : message.getFieldValue(FudgeMsg.class, field)) {
@@ -203,7 +203,7 @@ public class CurrencyMatrixFudgeBuilder implements FudgeBuilder<CurrencyMatrix> 
     }
 
     private void loadCross(final FudgeMsg message) {
-      final Map<Pair<Currency, Currency>, CurrencyMatrixValue> values = new HashMap<Pair<Currency, Currency>, CurrencyMatrixValue>();
+      final Map<Pair<Currency, Currency>, CurrencyMatrixValue> values = new HashMap<>();
       for (final FudgeField field : message) {
         final CurrencyMatrixValue cross = CurrencyMatrixValue.of(Currency.of(field.getName()));
         for (final FudgeField field2 : (FudgeMsg) field.getValue()) {

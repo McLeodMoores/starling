@@ -47,10 +47,9 @@ public class CdsRedCodeExtractor<T> {
     if (refEntityId.isScheme(ExternalSchemes.MARKIT_RED_CODE)) {
 
       return _redCodeHandler.extract(refEntityId.getValue());
-    } else {
-      LOGGER.warn("Unable to lookup RED code as reference entity external id uses scheme: {}", refEntityId.getScheme());
-      return null;
     }
+    LOGGER.warn("Unable to lookup RED code as reference entity external id uses scheme: {}", refEntityId.getScheme());
+    return null;
   }
 
 }

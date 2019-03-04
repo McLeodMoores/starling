@@ -335,9 +335,8 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
   private boolean isGoodValue(final ComputedValueResult computedValue) {
     if (computedValue == null || computedValue.getValue() == null || StringUtils.EMPTY.equals(computedValue.getValue())) {
       return false;
-    } else {
-      return !(computedValue.getValue() instanceof MissingValue);
     }
+    return !(computedValue.getValue() instanceof MissingValue);
   }
 
 }

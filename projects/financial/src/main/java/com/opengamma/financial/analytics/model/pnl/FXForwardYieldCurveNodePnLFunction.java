@@ -60,7 +60,9 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
  * Function that calculates the P&L for an FX forward due to movements in the yield curves used for pricing.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardYieldCurveNodePnLFunction.class);

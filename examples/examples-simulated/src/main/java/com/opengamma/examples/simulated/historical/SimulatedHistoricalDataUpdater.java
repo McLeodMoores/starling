@@ -52,7 +52,7 @@ public class SimulatedHistoricalDataUpdater extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -88,7 +88,7 @@ public class SimulatedHistoricalDataUpdater extends AbstractTool<ToolContext> {
       int pointsAdded = 0;
       int timeSeriesUpdated = 0;
       _feedback.workRequired(_data.getFinishValues().size());
-      for (Map.Entry<Pair<ExternalId, String>, Double> centreValue : _data.getFinishValues().entrySet()) {
+      for (final Map.Entry<Pair<ExternalId, String>, Double> centreValue : _data.getFinishValues().entrySet()) {
         LOGGER.debug("Updating TS points for {}/{}", centreValue.getKey().getFirst(), centreValue.getKey().getSecond());
         final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest();
         searchRequest.addExternalId(centreValue.getKey().getFirst());
@@ -99,7 +99,7 @@ public class SimulatedHistoricalDataUpdater extends AbstractTool<ToolContext> {
         if (searchResult.getDocuments().isEmpty()) {
           LOGGER.warn("No time series for {}/{}", centreValue.getKey().getFirst(), centreValue.getKey().getSecond());
         } else {
-          for (HistoricalTimeSeriesInfoDocument infoDoc : searchResult.getDocuments()) {
+          for (final HistoricalTimeSeriesInfoDocument infoDoc : searchResult.getDocuments()) {
             LOGGER.debug("Updating {}", infoDoc.getUniqueId());
             final ManageableHistoricalTimeSeries hts = htsMaster.getTimeSeries(infoDoc.getUniqueId(), filter);
             final LocalDateDoubleTimeSeries ldts = hts.getTimeSeries();
@@ -108,8 +108,8 @@ public class SimulatedHistoricalDataUpdater extends AbstractTool<ToolContext> {
               final double centre = centreValue.getValue();
               double pointValue = ldts.getLatestValueFast();
               pointDate = DateUtils.nextWeekDay(pointDate);
-              List<LocalDate> dates = new ArrayList<LocalDate>();
-              List<Double> values = new ArrayList<Double>();
+              final List<LocalDate> dates = new ArrayList<>();
+              final List<Double> values = new ArrayList<>();
               while (pointDate.isBefore(now)) {
                 pointValue = SimulatedHistoricalData.wiggleValue(rnd, pointValue, centre);
                 dates.add(pointDate);
@@ -121,7 +121,7 @@ public class SimulatedHistoricalDataUpdater extends AbstractTool<ToolContext> {
                 htsMaster.updateTimeSeriesDataPoints(infoDoc, ImmutableLocalDateDoubleTimeSeries.of(dates, values));
                 pointsAdded += dates.size();
                 timeSeriesUpdated++;
-                if ((timeSeriesUpdated % 100) == 0) {
+                if (timeSeriesUpdated % 100 == 0) {
                   GUIFeedback.say("Updated " + timeSeriesUpdated + " of " + _data.getFinishValues().size() + " time series");
                 }
               }
@@ -133,7 +133,7 @@ public class SimulatedHistoricalDataUpdater extends AbstractTool<ToolContext> {
       final String message = "Added " + pointsAdded + " points to " + timeSeriesUpdated + " time series";
       LOGGER.info("{}", message);
       _feedback.done(message);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       _feedback.done("An error occurred updating the time series database");
       throw e;
     }

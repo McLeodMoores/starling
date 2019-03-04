@@ -21,14 +21,16 @@ import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionPh
 import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionPhysicalFixedIborBlackMethod;
 import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackCubeBundle;
 import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackSwaptionBundle;
-import com.opengamma.analytics.financial.provider.calculator.blackswaption.PresentValueBlackSwaptionCalculator;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Present value calculator for interest rate instruments using Black model with implied volatilities.
- * 
- * @deprecated Use the present values calculators that reference {@link ParameterProviderInterface} e.g. {@link PresentValueBlackSwaptionCalculator}
+ * Present value calculator for interest rate instruments using Black model with
+ * implied volatilities.
+ *
+ * @deprecated Use the present values calculators that reference
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
+ *             e.g.
+ *             {@link com.opengamma.analytics.financial.provider.calculator.blackswaption.PresentValueBlackSwaptionCalculator}
  */
 @Deprecated
 public final class PresentValueBlackCalculator extends PresentValueCalculator {
@@ -40,7 +42,7 @@ public final class PresentValueBlackCalculator extends PresentValueCalculator {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static PresentValueBlackCalculator getInstance() {

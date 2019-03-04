@@ -75,7 +75,9 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveNodePnLFunction.class);

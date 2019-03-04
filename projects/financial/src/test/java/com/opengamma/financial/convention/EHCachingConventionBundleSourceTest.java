@@ -23,7 +23,10 @@ import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = {TestGroup.UNIT, "ehcache"}, singleThreaded = true)
 public class EHCachingConventionBundleSourceTest {
 

@@ -28,14 +28,15 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDACDXAsSingleNameParallelCS01Function extends ISDACDXAsSingleNameCS01Function {
 
   public ISDACDXAsSingleNameParallelCS01Function() {
     super(ValueRequirementNames.CS01);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
                                                 final ISDACompliantYieldCurve yieldCurve,

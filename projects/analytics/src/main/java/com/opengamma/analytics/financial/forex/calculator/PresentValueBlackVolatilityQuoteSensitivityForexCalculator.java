@@ -8,12 +8,11 @@ package com.opengamma.analytics.financial.forex.calculator;
 import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVolatilityQuoteSensitivityDataBundle;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorSameMethodAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaTermStructureDataBundle;
 
 // CSOFF
 /**
- * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
+ * @deprecated Curve builders that use and populate {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle}s are deprecated.
  */
 @Deprecated
 public final class PresentValueBlackVolatilityQuoteSensitivityForexCalculator extends

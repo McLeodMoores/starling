@@ -86,9 +86,8 @@ public class DbBatchMasterTest extends AbstractDbBatchTest {
       public Collection<com.opengamma.engine.ComputationTargetSpecification> getComputationTargets(final String configurationName) {
         if (configurationName.equals(calculationConfigName)) {
           return Arrays.asList(new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("Primitive", "Value")), _compTargetSpec);
-        } else {
-          return emptyList();
         }
+        return emptyList();
       }
 
       @Override

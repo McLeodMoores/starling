@@ -27,7 +27,7 @@ public class PortfolioComparator extends PositionSetComparator {
   }
 
   public static Collection<Position> getFlattenedPositions(final Portfolio portfolio) {
-    final Collection<Position> positions = new LinkedList<Position>();
+    final Collection<Position> positions = new LinkedList<>();
     PortfolioNodeTraverser.depthFirst(new AbstractPortfolioNodeTraversalCallback() {
       @Override
       public void preOrderOperation(final PortfolioNode parentNode, final Position position) {
@@ -38,8 +38,8 @@ public class PortfolioComparator extends PositionSetComparator {
   }
 
   public PortfolioComparison compare(final Portfolio first, final Portfolio second) {
-    UniqueId firstId = first.getUniqueId();
-    UniqueId secondId = second.getUniqueId();
+    final UniqueId firstId = first.getUniqueId();
+    final UniqueId secondId = second.getUniqueId();
     String firstName;
     String secondName;
 

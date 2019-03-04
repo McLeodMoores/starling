@@ -5,9 +5,6 @@
  */
 package com.opengamma.bbg.loader;
 
-import com.opengamma.bbg.livedata.normalization.BloombergRateRuleProvider;
-import com.opengamma.master.security.ManageableSecurity;
-
 /**
  * Maps to {@link ManageableSecurity}.getSecurityType()
  * <p>

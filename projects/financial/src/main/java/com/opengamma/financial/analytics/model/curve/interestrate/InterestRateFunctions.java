@@ -231,7 +231,9 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Adds default functions for yield curves calculated using the present value or par rate method.
      * @param functions A list of function configurations
+     * @deprecated Deprecated
      */
+    @Deprecated
     protected void addYieldCurveDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[5 + getApplicableCurrencies().size()];
       int i = 0;
@@ -256,6 +258,7 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
     }
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(FXImpliedYieldCurveFunction.class));

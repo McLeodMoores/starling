@@ -49,7 +49,7 @@ public final class ClasspathScanner {
     _timestamp = timestamp(_urls);
   }
 
-  private Set<URL> getClassPathElements() {
+  private static Set<URL> getClassPathElements() {
     if (s_classPathElements == null) {
       s_classPathElements = findClassPathElements();
     }

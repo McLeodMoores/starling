@@ -25,7 +25,6 @@ import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.core.security.AbstractSecuritySource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
@@ -38,10 +37,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Provides remote access to the {@link BloombergSecuritySource}.
  */
-/**
- * Provides remote access to the security master.
- */
-public class RemoteBloombergSecuritySource extends AbstractSecuritySource implements SecuritySource {
+public class RemoteBloombergSecuritySource extends AbstractSecuritySource {
   // TODO: Needs better javadoc to explain why class is needed
 
   /** Logger. */

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -59,8 +59,8 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
       return true;
     }
     if (ageLimit != null) {
-      LocalDate now = LocalDate.now(executionContext.getValuationClock());
-      Period difference = ageLimit.minus(Period.between(latestDataPoint.getFirst(), now));
+      final LocalDate now = LocalDate.now(executionContext.getValuationClock());
+      final Period difference = ageLimit.minus(Period.between(latestDataPoint.getFirst(), now));
       if (difference.isNegative()) {
         return true;
       }
@@ -90,17 +90,17 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
     final Builder constraints = desiredValue.getConstraints().copy();
     if (adjustValues == null || adjustValues.isEmpty()) {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
+      .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
     } else {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, adjustValues.iterator().next());
+      .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, adjustValues.iterator().next());
     }
     if (ageLimitValues == null || ageLimitValues.isEmpty()) {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, HistoricalTimeSeriesFunctionUtils.UNLIMITED_AGE_LIMIT_VALUE);
+      .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, HistoricalTimeSeriesFunctionUtils.UNLIMITED_AGE_LIMIT_VALUE);
     } else {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, ageLimitValues.iterator().next());
+      .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, ageLimitValues.iterator().next());
     }
     return ImmutableSet.of(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST, target.toSpecification(), constraints.get()));
   }
@@ -110,10 +110,9 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
     if (inputs.isEmpty()) {
       // Use full results - graph builder will compose correctly against the desired value
       return getResults(context, target);
-    } else {
-      // Use the substituted result
-      return inputs.keySet();
     }
+    // Use the substituted result
+    return inputs.keySet();
   }
 
 }

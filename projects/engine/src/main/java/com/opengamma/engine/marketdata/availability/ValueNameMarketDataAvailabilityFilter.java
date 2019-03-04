@@ -28,7 +28,7 @@ public class ValueNameMarketDataAvailabilityFilter extends AbstractMarketDataAva
 
   /**
    * Creates a provider.
-   * 
+   *
    * @param validMarketDataRequirementNames the valid market data requirement names, not null
    */
   public ValueNameMarketDataAvailabilityFilter(final Collection<String> validMarketDataRequirementNames) {
@@ -47,7 +47,7 @@ public class ValueNameMarketDataAvailabilityFilter extends AbstractMarketDataAva
 
   @Override
   protected void populateAvailabilityHintKey(final Collection<Serializable> key) {
-    key.add(new HashSet<String>(_validMarketDataRequirementNames));
+    key.add(new HashSet<>(_validMarketDataRequirementNames));
   }
 
 }

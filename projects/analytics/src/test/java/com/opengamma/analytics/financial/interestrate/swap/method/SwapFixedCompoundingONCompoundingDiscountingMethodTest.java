@@ -27,7 +27,9 @@ import com.opengamma.util.time.DateUtils;
 
 /**
  * Test.
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class SwapFixedCompoundingONCompoundingDiscountingMethodTest {
 

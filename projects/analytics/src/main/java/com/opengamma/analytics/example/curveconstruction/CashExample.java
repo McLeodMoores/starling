@@ -17,7 +17,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Example for cash.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CashExample {
 
   // CSOFF

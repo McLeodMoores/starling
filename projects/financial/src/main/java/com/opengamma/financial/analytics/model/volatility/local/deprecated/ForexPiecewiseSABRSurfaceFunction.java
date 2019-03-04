@@ -12,7 +12,6 @@ import static com.opengamma.financial.analytics.model.volatility.local.deprecate
 import static com.opengamma.financial.analytics.model.volatility.local.deprecated.LocalVolatilityPDEValuePropertyNames.PROPERTY_X_AXIS;
 import static com.opengamma.financial.analytics.model.volatility.local.deprecated.LocalVolatilityPDEValuePropertyNames.PROPERTY_Y_AXIS;
 import static com.opengamma.financial.analytics.model.volatility.local.deprecated.LocalVolatilityPDEValuePropertyNames.PROPERTY_Y_AXIS_TYPE;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -41,6 +40,8 @@ import com.opengamma.financial.analytics.volatility.surface.SurfaceAndCubeQuoteT
 import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  *
@@ -170,16 +171,16 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
       return period.getYears();
     }
     if (period.getMonths() != 0) {
-      return ((double) period.getMonths()) / 12;
+      return (double) period.getMonths() / 12;
     }
     if (period.getDays() != 0) {
-      return ((double) period.getDays()) / 365;
+      return (double) period.getDays() / 365;
     }
     throw new OpenGammaRuntimeException("Should never happen");
   }
 
   private Number[] getDeltaValues(final Pair<Number, FXVolQuoteType>[] quotes) {
-    final TreeSet<Number> values = new TreeSet<Number>();
+    final TreeSet<Number> values = new TreeSet<>();
     for (final Pair<Number, FXVolQuoteType> pair : quotes) {
       values.add(pair.getFirst());
     }

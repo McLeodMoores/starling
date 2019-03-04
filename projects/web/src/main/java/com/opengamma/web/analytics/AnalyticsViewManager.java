@@ -55,7 +55,7 @@ public class AnalyticsViewManager {
   could just add them to add them to SimpleAnalyticsView
   when view is requested (including IDs) create another impl that wraps those IDs and delegates to the one that
   holds the real IDs. but before delegating it compares the IDs
-  */
+   */
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticsViewManager.class);
 

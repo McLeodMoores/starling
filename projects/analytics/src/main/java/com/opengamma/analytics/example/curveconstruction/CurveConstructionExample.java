@@ -34,7 +34,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Example for curve construction.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CurveConstructionExample {
 // CSOFF
 
@@ -145,7 +147,7 @@ public class CurveConstructionExample {
     final double zeroCouponDiscountFactor = yieldCurve.getDiscountFactor(t);
     final double checkCalculation = notional * (zeroCouponDiscountFactor * (1 + r * t) - 1);
     out.format("Manually calculating value of loan gives %f%n", checkCalculation);
-    assert (presentValue - checkCalculation) < 0.0001;
+    assert presentValue - checkCalculation < 0.0001;
 
     final double parRateManual = (Math.exp(y * t) - 1) / t;
     out.format("Calculate par rate manually: %f%n", parRateManual);
@@ -153,7 +155,7 @@ public class CurveConstructionExample {
     final double parRate = parRateCalculator.visitCash(loan, bundle);
     out.format("Calculate par rate using ParRateCalculator: %f%n", parRate);
 
-    assert (parRate - parRateManual) < 0.0001;
+    assert parRate - parRateManual < 0.0001;
   }
 
   // @export "yield-points"

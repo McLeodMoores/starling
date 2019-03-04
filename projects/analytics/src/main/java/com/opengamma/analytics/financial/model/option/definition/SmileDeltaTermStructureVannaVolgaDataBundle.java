@@ -9,16 +9,17 @@ import org.apache.commons.lang.NotImplementedException;
 
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParameters;
-import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
-import com.opengamma.analytics.financial.provider.description.forex.BlackForexVannaVolgaProvider;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Class describing the data required to price instruments with the volatility delta and time dependent.
- * @deprecated Use {@link BlackForexVannaVolgaProvider}
+ * Class describing the data required to price instruments with the volatility
+ * delta and time dependent.
+ * 
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.description.forex.BlackForexVannaVolgaProvider}
  */
 @Deprecated
 public class SmileDeltaTermStructureVannaVolgaDataBundle extends ForexOptionDataBundle<SmileDeltaTermStructureParameters> {
@@ -50,7 +51,7 @@ public class SmileDeltaTermStructureVannaVolgaDataBundle extends ForexOptionData
   }
 
   /**
-   * Get the volatility at a given time/strike/forward taking the currency pair order in account. See {@link SmileDeltaTermStructureParametersStrikeInterpolation} for the interpolation/extrapolation.
+   * Get the volatility at a given time/strike/forward taking the currency pair order in account. See {@link com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation} for the interpolation/extrapolation.
    * @param ccy1 The first currency.
    * @param ccy2 The second currency.
    * @param time The time to expiration.

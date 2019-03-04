@@ -132,7 +132,7 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
     final JLabel viewDefinitionsLabel = new JLabel("View Definitions");
     viewSelectionPanel.add(viewDefinitionsLabel);
 
-    _comboBox = new JComboBox<ViewEntry>();
+    _comboBox = new JComboBox<>();
     _comboBox.setModel(getViewComboBoxModel());
     _comboBox.setRenderer(getViewListCellRenderer());
     viewSelectionPanel.add(_comboBox);

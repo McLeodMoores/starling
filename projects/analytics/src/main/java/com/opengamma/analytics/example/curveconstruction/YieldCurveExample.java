@@ -15,7 +15,9 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 
 /**
  * Example for yield curve
+ * @deprecated Deprecated
  */
+@Deprecated
 public class YieldCurveExample {
 
   // @export constantYieldCurveDemo

@@ -28,7 +28,9 @@ import com.opengamma.financial.analytics.model.forex.option.black.FXOptionBlackF
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class YieldCurveFunctionUtils {
 
   public static Set<ValueRequirement> getCurveRequirements(final MultiCurveCalculationConfig curveConfig, final ConfigDBCurveCalculationConfigSource configSource) {

@@ -11,7 +11,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionUtils;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.volatilityswap.VolatilitySwap;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -211,7 +210,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_annualizationFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _calendar.hashCode();
     result = prime * result + _currency.hashCode();
     result = prime * result + _nObservations;
@@ -221,9 +220,9 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
     result = prime * result + _effectiveDate.hashCode();
     result = prime * result + _maturityDate.hashCode();
     temp = Double.doubleToLongBits(_volNotional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_volStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

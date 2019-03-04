@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.InvalidPermissionStringException;
-import org.apache.shiro.authz.permission.WildcardPermission;
 
 import com.google.common.collect.ImmutableSet;
 

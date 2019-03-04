@@ -139,9 +139,8 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final ExternalId identifier = bundle.getExternalId(_security);
     if (identifier != null) {
       return identifier.toBundle();
-    } else {
-      return bundle;
     }
+    return bundle;
   }
 
   private ManageableTrade createTrade(final ManageableSecurity security) {
@@ -216,7 +215,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
       case 1:
         identifiers = createGovernmentBondSecurity().getExternalIdBundle();
         break;
-      // Note: MunicipalBondSecurity is not implemented
+        // Note: MunicipalBondSecurity is not implemented
       default:
         throw new IllegalStateException();
     }
@@ -339,15 +338,15 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final double strike = 1.25;
     final OptionType optionType = optionType();
     final BondFutureOptionSecurity security = new BondFutureOptionSecurity(tradingExchange,
-                                                                           settlementExchange,
-                                                                           expiry,
-                                                                           exerciseType,
-                                                                           underlyingIdentifier,
-                                                                           pointValue,
-                                                                           isMargined,
-                                                                           currency,
-                                                                           strike,
-                                                                           optionType);
+        settlementExchange,
+        expiry,
+        exerciseType,
+        underlyingIdentifier,
+        pointValue,
+        isMargined,
+        currency,
+        strike,
+        optionType);
     store(security);
     return security;
   }
@@ -383,7 +382,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final double parAmount = 50000;
     final double redemptionValue = 100d;
     final CorporateBondSecurity security = new CorporateBondSecurity(issuerName, issuerType, issuerDomicile, market, currency, yieldConvention, lastTradeDate, couponType, couponRate,
-          couponFrequency, dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
+        couponFrequency, dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
     store(security);
     return security;
   }
@@ -419,7 +418,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final double parAmount = 50000;
     final double redemptionValue = 100;
     final GovernmentBondSecurity security = new GovernmentBondSecurity(issuerName, issuerType, issuerDomicile, market, currency, yieldConvention, lastTradeDate, couponType, couponRate,
-          couponFrequency, dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
+        couponFrequency, dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
     store(security);
     return security;
   }
@@ -455,7 +454,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final double parAmount = 50000;
     final double redemptionValue = 100d;
     final MunicipalBondSecurity security = new MunicipalBondSecurity(issuerName, issuerType, issuerDomicile, market, currency, yieldConvention, lastTradeDate, couponType, couponRate,
-          couponFrequency, dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
+        couponFrequency, dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
     store(security);
     return security;
   }
@@ -629,7 +628,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final double strike = 0;
     final OptionType optionType = optionType();
     final CommodityFutureOptionSecurity security = new CommodityFutureOptionSecurity(tradingExchange, settlementExchange, expiry, exerciseType, underlyingIdentifier, pointValue, currency, strike,
-          optionType);
+        optionType);
     store(security);
     return security;
   }
@@ -655,7 +654,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     store(security);
     return security;
   }
-  */
+   */
 
   /*
   public void loadContinuousZeroDepositPortfolio() {
@@ -666,7 +665,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     }
     load(securities);
   }
-  */
+   */
 
   private LegacyFixedRecoveryCDSSecurity createLegacyFixedRecoveryCDSSecurity() {
     final boolean isBuy = bool();
@@ -963,7 +962,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final SamplingFrequency samplingFrequency = samplingFrequency();
     final double barrierLevel = 0;
     final EquityBarrierOptionSecurity security = new EquityBarrierOptionSecurity(optionType, strike, currency, underlyingId, exerciseType, expiry, pointValue, exchange, barrierType,
-          barrierDirection, monitoringType, samplingFrequency, barrierLevel);
+        barrierDirection, monitoringType, samplingFrequency, barrierLevel);
     store(security);
     return security;
   }
@@ -1063,7 +1062,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final ExternalId regionId = region();
     final Frequency observationFrequency = frequency();
     final EquityVarianceSwapSecurity security = new EquityVarianceSwapSecurity(spotUnderlyingId, currency, strike, notional, parameterizedAsVariance, annualizationFactor, firstObservationDate,
-          lastObservationDate, settlementDate, regionId, observationFrequency);
+        lastObservationDate, settlementDate, regionId, observationFrequency);
     store(security);
     return security;
   }
@@ -1197,7 +1196,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final ExternalId underlyingIdentifier = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "US0003M Index");
     final String category = "category";
     final EquityIndexDividendFutureSecurity security = new EquityIndexDividendFutureSecurity(expiry, tradingExchange, settlementExchange, currency, unitAmount, settlementDate, underlyingIdentifier,
-          category);
+        category);
     store(security);
     return security;
   }
@@ -1325,7 +1324,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     final double barrierLevel = 0;
     final boolean isLong = bool();
     final FXBarrierOptionSecurity security = new FXBarrierOptionSecurity(putCurrency, callCurrency, putAmount, callAmount, expiry, settlementDate, barrierType, barrierDirection, monitoringType,
-          samplingFrequency, barrierLevel, isLong);
+        samplingFrequency, barrierLevel, isLong);
     store(security);
     return security;
   }
@@ -1536,7 +1535,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     store(security);
     return security;
   }
-  */
+   */
 
   /*
   public void loadSimpleZeroDepositPortfolio() {
@@ -1546,7 +1545,7 @@ public class BloombergReferencePortfolioMaker implements Runnable {
     }
     load(securities);
   }
-  */
+   */
 
   private ForwardSwapSecurity createForwardSwapSecurity() {
     final ZonedDateTime tradeDate = ZonedDateTime.now().minusMonths(6);

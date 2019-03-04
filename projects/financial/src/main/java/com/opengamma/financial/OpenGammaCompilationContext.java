@@ -110,7 +110,9 @@ public final class OpenGammaCompilationContext {
   private static final String PERMISSIVE_FLAG_NAME = "permissive";
   /**
    * The name under which an instance of {@link PnLRequirementsGatherer} should be bound.
+   * @deprecated this functionality will be removed
    */
+  @Deprecated
   public static final String PNL_REQUIREMENTS_GATHERER_NAME = "pnlRequirementsGatherer";
 
   /**

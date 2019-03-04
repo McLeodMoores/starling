@@ -26,7 +26,6 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.analytics.AnalyticsNodeJsonWriter;
 import com.opengamma.web.analytics.DependencyGraphGridStructure;
 import com.opengamma.web.analytics.GridColumnsJsonWriter;
-import com.opengamma.web.analytics.PortfolioGridStructure;
 
 /**
  * Writes an instance of {@link PortfolioGridStructure} to JSON.

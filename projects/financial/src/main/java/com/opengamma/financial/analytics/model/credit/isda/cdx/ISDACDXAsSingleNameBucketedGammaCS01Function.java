@@ -42,7 +42,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDACDXAsSingleNameBucketedGammaCS01Function extends ISDACDXAsSingleNameCS01Function {
 
   public ISDACDXAsSingleNameBucketedGammaCS01Function() {

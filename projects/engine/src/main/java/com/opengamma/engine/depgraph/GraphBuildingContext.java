@@ -17,7 +17,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.MemoryUtils;
 import com.opengamma.engine.function.CompiledFunctionDefinition;
@@ -229,10 +228,9 @@ import com.opengamma.util.tuple.Pairs;
     if (resolver != null) {
       resolver.start(this);
       return resolver;
-    } else {
-      LOGGER.debug("Using direct resolution {}/{}", requirement, dependent);
-      return getOrCreateTaskResolving(requirement, dependent, functionExclusion);
     }
+    LOGGER.debug("Using direct resolution {}/{}", requirement, dependent);
+    return getOrCreateTaskResolving(requirement, dependent, functionExclusion);
   }
 
   public ResolveTask getOrCreateTaskResolving(final ValueRequirement valueRequirement, final ResolveTask parentTask,
@@ -258,13 +256,13 @@ import com.opengamma.util.tuple.Pairs;
         LOGGER.debug("Using existing task {}", task);
         newTask.release(this); // Discard local allocation
         return task;
-      } else {
-        getBuilder().incrementActiveResolveTasks();
-        // Don't call run; we want to fork this out to a new worker thread, never call inline
-        newTask.addRef(); // Reference held by the run queue
-        submit(newTask);
-        return newTask;
       }
+      getBuilder().incrementActiveResolveTasks();
+      // Don't call run; we want to fork this out to a new worker thread, never
+      // call inline
+      newTask.addRef(); // Reference held by the run queue
+      submit(newTask);
+      return newTask;
     } while (true);
   }
 
@@ -357,17 +355,15 @@ import com.opengamma.util.tuple.Pairs;
     public ValueProperties getValueProperties() {
       if (_length == 1) {
         return (ValueProperties) _properties;
-      } else {
-        return ((ValueProperties[]) _properties)[_index];
       }
+      return ((ValueProperties[]) _properties)[_index];
     }
 
     public ParameterizedFunction getFunction() {
       if (_length == 1) {
         return (ParameterizedFunction) _functions;
-      } else {
-        return ((ParameterizedFunction[]) _functions)[_index];
       }
+      return ((ParameterizedFunction[]) _functions)[_index];
     }
 
   }
@@ -547,16 +543,14 @@ import com.opengamma.util.tuple.Pairs;
       final ValueSpecification reducedSpecification = simplifyType(specification);
       if (specification == reducedSpecification) {
         return specifications;
-      } else {
-        return Collections.singleton(reducedSpecification);
       }
-    } else {
-      final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
-      for (final ValueSpecification specification : specifications) {
-        result.add(simplifyType(specification));
-      }
-      return result;
+      return Collections.singleton(reducedSpecification);
     }
+    final Collection<ValueSpecification> result = new ArrayList<>(specifications.size());
+    for (final ValueSpecification specification : specifications) {
+      result.add(simplifyType(specification));
+    }
+    return result;
   }
 
   /**

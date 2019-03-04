@@ -19,7 +19,9 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function calculating the total Black volatility sensitivity.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOneLookBarrierOptionBlackVegaFunction extends FXOneLookBarrierOptionBlackFunction {
 
   public FXOneLookBarrierOptionBlackVegaFunction() {

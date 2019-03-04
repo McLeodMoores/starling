@@ -8,7 +8,6 @@ package com.opengamma.livedata.entitlement;
 import java.util.Collection;
 import java.util.Map;
 
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.livedata.LiveDataSpecification;
 import com.opengamma.livedata.UserPrincipal;
 
@@ -27,23 +26,33 @@ public interface LiveDataEntitlementChecker {
 
   /**
    * Checks if a user is entitled to LiveData.
-   *  
-   * @param user  the user whose entitlements are being checked
-   * @param requestedSpecification  what market data the user wants to view   
-   * @return true if the user is entitled to the requested market data. false otherwise.
-   * @throws OpenGammaRuntimeException if timeout was reached without reply from server 
+   * 
+   * @param user
+   *          the user whose entitlements are being checked
+   * @param requestedSpecification
+   *          what market data the user wants to view
+   * @return true if the user is entitled to the requested market data. false
+   *         otherwise.
+   * @throws com.opengamma.OpenGammaRuntimeException
+   *           if timeout was reached without reply from server
    */
   boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification);
 
   /**
-   * Equivalent to calling {@link #isEntitled(UserPrincipal, LiveDataSpecification)}
-   * for each specification individually, but may be more efficient.
-   * 
-   * @param user  the user whose entitlements are being checked
-   * @param requestedSpecifications  what market data the user wants to view
-   * @return a Map telling, for each requested specification, whether the user is entitled to that market data.
-   * The returned response will be complete, i.e., it will contain <code>requestedSpecifications.size()</code> entries.
-   * @throws OpenGammaRuntimeException if timeout was reached without reply from server 
+   * Equivalent to calling
+   * {@link #isEntitled(UserPrincipal, LiveDataSpecification)} for each
+   * specification individually, but may be more efficient.
+   *
+   * @param user
+   *          the user whose entitlements are being checked
+   * @param requestedSpecifications
+   *          what market data the user wants to view
+   * @return a Map telling, for each requested specification, whether the user
+   *         is entitled to that market data. The returned response will be
+   *         complete, i.e., it will contain
+   *         <code>requestedSpecifications.size()</code> entries.
+   * @throws com.opengamma.OpenGammaRuntimeException
+   *           if timeout was reached without reply from server
    */
   Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications);
 

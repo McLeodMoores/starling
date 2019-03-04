@@ -14,14 +14,12 @@ import java.util.concurrent.TransferQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.ConnectionHandle;
 import com.jolbox.bonecp.ConnectionPartition;
 import com.jolbox.bonecp.StatementHandle;
 import com.jolbox.bonecp.hooks.AcquireFailConfig;
 import com.jolbox.bonecp.hooks.ConnectionHook;
 import com.jolbox.bonecp.hooks.ConnectionState;
-import com.opengamma.util.async.BlockingOperation;
 
 /**
  * Hacks a call to {@link BlockingOperation#wouldBlock} into {@link BoneCP} when it would wait for a connection to become available.

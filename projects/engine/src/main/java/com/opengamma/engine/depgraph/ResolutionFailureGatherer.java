@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -17,13 +17,13 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /**
  * Wraps another visitor to gather the return values of it.
- * 
+ *
  * @param <T> return type of the visit methods
  */
 public class ResolutionFailureGatherer<T> extends ResolutionFailureVisitor<T> {
 
   private final ResolutionFailureVisitor<T> _underlying;
-  private final List<T> _results = new LinkedList<T>();
+  private final List<T> _results = new LinkedList<>();
 
   public ResolutionFailureGatherer(final ResolutionFailureVisitor<T> underlying) {
     _underlying = underlying;

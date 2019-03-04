@@ -26,8 +26,10 @@ import com.opengamma.util.time.DateUtils;
 
 /**
  *
+ * @deprecated Deprecated
  */
 // CSOFF
+@Deprecated
 public class CreditDefaultSwap {
 
   private static final CreditDefaultSwap INSTANCE = new CreditDefaultSwap();

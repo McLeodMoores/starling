@@ -26,7 +26,10 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit test for InMemoryConventionBundleMaster.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class InMemoryConventionBundleMasterTest {
 

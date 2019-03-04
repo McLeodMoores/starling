@@ -27,7 +27,9 @@ import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureOptionBlackPV01Function extends BondFutureOptionBlackCurveSpecificFunction {
   private static final PV01Calculator CALCULATOR = new PV01Calculator(PresentValueCurveSensitivityBlackCalculator.getInstance());
 

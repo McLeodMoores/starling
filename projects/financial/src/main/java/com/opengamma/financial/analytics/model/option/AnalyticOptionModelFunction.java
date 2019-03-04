@@ -47,7 +47,7 @@ public abstract class AnalyticOptionModelFunction extends AbstractFunction.NonCo
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
     final StandardOptionDataBundle data = getDataBundle(executionContext.getValuationClock(), option, inputs);
     final OptionDefinition definition = getOptionDefinition(option);
-    final Set<Greek> requiredGreeks = new HashSet<Greek>();
+    final Set<Greek> requiredGreeks = new HashSet<>();
     for (final ValueRequirement dV : desiredValues) {
       final Greek desiredGreek = AvailableGreeks.getGreekForValueRequirement(dV);
       if (desiredGreek == null) {
@@ -56,7 +56,7 @@ public abstract class AnalyticOptionModelFunction extends AbstractFunction.NonCo
       requiredGreeks.add(desiredGreek);
     }
     final GreekResultCollection greeks = getModel().getGreeks(definition, data, requiredGreeks);
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     for (final ValueRequirement dV : desiredValues) {
       final Greek greek = AvailableGreeks.getGreekForValueRequirement(dV);
       assert greek != null : "Should have thrown IllegalArgumentException above.";
@@ -81,7 +81,7 @@ public abstract class AnalyticOptionModelFunction extends AbstractFunction.NonCo
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final EquityOptionSecurity security = (EquityOptionSecurity) target.getSecurity();
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     for (final String valueName : AvailableGreeks.getAllGreekNames()) {
       results.add(getResultSpecification(valueName, target, security, null));
     }

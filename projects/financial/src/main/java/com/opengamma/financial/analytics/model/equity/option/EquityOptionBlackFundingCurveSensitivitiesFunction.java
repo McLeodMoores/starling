@@ -45,7 +45,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Calculates the nodal sensitivities of an equity index or equity option to the funding curve (bucketed rho).
+ * @deprecated Deprecated
  */
+@Deprecated
 public class EquityOptionBlackFundingCurveSensitivitiesFunction extends EquityOptionBlackFunction {
 
   /**

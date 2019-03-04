@@ -80,21 +80,19 @@ public class BatchJobRunner {
         return RunCreationMode.REUSE_EXISTING;
       } else {
         throw new OpenGammaRuntimeException("Unrecognized runCreationMode. " +
-          "Should be one of AUTO, ALWAYS, NEVER. " +
-          "Was " + runCreationMode);
+            "Should be one of AUTO, ALWAYS, NEVER. " +
+            "Was " + runCreationMode);
       }
-    } else {
-      return null;
     }
+    return null;
   }
 
   private static LocalDate getObservationDate(final CommandLine line, final Properties configProperties, final String configPropertysFile) {
     final String observationDate = getProperty("observationDate", line, configProperties, configPropertysFile, false);
     if (observationDate != null) {
       return parseDate(observationDate);
-    } else {
-      return LocalDate.now();
     }
+    return LocalDate.now();
   }
 
 
@@ -102,18 +100,16 @@ public class BatchJobRunner {
     final String observationDate = getProperty("valuationTime", line, configProperties, configPropertysFile, false);
     if (observationDate != null) {
       return parseTime(observationDate);
-    } else {
-      return Instant.now();
     }
+    return Instant.now();
   }
 
   private static UniqueId getViewDefinitionUniqueId(final CommandLine line, final Properties configProperties) {
     final String view = getProperty("view", line, configProperties);
     if (view != null) {
       return UniqueId.parse(view);
-    } else {
-      throw new IllegalArgumentException("View definition unique Id is mandatory parameter");
     }
+    throw new IllegalArgumentException("View definition unique Id is mandatory parameter");
   }
 
   /**
@@ -267,8 +263,8 @@ public class BatchJobRunner {
     //    options.addOption("snapshotObservationDate", true, "Observation date of LiveData snapshot to use. yyyyMMdd. Default - same as observationDate");
 
     options.addOption("runCreationMode", true, "One of auto, create_new, create_new_overwrite, reuse_existing (case insensitive)." +
-      " Specifies whether to create a new run in the database." +
-      " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
+        " Specifies whether to create a new run in the database." +
+        " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
 
 
     //options.addOption("timeZone", true, "Time zone in which times on the command line are given. Default - system time zone.");

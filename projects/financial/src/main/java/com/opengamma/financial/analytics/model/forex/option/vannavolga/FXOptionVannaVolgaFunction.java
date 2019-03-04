@@ -62,7 +62,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCompiledInvoker {
   /** Property name for the delta to use */
   public static final String PROPERTY_OTM_DELTA = "DeltaOTM";
@@ -216,7 +218,7 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     YieldAndDiscountCurve[] curves;
     final YieldAndDiscountCurve putFundingCurve = getCurveForCurrency(inputs, putCurrency);
     final YieldAndDiscountCurve callFundingCurve = getCurveForCurrency(inputs, callCurrency);
-    final Map<String, Currency> curveCurrency = new HashMap<String, Currency>();
+    final Map<String, Currency> curveCurrency = new HashMap<>();
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
       ccy1 = putCurrency;
       ccy2 = callCurrency;

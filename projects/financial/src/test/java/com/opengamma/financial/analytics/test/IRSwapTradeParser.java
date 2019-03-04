@@ -158,23 +158,23 @@ public class IRSwapTradeParser {
     return trades;
   }
 
-  private void logErrors(final String type, final List<FudgeMsg> unsupportedProdTypes, final int totalRows) {
+  private static void logErrors(final String type, final List<FudgeMsg> unsupportedProdTypes, final int totalRows) {
     LOGGER.warn("Total {} rows: {} out of {}", type, unsupportedProdTypes.size(), totalRows);
     for (final FudgeMsg fudgeMsg : unsupportedProdTypes) {
       LOGGER.warn("{}", fudgeMsg);
     }
   }
 
-  private boolean isTeminatedTrade(final FudgeMsg row) {
+  private static boolean isTeminatedTrade(final FudgeMsg row) {
     final String status = row.getString(STATUS);
     return "TERMINATED".equalsIgnoreCase(status);
   }
 
-  private boolean isErsPVMissing(final FudgeMsg row) {
+  private static boolean isErsPVMissing(final FudgeMsg row) {
     return row.getString(ERS_PV) == null;
   }
 
-  private boolean isCompoundTrade(final FudgeMsg row) {
+  private static boolean isCompoundTrade(final FudgeMsg row) {
     final String clientId = row.getString(CLIENT_ID);
     if (clientId != null) {
       for (final String cmpKeyWord : COMPOUND_TRADES) {
@@ -186,7 +186,7 @@ public class IRSwapTradeParser {
     return false;
   }
 
-  private boolean isStubTrade(final FudgeMsg row) {
+  private static boolean isStubTrade(final FudgeMsg row) {
     final String clientId = row.getString(CLIENT_ID);
     if (clientId != null) {
       for (final String stubKeyWord : STUB_TRADES) {
@@ -198,7 +198,7 @@ public class IRSwapTradeParser {
     return false;
   }
 
-  private boolean isUnsupportedProductType(final FudgeMsg row) {
+  private static boolean isUnsupportedProductType(final FudgeMsg row) {
     final String productType = row.getString(PRODUCT_TYPE);
     if (productType == null) {
       return true;
@@ -257,7 +257,7 @@ public class IRSwapTradeParser {
     return swap;
   }
 
-  private String getSwapName(final FudgeMsg row, final SwapSecurity swap) {
+  private static String getSwapName(final FudgeMsg row, final SwapSecurity swap) {
     FixedInterestRateLeg fixedLeg = null;
     FloatingInterestRateLeg floatingLeg = null;
     if (swap.getPayLeg() instanceof FixedInterestRateLeg) {
@@ -279,7 +279,7 @@ public class IRSwapTradeParser {
         notional.getAmount());
   }
 
-  private SwapLeg parseReceiveLeg(final FudgeMsg row) {
+  private static SwapLeg parseReceiveLeg(final FudgeMsg row) {
     SwapLeg swapLeg = null;
     final String legType = row.getString(RECIEVE_LEG_TYPE);
     if (legType != null) {
@@ -319,7 +319,7 @@ public class IRSwapTradeParser {
     return swapLeg;
   }
 
-  private SwapLeg parsePayLeg(final FudgeMsg row) {
+  private static SwapLeg parsePayLeg(final FudgeMsg row) {
     SwapLeg swapLeg = null;
     final String legType = row.getString(PAY_LEG_TYPE);
     if (legType != null) {
@@ -358,7 +358,7 @@ public class IRSwapTradeParser {
     return swapLeg;
   }
 
-  private ExternalId parseFloatingRateId(final FudgeMsg row, final String columnName, final Frequency frequency) {
+  private static ExternalId parseFloatingRateId(final FudgeMsg row, final String columnName, final Frequency frequency) {
     ExternalId floatingRateId = null;
     if (frequency != null) {
       final String floatingIndexStr = row.getString(columnName);
@@ -374,7 +374,7 @@ public class IRSwapTradeParser {
     return floatingRateId;
   }
 
-  private Double parseFixedRate(final FudgeMsg row, final String columnName) {
+  private static Double parseFixedRate(final FudgeMsg row, final String columnName) {
     Double rate = null;
     final String rateStr = row.getString(columnName);
     try {
@@ -385,7 +385,7 @@ public class IRSwapTradeParser {
     return rate;
   }
 
-  private Boolean parseEOM(final FudgeMsg row, final String columnName) {
+  private static Boolean parseEOM(final FudgeMsg row, final String columnName) {
     Boolean isEom = null;
     final String rollConvStr = row.getString(columnName);
     if (rollConvStr != null) {
@@ -396,7 +396,7 @@ public class IRSwapTradeParser {
     return isEom;
   }
 
-  private Notional parseNotional(final FudgeMsg row, final String notionalColumn, final String ccyColumn) {
+  private static Notional parseNotional(final FudgeMsg row, final String notionalColumn, final String ccyColumn) {
     Notional notional = null;
     final String ccyStr = row.getString(ccyColumn);
     if (ccyStr != null) {
@@ -414,7 +414,7 @@ public class IRSwapTradeParser {
     return notional;
   }
 
-  private ExternalId parseRegionId(final FudgeMsg row, final String columnName) {
+  private static ExternalId parseRegionId(final FudgeMsg row, final String columnName) {
     ExternalId regionId = null;
     final String regionIdStr = row.getString(columnName);
     if (regionIdStr != null) {
@@ -426,7 +426,7 @@ public class IRSwapTradeParser {
     return regionId;
   }
 
-  private Frequency parseFrequency(final FudgeMsg row, final String columnName) {
+  private static Frequency parseFrequency(final FudgeMsg row, final String columnName) {
     Frequency frequency = null;
     final String frequencyStr = row.getString(columnName);
     if (frequencyStr != null) {
@@ -441,7 +441,7 @@ public class IRSwapTradeParser {
     return frequency;
   }
 
-  private DayCount parseDayCount(final FudgeMsg row, final String columnName) {
+  private static DayCount parseDayCount(final FudgeMsg row, final String columnName) {
     DayCount dayCount = null;
     final String dayCountStr = row.getString(columnName);
     if (dayCountStr != null) {
@@ -458,7 +458,7 @@ public class IRSwapTradeParser {
     return dayCount;
   }
 
-  private BusinessDayConvention parseBusinessDayConvention(final FudgeMsg row, final String columnName) {
+  private static BusinessDayConvention parseBusinessDayConvention(final FudgeMsg row, final String columnName) {
     BusinessDayConvention convention = null;
     final String conventionStr = row.getString(columnName);
     if (conventionStr != null) {
@@ -475,7 +475,7 @@ public class IRSwapTradeParser {
     return convention;
   }
 
-  private LocalDate parseDate(final FudgeMsg row, final String columnName) {
+  private static LocalDate parseDate(final FudgeMsg row, final String columnName) {
     LocalDate result = null;
     final String dateStr = row.getString(columnName);
     if (dateStr != null) {

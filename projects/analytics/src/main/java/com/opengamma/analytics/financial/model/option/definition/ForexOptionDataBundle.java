@@ -12,14 +12,15 @@ import org.apache.commons.lang.ObjectUtils;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.volatility.VolatilityModel;
-import com.opengamma.analytics.financial.provider.description.forex.BlackForexFlatProviderInterface;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * @param <T> The type of the volatility model
- * @deprecated Use {@link BlackForexFlatProviderInterface}
+ * @param <T>
+ *          The type of the volatility model
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.provider.description.forex.BlackForexFlatProviderInterface}
  */
 @Deprecated
 public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extends YieldCurveBundle {
@@ -77,10 +78,10 @@ public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extend
    * @return True if the currencies match the pair (in any order) and False otherwise.
    */
   public boolean checkCurrencies(final Currency ccy1, final Currency ccy2) {
-    if ((ccy1.equals(_currencyPair.getFirst())) && ccy2.equals(_currencyPair.getSecond())) {
+    if (ccy1.equals(_currencyPair.getFirst()) && ccy2.equals(_currencyPair.getSecond())) {
       return true;
     }
-    if ((ccy2.equals(_currencyPair.getFirst())) && ccy1.equals(_currencyPair.getSecond())) {
+    if (ccy2.equals(_currencyPair.getFirst()) && ccy1.equals(_currencyPair.getSecond())) {
       return true;
     }
     return false;

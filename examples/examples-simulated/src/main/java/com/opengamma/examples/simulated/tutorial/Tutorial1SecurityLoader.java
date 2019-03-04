@@ -34,7 +34,7 @@ public class Tutorial1SecurityLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -50,7 +50,7 @@ public class Tutorial1SecurityLoader extends AbstractTool<ToolContext> {
    * @return the example security instances, not null and not containing null
    */
   protected List<Tutorial1Security> loadSecurities() {
-    final List<Tutorial1Security> securities = new ArrayList<Tutorial1Security>();
+    final List<Tutorial1Security> securities = new ArrayList<>();
     securities.add(new Tutorial1Security("Example 1", ExternalId.of("Tutorial", "1").toBundle(), Currency.USD, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "HD")));
     securities.add(new Tutorial1Security("Example 2", ExternalId.of("Tutorial", "2").toBundle(), Currency.USD, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "ARG")));
     securities.add(new Tutorial1Security("Example 3", ExternalId.of("Tutorial", "3").toBundle(), Currency.USD, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "IPG")));

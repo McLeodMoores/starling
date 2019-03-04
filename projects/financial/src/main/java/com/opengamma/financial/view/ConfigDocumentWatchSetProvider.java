@@ -26,7 +26,7 @@ import com.opengamma.util.ClassUtils;
  * A {@link WatchSetProvider} that translate a configuration type identifier to object identifiers for the type instances.
  * <p>
  * This can be used for re-initialization of functions that look up configuration items by name.
- * 
+ *
  * @deprecated Use a sub-class of {@link AbstractConfigChangeProvider} to notify the {@link ViewProcessorManager} of changes instead
  */
 @Deprecated
@@ -57,21 +57,21 @@ public class ConfigDocumentWatchSetProvider implements WatchSetProvider {
   @Override
   @SuppressWarnings({"unchecked", "rawtypes" })
   public Set<ObjectId> getAdditionalWatchSet(final Set<ObjectId> watchSet) {
-    Set<ObjectId> toWatch = new HashSet<ObjectId>();
-    for (ObjectId watch : watchSet) {
+    final Set<ObjectId> toWatch = new HashSet<>();
+    for (final ObjectId watch : watchSet) {
       if (CONFIG_TYPE_SCHEME.equals(watch.getScheme())) {
         LOGGER.info("Creating watch on {}", watch);
         final Class clazz;
         try {
           clazz = ClassUtils.loadClass(watch.getValue());
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
           LOGGER.error("Can't create watch for {}", watch);
           LOGGER.warn("Caught exception", e);
           continue;
         }
         final Collection items = getConfigSource().getAll(clazz, VersionCorrection.LATEST);
-        if ((items != null) && !items.isEmpty()) {
-          for (Object item0 : items) {
+        if (items != null && !items.isEmpty()) {
+          for (final Object item0 : items) {
             final ConfigItem item = (ConfigItem) item0;
             final ObjectId oid = item.getObjectId();
             LOGGER.debug("Watching {} for {}", oid, watch);

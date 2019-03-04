@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.web.analytics.ValueRequirementTargetForCell;
 import com.opengamma.web.json.ValueRequirementJSONBuilder;
 

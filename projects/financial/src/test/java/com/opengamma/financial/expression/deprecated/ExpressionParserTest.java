@@ -17,7 +17,10 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Test.
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class ExpressionParserTest {
 
@@ -32,12 +35,12 @@ public class ExpressionParserTest {
 
   @Test(expectedExceptions = {IllegalArgumentException.class })
   public void testEmptyString() {
-    final UserExpression expr = new ExpressionParser().parse("");
+    new ExpressionParser().parse("");
   }
 
   @Test(expectedExceptions = {IllegalArgumentException.class })
   public void testIllegalString() {
-    final UserExpression expr = new ExpressionParser().parse("Foo less \"Bar\"");
+    new ExpressionParser().parse("Foo less \"Bar\"");
   }
 
   @Test

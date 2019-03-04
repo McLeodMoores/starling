@@ -102,17 +102,18 @@ public class PropertyPreservingFunctionTest {
     assertEqualOrdered(expected, func, doubled);
   }
 
-  private void assertEqualOrdered(final ValueProperties expected, final MockPropertyPreservingFunction func, final Collection<ValueSpecification> specses) {
+  private static void assertEqualOrdered(final ValueProperties expected, final MockPropertyPreservingFunction func,
+      final Collection<ValueSpecification> specses) {
     final ValueProperties resultProperties = func.getResultProperties(specses);
     final ValueProperties filteredResult = resultProperties.copy().withoutAny(ValuePropertyNames.FUNCTION).get();
     assertEquals(expected, filteredResult);
   }
 
-  private List<ValueSpecification> getSpecs(final ValueProperties... props) {
+  private static List<ValueSpecification> getSpecs(final ValueProperties... props) {
     return getSpecs(Lists.newArrayList(props));
   }
 
-  private List<ValueSpecification> getSpecs(final Collection<ValueProperties> props) {
+  private static List<ValueSpecification> getSpecs(final Collection<ValueProperties> props) {
     final List<ValueSpecification> ret = new ArrayList<>();
     for (final ValueProperties valueProp : props) {
       ret.add(getSpec(valueProp));
@@ -120,12 +121,16 @@ public class PropertyPreservingFunctionTest {
     return ret;
   }
 
-  private ValueSpecification getSpec(final ValueProperties props) {
+  private static ValueSpecification getSpec(final ValueProperties props) {
     final Builder realProps = props.copy().with(ValuePropertyNames.FUNCTION, "SomeFunc");
     final ValueSpecification spec = new ValueSpecification("X", ComputationTargetSpecification.of(Currency.USD), realProps.get());
     return spec;
   }
 
+  /**
+   * @deprecated Deprecated
+   */
+  @Deprecated
   private class MockPropertyPreservingFunction extends PropertyPreservingFunction {
 
     private final Collection<String> _preservedProperties;

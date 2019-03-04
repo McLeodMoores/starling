@@ -20,9 +20,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * An implementation of ConventionBundle for use by the InMemoryConventionBundleMaster.  Note it is NOT immutable, because the master needs to be able to assign
- * UniqueIds to it retrospectively, and to be able to update the bundle.
+ * An implementation of ConventionBundle for use by the
+ * InMemoryConventionBundleMaster. Note it is NOT immutable, because the master
+ * needs to be able to assign UniqueIds to it retrospectively, and to be able to
+ * update the bundle.
+ * 
+ * @deprecated Use individual implementations of
+ *             {@link com.opengamma.core.convention.Convention}.
  */
+@Deprecated
 public class ConventionBundleImpl implements ConventionBundle {
 
   private UniqueId _uniqueId;

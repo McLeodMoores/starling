@@ -74,7 +74,7 @@ public class JodaBeanRowParser extends RowParser {
    * Security properties to ignore when scanning
    */
   private static final String[] IGNORE_METAPROPERTIES = {
-    "securityType", "uniqueid", "objectid", "securitylink", "trades", "gicscode", "parentpositionid", "providerid", "deal", "requiredPermissions" };
+      "securityType", "uniqueid", "objectid", "securitylink", "trades", "gicscode", "parentpositionid", "providerid", "deal", "requiredPermissions" };
 
   /**
    * Column prefixes
@@ -218,9 +218,8 @@ public class JodaBeanRowParser extends RowParser {
         }
       }
       return securities.toArray(new ManageableSecurity[securities.size()]);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -260,9 +259,8 @@ public class JodaBeanRowParser extends RowParser {
         throw new IllegalStateException("The trade was not constructed despite of trade data present in a row.");
       }
       return result;
-    } else {
-      return null;
     }
+    return null;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

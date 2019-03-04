@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.NotImplementedException;
 
-import com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
@@ -104,10 +103,16 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
   }
 
   /**
-   * Since this interpolation method introduces new breakpoints in certain cases, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined
-   * Instead the node sensitivity is computed in {@link MonotoneConvexSplineInterpolator1D} via {@link Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}
-   * @param xValues The xValues
-   * @param yValues The yValues
+   * Since this interpolation method introduces new breakpoints in certain
+   * cases, {@link PiecewisePolynomialResultsWithSensitivity} is not
+   * well-defined Instead the node sensitivity is computed in
+   * {@link MonotoneConvexSplineInterpolator1D} via
+   * {@link com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}
+   * 
+   * @param xValues
+   *          The xValues
+   * @param yValues
+   *          The yValues
    * @return NotImplementedException
    */
   @Override
@@ -161,7 +166,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
     res[nInts] = endpointFirst(intervals[nInts - 1], intervals[nInts - 2], slopes[nInts - 1], slopes[nInts - 2]);
 
     for (int i = 1; i < nInts; ++i) {
-      if (Math.signum(slopes[i]) != Math.signum(slopes[i - 1]) | (slopes[i] == 0 | slopes[i - 1] == 0)) {
+      if (Math.signum(slopes[i]) != Math.signum(slopes[i - 1]) | slopes[i] == 0 | slopes[i - 1] == 0) {
         res[i] = 0.;
       } else {
         final double den1 = 2. * intervals[i] + intervals[i - 1];
@@ -430,7 +435,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
     final double[] res = new double[nData];
 
     for (int i = 1; i < nData - 1; ++i) {
-      res[i] = (rValues[2 * i + 1] > 0 && rValues[2 * i] > 0) ? beta[i] * Math.min(beta[i] * rValues[2 * i + 1] / intervals[i], beta[i] * rValues[2 * i] / intervals[i - 1]) : 0.;
+      res[i] = rValues[2 * i + 1] > 0 && rValues[2 * i] > 0 ? beta[i] * Math.min(beta[i] * rValues[2 * i + 1] / intervals[i], beta[i] * rValues[2 * i] / intervals[i - 1]) : 0.;
     }
     res[0] = rValues[1] > 0 ? beta[0] * rValues[1] / intervals[0] : 0.;
     res[nData - 1] = rValues[2 * (nData - 1)] > 0 ? beta[nData - 1] * rValues[2 * (nData - 1)] / intervals[nData - 2] : 0.;

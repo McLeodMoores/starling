@@ -22,13 +22,13 @@ public class TreePortfolioNodeGenerator implements PortfolioNodeGenerator {
 
   /**
    * Creates a new portfolio node generator.
-   * 
+   *
    * @param nameGenerator the source of portfolio node names
    */
   public TreePortfolioNodeGenerator(final NameGenerator nameGenerator) {
     ArgumentChecker.notNull(nameGenerator, "nameGenerator");
     _nameGenerator = nameGenerator;
-    _childNodes = new ArrayList<PortfolioNodeGenerator>();
+    _childNodes = new ArrayList<>();
   }
 
   public void addChildNode(final PortfolioNodeGenerator childNode) {
@@ -43,7 +43,7 @@ public class TreePortfolioNodeGenerator implements PortfolioNodeGenerator {
   @Override
   public PortfolioNode createPortfolioNode() {
     final SimplePortfolioNode node = new SimplePortfolioNode(getNameGenerator().createName());
-    for (PortfolioNodeGenerator childNodeGenerator : _childNodes) {
+    for (final PortfolioNodeGenerator childNodeGenerator : _childNodes) {
       final PortfolioNode childNode = childNodeGenerator.createPortfolioNode();
       if (childNode != null) {
         node.addChildNode(childNode);

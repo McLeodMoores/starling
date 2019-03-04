@@ -40,9 +40,8 @@ public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
   public int getIndexOfChild(final Object child) {
     if (child.equals(_unsatisfiedFailures)) {
       return 4;
-    } else {
-      return super.getIndexOfChild(child);
     }
+    return super.getIndexOfChild(child);
   }
 
   @Override

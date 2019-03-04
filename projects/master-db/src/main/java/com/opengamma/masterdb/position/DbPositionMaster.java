@@ -373,9 +373,8 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
 
     if (uniqueId.isVersioned()) {
       return getTradeById(uniqueId);
-    } else {
-      return getTradeByInstants(uniqueId, null, null);
     }
+    return getTradeByInstants(uniqueId, null, null);
   }
 
   /**

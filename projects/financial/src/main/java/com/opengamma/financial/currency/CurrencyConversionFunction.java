@@ -43,7 +43,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
    * The property this function will put on an output indicating the currency of the original value.
    */
   public static final String ORIGINAL_CURRENCY = "Original" + ValuePropertyNames.CURRENCY;
-  
+
   private static final String CONVERSION_METHOD_VALUE = "Single";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConversionFunction.class);
@@ -60,7 +60,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
 
   public CurrencyConversionFunction(final String... valueNames) {
     ArgumentChecker.notEmpty(valueNames, "valueNames");
-    _valueNames = new HashSet<String>(Arrays.asList(valueNames));
+    _valueNames = new HashSet<>(Arrays.asList(valueNames));
   }
 
   protected Set<String> getValueNames() {
@@ -76,7 +76,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   }
 
   private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
-    Builder properties = desiredValue.getConstraints().copy()
+    final Builder properties = desiredValue.getConstraints().copy()
         .withoutAny(DEFAULT_CURRENCY_INJECTION)
         .withoutAny(ValuePropertyNames.CONVERSION_METHOD)
         .withAny(ValuePropertyNames.CURRENCY).withoutAny(ORIGINAL_CURRENCY);
@@ -91,7 +91,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   /**
    * Divides the value by the conversion rate. Override this in a subclass for anything more elaborate - e.g. if the value is in "somethings per currency unit foo" so needs multiplying by the rate
    * instead.
-   * 
+   *
    * @param value input value to convert
    * @param conversionRate conversion rate to use
    * @return the converted value
@@ -114,7 +114,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
 
   /**
    * Delegates off to the other convert methods depending on the type of value.
-   * 
+   *
    * @param inputValue input value to convert
    * @param desiredValue requested value requirement
    * @param conversionRate conversion rate to use
@@ -156,15 +156,14 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
     if (outputCurrency.equals(inputCurrency)) {
       // Don't think this should happen
       return Collections.singleton(inputValue);
-    } else {
-      LOGGER.debug("Converting from {} to {}", inputCurrency, outputCurrency);
-      final Object converted = convertValue(inputValue, desiredValue, exchangeRate);
-      if (converted != null) {
-        return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
-      } else {
-        return null;
-      }
     }
+    LOGGER.debug("Converting from {} to {}", inputCurrency, outputCurrency);
+    final Object converted = convertValue(inputValue, desiredValue, exchangeRate);
+    if (converted != null) {
+      return Collections.singleton(
+          new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
+    }
+    return null;
   }
 
   @Override
@@ -183,10 +182,9 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
         }
         LOGGER.debug("Injecting view default currency {}", defaultCurrencyISO);
         return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue, defaultCurrencyISO));
-      } else {
-        LOGGER.debug("Cannot satisfy a wildcard currency constraint");
-        return null;
       }
+      LOGGER.debug("Cannot satisfy a wildcard currency constraint");
+      return null;
     } else {
       // Actual input requirement is desired requirement with the currency wild-carded
       return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue));
@@ -200,7 +198,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
     if (getValueNames().size() == 1) {
       return Collections.singleton(new ValueSpecification(getValueNames().iterator().next(), targetSpec, ValueProperties.all()));
     }
-    final Set<ValueSpecification> result = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> result = new HashSet<>();
     for (final String valueName : getValueNames()) {
       result.add(new ValueSpecification(valueName, targetSpec, ValueProperties.all()));
     }

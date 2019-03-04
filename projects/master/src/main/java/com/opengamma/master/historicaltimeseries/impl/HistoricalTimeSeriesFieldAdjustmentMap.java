@@ -5,6 +5,7 @@
  */
 package com.opengamma.master.historicaltimeseries.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class HistoricalTimeSeriesFieldAdjustmentMap {
    */
   public void addFieldAdjustment(final String requestedField, final String underlyingProvider, final String underlyingField,
       final HistoricalTimeSeriesAdjuster adjuster) {
-    _fieldAdjustments.put(requestedField, new HistoricalTimeSeriesFieldAdjustment(underlyingProvider, underlyingField, adjuster));
+    _fieldAdjustments.put(requestedField, new HistoricalTimeSeriesFieldAdjustment(underlyingProvider, Collections.singletonList(underlyingField), adjuster));
   }
 
 }

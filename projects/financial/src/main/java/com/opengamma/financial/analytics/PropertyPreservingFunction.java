@@ -81,7 +81,7 @@ public abstract class PropertyPreservingFunction extends AbstractFunction.NonCom
     super.setUniqueId(identifier);
     final Collection<String> optionalProperties = getOptionalPreservedProperties();
     final Collection<String> requiredProperties = getPreservedProperties();
-    final Collection<String> preservationCandidates = new ArrayList<String>(optionalProperties.size() + requiredProperties.size());
+    final Collection<String> preservationCandidates = new ArrayList<>(optionalProperties.size() + requiredProperties.size());
     preservationCandidates.addAll(optionalProperties);
     preservationCandidates.addAll(requiredProperties);
     _resultProperties = createResultProperties(preservationCandidates);
@@ -163,7 +163,7 @@ public abstract class PropertyPreservingFunction extends AbstractFunction.NonCom
       //NOTE: none has null properties
       return none;
     }
-    //NOTE: infinite properties behave as empty
+    // NOTE: infinite properties behave as empty
 
     final ValueProperties compose = a.compose(b);
     final Set<String> mismatchedProperties = Sets.symmetricDifference(a.getProperties(), b.getProperties());
@@ -182,7 +182,7 @@ public abstract class PropertyPreservingFunction extends AbstractFunction.NonCom
   }
 
   protected ValueProperties getResultPropertiesFromInputs(final Collection<ComputedValue> inputs) {
-    final Collection<ValueSpecification> specs = new ArrayList<ValueSpecification>(inputs.size());
+    final Collection<ValueSpecification> specs = new ArrayList<>(inputs.size());
     for (final ComputedValue input : inputs) {
       specs.add(input.getSpecification());
     }

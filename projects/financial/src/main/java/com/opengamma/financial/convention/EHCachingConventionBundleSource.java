@@ -7,10 +7,6 @@ package com.opengamma.financial.convention;
 
 import java.util.concurrent.ConcurrentMap;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import com.google.common.collect.MapMaker;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -18,9 +14,17 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 /**
  * A cached form of {@link ConventionBundleSource}.
+ *
+ * @deprecated {@link ConventionBundleSource} is deprecated. Use
+ *             {@link com.opengamma.core.convention.ConventionSource} instead.
  */
+@Deprecated
 public class EHCachingConventionBundleSource implements ConventionBundleSource {
 
   private static final String CONVENTION_CACHE_NAME = "conventionBundle";

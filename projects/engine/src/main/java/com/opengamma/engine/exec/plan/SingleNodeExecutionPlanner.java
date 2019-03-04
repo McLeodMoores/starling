@@ -93,9 +93,8 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
       LOGGER.debug("{} private values, {} shared values in graph", _privateValues.size(), _sharedValues.size());
       if (_privateValues.size() < _sharedValues.size()) {
         return CacheSelectHint.privateValues(_privateValues);
-      } else {
-        return CacheSelectHint.sharedValues(_sharedValues);
       }
+      return CacheSelectHint.sharedValues(_sharedValues);
     }
 
   }

@@ -49,7 +49,7 @@ public class EquityBetaAggregationFunction implements AggregationFunction<String
 
   private final boolean _caching = true;
 
-  private final Map<UniqueId, Double> _equityBetaCache = new HashMap<UniqueId, Double>();
+  private final Map<UniqueId, Double> _equityBetaCache = new HashMap<>();
 
   private static final List<String> REQUIRED = Arrays.asList(MORE_THAN_1_25, FROM_0_9_TO_1_25, FROM_0_75_TO_0_9, FROM_0_5_TO_0_75, LESS_THAN_0_5, NO_BETA);
 

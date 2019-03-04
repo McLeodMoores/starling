@@ -26,7 +26,9 @@ import com.opengamma.financial.security.FinancialSecurity;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class StandardVanillaIR01CDSFunction extends StandardVanillaCDSFunction {
 
   public StandardVanillaIR01CDSFunction(final String... valueRequirements) {

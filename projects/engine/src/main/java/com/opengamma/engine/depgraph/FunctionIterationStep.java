@@ -168,18 +168,16 @@ import com.opengamma.util.tuple.Triple;
     final Collection<FunctionExclusionGroup> parentExclusion = getTask().getFunctionExclusion();
     if (parentExclusion != null) {
       return groups.withExclusion(parentExclusion, functionExclusion);
-    } else {
-      return Collections.singleton(functionExclusion);
     }
+    return Collections.singleton(functionExclusion);
   }
 
   @Override
   protected boolean run(final GraphBuildingContext context) {
     if (setTaskState(getIterationBase())) {
       return getIterationBase().run(context);
-    } else {
-      return true;
     }
+    return true;
   }
 
 }

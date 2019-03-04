@@ -19,7 +19,6 @@ import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.forward.CommodityForwardSecurity;
 import com.opengamma.masterdb.security.hibernate.ContractCategoryBean;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExpiryBean;
@@ -30,7 +29,8 @@ import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 import com.opengamma.masterdb.security.hibernate.future.FutureBundleBean;
 
 /**
- * A Hibernate bean representation of {@link CommodityForwardSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.forward.CommodityForwardSecurity}.
  */
 @BeanDefinition
 public abstract class CommodityForwardSecurityBean extends SecurityBean {

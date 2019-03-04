@@ -15,7 +15,6 @@ import java.util.Map;
 
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.DummyChangeManager;
-import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.target.Primitive;
 import com.opengamma.engine.target.Primitive.ExternalBundleIdentifiablePrimitive;
 import com.opengamma.engine.target.Primitive.ExternalIdentifiablePrimitive;
@@ -143,13 +142,12 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
         if (schemes.length == values.length) {
           if (schemes.length == 1) {
             return ExternalIdBundle.of(schemes[0], values[0]);
-          } else {
-            final ExternalId[] identifiers = new ExternalId[schemes.length];
-            for (int i = 0; i < schemes.length; i++) {
-              identifiers[i] = ExternalId.of(schemes[i], values[i]);
-            }
-            return ExternalIdBundle.of(identifiers);
           }
+          final ExternalId[] identifiers = new ExternalId[schemes.length];
+          for (int i = 0; i < schemes.length; i++) {
+            identifiers[i] = ExternalId.of(schemes[i], values[i]);
+          }
+          return ExternalIdBundle.of(identifiers);
         }
       }
     }
@@ -163,12 +161,10 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
       final ExternalIdBundle externalIdBundle = resolveExternalIds(uniqueId, SCHEME_PREFIX);
       if (externalIdBundle.size() == 1) {
         return new ExternalIdentifiablePrimitive(uniqueId, functional(externalIdBundle.getExternalIds()).first());
-      } else {
-        return new ExternalBundleIdentifiablePrimitive(uniqueId, externalIdBundle);
       }
-    } else {
-      return new Primitive(uniqueId);
+      return new ExternalBundleIdentifiablePrimitive(uniqueId, externalIdBundle);
     }
+    return new Primitive(uniqueId);
 
   }
 

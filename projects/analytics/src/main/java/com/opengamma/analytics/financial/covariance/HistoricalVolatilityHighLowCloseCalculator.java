@@ -11,7 +11,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.RelativeTimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculator;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
@@ -20,18 +19,16 @@ import com.opengamma.util.CalculationMode;
 
 /**
  * The historical high-low-close volatility of a price time series can be
- * calculated using:
- * $$
- * \begin{eqnarray*}
- * \sigma = \frac{1}{n}\sum\limits_{i=1}^n \frac{rr_i}{2} - \frac{1}{n}\sum\limits_{i=1}^n (2\ln{2} - 1) r_i^2
- * \end{eqnarray*}
- * $$
- * where $rr_i$ is the $i^\text{th}$ period *relative* return of the high and
- * low prices, $rr_i$ is the $i^\text{th}$ period return of the close price and
- * $n$ is the number of data points in the price series.
+ * calculated using: $$ \begin{eqnarray*} \sigma =
+ * \frac{1}{n}\sum\limits_{i=1}^n \frac{rr_i}{2} -
+ * \frac{1}{n}\sum\limits_{i=1}^n (2\ln{2} - 1) r_i^2 \end{eqnarray*} $$ where
+ * $rr_i$ is the $i^\text{th}$ period *relative* return of the high and low
+ * prices, $rr_i$ is the $i^\text{th}$ period return of the close price and $n$
+ * is the number of data points in the price series.
  * <p>
  * Although any relative return calculator can be used, to get correct results
- * the calculator should be a {@link ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator}.
+ * the calculator should be a
+ * {@link com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator}.
  */
 public class HistoricalVolatilityHighLowCloseCalculator extends HistoricalVolatilityCalculator {
   /** The logger */

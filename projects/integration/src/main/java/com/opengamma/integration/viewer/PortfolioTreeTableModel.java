@@ -57,9 +57,8 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   public synchronized String getColumnName(final int column) {
     if (column == 0) {
       return "Trade";
-    } else {
-      return _columnModel.getCalculationConfigurationName(column) + "-" + _columnModel.getRequirementName(column);
     }
+    return _columnModel.getCalculationConfigurationName(column) + "-" + _columnModel.getRequirementName(column);
   }
 
   @Override
@@ -83,7 +82,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
       }
     }
   }
-  */
+   */
 
   //-------------------------------------------------------------------------
   @Override
@@ -213,9 +212,8 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
       final PortfolioNode node = (PortfolioNode) parent;
       if (index < node.getPositions().size()) {
         return node.getPositions().toArray()[index];
-      } else {
-        return node.getChildNodes().toArray()[index - node.getPositions().size()];
       }
+      return node.getChildNodes().toArray()[index - node.getPositions().size()];
     } else {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a unexpected type " + parent);
     }
@@ -249,9 +247,8 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
       final PortfolioNode node = (PortfolioNode) parent;
       if (child instanceof Position) {
         return new ArrayList<>(node.getPositions()).indexOf(child);
-      } else {
-        return new ArrayList<>(node.getChildNodes()).indexOf(child) + node.getPositions().size();
       }
+      return new ArrayList<>(node.getChildNodes()).indexOf(child) + node.getPositions().size();
     } else {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a unexpected type " + parent);
     }

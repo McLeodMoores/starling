@@ -7,7 +7,6 @@ package com.opengamma.web.analytics;
 
 import java.util.List;
 
-import com.opengamma.DataNotFoundException;
 import com.opengamma.core.position.Portfolio;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.view.ViewResultModel;

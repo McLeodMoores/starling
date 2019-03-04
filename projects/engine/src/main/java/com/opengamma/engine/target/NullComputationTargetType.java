@@ -101,9 +101,8 @@ import com.opengamma.id.VersionCorrection;
     }
     if (o instanceof ComputationTargetType) {
       return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

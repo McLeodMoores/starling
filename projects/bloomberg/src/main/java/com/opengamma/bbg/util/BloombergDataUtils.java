@@ -639,9 +639,8 @@ public final class BloombergDataUtils {
       ArgumentChecker.notNull(field, "field");
       ArgumentChecker.notNull(replacement, "replacement");
       return field.replaceAll("\\s+", replacement);
-    } else {
-      return null;
     }
+    return null;
   }
 
   public static Set<ExternalId> identifierLoader(final Reader reader) {
@@ -726,9 +725,8 @@ public final class BloombergDataUtils {
     final int splitIdx = ticker.lastIndexOf(' ');
     if (splitIdx > 0) {
       return Pairs.of(ticker.substring(0, splitIdx), ticker.substring(splitIdx + 1));
-    } else {
-      return null;
     }
+    return null;
   }
 
   public static boolean isValidBloombergTicker(final String ticker) {
@@ -738,9 +736,8 @@ public final class BloombergDataUtils {
       final String marketSector = matcher.group(3);
       LOGGER.debug("market sector {} extracted from ticker {}", marketSector, ticker);
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**
@@ -762,13 +759,13 @@ public final class BloombergDataUtils {
     final String strikeString = strikeFormat.format(strike);
     final StringBuilder sb = new StringBuilder();
     sb.append(tickerMarketSectorPair.getFirst())
-        .append(' ')
-        .append(expiry.getExpiry().format(expiryFormatter))
-        .append(' ')
-        .append(optionType == OptionType.PUT ? 'P' : 'C')
-        .append(strikeString)
-        .append(' ')
-        .append(tickerMarketSectorPair.getSecond());
+    .append(' ')
+    .append(expiry.getExpiry().format(expiryFormatter))
+    .append(' ')
+    .append(optionType == OptionType.PUT ? 'P' : 'C')
+    .append(strikeString)
+    .append(' ')
+    .append(tickerMarketSectorPair.getSecond());
     return ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, sb.toString());
   }
 
@@ -795,9 +792,8 @@ public final class BloombergDataUtils {
     final String front = ric.substring(0, Character.isDigit(ric.charAt(0)) ? 4 : 3);
     if (RIC_TO_BBG_MAP.containsKey(front)) {
       return RIC_TO_BBG_MAP.get(front);
-    } else {
-      throw new OpenGammaRuntimeException("Could not map RIC onto BBG code");
     }
+    throw new OpenGammaRuntimeException("Could not map RIC onto BBG code");
   }
 
   public static ExternalId futureBundleToGenericFutureTicker(final ExternalIdBundle bundle, final ZonedDateTime now, final OffsetTime futureExpiryTime, final ZoneId futureExpiryTimeZone) {

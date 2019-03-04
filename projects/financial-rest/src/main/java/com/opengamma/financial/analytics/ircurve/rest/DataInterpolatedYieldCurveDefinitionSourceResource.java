@@ -68,29 +68,28 @@ public class DataInterpolatedYieldCurveDefinitionSourceResource extends Abstract
     if (versionAsOfStr != null) {
       final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name, VersionCorrection.parse(versionAsOfStr, null));
       return responseOkObject(result);
-    } else {
-      final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name);
-      return responseOkObject(result);
     }
+    final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name);
+    return responseOkObject(result);
   }
 
-//  /**
-//   * Builds a URI.
-//   *
-//   * @param baseUri  the base URI, not null
-//   * @param currency  the currency, not null
-//   * @param name  the name, not null
-//   * @param versionAsOf  the version to fetch, null means latest
-//   * @return the URI, not null
-//   */
-//  public static URI uriSearchSingle(URI baseUri, Currency currency, String name, Instant versionAsOf) {
-//    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/definitions/searchSingle");
-//    bld.queryParam("currency", currency.toString());
-//    bld.queryParam("name", name);
-//    if (versionAsOf != null) {
-//      bld.queryParam("versionAsOf", versionAsOf.toString());
-//    }
-//    return bld.build();
-//  }
+  //  /**
+  //   * Builds a URI.
+  //   *
+  //   * @param baseUri  the base URI, not null
+  //   * @param currency  the currency, not null
+  //   * @param name  the name, not null
+  //   * @param versionAsOf  the version to fetch, null means latest
+  //   * @return the URI, not null
+  //   */
+  //  public static URI uriSearchSingle(URI baseUri, Currency currency, String name, Instant versionAsOf) {
+  //    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/definitions/searchSingle");
+  //    bld.queryParam("currency", currency.toString());
+  //    bld.queryParam("name", name);
+  //    if (versionAsOf != null) {
+  //      bld.queryParam("versionAsOf", versionAsOf.toString());
+  //    }
+  //    return bld.build();
+  //  }
 
 }

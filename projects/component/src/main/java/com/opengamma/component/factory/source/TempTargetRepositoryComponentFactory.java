@@ -122,17 +122,15 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
   protected TempTargetRepository createRepository(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     if (getRemote() != null) {
       return createRemoteRepository(repo, configuration);
-    } else {
-      return createLocalRepository(repo, configuration);
     }
+    return createLocalRepository(repo, configuration);
   }
 
   protected TempTargetRepository createCachedRepository(final TempTargetRepository tempTargets) {
     if (getCacheManager() != null) {
       return new EHCachingTempTargetRepository(tempTargets, getCacheManager());
-    } else {
-      return tempTargets;
     }
+    return tempTargets;
   }
 
   @Override

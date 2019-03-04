@@ -51,7 +51,7 @@ public class MasterPositionReader implements PositionReader {
 
 
   public MasterPositionReader(final String portfolioName, final PortfolioMaster portfolioMaster,
-                              final PositionMaster positionMaster, final SecuritySource securitySource) {
+      final PositionMaster positionMaster, final SecuritySource securitySource) {
 
     ArgumentChecker.notEmpty(portfolioName, "portfolioName");
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
@@ -82,47 +82,43 @@ public class MasterPositionReader implements PositionReader {
     final ObjectId positionId = getNextPositionId();
     if (positionId == null) {
       return null;
-    } else {
-      ManageablePosition position;
-      try {
-        position = _positionMaster.get(positionId, VersionCorrection.LATEST).getPosition();
-      } catch (final Throwable t) {
-        return ObjectsPair.of(null, null);
-      }
-
-      // Write the related security(ies)
-      final ManageableSecurityLink sLink = position.getSecurityLink();
-      final Security security = sLink.resolveQuiet(_securitySource);
-      if (security != null && security instanceof ManageableSecurity) {
-
-        // Find underlying security
-        // TODO support multiple underlyings; unfortunately the system does not provide a standard way
-        // to retrieve underlyings
-        if (((ManageableSecurity) security).propertyNames().contains("underlyingId")) {
-          final ExternalId id = (ExternalId) ((ManageableSecurity) security).property("underlyingId").get();
-
-          Security underlying;
-          try {
-            underlying = _securitySource.getSingle(id.toBundle());
-            if (underlying != null) {
-              return ObjectsPair.of(position,
-                  new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying});
-            } else {
-              LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
-            }
-          } catch (final Throwable e) {
-            // Underlying not found
-            LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
-          }
-        }
-        return ObjectsPair.of(position,
-              new ManageableSecurity[] {(ManageableSecurity) security});
-
-      } else {
-        LOGGER.warn("Could not resolve security relating to position " + position.getName());
-        return ObjectsPair.of(null, null);
-      }
     }
+    ManageablePosition position;
+    try {
+      position = _positionMaster.get(positionId, VersionCorrection.LATEST).getPosition();
+    } catch (final Throwable t) {
+      return ObjectsPair.of(null, null);
+    }
+
+    // Write the related security(ies)
+    final ManageableSecurityLink sLink = position.getSecurityLink();
+    final Security security = sLink.resolveQuiet(_securitySource);
+    if (security != null && security instanceof ManageableSecurity) {
+
+      // Find underlying security
+      // TODO support multiple underlyings; unfortunately the system does not
+      // provide a standard way
+      // to retrieve underlyings
+      if (((ManageableSecurity) security).propertyNames().contains("underlyingId")) {
+        final ExternalId id = (ExternalId) ((ManageableSecurity) security).property("underlyingId").get();
+
+        Security underlying;
+        try {
+          underlying = _securitySource.getSingle(id.toBundle());
+          if (underlying != null) {
+            return ObjectsPair.of(position, new ManageableSecurity[] { (ManageableSecurity) security, (ManageableSecurity) underlying });
+          }
+          LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
+        } catch (final Throwable e) {
+          // Underlying not found
+          LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
+        }
+      }
+      return ObjectsPair.of(position, new ManageableSecurity[] { (ManageableSecurity) security });
+
+    }
+    LOGGER.warn("Could not resolve security relating to position " + position.getName());
+    return ObjectsPair.of(null, null);
   }
 
   @Override
@@ -160,25 +156,25 @@ public class MasterPositionReader implements PositionReader {
       if (_positionIdIterator.hasNext()) {
         return _positionIdIterator.next();
 
-      // Current node's positions exhausted, find another node
-      } else {
-        // Go down to current node's child nodes to find more positions (depth-first)
-        _nodeIteratorStack.push(_nodeIterator);
-        _nodeIterator = _currentNode.getChildNodes().iterator();
-
-        // If there are no more nodes here pop back up until a node is available
-        while (!_nodeIterator.hasNext()) {
-          if (!_nodeIteratorStack.isEmpty()) {
-            _nodeIterator = _nodeIteratorStack.pop();
-          } else {
-            return null;
-          }
-        }
-
-        // Go to the next node and start fetching positions there
-        _currentNode = _nodeIterator.next();
-        _positionIdIterator = _currentNode.getPositionIds().iterator();
+        // Current node's positions exhausted, find another node
       }
+      // Go down to current node's child nodes to find more positions
+      // (depth-first)
+      _nodeIteratorStack.push(_nodeIterator);
+      _nodeIterator = _currentNode.getChildNodes().iterator();
+
+      // If there are no more nodes here pop back up until a node is available
+      while (!_nodeIterator.hasNext()) {
+        if (!_nodeIteratorStack.isEmpty()) {
+          _nodeIterator = _nodeIteratorStack.pop();
+        } else {
+          return null;
+        }
+      }
+
+      // Go to the next node and start fetching positions there
+      _currentNode = _nodeIterator.next();
+      _positionIdIterator = _currentNode.getPositionIds().iterator();
     }
   }
 

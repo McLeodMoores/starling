@@ -402,9 +402,8 @@ import com.opengamma.transport.FudgeMessageSender;
         callback.registerJobInvoker(this);
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

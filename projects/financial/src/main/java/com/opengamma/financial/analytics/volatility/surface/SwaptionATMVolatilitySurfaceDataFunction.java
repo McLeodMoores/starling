@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,8 +36,10 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * 
+ *
  */
 public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionATMVolatilitySurfaceDataFunction.class);
@@ -130,7 +130,7 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
   }
 
   private static VolatilitySurfaceData<Double, Double> getSurface(final VolatilitySurfaceData<Tenor, Tenor> volatilities) {
-    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<Pair<Double, Double>, Double>();
+    final Map<Pair<Double, Double>, Double> volatilityValues = new HashMap<>();
     final DoubleArrayList xList = new DoubleArrayList();
     final DoubleArrayList yList = new DoubleArrayList();
     for (final Tenor x : volatilities.getUniqueXValues()) {
@@ -146,7 +146,7 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
         }
       }
     }
-    return new VolatilitySurfaceData<Double, Double>(volatilities.getDefinitionName(), volatilities.getSpecificationName(), volatilities.getTarget(), xList.toArray(new Double[0]),
+    return new VolatilitySurfaceData<>(volatilities.getDefinitionName(), volatilities.getSpecificationName(), volatilities.getTarget(), xList.toArray(new Double[0]),
         yList.toArray(new Double[0]), volatilityValues);
   }
 

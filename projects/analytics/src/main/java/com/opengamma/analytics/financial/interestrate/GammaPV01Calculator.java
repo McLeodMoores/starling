@@ -10,12 +10,14 @@ import java.util.Map;
 import java.util.Set;
 
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Returns the change in PV01 of an instrument due to a parallel move of the yield curve, scaled so that the move is 1bp.
- * @deprecated Use the calculators that reference {@link ParameterProviderInterface}
+ * Returns the change in PV01 of an instrument due to a parallel move of the
+ * yield curve, scaled so that the move is 1bp.
+ * 
+ * @deprecated Use the calculators that reference
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
 @Deprecated
 public final class GammaPV01Calculator extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, Double> {
@@ -24,8 +26,8 @@ public final class GammaPV01Calculator extends InstrumentDerivativeVisitorSameMe
    */
   private static final double BP1 = 1.0E-4;
   /**
-  * The unique instance of the gamma PV01 calculator.
-  */
+   * The unique instance of the gamma PV01 calculator.
+   */
   private static final GammaPV01Calculator INSTANCE = new GammaPV01Calculator();
 
   /**
@@ -75,7 +77,7 @@ public final class GammaPV01Calculator extends InstrumentDerivativeVisitorSameMe
     final Map<String, Double> pv01 = ird.accept(_pv01Calculator, curves);
     double gammaPV01 = 0;
     for (final Map.Entry<String, Double> entry : up.entrySet()) {
-      if (!(pv01.containsKey(entry.getKey()))) {
+      if (!pv01.containsKey(entry.getKey())) {
         throw new IllegalStateException("Have bumped PV01 for curve called " + entry.getKey() + " but no PV01");
       }
       gammaPV01 += (entry.getValue() - pv01.get(entry.getKey())) / BP1;

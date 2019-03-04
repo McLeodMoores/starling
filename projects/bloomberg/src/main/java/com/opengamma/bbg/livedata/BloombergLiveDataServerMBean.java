@@ -51,9 +51,8 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
     final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return 0;
-    } else {
-      return rejection.getInstant().getEpochSecond();
     }
+    return rejection.getInstant().getEpochSecond();
   }
 
   @ManagedAttribute()
@@ -61,9 +60,8 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
     final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return Long.MAX_VALUE;
-    } else {
-      return Instant.now().getEpochSecond() - rejection.getInstant().getEpochSecond();
     }
+    return Instant.now().getEpochSecond() - rejection.getInstant().getEpochSecond();
   }
 
   @ManagedAttribute()
@@ -71,9 +69,8 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
     final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return null;
-    } else {
-      return rejection.getInstant().toString();
     }
+    return rejection.getInstant().toString();
   }
 
   @ManagedAttribute()
@@ -81,9 +78,8 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
     final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return -1;
-    } else {
-      return rejection.getRequestedSubscriptions();
     }
+    return rejection.getRequestedSubscriptions();
   }
 
   @ManagedAttribute()
@@ -91,8 +87,7 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
     final RejectedDueToSubscriptionLimitEvent rejection = _server.getLastLimitRejection();
     if (rejection == null) {
       return -1;
-    } else {
-      return rejection.getAfterSubscriptionCount();
     }
+    return rejection.getAfterSubscriptionCount();
   }
 }

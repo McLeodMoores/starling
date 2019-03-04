@@ -72,7 +72,7 @@ public class YieldCurveDefinitionFudgeBuilder implements FudgeBuilder<YieldCurve
     final String name = message.getString(NAME_FIELD);
     final String interpolatorName = message.getString(INTERPOLATOR_NAME_FIELD);
     final List<FudgeField> allByOrdinal = message.getAllByName(STRIP_FIELD);
-    final SortedSet<FixedIncomeStrip> strips = new TreeSet<FixedIncomeStrip>();
+    final SortedSet<FixedIncomeStrip> strips = new TreeSet<>();
     for (final FudgeField field : allByOrdinal) {
       final FixedIncomeStrip strip = deserializer.fieldValueToObject(FixedIncomeStrip.class, field);
       strips.add(strip);

@@ -116,9 +116,9 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
 
   //Track surfaces we create so we dont recreate them when multiple securities need them
   /** vol definitions we have created */
-  private final Set<String> _volDefinitionNames = new HashSet<String>();
+  private final Set<String> _volDefinitionNames = new HashSet<>();
   /** vol specifications we have created */
-  private final Set<String> _volSpecificationNames = new HashSet<String>();
+  private final Set<String> _volSpecificationNames = new HashSet<>();
 
   //-------------------------------------------------------------------------
   /**
@@ -143,7 +143,7 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
 
     // if skipping existing surfaces get the list now
     if (skipExisting) {
-      final ConfigSearchRequest<VolatilitySurfaceDefinition<?, ?>> volDefinitionSearchRequest = new ConfigSearchRequest<VolatilitySurfaceDefinition<?, ?>>();
+      final ConfigSearchRequest<VolatilitySurfaceDefinition<?, ?>> volDefinitionSearchRequest = new ConfigSearchRequest<>();
       volDefinitionSearchRequest.setType(VolatilitySurfaceDefinition.class);
       // can't use name to restrict search as ticker symbol may not be same as underlying symbol (e.g. RUT vs RUY)
       volDefinitionSearchRequest.setName(WILDCARD_SEARCH);
@@ -151,7 +151,7 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
         _volDefinitionNames.add(doc.getName());
       }
 
-      final ConfigSearchRequest<VolatilitySurfaceSpecification> volSpecSearchRequest = new ConfigSearchRequest<VolatilitySurfaceSpecification>();
+      final ConfigSearchRequest<VolatilitySurfaceSpecification> volSpecSearchRequest = new ConfigSearchRequest<>();
       volSpecSearchRequest.setType(VolatilitySurfaceSpecification.class);
       // can't use name to restrict search as ticker symbol may not be same as underlying symbol (e.g. RUT vs RUY)
       volSpecSearchRequest.setName(WILDCARD_SEARCH);
@@ -408,7 +408,7 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
         final Set<ExternalId> options = BloombergDataUtils.getOptionChain(_referenceDataProvider, underlyingTicker);
         final ObjectsPair<ImmutableList<Double>, ImmutableList<Double>> axes = determineAxes(options);
         final VolatilitySurfaceDefinition<Double, Double> volSurfaceDefinition =
-            new VolatilitySurfaceDefinition<Double, Double>(name, target,
+            new VolatilitySurfaceDefinition<>(name, target,
                 axes.getFirst().toArray(new Double[0]), axes.getSecond().toArray(new Double[0]));
         final ConfigItem<VolatilitySurfaceDefinition<Double, Double>> volDefinition = ConfigItem.of(volSurfaceDefinition, volSurfaceDefinition.getName(), VolatilitySurfaceDefinition.class);
         if (!_dryRun) {
@@ -439,7 +439,7 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
      * @return x and y axes
      */
     private ObjectsPair<ImmutableList<Double>, ImmutableList<Double>> determineAxes(final Collection<ExternalId> options) {
-      final Set<Double> strikes = new TreeSet<Double>();
+      final Set<Double> strikes = new TreeSet<>();
       final Pattern strikePattern = Pattern.compile(STRIKE_REGEXP);
       for (final ExternalId option : options) {
         final String name = option.getValue();
@@ -459,7 +459,7 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       if (numX < 17) {
         numX = 17;
       }
-      final List<Double> xAxis = new ArrayList<Double>();
+      final List<Double> xAxis = new ArrayList<>();
       for (int i = 1; i < numX + 1; i++) {
         xAxis.add(Double.valueOf(i));
       }

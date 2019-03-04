@@ -118,7 +118,7 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     }
     final BigDecimal dailyPnL = tradeValue.subtract(trade.getQuantity().multiply(BigDecimal.valueOf(markToMarket + costOfCarry)));
     LOGGER.debug("{}  security: {} quantity: {} fairValue: {} markToMarket: {} costOfCarry: {} dailyPnL: {}",
-          new Object[] {trade.getUniqueId(), trade.getSecurity().getExternalIdBundle(), trade.getQuantity(), tradeValue, markToMarket, costOfCarry, dailyPnL });
+        new Object[] {trade.getUniqueId(), trade.getSecurity().getExternalIdBundle(), trade.getQuantity(), tradeValue, markToMarket, costOfCarry, dailyPnL });
     final ComputedValue result = new ComputedValue(valueSpecification, MoneyCalculationUtils.rounded(dailyPnL).doubleValue());
     return Sets.newHashSet(result);
   }
@@ -171,9 +171,8 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
     final Currency ccy = FinancialSecurityUtils.getCurrency(security);
     if (ccy != null) {
       return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-    } else {
-      return ValueProperties.none();
     }
+    return ValueProperties.none();
   }
 
   private ValueRequirement getMarkToMarketSeriesRequirement(final HistoricalTimeSeriesResolver resolver, final ExternalIdBundle bundle, final DateConstraint startDate, final DateConstraint endDate) {

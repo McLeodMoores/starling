@@ -48,7 +48,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * PnL requirements gatherer.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
 
   private final Map<String, String> _curveCalculationConfigs = new HashMap<>();

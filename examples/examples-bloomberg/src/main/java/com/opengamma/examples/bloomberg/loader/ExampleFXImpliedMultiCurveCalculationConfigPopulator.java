@@ -18,8 +18,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * @deprecated
  */
+@Deprecated
 public class ExampleFXImpliedMultiCurveCalculationConfigPopulator {
   /** Curve names */
   private static final String[] CURVE_NAMES = new String[] {"DEFAULT"};

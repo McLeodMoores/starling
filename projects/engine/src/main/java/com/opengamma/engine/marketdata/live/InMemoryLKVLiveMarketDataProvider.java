@@ -43,7 +43,6 @@ import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.marketdata.AbstractMarketDataProvider;
 import com.opengamma.engine.marketdata.InMemoryLKVMarketDataProvider;
 import com.opengamma.engine.marketdata.MarketDataPermissionProvider;
-import com.opengamma.engine.marketdata.MarketDataProvider;
 import com.opengamma.engine.marketdata.MarketDataSnapshot;
 import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityFilter;
 import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityProvider;
@@ -377,7 +376,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     if (!failedSubscriptions.isEmpty()) {
       valuesChanged(failedSubscriptions); // PLAT-1429: wake up the init call
       subscriptionFailed(failedSubscriptions, "TODO: get/concat message(s) from " + failedSubscriptions.size()
-          + " failures"/*subscriptionResult.getUserMessage()*/);
+      + " failures"/*subscriptionResult.getUserMessage()*/);
     }
     if (!successfulSubscriptions.isEmpty()) {
       subscriptionsSucceeded(successfulSubscriptions);
@@ -422,7 +421,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
           value = msg;
         } else if (!(previousValue instanceof FudgeMsg)) {
           LOGGER.error("Found unexpected previous market value " + previousValue + " of type " + previousValue.getClass()
-            + " for specification " + subscription);
+          + " for specification " + subscription);
           value = msg;
         } else {
           final FudgeMsg currentValueMsg = (FudgeMsg) previousValue;
@@ -439,30 +438,29 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
         if (field == null) {
           LOGGER.debug("No market data value for {} on target {}", valueName, subscription.getTargetSpecification());
           continue;
-        } else {
-          switch (field.getType().getTypeId()) {
-            case FudgeWireType.BYTE_TYPE_ID:
-            case FudgeWireType.SHORT_TYPE_ID:
-            case FudgeWireType.INT_TYPE_ID:
-            case FudgeWireType.LONG_TYPE_ID:
-            case FudgeWireType.FLOAT_TYPE_ID:
-              // All numeric data is presented as a double downstream - convert
-              value = ((Number) field.getValue()).doubleValue();
-              break;
-            case FudgeWireType.DOUBLE_TYPE_ID:
-              // Already a double
-              value = field.getValue();
-              break;
-            case FudgeWireType.DATE_TYPE_ID:
-              value = ((FudgeDate) field.getValue()).toLocalDate();
-              break;
-            case FudgeWireType.DATETIME_TYPE_ID:
-              value = ((FudgeDateTime) field.getValue()).toLocalDateTime();
-              break;
-            default:
-              LOGGER.warn("Unexpected market data type {}", field);
-              continue;
-          }
+        }
+        switch (field.getType().getTypeId()) {
+          case FudgeWireType.BYTE_TYPE_ID:
+          case FudgeWireType.SHORT_TYPE_ID:
+          case FudgeWireType.INT_TYPE_ID:
+          case FudgeWireType.LONG_TYPE_ID:
+          case FudgeWireType.FLOAT_TYPE_ID:
+            // All numeric data is presented as a double downstream - convert
+            value = ((Number) field.getValue()).doubleValue();
+            break;
+          case FudgeWireType.DOUBLE_TYPE_ID:
+            // Already a double
+            value = field.getValue();
+            break;
+          case FudgeWireType.DATE_TYPE_ID:
+            value = ((FudgeDate) field.getValue()).toLocalDate();
+            break;
+          case FudgeWireType.DATETIME_TYPE_ID:
+            value = ((FudgeDateTime) field.getValue()).toLocalDateTime();
+            break;
+          default:
+            LOGGER.warn("Unexpected market data type {}", field);
+            continue;
         }
       }
       _underlyingProvider.addValue(subscription, value);

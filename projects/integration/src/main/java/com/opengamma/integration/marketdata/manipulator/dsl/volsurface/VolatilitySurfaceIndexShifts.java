@@ -74,8 +74,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface volSurface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     final Surface<Double, Double, Double> surface = volSurface.getSurface();
 
     if (volSurface instanceof BlackVolatilitySurfaceMoneynessFcnBackedByGrid) {
@@ -86,8 +86,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
       return shiftNonFunctionalSurface(volSurface);
     } else {
       LOGGER.warn("Unable to shift surface of type {}/{}",
-                    volSurface.getClass().getName(),
-                    surface.getClass().getName());
+          volSurface.getClass().getName(),
+          surface.getClass().getName());
       return volSurface;
     }
   }
@@ -157,9 +157,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
 
     if (absolute) {
       return volSurface.withMultipleAdditiveShifts(xArray, yArray, shifts);
-    } else {
-      return volSurface.withMultipleMultiplicativeShifts(xArray, yArray, shifts);
     }
+    return volSurface.withMultipleMultiplicativeShifts(xArray, yArray, shifts);
   }
 
   @Override

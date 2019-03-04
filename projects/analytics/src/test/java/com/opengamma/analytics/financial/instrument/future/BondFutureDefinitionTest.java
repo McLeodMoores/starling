@@ -31,7 +31,10 @@ import com.opengamma.util.time.DateUtils;
 
 /**
  * Tests related to bond futures security Definition construction.
+ * 
+ * @deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class BondFutureDefinitionTest {
   // 5-Year U.S. Treasury Note Futures: FVU1

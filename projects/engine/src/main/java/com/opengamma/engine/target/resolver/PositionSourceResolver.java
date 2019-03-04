@@ -16,7 +16,6 @@ import com.opengamma.core.position.PortfolioNode;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.position.Trade;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.target.logger.LoggedResolutionPortfolio;
 import com.opengamma.engine.target.logger.LoggedResolutionPortfolioNode;
 import com.opengamma.engine.target.logger.ResolutionLogger;
@@ -193,9 +192,8 @@ public class PositionSourceResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable resolved, final ResolutionLogger logger) {
       if (resolved instanceof Portfolio) {
         return new LoggedResolutionPortfolio((Portfolio) resolved, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
   }
@@ -228,9 +226,8 @@ public class PositionSourceResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable resolved, final ResolutionLogger logger) {
       if (resolved instanceof PortfolioNode) {
         return new LoggedResolutionPortfolioNode((PortfolioNode) resolved, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
     // IdentifierResolver

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -134,9 +134,8 @@ public interface LazyResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable underlying, final ResolutionLogger logger) {
       if (underlying instanceof Portfolio) {
         return new LoggedResolutionPortfolio((Portfolio) underlying, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
   }
@@ -163,9 +162,8 @@ public interface LazyResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable underlying, final ResolutionLogger logger) {
       if (underlying instanceof PortfolioNode) {
         return new LoggedResolutionPortfolioNode((PortfolioNode) underlying, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
   }
@@ -192,9 +190,8 @@ public interface LazyResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable underlying, final ResolutionLogger logger) {
       if (underlying instanceof Position) {
         return new LoggedResolutionPosition((Position) underlying, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
   }
@@ -221,9 +218,8 @@ public interface LazyResolver {
     public UniqueIdentifiable withLogger(final UniqueIdentifiable underlying, final ResolutionLogger logger) {
       if (underlying instanceof Trade) {
         return new LoggedResolutionTrade((Trade) underlying, logger);
-      } else {
-        return null;
       }
+      return null;
     }
 
   }

@@ -40,7 +40,9 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Produces the jump to default for single-name CDS.
+ * @deprecated Deprecated
  */
+@Deprecated
 public class StandardVanillaJumpToDefaultCDSFunction extends StandardVanillaCDSFunction {
   /** The calculator */
   private static final CDSRiskFactors CALCULATOR = new CDSRiskFactors();
@@ -65,7 +67,7 @@ public class StandardVanillaJumpToDefaultCDSFunction extends StandardVanillaCDSF
                                                 final Tenor[] tenors) {
     final double coupon = getCoupon(definition);
     final double lossGivenDefault = definition.getNotional() * CALCULATOR.valueOnDefault(analytic, yieldCurve, hazardCurve, coupon);
-    final double valueOnDefault = (definition.getBuySellProtection() == BuySellProtection.BUY) ? lossGivenDefault : -lossGivenDefault;
+    final double valueOnDefault = definition.getBuySellProtection() == BuySellProtection.BUY ? lossGivenDefault : -lossGivenDefault;
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.JUMP_TO_DEFAULT, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, valueOnDefault));
   }

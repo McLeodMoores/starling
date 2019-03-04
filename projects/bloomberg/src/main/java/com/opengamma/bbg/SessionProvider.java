@@ -118,53 +118,54 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
     synchronized (_lock) {
       if (_session != null) {
         return _session;
-      } else {
-        final Instant lastRetry = _lastRetry.get();
-        if (lastRetry == null) {
-          throw new ConnectionUnavailableException("Session provider has not been started");
-        }
-        final Instant now = OpenGammaClock.getInstance().instant();
-        if (Duration.between(lastRetry, now).compareTo(_retryDuration) < 0) {
-          throw new ConnectionUnavailableException("No Bloomberg connection is available");
-        }
-        _lastRetry.set(now);
-        LOGGER.info("Bloomberg session being opened...");
-        Session session = null;
+      }
+      final Instant lastRetry = _lastRetry.get();
+      if (lastRetry == null) {
+        throw new ConnectionUnavailableException("Session provider has not been started");
+      }
+      final Instant now = OpenGammaClock.getInstance().instant();
+      if (Duration.between(lastRetry, now).compareTo(_retryDuration) < 0) {
+        throw new ConnectionUnavailableException("No Bloomberg connection is available");
+      }
+      _lastRetry.set(now);
+      LOGGER.info("Bloomberg session being opened...");
+      Session session = null;
+      try {
         try {
-          try {
-            session = _connector.createOpenSession(_eventHandler);
-          } catch (final OpenGammaRuntimeException e) {
-            throw new ConnectionUnavailableException("Failed to open session", e);
-          }
-          LOGGER.info("Bloomberg session open");
-          LOGGER.info("Bloomberg service being opened...");
+          session = _connector.createOpenSession(_eventHandler);
+        } catch (final OpenGammaRuntimeException e) {
+          throw new ConnectionUnavailableException("Failed to open session", e);
+        }
+        LOGGER.info("Bloomberg session open");
+        LOGGER.info("Bloomberg service being opened...");
 
-          for (final String serviceName : _serviceNames) {
-            try {
-              if (!session.openService(serviceName)) {
-                throw new ConnectionUnavailableException("Bloomberg service failed to start: " + serviceName);
-              }
-            } catch (final InterruptedException ex) {
-              Thread.interrupted();
-              throw new ConnectionUnavailableException("Bloomberg service failed to start: " + serviceName, ex);
-            } catch (final Exception ex) {
-              throw new ConnectionUnavailableException("Bloomberg service failed to start: " + serviceName, ex);
+        for (final String serviceName : _serviceNames) {
+          try {
+            if (!session.openService(serviceName)) {
+              throw new ConnectionUnavailableException("Bloomberg service failed to start: " + serviceName);
             }
-            LOGGER.info("Bloomberg service open: {}", serviceName);
+          } catch (final InterruptedException ex) {
+            Thread.interrupted();
+            throw new ConnectionUnavailableException("Bloomberg service failed to start: " + serviceName, ex);
+          } catch (final Exception ex) {
+            throw new ConnectionUnavailableException("Bloomberg service failed to start: " + serviceName, ex);
           }
-          _session = session;
-          newSession = session;
-          session = null;
-        } finally {
-          if (session != null) {
-            // If the session was started but the service not opened, then there will be sockets open and threads allocated by
-            // the Bloomberg API which need to be killed. Just letting the session fall out of scope doesn't work (PLAT-5309)
-            LOGGER.debug("Attempting to stop partially constructed session");
-            try {
-              session.stop();
-            } catch (final Exception e) {
-              LOGGER.error("Error stopping partial session", e);
-            }
+          LOGGER.info("Bloomberg service open: {}", serviceName);
+        }
+        _session = session;
+        newSession = session;
+        session = null;
+      } finally {
+        if (session != null) {
+          // If the session was started but the service not opened, then there
+          // will be sockets open and threads allocated by
+          // the Bloomberg API which need to be killed. Just letting the session
+          // fall out of scope doesn't work (PLAT-5309)
+          LOGGER.debug("Attempting to stop partially constructed session");
+          try {
+            session.stop();
+          } catch (final Exception e) {
+            LOGGER.error("Error stopping partial session", e);
           }
         }
       }

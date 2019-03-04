@@ -209,9 +209,8 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
     if (getCommandLine().hasOption("type")) {
       final String[] typeValues = getCommandLine().getOptionValues("type");
       return Arrays.asList(typeValues);
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   private void checkForInvalidOption(final String longOpt) {

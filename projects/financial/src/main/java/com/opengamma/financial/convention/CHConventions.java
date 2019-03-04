@@ -25,7 +25,11 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard version of CHF instruments
+ * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class CHConventions {
 
   /**

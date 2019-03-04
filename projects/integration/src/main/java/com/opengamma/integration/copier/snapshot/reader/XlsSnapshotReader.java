@@ -84,7 +84,7 @@ public class XlsSnapshotReader implements SnapshotReader {
     //continue reading in each surface object until current row incrementing returns no data
     while (true) {
       final Map<String, String> details = _surfaceSheet.readKeyValueBlock(_surfaceSheet.getCurrentRowIndex(), 0);
-      if (details.isEmpty() || details == null) {
+      if (details == null || details.isEmpty()) {
         break;
       }
 
@@ -92,17 +92,17 @@ public class XlsSnapshotReader implements SnapshotReader {
       final Map<Pair<String, String>, String> overrideValues = _surfaceSheet.readMatrix(_surfaceSheet.getCurrentRowIndex(), 0);
       final ManageableVolatilitySurfaceSnapshot surface = new ManageableVolatilitySurfaceSnapshot();
       final VolatilitySurfaceKey key = VolatilitySurfaceKey.of(UniqueId.parse(details.get(SnapshotColumns.SURFACE_TARGET.get())),
-                                                         details.get(SnapshotColumns.NAME.get()),
-                                                         details.get(SnapshotColumns.SURFACE_INSTRUMENT_TYPE.get()),
-                                                         details.get(SnapshotColumns.SURFACE_QUOTE_TYPE.get()),
-                                                         details.get(SnapshotColumns.SURFACE_QUOTE_UNITS.get()));
+          details.get(SnapshotColumns.NAME.get()),
+          details.get(SnapshotColumns.SURFACE_INSTRUMENT_TYPE.get()),
+          details.get(SnapshotColumns.SURFACE_QUOTE_TYPE.get()),
+          details.get(SnapshotColumns.SURFACE_QUOTE_UNITS.get()));
       final HashMap<Pair<Object, Object>, ValueSnapshot> values = new HashMap<>();
 
       // use the market value map to add the value and 'lookup' the corresponding override value
       for (final Map.Entry<Pair<String, String>, String> entry : marketValues.entrySet()) {
-        final Pair rawOrdinals = entry.getKey();
-        final Pair ordinals = MarketDataSnapshotToolUtils.createOrdinatePair(rawOrdinals.getFirst().toString(),
-                                                                       rawOrdinals.getSecond().toString());
+        final Pair<String, String> rawOrdinals = entry.getKey();
+        final Pair<Object, Object> ordinals = MarketDataSnapshotToolUtils.createOrdinatePair(rawOrdinals.getFirst().toString(),
+            rawOrdinals.getSecond().toString());
         final String override = overrideValues.get(rawOrdinals);
         final String market = entry.getValue();
         values.put(ordinals, MarketDataSnapshotToolUtils.createValueSnapshot(market, override));
@@ -134,11 +134,11 @@ public class XlsSnapshotReader implements SnapshotReader {
     _yieldCurveSheet = new XlsSheetReader(_workbook, SnapshotType.YIELD_CURVE.get());
     while (true) {
       final Map<String, String> details = _yieldCurveSheet.readKeyValueBlock(_yieldCurveSheet.getCurrentRowIndex(), 0);
-      if (details.isEmpty() || details == null) {
+      if (details == null || details.isEmpty()) {
         break;
       }
       final YieldCurveKey key = YieldCurveKey.of(Currency.of(details.get(SnapshotColumns.YIELD_CURVE_CURRENCY.get())),
-                                           details.get(SnapshotColumns.NAME.get()));
+          details.get(SnapshotColumns.NAME.get()));
       final Instant instant = Instant.parse(details.get(SnapshotColumns.INSTANT.get()));
       final ManageableUnstructuredMarketDataSnapshot snapshot = getManageableUnstructuredMarketDataSnapshot(_yieldCurveSheet);
       final ManageableYieldCurveSnapshot curve = ManageableYieldCurveSnapshot.of(instant, snapshot);
@@ -153,7 +153,7 @@ public class XlsSnapshotReader implements SnapshotReader {
     _curveSheet = new XlsSheetReader(_workbook, SnapshotType.CURVE.get());
     while (true) {
       final Map<String, String> details = _curveSheet.readKeyValueBlock(_curveSheet.getCurrentRowIndex(), 0);
-      if (details.isEmpty() || details == null) {
+      if (details == null || details.isEmpty()) {
         break;
       }
       final ManageableCurveSnapshot curve = new ManageableCurveSnapshot();
@@ -171,9 +171,9 @@ public class XlsSnapshotReader implements SnapshotReader {
     final ManageableUnstructuredMarketDataSnapshot builder = new ManageableUnstructuredMarketDataSnapshot();
     for (final Map.Entry<String, ObjectsPair<String, String>> entry : map.entrySet()) {
       builder.putValue(createExternalIdBundle(entry.getKey()),
-                       _valueObject,
-                             MarketDataSnapshotToolUtils.createValueSnapshot(entry.getValue().getFirst(),
-                                                                             entry.getValue().getSecond()));
+          _valueObject,
+          MarketDataSnapshotToolUtils.createValueSnapshot(entry.getValue().getFirst(),
+              entry.getValue().getSecond()));
     }
     return builder;
   }

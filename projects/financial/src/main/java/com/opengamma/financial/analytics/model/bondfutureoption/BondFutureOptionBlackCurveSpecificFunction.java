@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bondfutureoption;
@@ -21,8 +21,10 @@ import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues
 import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondFutureOptionBlackCurveSpecificFunction extends BondFutureOptionBlackFunction {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackCurveSpecificFunction.class);

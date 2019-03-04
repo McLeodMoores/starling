@@ -289,9 +289,8 @@ public class DatabaseRestore {
     final ObjectId newObjectId = idMappings.get(oldId.getObjectId());
     if (newObjectId == null) {
       return null;
-    } else {
-      return newObjectId.atLatestVersion();
     }
+    return newObjectId.atLatestVersion();
   }
 
   private void loadTimeSeries() throws IOException {

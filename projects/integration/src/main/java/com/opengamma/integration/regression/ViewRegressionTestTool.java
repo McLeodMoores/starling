@@ -124,22 +124,22 @@ public class ViewRegressionTestTool {
       final CreateGoldenCopyForRegressionTest test;
       if (cl.hasOption(RESULT_OUT)) {
         test = new CreateGoldenCopyForRegressionTest(cl.getOptionValue(PROJECT_NAME),
-                                                     cl.getOptionValue(SERVER_CONFIG),
-                                                     cl.getOptionValue(DB_DUMP_DIR),
-                                                     cl.getOptionValue(LOGBACK_CONFIG),
-                                                     valuationTime,
-                                                     cl.getOptionValue(BASE_DIR),
-                                                     cl.getOptionValue(BASE_VERSION),
-                                                     cl.getOptionValue(BASE_PROPS));
+            cl.getOptionValue(SERVER_CONFIG),
+            cl.getOptionValue(DB_DUMP_DIR),
+            cl.getOptionValue(LOGBACK_CONFIG),
+            valuationTime,
+            cl.getOptionValue(BASE_DIR),
+            cl.getOptionValue(BASE_VERSION),
+            cl.getOptionValue(BASE_PROPS));
       } else {
         test = new CreateGoldenCopyForRegressionTest(cl.getOptionValue(PROJECT_NAME),
-                                                     cl.getOptionValue(SERVER_CONFIG),
-                                                     cl.getOptionValue(DB_DUMP_DIR),
-                                                     cl.getOptionValue(LOGBACK_CONFIG),
-                                                     valuationTime,
-                                                     cl.getOptionValue(TEST_DIR),
-                                                     cl.getOptionValue(TEST_VERSION),
-                                                     cl.getOptionValue(TEST_PROPS));
+            cl.getOptionValue(SERVER_CONFIG),
+            cl.getOptionValue(DB_DUMP_DIR),
+            cl.getOptionValue(LOGBACK_CONFIG),
+            valuationTime,
+            cl.getOptionValue(TEST_DIR),
+            cl.getOptionValue(TEST_VERSION),
+            cl.getOptionValue(TEST_PROPS));
       }
 
 
@@ -169,6 +169,7 @@ public class ViewRegressionTestTool {
           final RegressionTestResults regressionTestResults;
           if (fudgeMsgReader.hasNext()) {
             final FudgeMsg fudgeMsg = fudgeMsgReader.nextMessage();
+            @SuppressWarnings("unchecked")
             final Map<Pair<String, String>, CalculationResults> exemplarResults = (Map<Pair<String, String>, CalculationResults>) deserializer.fudgeMsgToObject(
                 fudgeMsg);
             final List<CalculationDifference> calculationDifferences = Lists.newArrayList();
@@ -182,53 +183,46 @@ public class ViewRegressionTestTool {
               calculationDifferences.add(CalculationDifference.between(exemplarResult, testViewResult, DELTA));
             }
             regressionTestResults = new RegressionTestResults(cl.getOptionValue(TEST_VERSION),
-                                                              cl.getOptionValue(TEST_VERSION),
-                                                              calculationDifferences);
+                cl.getOptionValue(TEST_VERSION),
+                calculationDifferences);
           } else {
             regressionTestResults = new RegressionTestResults(cl.getOptionValue(TEST_VERSION),
-                                                              cl.getOptionValue(TEST_VERSION),
-                                                              Collections.<CalculationDifference>emptyList());
+                cl.getOptionValue(TEST_VERSION),
+                Collections.<CalculationDifference>emptyList());
           }
 
           try (Writer writer = new BufferedWriter(new FileWriter(cl.getOptionValue(REPORT_FILE,
-                                                                                   DEFAULT_REPORT_FILE)))) {
+              DEFAULT_REPORT_FILE)))) {
             ReportGenerator.generateReport(regressionTestResults, ReportGenerator.Format.TEXT, writer);
           }
 
           return regressionTestResults.getStatus();
 
         }
-      } else {
-        return TestStatus.PASS;
       }
-    } else {
-      final ViewRegressionTest test = new ViewRegressionTest(cl.getOptionValue(PROJECT_NAME),
-                                                       cl.getOptionValue(SERVER_CONFIG),
-                                                       cl.getOptionValue(DB_DUMP_DIR),
-                                                       cl.getOptionValue(LOGBACK_CONFIG),
-                                                       valuationTime,
-                                                       cl.getOptionValue(BASE_DIR),
-                                                       cl.getOptionValue(BASE_VERSION),
-                                                       cl.getOptionValue(BASE_PROPS),
-                                                       cl.getOptionValue(TEST_DIR),
-                                                       cl.getOptionValue(TEST_VERSION),
-                                                       cl.getOptionValue(TEST_PROPS));
-      final RegressionTestResults results = test.run();
-      try (Writer writer = new BufferedWriter(new FileWriter(cl.getOptionValue(REPORT_FILE, DEFAULT_REPORT_FILE)))) {
-        ReportGenerator.generateReport(results, ReportGenerator.Format.TEXT, writer);
-      }
-      /*FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
-      try (FileWriter writer = new FileWriter(new File("/Users/chris/tmp/regression/results.xml"))) {
-        FudgeXMLStreamWriter streamWriter = new FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(), writer);
-        FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(streamWriter);
-        MutableFudgeMsg msg = serializer.objectToFudgeMsg(results);
-        FudgeSerializer.addClassHeader(msg, results.getClass());
-        fudgeMsgWriter.writeMessage(msg);
-        writer.append("\n");
-        fudgeMsgWriter.flush();
-      }*/
-      return results.getStatus();
+      return TestStatus.PASS;
     }
+    final ViewRegressionTest test = new ViewRegressionTest(cl.getOptionValue(PROJECT_NAME), cl.getOptionValue(SERVER_CONFIG), cl.getOptionValue(DB_DUMP_DIR),
+        cl.getOptionValue(LOGBACK_CONFIG), valuationTime, cl.getOptionValue(BASE_DIR), cl.getOptionValue(BASE_VERSION), cl.getOptionValue(BASE_PROPS),
+        cl.getOptionValue(TEST_DIR), cl.getOptionValue(TEST_VERSION), cl.getOptionValue(TEST_PROPS));
+    final RegressionTestResults results = test.run();
+    try (Writer writer = new BufferedWriter(new FileWriter(cl.getOptionValue(REPORT_FILE, DEFAULT_REPORT_FILE)))) {
+      ReportGenerator.generateReport(results, ReportGenerator.Format.TEXT, writer);
+    }
+    /*
+     * FudgeSerializer serializer = new
+     * FudgeSerializer(OpenGammaFudgeContext.getInstance()); try (FileWriter
+     * writer = new FileWriter(new
+     * File("/Users/chris/tmp/regression/results.xml"))) { FudgeXMLStreamWriter
+     * streamWriter = new
+     * FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(), writer);
+     * FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(streamWriter);
+     * MutableFudgeMsg msg = serializer.objectToFudgeMsg(results);
+     * FudgeSerializer.addClassHeader(msg, results.getClass());
+     * fudgeMsgWriter.writeMessage(msg); writer.append("\n");
+     * fudgeMsgWriter.flush(); }
+     */
+    return results.getStatus();
   }
 
   private static Options createOptions() {
@@ -236,40 +230,40 @@ public class ViewRegressionTestTool {
 
     // TODO extra options - java executable, arbitrary additional jvm args (for memory, GC config etc)
     final Option resultout = new Option(RESULT_OUT,
-                                         "resultout",
-                                         true,
-                                         "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
+        "resultout",
+        true,
+        "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
     resultout.setRequired(false);
     options.addOption(resultout);
 
     final Option resultin = new Option(RESULT_IN,
-                                         "resultin",
-                                         true,
-                                         "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
+        "resultin",
+        true,
+        "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
     resultin.setRequired(false);
     options.addOption(resultin);
 
 
 
     final Option projectNameOption = new Option(PROJECT_NAME,
-                                          "projectname",
-                                          true,
-                                          "Project name (as used in the build artifacts)");
+        "projectname",
+        true,
+        "Project name (as used in the build artifacts)");
     projectNameOption.setRequired(true);
     options.addOption(projectNameOption);
 
     final Option serverConfigOption = new Option(SERVER_CONFIG,
-                                           "serverconfig",
-                                           true,
-                                           "Configuration file used to run the server");
+        "serverconfig",
+        true,
+        "Configuration file used to run the server");
     serverConfigOption.setRequired(true);
     options.addOption(serverConfigOption);
 
     final Option dbDumpDirOption = new Option(DB_DUMP_DIR,
-                                        "dbdumpdir",
-                                        true,
-                                        "Directory containing the database dump files." +
-                                            " If this is omitted the database won't be created or populated, the existing database will be used");
+        "dbdumpdir",
+        true,
+        "Directory containing the database dump files." +
+        " If this is omitted the database won't be created or populated, the existing database will be used");
     options.addOption(dbDumpDirOption);
 
     final Option logbackConfigOption = new Option(LOGBACK_CONFIG, "logbackconfig", true, "Logback config for the servers");
@@ -279,16 +273,16 @@ public class ViewRegressionTestTool {
     options.addOption(valuationTimeOption);
 
     final Option baseDirOption = new Option(BASE_DIR,
-                                      "basedir",
-                                      true,
-                                      "Installation directory for the base version of the server");
+        "basedir",
+        true,
+        "Installation directory for the base version of the server");
     //baseDirOption.setRequired(true);
     options.addOption(baseDirOption);
 
     final Option newDirOption = new Option(TEST_DIR,
-                                     "testdir",
-                                     true,
-                                     "Installation directory for the test version of the server");
+        "testdir",
+        true,
+        "Installation directory for the test version of the server");
     //newDirOption.setRequired(true);
     options.addOption(newDirOption);
 

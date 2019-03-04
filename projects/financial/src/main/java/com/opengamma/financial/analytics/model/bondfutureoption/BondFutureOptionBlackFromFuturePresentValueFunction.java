@@ -29,8 +29,9 @@ import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 import com.opengamma.id.ExternalId;
 
 /**
- *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureOptionBlackFromFuturePresentValueFunction extends BondFutureOptionBlackFunction {
   /** String indicating the calculation method */
   public static final String FUTURES_PRICE = "FromFuturePrice";

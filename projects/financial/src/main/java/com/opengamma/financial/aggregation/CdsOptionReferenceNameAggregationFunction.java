@@ -8,7 +8,6 @@ package com.opengamma.financial.aggregation;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.legalentity.LegalEntity;
 import com.opengamma.core.legalentity.LegalEntitySource;
-import com.opengamma.core.position.Position;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.cds.AbstractCreditDefaultSwapSecurity;
@@ -43,11 +42,10 @@ public class CdsOptionReferenceNameAggregationFunction extends AbstractCdsOption
         if (underlying instanceof AbstractCreditDefaultSwapSecurity) {
           final String redCode = ((CreditDefaultSwapSecurity) underlying).getReferenceEntity().getValue();
           return legalEntitySource.getSingle(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
-        } else {
-          // CreditDefaultSwapOptionSecurity
-          // null communicates N/A
-          return null;
         }
+        // CreditDefaultSwapOptionSecurity
+        // null communicates N/A
+        return null;
 
       }
     });

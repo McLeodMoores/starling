@@ -125,19 +125,18 @@ public class YieldCurveInterpolatingFunction extends AbstractFunction {
 
       return interpolateCurve(curve, first, last);
 
-    } else {
-      final double first = 1. / 12;
-      final double last = 30;
-
-      return interpolateCurve(curve, first, last);
     }
+    final double first = 1. / 12;
+    final double last = 30;
+
+    return interpolateCurve(curve, first, last);
   }
 
   private static NodalDoublesCurve interpolateCurve(final Curve<Double, Double> curve, final double first, final double last) {
     final int steps = 100;
 
-    final List<Double> xs = new ArrayList<Double>(steps);
-    final List<Double> ys = new ArrayList<Double>(steps);
+    final List<Double> xs = new ArrayList<>(steps);
+    final List<Double> ys = new ArrayList<>(steps);
 
     // Output 100 points equally spaced along the curve
     final double step = (last - first) / (steps - 1);

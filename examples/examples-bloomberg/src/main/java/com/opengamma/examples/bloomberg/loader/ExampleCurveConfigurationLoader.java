@@ -11,13 +11,14 @@ import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.master.config.ConfigMaster;
 
 /**
- *
+ * @deprecated
  */
+@Deprecated
 public class ExampleCurveConfigurationLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { //CSIGNORE

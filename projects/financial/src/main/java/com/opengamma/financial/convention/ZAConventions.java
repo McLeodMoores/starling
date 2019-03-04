@@ -22,8 +22,10 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class ZAConventions {
   private static final char BBG_DAY_CODE = 'T';
   private static final char BBG_WEEK_CODE = 'Z';

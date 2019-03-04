@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -21,13 +21,12 @@ import com.opengamma.analytics.financial.model.finitedifference.ThetaMethodFinit
 import com.opengamma.analytics.financial.model.option.definition.Barrier;
 import com.opengamma.analytics.financial.model.option.definition.Barrier.BarrierType;
 import com.opengamma.analytics.financial.model.option.definition.Barrier.KnockType;
-import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.SurfaceArrayUtils;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
+ *
  */
 public class BarrierOptionPricer {
 
@@ -77,8 +76,8 @@ public class BarrierOptionPricer {
   public double getPrice(final EuropeanVanillaOption option, final Barrier barrier, final double rebate, final double spot, final double costOfCarry, final double rate, final double sigma) {
     Validate.notNull(option, "option");
     Validate.notNull(barrier, "barrier");
-    final boolean isKnockIn = (barrier.getKnockType() == KnockType.IN);
-    final boolean isDown = (barrier.getBarrierType() == BarrierType.DOWN);
+    final boolean isKnockIn = barrier.getKnockType() == KnockType.IN;
+    final boolean isDown = barrier.getBarrierType() == BarrierType.DOWN;
 
     //in these pathological cases the barrier is hit immediately so the value is just from the rebate (knock-out) or a European option (knock-in)
     if (isDown && spot <= barrier.getBarrierLevel() || !isDown && spot >= barrier.getBarrierLevel()) {
@@ -97,7 +96,7 @@ public class BarrierOptionPricer {
    * Computes the price of a one-touch out barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at any time before expiry,
    * the option is cancelled (knocked-out) and a rebate (which is often zero) is paid <b>immediately</b>. If the barrier is not hit, then a normal European option payment is made. <p>
    * If the barrier is above the spot it is assumed to be an up-and-out barrier (otherwise it would expire immediately) otherwise it is a down-and-out barrier
-   * As there are exact formulae for this case (see {@link BlackBarrierPriceFunction}), this is purely for testing purposes.
+   * As there are exact formulae for this case (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}), this is purely for testing purposes.
    * @param spot The current (i.e. option price time) of the underlying
    * @param barrierLevel The barrier level
    * @param strike The strike of the European option
@@ -173,7 +172,7 @@ public class BarrierOptionPricer {
    * Computes the price of a one-touch in barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at any time before expiry,
    * the option becomes a simple European (call or put). If the barrier is not hit a rebate is paid at the option expiry<p>
    * If the barrier is above the spot it is assumed to be an up-and-in barrier  otherwise it is a down-and-in barrier
-   * As there are exact formulae for this case (see {@link BlackBarrierPriceFunction}), this is purely for testing purposes.
+   * As there are exact formulae for this case (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}), this is purely for testing purposes.
    * @param spot The current (i.e. option price time) of the underlying
    * @param barrierLevel The barrier level
    * @param strike The strike of the European option

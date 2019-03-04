@@ -17,15 +17,16 @@ import com.opengamma.id.ExternalBundleIdentifiable;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalIdSearch;
-import com.opengamma.id.ExternalIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Holds instances of {@link ExternalIdentifiable} for the purpose of improving searching in
- * any of the In Memory Masters.
+ * Holds instances of {@link com.opengamma.id.ExternalIdentifiable} for the
+ * purpose of improving searching in any of the In Memory Masters.
  *
- * @param <T> the type of element stored
- * @param <V> the containing document
+ * @param <T>
+ *          the type of element stored
+ * @param <V>
+ *          the containing document
  */
 public class InMemoryExternalIdCache<T extends ExternalBundleIdentifiable, V> {
   private final Map<T, V> _allItems = new ConcurrentHashMap<>();

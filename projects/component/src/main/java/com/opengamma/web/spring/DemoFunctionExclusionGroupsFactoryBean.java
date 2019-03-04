@@ -46,9 +46,8 @@ public class DemoFunctionExclusionGroupsFactoryBean extends SingletonFactoryBean
       protected String getKey(final FunctionDefinition function) {
         if (function instanceof OpenGammaFunctionExclusions) {
           return ((OpenGammaFunctionExclusions) function).getMutualExclusionGroup();
-        } else {
-          return null;
         }
+        return null;
       }
 
       @Override

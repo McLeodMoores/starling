@@ -23,7 +23,9 @@ import com.opengamma.financial.security.future.BondFutureDeliverable;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class BondFutureNetBasisFromCurvesFunction extends BondFutureFromCurvesFunction {
   private static final BondFutureNetBasisFromCurvesCalculator CALCULATOR = BondFutureNetBasisFromCurvesCalculator.getInstance();
 

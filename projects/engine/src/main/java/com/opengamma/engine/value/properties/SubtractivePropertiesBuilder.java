@@ -103,10 +103,9 @@ public class SubtractivePropertiesBuilder extends ValueProperties.Builder {
   public ValueProperties get() {
     if (_properties.isEmpty()) {
       return ValueProperties.all();
-    } else {
-      _copied = false;
-      return createSubtractive(_properties);
     }
+    _copied = false;
+    return createSubtractive(_properties);
   }
 
   @Override

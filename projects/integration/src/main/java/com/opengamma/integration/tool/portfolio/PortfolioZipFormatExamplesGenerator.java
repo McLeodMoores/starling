@@ -97,8 +97,8 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
   }
 
   private static final Set<String> UNSUPPORTED_SECURITY_TYPES = Sets.newHashSet("CDS_INDEX", "CDS_INDEX_DEFINITION", "CDS", "RAW", "XXX", "MANAGEABLE",
-                                                                                "EXTERNAL_SENSITIVITIES_SECURITY", "EXTERNAL_SENSITIVITY_RISK_FACTORS");
-                                                                                // not enough string conversion stuff there for these yet
+      "EXTERNAL_SENSITIVITIES_SECURITY", "EXTERNAL_SENSITIVITY_RISK_FACTORS");
+  // not enough string conversion stuff there for these yet
 
   private List<ManageablePosition> loadSomePositions(final boolean includeTrades) {
     final List<ManageablePosition> positions = new ArrayList<>();
@@ -168,9 +168,8 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
             if (underlying != null) {
               return ObjectsPair.of(position,
                   new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying });
-            } else {
-              LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
             }
+            LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
           } catch (final Throwable e) {
             // Underlying not found
             LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
@@ -179,10 +178,9 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
         return ObjectsPair.of(position,
             new ManageableSecurity[] {(ManageableSecurity) security });
 
-      } else {
-        LOGGER.warn("Could not resolve security relating to position " + position.getName());
-        return ObjectsPair.of(null, null);
       }
+      LOGGER.warn("Could not resolve security relating to position " + position.getName());
+      return ObjectsPair.of(null, null);
     }
 
     @Override
@@ -219,14 +217,12 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
 
       if (SheetFormat.of(filename) == SheetFormat.ZIP) {
         return new ZippedPositionWriter(filename, includeTrades);
-      } else {
-        throw new OpenGammaRuntimeException("Input filename should end in .ZIP");
       }
+      throw new OpenGammaRuntimeException("Input filename should end in .ZIP");
 
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new PrettyPrintingPositionWriter(true);
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new PrettyPrintingPositionWriter(true);
   }
 
   @Override

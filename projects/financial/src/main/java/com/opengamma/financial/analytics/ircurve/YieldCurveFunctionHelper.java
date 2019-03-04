@@ -64,7 +64,7 @@ public class YieldCurveFunctionHelper {
     final LocalDate curveDate = atInstantZDT.toLocalDate();
     final InterpolatedYieldCurveSpecification specification = buildCurve(curveDate);
     final Instant expiry = findCurveExpiryDate(context.getSecuritySource(), atInstant, specification, atInstantZDT.with(LocalTime.MIDNIGHT).plusDays(1).minusNanos(1000000).toInstant());
-    return new Triple<>(expiry != null ? atInstantZDT.with(LocalTime.MIDNIGHT).toInstant() : null, expiry, specification);
+    return Triple.of(expiry != null ? atInstantZDT.with(LocalTime.MIDNIGHT).toInstant() : null, expiry, specification);
   }
 
   private Instant findCurveExpiryDate(final SecuritySource securitySource, final Instant curveDate, final InterpolatedYieldCurveSpecification specification, final Instant eod) {

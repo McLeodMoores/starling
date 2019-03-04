@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
@@ -15,7 +15,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class TenorLabelledMatrix1DTest {
@@ -67,7 +67,7 @@ public class TenorLabelledMatrix1DTest {
     assertArrayEquals(new double[] {2, 4, 6, 8}, newMatrix.getValues(), 1e-15);
   }
 
-  private void assertObjectArrayEquals(final Object[] expected, final Object[] actual) {
+  private static void assertObjectArrayEquals(final Object[] expected, final Object[] actual) {
     assertEquals(expected.length, actual.length);
     for (int i = 0; i < expected.length; i++) {
       assertEquals(expected[i], actual[i]);

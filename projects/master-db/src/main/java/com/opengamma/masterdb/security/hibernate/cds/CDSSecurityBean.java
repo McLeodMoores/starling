@@ -18,7 +18,6 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.cds.CDSSecurity;
 import com.opengamma.masterdb.security.hibernate.BusinessDayConventionBean;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.DayCountBean;
@@ -28,7 +27,9 @@ import com.opengamma.masterdb.security.hibernate.StubTypeBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link CDSSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.cds.CDSSecurity}.
+ * 
  * @author Martin Traverse
  */
 @BeanDefinition

@@ -36,7 +36,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionVannaVolgaPresentValueFunction extends FXOptionVannaVolgaSingleValuedFunction {
   private static final ForexOptionVanillaVannaVolgaMethod CALCULATOR = ForexOptionVanillaVannaVolgaMethod.getInstance();
 

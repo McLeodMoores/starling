@@ -45,8 +45,9 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * 
+ *
  */
+@Deprecated
 public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompiledInvoker {
   private static final double DAYS_IN_YEAR = 365.25;
   private static final CAPMFromRegressionCalculator CAPM_REGRESSION_MODEL = new CAPMFromRegressionCalculator();
@@ -67,7 +68,7 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
     DoubleTimeSeries<?> assetPnL = null;
     double assetFairValue = 0;
     final HistoricalTimeSeriesBundle timeSeries = new HistoricalTimeSeriesBundle();
-    for (ComputedValue input : inputs.getAllValues()) {
+    for (final ComputedValue input : inputs.getAllValues()) {
       if (ValueRequirementNames.PNL_SERIES.equals(input.getSpecification().getValueName())) {
         assetPnL = (DoubleTimeSeries<?>) inputs.getValue(ValueRequirementNames.PNL_SERIES); //TODO replace with return series when portfolio weights are in
       } else if (ValueRequirementNames.FAIR_VALUE.equals(input.getSpecification().getValueName())) {
@@ -79,7 +80,7 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
     }
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
-    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); //TODO 
+    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); //TODO
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueProperties constraints = desiredValue.getConstraints();
     final HistoricalTimeSeries marketTimeSeries = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, bundle.getCAPMMarket());
@@ -99,7 +100,7 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
     final double alphaResidual = regression.getResiduals()[0];
     final double alphaStdError = regression.getStandardErrorOfBetas()[0];
     final ValueProperties resultProperties = getResultProperties(desiredValues.iterator().next());
-    final Set<ComputedValue> result = new HashSet<ComputedValue>();
+    final Set<ComputedValue> result = new HashSet<>();
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ADJUSTED_R_SQUARED, targetSpec, resultProperties), regression.getAdjustedRSquared()));
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ALPHA, targetSpec, resultProperties), alpha));
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA, targetSpec, resultProperties), regression.getBetas()[1]));
@@ -136,7 +137,7 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
     if (returnCalculatorName == null || returnCalculatorName.size() != 1) {
       return null;
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(new ValueRequirement(ValueRequirementNames.PNL_SERIES, target.toSpecification(), ValueProperties.builder()
         .withAny(ValuePropertyNames.CURRENCY)
         .with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriod)
@@ -145,7 +146,7 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
         .with(ValuePropertyNames.RETURN_CALCULATOR, returnCalculatorName.iterator().next()).get()));
     requirements.add(new ValueRequirement(ValueRequirementNames.FAIR_VALUE, target.toSpecification()));
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); //TODO 
+    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); //TODO
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final HistoricalTimeSeriesResolutionResult marketTimeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
     if (marketTimeSeries == null) {
@@ -165,7 +166,7 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties resultProperties = getResultProperties();
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     results.add(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ADJUSTED_R_SQUARED, targetSpec, resultProperties));
     results.add(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ALPHA, targetSpec, resultProperties));

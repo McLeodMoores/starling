@@ -29,7 +29,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for USD deals
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class USDTest extends AbstractMockSourcesTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(USDTest.class);

@@ -20,7 +20,7 @@ import au.com.bytecode.opencsv.CSVParser;
 
 public class IRCurveParser {
 
-private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.class);
 
 
   private static final String CURVE_NAME = "Curve Name";
@@ -48,8 +48,8 @@ private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.c
   private static final String FORTY_YEARS = "40Y";
   private static final String FIFTY_YEARS = "50Y";
   private static final String[] DATES = new String[]{ THREE_MONTHS, SIX_MONTHS, NINE_MONTHS, ONE_YEAR, FIFTEEN_MONTHS, HEIGHTEEN_MONTHS, TWENTY_ONE_MONTHS,
-    TWO_YEARS, THREE_YEARS, FOUR_YEARS, FIVE_YEARS, SIX_YEARS, SEVEN_YEARS, HEIGHT_YEARS, NINE_YEARS, TEN_YEARS,
-    TWELVE_YEARS, FIFTEEN_YEARS, TWENTY_YEARS, TWENTY_FIVE_YEARS, THIRTY_YEARS, FORTY_YEARS, FIFTY_YEARS};
+      TWO_YEARS, THREE_YEARS, FOUR_YEARS, FIVE_YEARS, SIX_YEARS, SEVEN_YEARS, HEIGHT_YEARS, NINE_YEARS, TEN_YEARS,
+      TWELVE_YEARS, FIFTEEN_YEARS, TWENTY_YEARS, TWENTY_FIVE_YEARS, THIRTY_YEARS, FORTY_YEARS, FIFTY_YEARS};
   public static final LogNaturalCubicMonotonicityPreservingInterpolator1D LOG_NATURAL_CUBIC_MONOTONE_INSTANCE =
       new LogNaturalCubicMonotonicityPreservingInterpolator1D();
   private static final double[] TIMES = {0.249144422, 0.501026694, 0.750171116, 0.999315537, 1.25119781, 1.500342231,
@@ -82,13 +82,13 @@ private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.c
   }
 
 
-  private InterpolatedDoublesCurve createCurve(final FudgeMsg row) {
+  private static InterpolatedDoublesCurve createCurve(final FudgeMsg row) {
     final double[] discountFactors = new double [DATES.length];
     for (int i = 0; i < DATES.length; i++) {
       discountFactors[i] = row.getDouble(DATES[i]);
     }
     final InterpolatedDoublesCurve curve = new InterpolatedDoublesCurve(TIMES, discountFactors,
-      CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE, Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR), true, row.getString(CURVE_NAME));
+        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE, Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR), true, row.getString(CURVE_NAME));
     return curve;
   }
 

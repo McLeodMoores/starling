@@ -71,9 +71,9 @@ public class CurrencyMatrixSeriesSourcingFunction extends AbstractCurrencyMatrix
   protected ValueProperties.Builder createValueProperties() {
     final ValueProperties.Builder properties = super.createValueProperties();
     properties.withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
-        .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE);
+    .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+    .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
+    .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE);
     return properties;
   }
 
@@ -126,9 +126,8 @@ public class CurrencyMatrixSeriesSourcingFunction extends AbstractCurrencyMatrix
         }
 
       });
-    } else {
-      return false;
     }
+    return false;
   }
 
   protected ValueProperties getRequirementConstraints(final ValueRequirement desiredValue) {

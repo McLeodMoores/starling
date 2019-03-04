@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.quandl.historicaltimeseries.QuandlHistoricalTimeSeriesUpdater;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.financial.tool.ToolContext;
@@ -149,14 +148,13 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
             }
           }
           return true;
-        } else {
-          if (_feedback != null) {
-            synchronized (_feedback) {
-              _feedback.workCompleted(1);
-            }
-          }
-          return false;
         }
+        if (_feedback != null) {
+          synchronized (_feedback) {
+            _feedback.workCompleted(1);
+          }
+        }
+        return false;
       }
 
       @Override
@@ -174,7 +172,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
       @Override
       protected Map<ExternalIdBundle, LocalDateDoubleTimeSeries> getTimeSeries(final String dataField, final LocalDate startDate,
-                                                                               final LocalDate endDate, final String bbgDataProvider,
+          final LocalDate endDate, final String bbgDataProvider,
           final Set<ExternalIdBundle> identifierSet) {
         final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result = super.getTimeSeries(dataField, startDate, endDate, bbgDataProvider, identifierSet);
         if (_feedback != null) {

@@ -161,7 +161,7 @@ public class SimpleFXFuturePnLFunction extends AbstractFunction.NonCompiledInvok
     }
     final Position position = target.getPosition();
     final FXFutureSecurity future = (FXFutureSecurity) position.getSecurity();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties pvProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, future.getCurrency().getCode())
         .with(ValuePropertyNames.PAY_CURVE, payCurveName)

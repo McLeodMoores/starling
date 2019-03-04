@@ -175,9 +175,8 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     if (swap != null) {
       return new ManageableTrade(quantity.createQuantity(), persister.storeSecurity(swap), swap.getTradeDate().toLocalDate(), swap.getTradeDate().toOffsetDateTime().toOffsetTime(),
           ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
-    } else {
-      return null;
     }
+    return null;
   }
 
 }

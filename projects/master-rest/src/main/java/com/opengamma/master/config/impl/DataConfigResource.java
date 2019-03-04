@@ -162,7 +162,7 @@ public class DataConfigResource extends AbstractDataResource {
   }
 
   @PUT
-  public <T> Response replaceAllVersions(final List<ConfigDocument> replacementDocuments) {
+  public Response replaceAllVersions(final List<ConfigDocument> replacementDocuments) {
     final ObjectId objectId = getUrlConfigId();
     final List<UniqueId> result = getConfigMaster().replaceAllVersions(objectId, replacementDocuments);
     return responseOkObject(result);

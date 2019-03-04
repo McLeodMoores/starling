@@ -46,9 +46,8 @@ public class ResolutionFailureTreeTableModel extends AbstractTreeTableModel {
     } else if (node instanceof List) {
       if (column == 0) {
         return LIST_NAME;
-      } else {
-        return null;
       }
+      return null;
     } else if (node instanceof String) {
       switch (column) {
         case 0:

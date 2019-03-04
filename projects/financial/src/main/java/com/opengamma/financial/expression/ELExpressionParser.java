@@ -62,13 +62,13 @@ public class ELExpressionParser extends UserExpressionParser {
   /**
    * Parse the EL expression by wrapping it in "${...}". Note that a single equals sign (assignment) is converted
    * to the double equal comparison operation. I.e. "x=4" gets parsed as "${x==4}".
-   * 
+   *
    * @param fragment text expression
    * @return the parsed expression
    */
   private UserExpression elParse(final String fragment) {
     // TODO: escape the string if it contains "${}" characters
-    StringBuilder sb = new StringBuilder(fragment.length() + 10);
+    final StringBuilder sb = new StringBuilder(fragment.length() + 10);
     sb.append("${");
     int state = 0;
     for (int i = 0; i < fragment.length(); i++) {
@@ -162,7 +162,7 @@ public class ELExpressionParser extends UserExpressionParser {
     LOGGER.debug("Evaluating {}", sb);
     try {
       return new ELExpression(this, getFactory().createValueExpression(getContext(), sb.toString(), Object.class));
-    } catch (ELException e) {
+    } catch (final ELException e) {
       LOGGER.warn("EL exception = {}", e.getMessage());
       throw new IllegalArgumentException(fragment);
     }
@@ -279,16 +279,14 @@ public class ELExpressionParser extends UserExpressionParser {
         operation = elParse(source.substring(closeBracket + 1));
         tail = "";
       }
-      UserExpression expr = new IfExpression(condition, operation);
+      final UserExpression expr = new IfExpression(condition, operation);
       return Pairs.of(expr, tail);
-    } else {
-      final int semiColon = findSemiColon(source, 0);
-      if (semiColon == -1) {
-        return Pairs.of(elParse(source), "");
-      } else {
-        return Pairs.of(elParse(source.substring(0, semiColon)), source.substring(semiColon + 1));
-      }
     }
+    final int semiColon = findSemiColon(source, 0);
+    if (semiColon == -1) {
+      return Pairs.of(elParse(source), "");
+    }
+    return Pairs.of(elParse(source.substring(0, semiColon)), source.substring(semiColon + 1));
   }
 
   @Override
@@ -297,7 +295,7 @@ public class ELExpressionParser extends UserExpressionParser {
     if (parsed.getSecond().length() == 0) {
       return parsed.getFirst();
     }
-    List<UserExpression> exprs = new LinkedList<UserExpression>();
+    final List<UserExpression> exprs = new LinkedList<>();
     exprs.add(parsed.getFirst());
     do {
       parsed = ueParse(parsed.getSecond());

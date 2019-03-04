@@ -5,10 +5,8 @@
  */
 package com.opengamma.web.analytics.json;
 
-import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
-import com.opengamma.web.json.ValueRequirementJSONBuilder;
 import com.opengamma.web.json.ValueSpecificationJSONBuilder;
 
 /**

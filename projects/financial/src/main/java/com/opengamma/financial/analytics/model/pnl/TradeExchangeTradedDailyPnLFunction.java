@@ -82,9 +82,8 @@ public class TradeExchangeTradedDailyPnLFunction extends AbstractTradeOrDailyPos
     if (markToMarketSeries.getTimeSeries().isEmpty() || markToMarketSeries.getTimeSeries().getLatestValue() == null) {
       throw new NullPointerException("Could not get mark to market value for security " +
           security.getExternalIdBundle() + " for " + markDataField + " using " + resolutionKey + " for " + MAX_DAYS_OLD + " back from " + originalTradeDate);
-    } else {
-      return markToMarketSeries.getTimeSeries().getLatestTime();
     }
+    return markToMarketSeries.getTimeSeries().getLatestTime();
   }
 
   @Override

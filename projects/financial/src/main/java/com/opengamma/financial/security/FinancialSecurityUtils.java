@@ -37,9 +37,8 @@ public class FinancialSecurityUtils {
         final Currency ccy = ccyVisitor.getCurrency(security);
         if (ccy != null) {
           return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-        } else {
-          return ValueProperties.none();
         }
+        return ValueProperties.none();
       }
     });
     map.put(ComputationTargetType.SECURITY, new Function1<ComputationTarget, ValueProperties>() {
@@ -49,9 +48,8 @@ public class FinancialSecurityUtils {
         final Currency ccy = ccyVisitor.getCurrency(security);
         if (ccy != null) {
           return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-        } else {
-          return ValueProperties.none();
         }
+        return ValueProperties.none();
       }
     });
     map.put(ComputationTargetType.TRADE, new Function1<ComputationTarget, ValueProperties>() {
@@ -61,9 +59,8 @@ public class FinancialSecurityUtils {
         final Currency ccy = ccyVisitor.getCurrency(security);
         if (ccy != null) {
           return ValueProperties.with(ValuePropertyNames.CURRENCY, ccy.getCode()).get();
-        } else {
-          return ValueProperties.none();
         }
+        return ValueProperties.none();
       }
     });
     map.put(ComputationTargetType.CURRENCY, new Function1<ComputationTarget, ValueProperties>() {
@@ -83,9 +80,8 @@ public class FinancialSecurityUtils {
     final Function1<ComputationTarget, ValueProperties> operation = s_getCurrencyConstraint.get(target.getType());
     if (operation != null) {
       return operation.execute(target);
-    } else {
-      return ValueProperties.none();
     }
+    return ValueProperties.none();
   }
 
   /**
@@ -165,7 +161,7 @@ public class FinancialSecurityUtils {
    */
   public static CurrencyAmount getNotional(final Security security, final CurrencyPairs currencyPairs, final SecuritySource securitySource) {
     if (security instanceof FinancialSecurity) {
-      NotionalVisitor visitor = new NotionalVisitor(currencyPairs, securitySource);
+      final NotionalVisitor visitor = new NotionalVisitor(currencyPairs, securitySource);
       return ((FinancialSecurity) security).accept(visitor);
     }
     return null;

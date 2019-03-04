@@ -77,6 +77,9 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
         computeStddev = true;
       }
     }
+    if (constraints == null) {
+      throw new OpenGammaRuntimeException("Could not find constraints for " + desiredValues);
+    }
     final Set<String> scheduleCalculatorNames = constraints.getValues(ValuePropertyNames.SCHEDULE_CALCULATOR);
     final Set<String> meanCalculatorNames = constraints.getValues(ValuePropertyNames.MEAN_CALCULATOR);
     final Set<String> stdDevCalculatorNames = constraints.getValues(ValuePropertyNames.STD_DEV_CALCULATOR);

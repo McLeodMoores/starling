@@ -13,8 +13,9 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * @deprecated {@link MultiCurveCalculationConfig} is deprecated.
  */
+@Deprecated
 public class ConfigDBCurveCalculationConfigSource implements CurveCalculationConfigSource {
 
   private final ConfigSourceQuery<MultiCurveCalculationConfig> _query;
@@ -29,7 +30,7 @@ public class ConfigDBCurveCalculationConfigSource implements CurveCalculationCon
   }
 
   public ConfigDBCurveCalculationConfigSource(final ConfigSource configSource, final VersionCorrection versionCorrection) {
-    this(new ConfigSourceQuery<MultiCurveCalculationConfig>(configSource, MultiCurveCalculationConfig.class, versionCorrection));
+    this(new ConfigSourceQuery<>(configSource, MultiCurveCalculationConfig.class, versionCorrection));
   }
 
   public ConfigDBCurveCalculationConfigSource(final ConfigSourceQuery<MultiCurveCalculationConfig> query) {

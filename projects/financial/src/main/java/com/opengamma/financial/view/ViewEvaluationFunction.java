@@ -114,12 +114,11 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
           // Found a matching one
           LOGGER.debug("Using previous view definition {}", document.getUniqueId());
           return document.getUniqueId();
-        } else {
-          // Found a dead one; either our temp target unique identifiers are not unique (different repositories MUST have different schemes) or the identifier
-          // sequence has been restarted/repeated and is colliding with old or dead configuration documents.
-          LOGGER.info("Deleting expired view definition {}", document.getUniqueId());
-          master.removeVersion(document.getUniqueId());
         }
+        // Found a dead one; either our temp target unique identifiers are not unique (different repositories MUST have different schemes) or the identifier
+        // sequence has been restarted/repeated and is colliding with old or dead configuration documents.
+        LOGGER.info("Deleting expired view definition {}", document.getUniqueId());
+        master.removeVersion(document.getUniqueId());
       }
     }
     final ConfigItem<ViewDefinition> item = ConfigItem.of(viewDefinition);

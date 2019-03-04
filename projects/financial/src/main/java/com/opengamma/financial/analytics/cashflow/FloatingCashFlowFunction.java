@@ -57,7 +57,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FloatingCashFlowFunction extends AbstractFunction {
 
   private final String _valueRequirementName;

@@ -32,6 +32,7 @@ import com.opengamma.util.time.Tenor;
 /**
  *
  */
+@SuppressWarnings("deprecation")
 public class SpreadCurveFunctions {
 
   //private final static PresentValueCreditDefaultSwap cdsPresentValueCalculator = new PresentValueCreditDefaultSwap();

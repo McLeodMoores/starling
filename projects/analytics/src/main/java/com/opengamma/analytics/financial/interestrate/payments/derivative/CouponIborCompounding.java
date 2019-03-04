@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
@@ -59,7 +58,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Constructor.
-   * 
+   *
    * @param currency
    *          The payment currency.
    * @param paymentTime
@@ -111,7 +110,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Constructor.
-   * 
+   *
    * @param currency
    *          The payment currency.
    * @param paymentTime
@@ -156,7 +155,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Returns the The notional with the interest already fixed accrued.
-   * 
+   *
    * @return The notional accrued.
    */
   public double getNotionalAccrued() {
@@ -165,7 +164,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Returns the Ibor index underlying the coupon.
-   * 
+   *
    * @return The index.
    */
   @Override
@@ -175,7 +174,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Returns the payment accrual factors for each sub-period.
-   * 
+   *
    * @return The factors.
    */
   public double[] getPaymentAccrualFactors() {
@@ -184,7 +183,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Returns the fixing times for the different remaining periods.
-   * 
+   *
    * @return The times.
    */
   @Override
@@ -194,7 +193,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Gets the fixing period start times (in years).
-   * 
+   *
    * @return The times.
    */
   @Override
@@ -204,7 +203,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Gets the fixing period end times (in years).
-   * 
+   *
    * @return The times.
    */
   @Override
@@ -214,7 +213,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Returns the fixing period accrual factors for each sub-period.
-   * 
+   *
    * @return The factors.
    */
   @Override
@@ -224,7 +223,7 @@ public class CouponIborCompounding extends Coupon implements DepositIndexCompoun
 
   /**
    * Gets the forward curve name.
-   * 
+   *
    * @return the _forward curve name
    * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
    */

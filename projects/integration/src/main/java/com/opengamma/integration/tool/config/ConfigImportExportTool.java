@@ -142,18 +142,16 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
     if (getCommandLine().hasOption("type")) {
       final String[] typeValues = getCommandLine().getOptionValues("type");
       return Arrays.asList(typeValues);
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   private List<String> getNames() {
     if (getCommandLine().hasOption("name")) {
       final String[] nameValues = getCommandLine().getOptionValues("name");
       return Arrays.asList(nameValues);
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
   private void checkForInvalidOption(final String longOpt) {

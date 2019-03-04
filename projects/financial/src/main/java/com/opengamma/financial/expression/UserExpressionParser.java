@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public abstract class UserExpressionParser {
 
-  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<ComputationTargetResolver.AtVersionCorrection>();
+  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<>();
 
   /**
    * Returns the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing deep resolution of referenced entities.
@@ -62,7 +62,7 @@ public abstract class UserExpressionParser {
     if (id == null) {
       return null;
     }
-    if ((id instanceof UniqueIdentifiable) && type.isCompatible((UniqueIdentifiable) id)) {
+    if (id instanceof UniqueIdentifiable && type.isCompatible((UniqueIdentifiable) id)) {
       return (T) id;
     }
     ComputationTargetSpecification spec;
@@ -92,7 +92,7 @@ public abstract class UserExpressionParser {
   private final Map<Class<?>, Map<String, Pair<Class<?>, Function<?, ?>>>> _synthetics;
 
   protected UserExpressionParser() {
-    _synthetics = new HashMap<Class<?>, Map<String, Pair<Class<?>, Function<?, ?>>>>();
+    _synthetics = new HashMap<>();
   }
 
   /**

@@ -128,9 +128,8 @@ public class FinancialSecurityTargetDigests extends SecurityTypeTargetDigests im
     final Digests digests = _pairs.get(a);
     if (digests != null) {
       return digests.get(b);
-    } else {
-      return null;
     }
+    return null;
   }
 
   // SecurityTypeTargetDigests
@@ -139,9 +138,8 @@ public class FinancialSecurityTargetDigests extends SecurityTypeTargetDigests im
   protected Object getSecurityDigest(final Security security) {
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(this);
-    } else {
-      return super.getSecurityDigest(security);
     }
+    return super.getSecurityDigest(security);
   }
 
   // FinancialSecurityVisitor

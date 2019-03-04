@@ -57,11 +57,10 @@ public class EHCachingExchangeSourceTest {
 
   // -------------------------------------------------------------------------
   /**
-   * @throws InterruptedException
-   *           if there is an interruption
+   *
    */
   @Test
-  public void getById() throws InterruptedException {
+  public void getById() {
     final AtomicLong getCount = new AtomicLong(0);
     final ExchangeSource underlying = Mockito.mock(ExchangeSource.class);
     Mockito.when(underlying.getSingle(Matchers.<ExternalId> anyObject())).thenAnswer(new Answer<Exchange>() {

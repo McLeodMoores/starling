@@ -57,7 +57,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionBlackConstantSpreadThetaFunction extends FXOptionBlackMultiValuedFunction {
   private static final ConstantSpreadHorizonThetaCalculator CALCULATOR = ConstantSpreadHorizonThetaCalculator.getInstance();
 

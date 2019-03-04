@@ -42,7 +42,7 @@ public class SubdirsRegressionIOTest {
   private static void delete(final File file) {
     final File[] subfiles = file.listFiles();
     if (subfiles != null) {
-      for (File subfile : subfiles) {
+      for (final File subfile : subfiles) {
         if (!subfile.getName().startsWith(".")) {
           delete(subfile);
         }
@@ -122,7 +122,7 @@ public class SubdirsRegressionIOTest {
       instance.write("foo", "Foo instance", "0");
       instance.endWrite();
       Mockito.verify(format).write(Mockito.<Object>any(), Mockito.eq("Foo instance"), Mockito.<OutputStream>any());
-      assertTrue((new File(new File(file, "foo"), "0.obj")).exists());
+      assertTrue(new File(new File(file, "foo"), "0.obj").exists());
     } finally {
       delete(file);
     }
@@ -132,8 +132,8 @@ public class SubdirsRegressionIOTest {
     final File file = new File(tmpdir(), name());
     try {
       final Format format = Mockito.mock(Format.class);
-      (new File(file, "foo")).mkdirs();
-      (new File(new File(file, "foo"), "0")).createNewFile();
+      new File(file, "foo").mkdirs();
+      new File(new File(file, "foo"), "0").createNewFile();
       Mockito.when(format.read(Mockito.<Object>any(), Mockito.<InputStream>any())).thenReturn("Foo instance");
       final RegressionIO instance = new SubdirsRegressionIO(file, format, true);
       instance.beginRead();
@@ -150,7 +150,7 @@ public class SubdirsRegressionIOTest {
     try {
       final Format format = Mockito.mock(Format.class);
       final RegressionIO instance = new SubdirsRegressionIO(file, format, true);
-      (new File(file, "bar")).mkdirs();
+      new File(file, "bar").mkdirs();
       instance.beginRead();
       instance.read("foo", "0");
     } finally {
@@ -190,7 +190,7 @@ public class SubdirsRegressionIOTest {
     try {
       final Format format = Mockito.mock(Format.class);
       final RegressionIO instance = new SubdirsRegressionIO(file, format, true);
-      (new File(file, "foo")).createNewFile();
+      new File(file, "foo").createNewFile();
       instance.beginRead();
       instance.enumObjects("foo");
     } finally {
@@ -203,7 +203,7 @@ public class SubdirsRegressionIOTest {
     try {
       final Format format = Mockito.mock(Format.class);
       final RegressionIO instance = new SubdirsRegressionIO(file, format, true);
-      (new File(file, "foo")).mkdirs();
+      new File(file, "foo").mkdirs();
       instance.beginRead();
       assertEquals(instance.enumObjects("foo"), Collections.emptyList());
       instance.endRead();
@@ -217,11 +217,11 @@ public class SubdirsRegressionIOTest {
     try {
       final Format format = Mockito.mock(Format.class);
       final RegressionIO instance = new SubdirsRegressionIO(file, format, true);
-      (new File(file, "foo")).mkdirs();
-      (new File((new File(file, "foo")), "0")).createNewFile();
-      (new File((new File(file, "foo")), "1")).createNewFile();
+      new File(file, "foo").mkdirs();
+      new File(new File(file, "foo"), "0").createNewFile();
+      new File(new File(file, "foo"), "1").createNewFile();
       instance.beginRead();
-      assertEquals(new HashSet<String>(instance.enumObjects("foo")), ImmutableSet.of("0", "1"));
+      assertEquals(new HashSet<>(instance.enumObjects("foo")), ImmutableSet.of("0", "1"));
       instance.endRead();
     } finally {
       delete(file);
@@ -234,13 +234,13 @@ public class SubdirsRegressionIOTest {
       final Format format = Mockito.mock(Format.class);
       Mockito.when(format.getLogicalFileExtension(null)).thenReturn(".obj");
       final RegressionIO instance = new SubdirsRegressionIO(file, format, true);
-      (new File(file, "foo")).mkdirs();
-      (new File((new File(file, "foo")), "0")).createNewFile();
-      (new File((new File(file, "foo")), "1.obj")).createNewFile();
-      (new File((new File(file, "foo")), "2.obj")).createNewFile();
-      (new File((new File(file, "foo")), "3")).createNewFile();
+      new File(file, "foo").mkdirs();
+      new File(new File(file, "foo"), "0").createNewFile();
+      new File(new File(file, "foo"), "1.obj").createNewFile();
+      new File(new File(file, "foo"), "2.obj").createNewFile();
+      new File(new File(file, "foo"), "3").createNewFile();
       instance.beginRead();
-      assertEquals(new HashSet<String>(instance.enumObjects("foo")), ImmutableSet.of("1", "2"));
+      assertEquals(new HashSet<>(instance.enumObjects("foo")), ImmutableSet.of("1", "2"));
       instance.endRead();
     } finally {
       delete(file);

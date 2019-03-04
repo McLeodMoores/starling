@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve;
@@ -48,7 +48,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * 
+ *
  */
 public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction {
 
@@ -150,7 +150,7 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
 
       @Override
       public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-        final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+        final Set<ValueRequirement> result = new HashSet<>();
         result.add(_helper.getMarketDataValueRequirement());
         return result;
       }
@@ -167,7 +167,7 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
         final InterpolatedYieldCurveSpecificationWithSecurities specWithSecurities = builder.resolveToSecurity(specification, marketData);
         final Clock snapshotClock = executionContext.getValuationClock();
         final ZonedDateTime today = ZonedDateTime.now(snapshotClock); // TODO: change to times
-        final Map<Double, Double> timeInYearsToRates = new TreeMap<Double, Double>();
+        final Map<Double, Double> timeInYearsToRates = new TreeMap<>();
         boolean isFirst = true;
         for (final FixedIncomeStripWithSecurity strip : specWithSecurities.getStrips()) {
           Double price = marketData.getDataPoint(strip.getSecurityIdentifier());

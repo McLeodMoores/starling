@@ -76,8 +76,8 @@ implements MarketDataSnapshotMaster {
     }
     return new Try<MarketDataSnapshotHistoryResult>() {
       @Override
-      public MarketDataSnapshotHistoryResult tryMaster(final MarketDataSnapshotMaster master) {
-        return master.history(request);
+      public MarketDataSnapshotHistoryResult tryMaster(final MarketDataSnapshotMaster m) {
+        return m.history(request);
       }
     }.each(request.getObjectId().getScheme());
   }

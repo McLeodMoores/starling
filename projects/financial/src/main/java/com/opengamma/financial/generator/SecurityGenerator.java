@@ -505,9 +505,8 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   public Currency[] getCurrencies() {
     if (_currencies == null) {
       return getDefaultCurrencies();
-    } else {
-      return _currencies;
     }
+    return _currencies;
   }
 
   protected Currency getRandomCurrency() {

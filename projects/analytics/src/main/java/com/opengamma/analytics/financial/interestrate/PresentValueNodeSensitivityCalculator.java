@@ -11,13 +11,14 @@ import java.util.Map;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.Validate;
 
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Computes the sensitivity to the node in the curves.
- * @deprecated Use the calculators that reference {@link ParameterProviderInterface}
+ * 
+ * @deprecated Use the calculators that reference
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
 @Deprecated
 public class PresentValueNodeSensitivityCalculator extends NodeYieldSensitivityCalculator {

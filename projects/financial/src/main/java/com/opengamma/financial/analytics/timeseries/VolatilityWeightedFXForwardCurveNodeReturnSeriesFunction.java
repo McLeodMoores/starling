@@ -38,9 +38,8 @@ public class VolatilityWeightedFXForwardCurveNodeReturnSeriesFunction extends FX
       // NOTE jonathan 2013-04-29 -- should start a day earlier so the result after weighting starts at the startDate,
       // but need to know previous date with data
       return startDate;
-    } else {
-      return Iterables.getOnlyElement(volWeightingStartDates);
     }
+    return Iterables.getOnlyElement(volWeightingStartDates);
   }
 
   @Override

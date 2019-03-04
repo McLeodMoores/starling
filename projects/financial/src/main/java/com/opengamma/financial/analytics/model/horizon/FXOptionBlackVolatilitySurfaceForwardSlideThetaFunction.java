@@ -54,7 +54,9 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXOptionBlackVolatilitySurfaceForwardSlideThetaFunction extends FXOptionBlackMultiValuedFunction {
   private static final VolatilitySurfaceForwardSlideCalculator CALCULATOR = VolatilitySurfaceForwardSlideCalculator.getInstance();
 

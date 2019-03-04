@@ -8,7 +8,6 @@ package com.opengamma.analytics.financial.interestrate.future.calculator;
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.future.derivative.BondFuture;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureTransaction;
 import com.opengamma.analytics.financial.interestrate.future.method.BondFutureDiscountingMethod;
@@ -17,7 +16,7 @@ import com.opengamma.analytics.financial.interestrate.future.method.InterestRate
 // CSOFF
 /**
  * Calculate present value for futures from the quoted price.
- * @deprecated {@link YieldCurveBundle} is deprecated
+ * @deprecated {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle} is deprecated
  */
 @Deprecated
 public final class PresentValueFromFuturePriceCalculator extends InstrumentDerivativeVisitorAdapter<Double, Double> {

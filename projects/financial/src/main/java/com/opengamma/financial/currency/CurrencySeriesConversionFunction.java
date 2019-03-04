@@ -175,22 +175,21 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
     if (outputCurrency.equals(inputCurrency)) {
       // Don't think this should happen
       return Collections.singleton(inputValue);
-    } else {
-      LOGGER.debug("Converting from {} to {}", inputCurrency, outputCurrency);
-      final Object converted;
-      if (exchangeRates != null) {
-        converted = convertValue(inputValue, desiredValue, exchangeRates);
-      } else if (exchangeRate != null) {
-        converted = convertValue(inputValue, desiredValue, exchangeRate);
-      } else {
-        return null;
-      }
-      if (converted != null) {
-        return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
-      } else {
-        return null;
-      }
     }
+    LOGGER.debug("Converting from {} to {}", inputCurrency, outputCurrency);
+    final Object converted;
+    if (exchangeRates != null) {
+      converted = convertValue(inputValue, desiredValue, exchangeRates);
+    } else if (exchangeRate != null) {
+      converted = convertValue(inputValue, desiredValue, exchangeRate);
+    } else {
+      return null;
+    }
+    if (converted != null) {
+      return Collections.singleton(
+          new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
+    }
+    return null;
   }
 
   @Override
@@ -209,10 +208,9 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
         }
         LOGGER.debug("Injecting view default currency {}", defaultCurrencyISO);
         return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue, defaultCurrencyISO));
-      } else {
-        LOGGER.debug("Cannot satisfy a wildcard currency constraint");
-        return null;
       }
+      LOGGER.debug("Cannot satisfy a wildcard currency constraint");
+      return null;
     } else {
       // Actual input requirement is desired requirement with the currency wild-carded
       return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue));

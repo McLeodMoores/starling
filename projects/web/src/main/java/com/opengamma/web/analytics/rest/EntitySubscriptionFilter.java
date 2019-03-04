@@ -8,7 +8,6 @@ package com.opengamma.web.analytics.rest;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.auth.AuthUtils;
 import com.opengamma.web.analytics.push.ConnectionManager;
-import com.opengamma.web.analytics.push.LongPollingServlet;
 import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;

@@ -11,12 +11,10 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
-import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborSpreadDefinition;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
-import com.opengamma.analytics.financial.model.option.definition.EuropeanVanillaOptionDefinition;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Expiry;
@@ -51,7 +49,7 @@ public final class SwaptionPhysicalFixedIborSpreadDefinition implements Instrume
    * @param isCall Call.
    * @param isLong The long (true) / short (false) flag.
    */
-  private SwaptionPhysicalFixedIborSpreadDefinition(final ZonedDateTime expiryDate, final double strike, final SwapFixedIborSpreadDefinition underlyingSwap,
+  private SwaptionPhysicalFixedIborSpreadDefinition(final ZonedDateTime expiryDate, final SwapFixedIborSpreadDefinition underlyingSwap,
       final boolean isCall, final boolean isLong) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
@@ -74,9 +72,7 @@ public final class SwaptionPhysicalFixedIborSpreadDefinition implements Instrume
   public static SwaptionPhysicalFixedIborSpreadDefinition from(final ZonedDateTime expiryDate, final SwapFixedIborSpreadDefinition underlyingSwap, final boolean isLong) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
-    final double strike = underlyingSwap.getFixedLeg().getNthPayment(0).getRate();
-    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in the pricing methods.
-    return new SwaptionPhysicalFixedIborSpreadDefinition(expiryDate, strike, underlyingSwap, underlyingSwap.getFixedLeg().isPayer(), isLong);
+    return new SwaptionPhysicalFixedIborSpreadDefinition(expiryDate, underlyingSwap, underlyingSwap.getFixedLeg().isPayer(), isLong);
   }
 
   /**
@@ -91,9 +87,7 @@ public final class SwaptionPhysicalFixedIborSpreadDefinition implements Instrume
   public static SwaptionPhysicalFixedIborSpreadDefinition from(final ZonedDateTime expiryDate, final SwapFixedIborSpreadDefinition underlyingSwap, final boolean isCall, final boolean isLong) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
-    final double strike = underlyingSwap.getFixedLeg().getNthPayment(0).getRate();
-    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in the pricing methods.
-    return new SwaptionPhysicalFixedIborSpreadDefinition(expiryDate, strike, underlyingSwap, isCall, isLong);
+    return new SwaptionPhysicalFixedIborSpreadDefinition(expiryDate, underlyingSwap, isCall, isLong);
   }
 
   /**

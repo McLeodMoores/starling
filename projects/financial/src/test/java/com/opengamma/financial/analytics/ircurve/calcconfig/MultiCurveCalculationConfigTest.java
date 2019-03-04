@@ -22,7 +22,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Test.
+ * @deprecated This configuration type should no longer be used.
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class MultiCurveCalculationConfigTest extends FinancialTestBase {
 

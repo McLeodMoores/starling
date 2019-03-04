@@ -26,13 +26,13 @@ public class FloatingPaymentMatrix {
   private final int _maxEntries;
 
   public FloatingPaymentMatrix() {
-    _values = new TreeMap<LocalDate, List<Pair<CurrencyAmount, String>>>();
+    _values = new TreeMap<>();
     _maxEntries = 0;
   }
 
   public FloatingPaymentMatrix(final Map<LocalDate, List<Pair<CurrencyAmount, String>>> values) {
     ArgumentChecker.notNull(values, "values");
-    _values = new TreeMap<LocalDate, List<Pair<CurrencyAmount, String>>>(values);
+    _values = new TreeMap<>(values);
     int count = 0;
     for (final List<Pair<CurrencyAmount, String>> pairs : values.values()) {
       if (pairs.size() > count) {
@@ -45,13 +45,13 @@ public class FloatingPaymentMatrix {
   public FloatingPaymentMatrix(final Map<LocalDate, List<Pair<CurrencyAmount, String>>> values, final int maxEntries) {
     ArgumentChecker.notNull(values, "values");
     ArgumentChecker.notNegative(maxEntries, "max entries");
-    _values = new TreeMap<LocalDate, List<Pair<CurrencyAmount, String>>>(values);
+    _values = new TreeMap<>(values);
     _maxEntries = maxEntries;
   }
 
   public FloatingPaymentMatrix add(final Map<LocalDate, List<Pair<CurrencyAmount, String>>> resets) {
     ArgumentChecker.notNull(resets, "resets");
-    final Map<LocalDate, List<Pair<CurrencyAmount, String>>> values = new TreeMap<LocalDate, List<Pair<CurrencyAmount, String>>>(_values);
+    final Map<LocalDate, List<Pair<CurrencyAmount, String>>> values = new TreeMap<>(_values);
     for (final Map.Entry<LocalDate, List<Pair<CurrencyAmount, String>>> entry : resets.entrySet()) {
       final LocalDate date = entry.getKey();
       final List<Pair<CurrencyAmount, String>> newList = entry.getValue();

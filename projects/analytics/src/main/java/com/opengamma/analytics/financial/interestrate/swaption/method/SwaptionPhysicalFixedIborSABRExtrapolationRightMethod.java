@@ -17,17 +17,21 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.B
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.SABRExtrapolationRightFunction;
 import com.opengamma.analytics.financial.model.volatility.smile.function.SABRFormulaData;
-import com.opengamma.analytics.financial.model.volatility.smile.function.SABRHaganVolatilityFunction;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class used to compute the price and sensitivity of a physical delivery swaption with SABR model and extrapolation to the right.
- * Implemented only for the {@link SABRHaganVolatilityFunction}.
- * OpenGamma implementation note for the extrapolation: Smile extrapolation, version 1.2, May 2011.
- * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborSABRExtrapolationRightMethod}
+ * Class used to compute the price and sensitivity of a physical delivery
+ * swaption with SABR model and extrapolation to the right. Implemented only for
+ * the
+ * {@link com.opengamma.analytics.financial.model.volatility.smile.function.SABRHaganVolatilityFunction}.
+ * OpenGamma implementation note for the extrapolation: Smile extrapolation,
+ * version 1.2, May 2011.
+ * 
+ * @deprecated Use
+ *             {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborSABRExtrapolationRightMethod}
  */
 @Deprecated
 public class SwaptionPhysicalFixedIborSABRExtrapolationRightMethod {
@@ -154,7 +158,7 @@ public class SwaptionPhysicalFixedIborSABRExtrapolationRightMethod {
     final SABRExtrapolationRightFunction sabrExtrapolation = new SABRExtrapolationRightFunction(forwardModified, sabrParam, _cutOffStrike, swaption.getTimeToExpiry(), _mu);
     final double[] priceDSabr = new double[4];
     sabrExtrapolation.priceAdjointSABR(option, priceDSabr);
-    final double omega = (swaption.isLong() ? 1.0 : -1.0);
+    final double omega = swaption.isLong() ? 1.0 : -1.0;
     sensi.addAlpha(expiryMaturity, omega * pvbpModified * priceDSabr[0]);
     sensi.addBeta(expiryMaturity, omega * pvbpModified * priceDSabr[1]);
     sensi.addRho(expiryMaturity, omega * pvbpModified * priceDSabr[2]);

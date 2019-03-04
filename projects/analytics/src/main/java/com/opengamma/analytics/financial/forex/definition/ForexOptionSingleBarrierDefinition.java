@@ -14,12 +14,11 @@ import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.model.option.definition.Barrier;
-import com.opengamma.analytics.financial.model.option.definition.Barrier.BarrierType;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class describing a single-barrier FX option definition. The class wraps a vanilla European FX option ({@code ForexOptionVanillaDefinition}) and a
- * {@link BarrierType}.
+ * {@link com.opengamma.analytics.financial.model.option.definition.Barrier.BarrierType}.
  * It is suppose that the barrier has not been activated yet (and thus there is no flag indicated if the activation took place already).
  */
 public class ForexOptionSingleBarrierDefinition implements InstrumentDefinition<InstrumentDerivative> {
@@ -125,7 +124,7 @@ public class ForexOptionSingleBarrierDefinition implements InstrumentDefinition<
     result = prime * result + _barrier.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_rebate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingOption.hashCode();
     return result;
   }

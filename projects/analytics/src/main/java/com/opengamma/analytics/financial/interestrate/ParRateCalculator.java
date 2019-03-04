@@ -28,15 +28,18 @@ import com.opengamma.analytics.financial.interestrate.payments.method.CouponONDi
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swap.method.SwapFixedCouponDiscountingMethod;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Get the single fixed rate that makes the PV of the instrument zero. For  fixed-float swaps this is the swap rate, for FRAs it is the forward etc.
- * For instruments that cannot PV to zero, e.g. bonds, a single payment of -1.0 is assumed at zero (i.e. the bond must PV to 1.0)
- * @deprecated Use the par rate calculators that reference {@link ParameterProviderInterface}
+ * Get the single fixed rate that makes the PV of the instrument zero. For
+ * fixed-float swaps this is the swap rate, for FRAs it is the forward etc. For
+ * instruments that cannot PV to zero, e.g. bonds, a single payment of -1.0 is
+ * assumed at zero (i.e. the bond must PV to 1.0)
+ * 
+ * @deprecated Use the par rate calculators that reference
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
 @Deprecated
 public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {

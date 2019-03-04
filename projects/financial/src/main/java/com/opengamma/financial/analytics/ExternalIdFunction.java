@@ -51,9 +51,8 @@ public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
       }
       final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.EXTERNAL_ID, target.toSpecification(), constraints);
       return Collections.singleton(new ComputedValue(spec, result));
-    } else {
-      throw new OpenGammaRuntimeException("Could not get id for scheme " + schemeName);
     }
+    throw new OpenGammaRuntimeException("Could not get id for scheme " + schemeName);
   }
 
   @Override
@@ -68,7 +67,7 @@ public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
       return null;
     }
     final ValueProperties.Builder properties = createValueProperties();
-    for (ExternalId identifier : identifiers) {
+    for (final ExternalId identifier : identifiers) {
       properties.with(EXTERNAL_SCHEME_NAME, identifier.getScheme().getName());
     }
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.EXTERNAL_ID, target.toSpecification(), properties.get()));

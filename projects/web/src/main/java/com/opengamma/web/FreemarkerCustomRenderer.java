@@ -25,7 +25,7 @@ public final class FreemarkerCustomRenderer {
    */
   public static final Object INSTANCE = new FreemarkerCustomRenderer();
 
-  public String printExerciseType(final ExerciseType exerciseType) {
+  public static String printExerciseType(final ExerciseType exerciseType) {
     ArgumentChecker.notNull(exerciseType, "exerciseType");
     final String result = exerciseType.accept(new ExerciseTypeNameVisitor());
     return result;

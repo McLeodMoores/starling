@@ -20,7 +20,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class IRFutureConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<InterestRateFutureTransactionDefinition, YieldCurveBundle, Double> {
   /** Rolls down a yield curve bundle */
   private static final ConstantSpreadYieldCurveBundleRolldownFunction CURVE_ROLLDOWN = ConstantSpreadYieldCurveBundleRolldownFunction.getInstance();

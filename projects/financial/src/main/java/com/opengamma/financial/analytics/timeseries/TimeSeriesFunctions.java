@@ -16,7 +16,6 @@ import com.opengamma.engine.function.config.BeanDynamicFunctionConfigurationSour
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.VersionedFunctionConfigurationBean;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.analytics.ircurve.YieldCurveDefinition;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfig;
 import com.opengamma.financial.analytics.model.curve.interestrate.ImpliedDepositCurveFunction;
@@ -29,6 +28,7 @@ import com.opengamma.master.config.impl.ConfigSearchIterator;
 /**
  * Function repository configuration source for the functions contained in this package.
  */
+@SuppressWarnings("deprecation")
 public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
@@ -67,7 +67,9 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for yield curve functions based on the items defined in a Config Master.
+ * @deprecated This configuration type should no longer be used.
    */
+  @Deprecated
   public static class Providers extends VersionedFunctionConfigurationBean {
     /** The configuration master */
     private ConfigMaster _configMaster;

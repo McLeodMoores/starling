@@ -102,7 +102,7 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
    */
   private List<LocalDate> buildDates() {
     final Clock clock = Clock.systemDefaultZone();
-    final List<LocalDate> dates = new ArrayList<LocalDate>();
+    final List<LocalDate> dates = new ArrayList<>();
     final LocalDate twoYearsAgo = LocalDate.now(clock).minusYears(2);
     final LocalDate twoYearsTime = LocalDate.now(clock).plusYears(2);
     for (LocalDate next = twoYearsAgo; next.isBefore(twoYearsTime); next = next.plusMonths(3)) {
@@ -119,8 +119,8 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
    * @return list of names of config objects matching glob expression
    */
   private List<YieldCurveDefinition> getCurveDefinitionNames(final ConfigMaster configMaster, final String nameExpr) {
-    final List<YieldCurveDefinition> results = new ArrayList<YieldCurveDefinition>();
-    final ConfigSearchRequest<YieldCurveDefinition> request = new ConfigSearchRequest<YieldCurveDefinition>(YieldCurveDefinition.class);
+    final List<YieldCurveDefinition> results = new ArrayList<>();
+    final ConfigSearchRequest<YieldCurveDefinition> request = new ConfigSearchRequest<>(YieldCurveDefinition.class);
     request.setName(nameExpr);
     for (final ConfigDocument doc : ConfigSearchIterator.iterable(configMaster, request)) {
       results.add((YieldCurveDefinition) doc.getConfig().getValue());
@@ -129,11 +129,15 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
   }
 
   /**
-   * For a given list of curve definitions, on a given list of dates, get all ids on futures required by those curves.
+   * For a given list of curve definitions, on a given list of dates, get all
+   * ids on futures required by those curves.
    *
-   * @param configSource configuration source
-   * @param curveDefs curve definitions
-   * @param dates list of dates to construct the curve on
+   * @param configSource
+   *          configuration source
+   * @param curveDefs
+   *          curve definitions
+   * @param dates
+   *          list of dates to construct the curve on
    * @return list of all futures ids required by curves
    */
   private Set<ExternalId> getCurveFutureExternalIds(final ConfigSource configSource, final Collection<YieldCurveDefinition> curveDefs, final List<LocalDate> dates) {

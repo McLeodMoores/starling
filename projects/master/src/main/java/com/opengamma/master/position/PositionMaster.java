@@ -5,7 +5,6 @@
  */
 package com.opengamma.master.position;
 
-import com.opengamma.DataNotFoundException;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.AbstractChangeProvidingMaster;
 import com.opengamma.util.PublicSPI;
@@ -21,7 +20,7 @@ public interface PositionMaster extends AbstractChangeProvidingMaster<PositionDo
 
   /**
    * Searches for positions matching the specified search criteria.
-   * 
+   *
    * @param request  the search request, not null
    * @return the search result, not null
    * @throws IllegalArgumentException if the request is invalid
@@ -32,7 +31,7 @@ public interface PositionMaster extends AbstractChangeProvidingMaster<PositionDo
    * Queries the history of a single position.
    * <p>
    * The request must contain an object identifier to identify the position.
-   * 
+   *
    * @param request  the history request, not null
    * @return the position history, not null
    * @throws IllegalArgumentException if the request is invalid
@@ -42,13 +41,16 @@ public interface PositionMaster extends AbstractChangeProvidingMaster<PositionDo
   /**
    * Gets a trade by unique identifier.
    * <p>
-   * If the master supports history then the version in the identifier will be used
-   * to return the requested historic version.
-   * 
-   * @param tradeId  the trade unique identifier, not null
+   * If the master supports history then the version in the identifier will be
+   * used to return the requested historic version.
+   *
+   * @param tradeId
+   *          the trade unique identifier, not null
    * @return the trade, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no trade with that unique identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no trade with that unique identifier
    */
   ManageableTrade getTrade(UniqueId tradeId);
 

@@ -16,7 +16,9 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Test for {@code YieldCurveBundleBuilder}
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class YieldCurveBundleBuilderTest extends AnalyticsTestBase {
 

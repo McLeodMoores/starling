@@ -147,65 +147,57 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected ConfigMaster cache(final ConfigMaster configMaster) {
     if (getCacheManager() != null) {
       return new EHCachingConfigMaster("EngineContext.configMaster", configMaster, getCacheManager());
-    } else {
-      return configMaster;
     }
+    return configMaster;
   }
 
   protected ConfigSource cache(final ConfigSource configSource) {
     if (getCacheManager() != null) {
       return new EHCachingConfigSource(configSource, getCacheManager());
-    } else {
-      return configSource;
     }
+    return configSource;
   }
 
   protected ConventionBundleSource cache(final ConventionBundleSource conventionBundleSource) {
     if (getCacheManager() != null) {
       return new EHCachingConventionBundleSource(conventionBundleSource, getCacheManager());
-    } else {
-      return conventionBundleSource;
     }
+    return conventionBundleSource;
   }
 
   protected ConventionSource cache(final ConventionSource conventionSource) {
     if (getCacheManager() != null) {
       return new EHCachingConventionSource(conventionSource, getCacheManager());
-    } else {
-      return conventionSource;
     }
+    return conventionSource;
   }
 
   protected SecuritySource cache(final FinancialSecuritySource securitySource) {
     if (getCacheManager() != null) {
       return new EHCachingFinancialSecuritySource(securitySource, getCacheManager());
-    } else {
-      return securitySource;
     }
+    return securitySource;
   }
 
   protected ExchangeSource cache(final ExchangeSource exchangeSource) {
     if (getCacheManager() != null) {
       return new EHCachingExchangeSource(exchangeSource, getCacheManager());
-    } else {
-      return exchangeSource;
     }
+    return exchangeSource;
   }
 
   protected HistoricalTimeSeriesResolver cache(final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     if (getCacheManager() != null) {
       return new EHCachingHistoricalTimeSeriesResolver(historicalTimeSeriesResolver, getCacheManager());
-    } else {
-      return historicalTimeSeriesResolver;
     }
+    return historicalTimeSeriesResolver;
   }
 
   protected HistoricalTimeSeriesSource cache(final HistoricalTimeSeriesSource historicalTimeSeriesSource) {
     if (getCacheManager() != null) {
       return new EHCachingHistoricalTimeSeriesSource(historicalTimeSeriesSource, getCacheManager());
-    } else {
-      return historicalTimeSeriesSource;
     }
+    return historicalTimeSeriesSource;
   }
 
   protected HolidaySource cache(final HolidaySource holidaySource) {
@@ -215,33 +207,29 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected InterpolatedYieldCurveDefinitionSource cache(final InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
     if (getCacheManager() != null) {
       return new EHCachingInterpolatedYieldCurveDefinitionSource(interpolatedYieldCurveDefinitionSource, getCacheManager());
-    } else {
-      return interpolatedYieldCurveDefinitionSource;
     }
+    return interpolatedYieldCurveDefinitionSource;
   }
 
   protected LegalEntitySource cache(final LegalEntitySource legalEntitySource) {
     if (getCacheManager() != null) {
       return new EHCachingLegalEntitySource(legalEntitySource, getCacheManager());
-    } else {
-      return legalEntitySource;
     }
+    return legalEntitySource;
   }
 
   protected PositionSource cache(final PositionSource positionSource) {
     if (getCacheManager() != null) {
       return new EHCachingPositionSource(positionSource, getCacheManager());
-    } else {
-      return positionSource;
     }
+    return positionSource;
   }
 
   protected RegionSource cache(final RegionSource regionSource) {
     if (getCacheManager() != null) {
       return new EHCachingRegionSource(regionSource, getCacheManager());
-    } else {
-      return regionSource;
     }
+    return regionSource;
   }
 
   // component creation - if URIs are available
@@ -249,129 +237,113 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected ConfigMaster createConfigMaster(final URI uri) {
     if (uri != null) {
       return cache(new RemoteConfigMaster(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected ConfigSource createConfigSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteConfigSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected ConventionBundleSource createConventionBundleSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteConventionBundleSource(uri));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected ConventionSource createConventionSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteConventionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected ExchangeSource createExchangeSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteExchangeSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected HistoricalTimeSeriesResolver createHistoricalTimeSeriesResolver(final URI uri) {
     if (uri != null) {
       return cache(new RemoteHistoricalTimeSeriesResolver(uri));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected HistoricalTimeSeriesSource createHistoricalTimeSeriesSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteHistoricalTimeSeriesSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected HolidaySource createHolidaySource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteHolidaySource(uri));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected InterpolatedYieldCurveDefinitionSource createInterpolatedYieldCurveDefinitionSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteInterpolatedYieldCurveDefinitionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected InterpolatedYieldCurveSpecificationBuilder createInterpolatedYieldCurveSpecificationBuilder(final URI uri) {
     if (uri != null) {
       return /*TODO: cache*/new RemoteInterpolatedYieldCurveSpecificationBuilder(uri);
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected LegalEntitySource createLegalEntitySource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteLegalEntitySource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected PositionSource createPositionSource(final URI uri) {
     if (uri != null) {
       return cache(new RemotePositionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected RegionSource createRegionSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteRegionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected SecuritySource createSecuritySource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteFinancialSecuritySource(uri/*, TODO: change manager */));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected ViewProcessor createViewProcessor(final URI uri) {
     if (getJmsConnector() != null && uri != null) {
       return new RemoteViewProcessor(uri, getJmsConnector(), Executors.newSingleThreadScheduledExecutor());
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected VolatilityCubeDefinitionSource createVolatilityCubeDefinitionSource(final URI uri) {
     if (uri != null) {
       return /*TODO: cache*/new RemoteVolatilityCubeDefinitionSource(uri/*, TODO: change manager */);
-    } else {
-      return null;
     }
+    return null;
   }
 
   // initialisation

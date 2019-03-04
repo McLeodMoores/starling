@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -9,8 +9,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import net.sf.ehcache.CacheManager;
 
 import org.fudgemsg.FudgeContext;
 import org.slf4j.Logger;
@@ -32,6 +30,8 @@ import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -62,8 +62,8 @@ public class ReleaseCacheMessageTest {
   //-------------------------------------------------------------------------
   private static class ReportingBinaryDataStoreFactory implements BinaryDataStoreFactory {
 
-    private final Set<ViewComputationCacheKey> _cachesCreated = new HashSet<ViewComputationCacheKey>();
-    private final Set<ViewComputationCacheKey> _cachesDestroyed = new HashSet<ViewComputationCacheKey>();
+    private final Set<ViewComputationCacheKey> _cachesCreated = new HashSet<>();
+    private final Set<ViewComputationCacheKey> _cachesDestroyed = new HashSet<>();
 
     private final String _name;
 
@@ -99,7 +99,7 @@ public class ReleaseCacheMessageTest {
   private void pause () {
     try {
       Thread.sleep(100);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
   }
 
@@ -123,10 +123,10 @@ public class ReleaseCacheMessageTest {
         new InMemoryIdentifierMap(), FUDGE_CONTEXT, new DefaultFudgeMessageStoreFactory(privateServerStore,
             FUDGE_CONTEXT), new DefaultFudgeMessageStoreFactory(sharedStore, FUDGE_CONTEXT));
     LOGGER.info("Creating server local caches");
-    UniqueId viewCycle1Id = UniqueId.of("Test", "ViewCycle", "1");
-    UniqueId viewCycle2Id = UniqueId.of("Test", "ViewCycle", "2");
-    UniqueId viewCycle3Id = UniqueId.of("Test", "ViewCycle", "3");
-    UniqueId viewCycle4Id = UniqueId.of("Test", "ViewCycle", "4");
+    final UniqueId viewCycle1Id = UniqueId.of("Test", "ViewCycle", "1");
+    final UniqueId viewCycle2Id = UniqueId.of("Test", "ViewCycle", "2");
+    final UniqueId viewCycle3Id = UniqueId.of("Test", "ViewCycle", "3");
+    final UniqueId viewCycle4Id = UniqueId.of("Test", "ViewCycle", "4");
     putStuffIntoCache(cacheSource.getCache(viewCycle1Id, "Config 1"));
     putStuffIntoCache(cacheSource.getCache(viewCycle1Id, "Config 2"));
     putStuffIntoCache(cacheSource.getCache(viewCycle2Id, "Config 1"));
@@ -172,7 +172,7 @@ public class ReleaseCacheMessageTest {
       pause ();
     }
     LOGGER.info("Using new cache at remote client");
-    UniqueId viewCycle5Id = UniqueId.of("Test", "ViewCycle", "5");
+    final UniqueId viewCycle5Id = UniqueId.of("Test", "ViewCycle", "5");
     putStuffIntoCache(remoteSource.getCache(viewCycle5Id, "Config 1"));
     assertEquals(9, privateServerStore._cachesCreated.size());
     assertEquals(9, sharedStore._cachesCreated.size());

@@ -46,7 +46,9 @@ import com.opengamma.util.tuple.DoublesPair;
  * Sensitivity to the expiry rate might be implicit in the estimation of the underlying equity's forward, but we don't include this here.
  * The sensitivity to settlement rate is in the discounting, the ZeroBond price: PV = Z(t,S) * C(F,K,sig,T) <p>
  * We use chain rule to distribute closed-form model sensitivity across the curve
+ * @deprecated Deprecated
  */
+@Deprecated
 public class EquityVanillaBarrierOptionFundingCurveSensitivitiesFunction extends EquityVanillaBarrierOptionBlackFunction {
   /** The present value calculator */
   private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();

@@ -10,7 +10,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  *
+ * @deprecated This configuration type should no longer be used.
  */
+@Deprecated
 public class MultiCurveCalculationConfigJSONBuilder extends AbstractJSONBuilder<MultiCurveCalculationConfig> {
   /** Singleton */
   public static final MultiCurveCalculationConfigJSONBuilder INSTANCE = new MultiCurveCalculationConfigJSONBuilder();

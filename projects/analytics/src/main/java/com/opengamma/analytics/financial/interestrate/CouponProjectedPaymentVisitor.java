@@ -13,7 +13,9 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, CurrencyAmount> {
 
   @Override

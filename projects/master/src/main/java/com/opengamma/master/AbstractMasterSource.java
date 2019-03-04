@@ -8,7 +8,6 @@ package com.opengamma.master;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.opengamma.DataNotFoundException;
 import com.opengamma.core.AbstractSource;
 import com.opengamma.core.ObjectChangeListener;
 import com.opengamma.core.ObjectChangeListenerManager;

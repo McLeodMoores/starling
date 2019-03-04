@@ -6,7 +6,6 @@
 package com.opengamma.transport.socket;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

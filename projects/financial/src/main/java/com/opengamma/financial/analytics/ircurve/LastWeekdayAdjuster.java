@@ -19,9 +19,8 @@ public class LastWeekdayAdjuster implements TemporalAdjuster {
     final DayOfWeek lastWeekday = DayOfWeek.from(unadjustedLastDayInMonth);
     if (lastWeekday.equals(DayOfWeek.SATURDAY) || lastWeekday.equals(DayOfWeek.SUNDAY)) {
       return unadjustedLastDayInMonth.with(TemporalAdjusters.previous(DayOfWeek.FRIDAY));
-    } else {
-      return unadjustedLastDayInMonth;
     }
+    return unadjustedLastDayInMonth;
   }
 
 }

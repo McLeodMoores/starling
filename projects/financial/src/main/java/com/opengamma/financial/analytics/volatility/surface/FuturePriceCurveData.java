@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -18,14 +18,14 @@ import com.opengamma.id.UniqueIdentifiable;
  * @param <X> Type of the x-data
  */
 public class FuturePriceCurveData<X> {
-  private String _definitionName;
-  private String _specificationName;
-  private UniqueIdentifiable _target;
-  private Map<X, Double> _values;
-  private X[] _xs;
+  private final String _definitionName;
+  private final String _specificationName;
+  private final UniqueIdentifiable _target;
+  private final Map<X, Double> _values;
+  private final X[] _xs;
 
   public FuturePriceCurveData(final String definitionName, final String specificationName, final UniqueIdentifiable target,
-                               final X[] xs, final Map<X, Double> values) {
+      final X[] xs, final Map<X, Double> values) {
     Validate.notNull(definitionName, "Definition Name");
     Validate.notNull(specificationName, "Specification Name");
     Validate.notNull(target, "Target");
@@ -34,7 +34,7 @@ public class FuturePriceCurveData<X> {
     _definitionName = definitionName;
     _specificationName = specificationName;
     _target = target;
-    _values = new HashMap<X, Double>(values);
+    _values = new HashMap<>(values);
     _xs = xs;
   }
 
@@ -72,10 +72,10 @@ public class FuturePriceCurveData<X> {
     }
     final FuturePriceCurveData<?> other = (FuturePriceCurveData<?>) o;
     return getDefinitionName().equals(other.getDefinitionName()) &&
-           getSpecificationName().equals(other.getSpecificationName()) &&
-           getTarget().equals(other.getTarget()) &&
-           Arrays.equals(getXs(), other.getXs()) &&
-           _values.equals(other._values);
+        getSpecificationName().equals(other.getSpecificationName()) &&
+        getTarget().equals(other.getTarget()) &&
+        Arrays.equals(getXs(), other.getXs()) &&
+        _values.equals(other._values);
   }
 
   @Override

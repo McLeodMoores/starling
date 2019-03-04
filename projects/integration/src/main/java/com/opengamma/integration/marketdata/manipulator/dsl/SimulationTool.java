@@ -111,7 +111,7 @@ public class SimulationTool extends AbstractTool<ToolContext> {
     final ConfigItem<ViewDefinition> viewDef = viewDefs.iterator().next();
     final UniqueId viewDefId = viewDef.getUniqueId();
     LOGGER.info("Running simulation using script {}, view '{}', market data {}, batch mode {}",
-                  simulationScript, viewDefName, marketDataSpecs, batchMode);
+        simulationScript, viewDefName, marketDataSpecs, batchMode);
     simulation.run(viewDefId, marketDataSpecs, batchMode, listener, viewProcessor);
   }
 
@@ -186,17 +186,15 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   /* package */ static MarketDataSpecification parse(final String specStr) {
     if (specStr.startsWith(LIVE)) {
       return createLiveSpec(removePrefix(specStr, LIVE));
+    }
+    if (specStr.startsWith(SNAPSHOT)) {
+      return createSnapshotSpec(removePrefix(specStr, SNAPSHOT));
+    } else if (specStr.startsWith(FIXED_HISTORICAL)) {
+      return createFixedHistoricalSpec(removePrefix(specStr, FIXED_HISTORICAL));
+    } else if (specStr.startsWith(LATEST_HISTORICAL)) {
+      return createLatestHistoricalSpec(removePrefix(specStr, LATEST_HISTORICAL));
     } else {
-      if (specStr.startsWith(SNAPSHOT)) {
-        return createSnapshotSpec(removePrefix(specStr, SNAPSHOT));
-      } else if (specStr.startsWith(FIXED_HISTORICAL)) {
-        return createFixedHistoricalSpec(removePrefix(specStr, FIXED_HISTORICAL));
-      } else if (specStr.startsWith(LATEST_HISTORICAL)) {
-        return createLatestHistoricalSpec(removePrefix(specStr, LATEST_HISTORICAL));
-      } else {
-        throw new IllegalArgumentException("Market data must be one of 'live', 'fixedhistorical', 'latesthistorical'" +
-                                               " or 'snapshot'");
-      }
+      throw new IllegalArgumentException("Market data must be one of 'live', 'fixedhistorical', 'latesthistorical'" + " or 'snapshot'");
     }
   }
 
@@ -231,9 +229,8 @@ public class SimulationTool extends AbstractTool<ToolContext> {
         throw new IllegalArgumentException(specStr + " doesn't match 'fixedhistorical:timestamp[,time series rating]'");
       }
       return new FixedHistoricalMarketDataSpecification(timeSeriesRating, date);
-    } else {
-      return new FixedHistoricalMarketDataSpecification(date);
     }
+    return new FixedHistoricalMarketDataSpecification(date);
   }
 
   // TODO accept 'snapshot name/timestamp'? friendlier but requires looking up data from the server

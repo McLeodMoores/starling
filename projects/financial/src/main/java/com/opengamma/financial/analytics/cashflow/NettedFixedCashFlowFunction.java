@@ -53,7 +53,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
- */
+  * @deprecated Deprecated
+*/
+@Deprecated
 public class NettedFixedCashFlowFunction extends AbstractFunction {
 
   /** Property name for the date field */

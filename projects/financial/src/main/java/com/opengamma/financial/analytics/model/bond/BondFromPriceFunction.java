@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bond;
@@ -30,7 +30,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Bond function for results computed from the market clean price.
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondFromPriceFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override

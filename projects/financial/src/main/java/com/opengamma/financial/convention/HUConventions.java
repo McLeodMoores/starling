@@ -18,7 +18,11 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information use to construct standard versions of HUF instruments
+ * 
+ * @deprecated {@link ConventionBundle} is deprecated. Use a
+ *             {@link com.opengamma.core.convention.Convention} instead.
  */
+@Deprecated
 public class HUConventions {
   /** Bloomberg month codes */
   private static final char[] MONTH_CODES = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'};

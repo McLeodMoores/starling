@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.calcconfig;
@@ -18,8 +18,10 @@ import com.opengamma.financial.analytics.ircurve.StripInstrumentType;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
+ * @deprecated This configuration type should no longer be used.
  */
+@Deprecated
 @Config(description = "Multi curve calculation config", group = ConfigGroups.CURVES_LEGACY)
 public class MultiCurveCalculationConfig {
   //TODO check inputs for instrument exposures - need some or all of yield curve names in the array of names

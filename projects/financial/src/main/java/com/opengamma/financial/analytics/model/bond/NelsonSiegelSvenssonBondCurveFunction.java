@@ -54,7 +54,7 @@ import com.opengamma.financial.security.bond.GovernmentBondSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
   /** Name of the property type*/
@@ -105,7 +105,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
         final BondSecurityConverter converter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
         final FinancialSecuritySource securitySource = executionContext.getSecuritySource(FinancialSecuritySource.class);
-        final Collection<Security> allBonds = new ArrayList<Security>(securitySource.getBondsWithIssuerName(ISSUER_NAME));
+        final Collection<Security> allBonds = new ArrayList<>(securitySource.getBondsWithIssuerName(ISSUER_NAME));
         final Iterator<Security> iter = allBonds.iterator();
         while (iter.hasNext()) {
           final Security sec = iter.next();
@@ -137,7 +137,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
           final String bondStringName = PROPERTY_PREFIX + "_" + CURRENCY.getCode();
           final InstrumentDerivative bond = definition.toDerivative(now, bondStringName);
           t[i] = bond.accept(LAST_DATE);
-          ytm[i++] = ((Double) ytmObject / 100);
+          ytm[i++] = (Double) ytmObject / 100;
         }
         final DoubleMatrix1D initialValues = new DoubleMatrix1D(new double[] {1, 2, 3, 4, 2, 3 });
         final ParameterizedFunction<Double, DoubleMatrix1D, Double> parameterizedFunction = MODEL.getParameterizedFunction();
@@ -164,7 +164,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
       public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
         if (canApplyTo(context, target)) {
           final FinancialSecuritySource securitySource = context.getSecuritySource(FinancialSecuritySource.class);
-          final Collection<Security> allBonds = new ArrayList<Security>(securitySource.getBondsWithIssuerName("US TREASURY N/B"));
+          final Collection<Security> allBonds = new ArrayList<>(securitySource.getBondsWithIssuerName("US TREASURY N/B"));
           final Iterator<Security> iter = allBonds.iterator();
           while (iter.hasNext()) {
             final Security sec = iter.next();
@@ -178,7 +178,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
               throw new OpenGammaRuntimeException("non-bond security " + sec + " returned by getAllBondsOfIssuerType()");
             }
           }
-          final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+          final Set<ValueRequirement> requirements = new HashSet<>();
           for (final Security sec : allBonds) {
             if (sec instanceof BondSecurity) {
               final BondSecurity bond = (BondSecurity) sec;

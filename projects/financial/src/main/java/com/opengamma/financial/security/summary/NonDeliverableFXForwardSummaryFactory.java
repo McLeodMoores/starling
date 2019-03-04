@@ -6,7 +6,6 @@
 package com.opengamma.financial.security.summary;
 
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.financial.security.fx.NonDeliverableFXForwardSecurity;
 
 /**

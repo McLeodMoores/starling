@@ -140,9 +140,8 @@ import com.opengamma.util.OpenGammaClock;
     Randomizer<Object> randomizer = (Randomizer<Object>) _randomizers.get(value.getClass());
     if (randomizer == null) {
       return null;
-    } else {
-      return randomizer.randomize(value);
     }
+    return randomizer.randomize(value);
   }
 
   /**
@@ -348,9 +347,8 @@ import com.opengamma.util.OpenGammaClock;
       }
       if (randomized) {
         return randomBundle;
-      } else {
-        return null;
       }
+      return null;
     }
   }
 

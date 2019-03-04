@@ -14,7 +14,6 @@ import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.impl.AbstractRemoteDocumentMaster;
-import com.opengamma.master.portfolio.PortfolioMaster;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.master.position.PositionDocument;
 import com.opengamma.master.position.PositionHistoryRequest;
@@ -26,7 +25,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.sun.jersey.api.client.GenericType;
 
 /**
- * Provides access to a remote {@link PortfolioMaster}.
+ * Provides access to a remote
+ * {@link com.opengamma.master.portfolio.PortfolioMaster}.
  */
 public class RemotePositionMaster
 extends AbstractRemoteDocumentMaster<PositionDocument>

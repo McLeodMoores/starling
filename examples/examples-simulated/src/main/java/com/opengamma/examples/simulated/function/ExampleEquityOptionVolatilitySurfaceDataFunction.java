@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.function;
@@ -51,7 +51,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 //TODO this class needs to be re-written, as each instrument type needs a different set of inputs
 public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFunction {
@@ -101,7 +101,7 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
     }
     _result = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ComputationTargetSpecification.of(_definition.getTarget().getUniqueId()),
         createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-            .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get());
+        .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get());
     _results = Collections.singleton(_result);
   }
 
@@ -113,8 +113,8 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
 
   public static <X, Y> Set<ValueRequirement> buildRequirements(final VolatilitySurfaceSpecification specification, final VolatilitySurfaceDefinition<X, Y> definition,
 
-  final ZonedDateTime atInstant) {
-    final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+      final ZonedDateTime atInstant) {
+    final Set<ValueRequirement> result = new HashSet<>();
 
     final ExampleEquityOptionVolatilitySurfaceInstrumentProvider provider = (ExampleEquityOptionVolatilitySurfaceInstrumentProvider) specification.getSurfaceInstrumentProvider();
     for (final X x : definition.getXs()) {
@@ -182,7 +182,7 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
           return Collections.emptySet();
         }
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
-        final Map<Pair<Object, Object>, Double> volatilityValues = new HashMap<Pair<Object, Object>, Double>();
+        final Map<Pair<Object, Object>, Double> volatilityValues = new HashMap<>();
         //int numFound = 0;
         for (final Object x : _definition.getXs()) {
           for (final Object y : _definition.getYs()) {
@@ -202,7 +202,7 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
             }
           }
         }
-        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<Object, Object>(_definition.getName(), _specification.getName(), _definition.getTarget().getUniqueId(),
+        final VolatilitySurfaceData<?, ?> volSurfaceData = new VolatilitySurfaceData<>(_definition.getName(), _specification.getName(), _definition.getTarget().getUniqueId(),
             _definition.getXs(), _definition.getYs(), volatilityValues);
         final ComputedValue resultValue = new ComputedValue(_result, volSurfaceData);
         return Collections.singleton(resultValue);

@@ -139,7 +139,6 @@ import com.opengamma.financial.security.swap.SecurityNotional;
 import com.opengamma.financial.security.swap.SwapLeg;
 import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.financial.security.test.AbstractSecurityTestCaseAdapter;
-import com.opengamma.financial.security.test.SecurityTestCaseMethods;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
@@ -162,11 +161,11 @@ import com.opengamma.util.tuple.Pairs;
  */
 @SuppressWarnings("unchecked")
 @Test(groups = TestGroup.UNIT)
-public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter implements SecurityTestCaseMethods {
+public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SecurityTestCase.class);
 
-  private static interface TestDataProvider<T> {
+  private interface TestDataProvider<T> {
     void getValues(Collection<T> values);
   }
 

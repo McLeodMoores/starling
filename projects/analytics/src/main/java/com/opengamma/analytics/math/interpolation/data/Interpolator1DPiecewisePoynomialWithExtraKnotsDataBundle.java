@@ -11,12 +11,14 @@ import org.apache.commons.lang.NotImplementedException;
 
 import com.opengamma.analytics.math.interpolation.PiecewisePolynomialInterpolator;
 import com.opengamma.analytics.math.interpolation.PiecewisePolynomialResult;
-import com.opengamma.analytics.math.interpolation.PiecewisePolynomialResultsWithSensitivity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * For certain methods of {@link PiecewisePolynomialInterpolator} introducing extra breakpoints, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined
- * In this case, finite difference approximation is used to derive node sensitivity
+ * For certain methods of {@link PiecewisePolynomialInterpolator} introducing
+ * extra breakpoints,
+ * {@link com.opengamma.analytics.math.interpolation.PiecewisePolynomialResultsWithSensitivity}
+ * is not well-defined In this case, finite difference approximation is used to
+ * derive node sensitivity
  */
 public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements Interpolator1DDataBundle {
 

@@ -20,14 +20,14 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.Sets;
-import com.opengamma.financial.security.cds.CreditDefaultSwapIndexDefinitionSecurity;
 import com.opengamma.masterdb.security.hibernate.CDSIndexFamilyBean;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.TenorBean;
 
 /**
- * A Hibernate bean representation of {@link CreditDefaultSwapIndexDefinitionSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.cds.CreditDefaultSwapIndexDefinitionSecurity}.
  */
 @BeanDefinition
 public class CreditDefaultSwapIndexDefinitionSecurityBean extends SecurityBean {

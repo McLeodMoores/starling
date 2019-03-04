@@ -36,7 +36,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class BondFutureFromCurvesFunction extends BondFutureFunction<YieldCurveBundle> {
   private final String _requirementName;
   private final String _calculationType;
@@ -96,24 +98,24 @@ public abstract class BondFutureFromCurvesFunction extends BondFutureFunction<Yi
     final Set<String> creditCurveConfigs = constraints.getValues(PROPERTY_CREDIT_CURVE_CONFIG);
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getSecurity());
     final ValueProperties.Builder riskFreeCurveConstraints = ValueProperties.with(ValuePropertyNames.OUTPUT_RESERVED_PREFIX, "risk-free");
-    if ((riskFreeCurves == null) || riskFreeCurves.isEmpty()) {
+    if (riskFreeCurves == null || riskFreeCurves.isEmpty()) {
       riskFreeCurveConstraints.withAny(ValuePropertyNames.CURVE);
     } else {
       riskFreeCurveConstraints.with(ValuePropertyNames.CURVE, riskFreeCurves);
     }
-    if ((riskFreeCurveConfigs == null) || riskFreeCurveConfigs.isEmpty()) {
+    if (riskFreeCurveConfigs == null || riskFreeCurveConfigs.isEmpty()) {
       riskFreeCurveConstraints.withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     } else {
       riskFreeCurveConstraints.with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, riskFreeCurveConfigs);
     }
     final ValueRequirement riskFreeCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), riskFreeCurveConstraints.get());
     final ValueProperties.Builder creditCurveConstraints = ValueProperties.with(ValuePropertyNames.OUTPUT_RESERVED_PREFIX, "credit");
-    if ((creditCurves == null) || creditCurves.isEmpty()) {
+    if (creditCurves == null || creditCurves.isEmpty()) {
       creditCurveConstraints.withAny(ValuePropertyNames.CURVE);
     } else {
       creditCurveConstraints.with(ValuePropertyNames.CURVE, creditCurves);
     }
-    if ((creditCurveConfigs == null) || creditCurveConfigs.isEmpty()) {
+    if (creditCurveConfigs == null || creditCurveConfigs.isEmpty()) {
       creditCurveConstraints.withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     } else {
       creditCurveConstraints.with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, creditCurveConfigs);
@@ -131,13 +133,13 @@ public abstract class BondFutureFromCurvesFunction extends BondFutureFunction<Yi
     if (inputs.size() == 1) {
       final ValueSpecification spec = Iterables.getOnlyElement(inputs.keySet());
       Set<String> values = spec.getProperties().getValues(ValuePropertyNames.CURVE);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         return null;
       }
       riskFreeCurveName = values.iterator().next();
       creditCurveName = riskFreeCurveName;
       values = spec.getProperties().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
-      if ((values == null) || values.isEmpty()) {
+      if (values == null || values.isEmpty()) {
         return null;
       }
       riskFreeCurveConfig = values.iterator().next();
@@ -147,11 +149,11 @@ public abstract class BondFutureFromCurvesFunction extends BondFutureFunction<Yi
       for (final Map.Entry<ValueSpecification, ValueRequirement> input : inputs.entrySet()) {
         final ValueSpecification spec = input.getKey();
         final Set<String> curveNames = spec.getProperties().getValues(ValuePropertyNames.CURVE);
-        if ((curveNames == null) || curveNames.isEmpty()) {
+        if (curveNames == null || curveNames.isEmpty()) {
           return null;
         }
         final Set<String> curveConfigs = spec.getProperties().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
-        if ((curveConfigs == null) || curveConfigs.isEmpty()) {
+        if (curveConfigs == null || curveConfigs.isEmpty()) {
           return null;
         }
         final ValueRequirement requirement = input.getValue();

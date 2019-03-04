@@ -91,8 +91,8 @@ public class SchemaVersionParser {
     final String elementName = element.getName().getLocalPart();
     if (!elementName.equals(expectedName)) {
       throw new OpenGammaRuntimeException("Root element should have name [" + expectedName +
-                                              "] but instead found [" + elementName +
-                                              "] - unable to parse file");
+          "] but instead found [" + elementName +
+          "] - unable to parse file");
     }
   }
 
@@ -101,9 +101,8 @@ public class SchemaVersionParser {
     final Attribute schemaVersion = element.getAttributeByName(SCHEMA_VERSION_QNAME);
     if (schemaVersion != null) {
       return new SchemaVersion(schemaVersion.getValue());
-    } else {
-      throw new OpenGammaRuntimeException("No schema version was found - unable to parse file");
     }
+    throw new OpenGammaRuntimeException("No schema version was found - unable to parse file");
   }
 
   private XMLEventReader createXmlEventReader() throws XMLStreamException {

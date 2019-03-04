@@ -5,8 +5,6 @@
  */
 package com.opengamma.masterdb.security.hibernate;
 
-import com.opengamma.analytics.financial.credit.DebtSeniority;
-
 /**
  * Hibernate bean for storing the {@link DebtSeniority} type
  */

@@ -14,7 +14,6 @@ import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjustment;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.engine.marketdata.AbstractMarketDataSnapshot;
-import com.opengamma.engine.marketdata.MarketDataSnapshot;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
@@ -87,9 +86,8 @@ public class HistoricalMarketDataSnapshot extends AbstractMarketDataSnapshot {
     final String normalization = specification.getProperty(AbstractHistoricalMarketDataProvider.NORMALIZATION_PROPERTY);
     if (normalization != null) {
       return HistoricalTimeSeriesAdjustment.parse(normalization).adjust(value);
-    } else {
-      return value;
     }
+    return value;
   }
 
   //-------------------------------------------------------------------------

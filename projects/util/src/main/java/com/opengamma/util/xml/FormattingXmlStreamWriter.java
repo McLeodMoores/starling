@@ -14,8 +14,6 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.apache.commons.io.output.XmlStreamWriter;
-
 import com.google.common.base.Throwables;
 
 import net.sf.saxon.event.StreamWriterToReceiver;

@@ -119,7 +119,7 @@ public class ResolvingPortfolioCopier implements PortfolioCopier {
 
   void resolveTimeSeries(final BloombergHistoricalTimeSeriesLoader bbgLoader, final ManageableSecurity security, final String[] dataFields, final String dataProvider, final PortfolioCopierVisitor visitor) {
     for (final String dataField : dataFields) {
-      Set<ExternalId> ids = new HashSet<ExternalId>();
+      Set<ExternalId> ids = new HashSet<>();
       ids = security.getExternalIdBundle().getExternalIds();
       Map<ExternalId, UniqueId> tsMap = null;
       for (final ExternalId id : ids) {

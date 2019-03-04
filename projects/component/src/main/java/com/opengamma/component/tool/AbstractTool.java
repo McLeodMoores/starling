@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.component.ComponentManager;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ShutdownUtils;
@@ -334,9 +333,8 @@ public abstract class AbstractTool<T extends ToolContext> {
     ArgumentChecker.notNegative(i, "ToolContext index");
     if (getToolContexts().length > i) {
       return getToolContexts()[i];
-    } else {
-      throw new OpenGammaRuntimeException("ToolContext " + i + " does not exist");
     }
+    throw new OpenGammaRuntimeException("ToolContext " + i + " does not exist");
   }
 
   //-------------------------------------------------------------------------

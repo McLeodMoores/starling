@@ -1,13 +1,12 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.underlyingpool.definition;
 
 import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -15,7 +14,9 @@ import com.opengamma.util.money.Currency;
 /**
  * Class to specify the composition and characteristics of a collection of Obligor objects aggregated into a common pool
  * In the credit index context the underlying pool is the set of obligors that constitute an index (e.g. CDX.NA.IG series 18)
+ * @deprecated Deprecated
  */
+@Deprecated
 public class UnderlyingPool {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

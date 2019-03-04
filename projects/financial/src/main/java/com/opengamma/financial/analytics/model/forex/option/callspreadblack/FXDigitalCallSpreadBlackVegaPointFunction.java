@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.forex.option.callspreadblack;
@@ -24,7 +24,9 @@ import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues
 
 /**
  * The function calculating the Black volatility sensitivity to each point to which the option is sensitive..
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FXDigitalCallSpreadBlackVegaPointFunction extends FXDigitalCallSpreadBlackSingleValuedFunction {
 
   public FXDigitalCallSpreadBlackVegaPointFunction() {

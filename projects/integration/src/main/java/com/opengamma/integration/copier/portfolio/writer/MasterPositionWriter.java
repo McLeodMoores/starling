@@ -32,7 +32,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdSearch;
 import com.opengamma.id.ObjectId;
-import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.portfolio.ManageablePortfolio;
 import com.opengamma.master.portfolio.ManageablePortfolioNode;
@@ -110,24 +109,24 @@ public class MasterPositionWriter implements PositionWriter {
    */
 
   public MasterPositionWriter(final String portfolioName,
-                              final PortfolioMaster portfolioMaster,
-                              final PositionMaster positionMaster,
-                              final SecurityMaster securityMaster,
-                              final boolean mergePositions,
-                              final boolean keepCurrentPositions,
-                              final boolean discardIncompleteOptions) {
+      final PortfolioMaster portfolioMaster,
+      final PositionMaster positionMaster,
+      final SecurityMaster securityMaster,
+      final boolean mergePositions,
+      final boolean keepCurrentPositions,
+      final boolean discardIncompleteOptions) {
     this(portfolioName, portfolioMaster, positionMaster, securityMaster, mergePositions,
-         keepCurrentPositions, discardIncompleteOptions, false);
+        keepCurrentPositions, discardIncompleteOptions, false);
   }
 
   public MasterPositionWriter(final String portfolioName,
-                              final PortfolioMaster portfolioMaster,
-                              final PositionMaster positionMaster,
-                              final SecurityMaster securityMaster,
-                              final boolean mergePositions,
-                              final boolean keepCurrentPositions,
-                              final boolean discardIncompleteOptions,
-                              final boolean multithread) {
+      final PortfolioMaster portfolioMaster,
+      final PositionMaster positionMaster,
+      final SecurityMaster securityMaster,
+      final boolean mergePositions,
+      final boolean keepCurrentPositions,
+      final boolean discardIncompleteOptions,
+      final boolean multithread) {
 
     ArgumentChecker.notEmpty(portfolioName, "portfolioName");
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
@@ -244,13 +243,12 @@ public class MasterPositionWriter implements PositionWriter {
 
         // Return the updated position
         return ObjectsPair.of(addedDoc.getPosition(), securities);
-      } else {
-        // update position map
-        _securityIdToPosition.put(writtenSecurities.get(0).getUniqueId().getObjectId(), existingPosition);
-
-         // Return the updated position
-        return ObjectsPair.of(existingPosition, securities);
       }
+      // update position map
+      _securityIdToPosition.put(writtenSecurities.get(0).getUniqueId().getObjectId(), existingPosition);
+
+      // Return the updated position
+      return ObjectsPair.of(existingPosition, securities);
     }
     // Attempt to reuse an existing position from the previous version of the portfolio, and return if an exact match is found
     if (!(_originalNode == null) && !_originalNode.getPositionIds().isEmpty()) {
@@ -358,15 +356,15 @@ public class MasterPositionWriter implements PositionWriter {
 
     ArgumentChecker.notNull(security, "security");
     return SecurityMasterUtils.addOrUpdateSecurity(_securityMaster, security);
-//    SecuritySearchResult searchResult = lookupSecurity(security);
-//
-//    ManageableSecurity foundSecurity = updateSecurityVersionIfFound(security, searchResult);
-//
-//    if (foundSecurity != null) {
-//      return foundSecurity;
-//    } else {
-//      return addSecurity(security);
-//    }
+    //    SecuritySearchResult searchResult = lookupSecurity(security);
+    //
+    //    ManageableSecurity foundSecurity = updateSecurityVersionIfFound(security, searchResult);
+    //
+    //    if (foundSecurity != null) {
+    //      return foundSecurity;
+    //    } else {
+    //      return addSecurity(security);
+    //    }
   }
 
   /**
@@ -495,7 +493,7 @@ public class MasterPositionWriter implements PositionWriter {
                 // Update the position in the position master
                 final PositionDocument addedDoc = _positionMaster.update(new PositionDocument(position));
                 LOGGER.debug("Updated position {}", position);
-                 // Add the new position to the portfolio node
+                // Add the new position to the portfolio node
                 _currentNode.addPosition(addedDoc.getUniqueId());
               } catch (final Exception e) {
                 LOGGER.error("Unable to update position " + position.getUniqueId() + ": " + e.getMessage());
@@ -534,15 +532,15 @@ public class MasterPositionWriter implements PositionWriter {
           }
           if (position != null) {
             position.getSecurityLink().resolve(_securitySource);
-            if (position.getSecurity() != null) {
-              if (_securityIdToPosition.containsKey(position.getSecurity())) {
-                final ManageablePosition existing = _securityIdToPosition.get(position.getSecurity());
+            final ObjectId objectId = position.getSecurity().getUniqueId().getObjectId();
+            if (objectId != null) {
+              if (_securityIdToPosition.containsKey(objectId)) {
+                final ManageablePosition existing = _securityIdToPosition.get(objectId);
                 LOGGER.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/')
-                    + ": " + position + " and " + existing + ".  New trades for security "
-                    + position.getSecurity().getUniqueId().getObjectId() + " will be added to position " + position.getUniqueId());
+                    + ": " + position + " and " + existing + ".  New trades for security " + objectId + " will be added to position " + position.getUniqueId());
 
               } else {
-                _securityIdToPosition.put(position.getSecurity().getUniqueId().getObjectId(), position);
+                _securityIdToPosition.put(objectId, position);
               }
             }
           }

@@ -42,7 +42,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRYCNSFunction.class);
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();

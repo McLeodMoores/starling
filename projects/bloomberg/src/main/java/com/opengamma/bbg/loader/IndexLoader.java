@@ -71,7 +71,7 @@ public class IndexLoader extends SecurityLoader {
   private static final String FED_FUNDS_SECURITY_DES = "Federal Funds Effective Rate U";
   private static final Set<String> BLOOMBERG_SECURITY_DES_OVERNIGHT_EXCEPTIONS = Collections.unmodifiableSet(Sets.newHashSet(
       FED_FUNDS_SECURITY_DES
-  ));
+      ));
 
   /**
    * Creates an instance.
@@ -141,9 +141,8 @@ public class IndexLoader extends SecurityLoader {
     if (matcher.matches()) {
       final String descriptionPart = matcher.group(1); // remember, groups are 1 indexed!
       return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), descriptionPart.trim());
-    } else {
-      return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), securityDes.trim());
     }
+    return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), securityDes.trim());
   }
 
   // public visible for tests

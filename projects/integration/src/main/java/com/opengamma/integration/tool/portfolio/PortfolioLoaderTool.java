@@ -67,9 +67,9 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
     }
 
     final PortfolioWriter persister = new PortfolioWriter(write,
-                                                          getToolContext().getPortfolioMaster(),
-                                                          getToolContext().getPositionMaster(),
-                                                          getToolContext().getSecurityMaster());
+        getToolContext().getPortfolioMaster(),
+        getToolContext().getPositionMaster(),
+        getToolContext().getSecurityMaster());
 
 
     final String filename = getOptionValue(FILE_NAME_OPT);
@@ -101,13 +101,12 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
         // Check that the asset class was specified on the command line
         if (securityType == null) {
           throw new OpenGammaRuntimeException("Could not import as no asset class was specified for file " + filename);
-        } else {
-//          if (securityType.equalsIgnoreCase("exchangetraded")) {
-//            return new SingleSheetSimplePositionReader(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
-//          } else {
-          return ImmutableList.of(new SingleSheetSimplePositionReader(filename, securityType));
-//          }
         }
+        // if (securityType.equalsIgnoreCase("exchangetraded")) {
+        //            return new SingleSheetSimplePositionReader(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
+        //          } else {
+        return ImmutableList.of(new SingleSheetSimplePositionReader(filename, securityType));
+        //          }
       case XML:
         // XMl multi-asset portfolio
         try {

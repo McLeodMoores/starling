@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -37,7 +37,7 @@ import org.apache.commons.lang.ObjectUtils;
 
   /**
    * Create a new wrapper instance and add it to the canonical map.
-   * 
+   *
    * @param exception exception to wrap
    * @param canon the canonical map to add to
    */
@@ -53,10 +53,9 @@ import org.apache.commons.lang.ObjectUtils;
     if (existing != null) {
       existing.incrementCount();
       return existing;
-    } else {
-      canon.put(instance, instance);
-      return instance;
     }
+    canon.put(instance, instance);
+    return instance;
   }
 
   public Throwable getException() {

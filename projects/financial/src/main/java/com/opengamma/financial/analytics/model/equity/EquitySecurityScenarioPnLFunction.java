@@ -109,9 +109,8 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
     final ValueSpecification input = inputs.keySet().iterator().next();
     if (getValueRequirementName().equals(input.getValueName())) {
       return inputs.keySet();
-    } else {
-      return getResults(context, target);
     }
+    return getResults(context, target);
   }
 
   @Override
@@ -169,9 +168,9 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
     // If defaults have been added, this adds additional copy of the Function into dep graph with the adjusted constraints
     if (scenarioDefaults != null) {
       return Collections.singleton(new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get()));
-    } else { // Scenarios are defined, so we're satisfied
-      return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId()));
     }
+    return Collections
+        .singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId()));
   }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EquitySecurityScenarioPnLFunction.class);

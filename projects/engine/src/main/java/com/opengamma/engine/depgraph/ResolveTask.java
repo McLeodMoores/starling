@@ -68,9 +68,8 @@ import com.opengamma.engine.value.ValueSpecification;
       if (task.setState(this, nextState)) {
         context.run(task);
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
 
     protected boolean pushResult(final GraphBuildingContext context, final ResolvedValue resolvedValue, final boolean lastResult) {
@@ -200,10 +199,9 @@ import com.opengamma.engine.value.ValueSpecification;
       LOGGER.debug("State transition {} to {}", previousState, nextState);
       _state = nextState;
       return true;
-    } else {
-      System.err.println("Invalid state transition - was " + _state + ", not " + previousState + " - not advancing to " + nextState);
-      return false;
     }
+    System.err.println("Invalid state transition - was " + _state + ", not " + previousState + " - not advancing to " + nextState);
+    return false;
   }
 
   @Override
@@ -226,9 +224,8 @@ import com.opengamma.engine.value.ValueSpecification;
       // Release the lock that the context added before we got queued (or run in-line)
       release(context);
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   private Set<ValueRequirement> getParentValueRequirements() {
@@ -238,9 +235,8 @@ import com.opengamma.engine.value.ValueSpecification;
   public boolean hasParent(final ResolveTask task) {
     if (task == this) {
       return true;
-    } else {
-      return hasParent(task.getValueRequirement());
     }
+    return hasParent(task.getValueRequirement());
   }
 
   public boolean hasParent(final ValueRequirement valueRequirement) {

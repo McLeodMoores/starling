@@ -71,7 +71,7 @@ public abstract class AbstractPortfolioDailyPnLFunction extends AbstractFunction
     // TODO: We don't need the accumulated positions - the object identifiers only would suffice (don't need to go to both databases!)
     final Set<Position> allPositions = PositionAccumulator.getAccumulatedPositions(node);
     final ValueProperties constraints = ValueProperties.with(ValuePropertyNames.CURRENCY, currency).get();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     for (final Position position : allPositions) {
       requirements.add(new ValueRequirement(ValueRequirementNames.DAILY_PNL, ComputationTargetType.POSITION, position.getUniqueId().toLatest(), constraints));
     }
