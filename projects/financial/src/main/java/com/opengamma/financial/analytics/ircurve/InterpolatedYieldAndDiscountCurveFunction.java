@@ -26,7 +26,7 @@ import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
 import com.opengamma.analytics.math.interpolation.FlatExtrapolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -108,7 +108,7 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
     _definition = _helper.init(context, this);
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(_definition.getCurrency());
     final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, _curveName).get();
-    _interpolator = new CombinedInterpolatorExtrapolator(Interpolator1DFactory.getInterpolator(_definition.getInterpolatorName()), new FlatExtrapolator1D());
+    _interpolator = new CombinedInterpolatorExtrapolator(NamedInterpolator1dFactory.of(_definition.getInterpolatorName()), new FlatExtrapolator1D());
     final String curveReqName = _isYieldCurve ? ValueRequirementNames.YIELD_CURVE : ValueRequirementNames.DISCOUNT_CURVE;
     _result = new ValueSpecification(curveReqName, targetSpec, properties);
     _specResult = new ValueSpecification(ValueRequirementNames.YIELD_CURVE_SPEC, targetSpec, properties);

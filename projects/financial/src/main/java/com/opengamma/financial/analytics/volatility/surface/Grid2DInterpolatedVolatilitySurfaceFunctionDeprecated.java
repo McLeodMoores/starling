@@ -16,9 +16,9 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.core.marketdatasnapshot.VolatilitySurfaceData;
@@ -66,8 +66,8 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
     Validate.notNull(kRightExtrapolatorName, "k right extrapolator name");
     _definitionName = definitionName;
     _instrumentType = instrumentType;
-    final Interpolator1D tInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(tInterpolatorName, tLeftExtrapolatorName, tRightExtrapolatorName);
-    final Interpolator1D kInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(kInterpolatorName, kLeftExtrapolatorName, kRightExtrapolatorName);
+    final Interpolator1D tInterpolator = NamedInterpolator1dFactory.of(tInterpolatorName, tLeftExtrapolatorName, tRightExtrapolatorName);
+    final Interpolator1D kInterpolator = NamedInterpolator1dFactory.of(kInterpolatorName, kLeftExtrapolatorName, kRightExtrapolatorName);
     _interpolator = new GridInterpolator2D(tInterpolator, kInterpolator);
   }
 

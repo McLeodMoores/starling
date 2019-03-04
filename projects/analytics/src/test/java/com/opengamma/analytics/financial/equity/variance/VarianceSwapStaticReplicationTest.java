@@ -5,7 +5,6 @@
  */
 package com.opengamma.analytics.financial.equity.variance;
 
-import static com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory.getInterpolator;
 import static org.testng.AssertJUnit.assertEquals;
 
 import org.apache.commons.lang.Validate;
@@ -27,10 +26,14 @@ import com.opengamma.analytics.financial.model.volatility.surface.Strike;
 import com.opengamma.analytics.financial.varianceswap.VarianceSwap;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.function.Function;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator2D;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
@@ -103,11 +106,11 @@ public class VarianceSwapStaticReplicationTest {
   private static final double[] VOLS =
       new double[] {0.28, 0.28, 0.28, 0.28, 0.28, 0.25, 0.25, 0.25, 0.25, 0.25, 0.27, 0.26, 0.24, 0.23, 0.25, 0.27, 0.26, 0.25, 0.26, 0.27 };
 
-  private static final CombinedInterpolatorExtrapolator INTERPOLATOR_1D_STRIKE = getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC,
-      Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_1D_STRIKE = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
+      LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
 
-  private static final CombinedInterpolatorExtrapolator INTERPOLATOR_1D_EXPIRY =
-      getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_1D_EXPIRY = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
 
   private static final Interpolator2D INTERPOLATOR_2D = new GridInterpolator2D(INTERPOLATOR_1D_EXPIRY, INTERPOLATOR_1D_STRIKE);
   private static final BlackVolatilitySurfaceStrike VOL_STRIKE_SURFACE =
@@ -158,7 +161,7 @@ public class VarianceSwapStaticReplicationTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testSurfaceWithoutStrikeExtrapolation() {
-    final CombinedInterpolatorExtrapolator interpOnlyStrike = getInterpolator(Interpolator1DFactory.LINEAR);
+    final Interpolator1D interpOnlyStrike = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME);
     final Interpolator2D interp2D = new GridInterpolator2D(INTERPOLATOR_1D_EXPIRY, interpOnlyStrike);
     final InterpolatedDoublesSurface surface = new InterpolatedDoublesSurface(EXPIRIES, STRIKES, VOLS, interp2D);
     final BlackVolatilitySurfaceStrike volSurface = new BlackVolatilitySurfaceStrike(surface);

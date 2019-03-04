@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
@@ -100,7 +102,7 @@ public class DemoStandardFunctionConfiguration extends StandardFunctionConfigura
   /**
    * These functions provide aliases for the user to rename one of OpenGamma's ValueRequirementNames to one of their own.
    * In addition to adding the name to a class that extends ValueRenamingFunction, such as SimpleRenamingFunction, one must also
-   * add the name into ValueRequirementNames or to a project-specific name class 
+   * add the name into ValueRequirementNames or to a project-specific name class
    * and include that into the [webBasics] section of the engine.ini configuration file. <p>
    * eg: [webBasics] <p>
    *  valueRequirementNameClasses = com.opengamma.engine.value.ValueRequirementNames,com.opengamma.yourproject.function.YourProjectValueRequirementNames
@@ -424,9 +426,9 @@ public class DemoStandardFunctionConfiguration extends StandardFunctionConfigura
   protected void addEquityForwardDefaults(final List<FunctionConfiguration> functionConfigs) {
     // Interpolation Defaults
     functionConfigs.add(functionConfiguration(InterpolatedForwardCurveDefaults.class,
-        Interpolator1DFactory.DOUBLE_QUADRATIC,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-        Interpolator1DFactory.FLAT_EXTRAPOLATOR));
+        DoubleQuadraticInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME));
     // EquityForward PerEquityDefaults
     final List<String> equityForwardDefaults = EquityInstrumentDefaultValues.builder()
         .useIdName()

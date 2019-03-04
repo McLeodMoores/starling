@@ -13,8 +13,8 @@ import java.util.Map;
 import org.threeten.bp.LocalDate;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.VersionCorrection;
@@ -133,7 +133,7 @@ public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements Inter
       final String rightExtrapolatorName = curveDefinition.getRightExtrapolatorName();
       final boolean interpolateYield = curveDefinition.isInterpolateYields();
       final Interpolator1D interpolator =
-          CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+          NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
       return new InterpolatedYieldCurveSpecification(curveDate, curveDefinition.getName(), curveDefinition.getCurrency(), interpolator,
           interpolateYield, securities, curveDefinition.getRegionId());
     } catch (final OpenGammaRuntimeException e) {

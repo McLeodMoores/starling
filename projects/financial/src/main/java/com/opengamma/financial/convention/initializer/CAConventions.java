@@ -24,7 +24,7 @@ import static com.opengamma.financial.convention.initializer.PerCurrencyConventi
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.CompoundingIborLegConvention;
 import com.opengamma.financial.convention.DepositConvention;
@@ -61,7 +61,7 @@ public class CAConventions extends ConventionMasterInitializer {
 
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
-  private static final DayCount ACT_365 = DayCounts.ACT_365; 
+  private static final DayCount ACT_365 = DayCounts.ACT_365;
   private static final ExternalId CA = ExternalSchemes.financialRegionId("CA");
   private static final Currency CCY = Currency.CAD;
 
@@ -74,21 +74,21 @@ public class CAConventions extends ConventionMasterInitializer {
   //-------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
-    
+
     // Index Overnight
     final String onIndexName = getConventionName(CCY, OVERNIGHT);
     final ExternalId onIndexId = ExternalId.of(SCHEME_NAME, onIndexName);
     final OvernightIndexConvention onIndex = createOvernightIndexConvention(onIndexName);
-    
+
     // Index CDOR
     final String cdorConventionName = getConventionName(CCY, CDOR);
     final ExternalId cdorConventionId = ExternalId.of(SCHEME_NAME, cdorConventionName);
     final IborIndexConvention cdorIndex = createIborIndexConvention(cdorConventionName);
-    
+
     // Deposit
     final String depositONConventionName = getConventionName(CCY, DEPOSIT_ON);
     final DepositConvention depositONConvention = createONDepositConvention(depositONConventionName);
-    
+
     // Fixed Legs
     final String fixedLeg6MConventionName = getConventionName(CCY, TENOR_STR_6M, FIXED_LEG);
     final SwapFixedLegConvention fixedLeg6MConvention = createSwapFixedLegConvention(fixedLeg6MConventionName, TENOR_STR_6M, Tenor.SIX_MONTHS);
@@ -96,30 +96,30 @@ public class CAConventions extends ConventionMasterInitializer {
     final SwapFixedLegConvention fixedLeg1YConvention = createSwapFixedLegConvention(fixedLeg1YConventionName, TENOR_STR_1Y, Tenor.ONE_YEAR);
     final String fixedLeg1YPayLagConventionName = getConventionName(CCY, TENOR_STR_1Y, PAY_LAG + FIXED_LEG);
     final SwapFixedLegConvention fixedLeg1YPayLagConvention = createSwapFixedLegPayLagConvention(fixedLeg1YPayLagConventionName, TENOR_STR_1Y, Tenor.ONE_YEAR);
-    
+
     // CDOR Legs
     final String cdor3M6MLegConventionName = getConventionName(CCY, TENOR_STR_3M + TENOR_STR_6M, CDOR_CMP_LEG);
     final CompoundingIborLegConvention cdor3M6MLegConvention = createCompoundingIborLegConvention(cdor3M6MLegConventionName, cdorConventionId, TENOR_STR_3M, Tenor.THREE_MONTHS,
         TENOR_STR_6M, Tenor.SIX_MONTHS);
-    
+
     // Overnight Legs
     final String onLegConventionName = getConventionName(CCY, TENOR_STR_1Y, ON_CMP_LEG);
     final OISLegConvention onLegConvention = createOISLegConvention(onLegConventionName, onIndexId, TENOR_STR_1Y, Tenor.ONE_YEAR);
-    
+
     // Futures
-    final String quarterlySTIRFutureConventionName = getConventionName(CCY, STIR_FUTURES + QUARTERLY);    
+    final String quarterlySTIRFutureConventionName = getConventionName(CCY, STIR_FUTURES + QUARTERLY);
     final InterestRateFutureConvention quarterlySTIRFutureConvention = new InterestRateFutureConvention(
-        quarterlySTIRFutureConventionName, 
+        quarterlySTIRFutureConventionName,
         ExternalIdBundle.of(ExternalId.of(SCHEME_NAME, quarterlySTIRFutureConventionName)),
         ExternalId.of(ExchangeTradedInstrumentExpiryCalculator.SCHEME, IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME), CA, cdorConventionId);
-    
+
     // TODO: Remove - Note: Temporally used to retrieve underlying index convention.
-    
+
     final String irsibor3MLegConventionName = getConventionName(CCY, TENOR_STR_3M, IRS_IBOR_LEG);
     final VanillaIborLegConvention irsIbor3MLegConvention = new VanillaIborLegConvention(
         irsibor3MLegConventionName, getIds(CCY, TENOR_STR_3M, IRS_IBOR_LEG),
-        cdorConventionId, true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 0, true, StubType.SHORT_START, false, 0);
-    
+        cdorConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, true, StubType.SHORT_START, false, 0);
+
     // Convention add
     addConvention(master, onIndex);
     addConvention(master, cdorIndex);
@@ -149,27 +149,27 @@ public class CAConventions extends ConventionMasterInitializer {
         depositONConventionName, getIds(CCY, DEPOSIT_ON), ACT_365, FOLLOWING, 0, false, CCY, CA);
   }
 
-  protected SwapFixedLegConvention createSwapFixedLegConvention(final String fixedLegConventionName, 
+  protected SwapFixedLegConvention createSwapFixedLegConvention(final String fixedLegConventionName,
       final String tenorString, final Tenor resetTenor) {
     return new SwapFixedLegConvention(
         fixedLegConventionName, getIds(CCY, tenorString, FIXED_LEG),
         resetTenor, ACT_365, MODIFIED_FOLLOWING, CCY, CA, 1, true, StubType.SHORT_START, false, 0);
   }
 
-  protected SwapFixedLegConvention createSwapFixedLegPayLagConvention(final String fixedLeg1YPayLagConventionName, 
+  protected SwapFixedLegConvention createSwapFixedLegPayLagConvention(final String fixedLeg1YPayLagConventionName,
       final String tenorString, final Tenor resetTenor) {
     return new SwapFixedLegConvention(
         fixedLeg1YPayLagConventionName, getIds(CCY, tenorString, PAY_LAG + FIXED_LEG),
         resetTenor, ACT_365, MODIFIED_FOLLOWING, CCY, CA, 1, true, StubType.SHORT_START, false, 1);
   }
 
-  protected CompoundingIborLegConvention createCompoundingIborLegConvention(final String cdorLegConventionName, final ExternalId cdorConventionId, 
+  protected CompoundingIborLegConvention createCompoundingIborLegConvention(final String cdorLegConventionName, final ExternalId cdorConventionId,
       final String resetTenorString, final Tenor resetTenor, final String paymentTenorString,  final Tenor paymentTenor) {
-    return new CompoundingIborLegConvention(cdorLegConventionName, getIds(CCY, resetTenorString + paymentTenorString, CDOR_CMP_LEG), cdorConventionId, 
+    return new CompoundingIborLegConvention(cdorLegConventionName, getIds(CCY, resetTenorString + paymentTenorString, CDOR_CMP_LEG), cdorConventionId,
         paymentTenor, CompoundingType.FLAT_COMPOUNDING, resetTenor, StubType.SHORT_START, 0, true, StubType.SHORT_START, false, 0);
   }
 
-  protected OISLegConvention createOISLegConvention(final String onLegConventionName, final ExternalId onIndexId, 
+  protected OISLegConvention createOISLegConvention(final String onLegConventionName, final ExternalId onIndexId,
       final String tenorString, final Tenor resetTenor) {
     return new OISLegConvention(
         onLegConventionName, getIds(CCY, tenorString, ON_CMP_LEG), onIndexId,

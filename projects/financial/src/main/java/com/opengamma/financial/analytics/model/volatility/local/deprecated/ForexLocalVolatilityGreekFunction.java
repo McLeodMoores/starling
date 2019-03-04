@@ -31,7 +31,7 @@ import java.util.Set;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.greeks.Greek;
 import com.opengamma.analytics.financial.greeks.PDEResultCollection;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.AbstractFunction;
@@ -118,7 +118,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     for (final ValueRequirement value : desiredValues) {
       final Greek greek = s_greekNamesToGreeks.get(value.getValueName());
       final String strikeInterpolatorName = value.getConstraint(PROPERTY_RESULT_STRIKE_INTERPOLATOR);
-      final Double point = gridGreeks.getPointGreek(greek, strike, Interpolator1DFactory.getInterpolator(strikeInterpolatorName));
+      final Double point = gridGreeks.getPointGreek(greek, strike, NamedInterpolator1dFactory.of(strikeInterpolatorName));
       if (point == null) {
         throw new OpenGammaRuntimeException("Grid greeks for " + greek + " were null");
       }

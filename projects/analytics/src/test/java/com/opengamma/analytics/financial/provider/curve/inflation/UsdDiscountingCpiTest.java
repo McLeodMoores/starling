@@ -45,9 +45,10 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.analytics.financial.provider.description.inflation.InflationIssuerProviderInterface;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderDiscount;
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.InflationSensitivity;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LogLinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
@@ -59,8 +60,8 @@ import com.opengamma.util.tuple.Pair;
  */
 public class UsdDiscountingCpiTest {
 
-  private static final Interpolator1D INTERPOLATOR_LOG_LINEAR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_LOG_LINEAR = NamedInterpolator1dFactory.of(LogLinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
 
   private static final LastTimeCalculator MATURITY_CALCULATOR = LastTimeCalculator.getInstance();
   private static final double TOLERANCE_ROOT = 1.0E-10;
@@ -76,7 +77,7 @@ public class UsdDiscountingCpiTest {
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2012, 9, 28);
 
   private static final ZonedDateTimeDoubleTimeSeries TS_PRICE_INDEX_USD_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
-    DateUtils.getUTCDate(2011, 9, 28), DateUtils.getUTCDate(2012, 6, 30), DateUtils.getUTCDate(2012, 7, 31), DateUtils.getUTCDate(2012, 8, 30) }, new double[] {200, 200, 200, 200, 200 });
+      DateUtils.getUTCDate(2011, 9, 28), DateUtils.getUTCDate(2012, 6, 30), DateUtils.getUTCDate(2012, 7, 31), DateUtils.getUTCDate(2012, 8, 30) }, new double[] {200, 200, 200, 200, 200 });
   private static final String CURVE_NAME_CPI_USD = "USD CPI";
 
   /** Market values for the CPI USD curve */
@@ -86,173 +87,173 @@ public class UsdDiscountingCpiTest {
     GENERATOR_INFLATION_SWAP,
     GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP,
     GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP };
-  /** Tenors for the CPI USD curve */
-  private static final Period[] CPI_USD_TENOR = new Period[] {Period.ofYears(1),
-    Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(6), Period.ofYears(7),
-    Period.ofYears(8), Period.ofYears(9), Period.ofYears(10), Period.ofYears(12), Period.ofYears(15), Period.ofYears(20),
-    Period.ofYears(25), Period.ofYears(30) };
-  private static final GeneratorAttributeIR[] CPI_USD_ATTR = new GeneratorAttributeIR[CPI_USD_TENOR.length];
-  static {
-    for (int loopins = 0; loopins < CPI_USD_TENOR.length; loopins++) {
-      CPI_USD_ATTR[loopins] = new GeneratorAttributeIR(CPI_USD_TENOR[loopins]);
+    /** Tenors for the CPI USD curve */
+    private static final Period[] CPI_USD_TENOR = new Period[] {Period.ofYears(1),
+        Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(6), Period.ofYears(7),
+        Period.ofYears(8), Period.ofYears(9), Period.ofYears(10), Period.ofYears(12), Period.ofYears(15), Period.ofYears(20),
+        Period.ofYears(25), Period.ofYears(30) };
+    private static final GeneratorAttributeIR[] CPI_USD_ATTR = new GeneratorAttributeIR[CPI_USD_TENOR.length];
+    static {
+      for (int loopins = 0; loopins < CPI_USD_TENOR.length; loopins++) {
+        CPI_USD_ATTR[loopins] = new GeneratorAttributeIR(CPI_USD_TENOR[loopins]);
+      }
     }
-  }
 
-  /** Standard USD CPI curve instrument definitions */
-  private static final InstrumentDefinition<?>[] DEFINITIONS_CPI_USD;
+    /** Standard USD CPI curve instrument definitions */
+    private static final InstrumentDefinition<?>[] DEFINITIONS_CPI_USD;
 
-  /** Units of curves */
-  private static final int[] NB_UNITS = new int[] {1 };
-  private static final int NB_BLOCKS = NB_UNITS.length;
-  private static final InstrumentDefinition<?>[][][][] DEFINITIONS_UNITS = new InstrumentDefinition<?>[NB_BLOCKS][][][];
-  private static final GeneratorPriceIndexCurve[][][] GENERATORS_UNITS = new GeneratorPriceIndexCurve[NB_BLOCKS][][];
-  private static final String[][][] NAMES_UNITS = new String[NB_BLOCKS][][];
+    /** Units of curves */
+    private static final int[] NB_UNITS = new int[] {1 };
+    private static final int NB_BLOCKS = NB_UNITS.length;
+    private static final InstrumentDefinition<?>[][][][] DEFINITIONS_UNITS = new InstrumentDefinition<?>[NB_BLOCKS][][][];
+    private static final GeneratorPriceIndexCurve[][][] GENERATORS_UNITS = new GeneratorPriceIndexCurve[NB_BLOCKS][][];
+    private static final String[][][] NAMES_UNITS = new String[NB_BLOCKS][][];
 
-  private static final IssuerProviderDiscount US_MULTICURVE_PROVIDER = MulticurveProviderDiscountDataSets.createIssuerProvider().copy();
-  private static final InflationIssuerProviderDiscount KNOWN_DATA = new InflationIssuerProviderDiscount(US_MULTICURVE_PROVIDER);
+    private static final IssuerProviderDiscount US_MULTICURVE_PROVIDER = MulticurveProviderDiscountDataSets.createIssuerProvider().copy();
+    private static final InflationIssuerProviderDiscount KNOWN_DATA = new InflationIssuerProviderDiscount(US_MULTICURVE_PROVIDER);
 
-  private static final LinkedHashMap<String, IndexPrice[]> US_CPI_MAP = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, IndexPrice[]> US_CPI_MAP = new LinkedHashMap<>();
 
-  static {
-    DEFINITIONS_CPI_USD = getDefinitions(CPI_USD_MARKET_QUOTES, CPI_USD_GENERATORS, CPI_USD_ATTR);
+    static {
+      DEFINITIONS_CPI_USD = getDefinitions(CPI_USD_MARKET_QUOTES, CPI_USD_GENERATORS, CPI_USD_ATTR);
 
-    for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      DEFINITIONS_UNITS[loopblock] = new InstrumentDefinition<?>[NB_UNITS[loopblock]][][];
-      GENERATORS_UNITS[loopblock] = new GeneratorPriceIndexCurve[NB_UNITS[loopblock]][];
-      NAMES_UNITS[loopblock] = new String[NB_UNITS[loopblock]][];
+      for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
+        DEFINITIONS_UNITS[loopblock] = new InstrumentDefinition<?>[NB_UNITS[loopblock]][][];
+        GENERATORS_UNITS[loopblock] = new GeneratorPriceIndexCurve[NB_UNITS[loopblock]][];
+        NAMES_UNITS[loopblock] = new String[NB_UNITS[loopblock]][];
+      }
+      DEFINITIONS_UNITS[0][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_CPI_USD };
+
+      final GeneratorPriceIndexCurve genIntLin = new GeneratorPriceIndexCurveInterpolated(MATURITY_CALCULATOR, INTERPOLATOR_LOG_LINEAR);
+      GENERATORS_UNITS[0][0] = new GeneratorPriceIndexCurve[] {genIntLin };
+
+      NAMES_UNITS[0][0] = new String[] {CURVE_NAME_CPI_USD };
+
+      US_CPI_MAP.put(CURVE_NAME_CPI_USD, new IndexPrice[] {US_CPI });
     }
-    DEFINITIONS_UNITS[0][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_CPI_USD };
 
-    final GeneratorPriceIndexCurve genIntLin = new GeneratorPriceIndexCurveInterpolated(MATURITY_CALCULATOR, INTERPOLATOR_LOG_LINEAR);
-    GENERATORS_UNITS[0][0] = new GeneratorPriceIndexCurve[] {genIntLin };
-
-    NAMES_UNITS[0][0] = new String[] {CURVE_NAME_CPI_USD };
-
-    US_CPI_MAP.put(CURVE_NAME_CPI_USD, new IndexPrice[] {US_CPI });
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked" })
-  public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
-    final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
-    for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
-      definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
+    @SuppressWarnings({"rawtypes", "unchecked" })
+    public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+      final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
+      for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
+        definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
+      }
+      return definitions;
     }
-    return definitions;
-  }
 
-  private static final List<Pair<InflationIssuerProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+    private static final List<Pair<InflationIssuerProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
-  // Calculator
-  private static final PresentValueDiscountingInflationIssuerCalculator PVIC = PresentValueDiscountingInflationIssuerCalculator.getInstance();
-  private static final ParSpreadInflationMarketQuoteIssuerDiscountingCalculator PSIMQC = ParSpreadInflationMarketQuoteIssuerDiscountingCalculator.getInstance();
-  private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSIMQCSC = ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
+    // Calculator
+    private static final PresentValueDiscountingInflationIssuerCalculator PVIC = PresentValueDiscountingInflationIssuerCalculator.getInstance();
+    private static final ParSpreadInflationMarketQuoteIssuerDiscountingCalculator PSIMQC = ParSpreadInflationMarketQuoteIssuerDiscountingCalculator.getInstance();
+    private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSIMQCSC = ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
 
-  private static final InflationIssuerDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new InflationIssuerDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT, STEP_MAX);
+    private static final InflationIssuerDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new InflationIssuerDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT, STEP_MAX);
 
-  private static final double TOLERANCE_CAL = 1.0E-9;
+    private static final double TOLERANCE_CAL = 1.0E-9;
 
-  @BeforeSuite
-  static void initClass() {
-    for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[loopblock], GENERATORS_UNITS[loopblock], NAMES_UNITS[loopblock], KNOWN_DATA, PSIMQC, PSIMQCSC));
+    @BeforeSuite
+    static void initClass() {
+      for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
+        CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[loopblock], GENERATORS_UNITS[loopblock], NAMES_UNITS[loopblock], KNOWN_DATA, PSIMQC, PSIMQCSC));
+      }
     }
-  }
 
-  @Test(enabled = true)
-  public void performance() {
-    long startTime, endTime;
-    final int nbTest = 1000;
+    @Test(enabled = true)
+    public void performance() {
+      long startTime, endTime;
+      final int nbTest = 1000;
 
-    startTime = System.currentTimeMillis();
-    for (int looptest = 0; looptest < nbTest; looptest++) {
-      makeCurvesFromDefinitions(DEFINITIONS_UNITS[0], GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSIMQC, PSIMQCSC);
+      startTime = System.currentTimeMillis();
+      for (int looptest = 0; looptest < nbTest; looptest++) {
+        makeCurvesFromDefinitions(DEFINITIONS_UNITS[0], GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSIMQC, PSIMQCSC);
+      }
+      endTime = System.currentTimeMillis();
+      System.out.println("InflationBuildingCurveSimpleTestEUR - " + nbTest + " curve construction Price index EUR 1 units: " + (endTime - startTime) + " ms");
+      // Performance note: curve construction Price index EUR 1 units: 27-Mar-13: On Dell Precision T1850 3.5 GHz Quad-Core Intel Xeon: 3564 ms for 1000 sets.
     }
-    endTime = System.currentTimeMillis();
-    System.out.println("InflationBuildingCurveSimpleTestEUR - " + nbTest + " curve construction Price index EUR 1 units: " + (endTime - startTime) + " ms");
-    // Performance note: curve construction Price index EUR 1 units: 27-Mar-13: On Dell Precision T1850 3.5 GHz Quad-Core Intel Xeon: 3564 ms for 1000 sets.
-  }
 
-  @Test
-  public void curveConstructionGeneratorOtherBlocks() {
-    for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      curveConstructionTest(DEFINITIONS_UNITS[loopblock], CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getFirst(), loopblock);
+    @Test
+    public void curveConstructionGeneratorOtherBlocks() {
+      for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
+        curveConstructionTest(DEFINITIONS_UNITS[loopblock], CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getFirst(), loopblock);
+      }
     }
-  }
 
-  public void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final InflationIssuerProviderDiscount curves, final int block) {
-    final int nbBlocks = definitions.length;
-    for (int loopblock = 0; loopblock < nbBlocks; loopblock++) {
-      final InstrumentDerivative[][] instruments = convert(definitions[loopblock]);
-      final double[][] pv = new double[instruments.length][];
-      for (int loopcurve = 0; loopcurve < instruments.length; loopcurve++) {
-        pv[loopcurve] = new double[instruments[loopcurve].length];
-        for (int loopins = 0; loopins < instruments[loopcurve].length; loopins++) {
-          pv[loopcurve][loopins] = curves.getFxRates().convert(instruments[loopcurve][loopins].accept(PVIC, curves), USD).getAmount();
-          assertEquals("Curve construction: block " + block + ", unit " + loopblock + " - instrument " + loopins, 0, pv[loopcurve][loopins], TOLERANCE_CAL);
+    public void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final InflationIssuerProviderDiscount curves, final int block) {
+      final int nbBlocks = definitions.length;
+      for (int loopblock = 0; loopblock < nbBlocks; loopblock++) {
+        final InstrumentDerivative[][] instruments = convert(definitions[loopblock]);
+        final double[][] pv = new double[instruments.length][];
+        for (int loopcurve = 0; loopcurve < instruments.length; loopcurve++) {
+          pv[loopcurve] = new double[instruments[loopcurve].length];
+          for (int loopins = 0; loopins < instruments[loopcurve].length; loopins++) {
+            pv[loopcurve][loopins] = curves.getFxRates().convert(instruments[loopcurve][loopins].accept(PVIC, curves), USD).getAmount();
+            assertEquals("Curve construction: block " + block + ", unit " + loopblock + " - instrument " + loopins, 0, pv[loopcurve][loopins], TOLERANCE_CAL);
+          }
         }
       }
     }
-  }
 
-  @SuppressWarnings("unchecked")
-  private static Pair<InflationIssuerProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(final InstrumentDefinition<?>[][][] definitions,
-      final GeneratorPriceIndexCurve[][] curveGenerators,
-      final String[][] curveNames, final InflationIssuerProviderDiscount knownData, final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, Double> calculator,
-      final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, InflationSensitivity> sensitivityCalculator) {
-    final int nUnits = definitions.length;
-    final MultiCurveBundle<GeneratorPriceIndexCurve>[] curveBundles = new MultiCurveBundle[nUnits];
-    for (int i = 0; i < nUnits; i++) {
-      final int nCurves = definitions[i].length;
-      final SingleCurveBundle<GeneratorPriceIndexCurve>[] singleCurves = new SingleCurveBundle[nCurves];
-      for (int j = 0; j < nCurves; j++) {
-        final int nInstruments = definitions[i][j].length;
-        final InstrumentDerivative[] derivatives = new InstrumentDerivative[nInstruments];
-        final double[] initialGuess = new double[nInstruments];
-        for (int k = 0; k < nInstruments; k++) {
-          derivatives[k] = convert(definitions[i][j][k]);
-          initialGuess[k] = definitions[i][j][k].accept(CurveUtils.INFLATION_INITIALIZATION);
+    @SuppressWarnings("unchecked")
+    private static Pair<InflationIssuerProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(final InstrumentDefinition<?>[][][] definitions,
+        final GeneratorPriceIndexCurve[][] curveGenerators,
+        final String[][] curveNames, final InflationIssuerProviderDiscount knownData, final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, Double> calculator,
+        final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, InflationSensitivity> sensitivityCalculator) {
+      final int nUnits = definitions.length;
+      final MultiCurveBundle<GeneratorPriceIndexCurve>[] curveBundles = new MultiCurveBundle[nUnits];
+      for (int i = 0; i < nUnits; i++) {
+        final int nCurves = definitions[i].length;
+        final SingleCurveBundle<GeneratorPriceIndexCurve>[] singleCurves = new SingleCurveBundle[nCurves];
+        for (int j = 0; j < nCurves; j++) {
+          final int nInstruments = definitions[i][j].length;
+          final InstrumentDerivative[] derivatives = new InstrumentDerivative[nInstruments];
+          final double[] initialGuess = new double[nInstruments];
+          for (int k = 0; k < nInstruments; k++) {
+            derivatives[k] = convert(definitions[i][j][k]);
+            initialGuess[k] = definitions[i][j][k].accept(CurveUtils.INFLATION_INITIALIZATION);
+          }
+          final GeneratorPriceIndexCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
+          singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);
         }
-        final GeneratorPriceIndexCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
-        singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);
+        curveBundles[i] = new MultiCurveBundle<>(singleCurves);
       }
-      curveBundles[i] = new MultiCurveBundle<>(singleCurves);
+      return CURVE_BUILDING_REPOSITORY.makeCurvesFromDerivatives(curveBundles, knownData, US_CPI_MAP, calculator,
+          sensitivityCalculator);
     }
-    return CURVE_BUILDING_REPOSITORY.makeCurvesFromDerivatives(curveBundles, knownData, US_CPI_MAP, calculator,
-        sensitivityCalculator);
-  }
 
-  private static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions) {
-    final InstrumentDerivative[][] instruments = new InstrumentDerivative[definitions.length][];
-    for (int loopcurve = 0; loopcurve < definitions.length; loopcurve++) {
-      instruments[loopcurve] = new InstrumentDerivative[definitions[loopcurve].length];
-      int loopins = 0;
-      for (final InstrumentDefinition<?> instrument : definitions[loopcurve]) {
-        InstrumentDerivative ird;
-        if (instrument instanceof SwapFixedInflationZeroCouponDefinition) {
-          final Annuity<? extends Payment> ird1 = ((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().toDerivative(NOW);
-          final Annuity<? extends Payment> ird2 = ((SwapFixedInflationZeroCouponDefinition) instrument).getSecondLeg().toDerivative(NOW, TS_PRICE_INDEX_USD_WITH_TODAY);
-          ird = new Swap<>(ird1, ird2);
+    private static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions) {
+      final InstrumentDerivative[][] instruments = new InstrumentDerivative[definitions.length][];
+      for (int loopcurve = 0; loopcurve < definitions.length; loopcurve++) {
+        instruments[loopcurve] = new InstrumentDerivative[definitions[loopcurve].length];
+        int loopins = 0;
+        for (final InstrumentDefinition<?> instrument : definitions[loopcurve]) {
+          InstrumentDerivative ird;
+          if (instrument instanceof SwapFixedInflationZeroCouponDefinition) {
+            final Annuity<? extends Payment> ird1 = ((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().toDerivative(NOW);
+            final Annuity<? extends Payment> ird2 = ((SwapFixedInflationZeroCouponDefinition) instrument).getSecondLeg().toDerivative(NOW, TS_PRICE_INDEX_USD_WITH_TODAY);
+            ird = new Swap<>(ird1, ird2);
+          }
+          else {
+            ird = instrument.toDerivative(NOW);
+          }
+          instruments[loopcurve][loopins++] = ird;
         }
-        else {
-          ird = instrument.toDerivative(NOW);
-        }
-        instruments[loopcurve][loopins++] = ird;
       }
+      return instruments;
     }
-    return instruments;
-  }
 
-  private static InstrumentDerivative convert(final InstrumentDefinition<?> instrument) {
-    InstrumentDerivative ird;
-    if (instrument instanceof SwapFixedInflationZeroCouponDefinition) {
-      final Annuity<? extends Payment> ird1 = ((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().toDerivative(NOW);
-      final Annuity<? extends Payment> ird2 = ((SwapFixedInflationZeroCouponDefinition) instrument).getSecondLeg().toDerivative(NOW, TS_PRICE_INDEX_USD_WITH_TODAY);
-      ird = new Swap<>(ird1, ird2);
+    private static InstrumentDerivative convert(final InstrumentDefinition<?> instrument) {
+      InstrumentDerivative ird;
+      if (instrument instanceof SwapFixedInflationZeroCouponDefinition) {
+        final Annuity<? extends Payment> ird1 = ((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().toDerivative(NOW);
+        final Annuity<? extends Payment> ird2 = ((SwapFixedInflationZeroCouponDefinition) instrument).getSecondLeg().toDerivative(NOW, TS_PRICE_INDEX_USD_WITH_TODAY);
+        ird = new Swap<>(ird1, ird2);
+      }
+      else {
+        ird = instrument.toDerivative(NOW);
+      }
+      return ird;
     }
-    else {
-      ird = instrument.toDerivative(NOW);
-    }
-    return ird;
-  }
 
 }

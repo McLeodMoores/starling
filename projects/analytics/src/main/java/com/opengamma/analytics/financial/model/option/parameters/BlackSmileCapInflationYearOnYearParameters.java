@@ -10,11 +10,12 @@ import org.apache.commons.lang.ObjectUtils;
 import com.opengamma.analytics.financial.instrument.index.IndexPrice;
 import com.opengamma.analytics.financial.model.interestrate.definition.InflationYearOnYearCapFloorParameters;
 import com.opengamma.analytics.financial.model.volatility.VolatilityModel;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator2D;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
@@ -117,8 +118,8 @@ public class BlackSmileCapInflationYearOnYearParameters implements VolatilityMod
       }
     }
 
-    final Interpolator1D linearFlat = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-        Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final Interpolator1D linearFlat = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME);
     final GridInterpolator2D interpolator = new GridInterpolator2D(linearFlat, linearFlat);
     _volatility = InterpolatedDoublesSurface.from(xyData, volatilityVector, interpolator);
     _index = parameters.getIndex();

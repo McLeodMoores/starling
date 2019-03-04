@@ -9,8 +9,9 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.model.interestrate.definition.G2ppPiecewiseConstantParameters;
 import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 
 /**
  * Data sets used in some tests related to G2++ model.
@@ -23,10 +24,10 @@ public class TestsDataSetsG2pp {
   private static final String FORWARD3M = "Forward 3M";
 
   public static YieldCurveBundle createCurves1() {
-    final InterpolatedDoublesCurve dscC = new InterpolatedDoublesCurve(new double[] {0.0, 50.0}, new double[] {0.0500, 0.0500}, CombinedInterpolatorExtrapolatorFactory.getInterpolator(
-        Interpolator1DFactory.LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true, "Curve dsc");
-    final InterpolatedDoublesCurve fwd3C = new InterpolatedDoublesCurve(new double[] {0.0, 50.0}, new double[] {0.0500, 0.0500}, CombinedInterpolatorExtrapolatorFactory.getInterpolator(
-        Interpolator1DFactory.LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true, "Curve fwd3");
+    final InterpolatedDoublesCurve dscC = new InterpolatedDoublesCurve(new double[] { 0.0, 50.0 }, new double[] { 0.0500, 0.0500 },
+        NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true, "Curve dsc");
+    final InterpolatedDoublesCurve fwd3C = new InterpolatedDoublesCurve(new double[] { 0.0, 50.0 }, new double[] { 0.0500, 0.0500 },
+        NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true, "Curve fwd3");
     final YieldCurveBundle curves = new YieldCurveBundle();
     curves.setCurve(DISCOUNTING, YieldCurve.from(dscC));
     curves.setCurve(FORWARD3M, YieldCurve.from(fwd3C));
@@ -35,9 +36,9 @@ public class TestsDataSetsG2pp {
 
   public static YieldCurveBundle createCurves2() {
     final InterpolatedDoublesCurve dscC = new InterpolatedDoublesCurve(new double[] {0.0, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0}, new double[] {0.0100, 0.0150, 0.0200, 0.0250, 0.0300, 0.0350, 0.0400},
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true, "Curve dsc");
+        NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true, "Curve dsc");
     final InterpolatedDoublesCurve fwd3C = new InterpolatedDoublesCurve(new double[] {0.0, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0}, new double[] {0.0120, 0.0170, 0.0220, 0.0270, 0.0320, 0.0370, 0.0420},
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true, "Curve fwd3");
+        NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true, "Curve fwd3");
     final YieldCurveBundle curves = new YieldCurveBundle();
     curves.setCurve(DISCOUNTING, YieldCurve.from(dscC));
     curves.setCurve(FORWARD3M, YieldCurve.from(fwd3C));

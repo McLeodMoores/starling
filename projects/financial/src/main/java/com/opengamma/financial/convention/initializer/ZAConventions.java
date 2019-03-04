@@ -14,7 +14,7 @@ import static com.opengamma.financial.convention.initializer.PerCurrencyConventi
 
 import org.threeten.bp.LocalTime;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -73,7 +73,7 @@ public class ZAConventions extends ConventionMasterInitializer {
     final ExternalId libor3mConventionId = PerCurrencyConventionHelper.simpleNameId(libor3mConventionName);
     final VanillaIborLegConvention vanillaIborLegConvention = new VanillaIborLegConvention(
         vanillaIborLegConventionName, getIds(ZAR, tenorString, IRS_IBOR_LEG),
-        libor3mConventionId, true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 2);
+        libor3mConventionId, true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 2);
     addConvention(master, vanillaIborLegConvention);
   }
 

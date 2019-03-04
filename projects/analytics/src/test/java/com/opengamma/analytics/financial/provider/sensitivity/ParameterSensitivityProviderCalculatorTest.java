@@ -41,9 +41,11 @@ import com.opengamma.analytics.financial.provider.sensitivity.parameter.Paramete
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.util.money.Currency;
@@ -77,8 +79,8 @@ public class ParameterSensitivityProviderCalculatorTest {
 
   private static final double[] TIME = {0.25, 0.50, 1.0, 2.0, 5.0};
   private static final double[] YIELD = {0.02, 0.025, 0.03, 0.03, 0.028};
-  private static final Interpolator1D INTERPOLATOR_LINEAR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   private static final String DSC_NAME = "USD Discounting";
   private static final String FWD3_NAME = "USD Forward 3M";
   private static final YieldAndDiscountCurve DSC = new YieldCurve(DSC_NAME, new InterpolatedDoublesCurve(TIME, YIELD, INTERPOLATOR_LINEAR, true));

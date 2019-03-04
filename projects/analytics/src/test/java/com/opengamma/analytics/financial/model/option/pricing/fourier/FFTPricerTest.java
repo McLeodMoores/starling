@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -15,8 +15,8 @@ import com.opengamma.analytics.financial.model.volatility.BlackImpliedVolatility
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.number.ComplexNumber;
 import com.opengamma.util.test.TestGroup;
 
@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class FFTPricerTest {
-  private static final Interpolator1D INTERPOLATOR = Interpolator1DFactory.getInterpolator("DoubleQuadratic");
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of("DoubleQuadratic");
   private static final double FORWARD = 100;
   private static final double T = 1 / 52.0;
   private static final double DF = 0.96;
@@ -180,7 +180,7 @@ public class FFTPricerTest {
     for (int i = 0; i < 5; i++) {
       final double alpha = -1.6 + i * 0.5;
       for (int j = 0; j < 1; j++) {
-        isCall = (j == 0);
+        isCall = j == 0;
 
         final EuropeanVanillaOption option = new EuropeanVanillaOption(FORWARD, T, isCall);
         final double[][] strikeNprice = PRICER.price(FORWARD, DF, T, isCall, CEF, FORWARD, FORWARD, 1, 0.3, alpha, tol);
@@ -191,7 +191,7 @@ public class FFTPricerTest {
   }
 
   /**
-   * This test that the same price is produced when the alpha, tolerance and limitSigma are changed 
+   * This test that the same price is produced when the alpha, tolerance and limitSigma are changed
    */
   @Test
   public void testStability() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -25,10 +25,11 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.B
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.volatility.BlackImpliedVolatilityFormula;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.DoubleQuadraticInterpolator1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1d;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.minimization.DoubleRangeLimitTransform;
 import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
@@ -44,7 +45,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class TwoStateMarkovChainFitter {
   /** A logger */
@@ -52,7 +53,7 @@ public class TwoStateMarkovChainFitter {
   /** The Black implied volatility calculator */
   private static final BlackImpliedVolatilityFormula BLACK_IMPLIED_VOL = new BlackImpliedVolatilityFormula();
   /** The interpolator */
-  private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = Interpolator1DFactory.DOUBLE_QUADRATIC_INSTANCE;
+  private static final NamedInterpolator1d INTERPOLATOR_1D = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME);
   /** The grid interpolator */
   private static final GridInterpolator2D GRID_INTERPOLATOR2D = new GridInterpolator2D(INTERPOLATOR_1D, INTERPOLATOR_1D);
   /** The parameter transforms */
@@ -227,7 +228,7 @@ public class TwoStateMarkovChainFitter {
     final int xNodes = prices.getNumberSpaceNodes();
     final int tNodes = prices.getNumberTimeNodes();
     final int n = xNodes * tNodes;
-    final List<Pair<double[], Double>> out = new ArrayList<Pair<double[], Double>>(n);
+    final List<Pair<double[], Double>> out = new ArrayList<>(n);
 
     for (int i = 0; i < tNodes; i++) {
       final double t = prices.getTimeValue(i);

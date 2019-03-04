@@ -19,6 +19,8 @@ import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.LinearExtrapolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1d;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 
 /**
  * Holds Fudge builders for the interpolation model.
@@ -38,18 +40,41 @@ import com.opengamma.analytics.math.interpolation.LinearExtrapolator1D;
   @GenericFudgeBuilderFor(Interpolator1D.class)
   public static final class Interpolator1DBuilder implements FudgeBuilder<Interpolator1D> {
     private static final String TYPE_FIELD_NAME = "type";
+    private static final String FLAG = "namedInterpolator";
 
+    @SuppressWarnings("deprecation")
     @Override
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Interpolator1D object) {
       final MutableFudgeMsg message = serializer.newMessage();
       message.add(0, Interpolator1D.class.getName());
-      message.add(TYPE_FIELD_NAME, Interpolator1DFactory.getInterpolatorName(object));
+      if (object instanceof NamedInterpolator1d) {
+        message.add(FLAG, Boolean.TRUE);
+        message.add(TYPE_FIELD_NAME, ((NamedInterpolator1d) object).getName());
+      } else {
+        // backwards compatibility
+        message.add(TYPE_FIELD_NAME, Interpolator1DFactory.getInterpolatorName(object));
+        message.add(FLAG, Boolean.FALSE);
+      }
       return message;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public Interpolator1D buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      return Interpolator1DFactory.getInterpolator(message.getFieldValue(String.class, message.getByName(TYPE_FIELD_NAME)));
+      if (message.hasField(FLAG)) {
+        final Boolean flag = message.getBoolean(FLAG);
+        if (flag) {
+          return NamedInterpolator1dFactory.of(message.getFieldValue(String.class, message.getByName(TYPE_FIELD_NAME)));
+        }
+        // backwards compatibility
+        return Interpolator1DFactory.getInterpolator(message.getFieldValue(String.class, message.getByName(TYPE_FIELD_NAME)));
+      }
+      try {
+        return NamedInterpolator1dFactory.of(message.getFieldValue(String.class, message.getByName(TYPE_FIELD_NAME)));
+      } catch (final Exception e) {
+        // backwards compatibility
+        return Interpolator1DFactory.getInterpolator(message.getFieldValue(String.class, message.getByName(TYPE_FIELD_NAME)));
+      }
     }
   }
 
@@ -61,6 +86,7 @@ import com.opengamma.analytics.math.interpolation.LinearExtrapolator1D;
     private static final String LEFT_EXTRAPOLATOR_FIELD_NAME = "leftExtrapolator";
     private static final String RIGHT_EXTRAPOLATOR_FIELD_NAME = "rightExtrapolator";
     private static final String INTERPOLATOR_FIELD_NAME = "interpolator";
+    private static final String FLAG = "namedInterpolator";
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final CombinedInterpolatorExtrapolator object) {
@@ -89,7 +115,6 @@ import com.opengamma.analytics.math.interpolation.LinearExtrapolator1D;
         return new LinearExtrapolator1D(interpolator);
       }
       return Interpolator1DFactory.getInterpolator(extrapolatorName);
-      //return null;
     }
   }
 

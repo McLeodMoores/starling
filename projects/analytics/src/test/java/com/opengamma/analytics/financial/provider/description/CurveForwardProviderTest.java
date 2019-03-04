@@ -19,9 +19,10 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
@@ -31,12 +32,12 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CurveForwardProviderTest {
 
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   private static final InflationProviderForward MARKET_1 = new InflationProviderForward();
   private static final YieldAndDiscountCurve CURVE_50 = YieldCurve.from(ConstantDoublesCurve.from(0.0500));
   private static final YieldAndDiscountCurve CURVE_45 = YieldCurve.from(ConstantDoublesCurve.from(0.0450));
-  private static final DoublesCurve CURVE_INT_1 = InterpolatedDoublesCurve.from(new double[] {0.0, 0.5, 1.0 }, new double[] {0.01, 0.02, 0.01 }, LINEAR_FLAT);;
+  private static final DoublesCurve CURVE_INT_1 = InterpolatedDoublesCurve.from(new double[] {0.0, 0.5, 1.0 }, new double[] {0.01, 0.02, 0.01 }, LINEAR_FLAT);
   private static final DoublesCurve CURVE_35 = ConstantDoublesCurve.from(0.0350);
   private static final DoublesCurve CURVE_30 = ConstantDoublesCurve.from(0.0300);
   private static final IborIndex EURIBOR_3M = IndexIborMaster.getInstance().getIndex("EURIBOR3M");

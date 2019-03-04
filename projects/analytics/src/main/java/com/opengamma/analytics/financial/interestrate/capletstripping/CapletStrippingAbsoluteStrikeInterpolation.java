@@ -17,9 +17,10 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.TransformedInterpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.analytics.math.matrix.ColtMatrixAlgebra;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
@@ -40,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
  * cap that is below its intrinsic value) it is always possible to root find for the ordinates of the knots such that every cap is exactly repriced by the
  * model. In this way the volatility (and hence the price) of every caplet (of the fixed strike) can be inferred from the curve - this result will be highly
  * dependent on the choice of interpolator and knot positions.
- * 
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -49,8 +50,8 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
   // TODO option on root finder
   private static final NewtonVectorRootFinder ROOTFINDER = new NewtonDefaultVectorRootFinder(); // new BroydenVectorRootFinder();
 
-  private static final String DEFAULT_INTERPOLATOR = Interpolator1DFactory.DOUBLE_QUADRATIC;
-  private static final String DEFAULT_EXTRAPOLATOR = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private static final String DEFAULT_INTERPOLATOR = DoubleQuadraticInterpolator1dAdapter.NAME;
+  private static final String DEFAULT_EXTRAPOLATOR = LinearExtrapolator1dAdapter.NAME;
   private static final ParameterLimitsTransform TRANSFORM = new SingleRangeLimitTransform(0.0, LimitType.GREATER_THAN);
 
   private final VolatilityTermStructureProvider<DoubleMatrix1D> _volModel;
@@ -62,7 +63,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
    * transformation so it remains everywhere positive. For co-starting caps the knots are the first caplet expiry, then the end time of all the caps expect the
    * final one (i.e. all but the first unique caplets in the longest cap see volatilities from the extrapolated part of the curve). If the caps are not
    * co-starting it is not possible to auto-generate the knots and these should be supplied.
-   * 
+   *
    * @param caps
    *          List of caps with identical strikes
    * @param yieldCurves
@@ -82,7 +83,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
   /**
    * caplet stripping for a set of caps with the <b>same</b> (absolute) strike. The interpolator is double-quadratic with a linear extrapolator and a
    * transformation so it remains everywhere positive.
-   * 
+   *
    * @param caps
    *          List of caps with identical strikes
    * @param yieldCurves
@@ -96,7 +97,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
 
   /**
    * caplet stripping for a set of caps with the <b>same</b> (absolute) strike.
-   * 
+   *
    * @param caps
    *          List of caps with identical strikes
    * @param yieldCurves
@@ -120,7 +121,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
 
   /**
    * Stripe from market cap prices.
-   * 
+   *
    * @param capPrices
    *          The cap prices (in the same order that the caps we given)
    * @return vector of ordinates of the knots of the interpolated vol curve. Call getVolCurve with this result
@@ -162,7 +163,7 @@ public class CapletStrippingAbsoluteStrikeInterpolation extends CapletStrippingA
 
   /**
    * Stripe from market cap implied volatilities. <b>Note:</b> this will be considerably slower than using the cap prices
-   * 
+   *
    * @param capVols
    *          The cap implied volatilities (in the same order that the caps we given)
    * @return vector of ordinates of the knots of the interpolated vol curve. Call getVolCurve with this result

@@ -14,9 +14,10 @@ import com.opengamma.analytics.financial.curve.inflation.generator.GeneratorPric
 import com.opengamma.analytics.financial.model.interestrate.curve.PriceIndexCurve;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -27,8 +28,8 @@ public class GeneratorInflationCurveTest {
 
   private static final String CURVE_NAME_1 = "EU CPI XT";
 
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   private static final double[] NODES = new double[] {0.01, 0.50, 1.00, 2.00, 5.05, 10.0 };
   private static final double[] CPI = new double[] {100, 102, 103, 102.5, 106, 101 };
   private static final GeneratorPriceIndexCurveInterpolatedNode GENERATOR_PRICE_INDEX_INTERPOLATED_NODE = new GeneratorPriceIndexCurveInterpolatedNode(NODES, LINEAR_FLAT);

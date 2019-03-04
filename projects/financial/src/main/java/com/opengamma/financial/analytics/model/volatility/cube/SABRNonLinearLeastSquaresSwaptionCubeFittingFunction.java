@@ -32,8 +32,9 @@ import com.opengamma.analytics.financial.model.volatility.smile.fitting.SABRMode
 import com.opengamma.analytics.financial.model.volatility.smile.function.SABRHaganVolatilityFunction;
 import com.opengamma.analytics.math.interpolation.FlatExtrapolator1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
-import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
@@ -79,7 +80,7 @@ public class SABRNonLinearLeastSquaresSwaptionCubeFittingFunction extends Abstra
   /** The starting point */
   private static final DoubleMatrix1D SABR_INITIAL_VALUES = new DoubleMatrix1D(new double[] {0.05, 0.5, 0.7, 0.3 });
   /** The parameter surface x and y interpolator */
-  private static final LinearInterpolator1D LINEAR = (LinearInterpolator1D) Interpolator1DFactory.getInterpolator(Interpolator1DFactory.LINEAR);
+  private static final Interpolator1D LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME);
   /** The parameter surface x and y extrapolator */
   private static final FlatExtrapolator1D FLAT = new FlatExtrapolator1D();
   /** The surface interpolator */

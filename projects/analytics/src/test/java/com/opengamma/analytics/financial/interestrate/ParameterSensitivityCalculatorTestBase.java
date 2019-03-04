@@ -5,8 +5,6 @@
  */
 package com.opengamma.analytics.financial.interestrate;
 
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
 import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 
 import java.util.Arrays;
@@ -35,10 +33,13 @@ import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.differentiation.ScalarFieldFirstOrderDifferentiator;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.NaturalCubicSplineInterpolator1dAdapter;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
@@ -80,10 +81,10 @@ public abstract class ParameterSensitivityCalculatorTestBase {
   private static final SwapFixedIborDefinition SWAP_DEFINITION = SwapFixedIborDefinition.from(SETTLE_DATE, SWAP_TENOR, USD6MLIBOR3M, SWAP_NOTIONAL, SWAP_RATE, true);
   static final SwapFixedCoupon<Coupon> SWAP = SWAP_DEFINITION.toDerivative(REFERENCE_DATE, CURVE_NAMES);
 
-  private static final CombinedInterpolatorExtrapolator INTERPOLATOR_DQ = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, LINEAR_EXTRAPOLATOR,
-      FLAT_EXTRAPOLATOR);
-  private static final CombinedInterpolatorExtrapolator INTERPOLATOR_CS = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.NATURAL_CUBIC_SPLINE, LINEAR_EXTRAPOLATOR,
-      FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_DQ = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
+      LinearExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR_CS = NamedInterpolator1dFactory.of(NaturalCubicSplineInterpolator1dAdapter.NAME,
+      LinearExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
 
   static final double TOLERANCE_SENSI = 1.0E-6;
 
@@ -223,7 +224,7 @@ public abstract class ParameterSensitivityCalculatorTestBase {
         param[index++] = y;
       }
       final YieldCurve spreadCurve = (YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) spreadCurves.getCurve(curveName)).getCurves()[1];
-      param[index++] = ((ConstantDoublesCurve) (spreadCurve.getCurve())).getYData()[0];
+      param[index++] = ((ConstantDoublesCurve) spreadCurve.getCurve()).getYData()[0];
     }
 
     final Function1D<DoubleMatrix1D, Double> f = new Function1D<DoubleMatrix1D, Double>() {

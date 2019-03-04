@@ -11,7 +11,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.util.ArgumentChecker;
@@ -105,11 +106,11 @@ public class FXOptionPropertiesFunctions extends AbstractFunctionConfigurationBe
   /** The per-currency pair defaults */
   private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<>();
   /** The default interpolator name */
-  private String _interpolatorName = Interpolator1DFactory.DOUBLE_QUADRATIC;
+  private String _interpolatorName = DoubleQuadraticInterpolator1dAdapter.NAME;
   /** The default left extrapolator name */
-  private String _leftExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _leftExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
   /** The default right extrapolator name */
-  private String _rightExtrapolatorName = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _rightExtrapolatorName = LinearExtrapolator1dAdapter.NAME;
 
   /**
    * Sets the defaults for a set of currencies.
@@ -189,7 +190,7 @@ public class FXOptionPropertiesFunctions extends AbstractFunctionConfigurationBe
     _interpolatorName = interpolatorName;
   }
 
- /**
+  /**
    * Gets the interpolator name.
    * @return The interpolator name
    */

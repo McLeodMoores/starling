@@ -12,7 +12,8 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
@@ -61,9 +62,9 @@ public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
   private String _swaptionVolSurfaceName = "DEFAULT";
   private String _irFutureOptionVolSurfaceName = "DEFAULT";
   private String _bondFutureOptionVolSurfaceName = "DEFAULT";
-  private String _fxVolInterpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
-  private String _fxVolLeftExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-  private String _fxVolRightExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _fxVolInterpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
+  private String _fxVolLeftExtrapolator = LinearExtrapolator1dAdapter.NAME;
+  private String _fxVolRightExtrapolator = LinearExtrapolator1dAdapter.NAME;
 
   protected void addCurveCalculationConfig(final String currency, final String configName) {
     _curveCalculationConfigs.put(currency, configName);

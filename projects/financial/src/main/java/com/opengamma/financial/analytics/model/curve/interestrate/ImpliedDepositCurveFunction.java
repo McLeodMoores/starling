@@ -51,9 +51,8 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.linearalgebra.Decomposition;
 import com.opengamma.analytics.math.linearalgebra.DecompositionFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
@@ -186,7 +185,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), impliedConfiguration, impliedDefinition,
         originalConfiguration, originalCurveNames[0]);
-  };
+  }
 
   private class MyCompiledFunction extends AbstractInvokingCompiledFunction {
     /** The definition of the implied curve */
@@ -261,7 +260,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
       if (spotLag == 0 && conventionSettlementRegion == null) {
         spotDate = valuationDateTime;
       } else {
-        spotDate = ScheduleCalculator.getAdjustedDate(valuationDateTime, spotLag, calendar);;
+        spotDate = ScheduleCalculator.getAdjustedDate(valuationDateTime, spotLag, calendar);
       }
       final YieldCurveBundle curves = new YieldCurveBundle();
       final String fullYieldCurveName = _originalCurveName + "_" + _currency;
@@ -288,7 +287,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
         t[i] = endTime;
         r[i++] = parRate;
       }
-      final CombinedInterpolatorExtrapolator interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(_interpolatorName, _leftExtrapolatorName, _rightExtrapolatorName);
+      final Interpolator1D interpolator = NamedInterpolator1dFactory.of(_interpolatorName, _leftExtrapolatorName, _rightExtrapolatorName);
       final double absoluteTolerance = Double.parseDouble(absoluteToleranceName);
       final double relativeTolerance = Double.parseDouble(relativeToleranceName);
       final int iterations = Integer.parseInt(iterationsName);

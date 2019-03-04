@@ -12,15 +12,18 @@ import com.opengamma.analytics.financial.model.interestrate.curve.DiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.ClampedCubicSplineInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LogLinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.MonotonicLogNaturalCubicSplineInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.ResourceUtils;
 import com.opengamma.util.test.TestGroup;
 
 @Test(groups = TestGroup.UNIT)
 public class IRCurveParserTest {
- private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParserTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParserTest.class);
 
   public void test() throws Exception {
     final IRCurveParser curveParser = new IRCurveParser();
@@ -38,7 +41,7 @@ public class IRCurveParserTest {
     final double[] x = { 0.249144422, 0.501026694, 0.750171116, 0.999315537, 1.25119781, 1.500342231, 1.749486653};
     final double[] y = { 0.999297948, 0.998546826, 0.997720761, 0.996770227, 0.995642429, 0.994330655, 0.992795137 };
 
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(
         "LogNaturalCubicWithMonotonicity",
         "FlatExtrapolator",
         "LinearExtrapolator");
@@ -50,19 +53,25 @@ public class IRCurveParserTest {
 
     final double[] r = new double[y.length];
     for (int i = 0; i < r.length; i++) {
-            r[i] = -Math.log(y[i]) / x[i];
+      r[i] = -Math.log(y[i]) / x[i];
     }
     final InterpolatedDoublesCurve curve = new InterpolatedDoublesCurve(x, y,
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE, Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR), true, "curve");
+        NamedInterpolator1dFactory.of(MonotonicLogNaturalCubicSplineInterpolator1dAdapter.NAME, LogLinearExtrapolator1dAdapter.NAME,
+            LinearExtrapolator1dAdapter.NAME),
+        true, "curve");
     final double value2 = curve.getYValue(.31);
 
     final InterpolatedDoublesCurve curve2 = new InterpolatedDoublesCurve(x, r,
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.CLAMPED_CUBIC_MONOTONE, Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR), true, "curve");
+        NamedInterpolator1dFactory.of(ClampedCubicSplineInterpolator1dAdapter.NAME, LogLinearExtrapolator1dAdapter.NAME,
+            LinearExtrapolator1dAdapter.NAME),
+        true, "curve");
 
     final double value3 = Math.exp(-curve2.getYValue(.31) * .31);
 
     final InterpolatedDoublesCurve curveForYieldCurve = new InterpolatedDoublesCurve(x, y,
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE, Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR), true, "curve");
+        NamedInterpolator1dFactory.of(MonotonicLogNaturalCubicSplineInterpolator1dAdapter.NAME, LogLinearExtrapolator1dAdapter.NAME,
+            LinearExtrapolator1dAdapter.NAME),
+        true, "curve");
     final YieldAndDiscountCurve yieldcurve = DiscountCurve.from(curveForYieldCurve);
     final double value4 = yieldcurve.getDiscountFactor(.31);
 

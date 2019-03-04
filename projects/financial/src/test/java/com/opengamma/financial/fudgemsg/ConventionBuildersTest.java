@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.financial.convention.CMSLegConvention;
 import com.opengamma.financial.convention.CompoundingIborLegConvention;
 import com.opengamma.financial.convention.DeliverablePriceQuotedSwapFutureConvention;
@@ -189,7 +189,7 @@ public class ConventionBuildersTest extends AbstractFudgeBuilderTestCase {
   @Test
   public void testVanillaIborLegConvention() {
     final VanillaIborLegConvention convention = new VanillaIborLegConvention("EUR 3m Swap", ExternalIdBundle.of(InMemoryConventionBundleMaster.simpleNameSecurityId("EUR 3m Swap")),
-        ExternalId.of("Test", "3m Euribor"), true, Interpolator1DFactory.LINEAR, Tenor.THREE_MONTHS, 2, true, StubType.SHORT_END, false, 7);
+        ExternalId.of("Test", "3m Euribor"), true, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 2, true, StubType.SHORT_END, false, 7);
     convention.setUniqueId(UniqueId.of("Test", "12345"));
     assertEncodeDecodeCycle(VanillaIborLegConvention.class, convention);
   }

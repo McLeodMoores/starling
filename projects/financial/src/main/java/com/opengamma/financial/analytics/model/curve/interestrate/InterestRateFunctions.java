@@ -9,7 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.linearalgebra.DecompositionFactory;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -47,11 +48,11 @@ public class InterestRateFunctions extends AbstractFunctionConfigurationBean {
     /** True if finite difference is used to calculate derivatives */
     private boolean _useFiniteDifference; /* = false;*/
     /** The interpolator name */
-    private String _interpolatorName = Interpolator1DFactory.LINEAR;
+    private String _interpolatorName = LinearInterpolator1dAdapter.NAME;
     /** The left extrapolator name */
-    private String _leftExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
+    private String _leftExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
     /** The right extrapolator name */
-    private String _rightExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
+    private String _rightExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
 
     /**
      * Sets the currencies for which these defaults apply.

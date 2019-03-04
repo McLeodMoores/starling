@@ -16,10 +16,13 @@ import com.opengamma.analytics.financial.model.volatility.smile.function.SABRHag
 import com.opengamma.analytics.financial.model.volatility.smile.function.VolatilityFunctionProvider;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -35,8 +38,8 @@ public class TestsDataSetsSABR {
   /**
    * The linear interpolator/ flat extrapolator.  Used for SABR parameters interpolation.
    */
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final GridInterpolator2D INTERPOLATOR_2D = new GridInterpolator2D(LINEAR_FLAT, LINEAR_FLAT);
   /**
    * The standard day count 30/360 used in the data set.
@@ -55,13 +58,13 @@ public class TestsDataSetsSABR {
             0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
         10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
-        0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, INTERPOLATOR_2D);
+            0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
         10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {-0.25, -0.25, -0.25, -0.25, -0.25, -0.25,
-        -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00}, INTERPOLATOR_2D);
+            -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
         10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50,
-        0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, INTERPOLATOR_2D);
+            0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, INTERPOLATOR_2D);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, DAY_COUNT, sabrFunction);
   }
 
@@ -82,7 +85,7 @@ public class TestsDataSetsSABR {
   public static SABRInterestRateParameters createSABR1AlphaBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction, final double shift) {
     final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift,
-        0.05 + shift, 0.05 + shift, 0.05 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift}, INTERPOLATOR_2D);
+            0.05 + shift, 0.05 + shift, 0.05 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
@@ -132,14 +135,14 @@ public class TestsDataSetsSABR {
             0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
         10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {0.5 + shift, 0.5 + shift, 0.5 + shift,
-        0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift,
-        0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift}, INTERPOLATOR_2D);
+            0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift,
+            0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift, 0.5 + shift}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
         10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {-0.25, -0.25, -0.25, -0.25, -0.25, -0.25,
-        -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00}, INTERPOLATOR_2D);
+            -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5, 10, 100, 0.0, 0.5, 1, 2, 5,
         10, 100}, new double[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100, 100}, new double[] {0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50,
-        0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, INTERPOLATOR_2D);
+            0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, INTERPOLATOR_2D);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, DAY_COUNT, sabrFunction);
   }
 
@@ -163,7 +166,7 @@ public class TestsDataSetsSABR {
         1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {-0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift,
-        -0.25 + shift, -0.25 + shift, -0.25 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift}, INTERPOLATOR_2D);
+            -0.25 + shift, -0.25 + shift, -0.25 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0, 1,
         1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, INTERPOLATOR_2D);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, DAY_COUNT, sabrFunction);
@@ -211,7 +214,7 @@ public class TestsDataSetsSABR {
         INTERPOLATOR_2D);
     final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0, 1,
         1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift,
-        0.50 + shift, 0.50 + shift, 0.50 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift}, INTERPOLATOR_2D);
+            0.50 + shift, 0.50 + shift, 0.50 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift}, INTERPOLATOR_2D);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, DAY_COUNT, sabrFunction);
   }
 
@@ -264,16 +267,16 @@ public class TestsDataSetsSABR {
   public static SABRInterestRateParameters createSABR2() {
     final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0,
         10.0, 10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {0.05,
-        0.06, 0.07, 0.04, 0.05, 0.06, 0.07, 0.03, 0.04, 0.05, 0.06, 0.07, 0.03, 0.04, 0.05, 0.06, 0.03, 0.04, 0.05, 0.06, 0.04, 0.05, 0.06}, INTERPOLATOR_2D);
+            0.06, 0.07, 0.04, 0.05, 0.06, 0.07, 0.03, 0.04, 0.05, 0.06, 0.07, 0.03, 0.04, 0.05, 0.06, 0.03, 0.04, 0.05, 0.06, 0.04, 0.05, 0.06}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0,
         10.0, 10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {0.5, 0.5,
-        0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, INTERPOLATOR_2D);
+            0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0,
         10.0, 10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {-0.25,
-        -0.25, -0.25, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.10, 0.10, 0.10}, INTERPOLATOR_2D);
+            -0.25, -0.25, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.10, 0.10, 0.10}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0, 10.0,
         10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {0.50, 0.50,
-        0.50, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35}, INTERPOLATOR_2D);
+            0.50, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35}, INTERPOLATOR_2D);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, DAY_COUNT, new SABRHaganVolatilityFunction());
   }
 
@@ -285,16 +288,16 @@ public class TestsDataSetsSABR {
   public static SABRInterestRateParameters createSABR3() {
     final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0,
         10.0, 10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {0.03,
-        0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.026, 0.026, 0.022, 0.020, 0.029, 0.028, 0.027, 0.026, 0.03, 0.031, 0.032}, INTERPOLATOR_2D);
+            0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.026, 0.026, 0.022, 0.020, 0.029, 0.028, 0.027, 0.026, 0.03, 0.031, 0.032}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0,
         10.0, 10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {0.25,
-        0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25}, INTERPOLATOR_2D);
+            0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0,
         10.0, 10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {-0.15,
-        -0.15, -0.15, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.00, 0.25, 0.10, 0.40, 0.00, 0.00, 0.00, 0.00, 0.10, 0.10, 0.10}, INTERPOLATOR_2D);
+            -0.15, -0.15, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.00, 0.25, 0.10, 0.40, 0.00, 0.00, 0.00, 0.00, 0.10, 0.10, 0.10}, INTERPOLATOR_2D);
     final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 1.0, 1.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 10.0, 10.0, 10.0,
         10.0, 20.0, 20.0, 20.0}, new double[] {1.0, 2.0, 5.0, 1.0, 2.0, 5.0, 10.0, 1.0, 2.0, 5.0, 10.0, 20, 2.0, 5.0, 10.0, 20.0, 2.0, 5.0, 10.0, 20.0, 5.0, 10.0, 20.0}, new double[] {0.50, 0.50,
-        0.50, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.45, 0.25, 0.25, 0.40, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35}, INTERPOLATOR_2D);
+            0.50, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.45, 0.25, 0.25, 0.40, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35}, INTERPOLATOR_2D);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, DAY_COUNT, new SABRHaganVolatilityFunction());
   }
 
@@ -341,11 +344,14 @@ public class TestsDataSetsSABR {
     ccyMap.put(forward6MCurveName, ccy);
     final FXMatrix fx = new FXMatrix(ccy);
     final InterpolatedDoublesCurve dscC = new InterpolatedDoublesCurve(new double[] {0.05, 1.0, 2.0, 5.0, 10.0, 20.0}, new double[] {0.0050, 0.0100, 0.0150, 0.0200, 0.0200, 0.0300},
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true, "Curve dsc");
+        NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true,
+        "Curve dsc");
     final InterpolatedDoublesCurve fwd3C = new InterpolatedDoublesCurve(new double[] {0.05, 1.0, 2.0, 5.0, 10.0, 25.0}, new double[] {0.0070, 0.0120, 0.0165, 0.0215, 0.0210, 0.0310},
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true, "Curve fwd3");
+        NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true,
+        "Curve fwd3");
     final InterpolatedDoublesCurve fwd6C = new InterpolatedDoublesCurve(new double[] {0.05, 1.0, 2.0, 5.0, 10.0, 30.0}, new double[] {0.0075, 0.0125, 0.0170, 0.0220, 0.0212, 0.0312},
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true, "Curve fwd6");
+        NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true,
+        "Curve fwd6");
     final YieldCurveBundle curves = new YieldCurveBundle(fx, ccyMap);
     curves.setCurve(discountingCurvename, YieldCurve.from(dscC));
     curves.setCurve(forward3MCurveName, YieldCurve.from(fwd3C));

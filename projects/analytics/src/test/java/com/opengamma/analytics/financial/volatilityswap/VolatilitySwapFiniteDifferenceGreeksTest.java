@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -23,9 +23,10 @@ import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTerm
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.volatilityswap.CarrLeeFXData;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.frequency.PeriodFrequency;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
@@ -38,7 +39,7 @@ import com.opengamma.util.tuple.Pairs;
 public class VolatilitySwapFiniteDifferenceGreeksTest {
 
   /**
-   * 
+   *
    */
   public void newlyIssuedSwapTest() {
 
@@ -66,8 +67,8 @@ public class VolatilitySwapFiniteDifferenceGreeksTest {
     for (int i = 0; i < nTime; ++i) {
       System.arraycopy(volSmile, 0, volatility[i], 0, nVols);
     }
-    final Interpolator1D interp = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-        Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final Interpolator1D interp = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME);
     final SmileDeltaTermStructureParametersStrikeInterpolation smile = new SmileDeltaTermStructureParametersStrikeInterpolation(timeSet, delta, volatility, interp);
     final Currency base = Currency.EUR;
     final Currency counter = Currency.USD;
@@ -148,7 +149,7 @@ public class VolatilitySwapFiniteDifferenceGreeksTest {
   }
 
   /**
-   * 
+   *
    */
   public void SeasonedSwapTest() {
 
@@ -177,8 +178,8 @@ public class VolatilitySwapFiniteDifferenceGreeksTest {
     for (int i = 0; i < nTime; ++i) {
       System.arraycopy(volSmile, 0, volatility[i], 0, nVols);
     }
-    final Interpolator1D interp = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-        Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final Interpolator1D interp = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME);
     final SmileDeltaTermStructureParametersStrikeInterpolation smile = new SmileDeltaTermStructureParametersStrikeInterpolation(timeSet, delta, volatility, interp);
     final Currency base = Currency.EUR;
     final Currency counter = Currency.USD;

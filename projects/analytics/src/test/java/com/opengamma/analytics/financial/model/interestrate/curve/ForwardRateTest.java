@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -23,7 +23,7 @@ import com.opengamma.util.test.TestGroup;
 public class ForwardRateTest {
 
   private static final RungeKuttaIntegrator1D INTEGRATOR = new RungeKuttaIntegrator1D();
-  private static final Interpolator1D INTERPOLATOR = Interpolator1DFactory.DOUBLE_QUADRATIC_INSTANCE;
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of("DoubleQuadratic");
   private static final double[] T = new double[] {0.0, 0.05, 0.1, 0.2, 0.5, 1.0, 2, 3, 5, 7, 10 };
   private static final double[] R = new double[] {0.01, 0.01, 0.012, 0.014, 0.02, 0.03, 0.03, 0.029, 0.024, 0.023, 0.02 };
   private static final double[] P;

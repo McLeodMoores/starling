@@ -21,9 +21,10 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.interestrate.cash.derivative.Cash;
 import com.opengamma.analytics.financial.interestrate.fra.derivative.ForwardRateAgreement;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -93,7 +94,7 @@ public class MultipleYieldCurveFinderJacobianTest {
       dataM[i] = Math.random() / 10;
       dataNpM[i + N] = dataM[i];
     }
-    EXTRAPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    EXTRAPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
 
     CASH_NODES = new LinkedHashMap<>();
     CASH_NODES.put(FUNDING_CURVE_NAME, FUNDING_NODES);
@@ -164,7 +165,7 @@ public class MultipleYieldCurveFinderJacobianTest {
       for (int j = 0; j < N; j++) {
         if (i == j) {
           assertTrue(jacobian.getEntry(i, j) > 0.0);
-        } else if (i == (j + 1)) {
+        } else if (i == j + 1) {
           assertTrue(jacobian.getEntry(i, j) < 0.0);
         } else {
           assertEquals(0.0, jacobian.getEntry(i, j), 0.0);
@@ -183,7 +184,7 @@ public class MultipleYieldCurveFinderJacobianTest {
       for (int j = 0; j < N + M; j++) {
         if (i == j) {
           assertTrue(jacobian.getEntry(i, j) > 0.0);
-        } else if (i == (j + 1)) {
+        } else if (i == j + 1) {
           assertTrue(jacobian.getEntry(i, j) < 0.0);
         } else {
           assertEquals(0.0, jacobian.getEntry(i, j), 0.0);

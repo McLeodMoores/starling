@@ -59,9 +59,8 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.linearalgebra.Decomposition;
 import com.opengamma.analytics.math.linearalgebra.DecompositionFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
@@ -89,7 +88,6 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.CalendarUtils;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
 import com.opengamma.financial.analytics.fxforwardcurve.ConfigDBFXForwardCurveDefinitionSource;
 import com.opengamma.financial.analytics.fxforwardcurve.ConfigDBFXForwardCurveSpecificationSource;
 import com.opengamma.financial.analytics.fxforwardcurve.FXForwardCurveDefinition;
@@ -97,9 +95,7 @@ import com.opengamma.financial.analytics.fxforwardcurve.FXForwardCurveInstrument
 import com.opengamma.financial.analytics.fxforwardcurve.FXForwardCurveSpecification;
 import com.opengamma.financial.analytics.ircurve.calcconfig.ConfigDBCurveCalculationConfigSource;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfig;
-import com.opengamma.financial.analytics.ircurve.strips.FXForwardNode;
 import com.opengamma.financial.analytics.model.InterpolatedDataProperties;
-import com.opengamma.financial.analytics.model.curve.MultiCurveFunction;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.convention.FXSpotConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -287,7 +283,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
         curveKnots.put(fullDomesticCurveName, nodeTimes.toDoubleArray());
         final LinkedHashMap<String, double[]> curveNodes = new LinkedHashMap<>();
         final LinkedHashMap<String, Interpolator1D> interpolators = new LinkedHashMap<>();
-        final CombinedInterpolatorExtrapolator interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         curveNodes.put(fullDomesticCurveName, nodeTimes.toDoubleArray());
         interpolators.put(fullDomesticCurveName, interpolator);
         final FXMatrix fxMatrix = new FXMatrix();
@@ -518,7 +514,7 @@ public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompi
     final ValueProperties foreignCurveProperties = getForeignCurveProperties(foreignConfig, foreignCurveName, constraints);
     final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(foreignCurrency);
     requirements
-        .add(new ValueRequirement(FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currencyPair), fxForwardCurveSeriesProperties));
+    .add(new ValueRequirement(FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currencyPair), fxForwardCurveSeriesProperties));
     requirements.add(new ValueRequirement(YIELD_CURVE_SERIES, currencyTarget, foreignCurveProperties));
     return requirements;
   }

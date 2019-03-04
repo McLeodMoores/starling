@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.util.ArgumentChecker;
@@ -62,7 +62,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
   private double _maxProxyDelta = 1.5;
   private double _centreMoneyness = 1.0;
   private double _maxMoneynessScale = 3.5;
-  private String _spaceDirectionInterpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
+  private String _spaceDirectionInterpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
 
   public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
     _perCurrencyInfo.clear();

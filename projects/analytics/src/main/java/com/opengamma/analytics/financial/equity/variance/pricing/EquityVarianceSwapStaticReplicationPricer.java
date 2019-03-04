@@ -18,9 +18,10 @@ import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilit
 import com.opengamma.analytics.financial.model.volatility.surface.PureImpliedVolatilitySurface;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurfaceInterpolator;
 import com.opengamma.analytics.math.function.Function;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.NaturalCubicSplineInterpolator1dAdapter;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.ArgumentChecker;
@@ -61,7 +62,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
 
     /* package */ Builder() {
       this(new SmileInterpolatorSpline(),
-          CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.NATURAL_CUBIC_SPLINE, Interpolator1DFactory.LINEAR_EXTRAPOLATOR), true,
+          NamedInterpolator1dFactory.of(NaturalCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME), true,
           true, true);
     }
 
@@ -151,7 +152,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
 
   /**
    * Provides a builder that can construct a pricer with values other than the defaults.
-   * 
+   *
    * @return The builder
    */
   public static Builder builder() {
@@ -165,7 +166,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
 
   /**
    * Calculates the price of an equity variance swap from OTM option prices. The surface used is a pure implied volatility surface.
-   * 
+   *
    * @param swap
    *          The details of the equity variance swap, not null
    * @param spot
@@ -202,7 +203,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
    * The market implied volatilities are treated as invariant to the spot (sticky-strike), and price the variance swap twice with the spot bumped up and down.
    * The pricing itself involves finding pure implied volatilities, then interpolated implied volatility surface and finally the expected variance via static
    * replication.
-   * 
+   *
    * @param swap
    *          The details of the equality variance swap, not null
    * @param spot
@@ -233,7 +234,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
    * Compute the "bucketed vega" of a equity variance swap - the sensitivity of the square-root of the expected variance (since this has the same scale as the
    * implied volatilities) to the market implied volatilities. This is done by bumping each market implied volatility in turn, and computing the sensitivity by
    * finite difference
-   * 
+   *
    * @param swap
    *          The details of the equality variance swap
    * @param spot
@@ -271,7 +272,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
    * The market implied volatilities are treated as invariant to the spot (sticky-strike), and price the variance swap twice with the spot bumped up and down.
    * The pricing itself involves finding pure implied volatilities, then an interpolated implied volatility surface and finally the expected variance via static
    * replication.
-   * 
+   *
    * @param swap
    *          The details of the equality variance swap, not null
    * @param spot
@@ -301,7 +302,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
 
   /**
    * Calculates the price of an equity variance swap from implied volatilities. The surface used is a pure implied volatility surface.
-   * 
+   *
    * @param swap
    *          The details of the equity variance swap, not null
    * @param spot
@@ -333,7 +334,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
    * <p>
    * The (pure) implied volatilities are treated as invariant to the spot (sticky-pure strike which is similar to sticky delta), The variance swap is priced
    * twice with the spot bumped up and down.
-   * 
+   *
    * @param swap
    *          The details of the equality variance swap, not null
    * @param spot
@@ -371,7 +372,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
    * <p>
    * The (pure) implied volatilities as invariant to the spot (sticky-pure strike which is similar to sticky delta). The variance swap is priced three times;
    * spot bumped up, down and left unchanged.
-   * 
+   *
    * @param swap
    *          The details of the equality variance swap
    * @param spot
@@ -410,7 +411,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
    * <p>
    * The vega is taken as the sensitivity to the <b>square-root</b> of the annualised expected variance (EV) (n.b. this is not the same as the expected
    * volatility) to a parallel shift of the implied volatility surface.
-   * 
+   *
    * @param swap
    *          The details of the equality variance swap, not null
    * @param spot
@@ -453,7 +454,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
    * <p>
    * The vega is taken as the sensitivity of the <b>square-root</b> of the annualised expected variance (EV) (n.b. this is not the same as the expected
    * volatility) to a parallel shift of the <b>pure</b> implied volatility surface.
-   * 
+   *
    * @param swap
    *          The details of the equality variance swap, not null
    * @param spot
@@ -492,7 +493,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
   /**
    * Compute a delta from the market implied volatilities by first computing a pure implied volatility surface, then treating this as an invariant while the
    * spot is moved.
-   * 
+   *
    * @param swap
    *          The variance swap, not null
    * @param spot
@@ -526,7 +527,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
 
   /**
    * Compute sensitivity of an equity variance swap to the dividends. Here the pure volatility surface is assumed to be invariant to a change of dividends
-   * 
+   *
    * @param swap
    *          The equity swap, not null
    * @param spot
@@ -592,7 +593,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
   /**
    * Compute sensitivity of an equity variance swap to the dividends. The "market" implied volatility surface is assumed to be invariant to a change of
    * dividends
-   * 
+   *
    * @param swap
    *          The equity swap, not null
    * @param spot
@@ -663,7 +664,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
   /**
    * Convert each market implied volatility to an implied volatility of an option on the 'pure' stock, the VolatilitySurfaceInterpolator to construct a smooth
    * pure implied volatility surface
-   * 
+   *
    * @param spot
    *          The spot value of the underlying
    * @param discountCurve
@@ -723,7 +724,7 @@ public final class EquityVarianceSwapStaticReplicationPricer {
 
   /**
    * Convert the market implied volatility to the implied volatility of an option on the 'pure' stock
-   * 
+   *
    * @param k
    *          The Strike
    * @param f

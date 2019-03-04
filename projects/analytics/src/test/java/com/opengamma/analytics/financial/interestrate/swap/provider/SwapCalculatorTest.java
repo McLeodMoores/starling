@@ -40,9 +40,10 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 import com.opengamma.analytics.financial.provider.sensitivity.parameter.ParameterSensitivityParameterCalculator;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.amount.ReferenceAmount;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
@@ -226,7 +227,7 @@ public class SwapCalculatorTest {
     final MultipleCurrencyAmount cash = swap.accept(TPC);
     assertEquals("TodayPaymentCalculator: fixed-coupon swap",
         SWAP_FIXED_IBOR_DEFINITION.getFixedLeg().getNthPayment(0).getAmount()
-            + 0.0140 * NOTIONAL * SWAP_FIXED_IBOR_DEFINITION.getIborLeg().getNthPayment(1).getPaymentYearFraction(),
+        + 0.0140 * NOTIONAL * SWAP_FIXED_IBOR_DEFINITION.getIborLeg().getNthPayment(1).getPaymentYearFraction(),
         cash.getAmount(USDLIBOR3M.getCurrency()), TOLERANCE_PV);
     assertEquals("TodayPaymentCalculator: fixed-coupon swap", 1, cash.getCurrencyAmounts().length);
   }
@@ -362,8 +363,8 @@ public class SwapCalculatorTest {
   // }
 
   // Create a very simplified example of swap and curve to produce a detailed workout of AD for curve sensitivity
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final double[] CURVE_TIME = new double[] { 0.25, 0.50, 1.00, 2.00 };
   private static final double[] CURVE_RATE = new double[] { 0.01, 0.0125, 0.0150, 0.0175 };
   private static final String CURVE_NAME = "USD All";

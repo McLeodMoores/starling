@@ -30,10 +30,11 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LogLinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -73,8 +74,8 @@ public class InflationMarketModelConvexityAdjustmentCouponTest {
   private static final CouponInflationYearOnYearMonthly YEAR_ON_YEAR = YEAR_ON_YEAR_DEFINITION.toDerivative(PRICING_DATE);
 
   private static final InflationProviderDiscount INFLATION_PROVIDER = MARKET.getInflationProvider();
-  private static final Interpolator1D INTERPOLATOR_LINEAR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_LINEAR = NamedInterpolator1dFactory.of(LogLinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final GridInterpolator2D INTERPOLATOR_LINEAR_2D = new GridInterpolator2D(INTERPOLATOR_LINEAR, INTERPOLATOR_LINEAR);
   private static final InterpolatedDoublesCurve BLACK_SURF = InterpolatedDoublesCurve.from(new double[] {1.0, 5.0, 10.0 }, new double[] {.2, .2, .2 }, INTERPOLATOR_LINEAR);
   private static final BlackFlatCapFloorParameters BLACK_PARAM = new BlackFlatCapFloorParameters(BLACK_SURF, EURIBOR6M);

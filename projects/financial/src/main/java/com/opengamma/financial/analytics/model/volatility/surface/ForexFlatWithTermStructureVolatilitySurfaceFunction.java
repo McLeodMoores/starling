@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
@@ -16,8 +14,8 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.volatility.curve.BlackForexTermStructureParameters;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.marketdatasnapshot.VolatilitySurfaceData;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionExecutionContext;
@@ -36,6 +34,8 @@ import com.opengamma.financial.analytics.volatility.surface.VolatilitySurfaceShi
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  *
@@ -64,7 +64,7 @@ public class ForexFlatWithTermStructureVolatilitySurfaceFunction extends ForexVo
     final Tenor[] tenors = fxVolatilitySurface.getXs();
     Arrays.sort(tenors);
     final double shiftMultiplier;
-    if ((shifts != null) && (shifts.size() == 1)) {
+    if (shifts != null && shifts.size() == 1) {
       final String shift = shifts.iterator().next();
       shiftMultiplier = 1 + Double.parseDouble(shift);
     } else {
@@ -97,7 +97,7 @@ public class ForexFlatWithTermStructureVolatilitySurfaceFunction extends ForexVo
     if (shifts != null) {
       resultProperties.with(VolatilitySurfaceShiftFunction.SHIFT, shifts);
     }
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
     final DoublesCurve volatility = InterpolatedDoublesCurve.fromSorted(timesList.toDoubleArray(), volsList.toDoubleArray(), interpolator);
     final BlackForexTermStructureParameters termStructure = new BlackForexTermStructureParameters(volatility);
     return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),

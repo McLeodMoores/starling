@@ -19,8 +19,8 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.engine.ComputationTarget;
@@ -145,7 +145,7 @@ public class ImpliedYieldCurveSpecificationFunction extends AbstractFunction {
     final String leftExtrapolatorName = definition.getLeftExtrapolatorName();
     final String rightExtrapolatorName = definition.getRightExtrapolatorName();
     final boolean interpolateYield = definition.isInterpolateYields();
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
     return new InterpolatedYieldCurveSpecification(curveDate, definition.getName(), definition.getCurrency(), interpolator, interpolateYield, ids, definition.getRegionId());
   }
 

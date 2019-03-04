@@ -14,7 +14,8 @@ import org.springframework.beans.factory.InitializingBean;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculatorFactory;
 import com.opengamma.analytics.financial.schedule.TimeSeriesSamplingFunctionFactory;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculatorFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -51,8 +52,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for the deprecated functions contained in this package.
-  * @deprecated Deprecated
-  */
+   * @deprecated Deprecated
+   */
   @Deprecated
   public static class DeprecatedFunctions extends AbstractFunctionConfigurationBean {
 
@@ -213,9 +214,9 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     private String _scheduleName = ScheduleCalculatorFactory.DAILY;
     private String _samplingCalculatorName = TimeSeriesSamplingFunctionFactory.PREVIOUS_AND_FIRST_VALUE_PADDING;
-    private String _interpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
-    private String _leftExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-    private String _rightExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+    private String _interpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
+    private String _leftExtrapolator = LinearExtrapolator1dAdapter.NAME;
+    private String _rightExtrapolator = LinearExtrapolator1dAdapter.NAME;
 
     public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
       _perCurrencyInfo.clear();

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -19,22 +19,23 @@ import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpol
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr.SmileSurfaceDataBundle;
 import com.opengamma.analytics.math.function.Function;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.NaturalCubicSplineInterpolator1dAdapter;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class VolatilitySurfaceInterpolator {
   private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceInterpolator.class);
   private static final GeneralSmileInterpolator DEFAULT_SMILE_INTERPOLATOR = new SmileInterpolatorSABR();
-  private static final Interpolator1D DEFAULT_TIME_INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.NATURAL_CUBIC_SPLINE,
-      Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+  private static final Interpolator1D DEFAULT_TIME_INTERPOLATOR = NamedInterpolator1dFactory.of(NaturalCubicSplineInterpolator1dAdapter.NAME,
+      LinearExtrapolator1dAdapter.NAME);
   private static final boolean USE_LOG_TIME = true;
   private static final boolean USE_INTEGRATED_VARIANCE = true;
   private static final boolean USE_LOG_VALUE = true;
@@ -64,7 +65,7 @@ public class VolatilitySurfaceInterpolator {
   /**
    * <b>Note</b> The combination of useIntegratedVariance = true, useLogTime != useLogValue can produce very bad results, including considerable dips/humps between points at the same level (all other
    * combinations give a flat line), and thus should be avoided.
-   * 
+   *
    * @param useIntegratedVariance if true integrated variance ($\sigma^2t$) is used in the interpolation, otherwise variance is used
    * @param useLogTime if true the natural-log of the time values are used in interpolation, if false the time values are used directly. This can be useful if the expiries vary greatly in magnitude
    * @param useLogVariance If true the log of variance (actually either variance or integrated variance) is used in the interpolation
@@ -133,7 +134,7 @@ public class VolatilitySurfaceInterpolator {
    * <p>
    * The interpolation in the time direction uses the supplied interpolator (default is natural cubic spline) using the four nearest points. There is no guarantees of a monotonically increasing
    * integrated variance (hence calendar arbitrage or negative local volatility are possible), but using log time to better space out the x-points helps.
-   * 
+   *
    * @param marketData The mark data - contains the forwards, expiries, and strikes and (market) implied volatilities at each expiry, not null
    * @return Implied volatility surface parameterised by time and moneyness
    */
@@ -147,7 +148,7 @@ public class VolatilitySurfaceInterpolator {
    * Given a set of smiles in the moneyness dimension, produce surface function that additionally interpolates in expiry.
    * <p>
    * Access to the individual parts of getVolatilitySurface() permits user to bump vols without having to recalibrate each independent smile
-   * 
+   *
    * @param smileFunctions Array of Function1D's, one per expiry, that return volatility given strike
    * @param marketData The mark data - contains the forwards, expiries, and strikes and (market) implied volatilities at each expiry, not null
    * @return Implied volatility surface parameterised by time and moneyness
@@ -188,7 +189,7 @@ public class VolatilitySurfaceInterpolator {
         // FIXME If n < 4, time interpolation is hardcoded, also to be linear.
         final int index = SurfaceArrayUtils.getLowerBoundIndex(expiries, t);
 
-        if (index == 0 || index == (n - 1) || n < 4) {
+        if (index == 0 || index == n - 1 || n < 4) {
           int lowIdx;
           if (index == 0) {
             lowIdx = 0;

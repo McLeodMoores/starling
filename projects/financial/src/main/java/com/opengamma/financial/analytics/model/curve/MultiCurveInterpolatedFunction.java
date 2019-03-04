@@ -39,8 +39,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.core.convention.ConventionSource;
@@ -84,7 +84,7 @@ import com.opengamma.util.tuple.Pairs;
  * Produces yield curves using the {@link InterpolatedDataProperties#CALCULATION_METHOD_NAME} method.
  */
 public class MultiCurveInterpolatedFunction extends
-  MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
+MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(MultiCurveInterpolatedFunction.class);
   /**
@@ -117,8 +117,8 @@ public class MultiCurveInterpolatedFunction extends
 
   @Override
   public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
-                                                        final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
-                                                        final String[] currencies) {
+      final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
+      final String[] currencies) {
     return new MultiCurveInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
   }
 
@@ -138,9 +138,9 @@ public class MultiCurveInterpolatedFunction extends
      * @param currencies The set of currencies to which the curves produce sensitivities
      */
     protected MultiCurveInterpolatedCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation,
-                                                            final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
-                                                            final CurveConstructionConfiguration curveConstructionConfiguration,
-                                                            final String[] currencies) {
+        final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
+        final CurveConstructionConfiguration curveConstructionConfiguration,
+        final String[] currencies) {
       super(earliestInvocation, latestInvocation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
       _curveConstructionConfiguration = curveConstructionConfiguration;
@@ -264,7 +264,7 @@ public class MultiCurveInterpolatedFunction extends
           final String interpolatorName = specification.getInterpolatorName();
           final String rightExtrapolatorName = specification.getRightExtrapolatorName();
           final String leftExtrapolatorName = specification.getLeftExtrapolatorName();
-          final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+          final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
           final InterpolatedDoublesCurve rawCurve = InterpolatedDoublesCurve.from(times, yields, interpolator, curveName);
           final YieldAndDiscountCurve discountCurve;
           if (compoundPeriodsPerYear != 0 && isYield) {

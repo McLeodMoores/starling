@@ -14,7 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.financial.analytics.model.volatility.SmileFittingPropertyNamesAndValues;
@@ -219,12 +220,12 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
   /** The per-currency info */
   private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
   private String _fittingMethod = SmileFittingPropertyNamesAndValues.NON_LINEAR_LEAST_SQUARES;
-  private String _xInterpolator = Interpolator1DFactory.LINEAR;
-  private String _xLeftExtrapolator = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-  private String _xRightExtrapolator = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-  private String _yInterpolator = Interpolator1DFactory.LINEAR;
-  private String _yLeftExtrapolator = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-  private String _yRightExtrapolator = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
+  private String _xInterpolator = LinearInterpolator1dAdapter.NAME;
+  private String _xLeftExtrapolator = FlatExtrapolator1dAdapter.NAME;
+  private String _xRightExtrapolator = FlatExtrapolator1dAdapter.NAME;
+  private String _yInterpolator = LinearInterpolator1dAdapter.NAME;
+  private String _yLeftExtrapolator = FlatExtrapolator1dAdapter.NAME;
+  private String _yRightExtrapolator = FlatExtrapolator1dAdapter.NAME;
   private double _cutOff = 0.07;
   private double _mu = 10.0;
 

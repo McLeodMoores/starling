@@ -47,8 +47,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderInterface;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
@@ -100,7 +100,7 @@ import com.opengamma.util.tuple.Pairs;
  * Produces yield curves using the Hull-White one-factor discounting method.
  */
 public class HullWhiteOneFactorDiscountingCurveFunction extends
-  MultiCurveFunction<HullWhiteOneFactorProviderInterface, HullWhiteProviderDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
+MultiCurveFunction<HullWhiteOneFactorProviderInterface, HullWhiteProviderDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteOneFactorDiscountingCurveFunction.class);
   /** The calculator */
@@ -174,11 +174,11 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
      * @param currencies The set of currencies to which the curves produce sensitivities
      */
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation,
-                                        final ZonedDateTime latestInvokation,
-                                        final String[] curveNames,
-                                        final Set<ValueRequirement> exogenousRequirements,
-                                        final CurveConstructionConfiguration curveConstructionConfiguration,
-                                        final String[] currencies) {
+        final ZonedDateTime latestInvokation,
+        final String[] curveNames,
+        final Set<ValueRequirement> exogenousRequirements,
+        final CurveConstructionConfiguration curveConstructionConfiguration,
+        final String[] currencies) {
 
       super(earliestInvokation, latestInvokation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
@@ -355,7 +355,7 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
         final String interpolatorName = interpolatedDefinition.getInterpolatorName();
         final String leftExtrapolatorName = interpolatedDefinition.getLeftExtrapolatorName();
         final String rightExtrapolatorName = interpolatedDefinition.getRightExtrapolatorName();
-        final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         return new GeneratorCurveYieldInterpolated(getMaturityCalculator(), interpolator);
       }
       throw new OpenGammaRuntimeException("Cannot handle curves of type " + definition.getClass());

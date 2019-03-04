@@ -13,6 +13,9 @@ import org.testng.annotations.Test;
 
 import com.opengamma.analytics.math.interpolation.data.ArrayInterpolator1DDataBundle;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.StepInterpolator1dAdapter;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -81,7 +84,7 @@ public class StepInterpolator1DTest {
   @Test(enabled = false)
   void printTest() {
     System.out.println("StepInterpolator1DTest");
-    final CombinedInterpolatorExtrapolator interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.STEP, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(StepInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
     for (int i = 0; i < 101; i++) {
       final double x = 0.5 + i * 3.0 / 100;
       System.out.println(x + "\t" + interpolator.interpolate(DATA, x));

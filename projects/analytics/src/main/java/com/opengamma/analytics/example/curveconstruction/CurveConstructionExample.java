@@ -22,8 +22,8 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedC
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.function.RealPolynomialFunction1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1d;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.ColtMatrixAlgebra;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
@@ -38,7 +38,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public class CurveConstructionExample {
-// CSOFF
+  // CSOFF
 
   // @export "matrixDemo"
   public static void matrixDemo(final PrintStream out) {
@@ -160,7 +160,7 @@ public class CurveConstructionExample {
 
   // @export "yield-points"
   // factory takes interpolator, left extrapolator, right extrapolator
-  static CombinedInterpolatorExtrapolator interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator("NaturalCubicSpline", "LinearExtrapolator",
+  static NamedInterpolator1d interpolator = NamedInterpolator1dFactory.of("NaturalCubicSpline", "LinearExtrapolator",
       "FlatExtrapolator");
 
   @SuppressWarnings({"unused", "rawtypes" })

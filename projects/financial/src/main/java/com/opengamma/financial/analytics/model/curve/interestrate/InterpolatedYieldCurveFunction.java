@@ -19,8 +19,8 @@ import com.opengamma.analytics.financial.model.interestrate.curve.DiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -119,7 +119,7 @@ public class InterpolatedYieldCurveFunction extends AbstractFunction {
         final String interpolatorName = specification.getInterpolatorName();
         final String rightExtrapolatorName = specification.getRightExtrapolatorName();
         final String leftExtrapolatorName = specification.getLeftExtrapolatorName();
-        final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         final InterpolatedDoublesCurve curve = InterpolatedDoublesCurve.from(times, yields, interpolator, curveName);
         final ValueProperties curveProperties = createValueProperties()
             .with(ValuePropertyNames.CURVE, curveName)

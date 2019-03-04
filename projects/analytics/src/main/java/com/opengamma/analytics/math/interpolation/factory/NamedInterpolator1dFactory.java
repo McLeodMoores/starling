@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.fudgemsg.AnnotationReflector;
 import org.joda.convert.FromString;
 import org.reflections.Configuration;
@@ -40,19 +41,51 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
 
   /**
    * Gets the interpolator with this name.
-   * @param interpolatorName  the name, not null
-   * @return  the interpolator
+   *
+   * @param interpolatorName
+   *          the name, not null
+   * @return the interpolator
    */
   @FromString
   public static NamedInterpolator1d of(final String interpolatorName) {
-    return INSTANCE.instance(interpolatorName);
+    ArgumentChecker.notNull(interpolatorName, "interpolatorName");
+    try {
+      return INSTANCE.instance(interpolatorName);
+    } catch (final IllegalArgumentException e) {
+      // TODO move this logic into the combining interpolator adapter
+      // might have to parse name
+      if (interpolatorName.startsWith("Combined")) {
+        final String trimmed = interpolatorName.substring(9, interpolatorName.length() - 1);
+        final String[] pairs = trimmed.split(",");
+        if (pairs.length == 1) {
+          final String interpolator = StringUtils.trimToEmpty(pairs[0].split("=")[1]);
+          return INSTANCE.instance(interpolator);
+        } else if (pairs.length == 2) {
+          final String interpolator = StringUtils.trimToEmpty(pairs[0].split("=")[1]);
+          final String extrapolator = StringUtils.trimToEmpty(pairs[1].split("=")[1]);
+          return of(interpolator, extrapolator);
+        } else if (pairs.length == 3) {
+          final String interpolator = StringUtils.trimToEmpty(pairs[0].split("=")[1]);
+          final String leftExtrapolator = StringUtils.trimToEmpty(pairs[1].split("=")[1]);
+          final String rightExtrapolator = StringUtils.trimToEmpty(pairs[2].split("=")[1]);
+          return of(interpolator, leftExtrapolator, rightExtrapolator);
+        } else {
+          throw new IllegalArgumentException("Cannot get interpolator called " + interpolatorName);
+        }
+      }
+    }
+    throw new IllegalArgumentException("Cannot get interpolator called " + interpolatorName);
   }
 
   /**
-   * Gets a combined interpolator and extrapolator that uses the same extrapolation method on the left and right.
-   * @param interpolatorName  the interpolator name, not null
-   * @param extrapolatorName  the extrapolator name, not null
-   * @return  a combined interpolator and extrapolator
+   * Gets a combined interpolator and extrapolator that uses the same
+   * extrapolation method on the left and right.
+   *
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @param extrapolatorName
+   *          the extrapolator name, not null
+   * @return a combined interpolator and extrapolator
    */
   public static NamedInterpolator1d of(final String interpolatorName, final String extrapolatorName) {
     return of(interpolatorName, extrapolatorName, extrapolatorName);

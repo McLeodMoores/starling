@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.curve.forward;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_INTERPOLATOR;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.Map;
@@ -28,8 +27,8 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -60,6 +59,8 @@ import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  *
@@ -187,7 +188,7 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         if (expiries.size() == 0) {
           throw new OpenGammaRuntimeException("Could not get any values for forward swaps");
         }
-        final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         final ForwardCurve curve = new ForwardCurve(InterpolatedDoublesCurve.from(expiries, forwards, interpolator));
         return Collections.singleton(new ComputedValue(getResultSpec(target, curveName, interpolatorName, leftExtrapolatorName, rightExtrapolatorName, forwardTenorName), curve));
       }

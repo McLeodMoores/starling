@@ -18,11 +18,13 @@ import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpol
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr.ForexSmileDeltaSurfaceDataBundle;
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr.SmileSurfaceDataBundle;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.DoubleQuadraticInterpolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.LinearExtrapolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.NaturalCubicSplineInterpolator1dAdapter;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -33,8 +35,8 @@ public class VolatilitySurfaceInterpolatorTest {
   private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = new DoubleQuadraticInterpolator1D();
   private static final CombinedInterpolatorExtrapolator EXTRAPOLATOR_1D = new CombinedInterpolatorExtrapolator(INTERPOLATOR_1D, new LinearExtrapolator1D(INTERPOLATOR_1D));
   private static final GeneralSmileInterpolator SMILE_INTERPOLATOR = new SmileInterpolatorSpline();
-  private static final Interpolator1D TIME_INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.NATURAL_CUBIC_SPLINE,
-      Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+  private static final Interpolator1D TIME_INTERPOLATOR = NamedInterpolator1dFactory.of(NaturalCubicSplineInterpolator1dAdapter.NAME,
+      LinearExtrapolator1dAdapter.NAME);
   private static final boolean USE_LOG_TIME = true;
   private static final boolean USE_INTEGRATED_VARIANCE = true;
   private static final boolean USE_LOG_VALUE = true;
@@ -97,13 +99,14 @@ public class VolatilitySurfaceInterpolatorTest {
     assertEquals(SURFACE_INTERPOLATOR.hashCode(), other.hashCode());
     other = new VolatilitySurfaceInterpolator(new SmileInterpolatorSABR(), TIME_INTERPOLATOR, USE_LOG_TIME, USE_INTEGRATED_VARIANCE, USE_LOG_VALUE);
     assertFalse(other.equals(SURFACE_INTERPOLATOR));
-    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, Interpolator1DFactory.LINEAR_INSTANCE, USE_LOG_TIME, USE_INTEGRATED_VARIANCE, USE_LOG_VALUE);
+    final LinearInterpolator1dAdapter timeInterpolator = new LinearInterpolator1dAdapter();
+    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, timeInterpolator, USE_LOG_TIME, USE_INTEGRATED_VARIANCE, USE_LOG_VALUE);
     assertFalse(other.equals(SURFACE_INTERPOLATOR));
-    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, Interpolator1DFactory.LINEAR_INSTANCE, !USE_LOG_TIME, USE_INTEGRATED_VARIANCE, USE_LOG_VALUE);
+    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, timeInterpolator, !USE_LOG_TIME, USE_INTEGRATED_VARIANCE, USE_LOG_VALUE);
     assertFalse(other.equals(SURFACE_INTERPOLATOR));
-    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, Interpolator1DFactory.LINEAR_INSTANCE, USE_LOG_TIME, !USE_INTEGRATED_VARIANCE, USE_LOG_VALUE);
+    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, timeInterpolator, USE_LOG_TIME, !USE_INTEGRATED_VARIANCE, USE_LOG_VALUE);
     assertFalse(other.equals(SURFACE_INTERPOLATOR));
-    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, Interpolator1DFactory.LINEAR_INSTANCE, USE_LOG_TIME, USE_INTEGRATED_VARIANCE, !USE_LOG_VALUE);
+    other = new VolatilitySurfaceInterpolator(SMILE_INTERPOLATOR, timeInterpolator, USE_LOG_TIME, USE_INTEGRATED_VARIANCE, !USE_LOG_VALUE);
     assertFalse(other.equals(SURFACE_INTERPOLATOR));
   }
 

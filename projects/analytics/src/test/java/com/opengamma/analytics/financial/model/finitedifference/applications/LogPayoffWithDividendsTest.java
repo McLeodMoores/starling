@@ -31,8 +31,8 @@ import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.function.Function;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.test.TestGroup;
@@ -46,7 +46,7 @@ public class LogPayoffWithDividendsTest {
   private static final PDE1DCoefficientsProvider PDE_PROVIDER = new PDE1DCoefficientsProvider();
   private static final InitialConditionsProvider INITIAL_COND_PROVIDER = new InitialConditionsProvider();
 
-  private static final Interpolator1D INTEPOLATOR1D = Interpolator1DFactory.DOUBLE_QUADRATIC_INSTANCE;
+  private static final Interpolator1D INTEPOLATOR1D = NamedInterpolator1dFactory.of("DoubleQuadratic");
 
   private static final double EXPIRY = 1.5;
   private static final double DIVIDEND_DATE = 0.85;
@@ -218,7 +218,7 @@ public class LogPayoffWithDividendsTest {
     final Interpolator1DDataBundle interpolDB = INTEPOLATOR1D.getDataBundle(sNodes, res.getTerminalResults());
 
     final double val = INTEPOLATOR1D.interpolate(interpolDB, lnFT);
-    assertEquals(0.41491529, Math.sqrt(-2 * (val) / EXPIRY), 5e-4); //Number from backwardsPDETest
+    assertEquals(0.41491529, Math.sqrt(-2 * val / EXPIRY), 5e-4); //Number from backwardsPDETest
     //   System.out.println(val + "\t" + Math.sqrt(-2 * val / EXPIRY));
   }
 

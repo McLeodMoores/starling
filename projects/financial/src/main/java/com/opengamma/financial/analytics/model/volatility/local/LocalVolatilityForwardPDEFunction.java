@@ -29,7 +29,7 @@ import com.opengamma.analytics.financial.model.volatility.local.LocalVolatilityF
 import com.opengamma.analytics.financial.model.volatility.local.LocalVolatilitySurfaceMoneyness;
 import com.opengamma.analytics.financial.model.volatility.local.PDELocalVolatilityCalculator;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
@@ -67,7 +67,7 @@ public abstract class LocalVolatilityForwardPDEFunction extends LocalVolatilityP
     final double maxProxyDelta = Double.parseDouble(desiredValue.getConstraint(PROPERTY_MAX_PROXY_DELTA));
     final double centreMoneyness = Double.parseDouble(desiredValue.getConstraint(PROPERTY_CENTRE_MONEYNESS));
     final String interpolatorName = desiredValue.getConstraint(PROPERTY_SPACE_DIRECTION_INTERPOLATOR);
-    final Interpolator1D interpolator = Interpolator1DFactory.getInterpolator(interpolatorName);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName);
     final PDELocalVolatilityCalculator<?> pdeCalculator =
         getPDECalculator(new LocalVolatilityForwardPDECalculator(theta, nTimeSteps, nSpaceSteps, timeStepBunching, spaceStepBunching, maxProxyDelta, centreMoneyness), interpolator);
     final Object localVolatilityObject = inputs.getValue(ValueRequirementNames.LOCAL_VOLATILITY_SURFACE);
@@ -112,8 +112,8 @@ public abstract class LocalVolatilityForwardPDEFunction extends LocalVolatilityP
       } else if (values.size() != 1) {
         constraintsBuilder = constraints.copy();
         constraintsBuilder
-          .withoutAny(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR)
-          .with(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR, getBlackSmileInterpolatorName());
+        .withoutAny(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR)
+        .with(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR, getBlackSmileInterpolatorName());
       }
       values = constraints.getValues(PDEPropertyNamesAndValues.PROPERTY_PDE_DIRECTION);
       if (values == null) {

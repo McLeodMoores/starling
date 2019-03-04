@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.LogNaturalCubicMonotonicityPreservingInterpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LogLinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.MonotonicLogNaturalCubicSplineInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.csv.CSVDocumentReader;
 
@@ -88,7 +90,9 @@ public class IRCurveParser {
       discountFactors[i] = row.getDouble(DATES[i]);
     }
     final InterpolatedDoublesCurve curve = new InterpolatedDoublesCurve(TIMES, discountFactors,
-        CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_NATURAL_CUBIC_MONOTONE, Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR), true, row.getString(CURVE_NAME));
+        NamedInterpolator1dFactory.of(MonotonicLogNaturalCubicSplineInterpolator1dAdapter.NAME, LogLinearExtrapolator1dAdapter.NAME,
+            LinearExtrapolator1dAdapter.NAME),
+        true, row.getString(CURVE_NAME));
     return curve;
   }
 

@@ -21,9 +21,10 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.curve.MultiplyCurveSpreadFunction;
 import com.opengamma.analytics.math.curve.SpreadDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.StepInterpolator1dAdapter;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
@@ -105,7 +106,7 @@ public class YieldCurveUtils {
     final Iterator<Double> iterShifts = shifts.iterator();
     DoublesPair oldPair = iterBuckets.next();
     double shift = iterShifts.next();
-    final Interpolator1D stepInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.STEP, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final Interpolator1D stepInterpolator = NamedInterpolator1dFactory.of(StepInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
     switch (shiftType) {
       case ABSOLUTE: {
         if (oldPair.getFirstDouble() >= 0 && Double.compare(0, oldPair.getFirstDouble()) != 0) {

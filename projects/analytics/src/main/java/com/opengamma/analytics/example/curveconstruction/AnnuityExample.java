@@ -5,9 +5,6 @@
  */
 package com.opengamma.analytics.example.curveconstruction;
 
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-
 import java.io.PrintStream;
 import java.util.Arrays;
 
@@ -16,9 +13,11 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -48,7 +47,8 @@ public class AnnuityExample {
   public static YieldCurveBundle getBundle() {
     final YieldCurveBundle bundle = new YieldCurveBundle();
 
-    final Interpolator1D extrapolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, LINEAR_EXTRAPOLATOR, FLAT_EXTRAPOLATOR);
+    final Interpolator1D extrapolator = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME);
 
     final InterpolatedDoublesCurve fCurve = InterpolatedDoublesCurve.from(FUNDING_CURVE_TIMES, FUNDING_YIELDS, extrapolator);
     final YieldCurve fundingCurve = YieldCurve.from(fCurve);

@@ -22,7 +22,8 @@ import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.future.QuandlFedFundsFutureCurveInstrumentProvider;
 import com.mcleodmoores.quandl.future.QuandlFutureCurveInstrumentProvider;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -143,7 +144,7 @@ public final class QuandlCurveConfigurationsGenerator {
     populateFedFundsFuture(overnightCurveNodes, fedFundFutureIds, overnightCurveNodeIdMapperName, Tenor.ONE_MONTH, Tenor.ONE_MONTH, "CME 30D Fed Funds", "CME/FF",
         overnightReferenceId, 16);
     final AbstractCurveDefinition overnightDefinition = new InterpolatedCurveDefinition(overnightCurveName, overnightCurveNodes,
-        Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+        DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper overnightMapper = CurveNodeIdMapper.builder()
         .name(overnightCurveNodeIdMapperName)
         .cashNodeIds(overnightId)
@@ -159,7 +160,7 @@ public final class QuandlCurveConfigurationsGenerator {
         "CME 3M/3M Eurodollar LIBOR", "CME/ED", 16);
     populateSwaps(liborCurveNodes, swapIds, liborCurveNodeIdMapperName, "USD Vanilla LIBOR Fixed", "USD Vanilla LIBOR", "FRED/DSWP");
     final AbstractCurveDefinition liborDefinition = new InterpolatedCurveDefinition(liborCurveName, liborCurveNodes,
-        Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+        DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper liborMapper = CurveNodeIdMapper.builder()
         .name(liborCurveNodeIdMapperName)
         .cashNodeIds(liborId)
@@ -219,8 +220,8 @@ public final class QuandlCurveConfigurationsGenerator {
       return null;
     }
     populateRateFuture(curveNodes, rateFutureIds, curveNodeIdMapperName, Tenor.THREE_MONTHS, iborTenor, futureConvention, futurePrefix, nFutures);
-    final AbstractCurveDefinition definition = new InterpolatedCurveDefinition(curveName, curveNodes, Interpolator1DFactory.DOUBLE_QUADRATIC,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final AbstractCurveDefinition definition = new InterpolatedCurveDefinition(curveName, curveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper mapper = CurveNodeIdMapper.builder()
         .name(curveNodeIdMapperName)
         .rateFutureNodeIds(rateFutureIds)

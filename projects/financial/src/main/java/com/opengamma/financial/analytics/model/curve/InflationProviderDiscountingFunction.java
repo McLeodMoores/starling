@@ -51,8 +51,8 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.InflationSensitivity;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
@@ -102,7 +102,7 @@ import com.opengamma.util.tuple.Pairs;
  * Produces price index curves using the discounting method.
  */
 public class InflationProviderDiscountingFunction extends
-    MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingRepository, GeneratorPriceIndexCurve, InflationSensitivity> {
+MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingRepository, GeneratorPriceIndexCurve, InflationSensitivity> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InflationProviderDiscountingFunction.class);
   /** The calculator */
@@ -177,11 +177,11 @@ public class InflationProviderDiscountingFunction extends
      * @param currencies The set of currencies to which the curves produce sensitivities
      */
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation,
-                                        final ZonedDateTime latestInvokation,
-                                        final String[] curveNames,
-                                        final Set<ValueRequirement> exogenousRequirements,
-                                        final CurveConstructionConfiguration curveConstructionConfiguration,
-                                        final String[] currencies) {
+        final ZonedDateTime latestInvokation,
+        final String[] curveNames,
+        final Set<ValueRequirement> exogenousRequirements,
+        final CurveConstructionConfiguration curveConstructionConfiguration,
+        final String[] currencies) {
 
       super(earliestInvokation, latestInvokation, curveNames, ValueRequirementNames.PRICE_INDEX_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
@@ -253,11 +253,11 @@ public class InflationProviderDiscountingFunction extends
               final Security sec = securitySource.getSingle(inflationConfiguration.getPriceIndex().toBundle());
               if (sec == null) {
                 throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationConfiguration.getPriceIndex()
-                    + " was null");
+                + " was null");
               }
               if (!(sec instanceof PriceIndex)) {
                 throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationConfiguration.getPriceIndex()
-                    + " not of type PriceIndex");
+                + " not of type PriceIndex");
               }
               final PriceIndex indexSecurity = (PriceIndex) sec;
               inflation.add(new IndexPrice(indexSecurity.getName(), Currency.of(inflationConfiguration.getReference())));
@@ -328,7 +328,7 @@ public class InflationProviderDiscountingFunction extends
         final String interpolatorName = interpolatedDefinition.getInterpolatorName();
         final String leftExtrapolatorName = interpolatedDefinition.getLeftExtrapolatorName();
         final String rightExtrapolatorName = interpolatedDefinition.getRightExtrapolatorName();
-        final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         return new GeneratorPriceIndexCurveInterpolated(getMaturityCalculator(), interpolator);
       }
       throw new OpenGammaRuntimeException("Cannot handle curves of type " + definition.getClass());

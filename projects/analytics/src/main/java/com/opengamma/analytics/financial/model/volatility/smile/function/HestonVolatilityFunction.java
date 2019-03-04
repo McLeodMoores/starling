@@ -5,9 +5,6 @@
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
 
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.DOUBLE_QUADRATIC;
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-
 import java.util.Arrays;
 
 import org.apache.commons.lang.Validate;
@@ -19,9 +16,11 @@ import com.opengamma.analytics.financial.model.option.pricing.fourier.HestonChar
 import com.opengamma.analytics.financial.model.option.pricing.fourier.MartingaleCharacteristicExponent;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.lang.annotation.ExternalFunction;
 
 /**
@@ -31,7 +30,8 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
   /** The FFT pricer */
   private static final FFTPricer FFT_PRICER = new FFTPricer();
   /** The default interpolator */
-  private static final Interpolator1D DEFAULT_INTERPOLATOR1D = CombinedInterpolatorExtrapolatorFactory.getInterpolator(DOUBLE_QUADRATIC, FLAT_EXTRAPOLATOR, FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D DEFAULT_INTERPOLATOR1D = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   /** The default limit of sigma */
   private static final double DEFAULT_LIMIT_SIGMA = 0.3;
   /** The default limit of alpha */

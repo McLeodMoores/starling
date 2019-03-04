@@ -11,11 +11,18 @@ import static org.testng.AssertJUnit.assertNull;
 
 import org.testng.annotations.Test;
 
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NaturalCubicSplineInterpolator1dAdapter;
 import com.opengamma.util.test.TestGroup;
 
 /**
  * Test.
+ * 
+ * @deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class CombinedInterpolatorExtrapolatorFactoryTest {
 
@@ -26,32 +33,32 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBadInterpolatorName2() {
-    getInterpolator("Wrong name", Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    getInterpolator("Wrong name", FlatExtrapolator1dAdapter.NAME);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBadInterpolatorName3() {
-    getInterpolator("Wrong name", Interpolator1DFactory.FLAT_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    getInterpolator("Wrong name", FlatExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBadExtrapolatorName1() {
-    getInterpolator(Interpolator1DFactory.LINEAR, "Wrong name");
+    getInterpolator(LinearInterpolator1dAdapter.NAME, "Wrong name");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBadExtrapolatorName2() {
-    getInterpolator(Interpolator1DFactory.LINEAR, "Wrong name", Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    getInterpolator(LinearInterpolator1dAdapter.NAME, "Wrong name", FlatExtrapolator1dAdapter.NAME);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBadExtrapolatorName3() {
-    getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR, "Wrong name");
+    getInterpolator(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, "Wrong name");
   }
 
   @Test
   public void testNullExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, null);
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, null);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertNull(combined.getLeftExtrapolator());
     assertNull(combined.getRightExtrapolator());
@@ -59,7 +66,7 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testEmptyExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, "");
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, "");
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertNull(combined.getLeftExtrapolator());
     assertNull(combined.getRightExtrapolator());
@@ -67,7 +74,7 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testNullLeftExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, null, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, null, FlatExtrapolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), FlatExtrapolator1D.class);
@@ -75,7 +82,7 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testEmptyLeftExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, "", Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, "", FlatExtrapolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), FlatExtrapolator1D.class);
@@ -83,7 +90,7 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testNullRightExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR, null);
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, null);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), FlatExtrapolator1D.class);
@@ -91,7 +98,7 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testEmptyRightExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR, "");
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, "");
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), FlatExtrapolator1D.class);
@@ -99,7 +106,7 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testNullLeftAndRightExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, null, null);
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, null, null);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertNull(combined.getLeftExtrapolator());
     assertNull(combined.getRightExtrapolator());
@@ -107,7 +114,7 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testEmptyLeftAndRightExtrapolatorName() {
-    final CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, "", "");
+    final CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, "", "");
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertNull(combined.getLeftExtrapolator());
     assertNull(combined.getRightExtrapolator());
@@ -115,21 +122,21 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testNoExtrapolator() {
-    CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR);
+    CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertNull(combined.getLeftExtrapolator());
     assertNull(combined.getRightExtrapolator());
-    combined = getInterpolator(Interpolator1DFactory.NATURAL_CUBIC_SPLINE);
+    combined = getInterpolator(NaturalCubicSplineInterpolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), NaturalCubicSplineInterpolator1D.class);
   }
 
   @Test
   public void testOneExtrapolator() {
-    CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), FlatExtrapolator1D.class);
-    combined = getInterpolator(Interpolator1DFactory.NATURAL_CUBIC_SPLINE, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    combined = getInterpolator(NaturalCubicSplineInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), NaturalCubicSplineInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), FlatExtrapolator1D.class);
@@ -137,12 +144,12 @@ public class CombinedInterpolatorExtrapolatorFactoryTest {
 
   @Test
   public void testTwoExtrapolators() {
-    CombinedInterpolatorExtrapolator combined = getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    CombinedInterpolatorExtrapolator combined = getInterpolator(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), LinearInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), LinearExtrapolator1D.class);
-    combined = getInterpolator(Interpolator1DFactory.NATURAL_CUBIC_SPLINE, Interpolator1DFactory.FLAT_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    combined = getInterpolator(NaturalCubicSplineInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     assertEquals(combined.getInterpolator().getClass(), NaturalCubicSplineInterpolator1D.class);
     assertEquals(combined.getLeftExtrapolator().getClass(), FlatExtrapolator1D.class);
     assertEquals(combined.getRightExtrapolator().getClass(), LinearExtrapolator1D.class);

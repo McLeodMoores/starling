@@ -7,7 +7,8 @@ package com.opengamma.financial.analytics.model.volatility.surface;
 
 import java.util.List;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -34,12 +35,12 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
    */
   public static class Defaults extends AbstractFunctionConfigurationBean {
 
-    private String _xInterpolatorName = Interpolator1DFactory.LINEAR;
-    private String _yInterpolatorName = Interpolator1DFactory.LINEAR;
-    private String _leftXExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-    private String _rightXExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-    private String _leftYExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-    private String _rightYExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
+    private String _xInterpolatorName = LinearInterpolator1dAdapter.NAME;
+    private String _yInterpolatorName = LinearInterpolator1dAdapter.NAME;
+    private String _leftXExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
+    private String _rightXExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
+    private String _leftYExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
+    private String _rightYExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
     private boolean _useFixedAlpha; /* = false;*/
     private boolean _useFixedBeta = true;
     private boolean _useFixedRho; /* = false;*/

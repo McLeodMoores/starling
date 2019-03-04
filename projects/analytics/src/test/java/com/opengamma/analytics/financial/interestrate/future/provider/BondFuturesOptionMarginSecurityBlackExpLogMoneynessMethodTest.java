@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
@@ -27,10 +27,12 @@ import com.opengamma.analytics.financial.provider.description.IssuerProviderDisc
 import com.opengamma.analytics.financial.provider.description.StandardDataSetsBlack;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackBondFuturesExpLogMoneynessProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderDiscount;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.TimeSquareInterpolator1dAdapter;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
@@ -145,7 +147,7 @@ public class BondFuturesOptionMarginSecurityBlackExpLogMoneynessMethodTest {
     final double deltaCallExpected = priceAD[1];
     final double deltaCallComputed = METHOD_OPT.deltaUnderlyingPrice(CALL_BOBL_116, BLACK_FLAT_BNDFUT);
     assertEquals("BondFuturesOptionMarginSecurityBlackFlatMethod: delta", deltaCallExpected, deltaCallComputed, TOLERANCE_DELTA);
-    assertTrue("BondFuturesOptionMarginSecurityBlackFlatMethod: delta", (0.0d < deltaCallComputed) && (deltaCallComputed < 1.0d));
+    assertTrue("BondFuturesOptionMarginSecurityBlackFlatMethod: delta", 0.0d < deltaCallComputed && deltaCallComputed < 1.0d);
     final double deltaPutComputed = METHOD_OPT.deltaUnderlyingPrice(PUT_BOBL_116, BLACK_FLAT_BNDFUT);
     assertEquals("BondFuturesOptionMarginSecurityBlackFlatMethod: delta", deltaCallExpected - 1.0d, deltaPutComputed, TOLERANCE_DELTA);
   }
@@ -177,7 +179,7 @@ public class BondFuturesOptionMarginSecurityBlackExpLogMoneynessMethodTest {
     final double vegaCallExpected = priceAD[2];
     final double vegaCallComputed = METHOD_OPT.vegaUnderlyingPrice(CALL_BOBL_116, BLACK_FLAT_BNDFUT);
     assertEquals("BondFuturesOptionMarginSecurityBlackFlatMethod: vega", vegaCallExpected, vegaCallComputed, TOLERANCE_DELTA);
-    assertTrue("BondFuturesOptionMarginSecurityBlackFlatMethod: vega", (0.0d < vegaCallComputed) && (vegaCallComputed < 1.0d));
+    assertTrue("BondFuturesOptionMarginSecurityBlackFlatMethod: vega", 0.0d < vegaCallComputed && vegaCallComputed < 1.0d);
   }
 
 
@@ -192,10 +194,10 @@ public class BondFuturesOptionMarginSecurityBlackExpLogMoneynessMethodTest {
     assertEquals("BondFuturesOptionMarginSecurityBlackFlatMethod: theta", thetaCallExpected, thetaCallComputed, TOLERANCE_DELTA);
   }
 
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
-  private static final Interpolator1D TIME_SQUARE_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.TIME_SQUARE, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D TIME_SQUARE_FLAT = NamedInterpolator1dFactory.of(TimeSquareInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final GridInterpolator2D INTERPOLATOR_TIMESQUARE_LINEAR_2D = new GridInterpolator2D(TIME_SQUARE_FLAT, LINEAR_FLAT);
   private static final GridInterpolator2D INTERPOLATOR_LINEAR_LINEAR_2D = new GridInterpolator2D(LINEAR_FLAT, LINEAR_FLAT);
   private static final GridInterpolator2D INTERPOLATOR_LINEAR_TIMESQUARE_2D = new GridInterpolator2D(LINEAR_FLAT, TIME_SQUARE_FLAT);
@@ -231,11 +233,11 @@ public class BondFuturesOptionMarginSecurityBlackExpLogMoneynessMethodTest {
     final double stepMon = 0.005;
     for (int loopmon = 0; loopmon < nbMonTest; loopmon++) {
       for (int loopexp = 0; loopexp < nbExpTest; loopexp++) {
-        double exp = startExp + loopexp * stepExp;
-        double mon = startMon + loopmon * stepMon;
-        double intExpMon = BLACK_SURFACE_EXP_LOGMONEY.getZValue(exp, mon);
-        double intMonExp = BLACK_SURFACE_LOGMONEY_EXP.getZValue(mon, exp);
-        double intVar = BLACK_SURFACE_EXP_LOGMONEY_VAR.getZValue(exp, mon);
+        final double exp = startExp + loopexp * stepExp;
+        final double mon = startMon + loopmon * stepMon;
+        final double intExpMon = BLACK_SURFACE_EXP_LOGMONEY.getZValue(exp, mon);
+        final double intMonExp = BLACK_SURFACE_LOGMONEY_EXP.getZValue(mon, exp);
+        final double intVar = BLACK_SURFACE_EXP_LOGMONEY_VAR.getZValue(exp, mon);
         assertEquals("Time square interpolation: change of order", intExpMon, intMonExp, TOLERANCE_VOL);
         assertEquals("Time square interpolation: change of order " + loopmon + " - " + loopexp, intExpMon, Math.sqrt(intVar / exp), TOLERANCE_VOL);
       }

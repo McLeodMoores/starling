@@ -20,8 +20,9 @@ import com.opengamma.analytics.financial.model.volatility.smile.function.HestonV
 import com.opengamma.analytics.math.curve.NodalDoublesCurve;
 import com.opengamma.analytics.math.interpolation.FlatExtrapolator1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
-import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
@@ -55,7 +56,7 @@ public class HestonFourierIRFutureSurfaceFittingFunctionDeprecated extends Abstr
   private static final double ERROR = 0.001;
   private static final HestonVolatilityFunction HESTON_FUNCTION = new HestonVolatilityFunction();
   private static final DoubleMatrix1D HESTON_INITIAL_VALUES = new DoubleMatrix1D(new double[] {1.5, 0.1, 0.1, 0.5, 0.0});
-  private static final LinearInterpolator1D LINEAR = (LinearInterpolator1D) Interpolator1DFactory.getInterpolator(Interpolator1DFactory.LINEAR);
+  private static final Interpolator1D LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME);
   private static final FlatExtrapolator1D FLAT = new FlatExtrapolator1D();
   private static final GridInterpolator2D INTERPOLATOR = new GridInterpolator2D(LINEAR, LINEAR, FLAT, FLAT);
   private ValueSpecification _resultSpecification;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -10,10 +10,11 @@ import org.apache.commons.lang.ObjectUtils;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaParameters;
 import com.opengamma.analytics.financial.model.volatility.SmileAndBucketedSensitivities;
 import com.opengamma.analytics.financial.model.volatility.VolatilityAndBucketedSensitivities;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
@@ -31,8 +32,8 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
   /**
    * The default interpolator: linear with flat extrapolation.
    */
-  private static final Interpolator1D DEFAULT_INTERPOLATOR_STRIKE = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D DEFAULT_INTERPOLATOR_STRIKE = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
 
   /**
    * Constructor from volatility term structure. The default interpolator is used to interpolate in the strike dimension. The default interpolator is linear with flat extrapolation.

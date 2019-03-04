@@ -52,9 +52,8 @@ import com.opengamma.analytics.financial.interestrate.cash.derivative.Cash;
 import com.opengamma.analytics.financial.interestrate.cash.method.CashDiscountingMethod;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
@@ -190,7 +189,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000),
         impliedDefinition, originalConfiguration, originalCurveNames[0]);
-  };
+  }
 
   private class MyCompiledFunction extends AbstractInvokingCompiledFunction {
     /** The definition of the implied curve */
@@ -257,7 +256,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
         final Calendar calendar = CalendarUtils.getCalendar(holidaySource, _currency);
         final DepositConvention convention = conventionSource.getSingle(ExternalId.of(SCHEME_NAME, getConventionName(_currency, DEPOSIT)), DepositConvention.class);
         final String impliedDepositCurveName = _impliedCurveCalculationConfig + "_" + _currency.getCode();
-        final CombinedInterpolatorExtrapolator interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(_interpolatorName, _leftExtrapolatorName, _rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(_interpolatorName, _leftExtrapolatorName, _rightExtrapolatorName);
         final FXSpotConvention fxSpotConvention = conventionSource.getSingle(ExternalId.of("CONVENTION", "FX Spot"), FXSpotConvention.class);
         final int spotLag = fxSpotConvention.getSettlementDays();
 

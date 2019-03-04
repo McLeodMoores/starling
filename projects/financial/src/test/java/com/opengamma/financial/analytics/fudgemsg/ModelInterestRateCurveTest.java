@@ -18,7 +18,7 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -40,7 +40,7 @@ public class ModelInterestRateCurveTest extends AnalyticsTestBase {
     map.put(1., 0.03);
     map.put(2., 0.04);
     map.put(3., 0.05);
-    final DiscountCurve dc1 = new DiscountCurve("Curve name-dsc", InterpolatedDoublesCurve.from(map, Interpolator1DFactory.getInterpolator("Linear")));
+    final DiscountCurve dc1 = new DiscountCurve("Curve name-dsc", InterpolatedDoublesCurve.from(map, NamedInterpolator1dFactory.of("Linear")));
     final DiscountCurve dc2 = cycleObject(DiscountCurve.class, dc1);
     assertEquals(dc1, dc2);
   }
@@ -51,7 +51,7 @@ public class ModelInterestRateCurveTest extends AnalyticsTestBase {
     map.put(1., 0.03);
     map.put(2., 0.04);
     map.put(3., 0.05);
-    final YieldCurve dc1 = new YieldCurve("Curve name-Yld", InterpolatedDoublesCurve.from(map, Interpolator1DFactory.getInterpolator("Linear")));
+    final YieldCurve dc1 = new YieldCurve("Curve name-Yld", InterpolatedDoublesCurve.from(map, NamedInterpolator1dFactory.of("Linear")));
     final YieldCurve dc2 = cycleObject(YieldCurve.class, dc1);
     assertEquals(dc1, dc2);
   }
@@ -62,7 +62,7 @@ public class ModelInterestRateCurveTest extends AnalyticsTestBase {
     map.put(1., 0.03);
     map.put(2., 0.04);
     map.put(3., 0.05);
-    final PriceIndexCurve curve = new PriceIndexCurve(InterpolatedDoublesCurve.from(map, Interpolator1DFactory.getInterpolator("Linear")));
+    final PriceIndexCurve curve = new PriceIndexCurve(InterpolatedDoublesCurve.from(map, NamedInterpolator1dFactory.of("Linear")));
     assertEquals(curve, cycleObject(PriceIndexCurve.class, curve));
   }
 

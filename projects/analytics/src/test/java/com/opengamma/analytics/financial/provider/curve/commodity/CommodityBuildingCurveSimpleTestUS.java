@@ -23,9 +23,10 @@ import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCal
 import com.opengamma.analytics.financial.provider.description.MulticurveProviderDiscountDataSets;
 import com.opengamma.analytics.financial.provider.description.inflation.InflationProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LogLinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
@@ -38,8 +39,8 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class CommodityBuildingCurveSimpleTestUS {
 
-  private static final Interpolator1D INTERPOLATOR_LOG_LINEAR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_LOG_LINEAR = NamedInterpolator1dFactory.of(LogLinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
 
   private static final LastTimeCalculator MATURITY_CALCULATOR = LastTimeCalculator.getInstance();
   private static final double TOLERANCE_ROOT = 1.0E-10;
@@ -55,7 +56,7 @@ public class CommodityBuildingCurveSimpleTestUS {
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2012, 9, 28);
 
   private static final ZonedDateTimeDoubleTimeSeries TS_PRICE_INDEX_USD_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
-    DateUtils.getUTCDate(2011, 9, 28), DateUtils.getUTCDate(2012, 6, 30), DateUtils.getUTCDate(2012, 7, 31), DateUtils.getUTCDate(2012, 8, 30) }, new double[] {200, 200, 200, 200, 200 });
+      DateUtils.getUTCDate(2011, 9, 28), DateUtils.getUTCDate(2012, 6, 30), DateUtils.getUTCDate(2012, 7, 31), DateUtils.getUTCDate(2012, 8, 30) }, new double[] {200, 200, 200, 200, 200 });
   private static final String CURVE_NAME_CPI_USD = "USD CPI";
 
   /** Market values for the CPI USD curve */
@@ -67,37 +68,37 @@ public class CommodityBuildingCurveSimpleTestUS {
     GENERATOR_INFLATION_SWAP,
     GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP,
     GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP, GENERATOR_INFLATION_SWAP };
-  /** Tenors for the CPI USD curve */
+    /** Tenors for the CPI USD curve */
 
-  public static final Period[] CPI_USD_TENOR = new Period[] {Period.ofYears(1),
-    Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(6), Period.ofYears(7),
-    Period.ofYears(8), Period.ofYears(9), Period.ofYears(10), Period.ofYears(12), Period.ofYears(15), Period.ofYears(20),
-    Period.ofYears(25), Period.ofYears(30) };
-  public static final GeneratorAttributeIR[] CPI_USD_ATTR = new GeneratorAttributeIR[CPI_USD_TENOR.length];
-  static {
-    for (int loopins = 0; loopins < CPI_USD_TENOR.length; loopins++) {
-      CPI_USD_ATTR[loopins] = new GeneratorAttributeIR(CPI_USD_TENOR[loopins]);
+    public static final Period[] CPI_USD_TENOR = new Period[] {Period.ofYears(1),
+        Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(6), Period.ofYears(7),
+        Period.ofYears(8), Period.ofYears(9), Period.ofYears(10), Period.ofYears(12), Period.ofYears(15), Period.ofYears(20),
+        Period.ofYears(25), Period.ofYears(30) };
+    public static final GeneratorAttributeIR[] CPI_USD_ATTR = new GeneratorAttributeIR[CPI_USD_TENOR.length];
+    static {
+      for (int loopins = 0; loopins < CPI_USD_TENOR.length; loopins++) {
+        CPI_USD_ATTR[loopins] = new GeneratorAttributeIR(CPI_USD_TENOR[loopins]);
+      }
     }
-  }
 
-  /** Standard USD CPI curve instrument definitions */
+    /** Standard USD CPI curve instrument definitions */
 
-  /*public static final InstrumentDefinition<?>[] DEFINITIONS_CPI_USD;*/
+    /*public static final InstrumentDefinition<?>[] DEFINITIONS_CPI_USD;*/
 
-  /** Units of curves */
+    /** Units of curves */
 
-  public static final int[] NB_UNITS = new int[] {1 };
-  public static final int NB_BLOCKS = NB_UNITS.length;
-  public static final InstrumentDefinition<?>[][][][] DEFINITIONS_UNITS = new InstrumentDefinition<?>[NB_BLOCKS][][][];
-  public static final GeneratorPriceIndexCurve[][][] GENERATORS_UNITS = new GeneratorPriceIndexCurve[NB_BLOCKS][][];
-  public static final String[][][] NAMES_UNITS = new String[NB_BLOCKS][][];
+    public static final int[] NB_UNITS = new int[] {1 };
+    public static final int NB_BLOCKS = NB_UNITS.length;
+    public static final InstrumentDefinition<?>[][][][] DEFINITIONS_UNITS = new InstrumentDefinition<?>[NB_BLOCKS][][][];
+    public static final GeneratorPriceIndexCurve[][][] GENERATORS_UNITS = new GeneratorPriceIndexCurve[NB_BLOCKS][][];
+    public static final String[][][] NAMES_UNITS = new String[NB_BLOCKS][][];
 
-  public static final MulticurveProviderDiscount US_MULTICURVE_PROVIDER = MulticurveProviderDiscountDataSets.createMulticurveEurUsd().copy();
-  public static final InflationProviderDiscount KNOWN_DATA = new InflationProviderDiscount(US_MULTICURVE_PROVIDER);
+    public static final MulticurveProviderDiscount US_MULTICURVE_PROVIDER = MulticurveProviderDiscountDataSets.createMulticurveEurUsd().copy();
+    public static final InflationProviderDiscount KNOWN_DATA = new InflationProviderDiscount(US_MULTICURVE_PROVIDER);
 
-  public static final LinkedHashMap<String, IndexPrice[]> US_CPI_MAP = new LinkedHashMap<>();
+    public static final LinkedHashMap<String, IndexPrice[]> US_CPI_MAP = new LinkedHashMap<>();
 
-  /*static {
+    /*static {
     DEFINITIONS_CPI_USD = getDefinitions(CPI_USD_MARKET_QUOTES, CPI_USD_GENERATORS, CPI_USD_ATTR);
 
     for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {

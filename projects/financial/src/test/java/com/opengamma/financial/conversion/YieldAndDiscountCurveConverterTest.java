@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -39,7 +39,7 @@ public class YieldAndDiscountCurveConverterTest {
     expected.put("Foo[3.5]", 0.05);
 
     final Map<String, Double> actual = _converter.convert("Foo",
-        YieldCurve.from(InterpolatedDoublesCurve.from(map, Interpolator1DFactory.getInterpolator("Linear"))));
+        YieldCurve.from(InterpolatedDoublesCurve.from(map, NamedInterpolator1dFactory.of("Linear"))));
 
     assertEquals(expected, actual);
   }

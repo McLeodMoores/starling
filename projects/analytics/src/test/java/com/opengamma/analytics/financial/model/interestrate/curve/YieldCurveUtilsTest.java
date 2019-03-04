@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -22,9 +22,12 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.curve.MultiplyCurveSpreadFunction;
 import com.opengamma.analytics.math.curve.SpreadDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.StepInterpolator1dAdapter;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.DoublesPair;
 
@@ -38,11 +41,11 @@ public class YieldCurveUtilsTest {
   /** Multiplies yield curves */
   private static final MultiplyCurveSpreadFunction MULTIPLY_CURVE_FUNCTION = new MultiplyCurveSpreadFunction();
   /** The interpolator for the original curve */
-  private static final Interpolator1D INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
   /** The step interpolator used for bucketed shifts */
-  private static final Interpolator1D STEP_INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.STEP,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D STEP_INTERPOLATOR = NamedInterpolator1dFactory.of(StepInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   /** Time points of the original curve */
   private static final double[] T = new double[] {1, 2, 3, 4, 5, 6, 7};
   /** Yield points of the original curve */

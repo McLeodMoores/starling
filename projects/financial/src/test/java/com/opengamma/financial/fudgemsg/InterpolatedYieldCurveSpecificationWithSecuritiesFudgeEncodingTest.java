@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStrip;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStripWithSecurity;
@@ -71,7 +71,7 @@ public class InterpolatedYieldCurveSpecificationWithSecuritiesFudgeEncodingTest 
     strips.add(fraStrip);
 
     final InterpolatedYieldCurveSpecificationWithSecurities spec = new InterpolatedYieldCurveSpecificationWithSecurities(
-        LocalDate.now(), "FUNDING", Currency.USD, Interpolator1DFactory.LINEAR_INSTANCE, true, strips);
+        LocalDate.now(), "FUNDING", Currency.USD, new LinearInterpolator1dAdapter(), true, strips);
     assertEquals(spec, cycleObject(InterpolatedYieldCurveSpecificationWithSecurities.class, spec));
   }
 

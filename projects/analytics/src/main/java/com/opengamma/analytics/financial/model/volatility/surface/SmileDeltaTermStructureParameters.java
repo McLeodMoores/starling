@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -16,10 +16,11 @@ import com.opengamma.analytics.financial.model.volatility.VolatilityAndBucketedS
 import com.opengamma.analytics.financial.model.volatility.VolatilityAndBucketedSensitivitiesModel;
 import com.opengamma.analytics.financial.model.volatility.curve.BlackForexTermStructureParameters;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.ArrayInterpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.TimeSquareInterpolator1dAdapter;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
@@ -45,8 +46,8 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
   /**
    * The default interpolator: time square (total variance) with flat extrapolation.
    */
-  private static final Interpolator1D DEFAULT_INTERPOLATOR_EXPIRY = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.TIME_SQUARE, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D DEFAULT_INTERPOLATOR_EXPIRY = NamedInterpolator1dFactory.of(TimeSquareInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
 
   /**
    * Constructor from volatility term structure.
