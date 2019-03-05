@@ -57,7 +57,7 @@ public final class ValueRequirementNames {
   //  public static final String DAILY_VOLUME_AVG_20D = "Last Volume Avg 20D";
   //  public static final String DAILY_CALL_IMP_VOL_30D = "Last Call Implied Vol 30D";
   /**
-   * The mark as of the previous close (e.g. equity price) <p>
+   * The mark as of the previous close (e.g. equity price).
    */
   public static final String MARK = "Mark";
   /**
@@ -299,11 +299,11 @@ public final class ValueRequirementNames {
    */
   public static final String CURVE_DEFINITION = "CurveDefinition";
   /**
-   * A vector of P&L series for the nodal points of a yield curve.
+   * A vector of P&amp;L series for the nodal points of a yield curve.
    */
   public static final String YIELD_CURVE_PNL_SERIES = "Yield Curve P&L Series";
   /**
-   * A vector of P&L series for the nodal points of a curve.
+   * A vector of P&amp;L series for the nodal points of a curve.
    */
   public static final String CURVE_PNL_SERIES = "Curve P&L Series";
   /**
@@ -930,11 +930,12 @@ public final class ValueRequirementNames {
    */
   public static final String VALUE_CARRY_RHO = "ValueCarryRho";
   /**
-   * ValueDelta represents the cash value of the position or, the value of money one would make if the underlying increased in price by 100%.<p>
-   * {@link #DELTA} = dV/dS.  ValueDelta is defined as S(t) * dV/dS. <p>
-   * Observe: PNL = dV/dS * (change in S) = S(t) * dV/dS * (S(T) - S(t)) / S(t), thus S(t)* dV/dS (ValueDelta) would be the PNL if
-   * 1.0 = (S(T) - S(t)) / S(t) => S(T) = 2*S(t), i.e. if the underlying doubled (increased by 100%). It thus gives a measure of the
-   * sensitivity as a relative measure.
+   * ValueDelta represents the cash value of the position or, the value of money one would make if the underlying increased in price by 100%.
+   * <p>
+   * {@link #DELTA} = dV/dS. ValueDelta is defined as S(t) * dV/dS.
+   * <p>
+   * Observe: PNL = dV/dS * (change in S) = S(t) * dV/dS * (S(T) - S(t)) / S(t), thus S(t)* dV/dS (ValueDelta) would be the PNL if 1.0 = (S(T) - S(t)) / S(t)
+   * &ge; S(T) = 2*S(t), i.e. if the underlying doubled (increased by 100%). It thus gives a measure of the sensitivity as a relative measure.
    */
   public static final String VALUE_DELTA = "ValueDelta";
   /**
@@ -1174,11 +1175,11 @@ public final class ValueRequirementNames {
    */
   public static final String PEARSON_KURTOSIS = "Pearson Kurtosis";
   /**
-   * The P&L of a position, from reference date.
+   * The P&amp;L of a position, from reference date.
    */
   public static final String PNL = "PnL";
   /**
-   * The P&L series of a position.
+   * The P&amp;L series of a position.
    */
   public static final String PNL_SERIES = "P&L Series";
   /**
@@ -1225,15 +1226,15 @@ public final class ValueRequirementNames {
   ///// Value At Risk
 
   /**
-   * The VaR of a position or portfolio calculated using the historical P&L series.
+   * The VaR of a position or portfolio calculated using the historical P&amp;L series.
    */
   public static final String HISTORICAL_VAR = "HistoricalVaR";
   /**
-   * The standard deviation for VaR calculated using the historical P&L series. Should be combined with {@link #HISTORICAL_VAR}.
+   * The standard deviation for VaR calculated using the historical P&amp;L series. Should be combined with {@link #HISTORICAL_VAR}.
    */
   public static final String HISTORICAL_VAR_STDDEV = "HistoricalVaR Standard Deviation";
   /**
-   * The conditional VaR of a position or portfolio calculated using a historical P&L series.
+   * The conditional VaR of a position or portfolio calculated using a historical P&amp;L series.
    */
   public static final String CONDITIONAL_HISTORICAL_VAR = "HistoricalCVaR";
   /**

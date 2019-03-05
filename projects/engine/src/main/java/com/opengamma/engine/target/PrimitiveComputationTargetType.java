@@ -19,11 +19,12 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Specialized form of {@link ObjectComputationTargetType} for primitive objects that can be converted directly to/from unique identifiers
- * without an external resolver service. Instances also serve as an {@link ObjectResolver} and possibly {@link IdentifierResolver} so that
- * they can be added to a {@link ComputationTargetResolver} and/or {@link ComputationTargetSpecificationResolver} to handle the type.
+ * Specialized form of {@link ObjectComputationTargetType} for primitive objects that can be converted directly to/from unique identifiers without an external
+ * resolver service. Instances also serve as an {@link ObjectResolver} and possibly {@link IdentifierResolver} so that they can be added to a
+ * {@link com.opengamma.engine.ComputationTargetResolver} and/or {@link ComputationTargetSpecificationResolver} to handle the type.
  *
- * @param <T> the target object type
+ * @param <T>
+ *          the target object type
  */
 public class PrimitiveComputationTargetType<T extends UniqueIdentifiable> extends ObjectComputationTargetType<T> implements ObjectResolver<T> {
 

@@ -17,7 +17,7 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
- * Default implementation of the {@link ComputationTargetTypeProvider} populated from the public constants on {@ComputationTargetType}.
+ * Default implementation of the {@link ComputationTargetTypeProvider} populated from the public constants on {@link ComputationTargetType}.
  */
 public final class DefaultComputationTargetTypeProvider implements ComputationTargetTypeProvider {
 

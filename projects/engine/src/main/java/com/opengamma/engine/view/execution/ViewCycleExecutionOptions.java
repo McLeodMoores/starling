@@ -94,10 +94,11 @@ public class ViewCycleExecutionOptions {
     }
 
     /**
-     * Sets the market data specification for the view cycle. This is equivalent to calling {@link #setMarketDataSpecitications} with a list containing
-     * a single element.
+     * Sets the market data specification for the view cycle. This is equivalent to calling {@link #setMarketDataSpecifications} with a list containing a single
+     * element.
      *
-     * @param marketDataSpecification the market data specification, not null
+     * @param marketDataSpecification
+     *          the market data specification, not null
      * @return this instance
      */
     public Builder setMarketDataSpecification(final MarketDataSpecification marketDataSpecification) {
@@ -331,12 +332,12 @@ public class ViewCycleExecutionOptions {
     }
 
     sb.append("marketDataSpecifications=")
-        .append(getMarketDataSpecifications())
-        .append(", marketDataShiftSpecification=")
-        .append(getMarketDataSelector())
-        .append(", functionParameters=")
-        .append(getFunctionParameters())
-        .append("]");
+    .append(getMarketDataSpecifications())
+    .append(", marketDataShiftSpecification=")
+    .append(getMarketDataSelector())
+    .append(", functionParameters=")
+    .append(getFunctionParameters())
+    .append("]");
     return sb.toString();
   }
 

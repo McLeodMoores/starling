@@ -73,7 +73,6 @@ import com.opengamma.financial.security.swap.SwapSecurity;
  * Base function for all pricing and risk functions that use curves constructed
  * using the G2++ method. Produces results for trades with following underlying
  * securities:
- * <p>
  * <ul>
  * <li>{@link com.opengamma.financial.security.cash.CashSecurity}
  * <li>{@link com.opengamma.financial.security.cashflow.CashFlowSecurity}

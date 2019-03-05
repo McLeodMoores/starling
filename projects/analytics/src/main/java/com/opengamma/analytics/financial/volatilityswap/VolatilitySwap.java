@@ -14,8 +14,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A volatility swap is a forward contract on the realised volatility of a generic underlying. This could be a single equity price,
- * the value of an equity index, an FX rate or <b>any</b> other financial metric on which a volatility swap contract is based.<p>
+ * A volatility swap is a forward contract on the realised volatility of a generic underlying. This could be a single equity price, the value of an equity
+ * index, an FX rate or <b>any</b> other financial metric on which a volatility swap contract is based.
  */
 public class VolatilitySwap implements InstrumentDerivative {
   /** Time to the start of volatility observations */

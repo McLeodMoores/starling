@@ -5,12 +5,14 @@
  */
 package com.opengamma.financial.analytics.model.volatility.surface.black;
 
+import com.opengamma.engine.value.ValuePropertyNames;
+
 /**
  *
  */
 public class BlackVolatilitySurfacePropertyNamesAndValues {
-  
-  /** Property name for {@link ValuePropertyNames#SURFACE_CALCULATION_METHOD} 
+
+  /** Property name for {@link ValuePropertyNames#SURFACE_CALCULATION_METHOD}
    * indicating that an interpolated Black lognormal volatility surface was used
    */
   public static final String INTERPOLATED_BLACK_LOGNORMAL = "InterpolatedBlackLognormalSurface";
@@ -69,7 +71,7 @@ public class BlackVolatilitySurfacePropertyNamesAndValues {
   /** Property name for the choice of whether to (a) throw an exception if the extrapolator fails
    *  to fit a ShiftedLognormal model to the vol and gradient of the last strike,
    *  (b) to reduce the slope until a fit is found or
-   *  (c) to set slope to zero, such that exterior volatilities equal the last marked value 
+   *  (c) to set slope to zero, such that exterior volatilities equal the last marked value
    */
   public static final String PROPERTY_SPLINE_EXTRAPOLATOR_FAILURE = "SplineExtrapolatorFailure";
   /** Selection *Quiet* will throw away a volatility if ShiftedLogNormalTailExtrapolationFitter fails and try the next nearest strike until it fits */
@@ -78,7 +80,7 @@ public class BlackVolatilitySurfacePropertyNamesAndValues {
   public static final String EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE = "Exception";
   /**  Selection *Flat* means that volatilities in the exterior will equal the vol at the nearest boundary*/
   public static final String FLAT_SPLINE_EXTRAPOLATOR_FAILURE = "Flat";
-  
+
   // Properties for mixed log normal interpolation
   /** Property name for the weighting function to be used in mixed log-normal interpolation */
   public static final String PROPERTY_MIXED_LOG_NORMAL_WEIGHTING_FUNCTION = "MixedLogNormalWeightingFunction";

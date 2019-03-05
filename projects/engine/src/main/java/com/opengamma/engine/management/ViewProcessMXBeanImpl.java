@@ -33,7 +33,6 @@ import net.sf.ehcache.CacheException;
 
 /**
  * An MBean implementation for attributes and operations on a view process.
- *
  */
 public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
@@ -71,13 +70,16 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   /**
    * Create a management View
    *
-   * @param viewProcess the underlying view process
-   * @param viewProcessor the view processor responsible for the view process
+   * @param viewProcess
+   *          the underlying view process
+   * @param viewProcessor
+   *          the view processor responsible for the view process
    * @param splitByViewProcessor
+   *          true to split by view processor
    */
   public ViewProcessMXBeanImpl(final ViewProcessInternal viewProcess,
-                               final ViewProcessor viewProcessor,
-                               final boolean splitByViewProcessor) {
+      final ViewProcessor viewProcessor,
+      final boolean splitByViewProcessor) {
     ArgumentChecker.notNull(viewProcess, "viewProcess");
     ArgumentChecker.notNull(viewProcessor, "ViewProcessor");
     _viewProcess = viewProcess;
@@ -156,7 +158,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
     try {
       final String beanNamePrefix = splitByViewProcessor ?
           "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName :
-          "com.opengamma:type=ViewProcessor";
+            "com.opengamma:type=ViewProcessor";
       return new ObjectName(beanNamePrefix + ",ViewProcesses=ViewProcesses,name=ViewProcess " + viewProcessId.getValue());
     } catch (final MalformedObjectNameException e) {
       throw new CacheException(e);
@@ -234,7 +236,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   public Long getTimeSinceLastSuccessfulCycle() {
     return _lastSuccessfulCycleTimeStamp != null ?
         _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) :
-        null;
+          null;
   }
 
   @Override

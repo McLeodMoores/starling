@@ -69,7 +69,6 @@ import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
@@ -149,15 +148,23 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Creates a view definition for a portfolio containing only equities that produces:
+   * Creates a view definition for a portfolio containing only equities that
+   * produces:
    * <ul>
-   * <li> {@link ValueRequirementNames#FAIR_VALUE}
-   * <li> {@link ValueRequirementNames#CAPM_BETA}
-   * <li> {@link ValueRequirementNames#HISTORICAL_VAR}
-   * <li> {@link ValueRequirementNames#SHARPE_RATIO}
-   * <li> {@link ValueRequirementNames#PNL}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#FAIR_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#CAPM_BETA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#HISTORICAL_VAR}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#SHARPE_RATIO}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PNL}
    * </ul>
-   * @param portfolioName The portfolio name
+   * 
+   * @param portfolioName
+   *          The portfolio name
    * @return The view definition
    */
   private ViewDefinition getEquityViewDefinition(final String portfolioName) {
@@ -183,13 +190,18 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for a swap portfolio that produces:
    * <ul>
-   * <li> {@link ValueRequirementNames#NOTIONAL}
-   * <li> {@link ValueRequirementNames#FIXED_RATE}
-   * <li> {@link ValueRequirementNames#SWAP_DETAILS}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#NOTIONAL}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#FIXED_RATE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#SWAP_DETAILS}
    * </ul>
    * The curve-specific risk outputs are not collapsed into a single column.
-   * @param portfolioName  the portfolio name
-   * @return  the view definition
+   * 
+   * @param portfolioName
+   *          the portfolio name
+   * @return the view definition
    */
   private ViewDefinition getSwapDetailsViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
@@ -218,9 +230,12 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for a swap portfolio that produces:
    * <ul>
-   *  <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   *  <li> {@link ValueRequirementNames#PV01}
-   *  <li> {@link ValueRequirementNames#BUCKETED_PV01}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PV01}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#BUCKETED_PV01}
    * <ul>
    */
   private ViewDefinition getSwapViewDefinition(final String portfolioName, final String viewName) {
@@ -264,9 +279,12 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for an OIS portfolio that produces:
    * <ul>
-   *  <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   *  <li> {@link ValueRequirementNames#PAR_RATE}
-   *  <li> {@link ValueRequirementNames#BUCKETED_PV01}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PAR_RATE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#BUCKETED_PV01}
    * <ul>
    */
   private ViewDefinition getOisViewDefinition(final String portfolioName, final String viewName) {
@@ -305,15 +323,24 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for an FX option portfolio that produces:
    * <ul>
-   * <li> {@link ValueRequirementNames#VOLATILITY_SURFACE_DATA}
-   * <li> {@link ValueRequirementNames#VEGA_QUOTE_MATRIX}
-   * <li> {@link ValueRequirementNames#VEGA_MATRIX}
-   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
-   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   * <li> {@link ValueRequirementNames#FX_CURRENCY_EXPOSURE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VOLATILITY_SURFACE_DATA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VEGA_QUOTE_MATRIX}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VEGA_MATRIX}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#FX_CURRENCY_EXPOSURE}
    * </ul>
-   * @param portfolioName The portfolio name
-   * @param viewName The view name
+   * 
+   * @param portfolioName
+   *          The portfolio name
+   * @param viewName
+   *          The view name
    * @return The view definition
    */
   private ViewDefinition getFxOptionViewDefinition(final String portfolioName, final String viewName) {
@@ -380,19 +407,32 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for an FX option portfolio that produces:
    * <ul>
-   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   * <li> {@link ValueRequirementNames#VALUE_DELTA}
-   * <li> {@link ValueRequirementNames#VALUE_VEGA}
-   * <li> {@link ValueRequirementNames#VALUE_GAMMA_P}
-   * <li> {@link ValueRequirementNames#VALUE_RHO}
-   * <li> {@link ValueRequirementNames#VALUE_PHI}
-   * <li> {@link ValueRequirementNames#VALUE_VOMMA}
-   * <li> {@link ValueRequirementNames#VALUE_VANNA}
-   * <li> {@link ValueRequirementNames#VALUE_THETA}
-   * <li> {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_DELTA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_VEGA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_GAMMA_P}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_RHO}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_PHI}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_VOMMA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_VANNA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_THETA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
    * </ul>
-   * @param portfolioName The portfolio name
-   * @param viewName The view name
+   * 
+   * @param portfolioName
+   *          The portfolio name
+   * @param viewName
+   *          The view name
    * @return The view definition
    */
   private ViewDefinition getFxOptionGreeksViewDefinition(final String portfolioName, final String viewName) {
@@ -421,14 +461,20 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Creates a view definition for a portfolio of AUD swaps where the curve configuration generates the
-   * three yield curves (discounting, 3m forward and 6m forward) simultaneously. This view produces:
+   * Creates a view definition for a portfolio of AUD swaps where the curve
+   * configuration generates the three yield curves (discounting, 3m forward and
+   * 6m forward) simultaneously. This view produces:
    * <ul>
-   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
-   * <li> {@link ValueRequirementNames#YIELD_CURVE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#YIELD_CURVE}
    * </ul>
-   * @param portfolioName The portfolio name
+   * 
+   * @param portfolioName
+   *          The portfolio name
    * @return The view definition
    */
   private ViewDefinition getAudSwapViewDefinition(final String portfolioName) {
@@ -485,17 +531,24 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Creates a view definition for a portfolio of FX forwards with two column sets showing the results
-   * of calculations by discounting with yield curves implied from FX forwards and of using the
-   * FX forward quotes directly.<p>
+   * Creates a view definition for a portfolio of FX forwards with two column
+   * sets showing the results of calculations by discounting with yield curves
+   * implied from FX forwards and of using the FX forward quotes directly.
+   * <p>
    * This view produces:
    * <ul>
-   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   * <li> {@link ValueRequirementNames#FX_CURRENCY_EXPOSURE}
-   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#FX_CURRENCY_EXPOSURE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
    * </ul>
-   * @param portfolioName The portfolio name
-   * @param viewName The view name
+   * 
+   * @param portfolioName
+   *          The portfolio name
+   * @param viewName
+   *          The view name
    * @return The view definition
    */
   private ViewDefinition getFxForwardViewDefinition(final String portfolioName, final String viewName) {
@@ -553,17 +606,24 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Creates a view definition for a portfolio of FX forwards with two column sets showing the results
-   * of calculations by discounting with yield curves implied from FX forwards and of using the
-   * FX forward quotes directly.<p>
+   * Creates a view definition for a portfolio of FX forwards with two column
+   * sets showing the results of calculations by discounting with yield curves
+   * implied from FX forwards and of using the FX forward quotes directly.
+   * <p>
    * This view produces:
    * <ul>
-   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   * <li> {@link ValueRequirementNames#FX_CURRENCY_EXPOSURE}
-   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#FX_CURRENCY_EXPOSURE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
    * </ul>
-   * @param portfolioName The portfolio name
-   * @param viewName The view name
+   * 
+   * @param portfolioName
+   *          The portfolio name
+   * @param viewName
+   *          The view name
    * @return The view definition
    */
   private ViewDefinition getFxForwardDetailsViewDefinition(final String portfolioName, final String viewName) {
@@ -588,12 +648,18 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for an index future portfolio producing:
    * <ul>
-   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
-   * <li> {@link ValueRequirementNames#VALUE_DELTA}
-   * <li> {@link ValueRequirementNames#VALUE_RHO}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_DELTA}
+   * <li>
+   * {@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#VALUE_RHO}
    * </ul>
-   * @param portfolioName The portfolio name
-   * @param viewName The view name
+   * 
+   * @param portfolioName
+   *          The portfolio name
+   * @param viewName
+   *          The view name
    * @return The view definition
    */
   private ViewDefinition getFutureViewDefinition(final String portfolioName, final String viewName) {

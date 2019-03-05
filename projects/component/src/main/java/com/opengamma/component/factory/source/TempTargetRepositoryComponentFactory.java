@@ -54,19 +54,16 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
   @PropertyDefinition
   private boolean _publishRest = true;
   /**
-   * Gets the path to use for storage if required and created locally.
-   * The folder will be created if it doesn't exist.
-   * If it does exist, any files or folders within it may be destroyed.
-   * If omitted a folder will be created with {@link Files#createTempDir}.
+   * Gets the path to use for storage if required and created locally. The folder will be created if it doesn't exist. If it does exist, any files or folders
+   * within it may be destroyed. If omitted a folder will be created with {@link Files#createTempDir}.
    * <p>
-   * Ignored if {@link #_remoteURL} is specified.
+   * Ignored if a remote URI is specified.
    */
   @PropertyDefinition
   private String _path;
   /**
-   * The URI of a remote repository to be used.
-   * When this is set, {@link #_publishRest} should normally be set to false
-   * - it is normally inefficient to "republish" a REST resource this way.
+   * The URI of a remote repository to be used. When this is set, {@link #setPublishRest(boolean)} should normally be set to false - it is normally inefficient
+   * to "republish" a REST resource this way.
    * <p>
    * If omitted, a local repository will be created.
    */
@@ -212,12 +209,10 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets gets the path to use for storage if required and created locally.
-   * The folder will be created if it doesn't exist.
-   * If it does exist, any files or folders within it may be destroyed.
-   * If omitted a folder will be created with {@link Files#createTempDir}.
+   * Gets gets the path to use for storage if required and created locally. The folder will be created if it doesn't exist. If it does exist, any files or folders
+   * within it may be destroyed. If omitted a folder will be created with {@link Files#createTempDir}.
    * <p>
-   * Ignored if {@link #_remoteURL} is specified.
+   * Ignored if a remote URI is specified.
    * @return the value of the property
    */
   public String getPath() {
@@ -225,12 +220,10 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets gets the path to use for storage if required and created locally.
-   * The folder will be created if it doesn't exist.
-   * If it does exist, any files or folders within it may be destroyed.
-   * If omitted a folder will be created with {@link Files#createTempDir}.
+   * Sets gets the path to use for storage if required and created locally. The folder will be created if it doesn't exist. If it does exist, any files or folders
+   * within it may be destroyed. If omitted a folder will be created with {@link Files#createTempDir}.
    * <p>
-   * Ignored if {@link #_remoteURL} is specified.
+   * Ignored if a remote URI is specified.
    * @param path  the new value of the property
    */
   public void setPath(String path) {
@@ -239,11 +232,9 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code path} property.
-   * The folder will be created if it doesn't exist.
-   * If it does exist, any files or folders within it may be destroyed.
-   * If omitted a folder will be created with {@link Files#createTempDir}.
+   * within it may be destroyed. If omitted a folder will be created with {@link Files#createTempDir}.
    * <p>
-   * Ignored if {@link #_remoteURL} is specified.
+   * Ignored if a remote URI is specified.
    * @return the property, not null
    */
   public final Property<String> path() {
@@ -252,9 +243,8 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the URI of a remote repository to be used.
-   * When this is set, {@link #_publishRest} should normally be set to false
-   * - it is normally inefficient to "republish" a REST resource this way.
+   * Gets the URI of a remote repository to be used. When this is set, {@link #setPublishRest(boolean)} should normally be set to false - it is normally inefficient
+   * to "republish" a REST resource this way.
    * <p>
    * If omitted, a local repository will be created.
    * @return the value of the property
@@ -264,9 +254,8 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the URI of a remote repository to be used.
-   * When this is set, {@link #_publishRest} should normally be set to false
-   * - it is normally inefficient to "republish" a REST resource this way.
+   * Sets the URI of a remote repository to be used. When this is set, {@link #setPublishRest(boolean)} should normally be set to false - it is normally inefficient
+   * to "republish" a REST resource this way.
    * <p>
    * If omitted, a local repository will be created.
    * @param remote  the new value of the property
@@ -277,8 +266,7 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code remote} property.
-   * When this is set, {@link #_publishRest} should normally be set to false
-   * - it is normally inefficient to "republish" a REST resource this way.
+   * to "republish" a REST resource this way.
    * <p>
    * If omitted, a local repository will be created.
    * @return the property, not null

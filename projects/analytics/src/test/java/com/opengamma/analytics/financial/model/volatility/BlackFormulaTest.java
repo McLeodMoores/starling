@@ -71,14 +71,18 @@ public class BlackFormulaTest {
 
     assertEquals(atmcall.computeForwardDelta() - 0.5, atmput.computeForwardDelta() + 0.5, EPS);
 
-    /* System.err.println("deltaneutralstrike = " + deltaneutralstrike);
-    System.err.println("delta neutral put = " + deltaneutralput.computeForwardDelta());
-    System.err.println("delta neutral call = " + deltaneutralcall.computeForwardDelta());
-    System.err.println("delta of atmcall = " + atmcall.computeForwardDelta());
-    System.err.println("delta of atmput = " + atmput.computeForwardDelta());
-    System.err.println("atmcall - 0.5 = " + (atmcall.computeForwardDelta()-0.5));
-    System.err.println("atmput - 0.5 = " + (0.5 + atmput.computeForwardDelta()));
-     */
+    // System.err.println("deltaneutralstrike = " + deltaneutralstrike);
+    // System.err.println("delta neutral put = " +
+    // deltaneutralput.computeForwardDelta());
+    // System.err.println("delta neutral call = " +
+    // deltaneutralcall.computeForwardDelta());
+    // System.err.println("delta of atmcall = " +
+    // atmcall.computeForwardDelta());
+    // System.err.println("delta of atmput = " + atmput.computeForwardDelta());
+    // System.err.println("atmcall - 0.5 = " +
+    // (atmcall.computeForwardDelta()-0.5));
+    // System.err.println("atmput - 0.5 = " + (0.5 +
+    // atmput.computeForwardDelta()));
   }
 
   @Test
@@ -106,7 +110,7 @@ public class BlackFormulaTest {
     assertEquals(strike75Call, strike25Put, EPS);
     assertEquals(strike90Call, strike10Put, EPS);
 
-    assertTrue((strike10Call > strike25Call) && (strike25Call > strike50Call) && (strike50Call > strike75Call) && (strike75Call > strike90Call));
+    assertTrue(strike10Call > strike25Call && strike25Call > strike50Call && strike50Call > strike75Call && strike75Call > strike90Call);
 
   }
 

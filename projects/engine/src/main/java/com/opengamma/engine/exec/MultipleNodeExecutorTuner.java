@@ -26,10 +26,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * <p>
- * Continuously tunes the parameters to a {@link MultipleNodeExecutorFactory} to maintain good performance while aspects of the computing
- * cluster change. Schedule this to run periodically to update its sampling and make continuous adjustments.
- * </p>
- * <h2>Tuning rules<h2>
+ * Continuously tunes the parameters to a {@link MultipleNodeExecutorFactory} to maintain good performance while aspects of the computing cluster change.
+ * Schedule this to run periodically to update its sampling and make continuous adjustments.
+ * <h2>Tuning rules</h2>
  * <p>
  * Set maximum concurrency to the average node count of the job invokers. Requires a {@link JobDispatcher}.
  * </p>

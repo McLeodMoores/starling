@@ -18,7 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
@@ -86,9 +87,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
     i.setDividendType("model/equityoption", DIVIDEND_TYPE_NONE);
     i.setForwardCurve("model/equityoption", "Discounting");
     i.setForwardCurveCalculationMethod("model/equityoption", ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD);
-    i.setForwardCurveInterpolator("model/equityoption", Interpolator1DFactory.DOUBLE_QUADRATIC);
-    i.setForwardCurveLeftExtrapolator("model/equityoption", Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
-    i.setForwardCurveRightExtrapolator("model/equityoption", Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    i.setForwardCurveInterpolator("model/equityoption", DoubleQuadraticInterpolator1dAdapter.NAME);
+    i.setForwardCurveLeftExtrapolator("model/equityoption", LinearExtrapolator1dAdapter.NAME);
+    i.setForwardCurveRightExtrapolator("model/equityoption", LinearExtrapolator1dAdapter.NAME);
     i.setSurfaceCalculationMethod("model/equityoption", BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL);
     i.setSurfaceInterpolationMethod("model/equityoption", BlackVolatilitySurfacePropertyNamesAndValues.SPLINE);
     i.setVolatilitySurface("model/equityoption", "DEFAULT");

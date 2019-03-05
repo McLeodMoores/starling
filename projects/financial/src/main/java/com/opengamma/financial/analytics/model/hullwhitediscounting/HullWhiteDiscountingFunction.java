@@ -58,8 +58,12 @@ import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
+import com.opengamma.financial.security.cash.CashSecurity;
+import com.opengamma.financial.security.cashflow.CashFlowSecurity;
+import com.opengamma.financial.security.fra.FRASecurity;
 import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
 import com.opengamma.financial.security.future.FederalFundsFutureSecurity;
+import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.financial.security.fx.NonDeliverableFXForwardSecurity;
 import com.opengamma.financial.security.option.SwaptionSecurity;
@@ -68,7 +72,6 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 
 /**
  * Base function for all pricing and risk functions that use curves constructed using the Hull-White discounting method. Produces results for trades with following underlying securities:
- * <p>
  * <ul>
  * <li> {@link CashSecurity}
  * <li> {@link CashFlowSecurity}

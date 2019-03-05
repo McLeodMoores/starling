@@ -73,7 +73,6 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * Returns the minimum number of items for each job.
    *
    * @return the number of items
-   * @see #setMinimumJobItems
    */
   public int getMinimumJobItems() {
     return _minimumJobItems;
@@ -95,7 +94,6 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * Returns the maximum number of items for each job.
    *
    * @return the number of items
-   * @see #setMaximumJobItems
    */
   public int getMaximumJobItems() {
     return _maximumJobItems;

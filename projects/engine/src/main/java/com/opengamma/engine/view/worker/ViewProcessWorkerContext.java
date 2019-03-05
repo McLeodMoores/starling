@@ -9,6 +9,7 @@ import org.threeten.bp.Instant;
 
 import com.opengamma.engine.view.ViewComputationResultModel;
 import com.opengamma.engine.view.ViewDefinition;
+import com.opengamma.engine.view.ViewProcess;
 import com.opengamma.engine.view.compilation.CompiledViewDefinitionWithGraphs;
 import com.opengamma.engine.view.cycle.ViewCycle;
 import com.opengamma.engine.view.cycle.ViewCycleMetadata;
@@ -17,16 +18,16 @@ import com.opengamma.engine.view.impl.ViewProcessContext;
 import com.opengamma.engine.view.impl.ViewProcessImpl;
 
 /**
- * Context information for a {@link ViewComputationJob}. This would probably be eventually backed by a {@link ViewProcessImpl}, but distribution of work
- * over remote nodes or multiple local threads might mean there are intermediate synthetic contexts.
+ * Context information for a {@link ViewProcess}. This would probably be eventually backed by a {@link ViewProcessImpl}, but distribution of work over remote
+ * nodes or multiple local threads might mean there are intermediate synthetic contexts.
  * <p>
- * Some of the callback methods can have very large parameters (for example dependency graphs, or result models) when called remotely. Any callbacks that
- * are not required by the receiver (for example the process has no active listeners for that event) should be silently discarded at the earliest opportunity
- * and not sent over the network.
+ * Some of the callback methods can have very large parameters (for example dependency graphs, or result models) when called remotely. Any callbacks that are
+ * not required by the receiver (for example the process has no active listeners for that event) should be silently discarded at the earliest opportunity and
+ * not sent over the network.
  * <p>
- * The callback methods must be called from a worker's critical path, allowing the context to control the execution sequence by blocking if required. If
- * it is not appropriate for the worker to be blocked during the notification then the context (and not the worker) must implement an appropriate mechanism
- * to allow control to return immediately to the worker while it performs an appropriate action.
+ * The callback methods must be called from a worker's critical path, allowing the context to control the execution sequence by blocking if required. If it is
+ * not appropriate for the worker to be blocked during the notification then the context (and not the worker) must implement an appropriate mechanism to allow
+ * control to return immediately to the worker while it performs an appropriate action.
  */
 public interface ViewProcessWorkerContext {
 

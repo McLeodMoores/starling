@@ -9,9 +9,9 @@ import com.opengamma.engine.target.logger.ResolutionLogger;
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
- * Specialised form of resolver that performs "deep" resolution based on a version/correction timestamp in addition to the primary resolution of the
- * top most object. For example, {@link Position} and any other portfolio structure objects gets deep resolved so that the they have securities attached
- * to them rather than just the identifiers that users must then resolve.
+ * Specialised form of resolver that performs "deep" resolution based on a version/correction timestamp in addition to the primary resolution of the top most
+ * object. For example, {@link com.opengamma.core.position.Position} and any other portfolio structure objects gets deep resolved so that the they have
+ * securities attached to them rather than just the identifiers that users must then resolve.
  */
 public interface DeepResolver {
 

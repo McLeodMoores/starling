@@ -20,8 +20,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * The <b>forward</b> value of the index, i.e. the fair strike of a forward agreement paying the index value at maturity,
- * as seen from the selected market data. <p>
+ * The <b>forward</b> value of the index, i.e. the fair strike of a forward agreement paying the index value at maturity, as seen from the selected market data.
  */
 public class EquityVanillaBarrierOptionForwardValueFunction extends EquityVanillaBarrierOptionBlackFunction {
 

@@ -28,10 +28,7 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Container for the relevant details for pricing a floating swap leg, with the
- * entries
- * <p>
- * <li></li>
+ * Container for the relevant details for pricing a floating swap leg.
  */
 @Deprecated
 @BeanDefinition

@@ -10,7 +10,7 @@ import java.util.Collection;
 import com.opengamma.engine.function.FunctionDefinition;
 
 /**
- * Source of {@link ExclusionGroup} instances.
+ * Source of {@link FunctionExclusionGroup} instances.
  */
 public interface FunctionExclusionGroups {
 
@@ -35,8 +35,11 @@ public interface FunctionExclusionGroups {
   /**
    * Creates a function exclusion group collection.
    *
-   * @param existing the previous exclusion groups, not null
-   * @param newGroup the group to also include in the new collection, not null
+   * @param existing
+   *          the previous exclusion groups, not null
+   * @param newGroup
+   *          the group to also include in the new collection, not null
+   * @return the exclusion groups
    */
   Collection<FunctionExclusionGroup> withExclusion(Collection<FunctionExclusionGroup> existing, FunctionExclusionGroup newGroup);
 

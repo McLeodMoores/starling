@@ -86,7 +86,8 @@ public class CurveGroupConfiguration extends DirectBean implements Serializable 
 
   /**
    * Resolves the types for each curve.
-   * @return map of CurveDefinition -> List<CurveTypeConfiguration>, not null
+   * 
+   * @return map of CurveDefinition -&gt; List&lt;CurveTypeConfiguration&gt;, not null
    */
   public Map<AbstractCurveDefinition, List<? extends CurveTypeConfiguration>> resolveTypesForCurves() {
 

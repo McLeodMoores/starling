@@ -24,7 +24,7 @@ import com.opengamma.util.PublicSPI;
 
 /**
  * Result from searching for legal entities.
- * <p/>
+ * <p>
  * The returned documents will match the search criteria.
  * See {@link LegalEntitySearchRequest} for more details.
  */
@@ -84,7 +84,7 @@ public class LegalEntitySearchResult extends AbstractSearchResult<LegalEntityDoc
 
   /**
    * Gets the single result expected from a query.
-   * <p/>
+   * <p>
    * This throws an exception if more than 1 result is actually available. Thus,
    * this method implies an assumption about uniqueness of the queried legal
    * entity.

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
@@ -42,11 +43,10 @@ public final class AuthUtils {
   /**
    * Returns the {@code PermissionResolver} that creates authorization {@code Permission} instances.
    * <p>
-   * The authorization system is based on {@link Permission} instances.
-   * A {@link PermissionResolver} is used as a factory to create {@code Permission} instances.
+   * The authorization system is based on {@link Permission} instances. A {@link org.apache.shiro.authz.permission.PermissionResolver} is used as a factory to
+   * create {@code Permission} instances.
    * <p>
-   * The permission resolver returned here is a singleton that provides the ability
-   * to switch the permission implementation based on a prefix.
+   * The permission resolver returned here is a singleton that provides the ability to switch the permission implementation based on a prefix.
    *
    * @return the singleton {@code PermissionResolver}, not null
    */
@@ -58,9 +58,8 @@ public final class AuthUtils {
   /**
    * Gets the single shared security manager.
    * <p>
-   * The shared security manager is used as a fallback when there is no manager
-   * in the {@link ThreadContext}.
-   * This will return a permissive security manager by default.
+   * The shared security manager is used as a fallback when there is no manager in the {@link org.apache.shiro.util.ThreadContext}. This will return a
+   * permissive security manager by default.
    *
    * @return the security manager, not null
    */
@@ -71,11 +70,11 @@ public final class AuthUtils {
   /**
    * Sets the single shared security manager.
    * <p>
-   * The shared security manager is used as a fallback when there is no manager
-   * in the {@link ThreadContext}.
-   * This method can only be called if the current manager is permissive.
+   * The shared security manager is used as a fallback when there is no manager in the {@link org.apache.shiro.util.ThreadContext}. This method can only be
+   * called if the current manager is permissive.
    *
-   * @param securityManager  the new security manager, not null
+   * @param securityManager
+   *          the new security manager, not null
    */
   public static void initSecurityManager(final SecurityManager securityManager) {
     if (isPermissive()) {

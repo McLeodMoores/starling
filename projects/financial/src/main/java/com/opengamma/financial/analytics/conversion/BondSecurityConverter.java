@@ -38,8 +38,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link BondSecurity} to the equivalent {@BondFixedSecurityDefinition} or
- * {@link PaymentFixedDefinition} (for zero-coupons) for use in pricing.
+ * Converts {@link BondSecurity} to the equivalent {@link BondFixedSecurityDefinition} or {@link PaymentFixedDefinition} (for zero-coupons) for use in pricing.
  */
 public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** Excluded coupon types */

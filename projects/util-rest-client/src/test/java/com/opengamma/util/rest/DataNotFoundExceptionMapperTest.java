@@ -77,7 +77,7 @@ public class DataNotFoundExceptionMapperTest extends AbstractExceptionMapperTest
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), "");
     assertTrue(data.get("locator").startsWith(
-        "<p>IllegalArgumentException<br />&nbsp;&nbsp;at com.opengamma.util.rest.DataNotFoundExceptionMapperTest.testNoOutputMessage()"));
+        "<p>IllegalArgumentException<br>&nbsp;&nbsp;at com.opengamma.util.rest.DataNotFoundExceptionMapperTest.testNoOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 
@@ -98,7 +98,7 @@ public class DataNotFoundExceptionMapperTest extends AbstractExceptionMapperTest
     assertEquals(data.size(), 2);
     assertEquals(data.get("message"), message);
     assertTrue(data.get("locator").startsWith(
-        "<p>OpenGammaRuntimeException<br />&nbsp;&nbsp;at com.opengamma.util.rest.DataNotFoundExceptionMapperTest.testOutputMessage()"));
+        "<p>OpenGammaRuntimeException<br>&nbsp;&nbsp;at com.opengamma.util.rest.DataNotFoundExceptionMapperTest.testOutputMessage()"));
     assertTrue(data.get("locator").endsWith("</p>"));
   }
 

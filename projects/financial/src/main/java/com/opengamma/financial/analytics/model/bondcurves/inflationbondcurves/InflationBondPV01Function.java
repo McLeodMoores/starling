@@ -51,8 +51,8 @@ public class InflationBondPV01Function extends InflationBondFromCurvesFunction<I
       new PV01CurveParametersInflationCalculator<>(PresentValueCurveSensitivityIssuerDiscountingInflationCalculator.getInstance());
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PV01} and
-   * sets the calculator to {@link PV01CurveParametersInflationCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PV01} and sets the calculator to
+   * {@link PV01CurveParametersInflationCalculator}
    */
   public InflationBondPV01Function() {
     super(PV01, CALCULATOR);

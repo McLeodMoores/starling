@@ -27,7 +27,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Key
+   *          the x0 value for which to get the value of the function
    * @param x1Key
+   *          the x1 value for which to get the value of the function
    * @return Value of piecewise polynomial function in 2D at (x0Key, x1Key)
    */
   public double evaluate(final PiecewisePolynomialResult2D pp, final double x0Key, final double x1Key) {
@@ -69,7 +71,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Keys
+   *          the x0 values for which to get the value of the function
    * @param x1Keys
+   *          the x1 values for which to get the value of the function
    * @return Values of piecewise polynomial function in 2D at (x0Keys_i, x1Keys_j)
    */
   public DoubleMatrix2D evaluate(final PiecewisePolynomialResult2D pp, final double[] x0Keys, final double[] x1Keys) {
@@ -124,7 +128,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Key
+   *          the x0 value for which to get the first derivative of the function
    * @param x1Key
+   *          the x1 value for which to get the first derivative of the function
    * @return Value of first derivative of two-dimensional piecewise polynomial function with respect to x0 at (x0Keys_i, x1Keys_j)
    */
   public double differentiateX0(final PiecewisePolynomialResult2D pp, final double x0Key, final double x1Key) {
@@ -162,7 +168,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Key
+   *          the x0 value for which to get the first derivative of the function
    * @param x1Key
+   *          the x1 value for which to get the first derivative of the function
    * @return Value of first derivative of two-dimensional piecewise polynomial function with respect to x1 at (x0Keys_i, x1Keys_j)
    */
   public double differentiateX1(final PiecewisePolynomialResult2D pp, final double x0Key, final double x1Key) {
@@ -200,7 +208,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Keys
+   *          the x0 values for which to get the first derivative of the function
    * @param x1Keys
+   *          the x1 values for which to get the first derivative of the function
    * @return Values of first derivative of two-dimensional piecewise polynomial function with respect to x0 at (x0Keys_i, x1Keys_j)
    */
   public DoubleMatrix2D differentiateX0(final PiecewisePolynomialResult2D pp, final double[] x0Keys, final double[] x1Keys) {
@@ -238,7 +248,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Keys
+   *          the x0 values for which to get the first derivative of the function
    * @param x1Keys
+   *          the x1 values for which to get the first derivative of the function
    * @return Values of first derivative of two-dimensional piecewise polynomial function with respect to x1 at (x0Keys_i, x1Keys_j)
    */
   public DoubleMatrix2D differentiateX1(final PiecewisePolynomialResult2D pp, final double[] x0Keys, final double[] x1Keys) {
@@ -276,7 +288,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Key
+   *          the x0 value for which to get the cross derivative of the function
    * @param x1Key
+   *          the x1 value for which to get the cross derivative of the function
    * @return Value of cross derivative of two-dimensional piecewise polynomial function at (x0Keys_i, x1Keys_j)
    */
   public double differentiateCross(final PiecewisePolynomialResult2D pp, final double x0Key, final double x1Key) {
@@ -315,7 +329,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Key
+   *          the x0 value for which to get the second derivative of the function
    * @param x1Key
+   *          the x1 value for which to get the second derivative of the function
    * @return Value of second derivative of two-dimensional piecewise polynomial function with respect to x0 at (x0Keys_i, x1Keys_j)
    */
   public double differentiateTwiceX0(final PiecewisePolynomialResult2D pp, final double x0Key, final double x1Key) {
@@ -353,7 +369,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Key
+   *          the x0 value for which to get the second derivative of the function
    * @param x1Key
+   *          the x1 value for which to get the second derivative of the function
    * @return Value of second derivative of two-dimensional piecewise polynomial function with respect to x1 at (x0Keys_i, x1Keys_j)
    */
   public double differentiateTwiceX1(final PiecewisePolynomialResult2D pp, final double x0Key, final double x1Key) {
@@ -391,7 +409,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Keys
+   *          the x0 values for which to get the cross derivative of the function
    * @param x1Keys
+   *          the x1 values for which to get the cross derivative of the function
    * @return Values of cross derivative of two-dimensional piecewise polynomial function at (x0Keys_i, x1Keys_j)
    */
   public DoubleMatrix2D differentiateCross(final PiecewisePolynomialResult2D pp, final double[] x0Keys, final double[] x1Keys) {
@@ -430,7 +450,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Keys
+   *          the x0 values for which to get the second derivative of the function
    * @param x1Keys
+   *          the x1 values for which to get the second derivative of the function
    * @return Values of second derivative of two-dimensional piecewise polynomial function with respect to x0 at (x0Keys_i, x1Keys_j)
    */
   public DoubleMatrix2D differentiateTwiceX0(final PiecewisePolynomialResult2D pp, final double[] x0Keys, final double[] x1Keys) {
@@ -468,7 +490,9 @@ public class PiecewisePolynomialFunction2D {
    * @param pp
    *          PiecewisePolynomialResult2D
    * @param x0Keys
+   *          the x0 values for which to get the second derivative of the function
    * @param x1Keys
+   *          the x1 values for which to get the second derivative of the function
    * @return Values of second derivative of two-dimensional piecewise polynomial function with respect to x1 at (x0Keys_i, x1Keys_j)
    */
   public DoubleMatrix2D differentiateTwiceX1(final PiecewisePolynomialResult2D pp, final double[] x0Keys, final double[] x1Keys) {
@@ -504,10 +528,15 @@ public class PiecewisePolynomialFunction2D {
 
   /**
    * @param coefMat
+   *          the coefficient matrix
    * @param x0
+   *          x0
    * @param x1
+   *          x1
    * @param leftKnot0
+   *          the left knot on the x0 axis
    * @param leftKnot1
+   *          the left knot on the x1 axis
    * @return sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij} (x0-leftKnots0)^{order0-1-i} (x1-leftKnots1)^{order0-1-j}
    */
   private double getValue(final DoubleMatrix2D coefMat, final double x0, final double x1, final double leftKnot0, final double leftKnot1) {

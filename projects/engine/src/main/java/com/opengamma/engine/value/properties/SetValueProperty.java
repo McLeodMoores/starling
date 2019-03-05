@@ -18,7 +18,7 @@ import com.google.common.collect.Sets;
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
 
 /**
- * Internal state used to implement a {@link ValueProperties} entry that has more than a small number of values.
+ * Internal state used to implement a {@link com.opengamma.engine.value.ValueProperties} entry that has more than a small number of values.
  */
 public final class SetValueProperty extends AbstractValueProperty {
 

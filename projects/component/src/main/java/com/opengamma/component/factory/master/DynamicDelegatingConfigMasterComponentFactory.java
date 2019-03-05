@@ -31,7 +31,7 @@ import com.opengamma.master.config.impl.RemoteConfigMaster;
 
 /**
  * Component factory for delegating master that maintains a map of delegate masters.
- * <p/>
+ * <p>
  * Register as both a generic ConfigMaster as well as the concrete type
  * DynamicDelegatingConfigMasterComponentFactory, to allow command processor
  * to access out of band methods like:

@@ -59,7 +59,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * Function that calculates the P&L for an FX forward due to movements in the yield curves used for pricing.
+ * Function that calculates the P&amp;L for an FX forward due to movements in the yield curves used for pricing.
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -82,7 +83,7 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
   }
 
   /**
-   * Compiled function that calculates the P&L for an FX forward due to movements in the yield curves used for pricing.
+   * Compiled function that calculates the P&amp;L for an FX forward due to movements in the yield curves used for pricing.
    */
   protected class Compiled extends AbstractInvokingCompiledFunction {
     /** The currency pairs */
@@ -262,7 +263,6 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
       final ValueRequirement desiredValue = desiredValues.iterator().next();
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> resultCurrencies = constraints.getValues(CURRENCY);
-      final FXForwardSecurity security = (FXForwardSecurity) position.getSecurity();
       final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D ycReturnSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs.getValue(ValueRequirementNames.YIELD_CURVE_RETURN_SERIES);
       final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D fcReturnSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs
           .getValue(ValueRequirementNames.FX_FORWARD_CURVE_RETURN_SERIES);

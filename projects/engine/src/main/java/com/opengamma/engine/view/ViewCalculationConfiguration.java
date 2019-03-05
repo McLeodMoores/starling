@@ -83,20 +83,18 @@ public class ViewCalculationConfiguration implements Serializable {
   private UniqueId _scenarioParametersId;
 
   /**
-   * A set of default properties for functions to configure themselves from. Note that these are intended to represent generic
-   * concepts that would typically be expressed through constraints, for example a default currency or default curve, that might
-   * apply to a number of functions and will affect graph construction. Information specific to a particular function to
-   * override its default execution behavior only (i.e. it will not affect the choice to use that function in the graph, or any
-   * other aspect of graph building) should be set using the {@link FunctionParameters} for that function (for example a Monte
-   * Carlo iteration count) - see {@link #_resolutionRuleTransform} - and not constraints or default properties.
+   * A set of default properties for functions to configure themselves from. Note that these are intended to represent generic concepts that would typically be
+   * expressed through constraints, for example a default currency or default curve, that might apply to a number of functions and will affect graph
+   * construction. Information specific to a particular function to override its default execution behavior only (i.e. it will not affect the choice to use that
+   * function in the graph, or any other aspect of graph building) should be set using the {@link com.opengamma.engine.function.FunctionParameters} for that
+   * function (for example a Monte Carlo iteration count) - see {@link #_resolutionRuleTransform} - and not constraints or default properties.
    */
   private ValueProperties _defaultProperties = ValueProperties.none();
 
   /**
-   * A transformation to apply to the default resolution rules created by the view processor. Altering the resolution rules can
-   * affect dependency graph construction by allowing functions to be suppressed and/or priorities changed. The default parameters
-   * for functions can also be adjusted, either globally or using a {@link ComputationTargetFilter} to affect only a specific
-   * subset of the graph.
+   * A transformation to apply to the default resolution rules created by the view processor. Altering the resolution rules can affect dependency graph
+   * construction by allowing functions to be suppressed and/or priorities changed. The default parameters for functions can also be adjusted, either globally
+   * or using a {@link com.opengamma.engine.function.resolver.ComputationTargetFilter} to affect only a specific subset of the graph.
    */
   private ResolutionRuleTransform _resolutionRuleTransform = IdentityResolutionRuleTransform.INSTANCE;
 
@@ -131,7 +129,6 @@ public class ViewCalculationConfiguration implements Serializable {
    * Copies this view calculation configuration to a new parent view definition, adding the copy to the new owner.
    *
    * @param newOwner  the new parent view definition, not null
-   * @return
    */
   public void copyTo(final ViewDefinition newOwner) {
     final ViewCalculationConfiguration copy = new ViewCalculationConfiguration(newOwner, getName());

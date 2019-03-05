@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.authz.permission.InvalidPermissionStringException;
 import org.apache.shiro.authz.permission.PermissionResolver;
 
 import com.google.common.base.Throwables;
@@ -112,9 +113,11 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * <p>
    * The returned set of permissions may be smaller than the input set.
    *
-   * @param permissionStrings  the set of permission strings, not null
+   * @param permissionStrings
+   *          the set of permission strings, not null
    * @return the set of permission objects, not null
-   * @throws InvalidPermissionStringException if the permission string is invalid
+   * @throws org.apache.shiro.authz.permission.InvalidPermissionStringException
+   *           if the permission string is invalid
    */
   public ImmutableList<Permission> resolvePermissions(final String... permissionStrings) {
     ArgumentChecker.notNull(permissionStrings, "permissionStrings");
@@ -130,9 +133,11 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    * <p>
    * The returned set of permissions may be smaller than the input set.
    *
-   * @param permissionStrings  the set of permission strings, not null
+   * @param permissionStrings
+   *          the set of permission strings, not null
    * @return the set of permission objects, not null
-   * @throws InvalidPermissionStringException if the permission string is invalid
+   * @throws org.apache.shiro.authz.permission.InvalidPermissionStringException
+   *           if the permission string is invalid
    */
   public ImmutableSet<Permission> resolvePermissions(final Collection<String> permissionStrings) {
     ArgumentChecker.notNull(permissionStrings, "permissionStrings");
@@ -194,9 +199,9 @@ public final class ShiroPermissionResolver implements PermissionResolver {
    *
    * @param subjectPermissions  the set of permissions held by the subject, not null
    * @param requiredPermissions  the permissions that are required, not null
-   * @throws UnauthenticatedException if permission was denied due to invalid user authentication
+   * @throws org.apache.shiro.authz.UnauthenticatedException if permission was denied due to invalid user authentication
    * @throws UnauthorizedException if the user does not have the requested permission
-   * @throws AuthorizationException if permission was denied due to some other issue
+   * @throws org.apache.shiro.authz.AuthorizationException if permission was denied due to some other issue
    */
   public void checkPermissions(final Collection<Permission> subjectPermissions, final Collection<Permission> requiredPermissions) {
     // try bulk check

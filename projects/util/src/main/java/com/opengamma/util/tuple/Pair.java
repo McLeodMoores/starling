@@ -32,7 +32,7 @@ import com.opengamma.util.PublicAPI;
  */
 @PublicAPI
 public abstract class Pair<A, B>
-    implements ImmutableBean, Map.Entry<A, B>, Comparable<Pair<A, B>>, Serializable {
+implements ImmutableBean, Map.Entry<A, B>, Comparable<Pair<A, B>>, Serializable {
   // this ImmutableBean is not auto-generated
 
   /** Serialization version. */
@@ -214,14 +214,14 @@ public abstract class Pair<A, B>
   /**
    * Compares the pair based on the first element followed by the second element.
    * <p>
-   * A Pair <i>(x<sub>1</sub>, y<sub>1</sub>)</i> is less than another pair
-   * <i>(x<sub>2</sub>, y<sub>2</sub>)</i> if one of these is true:<br />
+   * A Pair <i>(x<sub>1</sub>, y<sub>1</sub>)</i> is less than another pair <i>(x<sub>2</sub>, y<sub>2</sub>)</i> if one of these is true:<br>
    * <i>x<sub>1</sub> &lt; x<sub>2</sub></i><br>
    * <i>x<sub>1</sub> = x<sub>2</sub></i> and <i>y<sub>1</sub> &lt; y<sub>2</sub></i>
    * <p>
    * The element types must be {@code Comparable}.
    *
-   * @param other  the other pair, not null
+   * @param other
+   *          the other pair, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override

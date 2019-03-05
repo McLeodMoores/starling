@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -12,12 +12,12 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 2D interpolator for gridded data using 1D piecewise polynomial spline interpolators. 
- * Given a set of data (x0Values_i, x1Values_j, yValues_{ij}), find values, first derivatives and second derivatives of the corresponding interpolant at (x0Keys_k, x1Keys_l). 
+ * 2D interpolator for gridded data using 1D piecewise polynomial spline interpolators.
+ * Given a set of data (x0Values_i, x1Values_j, yValues_{ij}), find values, first derivatives and second derivatives of the corresponding interpolant at (x0Keys_k, x1Keys_l).
  */
 public class MeshgridInterpolator2D {
 
-  private PiecewisePolynomialInterpolator[] _method;
+  private final PiecewisePolynomialInterpolator[] _method;
 
   /**
    * Constructor which can take different methods for x0 and x1
@@ -42,12 +42,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Key 
-   * @param x1Key 
-   * @return Value of 2D interpolant at (x0Key, x1Key) 
+   * Gets the interpolated value at <code>(x0Key, x1Key)</code>.
+   *
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Key
+   *          the x0 value for which the interpolated value is required
+   * @param x1Key
+   *          the x1 value for which the interpolated value is required
+   * @return Value of 2D interpolant at <code>(x0Key, x1Key)</code>
    */
   public double interpolate(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double x0Key, final double x1Key) {
     final double[] interpX1 = _method[1].interpolate(x1Values, yValues, x1Key).getData();
@@ -55,12 +62,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Keys 
-   * @param x1Keys 
-   * @return Values of 2D interpolant at (x0Key_i, x1Keys_j) 
+   * Gets the interpolated values at <code>(x0Key_i, x1Key_j)</code> for all i and j in the vectors.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Keys
+   *          the x0 values for which the interpolated value is required
+   * @param x1Keys
+   *          the x1 values for which the interpolated value is required
+   * @return Values of 2D interpolant at <code>(x0Key_i, x1Keys_j)</code>
    */
   public DoubleMatrix2D interpolate(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double[] x0Keys, final double[] x1Keys) {
     final double[][] interpX1 = OG_ALGEBRA.getTranspose(_method[1].interpolate(x1Values, yValues, x1Keys)).getData();
@@ -68,12 +82,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Key 
-   * @param x1Key 
-   * @return Value of first derivative with respect to x0 at (x0Key, x1Key) 
+   * Gets the first derivative of the surface with respect to x0 at <code>(x0Key, x1Key)</code>.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Key
+   *          the x0 value for which the interpolated value is required
+   * @param x1Key
+   *          the x1 value for which the interpolated value is required
+   * @return Value of first derivative with respect to x0 at <code>(x0Key, x1Key)</code>
    */
   public double differentiateX0(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double x0Key, final double x1Key) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
@@ -82,12 +103,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Keys 
-   * @param x1Keys 
-   * @return Values of first derivative with respect to x0 at (x0Key_i, x1Keys_j) 
+   * Gets the first derivative of the surface with respect to x0 at <code>(x0Key_i, x1Key_j)</code> for all i and j in the vectors.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Keys
+   *          the x0 values for which the interpolated value is required
+   * @param x1Keys
+   *          the x1 values for which the interpolated value is required
+   * @return Values of first derivative with respect to x0 at <code>(x0Key_i, x1Keys_j)</code>
    */
   public DoubleMatrix2D differentiateX0(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double[] x0Keys, final double[] x1Keys) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
@@ -96,12 +124,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Key 
-   * @param x1Key 
-   * @return Value of second derivative with respect to x0 at (x0Key, x1Key) 
+   * Gets the second derivative of the surface with respect to x0 at <code>(x0Key, x1Key)</code>.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Key
+   *          the x0 value for which the interpolated value is required
+   * @param x1Key
+   *          the x1 value for which the interpolated value is required
+   * @return Value of second derivative with respect to x0 at <code>(x0Key, x1Key)</code>
    */
   public double differentiateX0Twice(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double x0Key, final double x1Key) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
@@ -110,12 +145,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Keys 
-   * @param x1Keys 
-   * @return Values of second derivative with respect to x0 at (x0Key_i, x1Keys_j) 
+   * Gets the second derivative of the surface with respect to x0 at <code>(x0Key_i, x1Key_j)</code> for all i and j in the vectors.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Keys
+   *          the x0 values for which the interpolated value is required
+   * @param x1Keys
+   *          the x1 values for which the interpolated value is required
+   * @return Values of second derivative with respect to x0 at <code>(x0Key_i, x1Keys_j)</code>
    */
   public DoubleMatrix2D differentiateX0Twice(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double[] x0Keys, final double[] x1Keys) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
@@ -125,12 +167,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Key 
-   * @param x1Key 
-   * @return Value of first derivative with respect to x1 at (x0Key, x1Key) 
+   * Gets the first derivative of the surface with respect to x1 at <code>(x0Key, x1Key)</code>.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Key
+   *          the x0 value for which the interpolated value is required
+   * @param x1Key
+   *          the x1 value for which the interpolated value is required
+   * @return Value of first derivative with respect to x1 at <code>(x0Key, x1Key)</code>
    */
   public double differentiateX1(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double x0Key, final double x1Key) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
@@ -139,12 +188,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Keys 
-   * @param x1Keys 
-   * @return Values of first derivative with respect to x1 at (x0Key_i, x1Keys_j) 
+   * Gets the first derivative of the surface with respect to x1 at <code>(x0Key_i, x1Key_j)</code> for all i and j in the vectors.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Keys
+   *          the x0 values for which the interpolated value is required
+   * @param x1Keys
+   *          the x1 values for which the interpolated value is required
+   * @return Values of first derivative with respect to x1 at <code>(x0Key_i, x1Keys_j)</code>
    */
   public DoubleMatrix2D differentiateX1(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double[] x0Keys, final double[] x1Keys) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
@@ -153,12 +209,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Key 
-   * @param x1Key 
-   * @return Value of second derivative with respect to x1 at (x0Key, x1Key) 
+   * Gets the second derivative of the surface with respect to x1 at <code>(x0Key, x1Key)</code>.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Key
+   *          the x0 value for which the interpolated value is required
+   * @param x1Key
+   *          the x1 value for which the interpolated value is required
+   * @return Value of second derivative with respect to x1 at <code>(x0Key, x1Key)</code>
    */
   public double differentiateX1Twice(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double x0Key, final double x1Key) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
@@ -167,12 +230,19 @@ public class MeshgridInterpolator2D {
   }
 
   /**
-   * @param x0Values 
-   * @param x1Values 
-   * @param yValues 
-   * @param x0Keys 
-   * @param x1Keys 
-   * @return Values of second derivative with respect to x1 at (x0Key_i, x1Keys_j) 
+   * Gets the second derivative of the surface with respect to x1 at <code>(x0Key_i, x1Key_j)</code> for all i and j in the vectors.
+   * 
+   * @param x0Values
+   *          the values in the x0 direction
+   * @param x1Values
+   *          the values in the x1 direction
+   * @param yValues
+   *          the values in the y direction
+   * @param x0Keys
+   *          the x0 values for which the interpolated value is required
+   * @param x1Keys
+   *          the x1 values for which the interpolated value is required
+   * @return Values of second derivative with respect to x1 at <code>(x0Key_i, x1Keys_j)</code>
    */
   public DoubleMatrix2D differentiateX1Twice(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double[] x0Keys, final double[] x1Keys) {
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();

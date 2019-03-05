@@ -55,10 +55,15 @@ public abstract class DividendFunctionProvider {
 
   /**
    * Compute correction to asset price due to dividends up to the k-th payment
-   * @param assetPrice The asset price just before the k-th payment
-   * @param interestRate The interest rate
-   * @param offset Time in the layer just before the k-th payment
+   * 
+   * @param assetPrice
+   *          The asset price just before the k-th payment
+   * @param interestRate
+   *          The interest rate
+   * @param offset
+   *          Time in the layer just before the k-th payment
    * @param k
+   *          the k-th payment
    * @return The correction
    */
   public abstract double dividendCorrections(final double assetPrice, final double interestRate, final double offset, final int k);

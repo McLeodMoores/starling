@@ -76,33 +76,39 @@ public abstract class Result<T> {
   public abstract ImmutableSet<Failure> getFailures();
 
   /**
-   * Applies a function to a result's value if the result is a success.
-   * If the result is a failure then a failure is returned without applying the function.
+   * Applies a function to a result's value if the result is a success. If the result is a failure then a failure is returned without applying the function.
    * Useful for applying logic to a successful result using Java 8 lambdas without having to check the status.
+   * 
    * <pre>
    *   result = ...
-   *   return result.ifSuccess(value -> doSomething(value));
+   *   return result.ifSuccess(value -&gt; doSomething(value));
    * </pre>
+   * 
    * Identical to {@link #flatMap}
    *
-   * @param <U>  the required type of the new result object
-   * @param function  the function to transform the value with, not null
+   * @param <U>
+   *          the required type of the new result object
+   * @param function
+   *          the function to transform the value with, not null
    * @return the new result, not null
    */
   public abstract <U> Result<U> ifSuccess(Function<T, Result<U>> function);
 
   /**
-   * Applies a function to a result's value if the result is a success.
-   * If the result is a failure then a failure is returned without applying the function.
+   * Applies a function to a result's value if the result is a success. If the result is a failure then a failure is returned without applying the function.
    * Useful for applying logic to a successful result using Java 8 lambdas without having to check the status.
+   * 
    * <pre>
    *   result = ...
-   *   return result.flatMap(value -> doSomething(value));
+   *   return result.flatMap(value -&gt; doSomething(value));
    * </pre>
+   * 
    * Identical to {@link #ifSuccess}
    *
-   * @param <U>  the required type of the new result object
-   * @param function  the function to transform the value with, not null
+   * @param <U>
+   *          the required type of the new result object
+   * @param function
+   *          the function to transform the value with, not null
    * @return the new result, not null
    */
   public <U> Result<U> flatMap(final Function<T, Result<U>> function) {
@@ -110,19 +116,23 @@ public abstract class Result<T> {
   }
 
   /**
-   * Combines this result's value with another result's value using a binary function if both are successes.
-   * If either result is a failure then a failure is returned without applying the function.
-   * Useful for applying logic to successful results using Java 8 lambdas without having to check the statuses.
+   * Combines this result's value with another result's value using a binary function if both are successes. If either result is a failure then a failure is
+   * returned without applying the function. Useful for applying logic to successful results using Java 8 lambdas without having to check the statuses.
+   * 
    * <pre>
    *   result1 = ...
    *   result2 = ...
-   *   return result1.combineWith(result2, (value1, value2) -> doSomething(value1, value2);
+   *   return result1.combineWith(result2, (value1, value2) -&gt; doSomething(value1, value2);
    * </pre>
    *
-   * @param other  another result
-   * @param function  a function for combining values from two results
-   * @param <U> the type of the other result's value
-   * @param <V> the type of the value in the returned result
+   * @param other
+   *          another result
+   * @param function
+   *          a function for combining values from two results
+   * @param <U>
+   *          the type of the other result's value
+   * @param <V>
+   *          the type of the value in the returned result
    * @return a the result of combining the result values or a failure if either result is a failure
    */
   public abstract <U, V> Result<V> combineWith(Result<U> other, Function2<T, U, Result<V>> function);

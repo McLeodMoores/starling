@@ -11,9 +11,9 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.Interest
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureTransaction;
 
 /**
- * Provides the reference margin price,
- * for futures, options and other exchange traded securities that are margined. <p>
- * This is typically last night's close price, but may, on the trade date itself, be the trade price.<p>
+ * Provides the reference margin price, for futures, options and other exchange traded securities that are margined.
+ * <p>
+ * This is typically last night's close price, but may, on the trade date itself, be the trade price.
  */
 public class MarginPriceVisitor extends InstrumentDerivativeVisitorAdapter<Void, Double> {
 

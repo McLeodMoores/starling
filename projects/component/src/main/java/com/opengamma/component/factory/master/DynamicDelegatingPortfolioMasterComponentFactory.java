@@ -31,13 +31,10 @@ import com.opengamma.master.portfolio.impl.RemotePortfolioMaster;
 
 /**
  * Component factory for delegating master that maintains a map of delegate masters.
- * <p/>
- * Register as both a generic PortfolioMaster as well as the concrete type
- * DynamicDelegatingPortfolioMasterComponentFactory, to allow command processor
- * to access out of band methods like:
- * {@link DynamicDelegatingPortfolioMaster#register(String, PortfolioMaster)},
- * {@link DynamicDelegatingPortfolioMaster#deregister(String)} and
- * {@link DynamicDelegatingPortfolioMaster#add(String, PortfolioDocument)}
+ * <p>
+ * Register as both a generic PortfolioMaster as well as the concrete type DynamicDelegatingPortfolioMasterComponentFactory, to allow command processor to
+ * access out of band methods like: {@link DynamicDelegatingPortfolioMaster#register(String, PortfolioMaster)},
+ * {@link DynamicDelegatingPortfolioMaster#deregister(String)} and {@link DynamicDelegatingPortfolioMaster#add(String, PortfolioDocument)}
  */
 @BeanDefinition
 public class DynamicDelegatingPortfolioMasterComponentFactory extends AbstractComponentFactory {

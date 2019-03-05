@@ -28,7 +28,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Container for the relevant details for pricing a fixed swap leg, with the entries
- * <p>
+ * <ul>
  * <li>Start accrual date</li>
  * <li>End accrual date</li>
  * <li>Payment time</li>
@@ -38,7 +38,7 @@ import com.opengamma.util.money.CurrencyAmount;
  * <li>Notional</li>
  * <li>Rate</li>
  * <li>Discounted payment amount</li>
- * <p>
+ * </ul>
  * There is an entry for each coupon in a fixed leg.
  */
 @Deprecated

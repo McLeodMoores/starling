@@ -24,6 +24,7 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  *
  * @param <T>
+ *          The type of the market data
  */
 public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends TreeOptionModel<OptionDefinition, T> {
   private final int _n;

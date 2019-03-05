@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.stochastic;
@@ -12,9 +12,11 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.function.Function2D;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the option
  * @param <U>
+ *          The type of the market data
  */
 public abstract class StochasticProcess<T, U> {
 

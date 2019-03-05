@@ -61,11 +61,10 @@ import com.opengamma.util.tuple.Pairs;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
- * A function that uses information from a raw volatility surface (i.e. only that contains only market quotes,
- * which could be either prices or implied volatilities) and converts it to a surface containing volatility
- * values by implying the volatility using either the Black model if the options are European or the
- * Bjerksund-Stensland if the options are American. The standardised volatility surface has no empty values,
- * expiry is in years, and the strike and volatility scale is without unit (35% -> 0.35).
+ * A function that uses information from a raw volatility surface (i.e. only that contains only market quotes, which could be either prices or implied
+ * volatilities) and converts it to a surface containing volatility values by implying the volatility using either the Black model if the options are European
+ * or the Bjerksund-Stensland if the options are American. The standardised volatility surface has no empty values, expiry is in years, and the strike and
+ * volatility scale is without unit (35% -&gt; 0.35).
  */
 public class EquityOptionVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */

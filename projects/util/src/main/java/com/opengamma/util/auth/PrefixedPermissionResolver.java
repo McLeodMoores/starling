@@ -28,9 +28,11 @@ public interface PrefixedPermissionResolver extends PermissionResolver {
   /**
    * Resolves a single permission from the string form.
    *
-   * @param permissionString  the string representation of a permission, not null
+   * @param permissionString
+   *          the string representation of a permission, not null
    * @return the equivalent permission object, not null
-   * @throws InvalidPermissionStringException if the permission string is invalid
+   * @throws org.apache.shiro.authz.permission.InvalidPermissionStringException
+   *           if the permission string is invalid
    */
   @Override
   Permission resolvePermission(String permissionString);

@@ -26,6 +26,7 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  *
  * @param <T>
+ *          the type of the data
  */
 public class BinomialOptionModel<T extends StandardOptionDataBundle> extends TreeOptionModel<OptionDefinition, T> {
   private final int _n;

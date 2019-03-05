@@ -51,9 +51,9 @@ public class RawEquityFutureOptionVolatilitySurfaceDataFunction extends RawVolat
   /**
    * The postfix (e.g. Index, Equity) is removed from the Bloomberg ticker when constructing the surface name, so the full name of a surface with
    * <ul>
-   * <li>definitionName = OPENGAMMA
-   * <li>target=BLOOMBERG_TICKER~DJX Index
-   * <ul>
+   * <li>definitionName = OPENGAMMA</li>
+   * <li>target=BLOOMBERG_TICKER~DJX Index</li>
+   * </ul>
    * is OPENGAMMA_DJX_EQUITY_FUTURE_OPTION {@inheritDoc}
    */
   @Override
@@ -70,9 +70,9 @@ public class RawEquityFutureOptionVolatilitySurfaceDataFunction extends RawVolat
   /**
    * The postfix (e.g. Index, Equity) is removed from the Bloomberg ticker when constructing the surface name, so the full name of a surface with
    * <ul>
-   * <li>specificationName = OPENGAMMA
-   * <li>target=BLOOMBERG_TICKER~DJX Index
-   * <ul>
+   * <li>specificationName = OPENGAMMA</li>
+   * <li>target=BLOOMBERG_TICKER~DJX Index</li>
+   * </ul>
    * is OPENGAMMA_DJX_EQUITY_FUTURE_OPTION {@inheritDoc}
    */
   @Override

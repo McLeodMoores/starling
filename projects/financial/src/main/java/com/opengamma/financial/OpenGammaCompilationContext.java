@@ -353,6 +353,9 @@ public final class OpenGammaCompilationContext {
   }
 
   /**
+   * @param compilationContext
+   *          the compilation context
+   * @return a currency pairs source
    * @deprecated [PLAT-2782] interim measure to request data via function inputs, or targets
    */
   @Deprecated

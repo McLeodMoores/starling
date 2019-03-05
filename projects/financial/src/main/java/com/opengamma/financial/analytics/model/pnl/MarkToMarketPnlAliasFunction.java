@@ -14,7 +14,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.value.ValueRenamingFunction;
 
 /**
- * Renames ValueRequirementNames.MTM_PNL ("Mark-to-Market P&L") to arbitrary value
+ * Renames ValueRequirementNames.MTM_PNL to arbitrary value.
  */
 public class MarkToMarketPnlAliasFunction extends ValueRenamingFunction {
 

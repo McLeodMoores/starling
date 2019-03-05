@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fudgemsg;
@@ -28,20 +28,27 @@ import com.opengamma.util.ClassUtils;
  * Base class for builders of {@link LabelledMatrix3D} subclasses. Basic message structure is:
  * <dl>
  * <dd>[X|Y|Z]_KEYS</dd>
- * <dt>The values of the keys. The default encoding is a sub-message containing the keys as anonymous fields, but if the keys are primitive types it may use one of the built-in Fudge array types.</dt>
+ * <dt>The values of the keys. The default encoding is a sub-message containing the keys as anonymous fields, but if the keys are primitive types it may use one
+ * of the built-in Fudge array types.</dt>
  * <dd>[X|Y|Z]_LABELS</dd>
  * <dt>The values of the labels as a sub-message containing an anonymous field for each value.</dt>
  * <dd>[X|Y|Z]_TYPES</dd>
- * <dt>Additional type information for the labels as a sub-message containing an anonymous field for each value in <code>?_LABELS</code>. If a numeric value, this is the Fudge type identifier of the
- * original value. If a string value, this is a class name of the original type. This is an optional field. If omitted, default types will be inferred from <code>?_LABELS</code>. It will only be
- * generated if the inferred types differ from the actual types.</dt>
+ * <dt>Additional type information for the labels as a sub-message containing an anonymous field for each value in <code>?_LABELS</code>. If a numeric value,
+ * this is the Fudge type identifier of the original value. If a string value, this is a class name of the original type. This is an optional field. If omitted,
+ * default types will be inferred from <code>?_LABELS</code>. It will only be generated if the inferred types differ from the actual types.</dt>
  * <dd>VALUES</dd>
- * <dt>A flattened array of matrix data, e.g. <code>{ { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } }</code> becomes <code>{ 1, 2, 3, 4, 5, 6, 7, 8 }</code>.</dt>
+ * <dt>A flattened array of matrix data, e.g. <code>{ { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } }</code> becomes
+ * <code>{ 1, 2, 3, 4, 5, 6, 7, 8 }</code>.</dt>
+ * </dl>
  * 
- * @param <KX> X key type
- * @param <KY> Y key type
- * @param <KZ> Z key type
- * @param <T> sub-type of matrix to build
+ * @param <KX>
+ *          X key type
+ * @param <KY>
+ *          Y key type
+ * @param <KZ>
+ *          Z key type
+ * @param <T>
+ *          sub-type of matrix to build
  */
 public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends LabelledMatrix3D<KX, KY, KZ, ?, ?, ?, T>> extends AbstractFudgeBuilder<T> {
 
@@ -105,7 +112,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * General purpose label writer.
-   * 
+   *
    * @param serializer serialization context
    * @param message message to add the key to
    * @param labels labels to add
@@ -116,7 +123,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
     final MutableFudgeMsg valueMsg = serializer.newMessage();
     final MutableFudgeMsg typeMsg = serializer.newMessage();
     boolean needsTypeInfo = false;
-    for (Object label : labels) {
+    for (final Object label : labels) {
       final FudgeFieldType type = serializer.getFudgeContext().getTypeDictionary().getByJavaType(label.getClass());
       if (type == null) {
         serializer.addToMessage(valueMsg, null, null, label);
@@ -152,7 +159,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * General purpose key writer; defaults to {@link #writeKeys} - override in a subclass for more efficient handling.
-   * 
+   *
    * @param serializer serialization context
    * @param message message to add the key to
    * @param keys keys to add
@@ -163,7 +170,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * General purpose key writer; defaults to {@link #writeKeys} - override in a subclass for more efficient handling.
-   * 
+   *
    * @param serializer serialization context
    * @param message message to add the key to
    * @param keys keys to add
@@ -174,7 +181,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * General purpose key writer; defaults to {@link #writeKeys} - override in a subclass for more efficient handling.
-   * 
+   *
    * @param serializer serialization context
    * @param message message to add the key to
    * @param keys keys to add
@@ -185,7 +192,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * General purposes key writer; add each key as a field to a sub-message.
-   * 
+   *
    * @param <K> type of key
    * @param serializer serialization context
    * @param message message to add the keys to
@@ -195,7 +202,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
    */
   protected <K> void writeKeys(final FudgeSerializer serializer, final MutableFudgeMsg message, final K[] keys, final Class<K> keyClass, final String keysKey) {
     final MutableFudgeMsg submsg = serializer.newMessage();
-    for (K key : keys) {
+    for (final K key : keys) {
       serializer.addToMessageWithClassHeaders(submsg, null, null, key, keyClass);
     }
     message.add(keysKey, submsg);
@@ -211,7 +218,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * General purpose value writer.
-   * 
+   *
    * @param message message to add the values to
    * @param values values to add
    */
@@ -221,8 +228,8 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
     final int x = values[0][0].length;
     final double[] flat = new double[z * y * x];
     int i = 0;
-    for (double[][] slice : values) {
-      for (double[] row : slice) {
+    for (final double[][] slice : values) {
+      for (final double[] row : slice) {
         System.arraycopy(row, 0, flat, i, row.length);
         i += row.length;
       }
@@ -247,7 +254,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * Inverse of {@link #writeLabels}.
-   * 
+   *
    * @param deserializer deserialization context
    * @param message message to read from
    * @param labelsKey name of the field containing label values
@@ -263,7 +270,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
     final Object[] labels = new Object[valueMsg.getNumFields()];
     final FudgeMsg typeMsg = message.getMessage(labelTypesKey);
     final Iterator<FudgeField> itrValue = valueMsg.iterator();
-    final Iterator<FudgeField> itrType = (typeMsg != null) ? typeMsg.iterator() : null;
+    final Iterator<FudgeField> itrType = typeMsg != null ? typeMsg.iterator() : null;
     int i = 0;
     while (itrValue.hasNext()) {
       Class<?> type = null;
@@ -273,7 +280,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
         if (val instanceof String) {
           try {
             type = ClassUtils.loadClass((String) val);
-          } catch (ClassNotFoundException e) {
+          } catch (final ClassNotFoundException e) {
             LOGGER.warn("Message field {} requires unknown class {}", i, val);
             type = Object.class;
           }
@@ -290,7 +297,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * Inverse of {@link #readXKeys}.
-   * 
+   *
    * @param deserializer deserialization context
    * @param message message to read from
    * @return the keys
@@ -301,7 +308,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * Inverse of {@link #readXKeys}.
-   * 
+   *
    * @param deserializer deserialization context
    * @param message message to read from
    * @return the keys
@@ -312,7 +319,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * Inverse of {@link #readXKeys}.
-   * 
+   *
    * @param deserializer deserialization context
    * @param message message to read from
    * @return the keys
@@ -323,7 +330,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * Inverse of {@link #writeKeys}.
-   * 
+   *
    * @param <K> key type
    * @param deserializer deserialization context
    * @param message message to read from
@@ -340,7 +347,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
     }
     final K[] keys = (K[]) Array.newInstance(keyClass, submsg.getNumFields());
     int i = 0;
-    for (FudgeField key : submsg) {
+    for (final FudgeField key : submsg) {
       keys[i++] = deserializer.fieldValueToObject(keyClass, key);
     }
     return keys;
@@ -362,7 +369,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   /**
    * Inverse of {@link #writeValues}.
-   * 
+   *
    * @param message message to read from
    * @param x number of values in the X dimension
    * @param y number of values in the Y dimension
@@ -378,12 +385,12 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
     final double[] flat = message.getFieldValue(double[].class, field);
     if (flat.length != x * y * z) {
       LOGGER.warn("Invalid values length in {}", message);
-      throw new IllegalArgumentException("Expected " + (x * y * z) + " matrix elements, got " + flat.length);
+      throw new IllegalArgumentException("Expected " + x * y * z + " matrix elements, got " + flat.length);
     }
     final double[][][] values = new double[z][y][x];
     int i = 0;
-    for (double[][] slice : values) {
-      for (double[] row : slice) {
+    for (final double[][] slice : values) {
+      for (final double[] row : slice) {
         System.arraycopy(flat, i, row, 0, x);
         i += x;
       }

@@ -130,7 +130,7 @@ public final class VectorRootFinderFactory extends AbstractNamedInstanceFactory<
   }
 
   /**
-   * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -> EXTRAPOLATOR_NAME[NAME].
+   * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -&gt; EXTRAPOLATOR_NAME[NAME].
    *
    * @param extrapolatorName
    *          the version of the name of the linear extrapolator, not null

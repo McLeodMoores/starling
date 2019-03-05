@@ -34,7 +34,8 @@ public interface ComputationTargetTypeProvider {
   Collection<ComputationTargetType> getAdditionalTypes();
 
   /**
-   * Fetches all known simple and any union/nested types. This should be the union of the results of {@link #getAllSimpleTypes} and {@link #getAdditionalTypes}.
+   * Fetches all known simple and any union/nested types. This should be the union of the results of {@link #getSimpleTypes()} and
+   * {@link #getAdditionalTypes()}.
    *
    * @return all known types, not null
    */

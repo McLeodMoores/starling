@@ -27,14 +27,14 @@ import com.opengamma.util.ArgumentChecker;
  * penalty) of {@link DefaultViewComputationCache}. Therefore it does not need to be
  * wrapped in a {@link WriteThroughViewComputationCache} for efficient calculation node
  * performance.
- * <p/>
+ * <p>
  * Because there is no ability to overflow to off-heap storage in this implementation,
  * it should <strong>only</strong> be used in a case where testing has established
  * that the <em>entire</em> value cache can fit in RAM. Otherwise, an {@code OutOfMemoryException}
  * will be thrown and the JVM will exit.
- * <p/>
+ * <p>
  * In addition, this implementation cannot support remote calculation nodes.
- * <p/>
+ * <p>
  * This class was originally requested in <a href="http://jira.opengamma.com/browse/PLAT-4786">PLAT-4786</a>.
  */
 public class MapBackedInMemoryViewComputationCache extends AbstractViewComputationCache {

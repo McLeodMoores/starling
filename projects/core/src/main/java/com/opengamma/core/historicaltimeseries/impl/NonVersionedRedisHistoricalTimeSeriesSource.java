@@ -47,7 +47,7 @@ import redis.clients.jedis.JedisPool;
  * An extremely minimal and lightweight {@code HistoricalTimeSeriesSource} that pulls data
  * directly from Redis for situations where versioning, multiple fields, multiple data sources,
  * and identifier management is not necessary.
- * <p/>
+ * <p>
  * The following constraints must hold for this Source to be of any utility whatsoever:
  * <ul>
  *   <li>Historical lookups are not required. Because they are not supported.</li>
@@ -57,7 +57,7 @@ import redis.clients.jedis.JedisPool;
  *   <li>Each external ID has a single time series (thus there is not the capacity to store
  *       different Data Source, Data Provider, Observation Time, Data Field series).</li>
  * </ul>
- * <p/>
+ * <p>
  * Where a method is not supported semantically, an {@link UnsupportedOperationException}
  * will be thrown. Where use indicates that this class may be being used incorrectly,
  * a log message will be written at {@code WARN} level.

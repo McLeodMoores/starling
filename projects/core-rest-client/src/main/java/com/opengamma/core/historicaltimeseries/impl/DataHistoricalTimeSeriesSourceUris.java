@@ -71,14 +71,11 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   /**
-   * Builds a URI of the form <code>{path}/hts/{id}</code>. The following fields
-   * are added to the query:
+   * Builds a URI of the form <code>{path}/hts/{id}</code>. The following fields are added to the query:
    * <ul>
    * <li><code>version={versionString}</code> if the unique id is versioned</li>
-   * <li><code>start={start}&includeStart={includeStart}</code> if the start
-   * date is not null</li>
-   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
-   * null</li>
+   * <li><code>start={start}&amp;includeStart={includeStart}</code> if the start date is not null</li>
+   * <li><code>end={end}&amp;includeEnd={includeEnd}</code> if the end data is not null</li>
    * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
    * </ul>
    *
@@ -144,20 +141,14 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   /**
-   * Builds a URI of the form <code>{path}/htsSearches/single</code>. The
-   * following fields are added to the query:
+   * Builds a URI of the form <code>{path}/htsSearches/single</code>. The following fields are added to the query:
    * <ul>
    * <li><code>id={identifierBundle}</code></li>
-   * <li><code>dataSource={dataSource}</code></li> if the data source is not
-   * null</li>
-   * <li><code>dataProvider={dataProvider}</code></li> if the data provider is
-   * not null</li>
-   * <li><code>dataField={dataField}</code></li> if the data field is not
-   * null</li>
-   * <li><code>start={start}&includeStart={includeStart}</code> if the start
-   * date is not null</li>
-   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
-   * null</li>
+   * <li><code>dataSource={dataSource}</code> if the data source is not null</li>
+   * <li><code>dataProvider={dataProvider}</code> if the data provider is not null</li>
+   * <li><code>dataField={dataField}</code> if the data field is not null</li>
+   * <li><code>start={start}&amp;includeStart={includeStart}</code> if the start date is not null</li>
+   * <li><code>end={end}&amp;includeEnd={includeEnd}</code> if the end data is not null</li>
    * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
    * </ul>
    *
@@ -213,22 +204,15 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   /**
-   * Builds a URI of the form <code>{path}/htsSearches/single</code>. The
-   * following fields are added to the query:
+   * Builds a URI of the form <code>{path}/htsSearches/single</code>. The following fields are added to the query:
    * <ul>
    * <li><code>id={identifierBundle}</code></li>
-   * <li><code>idValidityDate={identifierValidityDate}</code> if the validity
-   * date is not null, otherwise <code>idValidityDate=ALL</code></li>
-   * <li><code>dataSource={dataSource}</code></li> if the data source is not
-   * null</li>
-   * <li><code>dataProvider={dataProvider}</code></li> if the data provider is
-   * not null</li>
-   * <li><code>dataField={dataField}</code></li> if the data field is not
-   * null</li>
-   * <li><code>start={start}&includeStart={includeStart}</code> if the start
-   * date is not null</li>
-   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
-   * null</li>
+   * <li><code>idValidityDate={identifierValidityDate}</code> if the validity date is not null, otherwise <code>idValidityDate=ALL</code></li>
+   * <li><code>dataSource={dataSource}</code> if the data source is not null</li>
+   * <li><code>dataProvider={dataProvider}</code> if the data provider is not null</li>
+   * <li><code>dataField={dataField}</code> if the data field is not null</li>
+   * <li><code>start={start}&amp;includeStart={includeStart}</code> if the start date is not null</li>
+   * <li><code>end={end}&amp;includeEnd={includeEnd}</code> if the end data is not null</li>
    * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
    * </ul>
    *
@@ -287,17 +271,13 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   /**
-   * Builds a URI of the form <code>{path}/htsSearches/resolve</code>. The
-   * following fields are added to the query:
+   * Builds a URI of the form <code>{path}/htsSearches/resolve</code>. The following fields are added to the query:
    * <ul>
    * <li><code>id={identifierBundle}</code></li>
-   * <li><code>dataField={dataField}</code></li> if the data field is not
-   * null</li>
-   * <li><code>resolutionKey={resolutionKey}</code</li>
-   * <li><code>start={start}&includeStart={includeStart}</code> if the start
-   * date is not null</li>
-   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
-   * null</li>
+   * <li><code>dataField={dataField}</code> if the data field is not null</li>
+   * <li><code>resolutionKey={resolutionKey}</code></li>
+   * <li><code>start={start}&amp;includeStart={includeStart}</code> if the start date is not null</li>
+   * <li><code>end={end}&amp;includeEnd={includeEnd}</code> if the end data is not null</li>
    * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
    * </ul>
    *
@@ -347,19 +327,14 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   /**
-   * Builds a URI of the form <code>{path}/htsSearches/resolve</code>. The
-   * following fields are added to the query:
+   * Builds a URI of the form <code>{path}/htsSearches/resolve</code>. The following fields are added to the query:
    * <ul>
    * <li><code>id={identifierBundle}</code></li>
-   * <li><code>idValidityDate={identifierValidityDate}</code> if the validity
-   * date is not null, otherwise <code>idValidityDate=ALL</code></li>
-   * <li><code>dataField={dataField}</code></li> if the data field is not
-   * null</li>
-   * <li><code>resolutionKey={resolutionKey}</code</li>
-   * <li><code>start={start}&includeStart={includeStart}</code> if the start
-   * date is not null</li>
-   * <li><code>end={end}&includeEnd={includeEnd}</code> if the end data is not
-   * null</li>
+   * <li><code>idValidityDate={identifierValidityDate}</code> if the validity date is not null, otherwise <code>idValidityDate=ALL</code></li>
+   * <li><code>dataField={dataField}</code> if the data field is not null</li>
+   * <li><code>resolutionKey={resolutionKey}</code></li>
+   * <li><code>start={start}&amp;includeStart={includeStart}</code> if the start date is not null</li>
+   * <li><code>end={end}&amp;includeEnd={includeEnd}</code> if the end data is not null</li>
    * <li><code>maxPoints={maxPoints}</code> if the max points is not null</li>
    * </ul>
    *

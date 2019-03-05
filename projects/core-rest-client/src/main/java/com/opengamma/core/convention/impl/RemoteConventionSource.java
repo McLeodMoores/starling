@@ -185,6 +185,8 @@ implements ConventionSource {
    * @param type
    *          the convention type
    * @return the convention or null if not found
+   * @param <T>
+   *          the type of the convention
    */
   @SuppressWarnings("unchecked")
   protected <T extends Convention> T doGetSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {

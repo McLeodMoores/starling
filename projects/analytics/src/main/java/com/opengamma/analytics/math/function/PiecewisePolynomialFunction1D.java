@@ -239,8 +239,9 @@ public class PiecewisePolynomialFunction1D {
 
   /**
    * @param pp
-   *          PiecewisePolynomialResult
+   *          the polynomial result
    * @param xKey
+   *          the x value for which to find the second derivative
    * @return Second derivatives of piecewise polynomial functions at xKey When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains
    *         multiple piecewise polynomials, an element in the return values corresponds to each piecewise polynomial
    */
@@ -273,7 +274,9 @@ public class PiecewisePolynomialFunction1D {
 
   /**
    * @param pp
+   *          the polynomial result
    * @param xKeys
+   *          the x values for which to find the second derivative
    * @return Second derivatives of piecewise polynomial functions at xKeys When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains
    *         multiple piecewise polynomials, a row vector of return value corresponds to each piecewise polynomial
    */
@@ -308,7 +311,9 @@ public class PiecewisePolynomialFunction1D {
    * @param pp
    *          PiecewisePolynomialResult
    * @param initialKey
+   *          the initial x value
    * @param xKey
+   *          the x value for which to integrate
    * @return Integral of piecewise polynomial between initialKey and xKey
    */
   public double integrate(final PiecewisePolynomialResult pp, final double initialKey, final double xKey) {
@@ -369,7 +374,9 @@ public class PiecewisePolynomialFunction1D {
    * @param pp
    *          PiecewisePolynomialResult
    * @param initialKey
+   *          the initial x value
    * @param xKeys
+   *          the x values for which to integrate
    * @return Integral of piecewise polynomial between initialKey and xKeys
    */
   public DoubleMatrix1D integrate(final PiecewisePolynomialResult pp, final double initialKey, final double[] xKeys) {

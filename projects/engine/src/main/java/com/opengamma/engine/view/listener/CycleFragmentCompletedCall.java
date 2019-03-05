@@ -10,11 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import com.opengamma.engine.view.ViewComputationResultModel;
 import com.opengamma.engine.view.ViewDeltaResultModel;
-import com.opengamma.engine.view.ViewResultModel;
 import com.opengamma.engine.view.impl.InMemoryViewComputationResultModel;
 
 /**
- * Represents a call to {@link ViewResultListener#cycleFragmentCompleted(ViewResultModel, ViewDeltaResultModel)}
+ * Represents a call to {@link ViewResultListener#cycleFragmentCompleted(ViewComputationResultModel, ViewDeltaResultModel)}
  */
 public class CycleFragmentCompletedCall extends AbstractCompletedResultsCall {
 

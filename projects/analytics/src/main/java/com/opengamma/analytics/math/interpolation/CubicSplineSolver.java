@@ -26,36 +26,41 @@ abstract class CubicSplineSolver {
   private final Decomposition<LUDecompositionResult> _luObj = new LUDecompositionCommons();
 
   /**
-   * One-dimensional cubic spline
-   * If (xValues length) = (yValues length), Not-A-Knot endpoint conditions are used
-   * If (xValues length) + 2 = (yValues length), Clamped endpoint conditions are used
-   * @param xValues X values of data
-   * @param yValues Y values of data
+   * One-dimensional cubic spline. If (xValues length) = (yValues length), Not-A-Knot endpoint conditions are used If (xValues length) + 2 = (yValues length),
+   * Clamped endpoint conditions are used
+   * 
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
    * @return Coefficient matrix whose i-th row vector is (a_0,a_1,...) for i-th intervals, where a_0,a_1,... are coefficients of f(x) = a_0 + a_1 x^1 + ....
-   * Note that the degree of polynomial is NOT necessarily 3
+   *         Note that the degree of polynomial is NOT necessarily 3
    */
   public abstract DoubleMatrix2D solve(final double[] xValues, final double[] yValues);
 
   /**
-   * One-dimensional cubic spline
-   * If (xValues length) = (yValues length), Not-A-Knot endpoint conditions are used
-   * If (xValues length) + 2 = (yValues length), Clamped endpoint conditions are used
-   * @param xValues X values of data
-   * @param yValues Y values of data
-   * @return Array of  matrices: the 0-th element is Coefficient Matrix (same as the solve method above), the i-th element is \frac{\partial a^{i-1}_j}{\partial yValues_k}
-   * where a_0^i,a_1^i,... are coefficients of f^i(x) = a_0^i + a_1^i (x - xValues_{i}) + .... with x \in [xValues_{i}, xValues_{i+1}]
+   * One-dimensional cubic spline. If (xValues length) = (yValues length), Not-A-Knot endpoint conditions are used If (xValues length) + 2 = (yValues length),
+   * Clamped endpoint conditions are used
+   * 
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
+   * @return Array of matrices: the 0-th element is Coefficient Matrix (same as the solve method above), the i-th element is \frac{\partial a^{i-1}_j}{\partial
+   *         yValues_k} where a_0^i,a_1^i,... are coefficients of f^i(x) = a_0^i + a_1^i (x - xValues_{i}) + .... with x \in [xValues_{i}, xValues_{i+1}]
    */
   public abstract DoubleMatrix2D[] solveWithSensitivity(final double[] xValues, final double[] yValues);
 
   /**
-   * Multi-dimensional cubic spline
-   * If (xValues length) = (yValuesMatrix NumberOfColumn), Not-A-Knot endpoint conditions are used
-   * If (xValues length) + 2 = (yValuesMatrix NumberOfColumn), Clamped endpoint conditions are used
-   * @param xValues X values of data
-   * @param yValuesMatrix Y values of data, where NumberOfRow defines dimension of the spline
-   * @return A set of coefficient matrices whose i-th row vector is (a_0,a_1,...) for the i-th interval, where a_0,a_1,... are coefficients of f(x) = a_0 + a_1 x^1 + ....
-   * Each matrix corresponds to an interpolation (xValues, yValuesMatrix RowVector)
-   * Note that the degree of polynomial is NOT necessarily 3
+   * Multi-dimensional cubic spline. If (xValues length) = (yValuesMatrix NumberOfColumn), Not-A-Knot endpoint conditions are used If (xValues length) + 2 =
+   * (yValuesMatrix NumberOfColumn), Clamped endpoint conditions are used
+   * 
+   * @param xValues
+   *          X values of data
+   * @param yValuesMatrix
+   *          Y values of data, where NumberOfRow defines dimension of the spline
+   * @return A set of coefficient matrices whose i-th row vector is (a_0,a_1,...) for the i-th interval, where a_0,a_1,... are coefficients of f(x) = a_0 + a_1
+   *         x^1 + .... Each matrix corresponds to an interpolation (xValues, yValuesMatrix RowVector) Note that the degree of polynomial is NOT necessarily 3
    */
   public abstract DoubleMatrix2D[] solveMultiDim(final double[] xValues, final DoubleMatrix2D yValuesMatrix);
 
@@ -163,7 +168,9 @@ abstract class CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
+   *
    * @param intervals
+   *          the intervals
    * @return Endpoint-independent part of the matrix A
    */
   protected double[][] getCommonMatrixElements(final double[] intervals) {
@@ -200,8 +207,8 @@ abstract class CubicSplineSolver {
     for (int i = 1; i < nDataPts - 1; ++i) {
       res[i] = 6. * yValues[i + 1] / intervals[i]
           - 6. * yValues[i] / intervals[i]
-          - 6. * yValues[i] / intervals[i - 1]
-          + 6. * yValues[i - 1] / intervals[i - 1];
+              - 6. * yValues[i] / intervals[i - 1]
+                  + 6. * yValues[i - 1] / intervals[i - 1];
     }
 
     return res;

@@ -73,7 +73,7 @@ public class LegalEntityDocument extends AbstractDocument implements Serializabl
 
   /**
    * Gets the name of the legal entity.
-   * <p/>
+   * <p>
    * This is derived from the legal entity itself.
    *
    * @return the name, null if no name

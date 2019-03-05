@@ -44,7 +44,7 @@ import com.opengamma.util.money.CurrencyAmount;
  * <li>Notional</li>
  * <li>Rate</li>
  * <li>Discounted payment amount</li>
- * <ul>
+ * </ul>
  * There is an entry for each coupon in a fixed leg.
  */
 @BeanDefinition
@@ -141,13 +141,13 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   @ImmutableConstructor
   public FixedLegCashFlows(final List<LocalDate> startAccrualDates,
-                           final List<LocalDate> endAccrualDates,
-                           final List<Double> discountFactors,
-                           final List<Double> paymentTimes,
-                           final List<Double> paymentFractions,
-                           final List<CurrencyAmount> paymentAmounts,
-                           final List<CurrencyAmount> notionals,
-                           final List<Double> fixedRates) {
+      final List<LocalDate> endAccrualDates,
+      final List<Double> discountFactors,
+      final List<Double> paymentTimes,
+      final List<Double> paymentFractions,
+      final List<CurrencyAmount> paymentAmounts,
+      final List<CurrencyAmount> notionals,
+      final List<Double> fixedRates) {
 
     ArgumentChecker.notNull(startAccrualDates, "startAccrualDates");
     ArgumentChecker.notNull(endAccrualDates, "endAccrualDates");

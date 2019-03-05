@@ -338,23 +338,42 @@ public class CurveNodeIdMapper {
   }
 
   /**
-   * @param name The name of this configuration
-   * @param billNodeIds The bill node ids
-   * @param bondNodeIds The bond node ids
-   * @param calendarSwapNodeIds The calendar swap node ids
-   * @param cashNodeIds The cash node ids
-   * @param continuouslyCompoundedRateIds The continuously-compounded rate ids
-   * @param creditSpreadNodeIds The credit spread node ids
-   * @param deliverableSwapFutureNodeIds The deliverable swap future node ids
-   * @param discountFactorNodeIds The discount factor node ids
-   * @param fraNodeIds The FRA node ids
-   * @param fxForwardNodeIds The FX forward node ids
-   * @param immFRANodeIds The IMM FRA node ids
-   * @param immSwapNodeIds The IMM swap node ids
-   * @param rateFutureNodeIds The rate future node ids
-   * @param swapNodeIds The swap node ids
-   * @param threeLegBasisSwapNodeIds The three-leg basis swap node ids
-   * @param zeroCouponInflationNodeIds The zero coupon inflation node ids;
+   * @param name
+   *          The name of this configuration
+   * @param billNodeIds
+   *          The bill node ids
+   * @param bondNodeIds
+   *          The bond node ids
+   * @param calendarSwapNodeIds
+   *          The calendar swap node ids
+   * @param cashNodeIds
+   *          The cash node ids
+   * @param continuouslyCompoundedRateIds
+   *          The continuously-compounded rate ids
+   * @param creditSpreadNodeIds
+   *          The credit spread node ids
+   * @param deliverableSwapFutureNodeIds
+   *          The deliverable swap future node ids
+   * @param discountFactorNodeIds
+   *          The discount factor node ids
+   * @param fraNodeIds
+   *          The FRA node ids
+   * @param fxForwardNodeIds
+   *          The FX forward node ids
+   * @param immFRANodeIds
+   *          The IMM FRA node ids
+   * @param immSwapNodeIds
+   *          The IMM swap node ids
+   * @param rateFutureNodeIds
+   *          The rate future node ids
+   * @param swapNodeIds
+   *          The swap node ids
+   * @param threeLegBasisSwapNodeIds
+   *          The three-leg basis swap node ids
+   * @param zeroCouponInflationNodeIds
+   *          The zero coupon inflation node ids
+   * @param periodicallyCompoundedRateIds
+   *          The periodically compounded rate ids
    */
   protected CurveNodeIdMapper(final String name,
       final Map<Tenor, CurveInstrumentProvider> billNodeIds,

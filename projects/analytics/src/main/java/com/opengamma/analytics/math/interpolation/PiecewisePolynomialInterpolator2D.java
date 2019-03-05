@@ -15,20 +15,29 @@ public abstract class PiecewisePolynomialInterpolator2D {
 
   /**
    * Given a set of data points (x0Values_i, x1Values_j, yValues_{ij}), 2d spline interpolation is returned such that f(x0Values_i, x1Values_j) = yValues_{ij}.
+   *
    * @param x0Values
+   *          the values in the x0 direction
    * @param x1Values
+   *          the values in the x1 direction
    * @param yValues
-   * @return {@link PiecewisePolynomialResult2D} containing positions of knots in x0 direction, positions of knots in x1 direction,
-   * coefficients of interpolant, number of intervals in x0 direction, number of intervals in x1 direction, order of polynomial function
+   *          the values in the y direction
+   * @return {@link PiecewisePolynomialResult2D} containing positions of knots in x0 direction, positions of knots in x1 direction, coefficients of interpolant,
+   *         number of intervals in x0 direction, number of intervals in x1 direction, order of polynomial function
    */
   public abstract PiecewisePolynomialResult2D interpolate(double[] x0Values, double[] x1Values, double[][] yValues);
 
   /**
    * @param x0Values
+   *          the values in the x0 direction
    * @param x1Values
+   *          the values in the x1 direction
    * @param yValues
+   *          the values in the y direction
    * @param x0Keys
+   *          the keys in the x0 direction, no NaNs or infinites
    * @param x1Keys
+   *          the keys in the x1 direction, no NaNs or infinites
    * @return Values of 2D interpolant at (x0Key_i, x1Keys_j)
    */
   public DoubleMatrix2D interpolate(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double[] x0Keys, final double[] x1Keys) {
@@ -83,10 +92,15 @@ public abstract class PiecewisePolynomialInterpolator2D {
 
   /**
    * @param x0Values
+   *          the values in the x0 direction
    * @param x1Values
+   *          the values in the x1 direction
    * @param yValues
+   *          the values in the y direction
    * @param x0Key
+   *          the key in the x0 direction, not NaN or infinite
    * @param x1Key
+   *          the key in the x1 direction, not NaN or infinite
    * @return Value of 2D interpolant at (x0Key, x1Key)
    */
   public double interpolate(final double[] x0Values, final double[] x1Values, final double[][] yValues, final double x0Key, final double x1Key) {
@@ -125,12 +139,20 @@ public abstract class PiecewisePolynomialInterpolator2D {
   }
 
   /**
+   * Gets the value, defined as:<br>
+   * sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij} (x0-leftKnots0)^{order0-1-i} (x1-leftKnots1)^{order0-1-j}
+   * 
    * @param coefMat
+   *          the coefficient matrix
    * @param x0
+   *          x0
    * @param x1
+   *          x1
    * @param leftKnot0
+   *          the left knot in the x0 direction
    * @param leftKnot1
-   * @return sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij} (x0-leftKnots0)^{order0-1-i} (x1-leftKnots1)^{order0-1-j}
+   *          the left knot in the x1 direction
+   * @return the value
    */
   protected double getValue(final DoubleMatrix2D coefMat, final double x0, final double x1, final double leftKnot0, final double leftKnot1) {
 

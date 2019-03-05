@@ -65,11 +65,10 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  */
 
 /**
- * A lightweight {@link HolidaySource} that cannot handle any versioning, and
- * which stores all Holiday documents as individual Redis elements using direct
- * Redis types rather than Fudge encoding.
+ * A lightweight {@link HolidaySource} that cannot handle any versioning, and which stores all Holiday documents as individual Redis elements using direct Redis
+ * types rather than Fudge encoding.
  *
- * Treats Saturday & Sunday as non working days.
+ * Treats Saturday and Sunday as non working days.
  */
 public class NonVersionedRedisHolidaySource implements HolidaySource {
   private static final Logger LOGGER = LoggerFactory.getLogger(NonVersionedRedisHolidaySource.class);
@@ -460,7 +459,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
   @Override
   public Collection<Holiday> get(final HolidayType holidayType,
-                                 final ExternalIdBundle regionOrExchangeIds) {
+      final ExternalIdBundle regionOrExchangeIds) {
     ArgumentChecker.notNull(holidayType, "holidayType");
     ArgumentChecker.notNull(regionOrExchangeIds, "regionOrExchangeIds");
 

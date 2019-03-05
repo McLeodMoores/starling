@@ -30,19 +30,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Extends existing Greek functions, reported at {@link Security} levels to sum
- * over {@link com.opengamma.core.position.Position}s.
+ * Extends existing Greek functions, reported at {@link Security} levels to sum over {@link com.opengamma.core.position.Position}s.
  * <p>
- * e.g. If a view asks for
- * {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_DELTA}, this
- * will create a requirement for {@link ValueRequirementNames#DELTA}.
+ * e.g. If a view asks for {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_DELTA}, this will create a requirement for
+ * {@link com.opengamma.engine.value.ValueRequirementNames#DELTA}.
  * <p>
- * NOTE! DELTA in the example, is the mathematical dV/dS, and does not contain
- * any unit contract size. The POSITION_DELTA *does* include any contract
+ * NOTE! DELTA in the example, is the mathematical dV/dS, and does not contain any unit contract size. The POSITION_DELTA *does* include any contract
  * multiplier.
  * <p>
- * The properties of the position-level requirement will match those of the
- * security level requirement.
+ * The properties of the position-level requirement will match those of the security level requirement.
  */
 // TODO Review the scope of this Function. e.g. by creating a canApplyTo(). [PLAT-5522]
 public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker {

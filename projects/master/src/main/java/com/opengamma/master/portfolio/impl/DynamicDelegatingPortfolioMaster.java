@@ -32,13 +32,13 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A portfolio master that uses the scheme of the unique identifier to determine which
  * underlying master should handle the request.
- * <p/>
+ * <p>
  * The underlying masters, or delegates, can be registered or deregistered at run time.
  * By default there is an {@link InMemoryPortfolioMaster} that will be used if specific scheme/delegate
  * combinations have not been registered.
- * <p/>
+ * <p>
  * Change events are aggregated from the different masters and presented through a single change manager.
- * <p/>
+ * <p>
  * The {@link #register(String, PortfolioMaster)}, {@link #deregister(String)} and
  * {@link #add(String, PortfolioDocument)} methods are public API outside
  * of the normal Master interface. Therefore to properly use this class the caller must have
@@ -69,7 +69,7 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
 
   /**
    * Registers a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for creating a delegate and registering it before making calls
    * to the DynamicDelegatingPortfolioMaster
    *
@@ -85,7 +85,7 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
 
   /**
    * Deregisters a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for deregistering a delegate when it is no longer needed.
    * For example, if delegates are made up of InMemoryMasters and data is no longer needed,
    * call deregister will free up memory

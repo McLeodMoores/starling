@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -11,7 +11,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.util.CompareUtils;
 
 /**
- * 
+ *
  * The generalized extreme value distribution is a family of continuous probability distributions that combines the Gumbel (type I),
  * Fr&eacute;chet (type II) and Weibull (type III) families of distributions.
  * <p>
@@ -57,7 +57,7 @@ import com.opengamma.util.CompareUtils;
  * \end{cases}
  * \end{align*}
  * $$
- * 
+ *
  */
 public class GeneralizedExtremeValueDistribution implements ProbabilityDistribution<Double> {
   private final double _mu;
@@ -66,7 +66,7 @@ public class GeneralizedExtremeValueDistribution implements ProbabilityDistribut
   private final boolean _ksiIsZero;
 
   /**
-   * 
+   *
    * @param mu The location parameter
    * @param sigma The scale parameter, not negative or zero
    * @param ksi The shape parameter
@@ -91,8 +91,10 @@ public class GeneralizedExtremeValueDistribution implements ProbabilityDistribut
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getInverseCDF(final Double p) {
@@ -112,8 +114,10 @@ public class GeneralizedExtremeValueDistribution implements ProbabilityDistribut
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double nextRandom() {
@@ -160,11 +164,11 @@ public class GeneralizedExtremeValueDistribution implements ProbabilityDistribut
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_ksi);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_mu);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_sigma);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

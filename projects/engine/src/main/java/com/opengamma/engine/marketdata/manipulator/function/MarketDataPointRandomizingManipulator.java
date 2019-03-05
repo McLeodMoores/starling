@@ -32,20 +32,21 @@ public class MarketDataPointRandomizingManipulator implements StructureManipulat
   private final double _rangeSize;
 
   /**
-   * Creates a randomizing manipulator where the actual market value is shifted by a random
-   * factor between the provided lower and upper bounds. Values produced will be shifted by
-   * a value greater than or equal to the lower bound, and strictly less than the upper
-   * bound. The reason for this is simplicity as it is in line with {@link Math#random()}.
+   * Creates a randomizing manipulator where the actual market value is shifted by a random factor between the provided lower and upper bounds. Values produced
+   * will be shifted by a value greater than or equal to the lower bound, and strictly less than the upper bound. The reason for this is simplicity as it is in
+   * line with {@link Math#random()}.
    *
-   * The following would create a manipulator such that if the original value is x, the
-   * produced value, y, would satisfy 0.9x <= y < 1.1x (i.e. y is within 10% of x).
+   * The following would create a manipulator such that if the original value is x, the produced value, y, would satisfy 0.9x &le; y &lt; 1.1x (i.e. y is within
+   * 10% of x).
    *
    * <code>
    *   new MarketDataPointRandomizingManipulator(0.9, 1.1);
    * </code>
    *
-   * @param lowerBound the lower bound of the scaling to be applied to the market data value
-   * @param upperBound the upper bound of the scaling to be applied to the market data value
+   * @param lowerBound
+   *          the lower bound of the scaling to be applied to the market data value
+   * @param upperBound
+   *          the upper bound of the scaling to be applied to the market data value
    */
   public MarketDataPointRandomizingManipulator(final Double lowerBound, final Double upperBound) {
     ArgumentChecker.notNull(lowerBound, "lowerBound");
@@ -59,8 +60,8 @@ public class MarketDataPointRandomizingManipulator implements StructureManipulat
 
   @Override
   public Double execute(final Double structure,
-                        final ValueSpecification valueSpecification,
-                        final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return structure * randomFactor();
   }
 

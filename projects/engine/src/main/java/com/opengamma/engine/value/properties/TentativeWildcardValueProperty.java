@@ -18,7 +18,8 @@ import com.google.common.collect.Sets;
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
 
 /**
- * Internal state used to implement a {@link ValueProperties} entry that is a wild-card in order for {@link ValueProperties.Builder#withOptional} to work.
+ * Internal state used to implement a {@link com.opengamma.engine.value.ValueProperties} entry that is a wild-card in order for
+ * {@link com.opengamma.engine.value.ValueProperties.Builder#withOptional} to work.
  */
 public final class TentativeWildcardValueProperty extends AbstractValueProperty {
 

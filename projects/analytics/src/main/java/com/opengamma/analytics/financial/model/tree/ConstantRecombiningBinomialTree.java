@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 /**
  *
  * @param <T>
+ *          The type of the data
  */
 public class ConstantRecombiningBinomialTree<T> extends RecombiningBinomialTree<T> {
   private final T _value;

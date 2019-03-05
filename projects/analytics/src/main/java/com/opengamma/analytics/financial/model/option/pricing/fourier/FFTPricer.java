@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -17,27 +17,39 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
+ *
  */
 public class FFTPricer {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
   private static final IntegralLimitCalculator LIMIT_CALCULATOR = new IntegralLimitCalculator();
 
   /**
-   * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward,
-   * and x is a random variable with a known characteristic function.
-   * @param forward The forward value of the underlying
-   * @param discountFactor 
-   * @param t Time to expiry
-   * @param isCall true for call 
-   * @param ce The Characteristic Exponent (log of characteristic function) of the returns of the underlying
-   * @param lowestStrike The lowest strike to return (the actual value will depend on the set up, but is guaranteed to be less than this) 
-   * @param highestStrike The highest strike to return (the actual value will depend on the set up, but is guaranteed to be greater than this) 
-   * @param minStrikesDisplayed minimum number of strikes returned (actual number depends on set up) 
-   * @param limitSigma An estimate of the implied vol used to calculate limits in the numerical routines 
-   * @param alpha Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended  
-   * @param tol Tolerance - smaller values give higher accuracy 
-   * @return array of arrays of strikes and prices 
+   * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward, and x
+   * is a random variable with a known characteristic function.
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param discountFactor
+   *          the discount factor
+   * @param t
+   *          Time to expiry
+   * @param isCall
+   *          true for call
+   * @param ce
+   *          The Characteristic Exponent (log of characteristic function) of the returns of the underlying
+   * @param lowestStrike
+   *          The lowest strike to return (the actual value will depend on the set up, but is guaranteed to be less than this)
+   * @param highestStrike
+   *          The highest strike to return (the actual value will depend on the set up, but is guaranteed to be greater than this)
+   * @param minStrikesDisplayed
+   *          minimum number of strikes returned (actual number depends on set up)
+   * @param limitSigma
+   *          An estimate of the implied vol used to calculate limits in the numerical routines
+   * @param alpha
+   *          Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended
+   * @param tol
+   *          Tolerance - smaller values give higher accuracy
+   * @return array of arrays of strikes and prices
    */
   public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final double lowestStrike,
       final double highestStrike, final int minStrikesDisplayed, final double limitSigma, final double alpha, final double tol) {
@@ -87,19 +99,30 @@ public class FFTPricer {
   }
 
   /**
-   * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward,
-   * and x is a random variable with a known characteristic function.
-   * @param forward The forward value of the underlying
-   * @param discountFactor 
-   * @param t Time to expiry
-   * @param isCall true for call 
-   * @param ce The Characteristic Exponent (log of characteristic function) of the returns of the underlying
-   * @param nStrikes maximum number of strikes (centred around ATM) to be returned 
-   * @param maxDeltaMoneyness Gives the (maximum) step size of the strikes in moneyness m = ln(K/F), where K is strike and F is forward 
-   * @param limitSigma An estimate of the implied vol used to calculate limits in the numerical routines 
-   * @param alpha Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended  
-   * @param tol Tolerance - smaller values give higher accuracy 
-   * @return array of arrays of strikes and prices 
+   * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward, and x
+   * is a random variable with a known characteristic function.
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param discountFactor
+   *          the discount factor
+   * @param t
+   *          Time to expiry
+   * @param isCall
+   *          true for call
+   * @param ce
+   *          The Characteristic Exponent (log of characteristic function) of the returns of the underlying
+   * @param nStrikes
+   *          maximum number of strikes (centred around ATM) to be returned
+   * @param maxDeltaMoneyness
+   *          Gives the (maximum) step size of the strikes in moneyness m = ln(K/F), where K is strike and F is forward
+   * @param limitSigma
+   *          An estimate of the implied vol used to calculate limits in the numerical routines
+   * @param alpha
+   *          Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended
+   * @param tol
+   *          Tolerance - smaller values give higher accuracy
+   * @return array of arrays of strikes and prices
    */
   public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikes,
       final double maxDeltaMoneyness,
@@ -151,20 +174,32 @@ public class FFTPricer {
   }
 
   /**
-   * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward,
-   * and x is a random variable with a known characteristic function. <b>Note: this method is for expert use only</b>
-   * @param forward The forward value of the underlying
-   * @param discountFactor 
-   * @param t Time to expiry
-   * @param isCall true for call 
-   * @param ce The Characteristic Exponent (log of characteristic function) of the returns of the underlying
-   * @param nStrikesBelowATM maximum number of strikes below ATM to be returned 
-   * @param nStrikesAboveATM maximum number of strikes above ATM to be returned 
-   * @param alpha Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended  
-   * @param delta The spacing for sampling the function 
-   * @param n The (zero padded) array of sample values. <b>Use a power of 2</b>
-   * @param m The actual number of samples. Need n >= 2m-1
-   * @return array of arrays of strikes and prices 
+   * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward, and x
+   * is a random variable with a known characteristic function. <b>Note: this method is for expert use only</b>
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param discountFactor
+   *          the discount factor
+   * @param t
+   *          Time to expiry
+   * @param isCall
+   *          true for call
+   * @param ce
+   *          The Characteristic Exponent (log of characteristic function) of the returns of the underlying
+   * @param nStrikesBelowATM
+   *          maximum number of strikes below ATM to be returned
+   * @param nStrikesAboveATM
+   *          maximum number of strikes above ATM to be returned
+   * @param alpha
+   *          Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended
+   * @param delta
+   *          The spacing for sampling the function
+   * @param n
+   *          The (zero padded) array of sample values. <b>Use a power of 2</b>
+   * @param m
+   *          The actual number of samples. Need n >= 2m-1
+   * @return array of arrays of strikes and prices
    */
   public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,
       final int nStrikesAboveATM, final double alpha, final double delta, final int n, final int m) {

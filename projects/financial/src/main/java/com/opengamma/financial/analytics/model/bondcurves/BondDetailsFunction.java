@@ -52,7 +52,7 @@ import com.opengamma.util.tuple.Pair;
 public class BondDetailsFunction extends BondAndBondFutureFromCurvesFunction<IssuerProviderInterface, Void> {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#BOND_DETAILS}.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#BOND_DETAILS}.
    */
   public BondDetailsFunction() {
     super(BOND_DETAILS, null);

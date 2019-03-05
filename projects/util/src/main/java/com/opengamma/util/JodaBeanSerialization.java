@@ -10,10 +10,8 @@ import org.joda.beans.ser.JodaBeanSer;
 /**
  * Utilities for working with Joda-Bean serialization.
  * <p>
- * Call the methods on {@link SerDeserializers#INSTANCE} or
- * {@link RenameHandler#INSTANCE} to handle refactoring.
- * This will need to be done in locations that have access to
- * the relevant refactored code.
+ * Call the methods on {@link org.joda.beans.ser.SerDeserializers#INSTANCE} or {@link org.joda.convert.RenameHandler#INSTANCE} to handle refactoring. This will
+ * need to be done in locations that have access to the relevant refactored code.
  */
 public final class JodaBeanSerialization {
 

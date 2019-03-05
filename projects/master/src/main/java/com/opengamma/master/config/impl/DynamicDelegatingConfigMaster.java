@@ -32,12 +32,12 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * A Config master that uses the scheme of the unique identifier to determine which underlying master should handle the request.
- * <p/>
+ * <p>
  * The underlying masters, or delegates, can be registered or deregistered at run time. By default there is an {@link InMemoryConfigMaster} that will be used if
  * specific scheme/delegate combinations have not been registered.
- * <p/>
+ * <p>
  * Change events are aggregated from the different masters and presented through a single change manager.
- * <p/>
+ * <p>
  * The {@link #register(String, ConfigMaster)}, {@link #deregister(String)} and {@link #add(String, ConfigDocument)} methods are public API outside of the
  * normal Master interface. Therefore to properly use this class the caller must have a concrete instance of this class and use these methods to properly
  * initialize the delegates as well as clean up resources when a delegate is no longer needed. But the engine itself will be able to interact with the component
@@ -70,7 +70,7 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
 
   /**
    * Registers a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for creating a delegate and registering it before making calls to the DynamicDelegatingConfigMaster
    *
    * @param scheme
@@ -87,7 +87,7 @@ public class DynamicDelegatingConfigMaster implements ConfigMaster {
 
   /**
    * Deregisters a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for deregistering a delegate when it is no longer needed. For example, if delegates are made up of InMemoryMasters and data is no
    * longer needed, call deregister will free up memory
    *

@@ -82,8 +82,10 @@ public final class FormattingXmlStreamWriter implements XMLStreamWriter {
   }
 
   /**
-   * Create a new {@link XmlStreamWriter} builder with a {@link Writer}.
-   * @param writer the writer to use
+   * Create a new {@link org.apache.commons.io.output.XmlStreamWriter} builder with a {@link Writer}.
+   * 
+   * @param writer
+   *          the writer to use
    * @return a builder
    */
   public static FormattingXMLStreamWriterBuilder builder(final Writer writer) {
@@ -92,8 +94,10 @@ public final class FormattingXmlStreamWriter implements XMLStreamWriter {
   }
 
   /**
-   * Create a new {@link XmlStreamWriter} builder with an {@link OutputStream}.
-   * @param os the output stream to use
+   * Create a new {@link org.apache.commons.io.output.XmlStreamWriter} builder with an {@link OutputStream}.
+   * 
+   * @param os
+   *          the output stream to use
    * @return a builder
    */
   public static FormattingXMLStreamWriterBuilder formattingStreamWriterBuilder(final OutputStream os) {

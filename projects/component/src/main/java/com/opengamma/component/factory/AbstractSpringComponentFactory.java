@@ -126,9 +126,7 @@ public abstract class AbstractSpringComponentFactory extends DirectBean implemen
   /**
    * Registers the spring context to be stopped at the end of the application.
    * <p>
-   * This will call
-   * {@link org.springframework.beans.factory.config.ConfigurableListableBeanFactorys#destroySingletons()}
-   * at the end of the application.
+   * This will call {@link org.springframework.beans.factory.config.ConfigurableListableBeanFactory#destroySingletons()} at the end of the application.
    *
    * @param repo
    *          the repository to register in, not null

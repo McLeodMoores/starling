@@ -21,7 +21,9 @@ import com.opengamma.engine.function.AbstractFunction;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
+import com.opengamma.engine.function.exclusion.FunctionExclusionGroups;
 import com.opengamma.engine.function.resolver.ComputationTargetResults;
+import com.opengamma.engine.function.resolver.FunctionPriority;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
@@ -231,11 +233,13 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   }
 
   /**
-   * Performs the {@link CompiledFunctionDefinition#canApplyTo} test by checking whether any defaults are returned for the target. If the {@link #getDefaults} cost is high, then consider overloading
-   * this method with something cheaper.
+   * Performs the {@link com.opengamma.engine.function.CompiledFunctionDefinition#canApplyTo} test by checking whether any defaults are returned for the target.
+   * If the {@link #getDefaults} cost is high, then consider overloading this method with something cheaper.
    *
-   * @param context the compilation context, not null
-   * @param target computation target, not null
+   * @param context
+   *          the compilation context, not null
+   * @param target
+   *          computation target, not null
    * @return true if applies (i.e. there are defaults available), false otherwise
    */
   @Override

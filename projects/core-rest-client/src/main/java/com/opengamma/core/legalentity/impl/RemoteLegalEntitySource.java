@@ -163,6 +163,8 @@ implements LegalEntitySource {
    * @param type
    *          the type
    * @return the legal entity or null
+   * @param <T>
+   *          the type of the legal entity
    */
   @SuppressWarnings("unchecked")
   protected <T extends LegalEntity> T doGetSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {

@@ -54,7 +54,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * Function that calculates the P&L for an FX forward due to movements in the underlying spot rate.
+ * Function that calculates the P&amp;L for an FX forward due to movements in the underlying spot rate.
  */
 public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
   /** The logger */
@@ -67,7 +67,7 @@ public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
   }
 
   /**
-   * Compiled function that calculates the P&L for an FX forward due to movements in the underlying spot rate.
+   * Compiled function that calculates the P&amp;L for an FX forward due to movements in the underlying spot rate.
    */
   protected class Compiled extends AbstractInvokingCompiledFunction {
     /** The currency pairs */
@@ -132,7 +132,7 @@ public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
       final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
       if (CalculationPropertyNamesAndValues.DISCOUNTING.equals(calculationMethod)) {
         requirements.add(new ValueRequirement(ValueRequirementNames.FX_CURRENCY_EXPOSURE, ComputationTargetSpecification.of(target.getPosition().getSecurity()),
-          ValueProperties.builder()
+            ValueProperties.builder()
             .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.DISCOUNTING)
             .with(ValuePropertyNames.PAY_CURVE, payCurveNames.iterator().next())
             .with(ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG, payCurveCalculationConfigs.iterator().next())
@@ -145,7 +145,7 @@ public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
         }
         final String forwardCurveName = Iterables.getOnlyElement(forwardCurveNames);
         requirements.add(new ValueRequirement(ValueRequirementNames.FX_CURRENCY_EXPOSURE, ComputationTargetSpecification.of(target.getPosition().getSecurity()),
-          ValueProperties.builder()
+            ValueProperties.builder()
             .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.FORWARD_POINTS)
             .with(ValuePropertyNames.PAY_CURVE, payCurveNames.iterator().next())
             .with(ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG, payCurveCalculationConfigs.iterator().next())
@@ -236,7 +236,7 @@ public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
         return null;
       }
       builder.with(ValuePropertyNames.CURRENCY, resultCurrency)
-             .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.FX_CURRENCY_EXPOSURE);
+      .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.FX_CURRENCY_EXPOSURE);
       return ImmutableSet.of(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), builder.get()));
     }
 

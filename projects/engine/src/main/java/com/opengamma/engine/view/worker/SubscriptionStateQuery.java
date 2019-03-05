@@ -53,62 +53,50 @@ public interface SubscriptionStateQuery {
 
   /**
    * Retries all failed subscriptions.
-   * 
+   *
    * @return the number of subscriptions being retried
    */
   int retryFailedSubscriptions();
-  
+
   /**
-   * Return the mapping (ticker -> SubscriptionStatus) of all failed subscriptions.
-   * These are the subscriptions which were unable to be fulfilled by the market
-   * data provider.
-   * Not exposed as an attribute as there is likely to be some work to actually
-   * calculate the required set.
+   * Return the mapping (ticker -&gt; SubscriptionStatus) of all failed subscriptions. These are the subscriptions which were unable to be fulfilled by the
+   * market data provider. Not exposed as an attribute as there is likely to be some work to actually calculate the required set.
    *
    * @return the mapping of all failed subscriptions.
    */
   Map<String, MarketDataManager.SubscriptionStatus> queryFailedSubscriptions();
 
   /**
-   * Return the mapping (ticker -> SubscriptionStatus) of all pending subscriptions.
-   * These are the subscriptions which have been requested from the market data
-   * provider but for which there has been no reply indicating success or failure.
-   * Not exposed as an attribute as there is likely to be some work to actually
-   * calculate the required set.
+   * Return the mapping (ticker -&gt; SubscriptionStatus) of all pending subscriptions. These are the subscriptions which have been requested from the market
+   * data provider but for which there has been no reply indicating success or failure. Not exposed as an attribute as there is likely to be some work to
+   * actually calculate the required set.
    *
    * @return the mapping of all pending subscriptions.
    */
   Map<String, MarketDataManager.SubscriptionStatus> queryPendingSubscriptions();
 
   /**
-   * Return the mapping (ticker -> SubscriptionStatus) of all removed subscriptions.
-   * These are the subscriptions which were requested but were subsequently no
-   * longer required.
-   * Not exposed as an attribute as there is likely to be some work to actually
-   * calculate the required set.
+   * Return the mapping (ticker -&gt; SubscriptionStatus) of all removed subscriptions. These are the subscriptions which were requested but were subsequently
+   * no longer required. Not exposed as an attribute as there is likely to be some work to actually calculate the required set.
    *
    * @return the mapping of all removed subscriptions.
    */
   Map<String, MarketDataManager.SubscriptionStatus> queryRemovedSubscriptions();
 
   /**
-   * Return the mapping (ticker -> SubscriptionStatus) of all active subscriptions.
-   * These are the subscriptions which have been successfully fulfilled by the
-   * market data provider.
-   * Not exposed as an attribute as there is likely to be some work to actually
-   * calculate the required set.
+   * Return the mapping (ticker -&gt; SubscriptionStatus) of all active subscriptions. These are the subscriptions which have been successfully fulfilled by the
+   * market data provider. Not exposed as an attribute as there is likely to be some work to actually calculate the required set.
    *
    * @return the mapping of all active subscriptions.
    */
   Map<String, MarketDataManager.SubscriptionStatus> queryActiveSubscriptions();
 
   /**
-   * Return the mapping (ticker -> SubscriptionStatus) of all subscriptions for
-   * which the ticker matches the supplied value. The match will work on any part
-   * of the ticker string so "AAPL" will match "AAPL." and also "AAPL/G4NHG.O".
-   * If the ticker is null or empty, all subscriptions will be returned.
+   * Return the mapping (ticker -&gt; SubscriptionStatus) of all subscriptions for which the ticker matches the supplied value. The match will work on any part
+   * of the ticker string so "AAPL" will match "AAPL." and also "AAPL/G4NHG.O". If the ticker is null or empty, all subscriptions will be returned.
    *
-   * @param ticker the ticker to use to find subscriptions.
+   * @param ticker
+   *          the ticker to use to find subscriptions.
    * @return the mapping of all matching subscriptions
    */
   Map<String, MarketDataManager.SubscriptionStatus> querySubscriptionState(String ticker);
@@ -135,5 +123,5 @@ public interface SubscriptionStateQuery {
      */
     REMOVED
   }
-  
+
 }

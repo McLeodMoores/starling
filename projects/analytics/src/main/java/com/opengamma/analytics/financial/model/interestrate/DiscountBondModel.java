@@ -11,8 +11,9 @@ import com.opengamma.analytics.financial.model.interestrate.definition.StandardD
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the market data
  */
 public interface DiscountBondModel<T extends StandardDiscountBondModelDataBundle> {
 

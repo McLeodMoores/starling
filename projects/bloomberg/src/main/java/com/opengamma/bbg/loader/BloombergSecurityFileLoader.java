@@ -148,9 +148,9 @@ public class BloombergSecurityFileLoader {
       }
     }
 
-//    for (ExternalIdBundle bundle : findSucesses(loadedSecurities)) {
-//      System.err.println(bundle.getIdentifier(SecurityUtils.ISIN));
-//    }
+    //    for (ExternalIdBundle bundle : findSucesses(loadedSecurities)) {
+    //      System.err.println(bundle.getIdentifier(SecurityUtils.ISIN));
+    //    }
   }
 
   private List<ExternalIdBundle> findErrors(final Map<ExternalIdBundle, UniqueId> loadedSecurities) {
@@ -226,6 +226,7 @@ public class BloombergSecurityFileLoader {
 
   /**
    * @param args
+   *          the arguments
    */
   public static void main(final String[] args) {  // CSIGNORE
     final Options options = createOptions();

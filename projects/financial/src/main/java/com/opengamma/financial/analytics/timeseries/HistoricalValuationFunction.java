@@ -55,8 +55,9 @@ import com.opengamma.timeseries.TimeSeries;
 import com.opengamma.util.money.Currency;
 
 /**
- * Iterates a view client over historical data to produce a historical valuation of a target. The view client iteration is performed by a helper function on a {@link ViewEvaluationTarget} created by
- * this function. The time series appropriate to this function's target are then extracted from the overall evaluation results.
+ * Iterates a view client over historical data to produce a historical valuation of a target. The view client iteration is performed by a helper function on a
+ * {@link com.opengamma.financial.view.ViewEvaluationTarget} created by this function. The time series appropriate to this function's target are then extracted
+ * from the overall evaluation results.
  */
 public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInvoker {
 

@@ -111,7 +111,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -159,34 +160,34 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleViewsPopulator.class);
   /** A list of currencies. */
   private static final Currency[] SWAP_CURRENCIES = new Currency[] {
-    Currency.USD,
-    Currency.GBP,
-    Currency.EUR,
-    Currency.JPY,
-    Currency.CHF };
+      Currency.USD,
+      Currency.GBP,
+      Currency.EUR,
+      Currency.JPY,
+      Currency.CHF };
   /** A list of OIS currencies */
   private static final Currency[] OIS_CURRENCIES = new Currency[] {
-    Currency.USD,
-    Currency.GBP,
-    Currency.EUR,
-    Currency.JPY };
+      Currency.USD,
+      Currency.GBP,
+      Currency.EUR,
+      Currency.JPY };
   /** A list of curve configuration names. */
   private static final String[] CURVE_CONFIG_NAMES = new String[] {
-    "DefaultTwoCurveUSDConfig",
-    "DefaultTwoCurveGBPConfig",
-    "DefaultTwoCurveEURConfig",
-    "DefaultTwoCurveJPYConfig",
-    "DefaultTwoCurveCHFConfig"
+      "DefaultTwoCurveUSDConfig",
+      "DefaultTwoCurveGBPConfig",
+      "DefaultTwoCurveEURConfig",
+      "DefaultTwoCurveJPYConfig",
+      "DefaultTwoCurveCHFConfig"
   };
   /** A list of currency pairs. */
   public static final UnorderedCurrencyPair[] CURRENCY_PAIRS = new UnorderedCurrencyPair[] {
-    UnorderedCurrencyPair.of(Currency.USD, Currency.EUR),
-    UnorderedCurrencyPair.of(Currency.USD, Currency.CHF),
-    UnorderedCurrencyPair.of(Currency.USD, Currency.AUD),
-    UnorderedCurrencyPair.of(Currency.USD, Currency.GBP),
-    UnorderedCurrencyPair.of(Currency.USD, Currency.JPY),
-    UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR),
-    UnorderedCurrencyPair.of(Currency.CHF, Currency.JPY) };
+      UnorderedCurrencyPair.of(Currency.USD, Currency.EUR),
+      UnorderedCurrencyPair.of(Currency.USD, Currency.CHF),
+      UnorderedCurrencyPair.of(Currency.USD, Currency.AUD),
+      UnorderedCurrencyPair.of(Currency.USD, Currency.GBP),
+      UnorderedCurrencyPair.of(Currency.USD, Currency.JPY),
+      UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR),
+      UnorderedCurrencyPair.of(Currency.CHF, Currency.JPY) };
   /** Map of currencies to swaption surface / cube names. */
   public static final Map<Currency, String> SWAPTION_CURRENCY_CONFIGS = new HashMap<>();
   /** Map of countries to swaption surface / cube names. */
@@ -284,14 +285,14 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
 
     final ViewCalculationConfiguration defaultCalc = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final String[] valueRequirementNames = new String[] {
-      FAIR_VALUE,
-      CAPM_BETA,
-      HISTORICAL_VAR,
-      SHARPE_RATIO,
-      TREYNOR_RATIO,
-      JENSENS_ALPHA,
-      TOTAL_RISK_ALPHA,
-      PNL };
+        FAIR_VALUE,
+        CAPM_BETA,
+        HISTORICAL_VAR,
+        SHARPE_RATIO,
+        TREYNOR_RATIO,
+        JENSENS_ALPHA,
+        TOTAL_RISK_ALPHA,
+        PNL };
     addValueRequirements(defaultCalc, EquitySecurity.SECURITY_TYPE, valueRequirementNames);
     viewDefinition.addViewCalculationConfiguration(defaultCalc);
     return viewDefinition;
@@ -524,9 +525,9 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     }
     final ValueProperties properties = ValueProperties.builder()
         .with(SURFACE, "DEFAULT")
-        .with(X_INTERPOLATOR_NAME, Interpolator1DFactory.LINEAR)
-        .with(LEFT_X_EXTRAPOLATOR_NAME, Interpolator1DFactory.LINEAR_EXTRAPOLATOR)
-        .with(RIGHT_X_EXTRAPOLATOR_NAME, Interpolator1DFactory.LINEAR_EXTRAPOLATOR)
+        .with(X_INTERPOLATOR_NAME, LinearInterpolator1dAdapter.NAME)
+        .with(LEFT_X_EXTRAPOLATOR_NAME, LinearExtrapolator1dAdapter.NAME)
+        .with(RIGHT_X_EXTRAPOLATOR_NAME, LinearExtrapolator1dAdapter.NAME)
         .with(PROPERTY_REALIZED_VARIANCE_METHOD, HISTORICAL_REALIZED_VARIANCE)
         .with(CURVE_EXPOSURES, "Exposures")
         .get();

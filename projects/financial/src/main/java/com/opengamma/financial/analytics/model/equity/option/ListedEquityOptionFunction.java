@@ -65,7 +65,6 @@ import com.opengamma.util.async.AsynchronousExecution;
  * In this family, we do not take as input an entire volatility surface (ValueRequirementNames.BLACK_VOLATILITY_SURFACE). Instead, the function requires the market_value of the option, and the
  * volatility is implied from that, along with the requirement of a forward curve (ValueRequirementNames.FORWARD_CURVE), and its contract parameters of expiry and strike.
  * <p>
- * <p>
  * This greatly reduces the data requirements of these functions, at the expense of ability to capture structure in strike and expiry space.
  */
 public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCompiledInvoker {

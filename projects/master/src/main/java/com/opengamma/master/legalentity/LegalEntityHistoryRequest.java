@@ -21,25 +21,25 @@ import com.opengamma.util.PublicSPI;
 
 /**
  * Request for the history of a legal entity.
- * <p/>
+ * <p>
  * A full legal entity master implements historical storage of data. History can
  * be stored in two dimensions and this request provides searching.
- * <p/>
+ * <p>
  * The first historic dimension is the classic series of versions. Each new
  * version is stored in such a manor that previous versions can be accessed.
- * <p/>
+ * <p>
  * The second historic dimension is corrections. A correction occurs when it is
  * realized that the original data stored was incorrect. A simple legal entity
  * master might simply replace the original version with the corrected value. A
  * full implementation will store the correction in such a manner that it is
  * still possible to obtain the value before the correction was made.
- * <p/>
+ * <p>
  * For example, a legal entity added on Monday and updated on Thursday has two
  * versions. If it is realized on Friday that the version stored on Monday was
  * incorrect, then a correction may be applied. There are now two versions, the
  * first of which has one correction. This may continue, with multiple
  * corrections allowed for each version.
- * <p/>
+ * <p>
  * Versions and corrections are represented by instants in the search.
  */
 @PublicSPI

@@ -31,8 +31,7 @@ import com.opengamma.financial.security.option.EquityOptionSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement,
- * and filters out all but those Security Types that are Equity based. <p>
+ * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement, and filters out all but those Security Types that are Equity based.
  * <p>
  * Applies only to Equity Security Types
  */
@@ -101,7 +100,7 @@ public class EquityNetMarketValueFunction extends AbstractFunction.NonCompiledIn
       return null;
     }
     return Collections.singleton(new ValueRequirement(ValueRequirementNames.NET_MARKET_VALUE, target.toSpecification(),
-          desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
+        desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
   }
 
 }

@@ -20,10 +20,12 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Expiry calculator for futures (not options) on the Russell 2000 Index.<p>
- * TF Futures, traded on the ICE, are specified here: https://www.theice.com/productguide/ProductSpec.shtml?specId=86 <p>
+ * Expiry calculator for futures (not options) on the Russell 2000 Index.
  * <p>
- * Contract Months = Four months in the March/June/September/December quarterly expiration cycle.<p>
+ * TF Futures, traded on the ICE, are specified here: https://www.theice.com/productguide/ProductSpec.shtml?specId=86
+ * <p>
+ * Contract Months = Four months in the March/June/September/December quarterly expiration cycle.
+ * <p>
  * Last Trading Day = Third Friday of the expiration month. Trading in the expiring contract ceases at 9:30 a.m. ET on the Last Trading Day.
  */
 public final class RussellFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {

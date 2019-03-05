@@ -83,7 +83,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveNodePnLFunction.class);
   // Please see http://jira.opengamma.com/browse/PLAT-2330 for information about this constant.
   /**
-   * Property name of the contribution to the P&L (e.g. yield curve, FX rate)
+   * Property name of the contribution to the P&amp;L (e.g. yield curve, FX rate)
    *
    * @deprecated Use {@link ValuePropertyNames#PROPERTY_PNL_CONTRIBUTIONS} instead
    */
@@ -134,7 +134,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
       if (inputs.getValue(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES) != null) {
         @SuppressWarnings("unchecked")
         final Map<UnorderedCurrencyPair, DoubleTimeSeries<?>> allFXSeries = (Map<UnorderedCurrencyPair, DoubleTimeSeries<?>>) inputs
-            .getValue(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES);
+        .getValue(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES);
         final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
         if (desiredCurrency.equals(currencyPairs.getCurrencyPair(Currency.of(desiredCurrency), currency).getCounter().getCode())) {
           isInverse = false;
@@ -314,12 +314,16 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
   }
 
   /**
-   * Creates the result properties for the P&L series
+   * Creates the result properties for the P&amp;L series
    *
-   * @param desiredValue The desired value
-   * @param currency The currency
-   * @param curveNames The curve names
-   * @param curveCalculationConfig The curve calculation configuration
+   * @param desiredValue
+   *          The desired value
+   * @param currency
+   *          The currency
+   * @param curveNames
+   *          The curve names
+   * @param curveCalculationConfig
+   *          The curve calculation configuration
    * @return The result properties
    */
   protected ValueProperties getResultProperties(final ValueRequirement desiredValue, final String currency, final String[] curveNames, final String curveCalculationConfig) {

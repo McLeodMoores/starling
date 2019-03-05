@@ -23,9 +23,9 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * The Spline Smile extrapolates by fitting a ShiftedLogNormal Model. This is Black with an additional free parameter, F' = F*exp(mu)) <p>
+ * The Spline Smile extrapolates by fitting a ShiftedLogNormal Model. This is Black with an additional free parameter, F' = F*exp(mu))
  * <p>
- * Two choices are provided of how to handle ExtrapolatorFailureBehaviour if the fitter is unable to find a solution to fit the boundary vol and the vol gradient dVol/dK at that point...<p>
+ * Two choices are provided of how to handle ExtrapolatorFailureBehaviour if the fitter is unable to find a solution to fit the boundary vol and the vol gradient dVol/dK at that point.
  * "Exception": an exception will be thrown. This selection puts the onus of shepherding the data on whoever provides marks. <p>
  * "Quiet":  the failing vol/strike will be tossed away, and the closest interior point is tried. This repeats until a solution is found.
  * In this method, risk will not be attributed to failing vols.<p>

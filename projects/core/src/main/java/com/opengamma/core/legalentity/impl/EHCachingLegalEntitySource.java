@@ -30,9 +30,9 @@ import net.sf.ehcache.Element;
 
 /**
  * A cache decorating a {@code LegalEntitySource}.
- * <p/>
+ * <p>
  * The cache is implemented using {@code EHCache}.
- * <p/>
+ * <p>
  * Any requests with a "latest" version/correction or unversioned unique identifier are not cached
  * and will always hit the underlying. This should not be an issue in practice as the engine components
  * which use the legal entity source will always specify an exact version/correction and versioned unique identifiers.

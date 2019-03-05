@@ -92,30 +92,31 @@ public class BeanDifference<P> {
   }
 
   /**
-   * If any of a bean's properties are beans themselves the comparison recursively compares all beans in the hierarchy.
-   * If a difference is found in a child bean the path contains the properties leading from the root bean to the child.
-   * For example consider the following classes:
+   * If any of a bean's properties are beans themselves the comparison recursively compares all beans in the hierarchy. If a difference is found in a child bean
+   * the path contains the properties leading from the root bean to the child. For example consider the following classes:
+   *
    * <pre>
    * class Foo implements Bean {
-   *   &#64PropertyDefinition
+   *   &#64;PropertyDefinition
    *   private Bar bar;
    * }
    *
    * class Bar implements Bean {
-   *   &#64PropertyDefinition
+   *   &#64;PropertyDefinition
    *   private Baz baz;
    * }
    *
    * class Baz implements Bean {
-   *   &#64PropertyDefinition
+   *   &#64;PropertyDefinition
    *   private String name;
    * }
    * </pre>
-   * Comparing two instances of {@code Foo} where {@code Baz} has a different name would yield a {@code BeanDifference}
-   * with a path {@code [Foo:bar, Bar:baz]} and a property {@code Baz:name}.
    *
-   * @return the properties leading to the bean at the root of the comparison to the bean where
-   *  the difference was found. Returns an empty list if the difference is in a property of the root bean.
+   * Comparing two instances of {@code Foo} where {@code Baz} has a different name would yield a {@code BeanDifference} with a path {@code [Foo:bar, Bar:baz]}
+   * and a property {@code Baz:name}.
+   *
+   * @return the properties leading to the bean at the root of the comparison to the bean where the difference was found. Returns an empty list if the
+   *         difference is in a property of the root bean.
    */
   public List<MetaProperty<?>> getPath() {
     return _path;

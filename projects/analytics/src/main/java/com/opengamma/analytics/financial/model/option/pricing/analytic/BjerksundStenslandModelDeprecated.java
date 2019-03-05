@@ -158,32 +158,48 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   //adjoint stuff
 
   /**
-   * get the  price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry), theta (expiry), vega (sigma))
-   * of an American option with the Bjerksund & Stensland (2002) approximation
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
-   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate),
-   *  b-rho (cost-of-carry), theta (expiry), vega (sigma)
+   * get the price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry), theta (expiry), vega
+   * (sigma)) of an American option with the Bjerksund &amp; Stensland (2002) approximation
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
+   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate), b-rho
+   *         (cost-of-carry), theta (expiry), vega (sigma)
    */
   public double[] getPriceAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
     return MODEL.getPriceAdjoint(s0, k, r, b, t, sigma, isCall);
   }
 
   /**
-   * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided differecne on the delta. For a call both delta and gamma
-   * are found by Algorithmic Differentiation.
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
+   * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided difference on the delta. For a call both
+   * delta and gamma are found by Algorithmic Differentiation.
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
    * @return length 3 array of price, delta and gamma
    */
   public double[] getPriceDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
@@ -191,14 +207,22 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get the price and vega of an American option by the Bjerksund & Stensland (2002) approximation
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
+   * Get the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
    * @return length 2 arrays containing the price and vega
    */
   public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
@@ -206,14 +230,22 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get a function for the price and vega of an American option by the Bjerksund & Stensland (2002) approximation in terms of the volatility (sigma).
-   * This is primarily used by the GenericImpliedVolatiltySolver to find a (Bjerksund & Stensland) implied volatility for a given market price of an American option
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param isCall true for calls
+   * Get a function for the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation in terms of the volatility (sigma). This
+   * is primarily used by the GenericImpliedVolatiltySolver to find a (Bjerksund &amp; Stensland) implied volatility for a given market price of an American
+   * option
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param isCall
+   *          true for calls
    * @return A function from volatility (sigma) to price and vega
    */
   public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
@@ -221,17 +253,25 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get the implied volatility according to the Bjerksund & Stensland (2002) approximation for the price of an American option quoted in the market.  It is the number that put
-   *  into the Bjerksund & Stensland (2002) approximation gives the market price. <b>This is not the same as the Black implied volatility</b> (which is only applicable to
-   *  European options), although it may be numerically close.
-   * @param price The market price of an American option
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param isCall true for calls
-   * @return The (Bjerksund & Stensland (2002)) implied volatility.
+   * Get the implied volatility according to the Bjerksund &amp; Stensland (2002) approximation for the price of an American option quoted in the market. It is
+   * the number that put into the Bjerksund &amp; Stensland (2002) approximation gives the market price. <b>This is not the same as the Black implied
+   * volatility</b> (which is only applicable to European options), although it may be numerically close.
+   * 
+   * @param price
+   *          The market price of an American option
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param isCall
+   *          true for calls
+   * @return The (Bjerksund &amp; Stensland (2002)) implied volatility.
    */
   public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
     return MODEL.impliedVolatility(price, s0, k, r, b, t, isCall);

@@ -407,14 +407,21 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Processes a field from the template component factory, either passing a value from the local configuration or using a value from the
-   * remote configuration document to set it accordingly.
+   * Processes a field from the template component factory, either passing a value from the local configuration or using a value from the remote configuration
+   * document to set it accordingly.
    *
-   * @param repo the component repository, not null
-   * @param property the template property, not null
-   * @param localConfiguration the local configuration, not null
-   * @param remoteConfiguration the remote configuration, as created by {@link #fetchConfiguration}
-   * @param template the template component factory, not null
+   * @param repo
+   *          the component repository, not null
+   * @param property
+   *          the template property, not null
+   * @param localConfiguration
+   *          the local configuration, not null
+   * @param remoteConfiguration
+   *          the remote configuration, as created by {@link #fetchConfiguration}
+   * @param template
+   *          the template component factory, not null
+   * @throws Exception
+   *           if there is a problem
    */
   protected void remoteComponentProperty(final ComponentRepository repo, final MetaProperty<?> property, final LinkedHashMap<String, String> localConfiguration,
       final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final AbstractComponentFactory template) throws Exception {
@@ -506,13 +513,19 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Processes the fields from a template component factory, either passing a value from local configuration, if any, or using a value
-   * from the remote configuration document to set it accordingly.
+   * Processes the fields from a template component factory, either passing a value from local configuration, if any, or using a value from the remote
+   * configuration document to set it accordingly.
    *
-   * @param repo the component repository, not null
-   * @param localConfiguration the local configuration, null if none
-   * @param remoteConfiguration the remote configuration, as created by {@link #fetchConfiguration}
-   * @param template the template component factory, not null
+   * @param repo
+   *          the component repository, not null
+   * @param localConfiguration
+   *          the local configuration, null if none
+   * @param remoteConfiguration
+   *          the remote configuration, as created by {@link #fetchConfiguration}
+   * @param template
+   *          the template component factory, not null
+   * @throws Exception
+   *           if there is a problem
    */
   protected void initTemplate(final ComponentRepository repo, final LinkedHashMap<String, String> localConfiguration,
       final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final AbstractComponentFactory template) throws Exception {

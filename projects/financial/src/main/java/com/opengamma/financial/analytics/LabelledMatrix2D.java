@@ -16,7 +16,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 /**
  * @param <S>
+ *          The type of the x values
  * @param <T>
+ *          The type of the y values
  */
 public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Comparable<T>> {
   private final S[] _xKeys;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.number;
@@ -94,7 +94,9 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public double doubleValue() {
@@ -103,7 +105,9 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public float floatValue() {
@@ -112,7 +116,9 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public int intValue() {
@@ -121,7 +127,9 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public long longValue() {

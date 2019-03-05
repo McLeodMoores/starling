@@ -8,12 +8,13 @@ package com.opengamma.analytics.financial.model.tree;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the data
  */
 public class RecombiningTrinomialTree<T> extends RecombiningTree<T> {
   /**
-   * 
+   *
    */
   public static final Function1D<Integer, Integer> NODES = new Function1D<Integer, Integer>() {
 
@@ -33,13 +34,13 @@ public class RecombiningTrinomialTree<T> extends RecombiningTree<T> {
     return NODES.evaluate(step);
   }
 
-//  @SuppressWarnings("unchecked")
-//  @Override
-//  public T[][] getEmptyNodes(int size) {
-//    Object[][] res = new Object[size+1][];
-//    for (int i = 0; i <= size; i++) {
-//      res[i] = new Object[NODES.evaluate(i)];
-//    }
-//    return (T[][]) res;
-//  }
+  //  @SuppressWarnings("unchecked")
+  //  @Override
+  //  public T[][] getEmptyNodes(int size) {
+  //    Object[][] res = new Object[size+1][];
+  //    for (int i = 0; i <= size; i++) {
+  //      res[i] = new Object[NODES.evaluate(i)];
+  //    }
+  //    return (T[][]) res;
+  //  }
 }

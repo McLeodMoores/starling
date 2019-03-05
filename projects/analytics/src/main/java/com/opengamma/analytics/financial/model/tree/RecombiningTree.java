@@ -11,8 +11,9 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the data
  */
 public abstract class RecombiningTree<T> implements Lattice<T> {
   private final T[][] _tree;

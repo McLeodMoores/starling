@@ -50,10 +50,10 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
    */
   @Deprecated
   public static CreditCurveIdentifier of(final ExternalId redCode,
-                                         final Currency currency,
-                                         final String term,
-                                         final String seniority,
-                                         final String restructuringClause) {
+      final Currency currency,
+      final String term,
+      final String seniority,
+      final String restructuringClause) {
     ArgumentChecker.notNull(redCode, "redCode");
     return new CreditCurveIdentifier(redCode.getValue(), currency, term, seniority, restructuringClause);
   }
@@ -72,10 +72,10 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
    */
   @Deprecated
   public static CreditCurveIdentifier of(final String redCode,
-                                         final Currency currency,
-                                         final String term,
-                                         final String seniority,
-                                         final String restructuringClause) {
+      final Currency currency,
+      final String term,
+      final String seniority,
+      final String restructuringClause) {
     return new CreditCurveIdentifier(redCode, currency, term, seniority, restructuringClause);
   }
 
@@ -89,9 +89,9 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
    * @return the credit curve identifier, not null
    */
   public static CreditCurveIdentifier of(final ExternalId redCode,
-                                         final Currency currency,
-                                         final String seniority,
-                                         final String restructuringClause) {
+      final Currency currency,
+      final String seniority,
+      final String restructuringClause) {
     ArgumentChecker.notNull(redCode, "redCode");
     return new CreditCurveIdentifier(redCode.getValue(), currency, null, seniority, restructuringClause);
   }
@@ -106,9 +106,9 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
    * @return the credit curve identifier, not null
    */
   public static CreditCurveIdentifier of(final String redCode,
-                                         final Currency currency,
-                                         final String seniority,
-                                         final String restructuringClause) {
+      final Currency currency,
+      final String seniority,
+      final String restructuringClause) {
     return new CreditCurveIdentifier(redCode, currency, null, seniority, restructuringClause);
   }
 
@@ -123,10 +123,10 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
    * @return the credit curve identifier, not null
    */
   public static CreditCurveIdentifier of(final String curveTypePrefix,
-                                         final String redCode,
-                                         final Currency currency,
-                                         final String seniority,
-                                         final String restructuringClause) {
+      final String redCode,
+      final Currency currency,
+      final String seniority,
+      final String restructuringClause) {
     return new CreditCurveIdentifier(curveTypePrefix, redCode, currency, null, seniority, restructuringClause);
   }
 
@@ -180,10 +180,10 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
    * @param restructuringClause the restructuring clause, not null
    */
   private CreditCurveIdentifier(final String redCode,
-                                final Currency currency,
-                                final String term,
-                                final String seniority,
-                                final String restructuringClause) {
+      final Currency currency,
+      final String term,
+      final String seniority,
+      final String restructuringClause) {
     ArgumentChecker.notNull(redCode, "redCode");
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(seniority, "seniority");
@@ -209,11 +209,11 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
    * @param restructuringClause the restructuring clause, not null
    */
   private CreditCurveIdentifier(final String curveTypePrefix,
-                                final String redCode,
-                                final Currency currency,
-                                final String term,
-                                final String seniority,
-                                final String restructuringClause) {
+      final String redCode,
+      final Currency currency,
+      final String term,
+      final String seniority,
+      final String restructuringClause) {
     ArgumentChecker.notNull(curveTypePrefix, "curve type prefix");
     ArgumentChecker.notNull(redCode, "redCode");
     ArgumentChecker.notNull(currency, "currency");
@@ -299,7 +299,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
 
   /**
    * Gets the object identifier.
-   * <p/>
+   * <p>
    * This uses the scheme {@link #OBJECT_SCHEME CreditCurveIdentifier}.
    *
    * @return the object identifier, not null
@@ -311,7 +311,7 @@ public final class CreditCurveIdentifier implements UniqueIdentifiable, ObjectId
 
   /**
    * Gets the unique identifier.
-   * <p/>
+   * <p>
    * The uses the scheme {@link #OBJECT_SCHEME CreditCurveIdentifier}
    *
    * @return the unique identifier, not null

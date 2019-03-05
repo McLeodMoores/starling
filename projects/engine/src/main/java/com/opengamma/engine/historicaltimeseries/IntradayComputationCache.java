@@ -24,26 +24,28 @@ import com.opengamma.util.PublicSPI;
 public interface IntradayComputationCache {
 
   /**
-   * Instructs the cache to store historical information at the given resolution.
-   * If this resolution already exists, changes numPoints to the given value.
-   * 
-   * @param resolution  the resolution you want, not null
-   * @param numPoints  how many points to store at this resolution, one or greater
-   * @throws IllegalArgumentException if numPoints <= 0
+   * Instructs the cache to store historical information at the given resolution. If this resolution already exists, changes numPoints to the given value.
+   *
+   * @param resolution
+   *          the resolution you want, not null
+   * @param numPoints
+   *          how many points to store at this resolution, one or greater
+   * @throws IllegalArgumentException
+   *           if numPoints &le; 0
    */
   void addResolution(Duration resolution, int numPoints);
 
   /**
    * Instructs the cache to stop storing historical information at the given resolution.
    * If this resolution does not exist, does nothing.
-   * 
+   *
    * @param resolution  the resolution you no longer want, not null
    */
   void removeResolution(Duration resolution);
 
   /**
    * Gets all currently active resolutions.
-   * 
+   *
    * @return a map of the resolutions to number of points, not null
    */
   Map<Duration, Integer> getResolutions();
@@ -56,7 +58,7 @@ public interface IntradayComputationCache {
    * (i.e., the resolution, e.g., 5 minutes). However, the last point in the time-series
    * is the result of the very last calculation, so the time difference between the last
    * point and the previous one can be something other than the resolution interval.
-   * 
+   *
    * @param viewName  the view you want the results for
    * (the computation cache runs within a ViewProcessor, so it may be handling multiple views)
    * @param calcConf  the calculation configuration name, such as 'Default'
@@ -67,9 +69,9 @@ public interface IntradayComputationCache {
    * @throws IllegalArgumentException if the given resolution has not been set up
    */
   ZonedDateTimeDoubleTimeSeries getValue(
-      String viewName, 
-      String calcConf, 
-      ValueSpecification specification, 
+      String viewName,
+      String calcConf,
+      ValueSpecification specification,
       Duration resolution);
 
 }

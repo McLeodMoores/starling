@@ -26,7 +26,7 @@ import com.opengamma.util.tuple.Pairs;
  * <dt>Now</dt>
  * <dd>The valuation date</dd>
  * <dt>Null</dt>
- * <dd>Will return <code>null</code> from the {@link #getLocalDate} function</dd>
+ * <dd>Will return <code>null</code> from the function</dd>
  * <dt>PreviousWeekDay(<em>expr</em>)</dt>
  * <dd>The previous weekday to the evaluated date constraint expression</dd>
  * <dt>PreviousWeekDay</dt>
@@ -36,8 +36,8 @@ import com.opengamma.util.tuple.Pairs;
  * <dt><em>expr</em>[+|-]<em>period</em></dt>
  * <dd>The evaluated date constraint expression plus or minus the given period, for example <code>PreviousWeekDay-P7D</code></dd>
  * <dt>-<em>period</em></dt>
- * <dd>The valuation date minus the given period, for example <code>-P1D</code> for the previous day.
- *     This is equivalent to <code>NOW-<em>period</em></code></dd>
+ * <dd>The valuation date minus the given period, for example <code>-P1D</code> for the previous day. This is equivalent to
+ * <code>NOW-<em>period</em></code></dd>
  * </dl>
  */
 public abstract class DateConstraint {

@@ -44,13 +44,19 @@ public abstract class InstrumentProviderPopulator {
 
   /**
    * Sets the renaming function to {@link DefaultCsbcRenamingFunction}.
+   *
+   * @param type
+   *          the instrument type, not null
    */
   public InstrumentProviderPopulator(final StripInstrumentType type) {
     this(type, new DefaultCsbcRenamingFunction());
   }
 
   /**
-   * @param renamingFunction  the renaming function, not null
+   * @param type
+   *          the instrument type, not null
+   * @param renamingFunction
+   *          the renaming function, not null
    */
   public InstrumentProviderPopulator(final StripInstrumentType type, final Function2<String, String, String> renamingFunction) {
     ArgumentChecker.notNull(type, "type");

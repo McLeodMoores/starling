@@ -17,18 +17,19 @@ import com.opengamma.id.ExternalId;
 
 /**
  * <p>
- * Parser for Bloomberg equity option tickers.  The rationale for having this parsing is to be able to extract instrument
- * indicatives from a Bloomberg ticker string or {@link com.opengamma.id.ExternalId}, without looking up the instrument via
- * Bloomberg security field loading.  This allows the caller to avoid expending Bloomberg security field lookup quota.
+ * Parser for Bloomberg equity option tickers. The rationale for having this parsing is to be able to extract instrument indicatives from a Bloomberg ticker
+ * string or {@link com.opengamma.id.ExternalId}, without looking up the instrument via Bloomberg security field loading. This allows the caller to avoid
+ * expending Bloomberg security field lookup quota.
  * </p>
- * A legal Bloomberg equity ticker looks like this:  <code>SPX US 01/21/12 P17.5 {Type}</code>.  See the Bloomberg documentation for more details.
+ * A legal Bloomberg equity ticker looks like this: <code>SPX US 01/21/12 P17.5 {Type}</code>. See the Bloomberg documentation for more details.
  * <p>
- * All dates are represented as {@link javax.time.calendar.LocalDate}. For greater accuracy, users should perform a Bloomberg security lookup.
+ * All dates are represented as {@link org.threeten.bp.LocalDate}. For greater accuracy, users should perform a Bloomberg security lookup.
  * </p>
  * <p>
- * The idiom for using this class is to
- * create a parser instance around the Bloomberg ticker, and then call various getters on the instance to read the indicatives.
+ * The idiom for using this class is to create a parser instance around the Bloomberg ticker, and then call various getters on the instance to read the
+ * indicatives.
  * </p>
+ * 
  * @author noah@opengamma
  */
 public abstract class BloombergTickerParserEQOption extends BloombergTickerParser {

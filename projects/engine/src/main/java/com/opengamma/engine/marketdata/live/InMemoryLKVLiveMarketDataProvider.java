@@ -63,7 +63,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * A {@link MarketDataProvider} for live data backed by an {@link InMemoryLKVMarketDataProvider}.
+ * A {@link com.opengamma.engine.marketdata.MarketDataProvider} for live data backed by an {@link InMemoryLKVMarketDataProvider}.
  */
 public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvider implements LiveMarketDataProvider, LiveDataListener, SubscriptionReporter {
 

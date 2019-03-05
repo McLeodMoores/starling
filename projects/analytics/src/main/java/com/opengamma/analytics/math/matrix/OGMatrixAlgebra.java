@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.matrix;
@@ -18,7 +18,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getCondition(final Matrix<?> m) {
@@ -27,7 +29,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getDeterminant(final Matrix<?> m) {
@@ -57,7 +61,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public DoubleMatrix2D getInverse(final Matrix<?> m) {
@@ -66,7 +72,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getNorm1(final Matrix<?> m) {
@@ -97,7 +105,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getNormInfinity(final Matrix<?> m) {
@@ -130,7 +140,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public DoubleMatrix2D getPower(final Matrix<?> m, final int p) {
@@ -208,7 +220,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   * 
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public DoubleMatrix2D getPower(final Matrix<?> m, final double p) {

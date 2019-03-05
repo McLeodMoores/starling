@@ -17,7 +17,7 @@ import com.opengamma.id.ExternalId;
  * </p>
  * A legal Bloomberg equity ticker looks like this:  <code>S X3 P17.5 Comdty</code>.  See the Bloomberg documentation for more details.
  * <p>
- * All dates are represented as {@link javax.time.calendar.LocalDate}. For greater accuracy, users should perform a Bloomberg security lookup.
+ * All dates are represented as {@link org.threeten.bp.LocalDate}. For greater accuracy, users should perform a Bloomberg security lookup.
  * </p>
  * <p>
  * The idiom for using this class is to

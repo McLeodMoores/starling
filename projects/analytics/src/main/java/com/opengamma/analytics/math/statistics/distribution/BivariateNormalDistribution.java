@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -28,7 +28,7 @@ public class BivariateNormalDistribution implements ProbabilityDistribution<doub
   private static final double[] Y = new double[] {0.018854042, 0.038088059, 0.0452707394, 0.038088059, 0.018854042 };
 
   /**
-   * @param x The parameters for the function, $(x, y, \rho$, with $-1 \geq \rho \geq 1$, not null 
+   * @param x The parameters for the function, $(x, y, \rho$, with $-1 \geq \rho \geq 1$, not null
    * @return The cdf
    */
   @Override
@@ -95,8 +95,10 @@ public class BivariateNormalDistribution implements ProbabilityDistribution<doub
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getInverseCDF(final double[] p) {
@@ -105,7 +107,7 @@ public class BivariateNormalDistribution implements ProbabilityDistribution<doub
 
   /**
    * @param x The parameters for the function, $(x, y, \rho$, with $-1 \geq \rho \geq 1$, not null
-   * @return The pdf  
+   * @return The pdf
    */
   @Override
   public double getPDF(final double[] x) {
@@ -118,8 +120,10 @@ public class BivariateNormalDistribution implements ProbabilityDistribution<doub
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double nextRandom() {

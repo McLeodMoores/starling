@@ -89,8 +89,10 @@ public class MongoDBReferenceDataCacheRefresher {
   /**
    * Runs the tool.
    *
-   * @param args  empty arguments
+   * @param args
+   *          empty arguments
    * @throws Exception
+   *           if there is a problem
    */
   public static void main(final String[] args) throws Exception { // CSIGNORE
     PlatformConfigUtils.configureSystemProperties();

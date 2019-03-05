@@ -33,7 +33,7 @@ import com.opengamma.master.security.impl.RemoteSecurityMaster;
 /**
  * Component factory for the combined security master.
  * <p>
- * The delegate security masters are specify by securityMaster<index> = SecurityMaster::<classifier> in the .ini config file
+ * The delegate security masters are specify by securityMaster&lt;index&gt; = SecurityMaster::&lt;classifier&gt; in the .ini config file
  */
 @BeanDefinition
 public class CombinedSecurityMasterComponentFactory extends AbstractComponentFactory {

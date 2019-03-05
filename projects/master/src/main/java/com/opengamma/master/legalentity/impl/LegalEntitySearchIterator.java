@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * An iterator that searches a legalentity master as an iterator.
- * <p/>
+ * <p>
  * Large systems may store a large amount of data in each master.
  * A simple search request that pulls back the entire database is unrealistic.
  * This remote iterator allows the database to be queried in a consistent way remotely.
@@ -25,7 +25,7 @@ public class LegalEntitySearchIterator extends AbstractSearchIterator<LegalEntit
 
   /**
    * Creates an instance based on a request.
-   * <p/>
+   * <p>
    * The request will be altered during the iteration.
    *
    * @param master  the underlying master, not null
@@ -45,7 +45,7 @@ public class LegalEntitySearchIterator extends AbstractSearchIterator<LegalEntit
 
   /**
    * Creates an instance based on a request.
-   * <p/>
+   * <p>
    * The request will be altered during the iteration.
    *
    * @param master  the underlying master, not null

@@ -49,8 +49,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
     public static final Entry PARTIAL_NODE = PARAMETERIZED_FUNCTION.matchTarget();
 
     /**
-     * An entry that produces while which match a node in a dependency graph based on the computation target, parameterized function and inputs. This can
-     * be used, for example, in preference of {@link #EXACT_NODE} to produce rules which will match during graph construction (as well as execution).
+     * An entry that produces rules which match a node in a dependency graph based on the computation target, parameterized function and inputs.
      */
     public static final Entry BUILD_NODE = PARTIAL_NODE.matchInputs();
 

@@ -167,8 +167,10 @@ public class TaxonomyGatheringFudgeMessageSender implements FudgeMessageSender {
   }
 
   /**
-   * Wait for the next write to occur that will have flushed the last of the field names collected by
-   * the previous call to send.
+   * Wait for the next write to occur that will have flushed the last of the field names collected by the previous call to send.
+   * 
+   * @throws InterruptedException
+   *           if there is an interrupt during the wait
    */
   protected void waitForNextWrite() throws InterruptedException {
     final int nextOrdinal = _nextOrdinal.get();

@@ -16,10 +16,13 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.money.Currency;
 
 /**
- * Hold the valid range of X and Y for a surface.  E.g. VolatilitySurfaceDefinition<Tenor, Double> (tenor vs strike, z is volatility), where Tenors go from 1YR..10YR,
- * strikes from 220.0d to 240.0d with deltas of 5
- * @param <X> Type of the x-data
- * @param <Y> Type of the y-data
+ * Hold the valid range of X and Y for a surface. E.g. VolatilitySurfaceDefinition&lt;Tenor, Double&gt; (tenor vs strike, z is volatility), where Tenors go from
+ * 1YR..10YR, strikes from 220.0d to 240.0d with deltas of 5
+ * 
+ * @param <X>
+ *          Type of the x-data
+ * @param <Y>
+ *          Type of the y-data
  */
 @Config(description = "Volatility surface definition", group = ConfigGroups.VOL)
 public class VolatilitySurfaceDefinition<X, Y> {

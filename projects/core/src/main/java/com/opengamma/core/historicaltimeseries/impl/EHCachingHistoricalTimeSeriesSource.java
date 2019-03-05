@@ -41,7 +41,7 @@ import net.sf.ehcache.CacheManager;
 
 /**
  * A cache decorating a {@code HistoricalTimeSeriesSource}.
- * <p/>
+ * <p>
  * The cache is implemented using {@code EHCache}.
  */
 public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeriesSource {

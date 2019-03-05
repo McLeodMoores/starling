@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -10,13 +10,13 @@ import java.util.Date;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 
+import com.opengamma.util.CompareUtils;
+
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
-import com.opengamma.util.CompareUtils;
-
 /**
- * 
+ *
  * The generalized Pareto distribution is a family of power law probability
  * distributions with location parameter $\mu$, shape parameter $\xi$ and scale
  * parameter $\sigma$, where
@@ -66,7 +66,7 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   private final RandomEngine _engine;
 
   /**
-   * 
+   *
    * @param mu The location parameter
    * @param sigma The scale parameter, not negative or zero
    * @param ksi The shape parameter, not zero
@@ -76,7 +76,7 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   }
 
   /**
-   * 
+   *
    * @param mu The location parameter
    * @param sigma The scale parameter
    * @param ksi The shape parameter
@@ -125,8 +125,10 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getInverseCDF(final Double p) {
@@ -134,9 +136,9 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   }
 
   /**
-  * {@inheritDoc} 
-  * @throws IllegalArgumentException If $x \not\in$ support
-  */
+   * {@inheritDoc}
+   * @throws IllegalArgumentException If $x \not\in$ support
+   */
   @Override
   public double getPDF(final Double x) {
     Validate.notNull(x);
@@ -144,7 +146,7 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   }
 
   /**
-   * {@inheritDoc} 
+   * {@inheritDoc}
    */
   @Override
   public double nextRandom() {
@@ -167,11 +169,11 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_ksi);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_mu);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_sigma);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -27,18 +27,14 @@ import com.opengamma.util.TerminatableJobContainer;
 // - Allow for single-message receiving sockets that close themselves.
 
 /**
- * Listens on a server socket, receives Fudge-encoded messages, and hands them
- * off to an underlying receiver for processing.
- * An example use case here is a server process that receives messages from
- * other nodes for asynchronous processing (such as a log aggregation server).
- * <p/>
- * This class will create one thread for each open external socket, as well as one
- * thread to accept new sockets from the {@code ServerSocket}.
+ * Listens on a server socket, receives Fudge-encoded messages, and hands them off to an underlying receiver for processing. An example use case here is a
+ * server process that receives messages from other nodes for asynchronous processing (such as a log aggregation server).
  * <p>
- * Each message will be handed to the underlying {@link FudgeMessageReceiver} in either
- * the same thread as the messages are consumed (unless an executor service is
- * supplied), so the underlying receiver must be threadsafe, and should not block except
- * where it is fine to block the remote end from publishing during consumption.
+ * This class will create one thread for each open external socket, as well as one thread to accept new sockets from the {@code ServerSocket}.
+ * <p>
+ * Each message will be handed to the underlying {@link FudgeMessageReceiver} in either the same thread as the messages are consumed (unless an executor service
+ * is supplied), so the underlying receiver must be threadsafe, and should not block except where it is fine to block the remote end from publishing during
+ * consumption.
  *
  * @author kirk
  */

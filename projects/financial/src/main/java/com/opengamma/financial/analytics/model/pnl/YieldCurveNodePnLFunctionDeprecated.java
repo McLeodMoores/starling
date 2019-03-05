@@ -65,7 +65,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public class YieldCurveNodePnLFunctionDeprecated extends AbstractFunction.NonCompiledInvoker {
-  /** Property name of the contribution to the P&L (e.g. yield curve, FX rate) */
+  /** Property name of the contribution to the P&amp;L (e.g. yield curve, FX rate) */
   public static final String PROPERTY_PNL_CONTRIBUTIONS = "PnLContribution";
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
   private static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("Weekend");

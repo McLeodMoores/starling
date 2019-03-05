@@ -16,7 +16,7 @@ import org.fudgemsg.wire.types.FudgeWireType;
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
 
 /**
- * Internal state used to implement a {@link ValueProperties} entry that is a wild-card.
+ * Internal state used to implement a {@link com.opengamma.engine.value.ValueProperties} entry that is a wild-card.
  */
 public final class WildcardValueProperty extends AbstractValueProperty {
 

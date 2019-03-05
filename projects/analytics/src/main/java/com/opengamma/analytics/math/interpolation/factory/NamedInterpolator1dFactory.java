@@ -32,6 +32,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 @SuppressWarnings("rawtypes")
 public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFactory<NamedInterpolator1d> {
+  // TODO use FromString annotation to construct interpolators with state
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(NamedInterpolator1dFactory.class);
   /**

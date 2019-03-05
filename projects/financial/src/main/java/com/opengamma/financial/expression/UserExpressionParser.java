@@ -104,12 +104,15 @@ public abstract class UserExpressionParser {
   public abstract void setConstant(String name, Object value);
 
   /**
-   * Registers a function. The function might appear as <name><object> (e.g. getSecurity)
-   * or <object>:<name> (e.g. Security:get) depending on the parser.
+   * Registers a function. The function might appear as &lt;name&gt;&lt;object&gt; (e.g. getSecurity) or &lt;object&gt;:&lt;name&gt; (e.g. Security:get)
+   * depending on the parser.
    *
-   * @param object the object type being returned, e.g. Security
-   * @param name the name of the operation, e.g. get
-   * @param method the static method to invoke to evaluate this
+   * @param object
+   *          the object type being returned, e.g. Security
+   * @param name
+   *          the name of the operation, e.g. get
+   * @param method
+   *          the static method to invoke to evaluate this
    */
   public abstract void setFunction(String object, String name, Method method);
 

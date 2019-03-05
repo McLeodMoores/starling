@@ -310,8 +310,10 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * @param option TimeToExpiry Strike and OptionType are contained
+   * @param option
+   *          TimeToExpiry Strike and OptionType are contained
    * @param forward
+   *          the forward
    * @return implied volatility
    */
   public double getImpliedVolatilityZ(final EuropeanVanillaOption option, final double forward) {
@@ -320,9 +322,12 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Call price for Z, used for checking call-put parity
+   * Call price for Z, used for checking call-put parity.
+   * 
    * @param option
+   *          the option
    * @param forward
+   *          the forward
    * @return call price
    */
   public double getPriceZ(final EuropeanVanillaOption option, final double forward) {

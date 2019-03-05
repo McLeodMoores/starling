@@ -36,7 +36,7 @@ import com.opengamma.util.metric.MetricProducer;
  * Listens to a channel of raw data updates, normalizes, writes to the LKV store, and then
  * publishes all value updates (for the normalized results) to a different channel
  * for detection by the data servers.
- * <p/>
+ * <p>
  * It has three ways that the list of active subscriptions can be built:
  * <ol>
  *   <li>You can just wait for updates to come through. Whenever an update is received
@@ -45,7 +45,7 @@ import com.opengamma.util.metric.MetricProducer;
  *   <li>You can explicitly add them (perhaps via startup configuration)
  *       via calls to {@link #addDistribution(String)}.</li>
  * </ol>
- * <p/>
+ * <p>
  * In general, if not bootstrapping for the first time, the first and second ways should be
  * sufficient.
  */

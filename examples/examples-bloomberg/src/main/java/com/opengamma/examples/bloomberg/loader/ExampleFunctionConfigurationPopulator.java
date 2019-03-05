@@ -5,13 +5,12 @@
  */
 package com.opengamma.examples.bloomberg.loader;
 
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.DOUBLE_QUADRATIC;
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-
 import java.util.Arrays;
 import java.util.Collections;
 
 import com.google.common.collect.ImmutableList;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.function.config.FunctionConfigurationDefinition;
@@ -55,7 +54,7 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -65,13 +64,13 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    AnalyticsFunctions analyticsFunctions = new AnalyticsFunctions() {
+    final AnalyticsFunctions analyticsFunctions = new AnalyticsFunctions() {
       @Override
       protected FunctionConfigurationSource modelFunctionConfiguration() {
-        ModelFunctions modelFunctions = new ModelFunctions() {
+        final ModelFunctions modelFunctions = new ModelFunctions() {
           @Override
           protected FunctionConfigurationSource equityFunctionConfiguration() {
-            EquityFunctions equityFunctions = new EquityFunctions() {
+            final EquityFunctions equityFunctions = new EquityFunctions() {
               @Override
               protected FunctionConfigurationSource optionFunctionConfiguration() {
                 return null;
@@ -90,7 +89,7 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
     storeFunctionDefinition(VALUE, ValueFunctions.instance());
     storeFunctionDefinition(VIEW, ViewFunctions.instance());
 
-    FunctionConfigurationDefinition financialFunc = new FunctionConfigurationDefinition(FINANCIAL,
+    final FunctionConfigurationDefinition financialFunc = new FunctionConfigurationDefinition(FINANCIAL,
         ImmutableList.of(AGGREGATION, ANALYTICS, CURRENCY, PROPERTY, VALUE, VIEW),
         Collections.<StaticFunctionConfiguration>emptyList(),
         Collections.<ParameterizedFunctionConfiguration>emptyList());
@@ -99,11 +98,12 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
     storeFunctionDefinition(STANDARD, DemoStandardFunctionConfiguration.instance());
     storeFunctionDefinition(CURVE, IRCurveFunctions.providers(getToolContext().getConfigMaster()));
 
-    FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
+    final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
         ImmutableList.of(FINANCIAL, STANDARD, CURVE, CUBE),
         Collections.<StaticFunctionConfiguration>emptyList(),
         ImmutableList.of(new ParameterizedFunctionConfiguration(FXOptionBlackSurfaceDefaults.class.getName(),
-            Arrays.asList(DOUBLE_QUADRATIC, LINEAR_EXTRAPOLATOR, LINEAR_EXTRAPOLATOR, "USD", "EUR", "DEFAULT"))));
+            Arrays.asList(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, "USD", "EUR",
+                "DEFAULT"))));
     storeFunctionDefinition(exampleFunc);
   }
 
@@ -113,7 +113,7 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
   }
 
   private void storeFunctionDefinition(final String name, final FunctionConfigurationSource funcConfigSource) {
-    FunctionConfigurationDefinition definition = FunctionConfigurationDefinition.of(name, funcConfigSource);
+    final FunctionConfigurationDefinition definition = FunctionConfigurationDefinition.of(name, funcConfigSource);
     final ConfigItem<FunctionConfigurationDefinition> config = ConfigItem.of(definition, name, FunctionConfigurationDefinition.class);
     ConfigMasterUtils.storeByName(getToolContext().getConfigMaster(), config);
   }

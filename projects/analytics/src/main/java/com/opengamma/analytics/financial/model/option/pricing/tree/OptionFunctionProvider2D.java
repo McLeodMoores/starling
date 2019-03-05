@@ -47,21 +47,35 @@ public abstract class OptionFunctionProvider2D {
   public abstract double[][] getPayoffAtExpiry(final double assetPrice1, final double assetPrice2, final double upOverDown1, final double upOverDown2);
 
   /**
-   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer
-   * This method should be overridden if an option has early exercise feature
-   * @param discount Discount factor
-   * @param uuProbability Up-up probability
-   * @param udProbability Up-down probability
-   * @param duProbability Down-up probability
-   * @param ddProbability Down-down probability
-   * @param values Option values in the (steps+1)-th layer
-   * @param baseAssetPrice1 Asset price 1 at (0,0), i.e., the starting point
-   * @param baseAssetPrice2 Asset price 2 at (0,0), i.e., the starting point
-   * @param downFactor1 Down factor for asset1
-   * @param downFactor2 Down factor for asset2
-   * @param upOverDown1 (up factor)/(down factor) for asset1
-   * @param upOverDown2 (up factor)/(down factor) for asset2
+   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer This method should be overridden if an option has
+   * early exercise feature
+   *
+   * @param discount
+   *          Discount factor
+   * @param uuProbability
+   *          Up-up probability
+   * @param udProbability
+   *          Up-down probability
+   * @param duProbability
+   *          Down-up probability
+   * @param ddProbability
+   *          Down-down probability
+   * @param values
+   *          Option values in the (steps+1)-th layer
+   * @param baseAssetPrice1
+   *          Asset price 1 at (0,0), i.e., the starting point
+   * @param baseAssetPrice2
+   *          Asset price 2 at (0,0), i.e., the starting point
+   * @param downFactor1
+   *          Down factor for asset1
+   * @param downFactor2
+   *          Down factor for asset2
+   * @param upOverDown1
+   *          (up factor)/(down factor) for asset1
+   * @param upOverDown2
+   *          (up factor)/(down factor) for asset2
    * @param steps
+   *          the number of steps
    * @return The option values in the (steps)-th layer
    */
   public double[][] getNextOptionValues(final double discount, final double uuProbability, final double udProbability, final double duProbability, final double ddProbability,
@@ -88,26 +102,45 @@ public abstract class OptionFunctionProvider2D {
   public abstract double[][] getPayoffAtExpiryTrinomial(final double assetPrice1, final double assetPrice2, final double middleOverDown1, final double middleOverDown2);
 
   /**
-   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer
-   * This method should be overridden if an option has early exercise feature
-   * @param discount Discount factor
-   * @param uuProbability Up-up probability
-   * @param umProbability Up-middle probability
-   * @param udProbability Up-down probability
-   * @param muProbability Middle-up probability
-   * @param mmProbability Middle-middle probability
-   * @param mdProbability Middle-down probability
-   * @param duProbability Down-up probability
-   * @param dmProbability Down-middle probability
-   * @param ddProbability Down-down probability
-   * @param values Option values in the (steps+1)-th layer
-   * @param baseAssetPrice1 Asset price 1 at (0,0), i.e., the starting point
-   * @param baseAssetPrice2 Asset price 2 at (0,0), i.e., the starting point
-   * @param downFactor1 Down factor for asset1
-   * @param downFactor2 Down factor for asset2
-   * @param middleOverDown1 (middle factor)/(down factor) for asset1
-   * @param middleOverDown2 (middle factor)/(down factor) for asset2
+   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer This method should be overridden if an option has
+   * early exercise feature
+   * 
+   * @param discount
+   *          Discount factor
+   * @param uuProbability
+   *          Up-up probability
+   * @param umProbability
+   *          Up-middle probability
+   * @param udProbability
+   *          Up-down probability
+   * @param muProbability
+   *          Middle-up probability
+   * @param mmProbability
+   *          Middle-middle probability
+   * @param mdProbability
+   *          Middle-down probability
+   * @param duProbability
+   *          Down-up probability
+   * @param dmProbability
+   *          Down-middle probability
+   * @param ddProbability
+   *          Down-down probability
+   * @param values
+   *          Option values in the (steps+1)-th layer
+   * @param baseAssetPrice1
+   *          Asset price 1 at (0,0), i.e., the starting point
+   * @param baseAssetPrice2
+   *          Asset price 2 at (0,0), i.e., the starting point
+   * @param downFactor1
+   *          Down factor for asset1
+   * @param downFactor2
+   *          Down factor for asset2
+   * @param middleOverDown1
+   *          (middle factor)/(down factor) for asset1
+   * @param middleOverDown2
+   *          (middle factor)/(down factor) for asset2
    * @param steps
+   *          the number of steps
    * @return The option values in the (steps)-th layer
    */
   public double[][] getNextOptionValues(final double discount, final double uuProbability, final double umProbability, final double udProbability, final double muProbability,

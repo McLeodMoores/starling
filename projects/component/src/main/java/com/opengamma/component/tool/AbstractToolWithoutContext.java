@@ -88,9 +88,9 @@ public abstract class AbstractToolWithoutContext {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * The base class defined three options:<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * The base class defined three options:<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args the command-line arguments, not null
    * @return true if successful, false otherwise
@@ -102,9 +102,9 @@ public abstract class AbstractToolWithoutContext {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * The base class defined three options:<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * The base class defined three options:<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args the command-line arguments, not null
    * @param defaultLogbackResource the default logback resource, null to use tool-logback.xml as the default

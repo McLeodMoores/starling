@@ -64,7 +64,9 @@ public class BloombergTickerParserEQ extends BloombergTickerParser {
 
   /**
    * Do not call
+   * 
    * @param matcher
+   *          the matcher
    */
   @Override
   protected void parse(final Matcher matcher) {

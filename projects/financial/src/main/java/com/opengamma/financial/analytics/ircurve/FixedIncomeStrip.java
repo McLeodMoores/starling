@@ -73,11 +73,15 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   /**
    * Creates a future strip.
    *
-   * @param instrumentType  the instrument type
-   * @param curveNodePointTime  the time of the curve node point
-   * @param conventionName  the name of the convention to use to resolve the strip into a security
-   * @param nthFutureFromTenor  how many futures to step through from the curveDate + the tenor. 1-based, must be >0.
-   *   e.g. 3 (tenor = 1YR) => 3rd quarterly future after curveDate +  1YR.
+   * @param instrumentType
+   *          the instrument type
+   * @param curveNodePointTime
+   *          the time of the curve node point
+   * @param conventionName
+   *          the name of the convention to use to resolve the strip into a security
+   * @param nthFutureFromTenor
+   *          how many futures to step through from the curveDate + the tenor. 1-based, must be &gt;0. e.g. 3 (tenor = 1YR) =&gt; 3rd quarterly future after
+   *          curveDate + 1YR.
    */
   public FixedIncomeStrip(final StripInstrumentType instrumentType, final Tenor curveNodePointTime, final int nthFutureFromTenor, final String conventionName) {
     ArgumentChecker.isTrue(instrumentType == StripInstrumentType.FUTURE, "Strip type for this constructor must be a future");

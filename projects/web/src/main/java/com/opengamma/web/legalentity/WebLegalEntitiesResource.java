@@ -47,7 +47,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
  * RESTful resource for all legalEntity documents.
- * <p/>
+ * <p>
  * The legalEntity documents resource represents all the data for one element type in the legalEntity master.
  */
 @Path("/legalentities")

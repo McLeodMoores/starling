@@ -11,11 +11,9 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 
 /**
- * Default implementation of ConventinBundleSource that uses an underlying
- * ConventionBundleMaster as a data source.
+ * Default implementation of ConventinBundleSource that uses an underlying ConventionBundleMaster as a data source.
  *
- * @Deprecated ConventionBundles are deprecated. Use {@link Convention}s
- *             instead.
+ * @deprecated ConventionBundles are deprecated. Use {@link com.opengamma.core.convention.Convention}s instead.
  */
 @Deprecated
 public class DefaultConventionBundleSource implements ConventionBundleSource {

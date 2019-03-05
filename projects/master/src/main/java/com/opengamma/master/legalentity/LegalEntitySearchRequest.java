@@ -37,7 +37,7 @@ import com.opengamma.util.RegexUtils;
 
 /**
  * Request for searching for legal entities.
- * <p/>
+ * <p>
  * Documents will be returned that match the search criteria. This class provides the ability to page the results and to search as at a specific version and
  * correction instant.
  */
@@ -206,7 +206,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   /**
    * Adds a key-value pair to the set of attributes to search for.
-   * <p/>
+   * <p>
    * Attributes are used to tag the object with additional information.
    *
    * @param key

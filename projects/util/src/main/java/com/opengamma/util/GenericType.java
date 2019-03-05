@@ -7,15 +7,18 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * This class is a trick used to extract GenericType information at runtime.  Java does not allow you get generic
- * type information easily, so this class does the trick.  For example:
- * <p/>
+ * This class is a trick used to extract GenericType information at runtime. Java does not allow you get generic type information easily, so this class does the
+ * trick. For example: <br>
+ *
  * <pre>
- * Type genericType = (new GenericType<List<String>>() {}).getGenericType();
+ * Type genericType = (new GenericType&lt;List&lt;String&gt;&gt;() {
+ * }).getGenericType();
  * </pre>
- * <p/>
- * The above code will get you the genericType for List<String>
- * @param <T>  the generic type
+ * <p>
+ * The above code will get you the genericType for List&lt;String&gt;
+ *
+ * @param <T>
+ *          the generic type
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
@@ -25,17 +28,17 @@ public class GenericType<T> {
 
   /**
    * Constructs a new generic entity. Derives represented class from type
-    * parameter. Note that this constructor is protected, users should create
-    * a (usually anonymous) subclass as shown above.
-    * @throws IllegalArgumentException if entity is null
-    */
+   * parameter. Note that this constructor is protected, users should create
+   * a (usually anonymous) subclass as shown above.
+   * @throws IllegalArgumentException if entity is null
+   */
   @SuppressWarnings("unchecked")
   protected GenericType() {
-    Type superclass = getClass().getGenericSuperclass();
+    final Type superclass = getClass().getGenericSuperclass();
     if (!(superclass instanceof ParameterizedType)) {
       throw new RuntimeException("Missing type parameter.");
     }
-    ParameterizedType parameterized = (ParameterizedType) superclass;
+    final ParameterizedType parameterized = (ParameterizedType) superclass;
     _genericType = parameterized.getActualTypeArguments()[0];
     _type = (Class<T>) Types.getRawType(_genericType);
   }

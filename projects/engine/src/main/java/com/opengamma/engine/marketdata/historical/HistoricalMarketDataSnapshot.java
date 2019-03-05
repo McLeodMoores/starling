@@ -19,7 +19,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A {@link MarketDataSnapshot} backed by historical data.
+ * A {@link com.opengamma.engine.marketdata.MarketDataSnapshot} backed by historical data.
  */
 public class HistoricalMarketDataSnapshot extends AbstractMarketDataSnapshot {
 

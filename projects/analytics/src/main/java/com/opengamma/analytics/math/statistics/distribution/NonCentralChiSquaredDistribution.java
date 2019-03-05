@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -61,7 +61,7 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
     } else {
       z = mu - s - (_dofOverTwo * 2.0 - 1) / 2 * (Math.log(mu) - Math.log(s)) / (mu - s);
     }
-    return (new NormalDistribution(0, 1)).getCDF(z);
+    return new NormalDistribution(0, 1).getCDF(z);
   }
 
   /**
@@ -74,7 +74,7 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
       return 0.0;
     }
 
-    if ((_dofOverTwo + _lambdaOverTwo) > 1000) {
+    if (_dofOverTwo + _lambdaOverTwo > 1000) {
       return getFraserApproxCDF(x);
     }
 
@@ -122,8 +122,10 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getInverseCDF(final Double p) {
@@ -132,8 +134,10 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getPDF(final Double x) {
@@ -142,8 +146,10 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double nextRandom() {
@@ -170,9 +176,9 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_dofOverTwo);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lambdaOverTwo);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.surface;
@@ -57,6 +57,7 @@ public class FunctionalDoublesSurface extends Surface<Double, Double, Double> {
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getXData() {
@@ -66,6 +67,7 @@ public class FunctionalDoublesSurface extends Surface<Double, Double, Double> {
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getYData() {
@@ -75,6 +77,7 @@ public class FunctionalDoublesSurface extends Surface<Double, Double, Double> {
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getZData() {
@@ -84,6 +87,7 @@ public class FunctionalDoublesSurface extends Surface<Double, Double, Double> {
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public int size() {

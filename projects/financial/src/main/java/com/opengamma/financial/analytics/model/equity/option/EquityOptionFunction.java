@@ -326,19 +326,22 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Adjusts the properties of the function inputs: <p>
+   * Adjusts the properties of the function inputs:
    * <ul>
-   *   <li> {@link ValueRequirementNames#YIELD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY}
-   *   properties and remaps {@link ValuePropertyNames#CURVE} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} and
-   *   {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG}.
-   *   <li> {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} removes the {@link ValuePropertyNames#FUNCTION} and
-   *   {@link InstrumentTypeProperties#PROPERTY_SURFACE_INSTRUMENT_TYPE} properties.
-   *   <li> {@link ValueRequirementNames#FORWARD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY}
-   *   properties and remaps {@link ValuePropertyNames#CURVE} -&gt; {@link ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME}.
+   * <li>{@link ValueRequirementNames#YIELD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY} properties and
+   * remaps {@link ValuePropertyNames#CURVE} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} and
+   * {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG}.
+   * <li>{@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} removes the {@link ValuePropertyNames#FUNCTION} and
+   * {@link InstrumentTypeProperties#PROPERTY_SURFACE_INSTRUMENT_TYPE} properties.
+   * <li>{@link ValueRequirementNames#FORWARD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY} properties and
+   * remaps {@link ValuePropertyNames#CURVE} -&gt; {@link ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME}.
    * </ul>
    * <p>
-   * @param input The resolved input
-   * @param properties The properties to be adjusted
+   * 
+   * @param input
+   *          The resolved input
+   * @param properties
+   *          The properties to be adjusted
    */
   protected void extractInputProperties(final ValueSpecification input, final ValueProperties.Builder properties) {
     final String inputName = input.getValueName();

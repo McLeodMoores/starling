@@ -8,11 +8,14 @@ package com.opengamma.util.map;
 import java.util.Collection;
 
 /**
- * Variant of {@link Map} that allows two keys to be used, equivalent to a map that has a composite key of both elements.
+ * Variant of {@link java.util.Map} that allows two keys to be used, equivalent to a map that has a composite key of both elements.
  *
- * @param <K1> key 1 type
- * @param <K2> key 2 type
- * @param <V> value type
+ * @param <K1>
+ *          key 1 type
+ * @param <K2>
+ *          key 2 type
+ * @param <V>
+ *          value type
  */
 public interface Map2<K1, K2, V> {
 

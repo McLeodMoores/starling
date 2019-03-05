@@ -55,19 +55,20 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
-* Produces a {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE}
-* from Forward and Discounting Curves, and the Option's {@link MarketDataRequirementNames#MARKET_VALUE} or {@link ValueRequirementNames#MARK_PREVIOUS}.<p>
-*/
+ * Produces a {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} from Forward and Discounting Curves, and the Option's
+ * {@link MarketDataRequirementNames#MARKET_VALUE} or {@link ValueRequirementNames#MARK_PREVIOUS}.
+ */
 public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends AbstractFunction.NonCompiledInvoker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionFunction.class);
 
   /**
-   * Property name for what to do if Implied Vol is undefined <p>
+   * Property name for what to do if Implied Vol is undefined
    * <p>
-   * Property used to select method of dealing with rare case in which option and forward prices are such
-   * that the implied volatility is not defined.<p>
-   * This occurs when the discounted payoff is worth more than the option price.<p>
+   * Property used to select method of dealing with rare case in which option and forward prices are such that the implied volatility is not defined.
+   * <p>
+   * This occurs when the discounted payoff is worth more than the option price.
+   * <p>
    * See child classes of this one.
    */
   public static final String PROPERTY_IMPLIED_VOL_BACKUP = "ImpliedVolBackup";
@@ -142,9 +143,9 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
       return null;
     }
     final ValueProperties forwardCurveProperties = ValueProperties.builder()
-      .with(ValuePropertyNames.CURVE, forwardCurveName)
-      .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
-      .get();
+        .with(ValuePropertyNames.CURVE, forwardCurveName)
+        .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
+        .get();
     // Next we need to determine the correct target for the ForwardCurve
     final ExternalId underlyingId = FinancialSecurityUtils.getUnderlyingId(security);
     if (underlyingId == null) {

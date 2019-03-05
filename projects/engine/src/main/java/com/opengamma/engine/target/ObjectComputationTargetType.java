@@ -13,9 +13,10 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Wrapper around the {@link ComputationTargetType} instance that is typed for the leaf node. This can be used to extract the required type from a target using
- * {@link ComputationTarget#getValue(ObjectComputationTargetType)}.
+ * {@link com.opengamma.engine.ComputationTarget#getValue(ObjectComputationTargetType)}.
  *
- * @param <T> the target object type
+ * @param <T>
+ *          the target object type
  */
 public class ObjectComputationTargetType<T extends UniqueIdentifiable> extends ComputationTargetType {
 

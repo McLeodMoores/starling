@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.provider.calculator.discounting.Interpo
  *
  */
 public final class IborInterpolatedStubCompoundingCoupon extends InterpolatedStubCoupon<DepositIndexCompoundingCoupon<IborIndex>, IborIndex>
-    implements DepositIndexCoupon<IborIndex> {
+implements DepositIndexCoupon<IborIndex> {
 
   private IborInterpolatedStubCompoundingCoupon(final DepositIndexCompoundingCoupon<IborIndex> fullCoupon, final double firstInterpolatedTime,
       final double firstInterpolatedYearFraction, final double secondInterpolatedTime, final double secondInterpolatedYearFraction) {
@@ -21,11 +21,16 @@ public final class IborInterpolatedStubCompoundingCoupon extends InterpolatedStu
 
   /**
    * @param fullCoupon
+   *          the full coupon
    * @param firstInterpolatedTime
+   *          the first interpolation time
    * @param firstInterpolatedYearFraction
+   *          the year fraction of the first interpolation time
    * @param secondInterpolatedTime
+   *          the second interpolation time
    * @param secondInterpolatedYearFraction
-   * @return
+   *          the year fraction of the second interpolation time
+   * @return the coupon
    */
   public static IborInterpolatedStubCompoundingCoupon from(final DepositIndexCompoundingCoupon<IborIndex> fullCoupon, final double firstInterpolatedTime,
       final double firstInterpolatedYearFraction, final double secondInterpolatedTime, final double secondInterpolatedYearFraction) {

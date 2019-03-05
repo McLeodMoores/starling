@@ -27,22 +27,24 @@ public class ResultCallback<T> {
   }
 
   /**
-   * Passes the result back to the original caller. Note that the calling thread may be used to execute a callback handler
-   * which may in turn block or perform other actions. If this will be a problem, the caller should use an {@link ExecutorService}
-   * or other source of threads to make the notification.
+   * Passes the result back to the original caller. Note that the calling thread may be used to execute a callback handler which may in turn block or perform
+   * other actions. If this will be a problem, the caller should use an {@link java.util.concurrent.ExecutorService} or other source of threads to make the
+   * notification.
    *
-   * @param result the result value
+   * @param result
+   *          the result value
    */
   public void setResult(final T result) {
     getOperation().setResult(result);
   }
 
   /**
-   * Passes an exception back to the original caller. Note that the calling thread may be used to execute a callback handler
-   * which may in turn block or perform other actions. If this will be a problem, the caller should use an {@link ExecutorService}
-   * or other source of threads to make the notification.
+   * Passes an exception back to the original caller. Note that the calling thread may be used to execute a callback handler which may in turn block or perform
+   * other actions. If this will be a problem, the caller should use an {@link java.util.concurrent.ExecutorService} or other source of threads to make the
+   * notification.
    *
-   * @param exception the exception that should be thrown
+   * @param exception
+   *          the exception that should be thrown
    */
   public void setException(final RuntimeException exception) {
     getOperation().setException(exception);

@@ -59,10 +59,8 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Computes a Profit and Loss time series for a position based on value greeks.
- * Takes in a set of specified value greeks (which will be part of configuration),
- * converts to sensitivities, loads the underlying time series, and calculates
- * a series of P&L based on {@link SensitivityPnLCalculator}.
+ * Computes a Profit and Loss time series for a position based on value greeks. Takes in a set of specified value greeks (which will be part of configuration),
+ * converts to sensitivities, loads the underlying time series, and calculates a series of P&amp;L based on {@link SensitivityPnLCalculator}.
  *
  */
 public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompiledInvoker {

@@ -31,13 +31,10 @@ import com.opengamma.master.security.impl.RemoteSecurityMaster;
 
 /**
  * Component factory for delegating master that maintains a map of delegate masters.
- * <p/>
- * Register as both a generic SecurityMaster as well as the concrete type
- * DynamicDelegatingSecurityMasterComponentFactory, to allow command processor
- * to access out of band methods like:
- * {@link DynamicDelegatingSecurityMaster#register(String, SecurityMaster)},
- * {@link DynamicDelegatingSecurityMaster#deregister(String)} and
- * {@link DynamicDelegatingSecurityMaster#add(String, SecurityDocument)}
+ * <p>
+ * Register as both a generic SecurityMaster as well as the concrete type DynamicDelegatingSecurityMasterComponentFactory, to allow command processor to access
+ * out of band methods like: {@link DynamicDelegatingSecurityMaster#register(String, SecurityMaster)},
+ * {@link DynamicDelegatingSecurityMaster#deregister(String)} and {@link DynamicDelegatingSecurityMaster#add(String, SecurityDocument)}
  */
 @BeanDefinition
 public class DynamicDelegatingSecurityMasterComponentFactory extends AbstractComponentFactory {

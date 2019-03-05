@@ -26,7 +26,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Produces the aggregated P&L series for a curve for an FX Forward.
+ * Produces the aggregated P&amp;L series for a curve for an FX Forward.
  */
 public class FXForwardYieldCurvePnLFunction extends AbstractFunction.NonCompiledInvoker {
 

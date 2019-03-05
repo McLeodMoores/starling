@@ -46,17 +46,27 @@ public abstract class OptionFunctionProvider1D {
   public abstract double[] getPayoffAtExpiry(final double assetPrice, final double downFactor, final double upOverDown);
 
   /**
-   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer
-   * For an option with early exercise feature, this method should be overridden
-   * @param discount Discount factor
-   * @param upProbability Up probability
-   * @param downProbability Down probability
-   * @param values Option values in the (steps+1)-th layer
-   * @param baseAssetPrice Asset price at (0,0), i.e., the starting point
-   * @param sumCashDiv Sum of discounted discrete cash dividends payed after (steps+1)-th layer
-   * @param downFactor Down factor
-   * @param upOverDown  (up factor)/(down factor)
+   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer For an option with early exercise feature, this method
+   * should be overridden
+   * 
+   * @param discount
+   *          Discount factor
+   * @param upProbability
+   *          Up probability
+   * @param downProbability
+   *          Down probability
+   * @param values
+   *          Option values in the (steps+1)-th layer
+   * @param baseAssetPrice
+   *          Asset price at (0,0), i.e., the starting point
+   * @param sumCashDiv
+   *          Sum of discounted discrete cash dividends payed after (steps+1)-th layer
+   * @param downFactor
+   *          Down factor
+   * @param upOverDown
+   *          (up factor)/(down factor)
    * @param steps
+   *          the number of steps
    * @return Option values in the (steps)-th layer
    */
   public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice,
@@ -79,18 +89,29 @@ public abstract class OptionFunctionProvider1D {
   public abstract double[] getPayoffAtExpiryTrinomial(final double assetPrice, final double downFactor, final double middleOverDown);
 
   /**
-   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer
-   * For an option with early exercise feature or barriers, this method should be overridden
-   * @param discount Discount factor
-   * @param upProbability Up probability
-   * @param middleProbability Middle probability
-   * @param downProbability Down probability
-   * @param values Option values in the (steps+1)-th layer
-   * @param baseAssetPrice Asset price at (0,0), i.e., the starting point
-   * @param sumCashDiv Sum of discounted discrete cash dividends payed after (steps+1)-th layer
-   * @param downFactor Down factor
-   * @param middleOverDown  (middle factor)/(down factor)
+   * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer For an option with early exercise feature or barriers,
+   * this method should be overridden
+   * 
+   * @param discount
+   *          Discount factor
+   * @param upProbability
+   *          Up probability
+   * @param middleProbability
+   *          Middle probability
+   * @param downProbability
+   *          Down probability
+   * @param values
+   *          Option values in the (steps+1)-th layer
+   * @param baseAssetPrice
+   *          Asset price at (0,0), i.e., the starting point
+   * @param sumCashDiv
+   *          Sum of discounted discrete cash dividends payed after (steps+1)-th layer
+   * @param downFactor
+   *          Down factor
+   * @param middleOverDown
+   *          (middle factor)/(down factor)
    * @param steps
+   *          the number of steps
    * @return Option values in the (steps)-th layer
    */
   public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,

@@ -213,9 +213,9 @@ public class BjerksundStenslandModel {
     final double alpha1 = getAlpha(x1, beta, k);
     final double alpha2 = getAlpha(x2, beta, k);
     return alpha2 * Math.pow(s0, beta) - alpha2 * getPhi(s0, t1, beta, x2, x2, r, b, sigma) + getPhi(s0, t1, 1, x2, x2, r, b, sigma)
-        - getPhi(s0, t1, 1, x1, x2, r, b, sigma) - k * getPhi(s0, t1, 0, x2, x2, r, b, sigma) + k * getPhi(s0, t1, 0, x1, x2, r, b, sigma) + alpha1
-        * getPhi(s0, t1, beta, x1, x2, r, b, sigma) - alpha1 * getPsi(s0, t1, t, beta, x1, x2, x1, r, b, sigma) + getPsi(s0, t1, t, 1, x1, x2, x1, r, b, sigma)
-        - getPsi(s0, t1, t, 1, k, x2, x1, r, b, sigma) - k * getPsi(s0, t1, t, 0, x1, x2, x1, r, b, sigma) + k * getPsi(s0, t1, t, 0, k, x2, x1, r, b, sigma);
+    - getPhi(s0, t1, 1, x1, x2, r, b, sigma) - k * getPhi(s0, t1, 0, x2, x2, r, b, sigma) + k * getPhi(s0, t1, 0, x1, x2, r, b, sigma) + alpha1
+    * getPhi(s0, t1, beta, x1, x2, r, b, sigma) - alpha1 * getPsi(s0, t1, t, beta, x1, x2, x1, r, b, sigma) + getPsi(s0, t1, t, 1, x1, x2, x1, r, b, sigma)
+    - getPsi(s0, t1, t, 1, k, x2, x1, r, b, sigma) - k * getPsi(s0, t1, t, 0, x1, x2, x1, r, b, sigma) + k * getPsi(s0, t1, t, 0, k, x2, x1, r, b, sigma);
   }
 
   private double getH(final double b, final double t, final double sigma, final double k, final double b0, final double bInfinity) {
@@ -292,17 +292,25 @@ public class BjerksundStenslandModel {
   //adjoint stuff
 
   /**
-   * get the  price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry), theta (expiry), vega (sigma))
-   * of an American option with the Bjerksund & Stensland (2002) approximation
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
-   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate),
-   *  b-rho (cost-of-carry), theta (expiry), vega (sigma)
+   * get the price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry), theta (expiry), vega
+   * (sigma)) of an American option with the Bjerksund &amp; Stensland (2002) approximation
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
+   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate), b-rho
+   *         (cost-of-carry), theta (expiry), vega (sigma)
    */
   public double[] getPriceAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
     if (isCall) {
@@ -389,14 +397,22 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get the price and vega of an American option by the Bjerksund & Stensland (2002) approximation
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
+   * Get the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
    * @return length 2 arrays containing the price and vega
    */
   public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
@@ -405,14 +421,22 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get a function for the price and vega of an American option by the Bjerksund & Stensland (2002) approximation in terms of the volatility (sigma).
-   * This is primarily used by the GenericImpliedVolatiltySolver to find a (Bjerksund & Stensland) implied volatility for a given market price of an American option
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param isCall true for calls
+   * Get a function for the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation in terms of the volatility (sigma). This
+   * is primarily used by the GenericImpliedVolatiltySolver to find a (Bjerksund &amp; Stensland) implied volatility for a given market price of an American
+   * option
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param isCall
+   *          true for calls
    * @return A function from volatility (sigma) to price and vega
    */
   public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
@@ -426,17 +450,25 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get the implied volatility according to the Bjerksund & Stensland (2002) approximation for the price of an American option quoted in the market.  It is the number that put
-   *  into the Bjerksund & Stensland (2002) approximation gives the market price. <b>This is not the same as the Black implied volatility</b> (which is only applicable to
-   *  European options), although it may be numerically close.
-   * @param price The market price of an American option
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param isCall true for calls
-   * @return The (Bjerksund & Stensland (2002)) implied volatility.
+   * Get the implied volatility according to the Bjerksund &amp; Stensland (2002) approximation for the price of an American option quoted in the market. It is
+   * the number that put into the Bjerksund &amp; Stensland (2002) approximation gives the market price. <b>This is not the same as the Black implied
+   * volatility</b> (which is only applicable to European options), although it may be numerically close.
+   * 
+   * @param price
+   *          The market price of an American option
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param isCall
+   *          true for calls
+   * @return The (Bjerksund &amp; Stensland (2002)) implied volatility.
    */
   public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
     final Function1D<Double, double[]> func = getPriceAndVegaFunction(s0, k, r, b, t, isCall);
@@ -524,7 +556,7 @@ public class BjerksundStenslandModel {
 
     final double kBar = -psi4Adj[0] + psi5Adj[0] - phi4Adj[0] + phi5Adj[0] + psi5Adj[4] * psi5Bar + psi3Adj[4] * psi3Bar + x2Adj[1] * x2Bar + x1Adj[1] * x1Bar
         + alpha1Adj[1] * alpha1Bar + alpha2Adj[1] * alpha2Bar;
-    ;
+
     final double rBar = psi5Adj[7] * psi5Bar + psi4Adj[7] * psi4Bar + psi3Adj[7] * psi3Bar + psi2Adj[7] * psi2Bar + psi1Adj[7] * psi1Bar + phi6Adj[6] * phi6Bar
         + phi5Adj[6] * phi5Bar + phi4Adj[6] * phi4Bar + phi3Adj[6] * phi3Bar + phi2Adj[6] * phi2Bar + phi1Adj[6] * phi1Bar + x2Adj[2] * x2Bar + x1Adj[2] * x1Bar
         + betaAdj[1] * betaBar;
@@ -1238,7 +1270,7 @@ public class BjerksundStenslandModel {
         res[3] = k * u - res[2];
         res[4] = 2 * rootT * k;
         res[5] = k * (b + sigma / rootT) * (isT1 ? RHO2 : 1.0);
-        ;
+
         return res;
       }
       z = 1;

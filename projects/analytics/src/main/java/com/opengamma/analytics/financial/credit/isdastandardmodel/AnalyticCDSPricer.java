@@ -97,7 +97,7 @@ public class AnalyticCDSPricer {
 
   /**
    * Present value (clean price) for the payer of premiums (i.e. the buyer of protection)
-  * @param cds analytic description of a CDS traded at a certain time
+   * @param cds analytic description of a CDS traded at a certain time
    * @param yieldCurve The yield (or discount) curve
    * @param creditCurve the credit (or survival) curve
    * @param fractionalSpread The <b>fraction</b> spread
@@ -271,22 +271,27 @@ public class AnalyticCDSPricer {
   }
 
   /**
-   * The value of the annuity (or RPV01 - the premium leg per unit of coupon) at a specified valuation time. The actual value of the leg is this
-   * multiplied by the notional and the fractional coupon (i.e. coupon in basis points divided by 10,000). <br>
+   * The value of the annuity (or RPV01 - the premium leg per unit of coupon) at a specified valuation time. The actual value of the leg is this multiplied by
+   * the notional and the fractional coupon (i.e. coupon in basis points divided by 10,000). <br>
    * If this is a spot starting CDS (effective protection start = 0) then cash flows from premium payments and accrual-on-default are risky discounted to t=0
    * ('today'), then rolled forward (risk-free) to the valuation time; if the annuity is requested clean, the accrued premium (paid at the cash-settle time) is
    * rolled (again risk-free) to the valuation time; the absolute value of this amount is subtracted from the other cash flows to give the clean annuity<br>
-   * If this is a forward starting CDS (effective protection start > 0), then the premium payments are again risky discounted to t=0; if the annuity is requested
-   * clean, the accrued premium is risk-free discounted to the effective protection start, then risky discounted to t=0 - this gives the t=0 value of the annuity
-   * including the chance that a default occurs before protection starts.
-   * If valuationTime > 0, the value of the annuity is rolled forward (risk-free) to that time. To compute the expected value of the annuity conditional on
-   * no default before the valuationTime, one must divide this number by the survival probability to the valuationTime.
-   *  (for unit coupon)
-   * @param cds analytic description of a CDS traded at a certain time
-   * @param yieldCurve The yield (or discount) curve
-   * @param creditCurve the credit (or survival) curve
-   * @param cleanOrDirty Clean or dirty price
+   * If this is a forward starting CDS (effective protection start > 0), then the premium payments are again risky discounted to t=0; if the annuity is
+   * requested clean, the accrued premium is risk-free discounted to the effective protection start, then risky discounted to t=0 - this gives the t=0 value of
+   * the annuity including the chance that a default occurs before protection starts. If valuationTime > 0, the value of the annuity is rolled forward
+   * (risk-free) to that time. To compute the expected value of the annuity conditional on no default before the valuationTime, one must divide this number by
+   * the survival probability to the valuationTime. (for unit coupon)
+   * 
+   * @param cds
+   *          analytic description of a CDS traded at a certain time
+   * @param yieldCurve
+   *          The yield (or discount) curve
+   * @param creditCurve
+   *          the credit (or survival) curve
+   * @param cleanOrDirty
+   *          Clean or dirty price
    * @param valuationTime
+   *          the valuation time
    * @return 10,000 times the RPV01 (on a notional of 1)
    */
   public double annuity(final CDSAnalytic cds, final ISDACompliantYieldCurve yieldCurve, final ISDACompliantCreditCurve creditCurve, final PriceType cleanOrDirty, final double valuationTime) {
@@ -369,7 +374,7 @@ public class AnalyticCDSPricer {
   /**
    * Sensitivity of the present value (for the payer of premiums, i.e. the buyer of protection) to the zero hazard rate
    *  of a given node (knot) of the credit curve. This is per unit of notional
-  * @param cds analytic description of a CDS traded at a certain time
+   * @param cds analytic description of a CDS traded at a certain time
    * @param yieldCurve The yield (or discount) curve
    * @param creditCurve the credit (or survival) curve
    * @param fractionalSpread The <b>fraction</b> spread
@@ -389,7 +394,7 @@ public class AnalyticCDSPricer {
   /**
    * Sensitivity of the present value (for the payer of premiums, i.e. the buyer of protection) to the zero rate
    *  of a given node (knot) of the yield curve. This is per unit of notional
-  * @param cds analytic description of a CDS traded at a certain time
+   * @param cds analytic description of a CDS traded at a certain time
    * @param yieldCurve The yield (or discount) curve
    * @param creditCurve the credit (or survival) curve
    * @param fractionalSpread The <b>fraction</b> spread
@@ -408,7 +413,7 @@ public class AnalyticCDSPricer {
   /**
    * Sensitivity of the par spread (the fixed payment on the premium leg that make the PV of the CDS zero for a given yield
    * and credit (hazard rate/survival) curve) to the zero hazard rate of a given node (knot) of the credit curve.
-  * @param cds analytic description of a CDS traded at a certain time
+   * @param cds analytic description of a CDS traded at a certain time
    * @param yieldCurve The yield (or discount) curve
    * @param creditCurve the credit (or survival) curve
    * @param creditCurveNode The credit curve node

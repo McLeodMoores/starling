@@ -18,7 +18,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * An implemention of {@link LastKnownValueStoreProvider} which backs onto Redis.
- * <p/>
+ * <p>
  * It has the following properties that should be set:
  * <dl>
  *   <dt>server</dt>

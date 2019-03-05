@@ -29,10 +29,8 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the forward used in constructing the surfaces. No convexity
- * adjustment is applied, so this may be used to compare to
- * {@link com.opengamma.engine.value.ValueRequirementNames#UNDERLYING_MARKET_PRICE}
- * computed in {@link InterestRateFutureOptionMarketUnderlyingPriceFunction}
+ * Calculates the forward used in constructing the surfaces. No convexity adjustment is applied, so this may be used to compare to
+ * {@link com.opengamma.engine.value.ValueRequirementNames#UNDERLYING_MARKET_PRICE} computed in {@link UnderlyingMarketPriceSTIRFutureOptionCalculator}
  */
 public class BlackDiscountingForwardIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The underlying market price calculator */

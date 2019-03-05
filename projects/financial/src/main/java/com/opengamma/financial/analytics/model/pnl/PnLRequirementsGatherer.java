@@ -12,23 +12,30 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.financial.security.FinancialSecurity;
 
 /**
- * Gathers contributions for sensitivity-based historical P&L calculations.
+ * Gathers contributions for sensitivity-based historical P&amp;L calculations.
  * <p>
- * This is available as an interface so that it may be implemented either locally or as a remote service.
- * See {@link DefaultPnLRequirementsGatherer} for a possible implementation.
+ * This is available as an interface so that it may be implemented either locally or as a remote service. See {@link DefaultPnLRequirementsGatherer} for a
+ * possible implementation.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
 public interface PnLRequirementsGatherer {
 
   /**
-   * @param security The security
-   * @param samplingPeriod The sampling period
-   * @param scheduleCalculator The schedule calculator
-   * @param samplingFunction The sampling function
-   * @param targetSpec The target specification
-   * @param currency The currency
-   * @return A set of requirements for calculating the first-order P&L
+   * @param security
+   *          The security
+   * @param samplingPeriod
+   *          The sampling period
+   * @param scheduleCalculator
+   *          The schedule calculator
+   * @param samplingFunction
+   *          The sampling function
+   * @param targetSpec
+   *          The target specification
+   * @param currency
+   *          The currency
+   * @return A set of requirements for calculating the first-order P&amp;L
    */
   Set<ValueRequirement> getFirstOrderRequirements(FinancialSecurity security, String samplingPeriod, String scheduleCalculator, String samplingFunction,
       ComputationTargetSpecification targetSpec, String currency);

@@ -32,9 +32,8 @@ import com.opengamma.financial.convention.rest.RemoteConventionBundleSource;
 
 /**
  * Component factory providing the {@code ConventionBundleSource}.
- * 
- * @deprecated {@link ConventionBundle}s are deprecated. Use
- *             {@link com.opengamma.core.convention.Convention}s instead.
+ *
+ * @deprecated ConventionBundles are deprecated. Use {@link com.opengamma.core.convention.Convention}s instead.
  */
 @Deprecated
 @BeanDefinition

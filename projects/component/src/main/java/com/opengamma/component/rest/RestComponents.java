@@ -69,7 +69,7 @@ public interface RestComponents {
   /**
    * Gets the complete set of singletons, handling managed components.
    * <p>
-   * This method wraps the managed components in an instance of {@link DataComponentServerResource}.
+   * This method wraps the managed components in a RESTful resource.
    *
    * @return the complete set of singletons, not null
    */
@@ -92,16 +92,17 @@ public interface RestComponents {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the managed components.
-   * These will be controlled by {@link DataComponentServerResource}.
+   * Gets the managed components. These will be controlled by a RESTful resource.
+   * 
    * @return the value of the property, not null
    */
   List<RestComponent> getLocalComponents();
 
   /**
-   * Sets the managed components.
-   * These will be controlled by {@link DataComponentServerResource}.
-   * @param localComponents  the new value of the property, not null
+   * Sets the managed components. These will be controlled by a RESTful resource.
+   * 
+   * @param localComponents
+   *          the new value of the property, not null
    */
   void setLocalComponents(List<RestComponent> localComponents);
 
@@ -122,31 +123,33 @@ public interface RestComponents {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of root resources.
-   * These are not managed by {@link DataComponentServerResource}.
+   * Gets the set of root resources. These will be controlled by a RESTful resource.
+   * 
    * @return the value of the property, not null
    */
   Set<Object> getRootResourceSingletons();
 
   /**
-   * Sets the set of root resources.
-   * These are not managed by {@link DataComponentServerResource}.
-   * @param rootResourceSingletons  the new value of the property, not null
+   * Sets the set of root resources. These will be controlled by a RESTful resource.
+   * 
+   * @param rootResourceSingletons
+   *          the new value of the property, not null
    */
   void setRootResourceSingletons(Set<Object> rootResourceSingletons);
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of root resource factories.
-   * These are not managed by {@link DataComponentServerResource}.
+   * Gets the set of root resource factories. These will be controlled by a RESTful resource.
+   * 
    * @return the value of the property, not null
    */
   Set<RestResourceFactory> getRootResourceFactories();
 
   /**
-   * Sets the set of root resource factories.
-   * These are not managed by {@link DataComponentServerResource}.
-   * @param rootResourceFactories  the new value of the property, not null
+   * Sets the set of root resource factories. These will be controlled by a RESTful resource.
+   * 
+   * @param rootResourceFactories
+   *          the new value of the property, not null
    */
   void setRootResourceFactories(Set<RestResourceFactory> rootResourceFactories);
 

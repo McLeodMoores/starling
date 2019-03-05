@@ -25,7 +25,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * A {@link ObjectResolver} for {@link ComputationTargetType#PRIMITIVE}.
+ * A {@link ObjectResolver} for {@link com.opengamma.engine.target.ComputationTargetType#PRIMITIVE}.
  */
 public class PrimitiveResolver extends AbstractIdentifierResolver implements Resolver<Primitive> {
   /**

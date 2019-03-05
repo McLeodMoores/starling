@@ -100,13 +100,16 @@ public class DemoStandardFunctionConfiguration extends StandardFunctionConfigura
   }
 
   /**
-   * These functions provide aliases for the user to rename one of OpenGamma's ValueRequirementNames to one of their own.
-   * In addition to adding the name to a class that extends ValueRenamingFunction, such as SimpleRenamingFunction, one must also
-   * add the name into ValueRequirementNames or to a project-specific name class
-   * and include that into the [webBasics] section of the engine.ini configuration file. <p>
-   * eg: [webBasics] <p>
-   *  valueRequirementNameClasses = com.opengamma.engine.value.ValueRequirementNames,com.opengamma.yourproject.function.YourProjectValueRequirementNames
-   * @param functions Extends this List<FunctionConfiguration>
+   * These functions provide aliases for the user to rename one of OpenGamma's ValueRequirementNames to one of their own. In addition to adding the name to a
+   * class that extends ValueRenamingFunction, such as SimpleRenamingFunction, one must also add the name into ValueRequirementNames or to a project-specific
+   * name class and include that into the [webBasics] section of the engine.ini configuration file.
+   * <p>
+   * eg: [webBasics]
+   * <p>
+   * valueRequirementNameClasses = com.opengamma.engine.value.ValueRequirementNames,com.opengamma.yourproject.function.YourProjectValueRequirementNames
+   * 
+   * @param functions
+   *          Extends this List
    */
   protected void addValueRenamingFunctions(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(SimpleRenamingFunction.class, ValueRequirementNames.VALUE_DELTA, ValueRequirementNames.NET_MARKET_VALUE));

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -13,10 +13,10 @@ import com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr.Smi
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- *  A surface that contains the Black (implied) volatility  as a function of time to maturity and moneyness, m, defined
- *  as m = k/F(T), where k is the strike and F(T) is the forward for expiry at time T <p>
- *  <p>
- *  The *intention* of this class is to provide access to underlying data grid, vol and axes, so that we may still bump points and project risk across the grid
+ * A surface that contains the Black (implied) volatility as a function of time to maturity and moneyness, m, defined as m = k/F(T), where k is the strike and
+ * F(T) is the forward for expiry at time T.
+ * <p>
+ * The *intention* of this class is to provide access to underlying data grid, vol and axes, so that we may still bump points and project risk across the grid
  */
 public class BlackVolatilitySurfaceMoneynessFcnBackedByGrid extends BlackVolatilitySurfaceMoneyness {
 

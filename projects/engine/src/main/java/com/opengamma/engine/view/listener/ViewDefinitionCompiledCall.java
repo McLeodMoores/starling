@@ -9,7 +9,7 @@ import com.google.common.base.Function;
 import com.opengamma.engine.view.compilation.CompiledViewDefinition;
 
 /**
- * Represents a call to {@link ViewResultListener#viewDefinitionCompiled(CompiledViewDefinition)}.
+ * Represents a call to {@link ViewResultListener#viewDefinitionCompiled(CompiledViewDefinition, boolean)}.
  */
 public class ViewDefinitionCompiledCall implements Function<ViewResultListener, Object> {
 

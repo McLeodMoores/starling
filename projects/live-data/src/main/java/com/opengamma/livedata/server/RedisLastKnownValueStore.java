@@ -179,7 +179,7 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
   /**
    * This method is not an exemplar of proper software engineering.
    * For more information on the rationale, please see http://jira.opengamma.com/browse/PLAT-2536 .
-   * <p/>
+   * <p>
    * A few problems with this:
    * <ol>
    *   <li>It's still not clear that storing all data as text is appropriate. See PLAT-2536 for commentary.</li>

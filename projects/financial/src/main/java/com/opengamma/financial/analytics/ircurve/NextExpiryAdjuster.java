@@ -14,8 +14,9 @@ import org.threeten.bp.temporal.TemporalAdjusters;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * {@code DatAdjuster} that finds the next given day of month in the next IMM Future Expiry Month. (EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER)) <p>
- * e.g. For IR Future Options, this is typically the 3rd Wednesday. For USD and GBP Equity Index Options, this is the Saturday after the Third Friday. <p>
+ * {@code DateAdjuster} that finds the next given day of month in the next IMM Future Expiry Month. (EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER,
+ * Month.DECEMBER)) e.g. For IR Future Options, this is typically the 3rd Wednesday. For USD and GBP Equity Index Options, this is the Saturday after the Third
+ * Friday.
  */
 public class NextExpiryAdjuster implements TemporalAdjuster {
 
@@ -26,9 +27,9 @@ public class NextExpiryAdjuster implements TemporalAdjuster {
   private final NextQuarterAdjuster _nextQuarterAdjuster;
 
   /** Specify the day and week in the month. (eg 3rd Wednesday) Adjuster returns that day in next IMM Expiry Month
-     * @param week Ordinal of week in month, beginning from 1.
-     * @param day DayOfWeek
-     */
+   * @param week Ordinal of week in month, beginning from 1.
+   * @param day DayOfWeek
+   */
   public NextExpiryAdjuster(final int week, final DayOfWeek day) {
     _dayOfMonthAdjuster = TemporalAdjusters.dayOfWeekInMonth(week, day);
     _nextQuarterAdjuster = new NextQuarterAdjuster();

@@ -20,13 +20,18 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Expiry calculator for futures and options on the VIX, the CBOE Volatility Index. <p>
- * VX Futures, traded on CFE, are specified here: http://cfe.cboe.com/Products/Spec_VIX.aspx <p>
- * VIX Index Options, traded on CBOE, are specified here:  <p>
+ * Expiry calculator for futures and options on the VIX, the CBOE Volatility Index.
  * <p>
- * Contract Months = The Exchange may list for trading up to nine near-term serial months and five months on the February quarterly cycle for the VIX futures contract.<p>
- * Expiry = The Wednesday that is thirty days prior to the third Friday of the calendar month immediately following the month in which the contract expires ("Final Settlement Date").
- * If the third Friday of the month subsequent to expiration of the applicable VIX futures contract is a CBOE holiday, expiry shall be thirty days prior to the CBOE business day preceding that Friday.
+ * VX Futures, traded on CFE, are specified here: http://cfe.cboe.com/Products/Spec_VIX.aspx
+ * <p>
+ * VIX Index Options, traded on CBOE, are specified here:
+ * <p>
+ * Contract Months = The Exchange may list for trading up to nine near-term serial months and five months on the February quarterly cycle for the VIX futures
+ * contract.
+ * <p>
+ * Expiry = The Wednesday that is thirty days prior to the third Friday of the calendar month immediately following the month in which the contract expires
+ * ("Final Settlement Date"). If the third Friday of the month subsequent to expiration of the applicable VIX futures contract is a CBOE holiday, expiry shall
+ * be thirty days prior to the CBOE business day preceding that Friday.
  *
  */
 public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {

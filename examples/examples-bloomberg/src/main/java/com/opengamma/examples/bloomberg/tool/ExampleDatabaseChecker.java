@@ -45,7 +45,7 @@ public class ExampleDatabaseChecker {
 
   /**
    * Main method to run the tool. No arguments are needed.
-   * <p/>
+   * <p>
    * If the command line is empty, the "development" configuration file is started. This file is intended for use with an IDE and
    * a checked out source code tree.
    * It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file system as per a standard checkout of Starling.

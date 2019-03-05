@@ -19,13 +19,14 @@ public interface FXForwardCurveInstrumentProvider extends CurveInstrumentProvide
    * market data. Otherwise, gets spot rate information from the dependency
    * graph using
    * {@link com.opengamma.engine.value.ValueRequirementNames#SPOT_RATE}
-   * 
+   *
    * @return True if the spot ticker is to be used to get the spot rate
    */
   boolean useSpotRateFromGraph();
 
   /**
-   * The data field name for the spot ticker (e.g. {@link MarketDataRequirementNames#MARKET_VALUE}.
+   * The data field name for the spot ticker (e.g. {@link com.opengamma.core.value.MarketDataRequirementNames#MARKET_VALUE}.
+   * 
    * @return The spot ticker data field name
    */
   String getDataFieldName();

@@ -29,14 +29,16 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
+import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix2D;
 import com.opengamma.financial.analytics.model.VegaMatrixUtils;
+import com.opengamma.financial.security.option.SwaptionSecurity;
 
 /**
- * Calculates the At-The-Money {@link ValueRequirementNames#VEGA_MATRIX} of a {@link SwaptionSecurity} 
- * using a Black (lognormal) surface and curves constructed using the Discounting method.
- * 
+ * Calculates the At-The-Money {@link com.opengamma.engine.value.ValueRequirementNames#VEGA_MATRIX} of a {@link SwaptionSecurity} using a Black (lognormal)
+ * surface and curves constructed using the Discounting method.
+ *
  */
 public class BlackDiscountingVegaMatrixSwaptionFunction extends BlackDiscountingSwaptionFunction {
   /** The value vega calculator */

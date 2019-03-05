@@ -40,10 +40,8 @@ public interface BatchMaster {
   /**
    * Gets a batch document by unique identifier.
    * <p>
-   * This returns a single batch document by unique identifier. It will return
-   * all the risk data and the total count of the errors. For more control, use
-   * {@link #get(com.opengamma.batch.rest.BatchGetRequest)}.
-   *
+   * This returns a single batch document by unique identifier. It will return all the risk data and the total count of the errors.
+   * 
    * @param batchId
    *          the unique identifier, not null
    * @return the document, not null

@@ -6,7 +6,7 @@
 package com.opengamma.core.obligor;
 
 /**
- * Enumerate the possible credit rating states for a reference entity (Standard & Poors rating classifications).
+ * Enumerate the possible credit rating states for a reference entity (Standard &amp; Poors rating classifications).
  */
 public enum CreditRatingStandardAndPoors {
   /**

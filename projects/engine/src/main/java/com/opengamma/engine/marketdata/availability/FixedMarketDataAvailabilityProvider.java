@@ -195,10 +195,11 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   /**
-   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification
-   * used by {@link #addValue(ValueRequirement,Object)} or {@link #removeValue(ValueRequirement)}.
+   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification used by
+   * {@link #addAvailableData(ValueSpecification)} or {@link #removeAvailableData(ValueSpecification)}.
    *
-   * @param requirement the requirement to resolve, not null
+   * @param requirement
+   *          the requirement to resolve, not null
    * @return the resolved {@code ValueSpecification}, not null
    */
   public ValueSpecification resolveRequirement(final ValueRequirement requirement) {

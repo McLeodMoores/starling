@@ -91,7 +91,6 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base function for all multi-curve pricing and risk functions. Produces results for trades with following underlying securities:
- * <p>
  * <ul>
  * <li> {@link CashSecurity}
  * <li> {@link CashFlowSecurity}

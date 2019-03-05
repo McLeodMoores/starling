@@ -15,7 +15,7 @@ import com.opengamma.util.PublicAPI;
  * Thus from a particular {@link ViewComputationResultModel} and a
  * {@link ViewDeltaResultModel} you can compose the equivalent
  * {@link ViewComputationResultModel} for that time sequence.
- * <p/>
+ * <p>
  * The differences here are for two purposes:
  * <ol>
  *   <li>Deltas are more efficient to transfer on the wire, and better
@@ -33,15 +33,9 @@ public interface ViewDeltaResultModel extends ViewResultModel {
   /**
    * The result timestamp for the previous delta, to chain them together
    * properly.
-   * This will correspond with either {@link #getResultTimestamp()} on the previous
-   * delta, or {@link ViewComputationResultModel#getResultTimestamp()} on the
-   * previous full result model.
    * 
    * @return the timestamp for the previous result in the delta chain
    */
   Instant getPreviousResultTimestamp();
   
-  // TODO kirk 2010-03-29 -- Notify on new nodes/positions
-  // TODO kirk 2010-03-29 -- Notify on removed nodes/positions
-  // TODO kirk 2010-03-29 -- Notify on removed calculation configurations
 }

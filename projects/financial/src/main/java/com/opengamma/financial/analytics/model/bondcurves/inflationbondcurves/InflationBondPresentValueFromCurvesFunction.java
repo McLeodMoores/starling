@@ -37,8 +37,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 public class InflationBondPresentValueFromCurvesFunction extends InflationBondFromCurvesFunction<InflationIssuerProviderInterface, MultipleCurrencyAmount> {
 
   /**
-   * Sets the value requirement name to
-   * {@link ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public InflationBondPresentValueFromCurvesFunction() {
     super(PRESENT_VALUE, null);

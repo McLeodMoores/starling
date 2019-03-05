@@ -31,13 +31,10 @@ import com.opengamma.master.position.impl.RemotePositionMaster;
 
 /**
  * Component factory for delegating master that maintains a map of delegate masters.
- * <p/>
- * Register as both a generic PositionMaster as well as the concrete type
- * DynamicDelegatingPositionMasterComponentFactory, to allow command processor
- * to access out of band methods like:
- * {@link DynamicDelegatingPositionMaster#register(String, PositionMaster)},
- * {@link DynamicDelegatingPositionMaster#deregister(String)} and
- * {@link DynamicDelegatingPositionMaster#add(String, PositionDocument)}
+ * <p>
+ * Register as both a generic PositionMaster as well as the concrete type DynamicDelegatingPositionMasterComponentFactory, to allow command processor to access
+ * out of band methods like: {@link DynamicDelegatingPositionMaster#register(String, PositionMaster)},
+ * {@link DynamicDelegatingPositionMaster#deregister(String)} and {@link DynamicDelegatingPositionMaster#add(String, PositionDocument)}
  */
 @BeanDefinition
 public class DynamicDelegatingPositionMasterComponentFactory extends AbstractComponentFactory {

@@ -24,14 +24,11 @@ import com.opengamma.financial.security.option.FxFutureOptionSecurity;
 import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 
 /**
- * This visitor returns true if the FinancialSecurity is market traded. In our
- * context, this means that a MarketDataRequirementNames.MARKET_VALUE is
- * available for a security.
+ * This visitor returns true if the FinancialSecurity is market traded. In our context, this means that a MarketDataRequirementNames.MARKET_VALUE is available
+ * for a security.
  * <p>
- * When
- * {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_MARKET_PRICE}
- * is chosen in a View Configuration, {@link SecurityMarketPriceFunction}
- * provides the price.
+ * When {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_MARKET_PRICE} is chosen in a View Configuration,
+ * {@link com.opengamma.financial.analytics.model.equity.SecurityMarketPriceFunction} provides the price.
  */
 public class MarketSecurityVisitor extends FinancialSecurityVisitorSameValueAdapter<Boolean> {
 

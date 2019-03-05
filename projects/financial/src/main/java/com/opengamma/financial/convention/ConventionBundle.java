@@ -20,7 +20,8 @@ import com.opengamma.id.UniqueIdentifiable;
 
 /**
  * A complete defined set of conventions, such as for LIBOR, EURIBOR and STIBOR.
- * @deprecated Use {@Convention}s instead
+ *
+ * @deprecated Use {@link com.opengamma.core.convention.Convention}s instead
  */
 @Deprecated
 public interface ConventionBundle extends UniqueIdentifiable {

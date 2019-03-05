@@ -10,7 +10,7 @@ import org.threeten.bp.Instant;
 import com.google.common.base.Function;
 
 /**
- * Represents a call to {@link ViewResultListener#viewDefinitionCompilationFailed(javax.time.Instant, Exception)}.
+ * Represents a call to {@link ViewResultListener#viewDefinitionCompilationFailed(Instant, Exception)}.
  */
 public class ViewDefinitionCompilationFailedCall implements Function<ViewResultListener, Object> {
 

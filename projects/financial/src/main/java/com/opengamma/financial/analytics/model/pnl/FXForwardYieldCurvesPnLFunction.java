@@ -46,7 +46,7 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 
 /**
- * Produces the aggregated P&L series across both curves for an FX Forward.
+ * Produces the aggregated P&amp;L series across both curves for an FX Forward.
  */
 public class FXForwardYieldCurvesPnLFunction extends AbstractFunction {
 

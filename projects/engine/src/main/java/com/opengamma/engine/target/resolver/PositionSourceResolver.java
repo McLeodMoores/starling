@@ -29,8 +29,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A {@link ObjectResolver} built on a {@link PositionSource}.
  * <p>
- * Note that these resolvers only access the position source for shallow resolution of trades and positions. More specialized forms will
- * combine these instances with {@link SecuritySource} based resolvers to provide the deep-resolution required by a full system.
+ * Note that these resolvers only access the position source for shallow resolution of trades and positions. More specialized forms will combine these instances
+ * with {@link com.opengamma.core.security.SecuritySource} based resolvers to provide the deep-resolution required by a full system.
  */
 public class PositionSourceResolver {
 

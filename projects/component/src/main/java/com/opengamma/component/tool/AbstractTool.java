@@ -28,11 +28,11 @@ import com.opengamma.util.StartupUtils;
 /**
  * Abstract class for command line tools.
  * <p>
- * The command line tools generally require access to key parts of the infrastructure.
- * These are provided via {@link ToolContext} which is setup and closed by this class
- * using {@link ComponentManager}. Normally the file is named {@code toolcontext.ini}.
+ * The command line tools generally require access to key parts of the infrastructure. These are provided via {@link ToolContext} which is setup and closed by
+ * this class using {@link com.opengamma.component.ComponentManager}. Normally the file is named {@code toolcontext.ini}.
  *
- * @param <T> the tool context type
+ * @param <T>
+ *          the tool context type
  */
 public abstract class AbstractTool<T extends ToolContext> {
 
@@ -88,10 +88,10 @@ public abstract class AbstractTool<T extends ToolContext> {
    * Main entry point to initialize and run the tool from standard command-line
    * arguments, terminating the JVM once complete.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    * <p>
    * This method is intended for use from a standalone main method.
    * It will print exceptions to system err and terminate the JVM.
@@ -109,10 +109,10 @@ public abstract class AbstractTool<T extends ToolContext> {
    * Main entry point to initialize and run the tool from standard command-line
    * arguments, terminating the JVM once complete.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    * <p>
    * This method is intended for use from a standalone main method.
    * It will print exceptions to system err and terminate the JVM.
@@ -159,10 +159,10 @@ public abstract class AbstractTool<T extends ToolContext> {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args  the command-line arguments, not null
    * @param toolContextClass  the type of tool context to create, should match the generic type argument
@@ -175,10 +175,10 @@ public abstract class AbstractTool<T extends ToolContext> {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory unless default specified<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory unless default specified<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args  the command-line arguments, not null
    * @param defaultConfigResource  the default configuration resource location, null if mandatory on command line
@@ -230,10 +230,12 @@ public abstract class AbstractTool<T extends ToolContext> {
   /**
    * Runs the tool.
    * <p>
-   * This starts the tool contexts and calls {@link #run(ToolContexts)}. This will catch exceptions and print a stack trace.
+   * This starts the tool contexts and calls {@link #run(ToolContext)}. This will catch exceptions and print a stack trace.
    *
-   * @param configResources  the config resource locations for multiple tool contexts, not null
-   * @param toolContextClass  the type of tool context to create, should match the generic type argument
+   * @param configResources
+   *          the config resource locations for multiple tool contexts, not null
+   * @param toolContextClass
+   *          the type of tool context to create, should match the generic type argument
    * @return true if successful
    */
   @SuppressWarnings("unchecked")

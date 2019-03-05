@@ -16,8 +16,7 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 public class InflationBondCleanPriceFromCurvesFunction extends InflationBondFromCurvesFunction<InflationIssuerProviderInterface, Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link ValueRequirementNames#CLEAN_PRICE} and the calculator to
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#CLEAN_PRICE} and the calculator to
    * {@link CleanRealPriceFromCurvesCalculator}.
    */
   public InflationBondCleanPriceFromCurvesFunction() {

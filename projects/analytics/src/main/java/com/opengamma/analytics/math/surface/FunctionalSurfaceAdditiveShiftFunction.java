@@ -53,8 +53,10 @@ public class FunctionalSurfaceAdditiveShiftFunction implements SurfaceShiftFunct
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double x, final double y, final double shift) {
@@ -63,8 +65,10 @@ public class FunctionalSurfaceAdditiveShiftFunction implements SurfaceShiftFunct
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double x, final double y, final double shift, final String newName) {
@@ -73,8 +77,10 @@ public class FunctionalSurfaceAdditiveShiftFunction implements SurfaceShiftFunct
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift) {
@@ -83,8 +89,10 @@ public class FunctionalSurfaceAdditiveShiftFunction implements SurfaceShiftFunct
 
   /**
    * {@inheritDoc}
+   * 
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public FunctionalDoublesSurface evaluate(final FunctionalDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift, final String newName) {

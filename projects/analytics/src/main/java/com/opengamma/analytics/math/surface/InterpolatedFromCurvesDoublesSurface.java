@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.surface;
@@ -21,7 +21,7 @@ import com.opengamma.util.tuple.Pair;
 /**
  * A surface that is constructed from a set of parallel curves ({@link Curve}), with an interpolator to find points between these curves. The
  * curves are assumed to be coplanar (with the planes parallel to the <i>x</i> or <i>y</i> axis), with their orientation supplied on construction.
- * 
+ *
  */
 public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double, Double> {
 
@@ -70,7 +70,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param interpolator The interpolator
    * @return A surface with an automatically-generated name
    */
-  public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves, 
+  public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves,
       final Interpolator1D interpolator) {
     return new InterpolatedFromCurvesDoublesSurface(xzCurves, curves, interpolator, false);
   }
@@ -82,7 +82,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves An array of curves, not null, must be the same length as the array of points of intersection
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
       final Interpolator1D interpolator, final String name) {
@@ -96,7 +96,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves An array of curves, not null, must be the same length as the array of points of intersection
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
       final Interpolator1D interpolator, final String name) {
@@ -110,7 +110,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves A list of curves, not null, must be the same length as the array of points of intersection
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
       final Interpolator1D interpolator, final String name) {
@@ -122,7 +122,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves A map of points of intersection of the curves to curves, not null
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves,
       final Interpolator1D interpolator, final String name) {
@@ -186,7 +186,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves An array of curves, not null, must be the same length as the array of points of intersection
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
       final Interpolator1D interpolator, final String name) {
@@ -200,7 +200,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves An array of curves, not null, must be the same length as the array of points of intersection
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
       final Interpolator1D interpolator, final String name) {
@@ -214,7 +214,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves A list of curves, not null, must be the same length as the array of points of intersection
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
       final Interpolator1D interpolator, final String name) {
@@ -226,7 +226,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
    * @param curves A map of points of intersection of the curves to curves, not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
    * @param interpolator The interpolator
    * @param name The name of the surface
-   * @return A surface 
+   * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves,
       final Interpolator1D interpolator, final String name) {
@@ -535,6 +535,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getXData() {
@@ -544,6 +545,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getYData() {
@@ -553,6 +555,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getZData() {
@@ -562,6 +565,7 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public int size() {

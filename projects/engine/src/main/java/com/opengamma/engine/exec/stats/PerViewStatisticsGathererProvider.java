@@ -18,10 +18,10 @@ import org.threeten.bp.Instant;
 import com.opengamma.id.UniqueId;
 
 /**
- * Partial implementation of a {@link GraphExecutorStatisticsGathererProvider} that delivers a per-view
- * {@link GraphExecutorStatisticsGatherer} instance.
+ * Partial implementation of a {@link GraphExecutorStatisticsGathererProvider} that delivers a per-view {@link GraphExecutorStatisticsGatherer} instance.
  *
  * @param <T>
+ *          The type of the statistics gatherer
  */
 public abstract class PerViewStatisticsGathererProvider<T extends GraphExecutorStatisticsGatherer> implements GraphExecutorStatisticsGathererProvider {
 

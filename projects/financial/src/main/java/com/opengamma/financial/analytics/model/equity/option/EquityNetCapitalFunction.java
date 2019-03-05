@@ -14,8 +14,7 @@ import com.opengamma.financial.security.option.EquityIndexOptionSecurity;
 import com.opengamma.financial.security.option.EquityOptionSecurity;
 
 /**
- * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement,
- * and scales by a constant representing, say, a fund's capital.<p>
+ * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement, and scales by a constant representing, say, a fund's capital.
  * <p>
  * Applies only to Equity Security Types
  */

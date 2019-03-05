@@ -29,7 +29,6 @@ import com.opengamma.util.time.Tenor;
  * is called using reflection.
  * <p>
  * The supported types of strip are:
- * <p>
  * <ul>
  * <li> {@link StripInstrumentType#CASH}
  * <li> {@link StripInstrumentType#CDOR}

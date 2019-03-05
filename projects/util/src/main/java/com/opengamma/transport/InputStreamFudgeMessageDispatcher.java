@@ -15,9 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Listens to an {@link InputStream}, splits the stream into individual
- * {@link FudgeMsg}s, and then dispatches them to a {@link FudgeMessageReceiver}.
- * Must be run in its own thread.
+ * Listens to an {@link InputStream}, splits the stream into individual {@link org.fudgemsg.FudgeMsg}s, and then dispatches them to a
+ * {@link FudgeMessageReceiver}. Must be run in its own thread.
  */
 public class InputStreamFudgeMessageDispatcher implements Runnable {
   private final InputStream _inputStream;
@@ -41,7 +40,7 @@ public class InputStreamFudgeMessageDispatcher implements Runnable {
 
   /**
    * Gets the inputStream.
-   * 
+   *
    * @return the inputStream
    */
   public InputStream getInputStream() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.loader;
@@ -14,7 +14,8 @@ import java.util.Set;
 
 import org.threeten.bp.Period;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
@@ -53,12 +54,12 @@ public class ExampleFXImpliedCurveConfigurationsPopulator {
   private static final String TICKER_SUFFIX = "FXFORWARD";
   /** The FX forward node tenors */
   private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_WEEK, Tenor.TWO_WEEKS, Tenor.THREE_WEEKS,
-    Tenor.ONE_MONTH, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS,
-    Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS, Tenor.SIX_YEARS, Tenor.SEVEN_YEARS, Tenor.EIGHT_YEARS,
-    Tenor.NINE_YEARS, Tenor.TEN_YEARS };
+      Tenor.ONE_MONTH, Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS,
+      Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS, Tenor.SIX_YEARS, Tenor.SEVEN_YEARS, Tenor.EIGHT_YEARS,
+      Tenor.NINE_YEARS, Tenor.TEN_YEARS };
   /** The FX forward node tenor strings */
   private static final String[] TENOR_STRINGS = new String[] {"1W", "2W", "3W", "1M", "3M",
-    "6M", "9M", "1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y" };
+      "6M", "9M", "1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y" };
   /** The exogenous USD curve configuration */
   private static final List<String> EXOGENOUS_CONFIGURATION = Arrays.asList("Default USD Curves");
   /** The FX forward convention id */
@@ -81,9 +82,9 @@ public class ExampleFXImpliedCurveConfigurationsPopulator {
   /**
    * Creates an FX implied curve configuration for a currency. The configuration
    * contains one discounting curve type referencing a curve called "[CURRENCY_STRING]FX" and
-   * is called "[CURRENCY_STRING] FX Implied Curve". The exogenous curve construction 
-   * configuration is called "Default USD Curves" and is populated in 
-   * {@link ExampleCurveConfigurationsPopulator}. 
+   * is called "[CURRENCY_STRING] FX Implied Curve". The exogenous curve construction
+   * configuration is called "Default USD Curves" and is populated in
+   * {@link ExampleCurveConfigurationsPopulator}.
    * @param currency The currency
    * @return The configuration
    */
@@ -99,7 +100,7 @@ public class ExampleFXImpliedCurveConfigurationsPopulator {
   }
 
   /**
-   * Creates a curve node id mapper for FX forwards for a currency / USD pair. 
+   * Creates a curve node id mapper for FX forwards for a currency / USD pair.
    * @param currency The currency
    * @return The curve node id mapper
    */
@@ -134,8 +135,8 @@ public class ExampleFXImpliedCurveConfigurationsPopulator {
           Currency.USD, curveNodeIdMapper);
       nodes.add(node);
     }
-    return new InterpolatedCurveDefinition(curveName, nodes, Interpolator1DFactory.LINEAR,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    return new InterpolatedCurveDefinition(curveName, nodes, LinearInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
   }
 
   /**

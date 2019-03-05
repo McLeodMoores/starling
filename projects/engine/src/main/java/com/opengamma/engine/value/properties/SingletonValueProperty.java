@@ -19,7 +19,7 @@ import com.google.common.collect.Sets;
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
 
 /**
- * Internal state used to implement a {@link ValueProperties} entry which has a single value.
+ * Internal state used to implement a {@link com.opengamma.engine.value.ValueProperties} entry which has a single value.
  */
 public final class SingletonValueProperty extends AbstractValueProperty {
 

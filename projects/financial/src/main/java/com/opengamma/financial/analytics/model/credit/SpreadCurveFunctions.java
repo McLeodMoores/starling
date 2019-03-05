@@ -36,7 +36,7 @@ import com.opengamma.util.time.Tenor;
 public class SpreadCurveFunctions {
 
   //private final static PresentValueCreditDefaultSwap cdsPresentValueCalculator = new PresentValueCreditDefaultSwap();
- // private static PresentValueStandardCreditDefaultSwap cdsPresentValueCalculator = new PresentValueStandardCreditDefaultSwap();
+  // private static PresentValueStandardCreditDefaultSwap cdsPresentValueCalculator = new PresentValueStandardCreditDefaultSwap();
 
   private static final Collection<Tenor> BUCKET_TENORS = new ArrayList<>();
   private static final double TEN_MINUS_4 = 1e-4;
@@ -113,16 +113,25 @@ public class SpreadCurveFunctions {
 
 
   /**
-   * Format the spread curve for a given cds.
-   * For IMM dates set all spreads to bucket maturity is in.
-   * For non-IMM dates take subset of spreads that correspond to buckets.
+   * Format the spread curve for a given cds. For IMM dates set all spreads to bucket maturity is in. For non-IMM dates take subset of spreads that correspond
+   * to buckets.
    *
    * Doesn't handle PUF and non-IMM.
    *
-   * @param cds the cds security
-   * @param spreadCurve the spread curve
-   * @param bucketDates the bucket dates
-   * @param quoteConvention the quote convention (e.g Spread, points upfront etc)
+   * @param cds
+   *          the cds security
+   * @param spreadCurve
+   *          the spread curve
+   * @param bucketDates
+   *          the bucket dates
+   * @param quoteConvention
+   *          the quote convention (e.g Spread, points upfront etc)
+   * @param valuationDate
+   *          the valuationDate
+   * @param isdaCurve
+   *          the interest rate curve
+   * @param startDate
+   *          the start date
    * @return the spread curve for the given cds
    */
   @Deprecated
@@ -188,13 +197,18 @@ public class SpreadCurveFunctions {
   /**
    * Get spread curve for the given tenors
    *
-   * @param spreadCurve the spread curve
-   * @param bucketDates the bucket dates
-   * @param quoteConvention the convention, spread or puf
+   * @param spreadCurve
+   *          the spread curve
+   * @param bucketDates
+   *          the bucket dates
+   * @param startDate
+   *          the start date
+   * @param quoteConvention
+   *          the convention, spread or puf
    * @return the spread curve
    */
   public static double[] getSpreadCurveNew(final NodalTenorDoubleCurve spreadCurve, final ZonedDateTime[] bucketDates,
-                                           final ZonedDateTime startDate, final StandardCDSQuotingConvention quoteConvention) {
+      final ZonedDateTime startDate, final StandardCDSQuotingConvention quoteConvention) {
     ArgumentChecker.notNull(spreadCurve, "spread curve");
     ArgumentChecker.notNull(bucketDates, "bucket dates");
     ArgumentChecker.isTrue(spreadCurve.size() > 0, "spread curve had no values");
@@ -224,15 +238,20 @@ public class SpreadCurveFunctions {
   }
 
   /**
-   * Get analytic quote objects for the spread / credit curve.
-   * If priced cds matures on an IMM date set spreads to quoted otherwise take them as par.
+   * Get analytic quote objects for the spread / credit curve. If priced cds matures on an IMM date set spreads to quoted otherwise take them as par.
    *
    * If quoteConvention is SPREAD, set quoted vs. par spread based on IMM maturity
    *
-   * @param pricedCDSMaturity the maturity of the priced cds
-   * @param values the quotes
-   * @param quoteConvention the quote convention e.g. SPREAD or PUF
-   * @param normalise control whether to normalise spreads to fractional vlaues
+   * @param pricedCDSMaturity
+   *          the maturity of the priced cds
+   * @param values
+   *          the quotes
+   * @param coupon
+   *          the coupon
+   * @param quoteConvention
+   *          the quote convention e.g. SPREAD or PUF
+   * @param normalise
+   *          control whether to normalise spreads to fractional vlaues
    * @return the cds quote conventions
    */
   public static CDSQuoteConvention[] getQuotes(final ZonedDateTime pricedCDSMaturity, final double[] values, final double coupon, final StandardCDSQuotingConvention quoteConvention, final boolean normalise) {

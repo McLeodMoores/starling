@@ -13,13 +13,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A collection of core floating indexes commonly permitted for OTC clearing.
- * While clients may choose to use any index that the underlying implementations
- * support, in general, using one of these enumerated constants can ensure that
- * data is correctly pulled through by the underlying margin calculators and
- * is recommended.
- * In order to create a floating index rate (e.g. {@see FloatingInterestRateLeg#setFloatingReferenceRateId(ExternalId)})
- * you should get the floating index, and then call foo.
+ * A collection of core floating indexes commonly permitted for OTC clearing. While clients may choose to use any index that the underlying implementations
+ * support, in general, using one of these enumerated constants can ensure that data is correctly pulled through by the underlying margin calculators and is
+ * recommended. In order to create a floating index rate (e.g. {@link FloatingInterestRateLeg#setFloatingReferenceRateId(ExternalId)}) you should get the
+ * floating index, and then call foo.
  */
 public enum FloatingIndex implements NamedInstance {
   /**

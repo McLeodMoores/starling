@@ -148,10 +148,10 @@ public interface ComponentLogger {
     /**
      * Creates an instance.
      * <p>
-     * Level 0 is errors only.<br />
-     * Level 1 is errors and warnings only.<br />
-     * Level 2 is normal info and above.<br />
-     * Level 3 is verbose info and above.<br />
+     * Level 0 is errors only.<br>
+     * Level 1 is errors and warnings only.<br>
+     * Level 2 is normal info and above.<br>
+     * Level 3 is verbose info and above.<br>
      *
      * @param verbosity  the verbosity level, 0 to 3
      */

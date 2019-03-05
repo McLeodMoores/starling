@@ -347,6 +347,9 @@ public final class OpenGammaExecutionContext {
   }
 
   /**
+   * @param context
+   *          the execution context
+   * @return a currency pairs source
    * @deprecated [PLAT-2782] interim measure to move away from direct use of a config source
    */
   @Deprecated

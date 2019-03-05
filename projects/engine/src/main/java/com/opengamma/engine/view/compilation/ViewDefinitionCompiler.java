@@ -100,12 +100,6 @@ public final class ViewDefinitionCompiler {
    * Compiles the specified view definition wrt the supplied compilation context, valuation time and version correction and returns the compiled view.
    * This method wraps the compileTask method, waiting for completion of the async compilation task and returning the resulting
    * CompiledViewDefinitionWithGraphsImpl, rather than a future reference to it.
-   *
-   * @param viewDefinition the view definition to compile
-   * @param compilationServices the compilation context (market data availability provider, graph builder factory, etc.)
-   * @param valuationTime the effective valuation time against which to compile
-   * @param versionCorrection the version correction to use
-   * @return the CompiledViewDefinitionWithGraphsImpl that results from the compilation
    */
   protected static final class CompilationCompletionEstimate implements Housekeeper.Callback<Supplier<Double>> {
 
@@ -246,7 +240,7 @@ public final class ViewDefinitionCompiler {
       final ComputationTarget target = versioned.resolve(specification);
       if (target == null) {
         throw new OpenGammaRuntimeException("Unable to resolve portfolio ID " + specification.getUniqueId()
-            + " for view '" + getContext().getViewDefinition().getName() + "'");
+        + " for view '" + getContext().getViewDefinition().getName() + "'");
       }
       return target.getValue(ComputationTargetType.PORTFOLIO);
     }
@@ -410,7 +404,7 @@ public final class ViewDefinitionCompiler {
           // Remove any invalid terminal outputs from the graph and update the changed position set with any late noticed changes
           final PortfolioIdentifierGatherer gatherer = new PortfolioIdentifierGatherer();
           PortfolioNodeTraverser.parallel(gatherer, getContext().getServices().getExecutorService())
-                                .traverse(builder.getCompilationContext().getPortfolio().getRootNode());
+          .traverse(builder.getCompilationContext().getPortfolio().getRootNode());
           final Set<UniqueId> identifiers = gatherer.getIdentifiers();
           final Set<ValueRequirement> specifics = calcConfig.getSpecificRequirements();
           final Iterator<Map.Entry<ValueSpecification, Set<ValueRequirement>>> itrTerminal = previousGraph.getTerminalOutputs().entrySet().iterator();
@@ -626,9 +620,10 @@ public final class ViewDefinitionCompiler {
   /**
    * Sets whether to batch portfolio requirements during graph builds.
    *
-   * @param useStripes true to stripe the portfolio requirements in batches to the graph builder, false to do them all at once
-   * @deprecated this is a temporary measure; enabling/disabling the striping should be performed programaticaly based on view/portfolio heuristics
-   * @see {@link #isStripedPortfolioRequirements}.
+   * @param useStripes
+   *          true to stripe the portfolio requirements in batches to the graph builder, false to do them all at once
+   * @deprecated this is a temporary measure; enabling/disabling the striping should be performed programaticaly based on view/portfolio heuristics. See
+   *             {@link #isStripedPortfolioRequirements}.
    */
   @Deprecated
   public static void setStripedPortfolioRequirements(final boolean useStripes) {

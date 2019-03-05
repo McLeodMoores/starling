@@ -138,9 +138,13 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the security manager via {@code createSecurityManager}.
    *
-   * @param repo  the component repository, not null
-   * @param pwService  the password service, not null
+   * @param repo
+   *          the component repository, not null
+   * @param pwService
+   *          the password service, not null
    * @return the security manager, not null
+   * @throws IOException
+   *           if there is a problem
    */
   protected SecurityManager initSecurityManager(final ComponentRepository repo, final PasswordService pwService) throws IOException {
     final SecurityManager securityManager = createSecurityManager(repo, pwService);
@@ -153,9 +157,13 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
   /**
    * Creates the security manager without registering it.
    *
-   * @param repo  the component repository, only used to register secondary items like lifecycle, not null
-   * @param pwService  the password service, not null
+   * @param repo
+   *          the component repository, only used to register secondary items like lifecycle, not null
+   * @param pwService
+   *          the password service, not null
    * @return the security manager, not null
+   * @throws IOException
+   *           if there is a problem
    */
   protected SecurityManager createSecurityManager(final ComponentRepository repo, final PasswordService pwService) throws IOException {
     // password matcher

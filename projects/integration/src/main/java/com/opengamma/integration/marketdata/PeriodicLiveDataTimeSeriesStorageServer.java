@@ -55,7 +55,7 @@ import au.com.bytecode.opencsv.CSVParser;
 /**
  * Will subscribe to a set of live data elements and periodically write those
  * values out to the Historical Time Series system.
- * <p/>
+ * <p>
  * The current implementation writes everything subscribed hourly to an
  * observation time with the name of the hour on which it fires <b>IN UTC</b>.
  */
