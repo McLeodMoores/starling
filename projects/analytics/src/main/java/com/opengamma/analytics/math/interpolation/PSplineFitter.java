@@ -60,10 +60,13 @@ public class PSplineFitter {
   }
 
   /**
-   * The penalty matrix, P, such the for weights vector, w, (w^T)*P*w is a quadratic penalty term. P is constructed as P = (D^T)*D, where
-   * D is the kth order difference matrix such that D*x is the kth order difference vector of x (with first k terms zero)
-   * @param m Length of the weights vector.
-   * @param k Difference order. Require m > k
+   * The penalty matrix, P, such the for weights vector, w, (w^T)*P*w is a quadratic penalty term. P is constructed as P = (D^T)*D, where D is the kth order
+   * difference matrix such that D*x is the kth order difference vector of x (with first k terms zero)
+   * 
+   * @param m
+   *          Length of the weights vector.
+   * @param k
+   *          Difference order. Require m &gt; k
    * @return The penalty matrix P.
    */
   public DoubleMatrix2D getPenaltyMatrix(final int m, final int k) {

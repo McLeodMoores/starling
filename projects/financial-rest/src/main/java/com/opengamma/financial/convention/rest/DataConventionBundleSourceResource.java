@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.mapping.FudgeSerializer;
 
+import com.opengamma.core.convention.impl.DataConventionSourceResource;
 import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.id.ExternalId;
@@ -29,7 +30,11 @@ import com.opengamma.util.rest.AbstractDataResource;
  * RESTful resource exposing a {@link ConventionBundleSource} to remote clients.
  * <p>
  * This is the server to {@link RemoteConventionBundleSource}.
+ *
+ * @deprecated {@link ConventionBundle} are deprecated. Use {@link com.opengamma.core.convention.Convention} and relevant classes (e.g.
+ *             {@link DataConventionSourceResource}.
  */
+@Deprecated
 public class DataConventionBundleSourceResource extends AbstractDataResource {
 
   private final ConventionBundleSource _underlying;

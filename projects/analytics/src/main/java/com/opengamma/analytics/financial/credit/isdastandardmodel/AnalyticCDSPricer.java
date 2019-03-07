@@ -276,12 +276,12 @@ public class AnalyticCDSPricer {
    * If this is a spot starting CDS (effective protection start = 0) then cash flows from premium payments and accrual-on-default are risky discounted to t=0
    * ('today'), then rolled forward (risk-free) to the valuation time; if the annuity is requested clean, the accrued premium (paid at the cash-settle time) is
    * rolled (again risk-free) to the valuation time; the absolute value of this amount is subtracted from the other cash flows to give the clean annuity<br>
-   * If this is a forward starting CDS (effective protection start > 0), then the premium payments are again risky discounted to t=0; if the annuity is
+   * If this is a forward starting CDS (effective protection start &gt; 0), then the premium payments are again risky discounted to t=0; if the annuity is
    * requested clean, the accrued premium is risk-free discounted to the effective protection start, then risky discounted to t=0 - this gives the t=0 value of
-   * the annuity including the chance that a default occurs before protection starts. If valuationTime > 0, the value of the annuity is rolled forward
+   * the annuity including the chance that a default occurs before protection starts. If valuationTime &gt; 0, the value of the annuity is rolled forward
    * (risk-free) to that time. To compute the expected value of the annuity conditional on no default before the valuationTime, one must divide this number by
    * the survival probability to the valuationTime. (for unit coupon)
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve

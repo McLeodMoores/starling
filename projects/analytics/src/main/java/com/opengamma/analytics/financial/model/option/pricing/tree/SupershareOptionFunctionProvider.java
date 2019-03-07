@@ -9,7 +9,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Supershare option pays S/KL if KL <= S < KH at expiry.
+ * Supershare option pays S/KL if KL &lt;= S &lt; KH at expiry.
  */
 public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
 

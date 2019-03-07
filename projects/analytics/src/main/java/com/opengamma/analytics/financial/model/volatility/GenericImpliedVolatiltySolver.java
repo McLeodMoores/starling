@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility;
@@ -11,8 +11,9 @@ import com.opengamma.analytics.math.rootfinding.BisectionSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 
 /**
- * Finds an implied volatility (a parameter that put into a model gives the market pirce of an option) for any option pricing model that has a 'volatility' parameter.
- *  This included the Black-Scholes-Merton model (and derivatives) for European options and Barone-Adesi & Whaley and Bjeksund and Stensland for American options   
+ * Finds an implied volatility (a parameter that put into a model gives the market price of an option) for any option pricing model that has a 'volatility'
+ * parameter. This included the Black-Scholes-Merton model (and derivatives) for European options and Barone-Adesi &amp; Whaley and Bjeksund and Stensland for
+ * American options
  */
 public class GenericImpliedVolatiltySolver {
 
@@ -37,7 +38,7 @@ public class GenericImpliedVolatiltySolver {
 
     double[] pnv = pavFunc.evaluate(sigma);
 
-    //This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega 
+    //This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
     if (pnv[1] == 0 || Double.isNaN(pnv[1])) {
       return solveByBisection(optionPrice, pavFunc, lowerSigma, upperSigma);
     }
@@ -94,7 +95,7 @@ public class GenericImpliedVolatiltySolver {
    * @param optionPrice Option price
    * @param pavFunc Model
    * @param guess Guess value
-   * @return Implied volatility 
+   * @return Implied volatility
    */
   public static double impliedVolatility(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double guess) {
 
@@ -115,7 +116,7 @@ public class GenericImpliedVolatiltySolver {
 
     double[] pnv = pavFunc.evaluate(sigma);
 
-    //This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega 
+    //This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
     if (Math.abs(pnv[1]) < 1.e-14 || Double.isNaN(pnv[1])) {
       return solveByBisection(optionPrice, pavFunc, lowerSigma, upperSigma);
     }
@@ -198,7 +199,7 @@ public class GenericImpliedVolatiltySolver {
 
       @Override
       public Double evaluate(final Double volatility) {
-        double trialPrice = pavFunc.evaluate(volatility)[0];
+        final double trialPrice = pavFunc.evaluate(volatility)[0];
         return trialPrice / optionPrice - 1.0;
       }
     };

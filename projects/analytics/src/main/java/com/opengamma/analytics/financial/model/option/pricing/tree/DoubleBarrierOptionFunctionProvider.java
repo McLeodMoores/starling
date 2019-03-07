@@ -19,13 +19,20 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   private CrossBarrierChecker _checkerDouble;
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param lowerBarrier Lower barrier price
-   * @param upperBarrier Upper barrier price
-   * @param typeName {@link BarrierTypes}, DownAndOut or UpAndOut
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param lowerBarrier
+   *          Lower barrier price
+   * @param upperBarrier
+   *          Upper barrier price
+   * @param typeName
+   *          the barrier type
    */
   public DoubleBarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double lowerBarrier, final double upperBarrier,
       final BarrierTypes typeName) {

@@ -6,12 +6,11 @@
 package com.opengamma.analytics.financial.credit.obligor;
 
 /**
- * Enumerate the possible credit rating states for a reference entity (Fitch rating classifications).
- * The ratings are long term.
+ * Enumerate the possible credit rating states for a reference entity (Fitch rating classifications). The ratings are long term.
  * <p>
- * This is an incomplete list of the long-term Fitch ratings classifications, but this enum is
- * deprecated and will not be completed. Some of the enum values have been remapped to their approximate
- * equivalents (e.g. CC &rarr CCC).
+ * This is an incomplete list of the long-term Fitch ratings classifications, but this enum is deprecated and will not be completed. Some of the enum values
+ * have been remapped to their approximate equivalents (e.g. CC &amp;rarr CCC).
+ * 
  * @deprecated Credit ratings have been promoted to objects. See {@link com.opengamma.analytics.financial.legalentity.CreditRating}
  */
 @Deprecated

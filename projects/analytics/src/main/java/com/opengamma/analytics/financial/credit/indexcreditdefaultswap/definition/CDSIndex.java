@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.indexcreditdefaultswap.definition;
@@ -34,7 +34,7 @@ public enum CDSIndex {
    */
   CDXHVOL,
   /**
-   * iTraxx Europe Investment Grade index (trades on spread) 
+   * iTraxx Europe Investment Grade index (trades on spread)
    */
   iTraxx,
   /**
@@ -62,7 +62,7 @@ public enum CDSIndex {
    */
   iTraxxAustralia,
   /**
-   * iTraxx Central & Eastern European, Middle Eastern and African countries (corporate and quasi-sovereign)
+   * iTraxx Central &amp; Eastern European, Middle Eastern and African countries (corporate and quasi-sovereign)
    */
   iTraxxCEEMEA,
   /**

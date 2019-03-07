@@ -9,8 +9,8 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Gap call option pays 0 if S <= K1 and S-K2 if S > K1, whereas gap put option pays K2-S if S < K1 and 0 if S >= K1,
- * where S is asset price at expiry.
+ * Gap call option pays 0 if S &lt;= K1 and S-K2 if S &gt; K1, whereas gap put option pays K2-S if S &lt; K1 and 0 if S &gt;= K1, where S is asset price at
+ * expiry.
  */
 public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
 

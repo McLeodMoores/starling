@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -20,17 +20,13 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A complex chooser option gives the holder the right to choose whether the
- * option is to be a standard call or put after a certain time. The exercise
- * style of the option, once the choice has been made, is European.
+ * A complex chooser option gives the holder the right to choose whether the option is to be a standard call or put after a certain time. The exercise style of
+ * the option, once the choice has been made, is European.
  * <p>
- * The payoff from the option with strike <i>K</i> and spot <i>S</i> is
- * <i>max(c<sub>BSM</i>(S, K, T<sub>C</sub>), p<sub>BSM</sub>(S, K,
- * T<sub>P</sub>)</i>, where <i>C<sub>BSM</sub></i> is the Black-Scholes-Merton
- * call price, <i>P<sub>BSM</sub></i> is the Black-Scholes-Merton put price,
- * <i>T<sub>C</sub></i> is the time to maturity of the call and
- * <i>T<sub>P</sub></i> is the time to maturity of the put.
- * 
+ * The payoff from the option with strike <i>K</i> and spot <i>S</i> is <i>max(c<sub>BSM</sub>(S, K, T<sub>C</sub>), p<sub>BSM</sub>(S, K, T<sub>P</sub>)</i>,
+ * where <i>C<sub>BSM</sub></i> is the Black-Scholes-Merton call price, <i>P<sub>BSM</sub></i> is the Black-Scholes-Merton put price, <i>T<sub>C</sub></i> is
+ * the time to maturity of the call and <i>T<sub>P</sub></i> is the time to maturity of the put.
+ *
  */
 public class ComplexChooserOptionDefinition extends OptionDefinition {
   private final OptionPayoffFunction<StandardOptionDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionDataBundle>() {
@@ -54,7 +50,7 @@ public class ComplexChooserOptionDefinition extends OptionDefinition {
   private static final Set<Greek> GREEKS = Collections.singleton(Greek.FAIR_PRICE);
 
   /**
-   * 
+   *
    * @param callStrike The strike of the potential call option
    * @param putStrike The strike of the potential put option
    * @param chooseDate The choice date (expiry) of the chooser option
@@ -133,13 +129,13 @@ public class ComplexChooserOptionDefinition extends OptionDefinition {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_callExpiry == null) ? 0 : _callExpiry.hashCode());
+    result = prime * result + (_callExpiry == null ? 0 : _callExpiry.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_callStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_putExpiry == null) ? 0 : _putExpiry.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_putExpiry == null ? 0 : _putExpiry.hashCode());
     temp = Double.doubleToLongBits(_putStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

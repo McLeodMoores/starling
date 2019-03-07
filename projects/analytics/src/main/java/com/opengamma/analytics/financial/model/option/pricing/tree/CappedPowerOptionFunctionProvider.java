@@ -9,7 +9,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Payoff of capped power option is min( max( S^i - K , 0 ) , C ) for call and min( max( K - S^i , 0 ) , C ) for put with i > 0, K > C > 0
+ * Payoff of capped power option is min( max( S^i - K , 0 ) , C ) for call and min( max( K - S^i , 0 ) , C ) for put with i &gt; 0, K &gt; C &gt; 0
  */
 public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D {
 

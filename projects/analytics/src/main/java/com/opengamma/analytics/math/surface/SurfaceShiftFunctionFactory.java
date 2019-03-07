@@ -59,12 +59,17 @@ public class SurfaceShiftFunctionFactory {
   }
 
   /**
-   * For a surface Surface<Double, Double, Double>, return a parallel-shifted surface.
-   * @param surface The original surface
-   * @param shift The shift
-   * @param useAdditive true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
+   * For a surface, return a parallel-shifted surface.
+   *
+   * @param surface
+   *          The original surface
+   * @param shift
+   *          The shift
+   * @param useAdditive
+   *          true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
    * @return A shifted surface with automatically-generated name
-   * @throws IllegalArgumentException If the surface type is not constant, functional, interpolated, nodal or spread
+   * @throws IllegalArgumentException
+   *           If the surface type is not constant, functional, interpolated, nodal or spread
    */
   public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double shift,
       final boolean useAdditive) {
@@ -90,14 +95,21 @@ public class SurfaceShiftFunctionFactory {
   }
 
   /**
-   * For a surface Surface<Double, Double, Double>, return a surface shifted at one point.
-   * @param surface The original surface
-   * @param x The <i>x</i> value of the shift
-   * @param y The <i>y</i> value of the shift
-   * @param shift The shift
-   * @param useAdditive true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
+   * For a surface, return a surface shifted at one point.
+   * 
+   * @param surface
+   *          The original surface
+   * @param x
+   *          The <i>x</i> value of the shift
+   * @param y
+   *          The <i>y</i> value of the shift
+   * @param shift
+   *          The shift
+   * @param useAdditive
+   *          true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
    * @return A shifted surface with automatically-generated name
-   * @throws IllegalArgumentException If the surface type is not constant, functional, interpolated, nodal or spread
+   * @throws IllegalArgumentException
+   *           If the surface type is not constant, functional, interpolated, nodal or spread
    */
   public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double x, final double y, final double shift,
       final boolean useAdditive) {
@@ -122,14 +134,21 @@ public class SurfaceShiftFunctionFactory {
   }
 
   /**
-   * For a surface Surface<Double, Double, Double>, return a parallel-shifted surface.
-   * @param surface The original surface
-   * @param x An array of <i>x</i> values to shift
-   * @param y An array of <i>y</i> values to shift
-   * @param shift The shifts
-   * @param useAdditive true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
+   * For a surface, return a parallel-shifted surface.
+   * 
+   * @param surface
+   *          The original surface
+   * @param x
+   *          An array of <i>x</i> values to shift
+   * @param y
+   *          An array of <i>y</i> values to shift
+   * @param shift
+   *          The shifts
+   * @param useAdditive
+   *          true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
    * @return A shifted surface with an automatically-generated name
-   * @throws IllegalArgumentException If the surface type is not constant, functional, interpolated, nodal or spread
+   * @throws IllegalArgumentException
+   *           If the surface type is not constant, functional, interpolated, nodal or spread
    */
   public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double[] x, final double[] y,
       final double[] shift, final boolean useAdditive) {
@@ -154,13 +173,19 @@ public class SurfaceShiftFunctionFactory {
   }
 
   /**
-   * For a surface Surface<Double, Double, Double>, return a parallel-shifted surface.
-   * @param surface The original surface
-   * @param shift The shift
-   * @param newName The name of the shifted surface
-   * @param useAdditive true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
+   * For a surface, return a parallel-shifted surface.
+   * 
+   * @param surface
+   *          The original surface
+   * @param shift
+   *          The shift
+   * @param newName
+   *          The name of the shifted surface
+   * @param useAdditive
+   *          true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
    * @return A shifted surface
-   * @throws IllegalArgumentException If the surface type is not constant, functional, interpolated, nodal or spread
+   * @throws IllegalArgumentException
+   *           If the surface type is not constant, functional, interpolated, nodal or spread
    */
   public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double shift, final String newName,
       final boolean useAdditive) {
@@ -187,15 +212,23 @@ public class SurfaceShiftFunctionFactory {
   }
 
   /**
-   * For a surface Surface<Double, Double, Double>, return a surface shifted at one point.
-   * @param surface The original surface
-   * @param x The <i>x</i> value of the shift
-   * @param y The <i>y</i> value of the shift
-   * @param shift The shift
-   * @param newName The name of the new surface
-   * @param useAdditive true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
+   * For a surface, return a surface shifted at one point.
+   * 
+   * @param surface
+   *          The original surface
+   * @param x
+   *          The <i>x</i> value of the shift
+   * @param y
+   *          The <i>y</i> value of the shift
+   * @param shift
+   *          The shift
+   * @param newName
+   *          The name of the new surface
+   * @param useAdditive
+   *          true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
    * @return A shifted surface
-   * @throws IllegalArgumentException If the surface type is not constant, functional, interpolated, nodal or spread
+   * @throws IllegalArgumentException
+   *           If the surface type is not constant, functional, interpolated, nodal or spread
    */
   public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double x, final double y, final double shift,
       final String newName, final boolean useAdditive) {
@@ -220,15 +253,23 @@ public class SurfaceShiftFunctionFactory {
   }
 
   /**
-   * For a surface Surface<Double, Double, Double>, return a parallel-shifted surface.
-   * @param surface The original surface
-   * @param x An array of <i>x</i> values to shift
-   * @param y An array of <i>y</i> values to shift
-   * @param shift The shifts
-   * @param newName The name of the shifted surface
-   * @param useAdditive true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
+   * For a surface, return a parallel-shifted surface.
+   * 
+   * @param surface
+   *          The original surface
+   * @param x
+   *          An array of <i>x</i> values to shift
+   * @param y
+   *          An array of <i>y</i> values to shift
+   * @param shift
+   *          The shifts
+   * @param newName
+   *          The name of the shifted surface
+   * @param useAdditive
+   *          true if the shift is additive, false if the shift is multiplicative (i.e. a percentage shift)
    * @return A shifted surface
-   * @throws IllegalArgumentException If the surface type is not constant, functional, interpolated, nodal or spread
+   * @throws IllegalArgumentException
+   *           If the surface type is not constant, functional, interpolated, nodal or spread
    */
   public static Surface<Double, Double, Double> getShiftedSurface(final Surface<Double, Double, Double> surface, final double[] x, final double[] y,
       final double[] shift, final String newName, final boolean useAdditive) {

@@ -13,11 +13,11 @@ package com.opengamma.analytics.financial.credit.bumpers;
 @Deprecated
 public enum SpreadVolatilityBumpType {
   /**
-   * sigma -> sigma + bump
+   * sigma -&gt; sigma + bump
    */
   ADDITIVE,
   /**
-   * sigma -> sigma x (1 + bump)
+   * sigma -&gt; sigma x (1 + bump)
    */
   MULTIPLICATIVE;
 

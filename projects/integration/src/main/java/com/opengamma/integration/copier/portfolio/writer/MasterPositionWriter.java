@@ -32,6 +32,7 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdSearch;
 import com.opengamma.id.ObjectId;
+import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.portfolio.ManageablePortfolio;
 import com.opengamma.master.portfolio.ManageablePortfolioNode;
@@ -384,13 +385,16 @@ public class MasterPositionWriter implements PositionWriter {
 
   /**
    * If there is an existing {@code ManageableSecurity} in the searchResult that matches security, for the 1st match:
-   * <p><ul>
+   * <ul>
    * <li>if the only difference is the {@link UniqueId} do nothing and return the existing
-   * <li> If there are other differences, update the existing and return the new security
-   * <li> If there are no matches or any errors are encountered, return null
-   * @param security new security being searched for
-   * <ul><p>
-   * @param searchResult results from search of Master for security
+   * <li>If there are other differences, update the existing and return the new security
+   * <li>If there are no matches or any errors are encountered, return null
+   * </ul>
+   * 
+   * @param security
+   *          new security being searched for
+   * @param searchResult
+   *          results from search of Master for security
    * @return found or updated security, null if no matches
    */
   protected ManageableSecurity updateSecurityVersionIfFound(final ManageableSecurity security, final SecuritySearchResult searchResult) {
@@ -537,7 +541,7 @@ public class MasterPositionWriter implements PositionWriter {
               if (_securityIdToPosition.containsKey(objectId)) {
                 final ManageablePosition existing = _securityIdToPosition.get(objectId);
                 LOGGER.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/')
-                    + ": " + position + " and " + existing + ".  New trades for security " + objectId + " will be added to position " + position.getUniqueId());
+                + ": " + position + " and " + existing + ".  New trades for security " + objectId + " will be added to position " + position.getUniqueId());
 
               } else {
                 _securityIdToPosition.put(objectId, position);

@@ -167,8 +167,9 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
 
   /**
    * Gets the discounting curve name used for currency1.
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurve1Name() {
@@ -180,8 +181,9 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
 
   /**
    * Gets the discounting curve name used for currency2.
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurve2Name() {

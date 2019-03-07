@@ -66,8 +66,10 @@ public class ISDACompliantCurve extends DoublesCurve {
   /**
    * Creates a flat curve at level r.
    *
-   * @param t  (arbitrary) single knot point (t > 0)
-   * @param r  the level
+   * @param t
+   *          (arbitrary) single knot point (t &gt; 0)
+   * @param r
+   *          the level
    */
   public ISDACompliantCurve(final double t, final double r) {
     this(new double[] {t }, new double[] {r });
@@ -76,8 +78,10 @@ public class ISDACompliantCurve extends DoublesCurve {
   /**
    * Creates an instance from a set of times and zero rates.
    *
-   * @param t  the set of times that form the knots of the curve, must be ascending with the first value >= 0, not null
-   * @param r  the set of zero rates, not null
+   * @param t
+   *          the set of times that form the knots of the curve, must be ascending with the first value &ge; 0, not null
+   * @param r
+   *          the set of zero rates, not null
    */
   public ISDACompliantCurve(final double[] t, final double[] r) {
     super("");
@@ -444,11 +448,13 @@ public class ISDACompliantCurve extends DoublesCurve {
   }
 
   /**
-   * Gets the sensitivity of the interpolated zero rate at time t to the value of the zero rate at a given node (knot).
-   * For a given index, i, this is zero unless $$t_{i-1} < t < t_{i+1}$$ since the interpolation is highly local.
+   * Gets the sensitivity of the interpolated zero rate at time t to the value of the zero rate at a given node (knot). For a given index, i, this is zero
+   * unless $$t_{i-1} &lt; t &lt; t_{i+1}$$ since the interpolation is highly local.
    *
-   * @param t  the time
-   * @param nodeIndex  the node index
+   * @param t
+   *          the time
+   * @param nodeIndex
+   *          the node index
    * @return the sensitivity to a single node
    */
   public double getSingleNodeSensitivity(final double t, final int nodeIndex) {
@@ -463,10 +469,13 @@ public class ISDACompliantCurve extends DoublesCurve {
   }
 
   /**
-   * Gets the sensitivity of the interpolated zero rate times time (RT or -ln(discount factor))  at time t to the value of the zero rate at a given node (knot).
-   * For a given index, i, this is zero unless $$t_{i-1} < t < t_{i+1}$$ since the interpolation is highly local.
-   * @param t  the time
-   * @param nodeIndex  the node index
+   * Gets the sensitivity of the interpolated zero rate times time (RT or -ln(discount factor)) at time t to the value of the zero rate at a given node (knot).
+   * For a given index, i, this is zero unless $$t_{i-1} &lt; t &lt; t_{i+1}$$ since the interpolation is highly local.
+   *
+   * @param t
+   *          the time
+   * @param nodeIndex
+   *          the node index
    * @return the sensitivity to a single node
    */
   public double getSingleNodeRTSensitivity(final double t, final int nodeIndex) {
@@ -499,12 +508,14 @@ public class ISDACompliantCurve extends DoublesCurve {
   }
 
   /**
-   * The sensitivity of the discount factor at some time, t, to the value of the zero rate at a given node (knot).
-   * For a given index, i, this is zero unless $$t_{i-1} < t < t_{i+1}$$ since the interpolation is highly local.
+   * The sensitivity of the discount factor at some time, t, to the value of the zero rate at a given node (knot). For a given index, i, this is zero unless
+   * $$t_{i-1} &lt; t &lt; t_{i+1}$$ since the interpolation is highly local.
    *
-   * @param t  the time value of the discount factor
-   * @param nodeIndex  the node index
-   * @return the  sensitivity of a discount factor to a single node
+   * @param t
+   *          the time value of the discount factor
+   * @param nodeIndex
+   *          the node index
+   * @return the sensitivity of a discount factor to a single node
    */
   public double getSingleNodeDiscountFactorSensitivity(final double t, final int nodeIndex) {
 

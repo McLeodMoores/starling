@@ -253,8 +253,9 @@ public class BillSecurity implements InstrumentDerivative {
 
   /**
    * Gets the name of the curve used for the bill cash flows (issuer credit).
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getCreditCurveName() {

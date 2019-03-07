@@ -75,9 +75,12 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
   }
 
   /**
-   * Transforms from a set of function parameters (some of which may have constrained range and/or be fixed) to a (possibly smaller) set of unconstrained fitting parameters
-   * <b>Note:</b> If a parameter is fixed, it is its value as provided by <i>startValues<\i> not the value given here that will be returned by inverseTransform (and thus used in the function)
-   * @param functionParameters The function parameters
+   * Transforms from a set of function parameters (some of which may have constrained range and/or be fixed) to a (possibly smaller) set of unconstrained
+   * fitting parameters <b>Note:</b> If a parameter is fixed, it is its value as provided by <i>startValues</i> not the value given here that will be returned
+   * by inverseTransform (and thus used in the function)
+   * 
+   * @param functionParameters
+   *          The function parameters
    * @return The fitting parameters
    */
   @Override

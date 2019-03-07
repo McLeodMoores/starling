@@ -6,11 +6,11 @@
 package com.opengamma.analytics.financial.credit.obligor;
 
 /**
- * Enumerate the possible credit rating states for a reference entity (Standard & Poor's rating classifications).
- * The ratings are long term.
+ * Enumerate the possible credit rating states for a reference entity (Standard &amp; Poor's rating classifications). The ratings are long term.
  * <p>
- * This is an incomplete list of the long-term S&P ratings classifications, but this enum is deprecated
- * and will not be completed. The DEFAULT value has been mapped to D.
+ * This is an incomplete list of the long-term S&amp;P ratings classifications, but this enum is deprecated and will not be completed. The DEFAULT value has
+ * been mapped to D.
+ *
  * @deprecated Credit ratings have been promoted to objects. See {@link com.opengamma.analytics.financial.legalentity.CreditRating}
  */
 @Deprecated

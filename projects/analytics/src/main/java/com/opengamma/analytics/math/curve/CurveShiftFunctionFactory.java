@@ -31,7 +31,7 @@ public class CurveShiftFunctionFactory {
 
   /**
    * Gets the function for a class type.
-   * 
+   *
    * @param clazz
    *          The class
    * @return The function
@@ -47,8 +47,8 @@ public class CurveShiftFunctionFactory {
   }
 
   /**
-   * For a curve Curve<Double, Double>, return a parallel-shifted curve.
-   * 
+   * For a curve, return a parallel-shifted curve.
+   *
    * @param curve
    *          The original curve
    * @param shift
@@ -74,8 +74,8 @@ public class CurveShiftFunctionFactory {
   }
 
   /**
-   * For a curve Curve<Double, Double>, return a curve shifted at one point.
-   * 
+   * For a curve, return a curve shifted at one point.
+   *
    * @param curve
    *          The original curve
    * @param x
@@ -103,8 +103,8 @@ public class CurveShiftFunctionFactory {
   }
 
   /**
-   * For a curve Curve<Double, Double>, return a parallel-shifted curve.
-   * 
+   * For a curve, return a parallel-shifted curve.
+   *
    * @param curve
    *          The original curve
    * @param x
@@ -132,8 +132,8 @@ public class CurveShiftFunctionFactory {
   }
 
   /**
-   * For a curve Curve<Double, Double>, return a parallel-shifted curve.
-   * 
+   * For a curve, return a parallel-shifted curve.
+   *
    * @param curve
    *          The original curve
    * @param shift
@@ -161,8 +161,8 @@ public class CurveShiftFunctionFactory {
   }
 
   /**
-   * For a curve Curve<Double, Double>, return a curve shifted at one point.
-   * 
+   * For a curve, return a curve shifted at one point.
+   *
    * @param curve
    *          The original curve
    * @param x
@@ -192,8 +192,8 @@ public class CurveShiftFunctionFactory {
   }
 
   /**
-   * For a curve Curve<Double, Double>, return a parallel-shifted curve.
-   * 
+   * For a curve, return a parallel-shifted curve.
+   *
    * @param curve
    *          The original curve
    * @param x

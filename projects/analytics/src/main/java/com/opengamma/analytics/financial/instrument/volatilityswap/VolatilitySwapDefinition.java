@@ -186,7 +186,8 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * {@inheritDoc}
-   * @deprecated Yield curve names are no longer stored in {@link InstrumentDerivative}
+   * 
+   * @deprecated Yield curve names are no longer stored in {@link InstrumentDefinition}
    */
   @Deprecated
   @Override

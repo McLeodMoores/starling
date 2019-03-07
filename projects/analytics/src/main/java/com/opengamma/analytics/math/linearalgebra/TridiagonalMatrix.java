@@ -14,19 +14,19 @@ import com.opengamma.analytics.math.matrix.Matrix;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class representing a tridiagonal matrix:
- * $$
- * \begin{align*}
- * \begin{pmatrix}
- * a_1     & b_1     & 0       & \cdots  & 0       & 0       & 0        \\
- * c_1     & a_2     & b_2     & \cdots  & 0       & 0       & 0        \\
- * 0       &         & \ddots  &         & \vdots  & \vdots  & \vdots   \\
- * 0       & 0       & 0       &         & c_{n-2} & a_{n-1} & b_{n-1}  \\
- * 0       & 0       & 0       & \cdots  & 0       & c_{n-1} & a_n
- * \end{pmatrix}
- * \end{align*}
- * $$
+ * Class representing a tridiagonal matrix.
  */
+// * $$
+// * \begin{align*}
+// * \begin{pmatrix}
+// * a_1 & b_1 & 0 & \cdots & 0 & 0 & 0 \\
+// * c_1 & a_2 & b_2 & \cdots & 0 & 0 & 0 \\
+// * 0 & & \ddots & & \vdots & \vdots & \vdots \\
+// * 0 & 0 & 0 & & c_{n-2} & a_{n-1} & b_{n-1} \\
+// * 0 & 0 & 0 & \cdots & 0 & c_{n-1} & a_n
+// * \end{pmatrix}
+// * \end{align*}
+// * $$
 public class TridiagonalMatrix implements Matrix<Double> {
   private final double[] _a;
   private final double[] _b;

@@ -55,7 +55,7 @@ public abstract class DividendFunctionProvider {
 
   /**
    * Compute correction to asset price due to dividends up to the k-th payment
-   * 
+   *
    * @param assetPrice
    *          The asset price just before the k-th payment
    * @param interestRate
@@ -136,8 +136,10 @@ public abstract class DividendFunctionProvider {
 
   /**
    * Compare time step width with payment time width
-   * @param dt Time step width
-   * @return True if (time step width) < (payment time width) for all dividends
+   * 
+   * @param dt
+   *          Time step width
+   * @return True if (time step width) &lt; (payment time width) for all dividends
    */
   public boolean checkTimeSteps(final double dt) {
     final int nDivM = _nDividends - 1;

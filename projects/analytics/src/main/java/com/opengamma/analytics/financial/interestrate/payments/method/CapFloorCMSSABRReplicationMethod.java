@@ -83,10 +83,13 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
   }
 
   /**
-   * Compute the present value of a CMS cap/floor by replication in SABR framework.
-   * For floor the replication is between 0.0 and the strike. 0.0 is used as the rates are always >=0.0 in SABR.
-   * @param cmsCapFloor The CMS cap/floor.
-   * @param sabrData The SABR data bundle.
+   * Compute the present value of a CMS cap/floor by replication in SABR framework. For floor the replication is between 0.0 and the strike. 0.0 is used as the
+   * rates are always &ge;0.0 in SABR.
+   * 
+   * @param cmsCapFloor
+   *          The CMS cap/floor.
+   * @param sabrData
+   *          The SABR data bundle.
    * @return The present value.
    */
   @Override
@@ -365,7 +368,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
         final double nPeriodDiscount = Math.pow(periodFactor, -_nbFixedPeriod);
         return 1.0 / x * (1.0 - nPeriodDiscount);
       }
-      return ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+      return (double) _nbFixedPeriod / _nbFixedPaymentYear;
     }
 
     /**
@@ -382,7 +385,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
         g = 1.0 / x * (1.0 - nPeriodDiscount);
         h = Math.pow(1.0 + _tau * x, _eta);
       } else {
-        g = ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+        g = (double) _nbFixedPeriod / _nbFixedPaymentYear;
         h = 1.0;
       }
       return h / g;
@@ -407,7 +410,7 @@ public class CapFloorCMSSABRReplicationMethod extends CapFloorCMSSABRReplication
             / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
       } else {
         // Implementation comment: When x is (almost) 0, useful for CMS swaps which are priced as CMS cap of strike 0.
-        g = ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+        g = (double) _nbFixedPeriod / _nbFixedPaymentYear;
         gp = -_nbFixedPeriod / 2.0 * (_nbFixedPeriod + 1.0) / (_nbFixedPaymentYear * _nbFixedPaymentYear);
         gpp = _nbFixedPeriod / 2.0 * (_nbFixedPeriod + 1.0) * (1.0 + (_nbFixedPeriod + 2.0) / 3.0) / (_nbFixedPaymentYear * _nbFixedPaymentYear * _nbFixedPaymentYear);
       }

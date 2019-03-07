@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.opengamma.id.UniqueId;
 import com.opengamma.web.analytics.push.ConnectionManager;
 import com.opengamma.web.analytics.push.WebPushServletContextUtils;
 import com.sun.jersey.api.core.HttpContext;

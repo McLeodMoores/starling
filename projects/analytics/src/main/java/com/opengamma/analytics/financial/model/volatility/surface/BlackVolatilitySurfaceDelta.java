@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -14,15 +14,15 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.analytics.math.surface.SurfaceShiftFunctionFactory;
 
 /**
- *  A surface that contains the Black (implied) volatility as a function of time to maturity and (call) delta. Delta is in the range [0,1], where 0.5 is
- *  the ATM (DNS), Delta > 0.5 is ITM calls and Delta < 0.5 is OTM calls. Since prices are normally quoted for OTM options, Delta > 0.5 will actually be populated
- *  by OTM puts (Delta_put > -0.5, since Delta_call - Delta_put = 1 always holds).
+ * A surface that contains the Black (implied) volatility as a function of time to maturity and (call) delta. Delta is in the range [0,1], where 0.5 is the ATM
+ * (DNS), Delta &gt; 0.5 is ITM calls and Delta &lt; 0.5 is OTM calls. Since prices are normally quoted for OTM options, Delta &gt; 0.5 will actually be
+ * populated by OTM puts (Delta_put &gt; -0.5, since Delta_call - Delta_put = 1 always holds).
  */
 public class BlackVolatilitySurfaceDelta extends BlackVolatilitySurface<Delta> {
   private final ForwardCurve _fc;
 
   /**
-   * 
+   *
    * @param surface A implied volatility surface parameterised by time and (call) delta
    * @param forwardCurve the forward curve
    */

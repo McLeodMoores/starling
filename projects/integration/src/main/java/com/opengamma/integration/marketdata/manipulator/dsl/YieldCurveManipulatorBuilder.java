@@ -67,7 +67,7 @@ public class YieldCurveManipulatorBuilder {
   /**
    * Shifts the curve using
    * {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve#withSingleShift}
-   * 
+   *
    * @param t
    *          The time.
    * @param shift
@@ -85,6 +85,7 @@ public class YieldCurveManipulatorBuilder {
    * This is only for the benefit of the Java API, not the DSL
    *
    * @param shiftType The type of shift
+   * @param shifts  the shifts
    * @return the bucketed shift builder
    */
   public final YieldCurveManipulatorBuilder bucketedShifts(final ScenarioShiftType shiftType, final YieldCurveBucketedShift... shifts) {
@@ -97,10 +98,13 @@ public class YieldCurveManipulatorBuilder {
 
 
   /**
-   * Creates a point shift builder.
-   * This is only for the benefit of the Java API, not the DSL.
+   * Creates a point shift builder. This is only for the benefit of the Java API, not the DSL.
+   * 
+   * @param shiftType
+   *          The type of shift
+   * @param shifts
+   *          the shifts
    * @return the point shifts builder
-   * @param shiftType The type of shift
    */
   public final YieldCurveManipulatorBuilder pointShifts(final ScenarioShiftType shiftType, final YieldCurvePointShift... shifts) {
     ArgumentChecker.notNull(shiftType, "shiftType");

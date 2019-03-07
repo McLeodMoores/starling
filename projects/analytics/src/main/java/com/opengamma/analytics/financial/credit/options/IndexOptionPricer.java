@@ -5,6 +5,7 @@
  */
 package com.opengamma.analytics.financial.credit.options;
 
+import com.opengamma.analytics.financial.credit.index.CDSIndexCalculator;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnnuityForSpreadApproxFunction;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnnuityForSpreadFunction;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnnuityForSpreadISDAFunction;

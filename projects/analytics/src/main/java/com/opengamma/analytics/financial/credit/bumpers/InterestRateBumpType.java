@@ -20,19 +20,19 @@ public enum InterestRateBumpType {
    */
   MULTIPLICATIVE,
   /**
-   * r(t,T) -> r(t,T) + dr i.e. each point on the curve is shifted by an equal amount dr
+   * r(t,T) -&gt; r(t,T) + dr i.e. each point on the curve is shifted by an equal amount dr
    */
   ADDITIVE_PARALLEL,
   /**
-   * r(t,T) -> r(t,T) + dr(T) i.e. each point on the curve is shifted by a seperate amount (e.g. bump one point at a time for bucketed risk)
+   * r(t,T) -&gt; r(t,T) + dr(T) i.e. each point on the curve is shifted by a separate amount (e.g. bump one point at a time for bucketed risk)
    */
   ADDITIVE_BUCKETED,
   /**
-   * r(t,T) -> [1 + dr] x r(t,T)
+   * r(t,T) -&gt; [1 + dr] x r(t,T)
    */
   MULTIPLICATIVE_PARALLEL,
   /**
-   * r(t,T) -> [1 + dr(T)] x r(t,T)
+   * r(t,T) -&gt; [1 + dr(T)] x r(t,T)
    */
   MULTIPLICATIVE_BUCKETED;
 }

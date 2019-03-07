@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -23,9 +23,9 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 
 /**
- *  Solves a coupled forward PDE (i.e. coupled Fokker-Plank) for the density of an asset when the process is CEV with vol levels determined by a
- *  two state Markov chain. The densities, p(t,s,state1) & p(t,s,state2), are such that int_{0}^{\infty} p(t,s,stateX) ds gives the probability
- *  of being in state X at time t, and (p(t,s,state1)+p(t,s,state2))*ds is the probability that the asset with be between s and s + ds at time t.   
+ * Solves a coupled forward PDE (i.e. coupled Fokker-Plank) for the density of an asset when the process is CEV with vol levels determined by a two state Markov
+ * chain. The densities, p(t,s,state1) &amp; p(t,s,state2), are such that int_{0}^{\infty} p(t,s,stateX) ds gives the probability of being in state X at time t,
+ * and (p(t,s,state1)+p(t,s,state2))*ds is the probability that the asset with be between s and s + ds at time t.
  */
 public class TwoStateMarkovChainDensity {
   private static final double THETA = 1.0;
@@ -54,16 +54,16 @@ public class TwoStateMarkovChainDensity {
 
     //BoundaryCondition lower = new FixedSecondDerivativeBoundaryCondition(0, grid.getSpaceNode(0), true);
     final BoundaryCondition lower = new NeumannBoundaryCondition(0.0, grid.getSpaceNode(0), true);
-    //BoundaryCondition lower = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(0));//TODO for beta < 0.5 zero is accessible and thus there will be non-zero 
+    //BoundaryCondition lower = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(0));//TODO for beta < 0.5 zero is accessible and thus there will be non-zero
     //density there
     final BoundaryCondition upper = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(grid.getNumSpaceNodes() - 1));
 
-    CoupledPDEDataBundle d1 = new CoupledPDEDataBundle(_data1, _initCon11, lower, upper, grid);
-    CoupledPDEDataBundle d2 = new CoupledPDEDataBundle(_data2, _initCon12, lower, upper, grid);
+    final CoupledPDEDataBundle d1 = new CoupledPDEDataBundle(_data1, _initCon11, lower, upper, grid);
+    final CoupledPDEDataBundle d2 = new CoupledPDEDataBundle(_data2, _initCon12, lower, upper, grid);
 
     final CoupledFiniteDifference solver = new CoupledFiniteDifference(THETA, true);
     final PDEResults1D[] res = solver.solve(d1, d2);
-    //handle this with generics  
+    //handle this with generics
     final PDEFullResults1D res1 = (PDEFullResults1D) res[0];
     final PDEFullResults1D res2 = (PDEFullResults1D) res[1];
     return new PDEFullResults1D[] {res1, res2 };
@@ -93,7 +93,7 @@ public class TwoStateMarkovChainDensity {
       public Double evaluate(final Double... ts) {
         Validate.isTrue(ts.length == 2);
         double s = ts[1];
-        if (s <= 0.0) { //TODO review how to handle absorption 
+        if (s <= 0.0) { //TODO review how to handle absorption
           s = -s;
         }
         return -Math.pow(s, 2 * beta) * vol * vol / 2;
@@ -109,7 +109,7 @@ public class TwoStateMarkovChainDensity {
         if (s < 0.0) {
           s = -s;
         }
-        final double temp = (s < 0.0 ? 0.0 : 2 * vol * vol * beta * Math.pow(s, 2 * (beta - 1)));
+        final double temp = s < 0.0 ? 0.0 : 2 * vol * vol * beta * Math.pow(s, 2 * (beta - 1));
         return s * (forward.getDrift(t) - temp);
       }
     };
@@ -124,7 +124,7 @@ public class TwoStateMarkovChainDensity {
         if (s < 0.) {
           s = -s;
         }
-        double temp = (beta == 1.0 ? 1.0 : Math.pow(s, 2 * (beta - 1)));
+        double temp = beta == 1.0 ? 1.0 : Math.pow(s, 2 * (beta - 1));
         if (s < 0) {
           temp = 0.0;
         }

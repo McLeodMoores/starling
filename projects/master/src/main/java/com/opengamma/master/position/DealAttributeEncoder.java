@@ -24,10 +24,8 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides helper methods to store a {@link Deal}'s data in a map of strings
- * and reload it into a {@link Deal} instance. Intended to be used for storing a
- * {@link Deal} in a {@link com.opengamma.core.position.Trade}'s
- * {@link Trade#getAttributes() attributes}.
+ * Provides helper methods to store a {@link Deal}'s data in a map of strings and reload it into a {@link Deal} instance. Intended to be used for storing a
+ * {@link Deal} in a {@link com.opengamma.core.position.Trade}'s {@link com.opengamma.core.position.Trade#getAttributes() attributes}.
  */
 public final class DealAttributeEncoder {
 

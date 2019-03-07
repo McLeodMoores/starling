@@ -11,8 +11,8 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Class implementing the Dirac delta function. $$ \begin{align*} \delta(x)= \begin{cases} \infty & \text{ when } x = 0\\ 0 & \text{ otherwise} \end{cases}
- * \end{align*} $$
+ * Class implementing the Dirac delta function. $$ \begin{align*} \delta(x)= \begin{cases} \infty &amp; \text{ when } x = 0\\ 0 &amp; \text{ otherwise}
+ * \end{cases} \end{align*} $$
  */
 public class DiracDeltaFunction extends Function1D<Double, Double> {
 

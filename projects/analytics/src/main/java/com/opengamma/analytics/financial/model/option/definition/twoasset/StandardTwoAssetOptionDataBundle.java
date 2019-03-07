@@ -29,17 +29,29 @@ public class StandardTwoAssetOptionDataBundle {
   private final ZonedDateTime _date;
 
   /**
-   * 
-   * @param interestRateCurve The interest rate curve (expects the x-axis to be time and the y-axis to be rate)
-   * @param b1 The cost-of-carry of the first asset
-   * @param b2 The cost-of-carry of the second asset
-   * @param volatilitySurface1 The volatility surface for the option on the first underlying (expects the x-axis to be time, the y-axis to be strike and the z-axis to be volatility)
-   * @param volatilitySurface2 The volatility surface for the option on the second underlying (expects the x-axis to be time, the y-axis to be strike and the z-axis to be volatility)
-   * @param spot1 The spot value of the first underlying
-   * @param spot2 The spot value of the second underlying
-   * @param rho The correlation between the spot rates of the underlying
-   * @param date The date of this data
-   * @throws IllegalArgumentException If $\rho < -1$ or $\rho > 1$ 
+   *
+   * @param interestRateCurve
+   *          The interest rate curve (expects the x-axis to be time and the y-axis to be rate)
+   * @param b1
+   *          The cost-of-carry of the first asset
+   * @param b2
+   *          The cost-of-carry of the second asset
+   * @param volatilitySurface1
+   *          The volatility surface for the option on the first underlying (expects the x-axis to be time, the y-axis to be strike and the z-axis to be
+   *          volatility)
+   * @param volatilitySurface2
+   *          The volatility surface for the option on the second underlying (expects the x-axis to be time, the y-axis to be strike and the z-axis to be
+   *          volatility)
+   * @param spot1
+   *          The spot value of the first underlying
+   * @param spot2
+   *          The spot value of the second underlying
+   * @param rho
+   *          The correlation between the spot rates of the underlying
+   * @param date
+   *          The date of this data
+   * @throws IllegalArgumentException
+   *           If $\rho &lt; -1$ or $\rho &gt; 1$
    */
   public StandardTwoAssetOptionDataBundle(final YieldAndDiscountCurve interestRateCurve, final double b1, final double b2, final VolatilitySurface volatilitySurface1,
       final VolatilitySurface volatilitySurface2, final double spot1, final double spot2, final double rho, final ZonedDateTime date) {
@@ -76,7 +88,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Gets the interest rate as a decimal 
+   * Gets the interest rate as a decimal
    * @param t The time to expiry
    * @return The interest rate
    */
@@ -85,16 +97,16 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Gets the cost of carry of the first asset as a decimal 
-   * @return The cost of carry 
+   * Gets the cost of carry of the first asset as a decimal
+   * @return The cost of carry
    */
   public double getFirstCostOfCarry() {
     return _b1;
   }
 
   /**
-   * Gets the cost of carry of the second asset as a decimal 
-   * @return The cost of carry 
+   * Gets the cost of carry of the second asset as a decimal
+   * @return The cost of carry
    */
   public double getSecondCostOfCarry() {
     return _b2;
@@ -103,7 +115,7 @@ public class StandardTwoAssetOptionDataBundle {
   /**
    * Gets the volatility of the first asset as a decimal
    * @param timeToExpiry The time to expiry
-   * @param strike The strike 
+   * @param strike The strike
    * @return The volatility
    */
   public double getFirstVolatility(final double timeToExpiry, final double strike) {
@@ -113,7 +125,7 @@ public class StandardTwoAssetOptionDataBundle {
   /**
    * Gets the volatility of the second asset as a decimal
    * @param timeToExpiry The time to expiry
-   * @param strike The strike 
+   * @param strike The strike
    * @return The volatility
    */
   public double getSecondVolatility(final double timeToExpiry, final double strike) {
@@ -121,7 +133,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * 
+   *
    * @return The spot value of the first asset
    */
   public double getFirstSpot() {
@@ -129,7 +141,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * 
+   *
    * @return The spot value of the second asset
    */
   public double getSecondSpot() {
@@ -137,7 +149,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * 
+   *
    * @return The interest rate curve
    */
   public YieldAndDiscountCurve getInterestRateCurve() {
@@ -145,7 +157,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * 
+   *
    * @return The volatility surface for the first asset
    */
   public VolatilitySurface getFirstVolatilitySurface() {
@@ -153,7 +165,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * 
+   *
    * @return The volatility surface for the second asset
    */
   public VolatilitySurface getSecondVolatilitySurface() {
@@ -161,7 +173,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * 
+   *
    * @return The correlation of the spot prices of the first and second asset
    */
   public double getCorrelation() {
@@ -169,7 +181,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * 
+   *
    * @return The date for which the data are valid
    */
   public ZonedDateTime getDate() {
@@ -248,9 +260,12 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Returns a new data bundle with the correlation between the two spot prices replaced by the argument
-   * @param correlation The correlation
+   * 
+   * @param correlation
+   *          The correlation
    * @return The new data bundle
-   * @throws IllegalArgumentException If $\rho < -1$ or $\rho > 1$ 
+   * @throws IllegalArgumentException
+   *           If $\rho &lt; -1$ or $\rho &gt; 1$
    */
   public StandardTwoAssetOptionDataBundle withCorrelation(final double correlation) {
     if (!ArgumentChecker.isInRangeInclusive(-1, 1, correlation)) {
@@ -276,19 +291,19 @@ public class StandardTwoAssetOptionDataBundle {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_b1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_b2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_date == null) ? 0 : _date.hashCode());
-    result = prime * result + ((_interestRateCurve == null) ? 0 : _interestRateCurve.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_date == null ? 0 : _date.hashCode());
+    result = prime * result + (_interestRateCurve == null ? 0 : _interestRateCurve.hashCode());
     temp = Double.doubleToLongBits(_rho);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spot1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spot2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_volatilitySurface1 == null) ? 0 : _volatilitySurface1.hashCode());
-    result = prime * result + ((_volatilitySurface2 == null) ? 0 : _volatilitySurface2.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_volatilitySurface1 == null ? 0 : _volatilitySurface1.hashCode());
+    result = prime * result + (_volatilitySurface2 == null ? 0 : _volatilitySurface2.hashCode());
     return result;
   }
 

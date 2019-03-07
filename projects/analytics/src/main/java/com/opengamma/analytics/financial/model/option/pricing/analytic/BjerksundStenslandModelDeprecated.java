@@ -15,69 +15,6 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Class defining an analytical approximation for American option prices as
  * derived by Bjerksund and Stensland (2002).
- * <p>
- * The price of a call is given by:
- * $$
- * \begin{align*}
- * C = &\alpha_2 S^\beta - \alpha_2 \phi(S, t_1, \beta, I_2, I_2)\\
- * & + \phi(S, t_1, 1, I_2, I_2) - \phi(S, t_1, 1, I_1, I_2)\\
- * & - K\phi(S, t_1, 0, I_2, I_2) + K\phi(S, t_1, 0, I_1, I_2)\\
- * & + \alpha_1 \phi(S, t_1, \beta, I_1, I_2) - \alpha_1 \psi(S, T, \beta, I_1, I_2, I_2, t_1)\\
- * & + \psi(S, T, 1, I_1, I2, I_1, t_1) - \psi(S, T, 1, K, I_2, I_1, t_1)\\
- * & - K\psi(S, T, 0, I_1, I_2, I_1, t_1) + K\psi(S, T, 0, K, I_2, I_1, t_1)
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * t_1 &= \frac{(\sqrt{5} - 1)T}{2}\\
- * I_1 &= B_0 + (B_\infty - B_0)(1 - e^{h_1})\\
- * I_2 &= B_0 + (B_\infty - B_0)(1 - e^{h_2})\\
- * B_0 &= \frac{\beta K}{\beta - 1}\\
- * B_\infty &= \max\left(K, \frac{rK}{r-b}\right)\\
- * h_1 &= \frac{(bt_1 + 2\sigma\sqrt{t_1})K^2}{B_0(B_0 - B_\infty)}\\
- * h_2 &= \frac{(bT + 2\sigma\sqrt{T})K^2}{B_0(B_0 - B_\infty)}\\
- * \alpha_1 &= (I_1 - K)I_1^{-\beta}\\
- * \alpha_2 &= (I_2 - K)I_2^{-\beta}\\
- * \beta &= \frac{1}{2} - \frac{b}{\sigma^2} + \sqrt{\left(\frac{b}{\sigma^2} - \frac{1}{2}\right)^2 + \frac{2r}{\sigma^2}}
- * \end{align*}
- * $$
- * The function $\phi(S, T, \gamma, H, I)$ is defined as
- * $$
- * \begin{align*}
- * \phi(S, T, \gamma, H, I) &= e^\lambda S^\gamma\left[N(-d_1) - \left(\frac{I}{S}\right)^\kappa N(-d_2)\right]\\
- * d_1 &= \frac{\ln(\frac{S}{H}) + (b + (\gamma - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * d_2 &= \frac{\ln(\frac{I^2}{SH}) + (b + (\gamma - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * \lambda &= -r + \gamma b + \frac{\gamma(\gamma - 1)\sigma^2}{2}\\
- * \kappa &= \frac{2b}{\sigma^2} + 2\gamma + 1
- * \end{align*}
- * $$
- * and the function $\psi(S, T, \gamma, H, I_2, I_1, t_1)$ is defined as
- * $$
- * \begin{align*}
- * \psi(S, T, \gamma, H, I_2, I_1, t_1) = &e^{\lambda T} S^\gamma\left[M(d_1, e_1, \rho)
- *   -\left(\frac{I_2}{S}\right)^\kappa M(d_2, e_2, \rho) - \left(\frac{I_1}{S}\right)^\kappa M(d_3, e_3, -\rho)
- *   +\left(\frac{I_1}{I_2}\right)^\kappa M(d_4, e_4, \rho)\right]
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * d_1 &= -\frac{\ln(\frac{S}{I_1}) + (b + (\gamma - \frac{1}{2})\sigma^2)t_1}{\sigma\sqrt{t_1}}\\
- * d_2 &= -\frac{\ln(\frac{I_2^2}{SI_1}) + (b + (\gamma - \frac{1}{2})\sigma^2)t_1}{\sigma\sqrt{t_1}}\\
- * d_3 &= -\frac{\ln(\frac{S}{I_1}) - (b + (\gamma - \frac{1}{2})\sigma^2)t_1}{\sigma\sqrt{t_1}}\\
- * d_4 &= -\frac{\ln(\frac{I_2^2}{SI_1}) - (b + (\gamma - \frac{1}{2})\sigma^2)t_1}{\sigma\sqrt{t_1}}\\
- * e_1 &= -\frac{\ln(\frac{S}{H}) + (b + (\gamma - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * e_2 &= -\frac{\ln(\frac{I_1^2}{SH}) + (b + (\gamma - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * e_3 &= -\frac{\ln(\frac{I_2^2}{SH}) + (b + (\gamma - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * e_4 &= -\frac{\ln(\frac{SI_1^2}{HI_2^2}) + (b + (\gamma - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}
- * \end{align*}
- * $$
- * and $\rho = \sqrt{\frac{t_1}{T}}$ and $M(\cdot, \cdot, \cdot)$ is the CDF of the bivariate
- * normal distribution (see {@link com.opengamma.analytics.math.statistics.distribution.BivariateNormalDistribution}).
- *
- * The price of puts is calculated using the Bjerksund-Stensland put-call transformation
- * $p(S, K, T, r, b, \sigma) = c(K, S, T, r - b, -b, \sigma)$.
  *
  * @deprecated Use {@link BjerksundStenslandModel} instead.
  */
@@ -160,7 +97,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   /**
    * get the price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry), theta (expiry), vega
    * (sigma)) of an American option with the Bjerksund &amp; Stensland (2002) approximation
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -185,7 +122,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   /**
    * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided difference on the delta. For a call both
    * delta and gamma are found by Algorithmic Differentiation.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -208,7 +145,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -233,7 +170,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    * Get a function for the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation in terms of the volatility (sigma). This
    * is primarily used by the GenericImpliedVolatiltySolver to find a (Bjerksund &amp; Stensland) implied volatility for a given market price of an American
    * option
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -256,7 +193,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    * Get the implied volatility according to the Bjerksund &amp; Stensland (2002) approximation for the price of an American option quoted in the market. It is
    * the number that put into the Bjerksund &amp; Stensland (2002) approximation gives the market price. <b>This is not the same as the Black implied
    * volatility</b> (which is only applicable to European options), although it may be numerically close.
-   * 
+   *
    * @param price
    *          The market price of an American option
    * @param s0
@@ -329,16 +266,25 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * get phi and its sensitivity to s, t, gamma, h, x (I), r, b & sigma
-   * @param s the strike
-   * @param t the time to expiry
-   * @param gamma gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored
-   * @param h h
-   * @param x x
-   * @param r the interest rate
-   * @param b the cost-of-carry
-   * @param sigma The volatility
-   * @return length 9 array of  phi and its sensitivity to s, t, gamma, h, x (I), r, b & sigma
+   * get phi and its sensitivity to s, t, gamma, h, x (I), r, b &amp; sigma
+   * 
+   * @param s
+   *          the strike
+   * @param t
+   *          the time to expiry
+   * @param gamma
+   *          gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored
+   * @param h
+   *          h
+   * @param x
+   *          x
+   * @param r
+   *          the interest rate
+   * @param b
+   *          the cost-of-carry
+   * @param sigma
+   *          The volatility
+   * @return length 9 array of phi and its sensitivity to s, t, gamma, h, x (I), r, b &amp; sigma
    */
   protected double[] getPhiAdjoint(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b,
       final double sigma) {
@@ -423,26 +369,38 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * get I1 and its sensitivity to k, r, b, sigma & t
-   * @param k The strike
-   * @param r The interest rate
-   * @param b The cost-of-carry
-   * @param sigma The volatility
-   * @param t The time to expiry
-   * @return length 6 array of  I1 and its sensitivity to k, r, b, sigma & t
+   * get I1 and its sensitivity to k, r, b, sigma &amp; t
+   * 
+   * @param k
+   *          The strike
+   * @param r
+   *          The interest rate
+   * @param b
+   *          The cost-of-carry
+   * @param sigma
+   *          The volatility
+   * @param t
+   *          The time to expiry
+   * @return length 6 array of I1 and its sensitivity to k, r, b, sigma &amp; t
    */
   protected double[] getI1Adjoint(final double k, final double r, final double b, final double sigma, final double t) {
     return MODEL.getI1Adjoint(k, r, b, sigma, t);
   }
 
   /**
-   * get I2 and its sensitivity to k, r, b, sigma & t
-   * @param k The strike
-   * @param r The interest rate
-   * @param b The cost-of-carry
-   * @param sigma The volatility
-   * @param t The time to expiry
-   * @return length 6 array of  I2 and its sensitivity to k, r, b, sigma & t
+   * get I2 and its sensitivity to k, r, b, sigma &amp; t
+   * 
+   * @param k
+   *          The strike
+   * @param r
+   *          The interest rate
+   * @param b
+   *          The cost-of-carry
+   * @param sigma
+   *          The volatility
+   * @param t
+   *          The time to expiry
+   * @return length 6 array of I2 and its sensitivity to k, r, b, sigma &amp; t
    */
   protected double[] getI2Adjoint(final double k, final double r, final double b, final double sigma, final double t) {
     return MODEL.getI2Adjoint(k, r, b, sigma, t);

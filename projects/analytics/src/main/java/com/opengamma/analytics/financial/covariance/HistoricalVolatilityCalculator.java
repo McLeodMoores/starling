@@ -45,8 +45,10 @@ public abstract class HistoricalVolatilityCalculator implements VolatilityCalcul
   }
 
   /**
-   * @param mode The calculation mode, not null
-   * @param percentBadDataPoints The acceptable percentage of bad data points, must be >= 0 and <= 1
+   * @param mode
+   *          The calculation mode, not null
+   * @param percentBadDataPoints
+   *          The acceptable percentage of bad data points, must be &ge; 0 and &le; 1
    */
   public HistoricalVolatilityCalculator(final CalculationMode mode, final double percentBadDataPoints) {
     ArgumentChecker.notNull(mode, "mode");

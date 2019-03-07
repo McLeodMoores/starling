@@ -15,7 +15,8 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Description of a bond future (derivative version).
- * @deprecated Use the {@link BondFuturesSecurityDefinition} and {@link BondFuturesTransactionDefinition}.
+ *
+ * @deprecated Use {@link BondFuturesSecurity} and {@link BondFuturesTransaction}.
  */
 @Deprecated
 public class BondFuture implements InstrumentDerivative {

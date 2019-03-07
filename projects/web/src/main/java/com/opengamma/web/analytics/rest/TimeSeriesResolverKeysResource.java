@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import org.json.JSONArray;
 
 import com.google.common.collect.Lists;
+import com.opengamma.engine.marketdata.spec.HistoricalMarketDataSpecification;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigSearchRequest;

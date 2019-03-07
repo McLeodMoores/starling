@@ -21,6 +21,7 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.financial.security.option.SwaptionSecurity;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExpiryBean;
 import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
@@ -28,7 +29,7 @@ import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link OptionSecurity}.
+ * A Hibernate bean representation of {@link SwaptionSecurity}.
  */
 @BeanDefinition
 public class SwaptionSecurityBean extends SecurityBean {
@@ -73,26 +74,26 @@ public class SwaptionSecurityBean extends SecurityBean {
     //      return getId().longValue() == option.getId().longValue();
     //    }
     return new EqualsBuilder()
-      .append(getId(), option.getId())
-      .append(getExpiry(), option.getExpiry())
-      .append(getUnderlying(), option.getUnderlying())
-      .append(getCashSettled(), option.getCashSettled())
-      .append(getLongShort(), option.getLongShort())
-      .append(getPayer(), option.getPayer())
-      .append(getCurrency(), getCurrency())
-      .isEquals();
+        .append(getId(), option.getId())
+        .append(getExpiry(), option.getExpiry())
+        .append(getUnderlying(), option.getUnderlying())
+        .append(getCashSettled(), option.getCashSettled())
+        .append(getLongShort(), option.getLongShort())
+        .append(getPayer(), option.getPayer())
+        .append(getCurrency(), getCurrency())
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
-      .append(getExpiry())
-      .append(getUnderlying())
-      .append(getCashSettled())
-      .append(getLongShort())
-      .append(getPayer())
-      .append(getCurrency())
-      .toHashCode();
+        .append(getExpiry())
+        .append(getUnderlying())
+        .append(getCashSettled())
+        .append(getLongShort())
+        .append(getPayer())
+        .append(getCurrency())
+        .toHashCode();
   }
 
   @Override

@@ -31,15 +31,19 @@ public interface ConnectionManager {
   void clientDisconnected(String userId, String clientId);
 
   /**
-   * Creates a subscription for changes to an entity that was requested via the REST interface.  If the entity
-   * is updated a notification will be sent over the long-polling HTTP connection identified by {@code clientId}.
-   * The subscription will be automatically cancelled after one update.
-   * @param userId ID of the user
-   * @param clientId ID of the connection
-   * @param uid The {@code UniqueId} of the entity for which updates are required
-   * @param url REST URL of the entity for which updates are required
-   * @throws OpenGammaRuntimeException If {@code clientId} isn't valid or refers to a connection that isn't owned
-   * by {@code userId}
+   * Creates a subscription for changes to an entity that was requested via the REST interface. If the entity is updated a notification will be sent over the
+   * long-polling HTTP connection identified by {@code clientId}. The subscription will be automatically cancelled after one update.
+   * 
+   * @param userId
+   *          ID of the user
+   * @param clientId
+   *          ID of the connection
+   * @param uid
+   *          The {@code UniqueId} of the entity for which updates are required
+   * @param url
+   *          REST URL of the entity for which updates are required
+   * @throws com.opengamma.OpenGammaRuntimeException
+   *           If {@code clientId} isn't valid or refers to a connection that isn't owned by {@code userId}
    */
   void subscribe(String userId, String clientId, UniqueId uid, String url);
 
@@ -57,11 +61,14 @@ public interface ConnectionManager {
 
   /**
    * Returns the {@link ClientConnection} for a given client ID.
-   * @param userId ID of the user
-   * @param clientId ID of the connection
+   * 
+   * @param userId
+   *          ID of the user
+   * @param clientId
+   *          ID of the connection
    * @return The connection for the specified client ID
-   * @throws DataNotFoundException If there is no connection with the specified client ID or if the connection
-   * doesn't belong to the specified user
+   * @throws com.opengamma.DataNotFoundException
+   *           If there is no connection with the specified client ID or if the connection doesn't belong to the specified user
    */
   ClientConnection getConnectionByClientId(String userId, String clientId);
 

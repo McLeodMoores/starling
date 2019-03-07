@@ -28,7 +28,8 @@ public class BillTransaction implements InstrumentDerivative {
    */
   private final double _quantity;
   /**
-   * The amount paid at settlement date for the bill transaction. The amount is negative for a purchase (_quantity>0) and positive for a sell (_quantity<0).
+   * The amount paid at settlement date for the bill transaction. The amount is negative for a purchase (_quantity&gt;0) and positive for a sell
+   * (_quantity&lt;0).
    */
   private final double _settlementAmount;
 
@@ -40,10 +41,16 @@ public class BillTransaction implements InstrumentDerivative {
 
   /**
    * Constructor.
-   * @param billPurchased The bill underlying the transaction.
-   * @param quantity The bill quantity.
-   * @param settlementAmount The amount paid at settlement date for the bill transaction. The amount is negative for a purchase (_quantity>0) and positive for a sell (_quantity<0).
-   * @param billStandard The bill with standard settlement date (time).
+   *
+   * @param billPurchased
+   *          The bill underlying the transaction.
+   * @param quantity
+   *          The bill quantity.
+   * @param settlementAmount
+   *          The amount paid at settlement date for the bill transaction. The amount is negative for a purchase (_quantity&gt;0) and positive for a sell
+   *          (_quantity&lt;0).
+   * @param billStandard
+   *          The bill with standard settlement date (time).
    */
   public BillTransaction(final BillSecurity billPurchased, final double quantity, final double settlementAmount, final BillSecurity billStandard) {
     Validate.notNull(billPurchased, "Bill purchased");
@@ -120,9 +127,9 @@ public class BillTransaction implements InstrumentDerivative {
     result = prime * result + _billStandard.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_quantity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_settlementAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

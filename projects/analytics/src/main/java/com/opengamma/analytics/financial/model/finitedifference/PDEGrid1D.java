@@ -10,7 +10,7 @@ import java.util.Arrays;
 import org.apache.commons.lang.Validate;
 
 /**
- * 
+ *
  */
 public class PDEGrid1D {
   private final int _nSpaceNodes;
@@ -25,11 +25,18 @@ public class PDEGrid1D {
 
   /**
    * Create a uniform grid with numTimeNodes between 0 and tMax, and numSpaceNodes between xMin and xMax
-   * @param numTimeNodes The number of time nodes. Note, the number of time steps is numTimeNodes - 1, therefore need  numTimeNodes >= 2
-   * @param numSpaceNodes The number of space nodes. Note, this includes the boundaries, so the number of internal nodes is numSpaceNodes - 2, therefore need numSpaceNodes >=3
-   * @param tMax maximum time
-   * @param xMin minimum x
-   * @param xMax maximum x
+   *
+   * @param numTimeNodes
+   *          The number of time nodes. Note, the number of time steps is numTimeNodes - 1, therefore need numTimeNodes &gt;= 2
+   * @param numSpaceNodes
+   *          The number of space nodes. Note, this includes the boundaries, so the number of internal nodes is numSpaceNodes - 2, therefore need numSpaceNodes
+   *          &gt;=3
+   * @param tMax
+   *          maximum time
+   * @param xMin
+   *          minimum x
+   * @param xMax
+   *          maximum x
    */
   public PDEGrid1D(final int numTimeNodes, final int numSpaceNodes, final double tMax, final double xMin, final double xMax) {
 

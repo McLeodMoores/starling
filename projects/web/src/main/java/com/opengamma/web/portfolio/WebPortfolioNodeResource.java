@@ -225,11 +225,12 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
   }
 
   /**
-   * Extracts the path from the root node to the current node, for web breadcrumb display.
-   * The nodes are returned in a list, ordered from root to current node.
+   * Extracts the path from the root node to the current node, for web breadcrumb display. The nodes are returned in a list, ordered from root to current node.
    * Not using findNodeStackByObjectId(), which traverses the tree exhaustively until it finds the required path.
-   * @param node  the current node
-   * @return      a list of <UniqueId, String> pairs denoting all nodes on the path from root to current node
+   * 
+   * @param node
+   *          the current node
+   * @return a list of &lt;UniqueId, String&gt; pairs denoting all nodes on the path from root to current node
    */
   protected List<ObjectsPair<UniqueId, String>> getPathNodes(final ManageablePortfolioNode node) {
     final LinkedList<ObjectsPair<UniqueId, String>> result = new LinkedList<>();

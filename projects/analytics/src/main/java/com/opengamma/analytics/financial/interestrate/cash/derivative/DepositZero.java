@@ -178,8 +178,9 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the discounting curve name.
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurveName() {

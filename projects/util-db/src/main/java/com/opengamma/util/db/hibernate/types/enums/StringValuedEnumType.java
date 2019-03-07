@@ -83,15 +83,19 @@ implements EnhancedUserType, ParameterizedType {
   }
 
   /**
-   * Retrieve an instance of the mapped class from a JDBC resultset. Implementors
-   * should handle possibility of null values.
+   * Retrieve an instance of the mapped class from a JDBC resultset. Implementors should handle possibility of null values.
    *
-   * @param rs a JDBC result set
-   * @param names the column names
-   * @param owner the containing entity
+   * @param rs
+   *          a JDBC result set
+   * @param names
+   *          the column names
+   * @param owner
+   *          the containing entity
    * @return Object
    * @throws HibernateException
+   *           if there is a problem
    * @throws SQLException
+   *           if there is a problem
    */
   @Override
   public Object nullSafeGet(final ResultSet rs, final String[] names, final SharedSessionContractImplementor session,
@@ -110,15 +114,19 @@ implements EnhancedUserType, ParameterizedType {
   }
 
   /**
-   * Write an instance of the mapped class to a prepared statement. Implementors
-   * should handle possibility of null values. A multi-column type should be written
+   * Write an instance of the mapped class to a prepared statement. Implementors should handle possibility of null values. A multi-column type should be written
    * to parameters starting from <tt>index</tt>.
    *
-   * @param st a JDBC prepared statement
-   * @param value the object to write
-   * @param index statement parameter index
+   * @param st
+   *          a JDBC prepared statement
+   * @param value
+   *          the object to write
+   * @param index
+   *          statement parameter index
    * @throws HibernateException
+   *           if there is a problem
    * @throws SQLException
+   *           if there is a problem
    */
   @Override
   @SuppressWarnings("unchecked")

@@ -149,7 +149,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * @return The yield curve name
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getYieldCurveName() {

@@ -196,14 +196,19 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
   }
 
   /**
-   * Use this for models that cannot be easily expressed as having 3 parameters (e.g. mixed log-normal). It picks out 3 consecutive strikes and gives them a small error (1bps by default), while the
-   * rest of the data has a relatively large error (100bps by default). The fit is then made to all data (n > 3) which allows more than 3 parameters to be fitted (recall, the start position is set
-   * from a true global fit). The chi^2 should be close to zero if the model is capable of fitting the data.
+   * Use this for models that cannot be easily expressed as having 3 parameters (e.g. mixed log-normal). It picks out 3 consecutive strikes and gives them a
+   * small error (1bps by default), while the rest of the data has a relatively large error (100bps by default). The fit is then made to all data (n &gt; 3)
+   * which allows more than 3 parameters to be fitted (recall, the start position is set from a true global fit). The chi^2 should be close to zero if the model
+   * is capable of fitting the data.
    *
-   * @param index Index of first strike
-   * @param strikes Array of all strikes
-   * @param impliedVols Array of all vols
-   * @param errors Array of all errors
+   * @param index
+   *          Index of first strike
+   * @param strikes
+   *          Array of all strikes
+   * @param impliedVols
+   *          Array of all vols
+   * @param errors
+   *          Array of all errors
    * @return array containing the 3 strikes, vols and errors
    */
   protected static double[][] getStrikesVolsAndErrorsForAllPoints(final int index, final double[] strikes, final double[] impliedVols, final double[] errors) {

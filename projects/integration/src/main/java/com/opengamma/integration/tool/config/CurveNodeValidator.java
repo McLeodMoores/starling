@@ -58,12 +58,20 @@ public final class CurveNodeValidator implements CurveNodeVisitor<Void> {
 
   /**
    * @param curveDate
+   *          the curve date
    * @param configValidationUtils
+   *          the validation utils
    * @param securitySource
+   *          a security source
    * @param validationNode
+   *          the validation node
    * @param curveNodeIdMapper
+   *          the node to identifier mapper
+   * @param configSource
+   *          a configuration source
    */
-  public CurveNodeValidator(final LocalDate curveDate, final ConfigValidationUtils configValidationUtils, final SecuritySource securitySource, final ValidationNode validationNode, final CurveNodeIdMapper curveNodeIdMapper, final ConfigSource configSource) {
+  public CurveNodeValidator(final LocalDate curveDate, final ConfigValidationUtils configValidationUtils, final SecuritySource securitySource,
+      final ValidationNode validationNode, final CurveNodeIdMapper curveNodeIdMapper, final ConfigSource configSource) {
     _curveDate = curveDate;
     _configValidationUtils = configValidationUtils;
     _securitySource = securitySource;

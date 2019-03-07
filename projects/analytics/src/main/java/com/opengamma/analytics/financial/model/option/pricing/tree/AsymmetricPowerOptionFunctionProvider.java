@@ -9,7 +9,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Payoff of asymmetric power option is max( S^i - K , 0 ) for call and max( K - S^i , 0 ) for put with i > 0
+ * Payoff of asymmetric power option is max( S^i - K , 0 ) for call and max( K - S^i , 0 ) for put with i &gt; 0
  */
 public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvider1D {
 

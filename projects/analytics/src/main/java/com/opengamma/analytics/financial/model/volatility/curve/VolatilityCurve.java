@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.CurveShiftFunctionFactory;
 
 /**
- * VolatilityTermStructure backed by a Curve<Double, Double>
+ * VolatilityTermStructure backed by a {@link Curve}.
  */
 public class VolatilityCurve implements VolatilityTermStructure {
   private final Curve<Double, Double> _curve;

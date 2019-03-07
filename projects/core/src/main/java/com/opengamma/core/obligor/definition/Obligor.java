@@ -36,19 +36,6 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public class Obligor extends DirectBean {
 
-  // ----------------------------------------------------------------------------------------------------------------------------------------
-
-  // TODO : Need to be able to allow the user to add user-defined fields to the definition of an obligor on an ad-hoc
-  // basis (each user will have different ways of representing an obligor)
-  // TODO : Should we include the recovery rate model as part of the obligors composition (private final RecoveryRateModel _recoveryRateModel;)?
-
-  // NOTE : There should be no market data within this objects definition (should only have the obligor characteristics)
-
-  // ----------------------------------------------------------------------------------------------------------------------------------------
-
-  // Private member variables
-
-  // The obligor identifiers
   @PropertyDefinition(validate = "notNull")
   private String _obligorTicker;
   @PropertyDefinition(validate = "notNull")
@@ -56,13 +43,11 @@ public class Obligor extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private String _obligorREDCode;
 
-  // The obligor credit rating (MarkIt fields)
   @PropertyDefinition(validate = "notNull")
   private CreditRating _compositeRating;
   @PropertyDefinition(validate = "notNull")
   private CreditRating _impliedRating;
 
-  // The obligor credit rating (Moodys, S&P and Fitch classifications)
   @PropertyDefinition(validate = "notNull")
   private CreditRatingMoodys _moodysCreditRating;
   @PropertyDefinition(validate = "notNull")
@@ -70,19 +55,15 @@ public class Obligor extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private CreditRatingFitch _fitchCreditRating;
 
-  // Explicit flag to determine if the obligor has already defaulted prior to the current time
   @PropertyDefinition(validate = "notNull")
   private boolean _hasDefaulted;
 
-  // The obligor industrial sector classification
   @PropertyDefinition(validate = "notNull")
   private Sector _sector;
 
-  // The regional domicile of the obligor
   @PropertyDefinition(validate = "notNull")
   private Region _region;
 
-  // The country of domicile of the obligor
   @PropertyDefinition(validate = "notNull")
   private String _country;
 

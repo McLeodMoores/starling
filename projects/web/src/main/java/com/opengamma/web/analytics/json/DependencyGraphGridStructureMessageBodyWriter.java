@@ -26,6 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.analytics.AnalyticsNodeJsonWriter;
 import com.opengamma.web.analytics.DependencyGraphGridStructure;
 import com.opengamma.web.analytics.GridColumnsJsonWriter;
+import com.opengamma.web.analytics.PortfolioGridStructure;
 
 /**
  * Writes an instance of {@link PortfolioGridStructure} to JSON.
@@ -41,8 +42,6 @@ public class DependencyGraphGridStructureMessageBodyWriter implements MessageBod
   /** Field name for the JSON. */
   private static final String CALC_CONFIG_NAME = "calcConfigName";
   /** Field name for the JSON. */
-  @SuppressWarnings("unused")
-  private static final String VALUE_REQUIREMENT = "valueRequirement";
 
   private final GridColumnsJsonWriter _writer;
 
@@ -58,22 +57,22 @@ public class DependencyGraphGridStructureMessageBodyWriter implements MessageBod
 
   @Override
   public long getSize(final DependencyGraphGridStructure gridStructure,
-                      final Class<?> type,
-                      final Type genericType,
-                      final Annotation[] annotations,
-                      final MediaType mediaType) {
+      final Class<?> type,
+      final Type genericType,
+      final Annotation[] annotations,
+      final MediaType mediaType) {
     // TODO this means unknown size. is it worth encoding it twice to find out the size?
     return -1;
   }
 
   @Override
   public void writeTo(final DependencyGraphGridStructure gridStructure,
-                      final Class<?> type,
-                      final Type genericType,
-                      final Annotation[] annotations,
-                      final MediaType mediaType,
-                      final MultivaluedMap<String, Object> httpHeaders,
-                      final OutputStream entityStream) throws IOException, WebApplicationException {
+      final Class<?> type,
+      final Type genericType,
+      final Annotation[] annotations,
+      final MediaType mediaType,
+      final MultivaluedMap<String, Object> httpHeaders,
+      final OutputStream entityStream) throws IOException, WebApplicationException {
     final Object[] rootNode = AnalyticsNodeJsonWriter.getJsonStructure(gridStructure.getRootNode());
     final List<Map<String, Object>> columns = _writer.getJsonStructure(gridStructure.getColumnStructure().getGroups());
     //ValueRequirementJSONBuilder jsonBuilder = new ValueRequirementJSONBuilder();
@@ -88,8 +87,8 @@ public class DependencyGraphGridStructureMessageBodyWriter implements MessageBod
     //}
     final String calcConfigName = gridStructure.getCalculationConfigurationName();
     final ImmutableMap<String, Object> jsonMap = ImmutableMap.of(COLUMN_SETS, columns,
-                                                           ROOT_NODE, rootNode,
-                                                           CALC_CONFIG_NAME, calcConfigName/*,
+        ROOT_NODE, rootNode,
+        CALC_CONFIG_NAME, calcConfigName/*,
                                                            VALUE_REQUIREMENT, valueReqJson*/);
     entityStream.write(new JSONObject(jsonMap).toString().getBytes());
   }

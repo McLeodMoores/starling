@@ -267,11 +267,13 @@ public class DupireLocalVolatilityCalculator {
   }
 
   /**
-   * Get the local volatility surface (parameterised by expiry and moneyness = strike/forward) from a Black volatility surface (also parameterised by expiry and moneyness). <b>Note</b> this is the
-   * cleanest method as is does not require any knowledge of instantaneous rates (i.e. r & q). If the Black volatility surface is parameterised by strike and/or the local volatility surface is
-   * required to be parameterised by strike use can use the converters BlackVolatilitySurfaceConverter and/or LocalVolatilitySurfaceConverter
+   * Get the local volatility surface (parameterised by expiry and moneyness = strike/forward) from a Black volatility surface (also parameterised by expiry and
+   * moneyness). <b>Note</b> this is the cleanest method as is does not require any knowledge of instantaneous rates (i.e. r &amp; q). If the Black volatility
+   * surface is parameterised by strike and/or the local volatility surface is required to be parameterised by strike use can use the converters
+   * BlackVolatilitySurfaceConverter and/or LocalVolatilitySurfaceConverter
    *
-   * @param impliedVolatilitySurface Black volatility surface (parameterised by expiry and moneyness)
+   * @param impliedVolatilitySurface
+   *          Black volatility surface (parameterised by expiry and moneyness)
    * @return local volatility surface (parameterised by expiry and moneyness)
    */
   public LocalVolatilitySurfaceMoneyness getLocalVolatility(final BlackVolatilitySurfaceMoneyness impliedVolatilitySurface) {

@@ -86,7 +86,6 @@ public class CurveValidator {
   }
   /**
    * Not re-entrant.
-   * @return
    */
   public void validateNewCurveSetup() {
     _curveConstructionConfigNodes = new ArrayList<>();

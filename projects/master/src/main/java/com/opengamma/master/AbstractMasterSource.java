@@ -70,9 +70,11 @@ implements ObjectChangeListenerManager {
    * <p>
    * This overrides the version in the unique identifier if set to do so.
    *
-   * @param uniqueId the unique identifier, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @return the document, not null
-   * @throws DataNotFoundException if the document could not be found
+   * @throws com.opengamma.DataNotFoundException
+   *           if the document could not be found
    */
   public D getDocument(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -84,10 +86,13 @@ implements ObjectChangeListenerManager {
    * <p>
    * The specified version-correction may be overridden if set to do so.
    *
-   * @param objectId the object identifier, not null
-   * @param versionCorrection the version-correction, not null
+   * @param objectId
+   *          the object identifier, not null
+   * @param versionCorrection
+   *          the version-correction, not null
    * @return the document, not null
-   * @throws DataNotFoundException if the document could not be found
+   * @throws com.opengamma.DataNotFoundException
+   *           if the document could not be found
    */
   public D getDocument(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");

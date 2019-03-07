@@ -58,15 +58,23 @@ public class EquityIndexOptionDefinition implements InstrumentDefinition<EquityI
   private final SettlementType _settlementType;
 
   /**
-   * @param isCall Call if true, Put if false
-   * @param strike Strike, with same scaling as index has. Not negative or zero.
-   * @param currency Currency of settlement, not null
-   * @param exerciseType Exercise type, European or American, not null
-   * @param expiryDT Expiry, date and time of last, or only, exercise decision, not null
-   * @param settlementDate Cash settlement occurs on this LocalDate, not null
-   * @param pointValue Unit notional. A unit move in price is multiplied by this to give P&L of a single contract. A negative amount
-   * represents a short position. Not zero.
-   * @param settlementType Whether the option is physically or cash-settled, not null
+   * @param isCall
+   *          Call if true, Put if false
+   * @param strike
+   *          Strike, with same scaling as index has. Not negative or zero.
+   * @param currency
+   *          Currency of settlement, not null
+   * @param exerciseType
+   *          Exercise type, European or American, not null
+   * @param expiryDT
+   *          Expiry, date and time of last, or only, exercise decision, not null
+   * @param settlementDate
+   *          Cash settlement occurs on this LocalDate, not null
+   * @param pointValue
+   *          Unit notional. A unit move in price is multiplied by this to give P&amp;L of a single contract. A negative amount represents a short position. Not
+   *          zero.
+   * @param settlementType
+   *          Whether the option is physically or cash-settled, not null
    */
   public EquityIndexOptionDefinition(final boolean isCall, final double strike, final Currency currency, final ExerciseDecisionType exerciseType,
       final ZonedDateTime expiryDT, final LocalDate settlementDate, final double pointValue, final SettlementType settlementType) {

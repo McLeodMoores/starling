@@ -11,6 +11,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionWithData;
+import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponFixedAccruedCompoundingDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedCompoundedONCompoundedDefinition;
@@ -28,7 +29,7 @@ import com.opengamma.util.time.Expiry;
  * Class describing a European swaption on a vanilla swap with cash delivery.
  */
 public final class SwaptionCashFixedCompoundedONCompoundingDefinition
-    implements InstrumentDefinitionWithData<SwaptionCashFixedCompoundedONCompounded, ZonedDateTimeDoubleTimeSeries> {
+implements InstrumentDefinitionWithData<SwaptionCashFixedCompoundedONCompounded, ZonedDateTimeDoubleTimeSeries> {
 
   /**
    * Swap underlying the swaption.

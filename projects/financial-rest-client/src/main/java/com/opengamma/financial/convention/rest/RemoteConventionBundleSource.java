@@ -20,10 +20,9 @@ import com.opengamma.util.rest.UniformInterfaceException404NotFound;
 /**
  * Provides remote access to a {@link ConventionBundleSource}.
  * <p>
- * This is the client to {@link DataConventionBundleSourceResource}.
+ * This is the client to <code>DataConventionBundleSourceResource</code>.
  *
- * @deprecated Convention bundles should not be used. Use {@link Convention} and
- *             {@link RemoteConventionSource}.
+ * @deprecated Convention bundles should not be used. Use {@link Convention} and {@link RemoteConventionSource}.
  */
 @Deprecated
 public class RemoteConventionBundleSource extends AbstractRemoteClient implements ConventionBundleSource {

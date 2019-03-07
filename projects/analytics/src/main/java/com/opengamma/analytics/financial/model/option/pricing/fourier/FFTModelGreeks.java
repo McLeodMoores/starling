@@ -126,7 +126,7 @@ public class FFTModelGreeks {
    * @param n
    *          The (zero padded) array of sample values. <b>Use a power of 2</b>
    * @param m
-   *          The actual number of samples. Need n >= 2m-1
+   *          The actual number of samples. Need n &gt;= 2m-1
    * @return an array of arrays where is first array is the strikes, the second the prices, the first the derivatives of price wrt the first parameter etc
    */
   public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,

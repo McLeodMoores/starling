@@ -58,15 +58,15 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d1 = 0.;
     double d2 = 0.;
 
     if (bFwd && bStr) {
       LOGGER.info("(large value)/(large value) ambiguous");
-      return isCall ? (forward >= strike ? forward : 0.) : (strike >= forward ? strike : 0.);
+      return isCall ? forward >= strike ? forward : 0. : strike >= forward ? strike : 0.;
     }
     if (sigmaRootT < SMALL) {
       return Math.max(sign * (forward - strike), 0.0);
@@ -141,16 +141,16 @@ public abstract class BlackFormulaRepository {
     final int sign = isCall ? 1 : -1;
 
     double d1 = 0.;
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
 
     if (bSigRt) {
       return isCall ? 1. : 0.;
     }
     if (sigmaRootT < SMALL) {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
-        return (isCall ? (forward > strike ? 1.0 : 0.0) : (forward > strike ? 0.0 : -1.0));
+        return isCall ? forward > strike ? 1.0 : 0.0 : forward > strike ? 0.0 : -1.0;
       }
       LOGGER.info("(log 1.)/0., ambiguous value");
       return isCall ? 0.5 : -0.5;
@@ -166,7 +166,7 @@ public abstract class BlackFormulaRepository {
 
   public static double strikeForDelta(final double forward, final double forwardDelta, final double timeToExpiry, final double lognormalVol, final boolean isCall) {
     ArgumentChecker.isTrue(forward >= 0.0, "negative/NaN forward; have {}", forward);
-    ArgumentChecker.isTrue((isCall && forwardDelta > 0 && forwardDelta < 1) || (!isCall && forwardDelta > -1 && forwardDelta < 0), "delta out of range", forwardDelta);
+    ArgumentChecker.isTrue(isCall && forwardDelta > 0 && forwardDelta < 1 || !isCall && forwardDelta > -1 && forwardDelta < 0, "delta out of range", forwardDelta);
     ArgumentChecker.isTrue(timeToExpiry >= 0.0, "negative/NaN timeToExpiry; have {}", timeToExpiry);
     ArgumentChecker.isTrue(lognormalVol >= 0.0, "negative/NaN lognormalVol; have {}", lognormalVol);
 
@@ -206,16 +206,16 @@ public abstract class BlackFormulaRepository {
     final int sign = isCall ? 1 : -1;
 
     double d2 = 0.;
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
 
     if (bSigRt) {
       return isCall ? 0. : 1.;
     }
     if (sigmaRootT < SMALL) {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
-        return (isCall ? (forward > strike ? -1.0 : 0.0) : (forward > strike ? 0.0 : 1.0));
+        return isCall ? forward > strike ? -1.0 : 0.0 : forward > strike ? 0.0 : 1.0;
       }
       LOGGER.info("(log 1.)/0., ambiguous value");
       return isCall ? -0.5 : 0.5;
@@ -256,16 +256,16 @@ public abstract class BlackFormulaRepository {
     final int sign = isCall ? 1 : -1;
 
     double d = 0.;
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
 
     if (bSigRt) {
       return isCall ? 0.5 : -0.5;
     }
     if (sigmaRootT < SMALL) {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
-        return (isCall ? (forward > strike ? 1.0 : 0.0) : (forward > strike ? 0.0 : -1.0));
+        return isCall ? forward > strike ? 1.0 : 0.0 : forward > strike ? 0.0 : -1.0;
       }
       LOGGER.info("(log 1.)/0., ambiguous");
       return isCall ? 0.5 : -0.5;
@@ -301,9 +301,9 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
     double d1 = 0.;
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
 
     if (bSigRt) {
       return 0.;
@@ -346,9 +346,9 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
     double d2 = 0.;
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
 
     if (bSigRt) {
       return 0.;
@@ -391,9 +391,9 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
     double d2 = 0.;
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
 
     if (bSigRt) {
       return 0.;
@@ -451,23 +451,23 @@ public abstract class BlackFormulaRepository {
     final int sign = isCall ? 1 : -1;
     //    final double b = 0; // for now set cost of carry to 0
 
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d1 = 0.;
     double d2 = 0.;
 
     double priceLike = Double.NaN;
-    final double rt = (timeToExpiry < SMALL && Math.abs(interestRate) > LARGE) ? (interestRate > 0. ? 1. : -1.) : interestRate * timeToExpiry;
+    final double rt = timeToExpiry < SMALL && Math.abs(interestRate) > LARGE ? interestRate > 0. ? 1. : -1. : interestRate * timeToExpiry;
     if (bFwd && bStr) {
       LOGGER.info("(large value)/(large value) ambiguous");
-      priceLike = isCall ? (forward >= strike ? forward : 0.) : (strike >= forward ? strike : 0.);
+      priceLike = isCall ? forward >= strike ? forward : 0. : strike >= forward ? strike : 0.;
     } else {
       if (sigmaRootT < SMALL) {
         if (rt > LARGE) {
-          priceLike = isCall ? (forward > strike ? forward : 0.0) : (forward > strike ? 0.0 : -forward);
+          priceLike = isCall ? forward > strike ? forward : 0.0 : forward > strike ? 0.0 : -forward;
         } else {
-          priceLike = isCall ? (forward > strike ? forward - strike * Math.exp(-rt) : 0.0) : (forward > strike ? 0.0 : -forward + strike * Math.exp(-rt));
+          priceLike = isCall ? forward > strike ? forward - strike * Math.exp(-rt) : 0.0 : forward > strike ? 0.0 : -forward + strike * Math.exp(-rt);
         }
       } else {
         if (Math.abs(forward - strike) < SMALL | bSigRt) {
@@ -480,12 +480,12 @@ public abstract class BlackFormulaRepository {
         final double nF = NORMAL.getCDF(sign * d1);
         final double nS = NORMAL.getCDF(sign * d2);
         final double first = nF == 0. ? 0. : forward * nF;
-        final double second = ((nS == 0.) | (Math.exp(-interestRate * timeToExpiry) == 0.)) ? 0. : strike * Math.exp(-interestRate * timeToExpiry) * nS;
+        final double second = nS == 0. | Math.exp(-interestRate * timeToExpiry) == 0. ? 0. : strike * Math.exp(-interestRate * timeToExpiry) * nS;
         priceLike = sign * (first - second);
       }
     }
 
-    final double res = (interestRate > LARGE && Math.abs(priceLike) < SMALL) ? 0. : interestRate * priceLike;
+    final double res = interestRate > LARGE && Math.abs(priceLike) < SMALL ? 0. : interestRate * priceLike;
     return Math.abs(res) > LARGE ? res : driftLess + res;
   }
 
@@ -524,22 +524,22 @@ public abstract class BlackFormulaRepository {
     }
     final int sign = isCall ? 1 : -1;
 
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d2 = 0.;
 
     double priceLike = Double.NaN;
-    final double rt = (timeToExpiry < SMALL && Math.abs(interestRate) > LARGE) ? (interestRate > 0. ? 1. : -1.) : interestRate * timeToExpiry;
+    final double rt = timeToExpiry < SMALL && Math.abs(interestRate) > LARGE ? interestRate > 0. ? 1. : -1. : interestRate * timeToExpiry;
     if (bFwd && bStr) {
       LOGGER.info("(large value)/(large value) ambiguous");
-      priceLike = isCall ? 0. : (strike >= forward ? strike : 0.);
+      priceLike = isCall ? 0. : strike >= forward ? strike : 0.;
     } else {
       if (sigmaRootT < SMALL) {
         if (rt > LARGE) {
           priceLike = 0.;
         } else {
-          priceLike = isCall ? (forward > strike ? -strike : 0.0) : (forward > strike ? 0.0 : +strike);
+          priceLike = isCall ? forward > strike ? -strike : 0.0 : forward > strike ? 0.0 : +strike;
         }
       } else {
         if (Math.abs(forward - strike) < SMALL | bSigRt) {
@@ -548,11 +548,11 @@ public abstract class BlackFormulaRepository {
           d2 = Math.log(forward / strike) / sigmaRootT - 0.5 * sigmaRootT;
         }
         final double nS = NORMAL.getCDF(sign * d2);
-        priceLike = (nS == 0.) ? 0. : -sign * strike * nS;
+        priceLike = nS == 0. ? 0. : -sign * strike * nS;
       }
     }
 
-    final double res = (interestRate > LARGE && Math.abs(priceLike) < SMALL) ? 0. : interestRate * priceLike;
+    final double res = interestRate > LARGE && Math.abs(priceLike) < SMALL ? 0. : interestRate * priceLike;
     return Math.abs(res) > LARGE ? res : driftLess + res;
   }
 
@@ -578,9 +578,9 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
 
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d1 = 0.;
 
     if (bSigRt) {
@@ -592,7 +592,7 @@ public abstract class BlackFormulaRepository {
       }
       LOGGER.info("log(1)/0 ambiguous");
       if (rootT < SMALL) {
-        return forward < SMALL ? -NORMAL.getPDF(0.) * lognormalVol / 2. : (lognormalVol < SMALL ? -forward * NORMAL.getPDF(0.) / 2. : -forward * NORMAL.getPDF(0.) * lognormalVol / 2. / rootT);
+        return forward < SMALL ? -NORMAL.getPDF(0.) * lognormalVol / 2. : lognormalVol < SMALL ? -forward * NORMAL.getPDF(0.) / 2. : -forward * NORMAL.getPDF(0.) * lognormalVol / 2. / rootT;
       }
       if (lognormalVol < SMALL) {
         return bFwd ? -NORMAL.getPDF(0.) / 2. / rootT : -forward * NORMAL.getPDF(0.) * lognormalVol / 2. / rootT;
@@ -630,9 +630,9 @@ public abstract class BlackFormulaRepository {
       LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d1 = 0.;
 
     if (bSigRt) {
@@ -643,7 +643,7 @@ public abstract class BlackFormulaRepository {
         return 0.;
       }
       LOGGER.info("log(1)/0 ambiguous");
-      return (rootT < SMALL && forward > LARGE) ? NORMAL.getPDF(0.) : forward * rootT * NORMAL.getPDF(0.);
+      return rootT < SMALL && forward > LARGE ? NORMAL.getPDF(0.) : forward * rootT * NORMAL.getPDF(0.);
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
       d1 = 0.5 * sigmaRootT;
@@ -684,9 +684,9 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
 
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d1 = 0.;
     double d2 = 0.;
 
@@ -734,9 +734,9 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
 
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d1 = 0.;
     double d2 = 0.;
 
@@ -784,9 +784,9 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
 
-    final boolean bFwd = (forward > LARGE);
-    final boolean bStr = (strike > LARGE);
-    final boolean bSigRt = (sigmaRootT > LARGE);
+    final boolean bFwd = forward > LARGE;
+    final boolean bStr = strike > LARGE;
+    final boolean bSigRt = sigmaRootT > LARGE;
     double d1 = 0.;
     double d2 = 0.;
 
@@ -857,12 +857,18 @@ public abstract class BlackFormulaRepository {
 
   /**
    * Get the log-normal (Black) implied volatility of an out-the-money European option starting from an initial guess
-   * @param otmPrice The <b>forward</b> price - i.e. the market price divided by the numeraire (i.e. the zero bond p(0,T) for the T-forward measure)
-   * <b>Note</b> This MUST be an OTM price - i.e. a call price for strike >= forward and a put price otherwise
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param volGuess a guess of the implied volatility
+   * 
+   * @param otmPrice
+   *          The <b>forward</b> price - i.e. the market price divided by the numeraire (i.e. the zero bond p(0,T) for the T-forward measure) <b>Note</b> This
+   *          MUST be an OTM price - i.e. a call price for strike &gt;= forward and a put price otherwise
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param volGuess
+   *          a guess of the implied volatility
    * @return log-normal (Black) implied volatility
    */
   @ExternalFunction
@@ -1049,9 +1055,9 @@ public abstract class BlackFormulaRepository {
   @ExternalFunction
   public static double impliedStrike(final double delta, final boolean isCall, final double forward, final double time, final double volatility) {
     Validate.isTrue(delta > -1 && delta < 1, "Delta out of range");
-    Validate.isTrue(isCall ^ (delta < 0), "Delta incompatible with call/put: " + isCall + ", " + delta);
+    Validate.isTrue(isCall ^ delta < 0, "Delta incompatible with call/put: " + isCall + ", " + delta);
     Validate.isTrue(forward > 0, "Forward negative");
-    final double omega = (isCall ? 1.0 : -1.0);
+    final double omega = isCall ? 1.0 : -1.0;
     final double strike = forward * Math.exp(-volatility * Math.sqrt(time) * omega * NORMAL.getInverseCDF(omega * delta) + volatility * volatility * time / 2);
     return strike;
   }
@@ -1069,9 +1075,9 @@ public abstract class BlackFormulaRepository {
    */
   public static double impliedStrike(final double delta, final boolean isCall, final double forward, final double time, final double volatility, final double[] derivatives) {
     Validate.isTrue(delta > -1 && delta < 1, "Delta out of range");
-    Validate.isTrue(isCall ^ (delta < 0), "Delta incompatible with call/put: " + isCall + ", " + delta);
+    Validate.isTrue(isCall ^ delta < 0, "Delta incompatible with call/put: " + isCall + ", " + delta);
     Validate.isTrue(forward > 0, "Forward negative");
-    final double omega = (isCall ? 1.0 : -1.0);
+    final double omega = isCall ? 1.0 : -1.0;
     final double sqrtt = Math.sqrt(time);
     final double n = NORMAL.getInverseCDF(omega * delta);
     final double part1 = Math.exp(-volatility * sqrtt * omega * n + volatility * volatility * time / 2);

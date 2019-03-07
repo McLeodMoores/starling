@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.opengamma.analytics.financial.credit.index.CDSIndexCalculator;
 import com.opengamma.analytics.financial.credit.index.IntrinsicIndexDataBundle;
+import com.opengamma.analytics.financial.credit.index.PortfolioSwapAdjustment;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnnuityForSpreadFunction;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnnuityForSpreadISDAFunction;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;

@@ -17,45 +17,8 @@ import cern.jet.random.engine.RandomEngine;
 
 /**
  *
- * The generalized Pareto distribution is a family of power law probability
- * distributions with location parameter $\mu$, shape parameter $\xi$ and scale
- * parameter $\sigma$, where
- * $$
- * \begin{eqnarray*}
- * \mu&\in&\Re,\\
- * \xi&\in&\Re,\\
- * \sigma&>&0
- * \end{eqnarray*}
- * $$
- * and with support
- * $$
- * \begin{eqnarray*}
- * x\geq\mu\quad\quad\quad(\xi\geq 0)\\
- * \mu\leq x\leq\mu-\frac{\sigma}{\xi}\quad(\xi<0)
- * \end{eqnarray*}
- * $$
- * The cdf is given by:
- * $$
- * \begin{align*}
- * F(z)&=1-\left(1 + \xi z\right)^{-\frac{1}{\xi}}\\
- * z&=\frac{x-\mu}{\sigma}
- * \end{align*}
- * $$
- * and the pdf is given by:
- * $$
- * \begin{align*}
- * f(z)&=\frac{\left(1+\xi z\right)^{-\left(\frac{1}{\xi} + 1\right)}}{\sigma}\\
- * z&=\frac{x-\mu}{\sigma}
- * \end{align*}
- * $$
- * Given a uniform random number variable $U$ drawn from the interval $(0,1]$, a
- * Pareto-distributed random variable with parameters $\mu$, $\sigma$ and
- * $\xi$ is given by
- * $$
- * \begin{align*}
- * X=\mu + \frac{\sigma\left(U^{-\xi}-1\right)}{\xi}\sim GPD(\mu,\sigma,\xi)
- * \end{align*}
- * $$
+ * The generalized Pareto distribution is a family of power law probability distributions with location parameter $\mu$, shape parameter $\xi$ and scale
+ * parameter $\sigma$.
  */
 public class GeneralizedParetoDistribution implements ProbabilityDistribution<Double> {
   // TODO check cdf, pdf for support
@@ -125,7 +88,7 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @return Not supported
    * @throws NotImplementedException
    *           not implemented

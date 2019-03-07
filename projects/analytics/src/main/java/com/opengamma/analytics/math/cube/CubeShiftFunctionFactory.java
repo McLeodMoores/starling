@@ -25,7 +25,7 @@ public class CubeShiftFunctionFactory {
   /** Multiplicative shift function for {@link InterpolatedDoublesCube}. */
   public static final InterpolatedCubeMultiplicativeShiftFunction INTERPOLATED_MULTIPLICATIVE = new InterpolatedCubeMultiplicativeShiftFunction();
   /** Additive shift function for {@link InterpolatedFromSurfacesDoublesCube}. */
-  public static final InterpolatedFromSurfacesCubeAdditiveShiftFunction INTERPOLATED_FROM_CURVES_ADDITIVE = 
+  public static final InterpolatedFromSurfacesCubeAdditiveShiftFunction INTERPOLATED_FROM_CURVES_ADDITIVE =
       new InterpolatedFromSurfacesCubeAdditiveShiftFunction();
   /** Additive shift function for {@link NodalDoublesCube}. */
   public static final NodalCubeAdditiveShiftFunction NODAL_ADDITIVE = new NodalCubeAdditiveShiftFunction();
@@ -63,7 +63,7 @@ public class CubeShiftFunctionFactory {
   }
 
   /**
-   * For a cube Cube<Double, Double, Double, Double>, return a parallel-shifted cube.
+   * For a cube, return a parallel-shifted cube.
    *
    * @param cube
    *          The original cube
@@ -98,7 +98,7 @@ public class CubeShiftFunctionFactory {
   }
 
   /**
-   * For a cube Cube<Double, Double, Double, Double>, return a cube shifted at one point.
+   * For a cube, return a cube shifted at one point.
    *
    * @param cube
    *          The original cube
@@ -139,7 +139,7 @@ public class CubeShiftFunctionFactory {
   }
 
   /**
-   * For a cube Cube<Double, Double, Double, Double>, return a parallel-shifted cube.
+   * For a cube, return a parallel-shifted cube.
    *
    * @param cube
    *          The original cube
@@ -180,7 +180,7 @@ public class CubeShiftFunctionFactory {
   }
 
   /**
-   * For a cube Cube<Double, Double, Double, Double>, return a parallel-shifted cube.
+   * For a cube, return a parallel-shifted cube.
    *
    * @param cube
    *          The original cube
@@ -219,7 +219,7 @@ public class CubeShiftFunctionFactory {
   }
 
   /**
-   * For a cube Cube<Double, Double, Double, Double>, return a cube shifted at one point.
+   * For a cube, return a cube shifted at one point.
    *
    * @param cube
    *          The original cube
@@ -262,7 +262,7 @@ public class CubeShiftFunctionFactory {
   }
 
   /**
-   * For a cube Cube<Double, Double, Double, Double>, return a parallel-shifted cube.
+   * For a cube, return a parallel-shifted cube.
    *
    * @param cube
    *          The original cube

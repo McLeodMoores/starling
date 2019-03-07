@@ -13,14 +13,16 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  Model-independent realized variance result of the swap based upon observations already made.<p>
- *  Notes on market-standard form :<p>
- *  Computed as the average daily variance of log returns, scaled by an annualization factor, an estimate of the number of business days per year<p>
- *  In this calculation, the average is taken over the actual number of observations provided.
- *  In variance instruments, the number of actual observations may be less than number expected,
- *  due to unforeseen market disruptions. To account for this, the sum is normalized by nObsExpected (>= nObsActual)
- *  The realized variance calculated in this class do not perform this normalization. See {@link VarianceSwapStaticReplication#presentValue}
- *  for an example of this normalization.
+ * Model-independent realized variance result of the swap based upon observations already made.
+ * <p>
+ * Notes on market-standard form :
+ * <p>
+ * Computed as the average daily variance of log returns, scaled by an annualization factor, an estimate of the number of business days per year
+ * <p>
+ * In this calculation, the average is taken over the actual number of observations provided. In variance instruments, the number of actual observations may be
+ * less than number expected, due to unforeseen market disruptions. To account for this, the sum is normalized by nObsExpected (&ge; nObsActual) The realized
+ * variance calculated in this class do not perform this normalization. See {@link VarianceSwapStaticReplication#presentValue} for an example of this
+ * normalization.
  */
 public class RealizedVariance extends Function1D<VarianceSwap, Double> {
 

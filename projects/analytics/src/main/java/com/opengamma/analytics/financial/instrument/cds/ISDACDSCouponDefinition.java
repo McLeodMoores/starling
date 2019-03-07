@@ -9,6 +9,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.credit.cds.ISDACDSCoupon;
 import com.opengamma.analytics.financial.instrument.payment.CouponFixedDefinition;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
 import com.opengamma.financial.convention.daycount.ActualThreeSixtyFive;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.ArgumentChecker;
@@ -72,7 +73,7 @@ public class ISDACDSCouponDefinition extends CouponFixedDefinition {
     final ZonedDateTime rebasedDate2 = date2.withZoneSameInstant(date1.getZone());
 
     return rebasedDate2.isBefore(date1)
-      ? -ACT_365F.getDayCountFraction(rebasedDate2, date1)
-      :  ACT_365F.getDayCountFraction(date1, rebasedDate2);
+        ? -ACT_365F.getDayCountFraction(rebasedDate2, date1)
+            :  ACT_365F.getDayCountFraction(date1, rebasedDate2);
   }
 }

@@ -160,11 +160,11 @@ public class MultipleCurrencyParameterSensitivity {
   }
 
   /**
-   * Returns the sensitivities for a particular curve name. An unmodifiable map
-   * of Currency -> Sensitivities will be returned. Note that this implementation
+   * Returns the sensitivities for a particular curve name. An unmodifiable map of Currency -&gt; Sensitivities will be returned. Note that this implementation
    * will not be efficient if there are a large number of curves.
    *
-   * @param name the name of the curve to get sensitivities for
+   * @param name
+   *          the name of the curve to get sensitivities for
    * @return map of sensitivities by currency
    */
   public Map<Currency, DoubleMatrix1D> getSensitivityByName(final String name) {
@@ -201,7 +201,8 @@ public class MultipleCurrencyParameterSensitivity {
   }
 
   /**
-   * Returns a map<Pair<String, Currency>, Double> with the total sensitivity with respect to each curve/currency.
+   * Returns a map with the total sensitivity with respect to each curve/currency.
+   *
    * @return The map.
    */
   public Map<Pair<String, Currency>, Double> totalSensitivityByCurveCurrency() {

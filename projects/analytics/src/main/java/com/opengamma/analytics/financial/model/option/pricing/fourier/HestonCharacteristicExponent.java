@@ -24,27 +24,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * The Heston stochastic volatility model is defined as:
- * $$
- * \begin{align*}
- * dS_t &= \mu S_t dt + \sqrt{V_t}S_t dW_S(t)\\
- * dV_t &= \kappa(\theta - V_0)dt + \omega\sqrt{V_t} dW_V(t)\\
- * \text{with}\\
- * dW_S(t) dW_V(t) = \rho dt
- * \end{align*}
- * $$
- * This class represents the characteristic function of the Heston model:
- * $$
- * \begin{align*}
- * \phi(u) &= e^{C(t, u) + D(t, u)V_0 + iu\ln F}\\
- * \text{where}\\
- * C(t, u) &= \frac{\kappa\theta}{\omega^2} \left((\kappa - \rho \omega ui + d(u))t - 2\ln\left(\frac{c(u)e^{d(u)t} - 1}{c(u) - 1}\right) \right)\\
- * D(t, u) &= \frac{\kappa - \rho \omega ui + d(u)}{\omega^2}\left(\frac{e^{d(u)t} - 1}{c(u)e^{d(u)t} - 1}\right)\\
- * c(u) &= \frac{\kappa - \rho \omega ui + d(u)}{\kappa - \rho \omega ui - d(u)}\\
- * \text{and}\\
- * d(u) &= \sqrt{(\rho \omega ui - \kappa)^2 + iu\omega^2 + \omega^2 u^2}
- * \end{align*}
- * $$
+ * The characteristic exponent of the Heston stochastic volatility model.
  */
 public class HestonCharacteristicExponent implements MartingaleCharacteristicExponent {
   private final double _kappa;
@@ -354,15 +334,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   /**
-   * The maximum allowable value of $alpha$ which is given by
-   * $$
-   * \begin{align*}
-   * t &= \omega - 2 \kappa \rho \\
-   * \rho^* &= 1 - \rho^2\\
-   * r &= \sqrt{t^2 + 4\kappa^2\rho^*}\\
-   * \alpha_{max} &= \frac{t + r}{\omega(\rho^* - 1)}
-   * \end{align*}
-   * $$
+   * The maximum allowable value of $alpha$.
    *
    * @return $alpha_{max}$
    */
@@ -371,15 +343,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     return _alphaMax;
   }
 
-  /** The maximum allowable value of $alpha$ which is given by
-   * $$
-   * \begin{align*}
-   * t &= \omega - 2 \kappa \rho \\
-   * \rho^* &= 1 - \rho^2\\
-   * r &= \sqrt{t^2 + 4\kappa^2\rho^*}\\
-   * \alpha_{min} &= \frac{t - r}{\omega(\rho^* - 1)}
-   * \end{align*}
-   * $$
+  /**
+   * The minimum allowable value of $alpha$.
+   * 
    * @return $alpha_{min}$
    */
   @Override

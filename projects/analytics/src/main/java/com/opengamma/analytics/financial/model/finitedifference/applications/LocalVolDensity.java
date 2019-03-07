@@ -25,11 +25,15 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 public class LocalVolDensity {
 
   /**
-   * Get the coefficients (a, b and c) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial dimension). The PDE is of the form
-   * $frac{\partial V}{\partial t} + a(x,t)\frac{\partial^2V}{\partial x^2}+b(x,t)\frac{\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
-   * @param forward the forward curve
-   * @param localVol the local volatility surface (parameterised by strike)
-   * @return The coefficients a, b & c - which are all functions of time and asset value (space)
+   * Get the coefficients (a, b and c) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial dimension). The PDE
+   * is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\partial^2V}{\partial x^2}+b(x,t)\frac{\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the
+   * density
+   * 
+   * @param forward
+   *          the forward curve
+   * @param localVol
+   *          the local volatility surface (parameterised by strike)
+   * @return The coefficients a, b &amp; c - which are all functions of time and asset value (space)
    */
   public static ConvectionDiffusionPDE1DCoefficients getStandardCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
 
@@ -67,7 +71,7 @@ public class LocalVolDensity {
         final double lv1Div = getLocalVolFirstDiv(localVol, t, s);
         final double lv2Div = getLocalVolSecondDiv(localVol, t, s);
         final double lv = localVol.getVolatility(t, s);
-        final double temp1 = (lv + s * lv1Div);
+        final double temp1 = lv + s * lv1Div;
         final double temp2 = lv * s * (s * lv2Div + 2 * lv1Div);
 
         return forward.getDrift(t) - temp1 * temp1 - temp2;
@@ -93,11 +97,15 @@ public class LocalVolDensity {
   }
 
   /**
-   * Get the coefficients (a, b, c, $\alpha$ & $\beta$) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial dimension).
-   * The PDE is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\alpha(x,t)\partial^2V}{\partial x^2}+b(x,t)\frac{\beta(x,t)\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
-   * @param forward the forward curve
-   * @param localVol the local volatility surface (parameterised by strike)
-   * @return The coefficients a, b, c, $\alpha$ & $\beta$ - which are all functions of time and asset value (space)
+   * Get the coefficients (a, b, c, $\alpha$ &amp; $\beta$) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1
+   * spatial dimension). The PDE is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\alpha(x,t)\partial^2V}{\partial x^2}+b(x,t)\frac{\beta(x,t)\partial
+   * V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
+   *
+   * @param forward
+   *          the forward curve
+   * @param localVol
+   *          the local volatility surface (parameterised by strike)
+   * @return The coefficients a, b, c, $\alpha$ &amp; $\beta$ - which are all functions of time and asset value (space)
    */
   public static ConvectionDiffusionPDE1DFullCoefficients getFullCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
 

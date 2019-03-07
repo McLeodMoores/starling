@@ -164,19 +164,27 @@ public class FiniteDifferenceSpreadSensitivityCalculator {
   }
 
   /**
-   * The CS01 (or credit DV01) by a parallel shift of the market par spreads (CDS par spread curve). This takes an extraneous yield curve, a set of reference CDSs
-   * (marketCDSs) and their par-spreads (expressed as <b>fractions not basis points</b>) and bootstraps a credit (hazard) curve -
-   * the target CDS is then priced with this credit curve. This is then repeated with the market spreads bumped in parallel by
-   * some amount. The result is the difference (bumped minus base price) is divided by the bump amount.<br>
-   * For small bumps (<1e-4) this approximates $$\frac{\partial V}{\partial S}$$<br>
+   * The CS01 (or credit DV01) by a parallel shift of the market par spreads (CDS par spread curve). This takes an extraneous yield curve, a set of reference
+   * CDSs (marketCDSs) and their par-spreads (expressed as <b>fractions not basis points</b>) and bootstraps a credit (hazard) curve - the target CDS is then
+   * priced with this credit curve. This is then repeated with the market spreads bumped in parallel by some amount. The result is the difference (bumped minus
+   * base price) is divided by the bump amount.<br>
+   * For small bumps (&gt;1e-4) this approximates $$\frac{\partial V}{\partial S}$$<br>
    * Credit DV01 is (often) defined as -( V(S + 1bp) - V(s)) - to achieve this use fracBumpAmount = 1e-4 and bumpType ADDITIVE
-   * @param cds analytic description of a CDS traded at a certain time
-   * @param cdsFracSpread The <b>fraction</b> spread of the CDS
-   * @param yieldCurve The yield (or discount) curve
-   * @param marketCDSs The market CDSs - these are the reference instruments used to build the credit curve
-   * @param parSpreads The <b>fractional</b> spreads of the market CDSs
-   * @param fracBumpAmount The fraction bump amount, so a 1pb bump is 1e-4
-   * @param bumpType ADDITIVE or MULTIPLICATIVE
+   * 
+   * @param cds
+   *          analytic description of a CDS traded at a certain time
+   * @param cdsFracSpread
+   *          The <b>fraction</b> spread of the CDS
+   * @param yieldCurve
+   *          The yield (or discount) curve
+   * @param marketCDSs
+   *          The market CDSs - these are the reference instruments used to build the credit curve
+   * @param parSpreads
+   *          The <b>fractional</b> spreads of the market CDSs
+   * @param fracBumpAmount
+   *          The fraction bump amount, so a 1pb bump is 1e-4
+   * @param bumpType
+   *          ADDITIVE or MULTIPLICATIVE
    * @return The credit DV01
    */
   public double parallelCS01FromParSpreads(final CDSAnalytic cds, final double cdsFracSpread, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic[] marketCDSs, final double[] parSpreads,
@@ -269,19 +277,26 @@ public class FiniteDifferenceSpreadSensitivityCalculator {
   }
 
   /**
-   * The bucketed CS01 (or credit DV01) by shifting each  market par-spread in turn. This takes an extraneous yield curve, a set of reference CDSs
-   * (marketCDSs) and their par-spreads (expressed as <b>fractions not basis points</b>) and bootstraps a credit (hazard) curve -
-   * the target CDS is then priced with this credit curve. This is then repeated with each market spreads bumped in turn.
-   * The result is the vector of differences (bumped minus base price) divided by the bump amount.<br>
-   * For small bumps (<1e-4) this approximates $$\frac{\partial V}{\partial S_i}$$ where $$S_i$$ is the spread of the $$1^{th}$$
-   * market CDS<br>
-   * @param cds analytic description of a CDS traded at a certain time
-   * @param cdsCoupon The <b>fraction</b> spread of the CDS
-   * @param yieldCurve The yield (or discount) curve
-   * @param marketCDSs The market CDSs - these are the reference instruments used to build the credit curve
-   * @param marketParSpreads The <b>fractional</b> par-spreads of the market CDSs
-   * @param fracBumpAmount The fraction bump amount, so a 1pb bump is 1e-4
-   * @param bumpType ADDITIVE or MULTIPLICATIVE
+   * The bucketed CS01 (or credit DV01) by shifting each market par-spread in turn. This takes an extraneous yield curve, a set of reference CDSs (marketCDSs)
+   * and their par-spreads (expressed as <b>fractions not basis points</b>) and bootstraps a credit (hazard) curve - the target CDS is then priced with this
+   * credit curve. This is then repeated with each market spreads bumped in turn. The result is the vector of differences (bumped minus base price) divided by
+   * the bump amount.<br>
+   * For small bumps (&lt;1e-4) this approximates $$\frac{\partial V}{\partial S_i}$$ where $$S_i$$ is the spread of the $$1^{th}$$ market CDS<br>
+   *
+   * @param cds
+   *          analytic description of a CDS traded at a certain time
+   * @param cdsCoupon
+   *          The <b>fraction</b> spread of the CDS
+   * @param yieldCurve
+   *          The yield (or discount) curve
+   * @param marketCDSs
+   *          The market CDSs - these are the reference instruments used to build the credit curve
+   * @param marketParSpreads
+   *          The <b>fractional</b> par-spreads of the market CDSs
+   * @param fracBumpAmount
+   *          The fraction bump amount, so a 1pb bump is 1e-4
+   * @param bumpType
+   *          ADDITIVE or MULTIPLICATIVE
    * @return The credit CS01
    */
   public double[] bucketedCS01FromParSpreads(final CDSAnalytic cds, final double cdsCoupon, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic[] marketCDSs, final double[] marketParSpreads,
@@ -311,20 +326,26 @@ public class FiniteDifferenceSpreadSensitivityCalculator {
   }
 
   /**
-   * The bucketed CS01 (or credit DV01) by bumping each quoted (or flat) spread in turn. This takes an extraneous yield curve,
-   *  a set of reference CDSs (marketCDSs) and their quoted (or flat) spreads (expressed as <b>fractions not basis points</b>) and
-   *  bootstraps a credit (hazard) curve -
-   * the target CDS is then priced with this credit curve. This is then repeated with each market spreads bumped in turn.
-   * The result is the vector of differences (bumped minus base price) divided by the bump amount.<br>
-   * For small bumps (<1e-4) this approximates $$\frac{\partial V}{\partial S_i}$$ for a flat curve where $$S_i$$
-   * is the spread of the $$1^{th}$$ market CDS
-   * @param cds analytic description of a CDS traded at a certain time
-   * @param dealSpread The <b>fraction</b> spread of the CDS
-   * @param yieldCurve The yield (or discount) curve
-   * @param marketCDSs The market CDSs - these are the reference instruments used to build the credit curve
-   * @param quotedSpreads The <b>fractional</b> spreads of the market CDSs
-   * @param fracBumpAmount The fraction bump amount, so a 1pb bump is 1e-4
-   * @param bumpType ADDITIVE or MULTIPLICATIVE
+   * The bucketed CS01 (or credit DV01) by bumping each quoted (or flat) spread in turn. This takes an extraneous yield curve, a set of reference CDSs
+   * (marketCDSs) and their quoted (or flat) spreads (expressed as <b>fractions not basis points</b>) and bootstraps a credit (hazard) curve - the target CDS is
+   * then priced with this credit curve. This is then repeated with each market spreads bumped in turn. The result is the vector of differences (bumped minus
+   * base price) divided by the bump amount.<br>
+   * For small bumps (&lt;1e-4) this approximates $$\frac{\partial V}{\partial S_i}$$ for a flat curve where $$S_i$$ is the spread of the $$1^{th}$$ market CDS
+   * 
+   * @param cds
+   *          analytic description of a CDS traded at a certain time
+   * @param dealSpread
+   *          The <b>fraction</b> spread of the CDS
+   * @param yieldCurve
+   *          The yield (or discount) curve
+   * @param marketCDSs
+   *          The market CDSs - these are the reference instruments used to build the credit curve
+   * @param quotedSpreads
+   *          The <b>fractional</b> spreads of the market CDSs
+   * @param fracBumpAmount
+   *          The fraction bump amount, so a 1pb bump is 1e-4
+   * @param bumpType
+   *          ADDITIVE or MULTIPLICATIVE
    * @return The bucketed CS01 for a single CDS
    */
   public double[] bucketedCS01FromQuotedSpreads(final CDSAnalytic cds, final double dealSpread, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic[] marketCDSs, final double[] quotedSpreads,
@@ -360,20 +381,27 @@ public class FiniteDifferenceSpreadSensitivityCalculator {
   }
 
   /**
-   * The bucketed CS01 (or credit DV01) on a set of CDSS by bumping each quoted (or flat) spread in turn. This takes an extraneous yield curve,
-   *  a set of reference CDSs (marketCDSs) and their quoted (or flat) spreads (expressed as <b>fractions not basis points</b>) and
-   *  bootstraps a credit (hazard) curve -
-   * the target CDS is then priced with this credit curve. This is then repeated with each market spreads bumped in turn.
-   * The result is the vector of differences (bumped minus base price) divided by the bump amount.<br>
-   * For small bumps (<1e-4) this approximates $$\frac{\partial V}{\partial S_i}$$ for a flat curve where $$S_i$$
-   * @param cds a set of analytic description of  CDSs traded at a certain times
-   * @param dealSpread The <b>fraction</b> spread of the CDS
-   * @param yieldCurve The yield (or discount) curve
-   * @param marketCDSs The market CDSs - these are the reference instruments used to build the credit curve
-   * @param quotedSpreads The <b>fractional</b> spreads of the market CDSs
-   * @param fracBumpAmount The fraction bump amount, so a 1pb bump is 1e-4
-   * @param bumpType ADDITIVE or MULTIPLICATIVE
-   * @return The bucketed CS01 for a set of  CDSs
+   * The bucketed CS01 (or credit DV01) on a set of CDSS by bumping each quoted (or flat) spread in turn. This takes an extraneous yield curve, a set of
+   * reference CDSs (marketCDSs) and their quoted (or flat) spreads (expressed as <b>fractions not basis points</b>) and bootstraps a credit (hazard) curve -
+   * the target CDS is then priced with this credit curve. This is then repeated with each market spreads bumped in turn. The result is the vector of
+   * differences (bumped minus base price) divided by the bump amount.<br>
+   * For small bumps (&lt;1e-4) this approximates $$\frac{\partial V}{\partial S_i}$$ for a flat curve where $$S_i$$
+   * 
+   * @param cds
+   *          a set of analytic description of CDSs traded at a certain times
+   * @param dealSpread
+   *          The <b>fraction</b> spread of the CDS
+   * @param yieldCurve
+   *          The yield (or discount) curve
+   * @param marketCDSs
+   *          The market CDSs - these are the reference instruments used to build the credit curve
+   * @param quotedSpreads
+   *          The <b>fractional</b> spreads of the market CDSs
+   * @param fracBumpAmount
+   *          The fraction bump amount, so a 1pb bump is 1e-4
+   * @param bumpType
+   *          ADDITIVE or MULTIPLICATIVE
+   * @return The bucketed CS01 for a set of CDSs
    */
   public double[][] bucketedCS01FromQuotedSpreads(final CDSAnalytic[] cds, final double dealSpread, final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic[] marketCDSs,
       final double[] quotedSpreads, final double fracBumpAmount, final BumpType bumpType) {

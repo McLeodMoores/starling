@@ -8,6 +8,7 @@ package com.opengamma.analytics.financial.instrument.volatilityswap;
 import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.volatilityswap.FXVolatilitySwap;
 import com.opengamma.analytics.util.time.TimeCalculator;
@@ -81,7 +82,8 @@ public class FXVolatilitySwapDefinition extends VolatilitySwapDefinition {
 
   /**
    * {@inheritDoc}
-   * @deprecated Yield curve names are no longer stored in {@link InstrumentDerivative}
+   * 
+   * @deprecated Yield curve names are no longer stored in {@link InstrumentDefinition}
    */
   @Deprecated
   @Override

@@ -167,14 +167,20 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
   }
 
   /**
-   * Builder of FRA from the accrual start date, the accrual end date and the index.
-   * The fixing period dates are computed from the index conventions.
-   * @param accrualStartDate (Unadjusted) start date of the accrual period
-   * @param accrualEndDate (Unadjusted) end date of the accrual period
-   * @param notional The notional
-   * @param index The FRA Ibor index.
-   * @param rate The FRA rate.
-   * @param calendar The holiday calendar for the ibor leg & payment date.
+   * Builder of FRA from the accrual start date, the accrual end date and the index. The fixing period dates are computed from the index conventions.
+   * 
+   * @param accrualStartDate
+   *          (Unadjusted) start date of the accrual period
+   * @param accrualEndDate
+   *          (Unadjusted) end date of the accrual period
+   * @param notional
+   *          The notional
+   * @param index
+   *          The FRA Ibor index.
+   * @param rate
+   *          The FRA rate.
+   * @param calendar
+   *          The holiday calendar for the ibor leg &amp; payment date.
    * @return The FRA.
    */
   public static ForwardRateAgreementDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double notional,
@@ -306,7 +312,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final String forwardCurveName = yieldCurveNames[1];
     final ZonedDateTime zonedDate = date.toLocalDate().atStartOfDay(ZoneOffset.UTC);
     final double paymentTime = actAct.getDayCountFraction(zonedDate, getPaymentDate(), _calendar);
-    if (date.isAfter(getFixingDate()) || (date.equals(getFixingDate()))) {
+    if (date.isAfter(getFixingDate()) || date.equals(getFixingDate())) {
       Double fixedRate = indexFixingTimeSeries.getValue(getFixingDate());
       //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
       if (fixedRate == null) {
@@ -360,7 +366,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
     final ZonedDateTime zonedDate = date.toLocalDate().atStartOfDay(ZoneOffset.UTC);
     final double paymentTime = actAct.getDayCountFraction(zonedDate, getPaymentDate(), _calendar);
-    if (date.isAfter(getFixingDate()) || (date.equals(getFixingDate()))) {
+    if (date.isAfter(getFixingDate()) || date.equals(getFixingDate())) {
       Double fixedRate = indexFixingTimeSeries.getValue(getFixingDate());
       //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
       if (fixedRate == null) {
@@ -397,12 +403,12 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingPeriodAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _fixingPeriodEndDate.hashCode();
     result = prime * result + _fixingPeriodStartDate.hashCode();
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

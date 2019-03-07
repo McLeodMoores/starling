@@ -360,10 +360,13 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Extracts a BigDecimal handling DB annoyances.
    *
-   * @param rs  the result set, not null
-   * @param columnName  the column name, not null
+   * @param rs
+   *          the result set, not null
+   * @param columnName
+   *          the column name, not null
    * @return the extracted value, may be null
    * @throws SQLException
+   *           if there is a problem getting the value
    */
   protected BigDecimal extractBigDecimal(final ResultSet rs, final String columnName) throws SQLException {
     final BigDecimal value = rs.getBigDecimal(columnName);

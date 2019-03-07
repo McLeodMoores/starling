@@ -10,9 +10,8 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Compute price and Greeks of digital (cash-or-nothing) option
- * Cash-or-nothing call option pays 0 if S <= K and K if S > K, whereas cash-or-nothing put option pays 1. if S < K and 0 if S >= K,
- * where S is asset price at expiry.
+ * Compute price and Greeks of digital (cash-or-nothing) option Cash-or-nothing call option pays 0 if S &lt;= K and K if S &gt; K, whereas cash-or-nothing put
+ * option pays 1. if S &lt; K and 0 if S &gt;= K, where S is asset price at expiry.
  */
 public class DigitalOptionFunction {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);

@@ -43,19 +43,23 @@ public class ISDACompliantYieldCurve extends ISDACompliantCurve {
   /**
    * Creates a flat yield curve at level r.
    *
-   * @param t  the (arbitrary) single knot point (t > 0)
-   * @param r  the level
+   * @param t
+   *          the (arbitrary) single knot point (t &gt; 0)
+   * @param r
+   *          the level
    */
   public ISDACompliantYieldCurve(final double t, final double r) {
     super(t, r);
   }
 
   /**
-   * Creates a yield (discount) curve with knots at times, t, zero rates, r, at the knots and piecewise constant
-   * forward  rates between knots (i.e. linear interpolation of r*t or the -log(discountFactor).
+   * Creates a yield (discount) curve with knots at times, t, zero rates, r, at the knots and piecewise constant forward rates between knots (i.e. linear
+   * interpolation of r*t or the -log(discountFactor).
    *
-   * @param t  the set of times that form the knots of the curve. Must be ascending with the first value >= 0, not null
-   * @param r  the set of zero rates, not null
+   * @param t
+   *          the set of times that form the knots of the curve. Must be ascending with the first value &ge; 0, not null
+   * @param r
+   *          the set of zero rates, not null
    */
   public ISDACompliantYieldCurve(final double[] t, final double[] r) {
     super(t, r);

@@ -72,11 +72,14 @@ public class BlackFormula {
   }
 
   /**
-   * Via the BlackFormula, this converts a Delta-parameterised strike into the actual strike value.
-   * fwdDelta, defined here, is always positive, in [0,1]. At 0.5, a straddle has zero delta, occurring at K == F*exp(0.5 sig^2 T). So deltas < 0.5 are out-of-the-money.
-   * Hence a 0.25 put and a 0.25 call will have a strike less and greater than the forward, respectively.
-   * @param fwdDelta the first order derivative of the price with respect to the forward
-   * @param forCall Choose whether you would like to see the strike of the call or put for the fwdDelta provided
+   * Via the BlackFormula, this converts a Delta-parameterised strike into the actual strike value. fwdDelta, defined here, is always positive, in [0,1]. At
+   * 0.5, a straddle has zero delta, occurring at K == F*exp(0.5 sig^2 T). So deltas &lt; 0.5 are out-of-the-money. Hence a 0.25 put and a 0.25 call will have a
+   * strike less and greater than the forward, respectively.
+   * 
+   * @param fwdDelta
+   *          the first order derivative of the price with respect to the forward
+   * @param forCall
+   *          Choose whether you would like to see the strike of the call or put for the fwdDelta provided
    * @return The true strike value
    */
   public final Double computeStrikeImpliedByForwardDelta(final double fwdDelta, final boolean forCall) {

@@ -68,7 +68,7 @@ public interface AnalyticsView {
    */
   List<String> updateResults(ViewResultModel results, ViewCycle viewCycle);
 
-// -------- main grid --------
+  // -------- main grid --------
 
   /**
    * Returns the row and column structure of one of the top level grids.
@@ -195,11 +195,11 @@ public interface AnalyticsView {
    * @param valueRequirement Requirement which requests the value we're interested in
    */
   void openDependencyGraph(int requestId,
-                           GridType gridType,
-                           int graphId,
-                           String callbackId,
-                           String calcConfigName,
-                           ValueRequirement valueRequirement);
+      GridType gridType,
+      int graphId,
+      String callbackId,
+      String calcConfigName,
+      ValueRequirement valueRequirement);
 
   /**
    * Closes a dependency graph.
@@ -285,16 +285,20 @@ public interface AnalyticsView {
 
   /**
    * Returns information about an error that occurred in the server
+   * 
    * @return The error, not null
-   * @throws DataNotFoundException If the ID is unknown
+   * @throws com.opengamma.DataNotFoundException
+   *           If the ID is unknown
    */
   List<ErrorInfo> getErrors();
 
   /**
    * Deletes an error that a client is no longer interested in
    *
-   * @param id The error ID. This is pushed to the client as a notification
-   * @throws DataNotFoundException If the ID is unknown
+   * @param id
+   *          The error ID. This is pushed to the client as a notification
+   * @throws com.opengamma.DataNotFoundException
+   *           If the ID is unknown
    */
   void deleteError(long id);
 }

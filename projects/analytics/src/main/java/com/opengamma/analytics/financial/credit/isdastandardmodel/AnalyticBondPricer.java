@@ -92,11 +92,15 @@ public class AnalyticBondPricer {
   }
 
   /**
-   * This gives a function (Function1D<Double, Double>) that allows you to price a bond for any level of a constant hazard rate
-   * @param bond Simple analytic representation of a fixed coupon bond
-   * @param yieldCurve The yield curve
-   * @param cleanOrDirty Clean or dirty price for the bond
-   * @return a function of hazard rate -> bond price
+   * This gives a function that allows you to price a bond for any level of a constant hazard rate.
+   *
+   * @param bond
+   *          Simple analytic representation of a fixed coupon bond
+   * @param yieldCurve
+   *          The yield curve
+   * @param cleanOrDirty
+   *          Clean or dirty price for the bond
+   * @return a function of hazard rate -&gt; bond price
    */
   public Function1D<Double, Double> getBondPriceForHazardRateFunction(final BondAnalytic bond, final ISDACompliantYieldCurve yieldCurve, final PriceType cleanOrDirty) {
     ArgumentChecker.notNull(bond, "bond");

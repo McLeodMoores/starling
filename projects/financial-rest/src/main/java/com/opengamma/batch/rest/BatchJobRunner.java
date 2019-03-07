@@ -114,6 +114,11 @@ public class BatchJobRunner {
 
   /**
    * Creates an runs a batch job based on a properties file and configuration.
+   *
+   * @param args
+   *          the command line arguments
+   * @throws Exception
+   *           if there is a problem
    */
   public static void main(final String[] args) throws Exception {  // CSIGNORE
     if (args.length == 0) {

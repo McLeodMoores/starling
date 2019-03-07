@@ -85,7 +85,7 @@ public class CDSAnalyticFactory {
   }
 
   /**
-  * Produce CDSs with the following default values and a supplied recovery rate:<P>
+   * Produce CDSs with the following default values and a supplied recovery rate:<P>
    * Step-in: T+1<br>
    * Cash-Settle: T+3 working days<br>
    * Pay accrual on Default: true<br>
@@ -114,7 +114,7 @@ public class CDSAnalyticFactory {
   }
 
   /**
-  * Produce CDSs with the following default values and a supplied coupon interval:<P>
+   * Produce CDSs with the following default values and a supplied coupon interval:<P>
    * Step-in: T+1<br>
    * Cash-Settle: T+3 working days<br>
    * Pay accrual on Default: true<br>
@@ -144,7 +144,7 @@ public class CDSAnalyticFactory {
   }
 
   /**
-  * Produce CDSs with the following default values and a supplied recovery rate and coupon interval:<P>
+   * Produce CDSs with the following default values and a supplied recovery rate and coupon interval:<P>
    * Step-in: T+1<br>
    * Cash-Settle: T+3 working days<br>
    * Pay accrual on Default: true<br>
@@ -329,14 +329,16 @@ public class CDSAnalyticFactory {
   //************************************************************************************************************************
 
   /**
-   * Set up an on-the-run index represented as a single name CDS (i.e. by CDSAnalytic). The index roll dates (when new indices are issued) are 20 Mar & Sep,
-   *  and the index is defined to have a maturity that is its nominal tenor plus 3M on issuance, so a 5Y index on the 6-Feb-2014 will have a maturity of
-   *  20-Dec-2018 (5Y3M on the issue date of 20-Sep-2013).
-   *  The accrual start date will be the previous IMM date (before the trade date), business-day adjusted.  <b>Note</b> it payment interval is changed from the
-   * default of 3M, this will produce a (possibly incorrect) non-standard first coupon.
-   * will have a maturity of
-   * @param tradeDate The trade date
-   * @param tenor The nominal length of the index
+   * Set up an on-the-run index represented as a single name CDS (i.e. by CDSAnalytic). The index roll dates (when new indices are issued) are 20 Mar &amp; Sep,
+   * and the index is defined to have a maturity that is its nominal tenor plus 3M on issuance, so a 5Y index on the 6-Feb-2014 will have a maturity of
+   * 20-Dec-2018 (5Y3M on the issue date of 20-Sep-2013). The accrual start date will be the previous IMM date (before the trade date), business-day adjusted.
+   * <b>Note</b> it payment interval is changed from the default of 3M, this will produce a (possibly incorrect) non-standard first coupon. will have a maturity
+   * of
+   *
+   * @param tradeDate
+   *          The trade date
+   * @param tenor
+   *          The nominal length of the index
    * @return A CDS analytic description
    */
   public CDSAnalytic makeCDX(final LocalDate tradeDate, final Period tenor) {
@@ -349,14 +351,16 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Set up a strip of on-the-run indexes represented as a single name CDSs (i.e. by CDSAnalytic). The index roll dates (when new indices are issued) are 20 Mar & Sep,
-   *  and the index is defined to have a maturity that is its nominal tenor plus 3M on issuance, so a 5Y index on the 6-Feb-2014 will have a maturity of
-   *  20-Dec-2018 (5Y3M on the issue date of 20-Sep-2013).
-   *  The accrual start date will be the previous IMM date (before the trade date), business-day adjusted.  <b>Note</b> it payment interval is changed from the
-   * default of 3M, this will produce a (possibly incorrect) non-standard first coupon.
-   * will have a maturity of
-   * @param tradeDate The trade date
-   * @param tenors The nominal lengths of the indexes
+   * Set up a strip of on-the-run indexes represented as a single name CDSs (i.e. by CDSAnalytic). The index roll dates (when new indices are issued) are 20 Mar
+   * &amp; Sep, and the index is defined to have a maturity that is its nominal tenor plus 3M on issuance, so a 5Y index on the 6-Feb-2014 will have a maturity
+   * of 20-Dec-2018 (5Y3M on the issue date of 20-Sep-2013). The accrual start date will be the previous IMM date (before the trade date), business-day
+   * adjusted. <b>Note</b> it payment interval is changed from the default of 3M, this will produce a (possibly incorrect) non-standard first coupon. will have
+   * a maturity of
+   * 
+   * @param tradeDate
+   *          The trade date
+   * @param tenors
+   *          The nominal lengths of the indexes
    * @return An array of CDS analytic descriptions
    */
   public CDSAnalytic[] makeCDX(final LocalDate tradeDate, final Period[] tenors) {
@@ -532,8 +536,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-  * A forward starting CDS starts on some date after today (the trade date). The accrual start must be specified (would normally use this for T+1 accrual atart).
-  *  The stepin date and cash settlement date are taken from the forward start date  (1 day and 3 working days by default)
+   * A forward starting CDS starts on some date after today (the trade date). The accrual start must be specified (would normally use this for T+1 accrual atart).
+   *  The stepin date and cash settlement date are taken from the forward start date  (1 day and 3 working days by default)
    * @param tradeDate The trade date (i.e. today)
    * @param forwardStartDate The forward start date
    * @param accStartDate The accrual start date
@@ -562,15 +566,18 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * /** A forward starting index starts on some date after today (the trade date). The stepin date and cash settlement date are taken from the forward start date
-   * (1 day and 3 working days by default).
-   *The maturity (of the index) is taken from the forward-start-date. The index roll dates (when new indices are issued) are 20 Mar & Sep,
-   *  and the index is defined to have a maturity that is its nominal tenor plus 3M on issuance, so a 5Y index on the 6-Feb-2014 will have a maturity of
-   *  20-Dec-2018 (5Y3M on the issue date of 20-Sep-2013).  However for a trade-date of 6-Feb-2014, a forward-start-date
-   * of 25-Mar-2014 and a tenor of 5Y, the maturity will be 20-Jun-2019.
-   * @param tradeDate The trade date (i.e. today)
-   * @param forwardStartDate   The forward start date
-   * @param tenor The tenor (nominal length) of the index at the forwardStartDate
+   * /** A forward starting index starts on some date after today (the trade date). The stepin date and cash settlement date are taken from the forward start
+   * date (1 day and 3 working days by default). The maturity (of the index) is taken from the forward-start-date. The index roll dates (when new indices are
+   * issued) are 20 Mar &amp; Sep, and the index is defined to have a maturity that is its nominal tenor plus 3M on issuance, so a 5Y index on the 6-Feb-2014
+   * will have a maturity of 20-Dec-2018 (5Y3M on the issue date of 20-Sep-2013). However for a trade-date of 6-Feb-2014, a forward-start-date of 25-Mar-2014
+   * and a tenor of 5Y, the maturity will be 20-Jun-2019.
+   *
+   * @param tradeDate
+   *          The trade date (i.e. today)
+   * @param forwardStartDate
+   *          The forward start date
+   * @param tenor
+   *          The tenor (nominal length) of the index at the forwardStartDate
    * @return A CDS analytic description for a forward starting index
    */
   public CDSAnalytic makeForwardStartingCDX(final LocalDate tradeDate, final LocalDate forwardStartDate, final Period tenor) {

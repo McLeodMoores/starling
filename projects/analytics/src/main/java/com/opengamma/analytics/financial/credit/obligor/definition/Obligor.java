@@ -58,18 +58,30 @@ public class Obligor {
   private final String _country;
 
   /**
-   * @param obligorTicker The ticker, not null or empty
-   * @param obligorShortName The short name, not null or empty
-   * @param obligorREDCode The RED code, not null
-   * @param compositeRating The Markit composite rating, not null
-   * @param impliedRating The Markit implied rating, not null
-   * @param moodysCreditRating The Moody's rating, not null
-   * @param standardAndPoorsCreditRating The S&P rating, not null
-   * @param fitchCreditRating The Fitch rating, not null
-   * @param hasDefaulted True if the obligor has defaulted
-   * @param sector The sector, not null
-   * @param region The region, not null
-   * @param country The country, not null
+   * @param obligorTicker
+   *          The ticker, not null or empty
+   * @param obligorShortName
+   *          The short name, not null or empty
+   * @param obligorREDCode
+   *          The RED code, not null
+   * @param compositeRating
+   *          The Markit composite rating, not null
+   * @param impliedRating
+   *          The Markit implied rating, not null
+   * @param moodysCreditRating
+   *          The Moody's rating, not null
+   * @param standardAndPoorsCreditRating
+   *          The S&amp;P rating, not null
+   * @param fitchCreditRating
+   *          The Fitch rating, not null
+   * @param hasDefaulted
+   *          True if the obligor has defaulted
+   * @param sector
+   *          The sector, not null
+   * @param region
+   *          The region, not null
+   * @param country
+   *          The country, not null
    */
   public Obligor(final String obligorTicker,
       final String obligorShortName,
@@ -179,8 +191,9 @@ public class Obligor {
   }
 
   /**
-   * Gets the S&P rating.
-   * @return The S&P rating
+   * Gets the S&amp;P rating.
+   *
+   * @return The S&amp;P rating
    */
   public CreditRatingStandardAndPoors getStandardAdPoorsCreditRating() {
     return _standardAndPoorsCreditRating;

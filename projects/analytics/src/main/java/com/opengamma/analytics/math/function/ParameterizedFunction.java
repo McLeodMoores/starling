@@ -7,6 +7,7 @@ package com.opengamma.analytics.math.function;
 
 import org.apache.commons.lang.Validate;
 
+import com.opengamma.analytics.financial.interestrate.NelsonSiegelSvennsonBondCurveModel;
 import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 
 /**

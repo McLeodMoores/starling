@@ -10,6 +10,7 @@ import java.util.Arrays;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -189,8 +190,9 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the OIS curve name.
+   * 
    * @return The curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getOISCurveName() {

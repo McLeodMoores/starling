@@ -41,10 +41,13 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Determine r(t)t = \int _{xValues_0}^{x} f(s) ds  for t >= min{xValues}
-   * Extrapolation by a linear function in the region t > max{xValues}. To employ this extrapolation, use interpolate methods in this class.
-   * @param xValues Data t_i
-   * @param yValues Data r_i*t_i
+   * Determine r(t)t = \int _{xValues_0}^{x} f(s) ds for t &ge; min{xValues} Extrapolation by a linear function in the region t &gt; max{xValues}. To employ
+   * this extrapolation, use interpolate methods in this class.
+   * 
+   * @param xValues
+   *          Data t_i
+   * @param yValues
+   *          Data r_i*t_i
    * @return PiecewisePolynomialResult for r(t)t
    */
   @Override

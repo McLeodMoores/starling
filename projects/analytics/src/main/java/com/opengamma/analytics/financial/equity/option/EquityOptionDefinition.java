@@ -47,8 +47,7 @@ public class EquityOptionDefinition implements InstrumentDefinition<EquityOption
    */
   private final LocalDate _settlementDate;
   /**
-   * Point value, scaling of standard contract.
-   * Unit notional. A unit move in price is multiplied by this to give P&L of a single contract
+   * Point value, scaling of standard contract. Unit notional. A unit move in price is multiplied by this to give P&amp;L of a single contract
    */
   private final double _pointValue;
   /**
@@ -57,15 +56,23 @@ public class EquityOptionDefinition implements InstrumentDefinition<EquityOption
   private final SettlementType _settlementType;
 
   /**
-   * @param isCall Call if true, Put if false
-   * @param strike Strike, not negative or zero.
-   * @param currency Settlement amount currency, not null
-   * @param exerciseType Exercise type, not null
-   * @param expiryDate Expiry of last, or only, exercise decision, not null
-   * @param settlementDate Date for settlement, not null
-   * @param pointValue Unit notional. A unit move in price is multiplied by this to give P&L of a single contract. A negative amount
-   * represents a short position. Not zero.
-   * @param settlementType Whether the option is physically or cash-settled, not null
+   * @param isCall
+   *          Call if true, Put if false
+   * @param strike
+   *          Strike, not negative or zero.
+   * @param currency
+   *          Settlement amount currency, not null
+   * @param exerciseType
+   *          Exercise type, not null
+   * @param expiryDate
+   *          Expiry of last, or only, exercise decision, not null
+   * @param settlementDate
+   *          Date for settlement, not null
+   * @param pointValue
+   *          Unit notional. A unit move in price is multiplied by this to give P&amp;L of a single contract. A negative amount represents a short position. Not
+   *          zero.
+   * @param settlementType
+   *          Whether the option is physically or cash-settled, not null
    */
   public EquityOptionDefinition(final boolean isCall, final double strike, final Currency currency, final ExerciseDecisionType exerciseType,
       final ZonedDateTime expiryDate, final LocalDate settlementDate, final double pointValue, final SettlementType settlementType) {

@@ -240,9 +240,11 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Reads a sheet from the start row and column and returns a map of key / values.
    *
-   * @param startRow  int to specify starting point, _currentRowIndex is set to startRow
-   * @param startCol  int to specify starting point
-   * @return Map<String, String> of all key/values until and empty row is reached.
+   * @param startRow
+   *          int to specify starting point, _currentRowIndex is set to startRow
+   * @param startCol
+   *          int to specify starting point
+   * @return Map&lt;String, String&gt; of all key/values until an empty row is reached.
    */
   public Map<String, String> readKeyValueBlock(final int startRow, final int startCol) {
     final Map<String, String> keyValueMap = new HashMap<>();
@@ -262,9 +264,11 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Reads a sheet from the start row and column and returns a map of key / pair values.
    *
-   * @param startRow  int to specify starting point, _currentRowIndex is set to startRow
-   * @param startCol  int to specify starting point
-   * @return Map<String, ObjectsPair<String, String>> of all key/value-pair until and empty row is reached.
+   * @param startRow
+   *          int to specify starting point, _currentRowIndex is set to startRow
+   * @param startCol
+   *          int to specify starting point
+   * @return Map&lt;String, ObjectsPair&lt;String, String&gt;&gt; of all key/value-pair until an empty row is reached.
    */
   public Map<String, ObjectsPair<String, String>> readKeyPairBlock(final int startRow, final int startCol) {
     final Map<String, ObjectsPair<String, String>> keyPairMap = new HashMap<>();
@@ -279,7 +283,7 @@ public class XlsSheetReader extends SheetReader {
         final String stringFirstCellValue = getCellAsString(firstValueCell);
         final String stringSecondCellValue = getCellAsString(secondValueCell);
         keyPairMap.put(stringCellValue,
-                       ObjectsPair.of(stringFirstCellValue, stringSecondCellValue));
+            ObjectsPair.of(stringFirstCellValue, stringSecondCellValue));
       } catch (final IllegalStateException ise) {
         LOGGER.error("Could not extract String value from cell col={} row={} sheet={}", startCol, _currentRowIndex, _sheet.getSheetName(), ise);
       }
@@ -293,9 +297,11 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Reads a sheet from the start row and column and returns a map of ordinal-key / values.
    *
-   * @param startRow  int to specify starting point, _currentRowIndex is set to startRow
-   * @param startCol  int to specify starting point
-   * @return Map<Pair<String, String>, String> of all ordinal-pair/value until and empty row is reached.
+   * @param startRow
+   *          int to specify starting point, _currentRowIndex is set to startRow
+   * @param startCol
+   *          int to specify starting point
+   * @return Map&lt;Pair&lt;String, String&gt;, String&gt; of all ordinal-pair/value until an empty row is reached.
    */
   public Map<Pair<String, String>, String> readMatrix(final int startRow, final int startCol) {
     final Map<Pair<String, String>, String> valueMap = new HashMap<>();

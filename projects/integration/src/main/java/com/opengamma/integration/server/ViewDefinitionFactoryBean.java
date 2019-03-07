@@ -129,9 +129,10 @@ public class ViewDefinitionFactoryBean extends SingletonFactoryBean<ViewDefiniti
   }
 
   /**
-   * Sets the value definitions as calcConfig -> (securityType -> requirementName).
+   * Sets the value definitions as calcConfig -&gt; (securityType -&gt; requirementName).
    *
-   * @param portfolioRequirements value definitions to set
+   * @param portfolioRequirements
+   *          value definitions to set
    */
   public void setPortfolioRequirements(final Map<String, Map<String, String[]>> portfolioRequirements) {
     _portfolioRequirements = portfolioRequirements;

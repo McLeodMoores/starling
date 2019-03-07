@@ -48,10 +48,13 @@ public class CouponCMSSABRReplicationGenericMethod {
   }
 
   /**
-   * Compute the price of a CMS coupon by replication in SABR framework.
-   * The CMS coupon is priced as a cap with strike 0.0. The strike 0.0 is used as the rates are always >=0.0 in SABR.
-   * @param cmsCoupon The CMS coupon.
-   * @param sabrData The SABR and curve data.
+   * Compute the price of a CMS coupon by replication in SABR framework. The CMS coupon is priced as a cap with strike 0.0. The strike 0.0 is used as the rates
+   * are always &ge;0.0 in SABR.
+   * 
+   * @param cmsCoupon
+   *          The CMS coupon.
+   * @param sabrData
+   *          The SABR and curve data.
    * @return The coupon price.
    */
   public CurrencyAmount presentValue(final CouponCMS cmsCoupon, final SABRInterestRateDataBundle sabrData) {

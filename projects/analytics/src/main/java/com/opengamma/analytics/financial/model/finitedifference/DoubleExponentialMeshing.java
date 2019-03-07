@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.finitedifference;
 import org.apache.commons.lang.Validate;
 
 /**
- * 
+ *
  */
 public class DoubleExponentialMeshing extends MeshingFunction {
 
@@ -18,14 +18,21 @@ public class DoubleExponentialMeshing extends MeshingFunction {
 
   /**
    * creates a non-uniform set of points according by joining two ExponentialMeshing
-   * @param lowerBound The value of x_0
-   * @param upperBound The value of x_N
-   * @param centre the value where we switch from the lower to upper ExponentialMeshing
-   * @param nPoints Number of Points
-   * @param lambdaLower Bunching parameter. lambda = 0 is uniform, lambda > 0 gives a high density of points near X_0 and lambda < 0 gives a high density
-   * of points near centre
-   *  @param lambdaUpper Bunching parameter. lambda = 0 is uniform, lambda > 0 gives a high density of points near centre and lambda < 0 gives a high density
-   * of points near x_N
+   * 
+   * @param lowerBound
+   *          The value of x_0
+   * @param upperBound
+   *          The value of x_N
+   * @param centre
+   *          the value where we switch from the lower to upper ExponentialMeshing
+   * @param nPoints
+   *          Number of Points
+   * @param lambdaLower
+   *          Bunching parameter. lambda = 0 is uniform, lambda &gt; 0 gives a high density of points near X_0 and lambda &lt; 0 gives a high density of points
+   *          near centre
+   * @param lambdaUpper
+   *          Bunching parameter. lambda = 0 is uniform, lambda &gt; 0 gives a high density of points near centre and lambda &lt; 0 gives a high density of
+   *          points near x_N
    */
   public DoubleExponentialMeshing(final double lowerBound, final double upperBound, final double centre, final int nPoints, final double lambdaLower, final double lambdaUpper) {
     super(nPoints);

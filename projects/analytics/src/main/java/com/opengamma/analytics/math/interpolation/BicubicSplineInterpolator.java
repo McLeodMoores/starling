@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -13,16 +13,16 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  Given a set of data (x0Values_i, x1Values_j, yValues_{ij}), derive the piecewise bicubic function, f(x0,x1) = sum_{i=0}^{3} sum_{j=0}^{3} coefMat_{ij} (x0-x0Values_i)^{3-i} (x1-x1Values_j)^{3-j},
- *  for the region x0Values_i < x0 < x0Values_{i+1}, x1Values_j < x1 < x1Values_{j+1}  such that f(x0Values_a, x1Values_b) = yValues_{ab} where a={i,i+1}, b={j,j+1}. 
- *  1D piecewise polynomial interpolation methods are called to determine first derivatives and cross derivative at data points
- *  Note that the value of the cross derivative at {ij} is not "accurate" if yValues_{ij} = 0.
+ * Given a set of data (x0Values_i, x1Values_j, yValues_{ij}), derive the piecewise bicubic function, f(x0,x1) = sum_{i=0}^{3} sum_{j=0}^{3} coefMat_{ij}
+ * (x0-x0Values_i)^{3-i} (x1-x1Values_j)^{3-j}, for the region x0Values_i &lt; x0 &lt; x0Values_{i+1}, x1Values_j &lt; x1 &lt; x1Values_{j+1} such that
+ * f(x0Values_a, x1Values_b) = yValues_{ab} where a={i,i+1}, b={j,j+1}. 1D piecewise polynomial interpolation methods are called to determine first derivatives
+ * and cross derivative at data points Note that the value of the cross derivative at {ij} is not "accurate" if yValues_{ij} = 0.
  */
 public class BicubicSplineInterpolator extends PiecewisePolynomialInterpolator2D {
 
   private static final double ERROR = 1.e-13;
 
-  private PiecewisePolynomialInterpolator[] _method;
+  private final PiecewisePolynomialInterpolator[] _method;
   private static double[][] s_invMat;
 
   static {
@@ -77,11 +77,11 @@ public class BicubicSplineInterpolator extends PiecewisePolynomialInterpolator2D
     final int nData0 = x0Values.length;
     final int nData1 = x1Values.length;
 
-    DoubleMatrix2D yValuesMatrix = new DoubleMatrix2D(yValues);
+    final DoubleMatrix2D yValuesMatrix = new DoubleMatrix2D(yValues);
     final PiecewisePolynomialFunction1D func = new PiecewisePolynomialFunction1D();
     double[][] diff0 = new double[nData1][nData0];
     double[][] diff1 = new double[nData0][nData1];
-    double[][] cross = new double[nData0][nData1];
+    final double[][] cross = new double[nData0][nData1];
 
     final PiecewisePolynomialResult result0 = _method[0].interpolate(x0Values, OG_ALGEBRA.getTranspose(yValuesMatrix).getData());
     diff0 = func.differentiate(result0, x0Values).getData();
@@ -109,10 +109,10 @@ public class BicubicSplineInterpolator extends PiecewisePolynomialInterpolator2D
       }
     }
 
-    DoubleMatrix2D[][] coefMat = new DoubleMatrix2D[nData0 - 1][nData1 - 1];
+    final DoubleMatrix2D[][] coefMat = new DoubleMatrix2D[nData0 - 1][nData1 - 1];
     for (int i = 0; i < nData0 - 1; ++i) {
       for (int j = 0; j < nData1 - 1; ++j) {
-        double[] diffsVec = new double[16];
+        final double[] diffsVec = new double[16];
         for (int l = 0; l < 2; ++l) {
           for (int m = 0; m < 2; ++m) {
             diffsVec[l + 2 * m] = yValues[i + l][j + m];
@@ -137,13 +137,13 @@ public class BicubicSplineInterpolator extends PiecewisePolynomialInterpolator2D
         final double[] ansVec = ((DoubleMatrix1D) OG_ALGEBRA.multiply(new DoubleMatrix2D(s_invMat), diffs)).getData();
 
         double ref = 0.;
-        double[][] coefMatTmp = new double[order][order];
+        final double[][] coefMatTmp = new double[order][order];
         for (int l = 0; l < order; ++l) {
           for (int m = 0; m < order; ++m) {
-            coefMatTmp[order - l - 1][order - m - 1] = ansVec[l + m * (order)] / Math.pow((x0Values[i + 1] - x0Values[i]), l) / Math.pow((x1Values[j + 1] - x1Values[j]), m);
+            coefMatTmp[order - l - 1][order - m - 1] = ansVec[l + m * order] / Math.pow(x0Values[i + 1] - x0Values[i], l) / Math.pow(x1Values[j + 1] - x1Values[j], m);
             ArgumentChecker.isFalse(Double.isNaN(coefMatTmp[order - l - 1][order - m - 1]), "Too large/small input");
             ArgumentChecker.isFalse(Double.isInfinite(coefMatTmp[order - l - 1][order - m - 1]), "Too large/small input");
-            ref += coefMatTmp[order - l - 1][order - m - 1] * Math.pow((x0Values[i + 1] - x0Values[i]), l) * Math.pow((x1Values[j + 1] - x1Values[j]), m);
+            ref += coefMatTmp[order - l - 1][order - m - 1] * Math.pow(x0Values[i + 1] - x0Values[i], l) * Math.pow(x1Values[j + 1] - x1Values[j], m);
           }
         }
         final double bound = Math.max(Math.abs(ref) + Math.abs(yValues[i + 1][j + 1]), 0.1);

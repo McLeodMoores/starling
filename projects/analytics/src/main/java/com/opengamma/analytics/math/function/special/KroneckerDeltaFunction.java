@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.function.Function2D;
 
 /**
- * Class implementing the Kronecker delta function. $$ \begin{align*} \delta_{i, j}= \begin{cases} 1 & i = j\\ 0 & i \neq j \end{cases} \end{align*} $$
+ * Class implementing the Kronecker delta function. $$ \begin{align*} \delta_{i, j}= \begin{cases} 1 &amp; i = j\\ 0 &amp; i \neq j \end{cases} \end{align*} $$
  */
 public class KroneckerDeltaFunction extends Function2D<Integer, Integer> {
 

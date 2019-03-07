@@ -12,8 +12,8 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
  * A one-dimensional step interpolator using the upper bound value.
- * <P>The interpolated value of the function
- * <i>x</i> with <i>x<sub>1</sub> <= x < x<sub>2</sub></i> is given by: <i>y = y<sub>1</sub></i>
+ * <P>
+ * The interpolated value of the function <i>x</i> with <i>x<sub>1</sub> &le; x &lt; x<sub>2</sub></i> is given by: <i>y = y<sub>1</sub></i>
  */
 public class StepUpperInterpolator1D extends Interpolator1D {
   private static final long serialVersionUID = 1L;

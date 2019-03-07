@@ -278,7 +278,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
         } else {
           LOGGER.error("Would write {} {} {} {} {} {} {} {}",
               new Object[] {description, getDataSource(), getDataProvider(), field.getName(), _observationTimeName,
-                            _liveDataSpecification.getIdentifiers().toString(), _date, field.getValue()});
+                  _liveDataSpecification.getIdentifiers().toString(), _date, field.getValue()});
         }
       }
     }
@@ -321,7 +321,10 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
   }
 
   /**
-   * @param is The input stream to load
+   * @param is
+   *          The input stream to load
+   * @throws IOException
+   *           if there is a problem when reading
    */
   public void initializeFromStream(final InputStream is) throws IOException {
     final CSVParser parser = new CSVParser();

@@ -9,7 +9,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Payoff of powered option is max( S - K , 0 )^i for call and max( K - S , 0 )^i for put with i > 0
+ * Payoff of powered option is max( S - K , 0 )^i for call and max( K - S , 0 )^i for put with i &gt; 0
  */
 public class PoweredOptionFunctionProvider extends OptionFunctionProvider1D {
 

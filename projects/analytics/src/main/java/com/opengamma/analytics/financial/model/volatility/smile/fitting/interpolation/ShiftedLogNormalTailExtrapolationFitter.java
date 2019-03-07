@@ -71,7 +71,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
     final double pAv = BlackFormulaRepository.price(forward, kAv, timeToExpiry, sigmaAv, isCall);
     final double sigmaGrad = (vol1 - vol2) / (strikes[0] - strikes[1]);
     final double pGrad = BlackFormulaRepository.dualDelta(forward, kAv, timeToExpiry, sigmaAv, isCall) + BlackFormulaRepository.vega(forward, kAv, timeToExpiry, sigmaAv)
-        * sigmaGrad;
+    * sigmaGrad;
 
     //This often fails to converge, thus the model is first fitted using price and grad, which given a point very close to the solution to use as the starting point
     final double[] temp = fitPriceAndGrad(forward, kAv, pAv, pGrad, timeToExpiry, isCall);
@@ -197,12 +197,19 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
   /**
    * Calls fitVolatilityAndGrad. If this fails, it will retry from the nearest strike within the domain, and continue to do this until success is found
-   * @param forward forward
-   * @param strikes array of strikes
-   * @param vols array of vols at strikes
-   * @param dSigmaDx Function1D<Double, Double> that produces the vol gradient at given strike
-   * @param expiry option expiry
-   * @param lowTail True if fitting extrapolation model to low strikes, false if fitting to high strike tail.
+   * 
+   * @param forward
+   *          forward
+   * @param strikes
+   *          array of strikes
+   * @param vols
+   *          array of vols at strikes
+   * @param dSigmaDx
+   *          function that produces the vol gradient at given strike
+   * @param expiry
+   *          option expiry
+   * @param lowTail
+   *          True if fitting extrapolation model to low strikes, false if fitting to high strike tail.
    * @return 3-element array containing: [0] mu = ln(shiftedForward / originalForward) [1] theta = new ln volatility to use [2] new extrapolation boundary
    */
   public ArrayList<Double> fitVolatilityAndGradRecursivelyByTossingPoints(final double forward, final double[] strikes, final double[] vols,
@@ -223,7 +230,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
           Arrays.copyOfRange(vols, 0, n - 1), dSigmaDx, expiry, lowTail);
     }
     LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0])
-      + ", and vol, " + shiftAndVol[1]);
+    + ", and vol, " + shiftAndVol[1]);
     final ArrayList<Double> listShiftVolStrike = new ArrayList<>();
     listShiftVolStrike.add(0, shiftAndVol[0]); // mu = ln(shiftedForward / originalForward)
     listShiftVolStrike.add(1, shiftAndVol[1]); // theta = new ln volatility to use
@@ -261,7 +268,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
           Arrays.copyOfRange(dSigmaDx, 0, n - 1), expiry, lowTail);
     }
     LOG.info("Extrapolating from strike, " + strikes[endIdx] + ", with shifted forward, " + forward * Math.exp(shiftAndVol[0])
-        + ", and vol, " + shiftAndVol[1]);
+    + ", and vol, " + shiftAndVol[1]);
     final ArrayList<Double> listShiftVolStrike = new ArrayList<>();
     listShiftVolStrike.add(0, shiftAndVol[0]); // mu = ln(shiftedForward / originalForward)
     listShiftVolStrike.add(1, shiftAndVol[1]); // theta = new ln volatility to use

@@ -15,42 +15,10 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 
 /**
  * Pricing model for capped power options (see {@link com.opengamma.analytics.financial.model.option.definition.CappedPowerOptionDefinition}).
- * <p>
- * The price of this option is given by:
- * $$
- * \begin{align*}
- * c &= S^ie^{[(i-1)(r + \frac{i\sigma^2}{2}) - i(r-b)]T}[N(d_1) - N(d_3)] - e^{-rT}[KN(d_2) - (C + K)N(d_4)]\\
- * p &= e^{-rT}[KN(-d_2) - (C + K)N(-d_4)] - S^ie^{[(i-1)(r + \frac{i\sigma^2}{2}) - i(r-b)]T}[N(-d_1) - N(-d_3)]
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * d_1 &= \frac{\ln\left(\frac{S}{K^{\frac{1}{i}}}\right) + (b + (i - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * d_2 &= d_1 - \sigma\sqrt{T}\\\\
- * \end{align*}
- * $$
- * and 
- * $$
- * \begin{align*}
- * d_3 &= \frac{\ln\left(\frac{S}{(K + C)^{\frac{1}{i}}}\right) + (b + (i - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * d_4 &= d_3 - i\sigma\sqrt{T}
- * \end{align*}
- * $$
- * for a call and 
- * $$
- * \begin{align*}
- * d_3 &= \frac{\ln\left(\frac{S}{(K - C)^{\frac{1}{i}}}\right) + (b + (i - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}\\
- * d_4 &= d_3 - i\sigma\sqrt{T}
- * \end{align*}
- * $$
  */
 public class CappedPowerOptionModel extends AnalyticOptionModel<CappedPowerOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Function1D<StandardOptionDataBundle, Double> getPricingFunction(final CappedPowerOptionDefinition definition) {
     Validate.notNull(definition);

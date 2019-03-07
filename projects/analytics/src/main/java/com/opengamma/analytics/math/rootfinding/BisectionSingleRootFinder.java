@@ -11,11 +11,9 @@ import com.opengamma.analytics.math.function.Function1D;
 /**
  * Finds a single root of a function using the bisection method.
  * <p>
- * If a root of a function $f(x)$ is bounded by two values $x_1$ and $x_2$,
- * then $f(x_1)f(x_2) < 0$.  The function is evaluated at the midpoint of these
- * values and the bound that gives the same sign in the function evaluation is
- * replaced. The bisection is stopped when the change in the value of $x$ is
- * below the accuracy, or the evaluation of the function at $x$ is zero.
+ * If a root of a function $f(x)$ is bounded by two values $x_1$ and $x_2$, then $f(x_1)f(x_2) &lt; 0$. The function is evaluated at the midpoint of these
+ * values and the bound that gives the same sign in the function evaluation is replaced. The bisection is stopped when the change in the value of $x$ is below
+ * the accuracy, or the evaluation of the function at $x$ is zero.
  */
 public class BisectionSingleRootFinder extends RealSingleRootFinder {
   private final double _accuracy;

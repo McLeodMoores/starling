@@ -14,19 +14,11 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Class that performs integration using Gaussian quadrature.
  * <p>
- * If a function $f(x)$ can be written as $f(x) = W(x)g(x)$, where $g(x)$ is
- * approximately polynomial, then for suitably chosen weights $w_i$ and points
- * $x_i$, the integral can be approximated as:
- * $$
- * \begin{align*}
- * \int_{-1}^1 f(x)dx 
- * &=\int_{-1}^1 W(x)g(x)dx\\
- * &\approx \sum_{\i=1}^{n} w_i f(x_i)
- * \end{align*}
- * $$
- * The evaluation points, weights and valid limits of integration depend on the type of orthogonal polynomials that are used 
- * (see {@link com.opengamma.analytics.math.function.special.OrthogonalPolynomialFunctionGenerator} and {@link GaussLaguerreWeightAndAbscissaFunction}).
- * 
+ * If a function $f(x)$ can be written as $f(x) = W(x)g(x)$, where $g(x)$ is approximately polynomial, then for suitably chosen weights $w_i$ and points $x_i$,
+ * the integral can be approximated as: $$ \begin{align*} \int_{-1}^1 f(x)dx =\int_{-1}^1 W(x)g(x)dx\\ \approx \sum_{\i=1}^{n} w_i f(x_i) \end{align*} $$ The
+ * evaluation points, weights and valid limits of integration depend on the type of orthogonal polynomials that are used (see
+ * {@link com.opengamma.analytics.math.function.special.OrthogonalPolynomialFunctionGenerator} and {@link GaussLaguerreWeightAndAbscissaFunction}).
+ *
  */
 public abstract class GaussianQuadratureIntegrator1D extends Integrator1D<Double, Double> {
   private final int _n;
@@ -62,7 +54,7 @@ public abstract class GaussianQuadratureIntegrator1D extends Integrator1D<Double
    * approximate the integral of $g(x)$ over a specific range as $\int^b_a g(x) dx =\int^b_a W(x)f(x) dx \approx \sum_{i=0}^{N-1} w_i f(x_i)$, were the abscissas $x_i$
    * and the weights $w_i$ have been precomputed. This is accurate if $f(x)$ can be approximated by a polynomial. 
    * @param polyFunction The function $f(x)$ rather than the full function $g(x) = W(x)f(x)$ This should be well approximated by a polynomial.
-   * @return The integral 
+   * @return The integral
    */
   public double integrateFromPolyFunc(final Function1D<Double, Double> polyFunction) {
     ArgumentChecker.notNull(polyFunction, "polyFunction");
@@ -82,7 +74,7 @@ public abstract class GaussianQuadratureIntegrator1D extends Integrator1D<Double
   public abstract Double[] getLimits();
 
   /**
-   * Returns a function that is valid for both the type of quadrature and the limits of integration. 
+   * Returns a function that is valid for both the type of quadrature and the limits of integration.
    * @param function The function to be integrated, not null
    * @param lower The lower integration limit, not null
    * @param upper The upper integration limit, not null

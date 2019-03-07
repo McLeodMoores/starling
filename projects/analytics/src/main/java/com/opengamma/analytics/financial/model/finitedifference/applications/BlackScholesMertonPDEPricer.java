@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -173,24 +173,38 @@ public class BlackScholesMertonPDEPricer {
   }
 
   /**
-   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate, cost-of-carry, and volatility) by using
-   * finite difference methods to solve the Black-Scholes-Merton PDE. The spatial (spot) grid concentrates points around the spot level and ensures that
-   * strike and spot lie on the grid. The temporal grid concentrates points near time-to-expiry = 0 (i.e. the start). The PDE solver uses theta = 0.5 (Crank-Nicolson)
-   * unless a burn-in period is use, in which case theta = 1.0 (fully implicit) in that region.
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
-   * @param isAmerican true if the option is American (false for European)
-   * @param spaceNodes Number of Space nodes
-   * @param timeNodes Number of time nodes
-   * @param beta Bunching parameter for space (spot) nodes. A value great than zero. Very small values gives a very high density of points around the spot, with the
-   * density quickly falling away in both directions
-   * @param lambda Bunching parameter for time nodes. $\lambda = 0$ is uniform, $\lambda > 0$ gives a high density of points near $\tau = 0$
-   * @param sd The number of standard deviations from s0 to place the boundaries. Values between 3 and 6 are recommended.
+   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate, cost-of-carry, and volatility)
+   * by using finite difference methods to solve the Black-Scholes-Merton PDE. The spatial (spot) grid concentrates points around the spot level and ensures
+   * that strike and spot lie on the grid. The temporal grid concentrates points near time-to-expiry = 0 (i.e. the start). The PDE solver uses theta = 0.5
+   * (Crank-Nicolson) unless a burn-in period is use, in which case theta = 1.0 (fully implicit) in that region.
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
+   * @param isAmerican
+   *          true if the option is American (false for European)
+   * @param spaceNodes
+   *          Number of Space nodes
+   * @param timeNodes
+   *          Number of time nodes
+   * @param beta
+   *          Bunching parameter for space (spot) nodes. A value great than zero. Very small values gives a very high density of points around the spot, with
+   *          the density quickly falling away in both directions
+   * @param lambda
+   *          Bunching parameter for time nodes. $\lambda = 0$ is uniform, $\lambda &gt; 0$ gives a high density of points near $\tau = 0$
+   * @param sd
+   *          The number of standard deviations from s0 to place the boundaries. Values between 3 and 6 are recommended.
    * @return The option price
    */
   public double price(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall,

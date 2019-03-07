@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.OpenGammaRuntimeException;
 
 /**
- * Performs a parse of an XML document (via the provided Reader), in order to extract the
- * schema version. A StAX parser {@see http://docs.oracle.com/javase/tutorial/jaxp/stax/login.html} is
- * used so that the whole document is not read into memory when all the should be required is the
- * first few lines of the document.
+ * Performs a parse of an XML document (via the provided Reader), in order to extract the schema version.
+ * <p>
+ * A (@see <a href=http://docs.oracle.com/javase/tutorial/jaxp/stax/login.html>STAX parser</a>) is used so that the whole document is not read into memory when
+ * all that should be required is the first few lines of the document.
  */
 public class SchemaVersionParser {
 

@@ -69,7 +69,10 @@ public class ViewRegressionTestTool {
   /**
    * Main method to run the tool.
    *
-   * @param args the arguments, unused
+   * @param args
+   *          the arguments, unused
+   * @throws Exception
+   *           if there is a problem
    */
   public static void main(final String[] args) throws Exception { // CSIGNORE
     try {

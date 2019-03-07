@@ -27,10 +27,10 @@ import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.master.convention.ManageableConvention;
 
 /**
- * Fields defined here apply to CDSs created via the {@link CDSAnalyticFactory}.
- * These apply to CDSs created for curve calibration.
+ * Fields defined here apply to CDSs created via the {@link com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalyticFactory}. These apply to CDSs
+ * created for curve calibration.
  *
- * For a more detailed explanation on each of the fields listed here, see {@link CDSAnalyticFactory}.
+ * For a more detailed explanation of each of the fields listed here, see {@link com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalyticFactory}.
  */
 @BeanDefinition
 public class IsdaCreditCurveConvention extends ManageableConvention {

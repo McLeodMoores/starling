@@ -27,11 +27,16 @@ public class SimpleFutureDataBundle {
   private final Double _costOfCarry;
 
   /**
-   * @param fundingCurve Used for discounting
-   * @param marketPrice Quoted futures price
-   * @param spotValue Quoted market spot value of the underlying
-   * @param dividendYield An estimate of the continuous dividend yield over the life of the future
-   * @param costOfCarry An estimate of the cost of carry, as a rate => FwdPrice = Spot * exp(costOfCarry * T)
+   * @param fundingCurve
+   *          Used for discounting
+   * @param marketPrice
+   *          Quoted futures price
+   * @param spotValue
+   *          Quoted market spot value of the underlying
+   * @param dividendYield
+   *          An estimate of the continuous dividend yield over the life of the future
+   * @param costOfCarry
+   *          An estimate of the cost of carry, as a rate =&gt; FwdPrice = Spot * exp(costOfCarry * T)
    */
   public SimpleFutureDataBundle(final YieldAndDiscountCurve fundingCurve, final Double marketPrice, final Double spotValue, final Double dividendYield, final Double costOfCarry) {
     _fundingCurve = fundingCurve;

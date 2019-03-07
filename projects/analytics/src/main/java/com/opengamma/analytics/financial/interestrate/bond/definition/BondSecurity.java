@@ -149,8 +149,9 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the name of the curve used for settlement amount discounting.
+   * 
    * @return The curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getRepoCurveName() {
@@ -188,8 +189,9 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the name of the curve used for discounting.
+   * 
    * @return The curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurveName() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class MarkovChainApprox {
   /** The first volatility */
@@ -44,12 +44,18 @@ public class MarkovChainApprox {
   private final double[] _vols;
 
   /**
-   * @param vol1 The first volatility, >= 0
-   * @param vol2 The second volatility, >= 0
-   * @param lambda12 The first jump parameter, >= 0
-   * @param lambda21 The second jump parameter, >= 0
-   * @param probState1 The probability of being in the first state, 0 <= probState1 <= 1
-   * @param expiry The time to expiry
+   * @param vol1
+   *          The first volatility, &ge; 0
+   * @param vol2
+   *          The second volatility, &ge; 0
+   * @param lambda12
+   *          The first jump parameter, &ge; 0
+   * @param lambda21
+   *          The second jump parameter, &ge; 0
+   * @param probState1
+   *          The probability of being in the first state, 0 &le; probState1 &le; 1
+   * @param expiry
+   *          The time to expiry
    */
   public MarkovChainApprox(final double vol1, final double vol2, final double lambda12, final double lambda21, final double probState1, final double expiry) {
     ArgumentChecker.isTrue(vol1 >= 0, "The first volatility must be greater than or equal to 0; have {}", vol1);
@@ -96,7 +102,7 @@ public class MarkovChainApprox {
    * Calculates the price using the Black formula
    * @param forward The forward price
    * @param df The discount factor
-   * @param strike The strike 
+   * @param strike The strike
    * @return The price
    */
   public double price(final double forward, final double df, final double strike) {

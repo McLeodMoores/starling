@@ -184,12 +184,15 @@ public abstract class AbstractRegressionTest {
   }
 
   /**
-   * A {@link File} giving the location to write the difference
-   * report to.
-   * @param viewName the view which ran
-   * @param snapshotName the snapshot which was run against
+   * A {@link File} giving the location to write the difference report to.
+   * 
+   * @param viewName
+   *          the view which ran
+   * @param snapshotName
+   *          the snapshot which was run against
    * @return the location to write the differences report to
    * @throws IOException
+   *           if there is a problem getting the file
    */
   protected File getDifferencesReportFile(final String viewName, final String snapshotName) throws IOException {
     final String tempDir = System.getProperty("java.io.tmpdir");

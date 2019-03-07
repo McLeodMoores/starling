@@ -35,7 +35,10 @@ public class PeriodicLiveDataTimeSeriesStorageTool extends AbstractTool<ToolCont
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
+   * @throws Exception
+   *           if there is a problem
    */
   public static void main(final String[] args) throws Exception { //CSIGNORE
     final PeriodicLiveDataTimeSeriesStorageTool tool = new PeriodicLiveDataTimeSeriesStorageTool();

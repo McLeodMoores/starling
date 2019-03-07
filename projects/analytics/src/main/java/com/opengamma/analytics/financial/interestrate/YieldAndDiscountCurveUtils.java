@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 public class YieldAndDiscountCurveUtils {
 
   /**
-   * Computes the forward rate for a given index in a given curve 
+   * Computes the forward rate for a given index in a given curve
    * @param curve The curve.
    * @param curveDate The curve date.
    * @param fixingDate The forward rate fixing date.
@@ -48,7 +48,7 @@ public class YieldAndDiscountCurveUtils {
   }
 
   /**
-   * Computes the forward rate for a given index in a multicurve provider. The curve used to compute the forward is the curve associated to the index. 
+   * Computes the forward rate for a given index in a multicurve provider. The curve used to compute the forward is the curve associated to the index.
    * @param multicurve The curve provider. Should contain the curve related to the index for which the forward rate is requested.
    * @param curveDate The curve date.
    * @param fixingDate The forward rate fixing date.
@@ -74,11 +74,17 @@ public class YieldAndDiscountCurveUtils {
 
   /**
    * Compute the zero coupon for a given payment date.
-   * @param curve The curve.
-   * @param curveDate The curve date.
-   * @param payDate The payment date.
-   * @param dc The day count convention.
-   * @param paymentPerYear Number of payment per year for a period payment. If paymentPerYear<=0, a continuously compounded rate is computed.
+   * 
+   * @param curve
+   *          The curve.
+   * @param curveDate
+   *          The curve date.
+   * @param payDate
+   *          The payment date.
+   * @param dc
+   *          The day count convention.
+   * @param paymentPerYear
+   *          Number of payment per year for a period payment. If paymentPerYear&le;0, a continuously compounded rate is computed.
    * @return The rate
    */
   public static double zeroCouponRate(final YieldAndDiscountCurve curve, final ZonedDateTime curveDate, final ZonedDateTime payDate, final DayCount dc, final int paymentPerYear) {
@@ -96,7 +102,7 @@ public class YieldAndDiscountCurveUtils {
     final double rate = -Math.log(df) / timeDc;
     return rate;
   }
-  
+
   /**
    * Compute the zero coupon for a given payment date.
    * @param curve The curve.

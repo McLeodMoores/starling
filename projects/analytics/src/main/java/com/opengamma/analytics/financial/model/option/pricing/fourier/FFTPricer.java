@@ -26,7 +26,7 @@ public class FFTPricer {
   /**
    * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward, and x
    * is a random variable with a known characteristic function.
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param discountFactor
@@ -101,7 +101,7 @@ public class FFTPricer {
   /**
    * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward, and x
    * is a random variable with a known characteristic function.
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param discountFactor
@@ -176,7 +176,7 @@ public class FFTPricer {
   /**
    * Price a European option across a range of strikes using a FFT. The terminal price is assumed to be of the form S = F*exp(x), where F is the forward, and x
    * is a random variable with a known characteristic function. <b>Note: this method is for expert use only</b>
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param discountFactor
@@ -198,7 +198,7 @@ public class FFTPricer {
    * @param n
    *          The (zero padded) array of sample values. <b>Use a power of 2</b>
    * @param m
-   *          The actual number of samples. Need n >= 2m-1
+   *          The actual number of samples. Need n &gt;= 2m-1
    * @return array of arrays of strikes and prices
    */
   public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,

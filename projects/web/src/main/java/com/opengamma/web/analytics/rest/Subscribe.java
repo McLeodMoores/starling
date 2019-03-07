@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.opengamma.id.UniqueId;
 
 /**
  * Annotation for REST methods that return an entity with a {@link UniqueId}.  When the method is called a

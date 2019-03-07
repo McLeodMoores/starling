@@ -14,21 +14,8 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * Class for pricing asset-or-nothing options (see {@link com.opengamma.analytics.financial.model.option.definition.AssetOrNothingOptionDefinition}).
- * The price is calculated using the Reiner-Rubenstein formula:
- * $$
- * \begin{align*}
- * c &= S e^{(b-r)T}N(d)\\
- * p &= S e^{(b-r)T}N(-d)
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * d = \frac{\ln{\frac{S}{K}} + (b + \frac{\sigma^2}{2})T}{\sigma\sqrt{T}}
- * \end{align*}
- * $$
- * 
+ * Class for pricing asset-or-nothing options (see {@link com.opengamma.analytics.financial.model.option.definition.AssetOrNothingOptionDefinition}). The price
+ * is calculated using the Reiner-Rubenstein formula.
  */
 public class AssetOrNothingOptionModel extends AnalyticOptionModel<AssetOrNothingOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);

@@ -111,14 +111,13 @@ public class TradePositionResolver {
   }
 
   /**
-   * Returns a Multimap of positions -> trades built from the positions added via the
-   * {@link #addToPosition(String, String)} method. It will be quite usual to have a position
-   * containing multiple trades. Note that this map is not populated until the
-   * {@link #resolve()} method has been called. Any attempt to access before that point will
-   * result in an IllegalStateException being thrown.
+   * Returns a Multimap of positions -&gt; trades built from the positions added via the {@link #addToPosition(String, String)} method. It will be quite usual
+   * to have a position containing multiple trades. Note that this map is not populated until the {@link #resolve()} method has been called. Any attempt to
+   * access before that point will result in an IllegalStateException being thrown.
    *
-   * @return Multimap of position -> trades
-   * @throws IllegalStateException if this method is called before the {@link #resolve()} method
+   * @return Multimap of position -&gt; trades
+   * @throws IllegalStateException
+   *           if this method is called before the {@link #resolve()} method
    */
   public Multimap<String, String> getPositions() {
     checkResolved();
@@ -140,13 +139,13 @@ public class TradePositionResolver {
   }
 
   /**
-   * Returns a Multimap of trades -> positions indicating trades which appear in more than
-   * one position (along with the positions they appear in). It is for the client to
-   * determine whether this is acceptable or not, and how to resolve. Note that this map
-   * is not populated until the {@link #resolve()} method has been called.
+   * Returns a Multimap of trades -&gt; positions indicating trades which appear in more than one position (along with the positions they appear in). It is for
+   * the client to determine whether this is acceptable or not, and how to resolve. Note that this map is not populated until the {@link #resolve()} method has
+   * been called.
    *
-   * @return Multimap of trade -> positions
-   * @throws IllegalStateException if this method is called before the {@link #resolve()} method
+   * @return Multimap of trade -&gt; positions
+   * @throws IllegalStateException
+   *           if this method is called before the {@link #resolve()} method
    */
   public Multimap<String, String> getDuplicateTrades() {
     checkResolved();
@@ -217,33 +216,33 @@ public class TradePositionResolver {
   private Iterable<String> determineOrphanTrades() {
     return ImmutableSet.copyOf(Iterables.filter(_tradeIds,
         new Predicate<String>() {
-          @Override
-          public boolean apply(final String tradeId) {
-            return !_invertedPositions.containsKey(tradeId);
-          }
-        }
-    ));
+      @Override
+      public boolean apply(final String tradeId) {
+        return !_invertedPositions.containsKey(tradeId);
+      }
+    }
+        ));
   }
 
   private Multimap<String, String> determineDuplicatedTrades() {
     return Multimaps.filterKeys(_invertedPositions,
         new Predicate<String>() {
-          @Override
-          public boolean apply(final String s) {
-            return _invertedPositions.get(s).size() > 1;
-          }
-        }
-    );
+      @Override
+      public boolean apply(final String s) {
+        return _invertedPositions.get(s).size() > 1;
+      }
+    }
+        );
   }
 
   private Iterable<String> determineUnknownTrades() {
     return Iterables.filter(_invertedPositions.keySet(),
         new Predicate<String>() {
-          @Override
-          public boolean apply(final String s) {
-            return !_tradeIds.contains(s);
-          }
-        }
-    );
+      @Override
+      public boolean apply(final String s) {
+        return !_tradeIds.contains(s);
+      }
+    }
+        );
   }
 }

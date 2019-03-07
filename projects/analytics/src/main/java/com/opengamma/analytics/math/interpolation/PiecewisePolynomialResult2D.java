@@ -11,13 +11,11 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Result of 2D interpolation by piecewise polynomial f(x0,x1) containing
- * _knots0: Positions of knots in x0 direction
- * _knots1: Positions of knots in x1 direction
- * _coefMatrix: Coefficient matrix whose (i,j) element is a DoubleMatrix2D containing coefficients for the square, _knots0_i < x0 < _knots0_{i+1}, _knots1_j < x1 < _knots1_{j+1},
- * Each DoubleMatrix2D is c_ij where f(x0,x1) = sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij} (x0-knots0_i)^{order0-1-i} (x1-knots1_j)^{order0-1-j}
- * _nIntervals: Number of intervals in x0 direction and x1 direction, respectively, which should be (Number of knots) - 1
- * _order: Number of coefficients in polynomial in terms of x0 and x1, respectively, which is equal to (polynomial degree) + 1
+ * Result of 2D interpolation by piecewise polynomial f(x0,x1) containing _knots0: Positions of knots in x0 direction _knots1: Positions of knots in x1
+ * direction _coefMatrix: Coefficient matrix whose (i,j) element is a DoubleMatrix2D containing coefficients for the square, _knots0_i &lt; x0 &lt;
+ * _knots0_{i+1}, _knots1_j &lt; x1 &lt; _knots1_{j+1}, Each DoubleMatrix2D is c_ij where f(x0,x1) = sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij}
+ * (x0-knots0_i)^{order0-1-i} (x1-knots1_j)^{order0-1-j} _nIntervals: Number of intervals in x0 direction and x1 direction, respectively, which should be
+ * (Number of knots) - 1 _order: Number of coefficients in polynomial in terms of x0 and x1, respectively, which is equal to (polynomial degree) + 1
  */
 public class PiecewisePolynomialResult2D {
 

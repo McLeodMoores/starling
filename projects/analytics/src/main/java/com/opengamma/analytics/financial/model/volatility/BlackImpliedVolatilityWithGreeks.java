@@ -8,10 +8,10 @@ package com.opengamma.analytics.financial.model.volatility;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Given a set of European-type option data (price, spot, time to expiry) and futures (or discount factor),
- * derive implied volatility via {@link BlackFormulaRepository}, then compute Greeks by using the derived volatility
+ * Given a set of European-type option data (price, spot, time to expiry) and futures (or discount factor), derive implied volatility via
+ * {@link BlackFormulaRepository}, then compute Greeks by using the derived volatility
  *
- * The inverse is also implemented, i.e., volatility -> price,  where the Greeks are computed at the same time.
+ * The inverse is also implemented, i.e., volatility -&lt; price, where the Greeks are computed at the same time.
  */
 public class BlackImpliedVolatilityWithGreeks {
 

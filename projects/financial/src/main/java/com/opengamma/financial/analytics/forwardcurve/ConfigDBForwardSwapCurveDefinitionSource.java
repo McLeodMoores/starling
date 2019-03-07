@@ -23,7 +23,7 @@ public class ConfigDBForwardSwapCurveDefinitionSource implements ForwardCurveDef
   /**
    * @param configSource
    *          the config source, not null
-   * @deprecated Use the other constructor or <code>ConfigDBForwardSwapCurveDefinitionSource#init(FunctionCompilationContext, FunctionDefinition)</code> instead.
+   * @deprecated Use the other constructor or {@link ConfigDBForwardSwapCurveDefinitionSource#init(FunctionCompilationContext, FunctionDefinition)} instead.
    */
   @Deprecated
   public ConfigDBForwardSwapCurveDefinitionSource(final ConfigSource configSource) {

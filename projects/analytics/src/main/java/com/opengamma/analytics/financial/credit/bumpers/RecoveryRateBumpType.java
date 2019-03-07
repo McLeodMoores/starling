@@ -13,11 +13,11 @@ package com.opengamma.analytics.financial.credit.bumpers;
 @Deprecated
 public enum RecoveryRateBumpType {
   /**
-   * delta -> delta + bump
+   * delta -&gt; delta + bump
    */
   ADDITIVE,
   /**
-   * delta -> delta x (1 + bump)
+   * delta -&gt; delta x (1 + bump)
    */
   MULTIPLICATIVE;
 }

@@ -29,23 +29,6 @@ import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
  * with ($1+k$) lognormally distributed, $\overline{k}$ the expected jump size,
  * $\lambda$ the frequency of events (the average number of events per year)
  * and $q$ a Poisson counter with intensity $\lambda$.
- * <p>
- * The price of an option can be calculated using:
- * $$
- * \begin{align*}
- * c &= \sum_{i=0}^{\infty} \frac{e^{-\lambda T}(\lambda T)^i}{i!}c_i(S, K, T, r, b_i, \sigma_i)\\
- * p &= \sum_{i=0}^{\infty} \frac{e^{-\lambda T}(\lambda T)^i}{i!}p_i(S, K, T, r, b_i, \sigma_i)
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * b_i &= b - \lambda \overline{k} + \frac{i\overline{\gamma}}{T}\\
- * \sigma_i &= \sqrt{\sigma^2 + \delta^2\frac{i}{T}}\\
- * \overline{\gamma} &= \ln(1 + \overline{k}) 
- * \end{align*}
- * $$
- * and $\delta$ is the standard deviation of log asset price jumps.
  */
 public class BatesGeneralizedJumpDiffusionModel extends AnalyticOptionModel<OptionDefinition, BatesGeneralizedJumpDiffusionModelDataBundle> {
   private static final AnalyticOptionModel<OptionDefinition, StandardOptionDataBundle> BSM = new BlackScholesMertonModel();

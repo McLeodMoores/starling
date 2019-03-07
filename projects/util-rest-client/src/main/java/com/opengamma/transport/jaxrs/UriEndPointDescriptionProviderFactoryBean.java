@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * An implementation of {@link EndPointDescriptionProvider} that produces values from a local or remote URI.
+ * An implementation of {@link com.opengamma.transport.EndPointDescriptionProvider} that produces values from a local or remote URI.
  */
 public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryBean<UriEndPointDescriptionProvider> {
 

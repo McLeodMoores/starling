@@ -25,8 +25,7 @@ import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of
- * {@link com.opengamma.financial.security.fra.FRASecurityFRASecurity}.
+ * A Hibernate bean representation of {@link com.opengamma.financial.security.fra.FRASecurity}.
  */
 @BeanDefinition
 public class FRASecurityBean extends SecurityBean {

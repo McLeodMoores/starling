@@ -9,8 +9,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * The call option pays off max[S2 - X2, 0] if S1 > X1 and 0 otherwise,
- * whereas the put pays off max[X2 - S2, 0] if S1 < X1 and 0 otherwise
+ * The call option pays off max[S2 - X2, 0] if S1 &gt; X1 and 0 otherwise, whereas the put pays off max[X2 - S2, 0] if S1 &lt; X1 and 0 otherwise
  */
 public class TwoAssetCorrelationOptionFunctionProvider extends OptionFunctionProvider2D {
   private final double _strike2;

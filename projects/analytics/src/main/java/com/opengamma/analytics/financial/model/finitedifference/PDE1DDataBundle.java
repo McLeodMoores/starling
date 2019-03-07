@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -27,11 +27,17 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * All the relevant information to solve a 1D PDE on a finite difference grid
-   * @param coefficients The description of the PDE $\mathcal{D}[V(t,x)]=0$
-   * @param initialCondition The function V(0,x)
-   * @param lowerBoundary Boundary condition at the lowest value of x
-   * @param upperBoundary Boundary condition at the highest value of x
-   * @param grid 2D grid (t & x) on which the PDE will be solved
+   * 
+   * @param coefficients
+   *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
+   * @param initialCondition
+   *          The function V(0,x)
+   * @param lowerBoundary
+   *          Boundary condition at the lowest value of x
+   * @param upperBoundary
+   *          Boundary condition at the highest value of x
+   * @param grid
+   *          2D grid (t &amp; x) on which the PDE will be solved
    */
   public PDE1DDataBundle(final T coefficients,
       final Function1D<Double, Double> initialCondition,
@@ -49,13 +55,20 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * All the relevant information to solve a 1D PDE on a finite difference grid
-   * @param coefficients The description of the PDE $\mathcal{D}[V(t,x)]=0$
-   * @param initialCondition The function V(0,x)
-   * @param lowerBoundary Boundary condition at the lowest value of x
-   * @param upperBoundary Boundary condition at the highest value of x
-   * @param freeBoundary for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$
-   * where $max(V^*(t,x)$ is the value calculated before the free-boundary condition is applied
-   * @param grid 2D grid (t & x) on which the PDE will be solved
+   * 
+   * @param coefficients
+   *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
+   * @param initialCondition
+   *          The function V(0,x)
+   * @param lowerBoundary
+   *          Boundary condition at the lowest value of x
+   * @param upperBoundary
+   *          Boundary condition at the highest value of x
+   * @param freeBoundary
+   *          for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$ where $max(V^*(t,x)$ is the value calculated
+   *          before the free-boundary condition is applied
+   * @param grid
+   *          2D grid (t &amp; x) on which the PDE will be solved
    */
   public PDE1DDataBundle(final T coefficients,
       final Function1D<Double, Double> initialCondition,
@@ -75,11 +88,17 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * All the relevant information to solve a 1D PDE on a finite difference grid
-   * @param coefficients The description of the PDE $\mathcal{D}[V(t,x)]=0$
-   * @param initialCondition The values $V(0,x_i)$ where $x_i$ are the spacial grid points
-   * @param lowerBoundary Boundary condition at the lowest value of x
-   * @param upperBoundary Boundary condition at the highest value of x
-   * @param grid 2D grid (t & x) on which the PDE will be solved
+   * 
+   * @param coefficients
+   *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
+   * @param initialCondition
+   *          The values $V(0,x_i)$ where $x_i$ are the spacial grid points
+   * @param lowerBoundary
+   *          Boundary condition at the lowest value of x
+   * @param upperBoundary
+   *          Boundary condition at the highest value of x
+   * @param grid
+   *          2D grid (t &amp; x) on which the PDE will be solved
    */
   public PDE1DDataBundle(final T coefficients,
       final double[] initialCondition,
@@ -98,13 +117,20 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * All the relevant information to solve a 1D PDE on a finite difference grid
-   * @param coefficients The description of the PDE $\mathcal{D}[V(t,x)]=0$
-   * @param initialCondition The values $V(0,x_i)$ where $x_i$ are the spacial grid points
-   * @param lowerBoundary Boundary condition at the lowest value of x
-   * @param upperBoundary Boundary condition at the highest value of x
-   * @param freeBoundary for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$
-   * where $max(V^*(t,x)$ is the value calculated before the free-boundary condition is applied
-   * @param grid 2D grid (t & x) on which the PDE will be solved
+   *
+   * @param coefficients
+   *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
+   * @param initialCondition
+   *          The values $V(0,x_i)$ where $x_i$ are the spacial grid points
+   * @param lowerBoundary
+   *          Boundary condition at the lowest value of x
+   * @param upperBoundary
+   *          Boundary condition at the highest value of x
+   * @param freeBoundary
+   *          for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$ where $max(V^*(t,x)$ is the value calculated
+   *          before the free-boundary condition is applied
+   * @param grid
+   *          2D grid (t &amp; x) on which the PDE will be solved
    */
   public PDE1DDataBundle(final T coefficients,
       final double[] initialCondition,
@@ -197,12 +223,12 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_coefficients == null) ? 0 : _coefficients.hashCode());
-    result = prime * result + ((_freeBoundary == null) ? 0 : _freeBoundary.hashCode());
-    result = prime * result + ((_grid == null) ? 0 : _grid.hashCode());
+    result = prime * result + (_coefficients == null ? 0 : _coefficients.hashCode());
+    result = prime * result + (_freeBoundary == null ? 0 : _freeBoundary.hashCode());
+    result = prime * result + (_grid == null ? 0 : _grid.hashCode());
     result = prime * result + Arrays.hashCode(_initialCondition);
-    result = prime * result + ((_lowerBoundary == null) ? 0 : _lowerBoundary.hashCode());
-    result = prime * result + ((_upperBoundary == null) ? 0 : _upperBoundary.hashCode());
+    result = prime * result + (_lowerBoundary == null ? 0 : _lowerBoundary.hashCode());
+    result = prime * result + (_upperBoundary == null ? 0 : _upperBoundary.hashCode());
     return result;
   }
 

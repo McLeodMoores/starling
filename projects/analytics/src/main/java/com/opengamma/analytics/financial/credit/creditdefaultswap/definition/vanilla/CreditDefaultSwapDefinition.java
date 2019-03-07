@@ -134,29 +134,52 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
 
   /**
    * Create a CDS object
-   * @param buySellProtection Are we buying or selling the credit protection
-   * @param protectionBuyer protection buyer
-   * @param protectionSeller protection seller
-   * @param referenceEntity reference entity
-   * @param currency Currency
-   * @param debtSeniority Debt Seniority
-   * @param restructuringClause Restructuring Clause
-   * @param calendar Calendar
-   * @param startDate Date when protection begins (this can be the start or the end of the day depending on the value of protectionStart)
-   * @param effectiveDate Date when party assumes ownership (aka stepin date or assignment date). Currently must have  startDate <= effectiveDate which
-   * means you cannot buy forward protection - TODO investigate whether this can be removed
-   * @param maturityDate Date when protection ends (end of day)
-   * @param stubType stub type
-   * @param couponFrequency coupon frequency
-   * @param daycountFractionConvention day-count convention
-   * @param businessdayAdjustmentConvention business-day adjustment convention
-   * @param immAdjustMaturityDate if true adjust IMM maturity date - TODO check exactly what this does
-   * @param adjustEffectiveDate if true adjust effective date for non-business days
-   * @param adjustMaturityDate if true adjust (non-IMM) maturity date for non-business days
-   * @param notional the notional
-   * @param recoveryRate the recovery rate (between 0 and 1.0)
-   * @param includeAccruedPremium If true accrued premium must be paid in the event of default
-   * @param protectionStart if true the protection is from the start of day
+   * 
+   * @param buySellProtection
+   *          Are we buying or selling the credit protection
+   * @param protectionBuyer
+   *          protection buyer
+   * @param protectionSeller
+   *          protection seller
+   * @param referenceEntity
+   *          reference entity
+   * @param currency
+   *          Currency
+   * @param debtSeniority
+   *          Debt Seniority
+   * @param restructuringClause
+   *          Restructuring Clause
+   * @param calendar
+   *          Calendar
+   * @param startDate
+   *          Date when protection begins (this can be the start or the end of the day depending on the value of protectionStart)
+   * @param effectiveDate
+   *          Date when party assumes ownership (aka stepin date or assignment date). Currently must have startDate &lt; effectiveDate which means you cannot
+   *          buy forward protection
+   * @param maturityDate
+   *          Date when protection ends (end of day)
+   * @param stubType
+   *          stub type
+   * @param couponFrequency
+   *          coupon frequency
+   * @param daycountFractionConvention
+   *          day-count convention
+   * @param businessdayAdjustmentConvention
+   *          business-day adjustment convention
+   * @param immAdjustMaturityDate
+   *          if true adjust IMM maturity date - TODO check exactly what this does
+   * @param adjustEffectiveDate
+   *          if true adjust effective date for non-business days
+   * @param adjustMaturityDate
+   *          if true adjust (non-IMM) maturity date for non-business days
+   * @param notional
+   *          the notional
+   * @param recoveryRate
+   *          the recovery rate (between 0 and 1.0)
+   * @param includeAccruedPremium
+   *          If true accrued premium must be paid in the event of default
+   * @param protectionStart
+   *          if true the protection is from the start of day
    */
   public CreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller, final LegalEntity referenceEntity, final Currency currency,
       final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate, final ZonedDateTime effectiveDate,

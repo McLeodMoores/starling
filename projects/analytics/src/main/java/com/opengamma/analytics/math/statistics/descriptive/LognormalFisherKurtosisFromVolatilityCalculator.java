@@ -16,13 +16,13 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Calculates the Fisher kurtosis (a.k.a. excess kurtosis) of a lognormal distribution using the standard
  * deviation and time.
- * $$
- * \begin{align*}
- * y &= \sigma^2 t\\
- * \kappa &= y^8 + 6y^3 + 15y^4 + 16y^2
- * \end{align*}
- * $$
  */
+// * $$
+// * \begin{align*}
+// * y &= \sigma^2 t\\
+// * \kappa &= y^8 + 6y^3 + 15y^4 + 16y^2
+// * \end{align*}
+// * $$
 @LognormalStatistic(aliases = "Lognormal Fisher Kurtosis From Volatility")
 public class LognormalFisherKurtosisFromVolatilityCalculator extends LognormalStatisticsCalculator {
   /**

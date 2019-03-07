@@ -73,7 +73,7 @@ public class BaroneAdesiWhaleyModel {
    * <li>theta
    * <li>vega
    * </ol>
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -108,7 +108,7 @@ public class BaroneAdesiWhaleyModel {
 
   /**
    * Get the price, delta and gamma of an American option by the Barone-Adesi &amp; Whaley approximation.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -168,7 +168,7 @@ public class BaroneAdesiWhaleyModel {
   /**
    * Get a function for the price and vega of an American option by the Barone-Adesi &amp; Whaley approximation in terms of the volatility (sigma). This is
    * primarily used by the GenericImpliedVolatiltySolver to find a (Barone-Adesi &amp; Whaley) implied volatility for a given market price of an American option
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -197,12 +197,12 @@ public class BaroneAdesiWhaleyModel {
 
   /**
    * Get the implied volatility according to the Barone-Adesi &amp; Whaley approximation for the price of an American option quoted in the market. It is the
-   * number that put into the Barone-Adesi & Whaley approximation gives the market price. <b>This is not the same as the Black implied volatility</b> (which is
-   * only applicable to European options), although it may be numerically close.
+   * number that put into the Barone-Adesi &amp; Whaley approximation gives the market price. <b>This is not the same as the Black implied volatility</b> (which
+   * is only applicable to European options), although it may be numerically close.
    * <p>
    * If the price indicates that the option should be exercised immediately (price = s0-k for calls and k-s0 for puts), then implied volatility does not exist,
    * and zero is returned (with a warning)
-   * 
+   *
    * @param price
    *          The market price of an American option
    * @param s0
@@ -217,7 +217,7 @@ public class BaroneAdesiWhaleyModel {
    *          The time-to-expiry
    * @param isCall
    *          true for calls
-   * @return The (Barone-Adesi & Whaley) implied volatility.
+   * @return The (Barone-Adesi &amp; Whaley) implied volatility.
    */
   public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
 

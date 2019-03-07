@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.matrix;
@@ -74,33 +74,12 @@ public abstract class MatrixAlgebra {
   }
 
   /**
-   * Returns the Kronecker product of two matrices. If $\mathbf{A}$ is an $m
-   * \times n$ matrix and $\mathbf{B}$ is a $p \times q$ matrix, then the
-   * Kronecker product $A \otimes B$ is an $mp \times nq$ matrix with elements
-   * $$
-   * \begin{align*}
-   * A \otimes B &= 
-   * \begin{pmatrix}
-   * a_{11}\mathbf{B} & \cdots & a_{1n}\mathbf{B} \\
-   * \vdots           & \ddots & \vdots           \\
-   * a_{m1}\mathbf{B} & \cdots & a_{mn}\mathbf{B}
-   * \end{pmatrix}\\
-   * &= 
-   * \begin{pmatrix}
-   * a_{11}b_{11} & a_{11}b_{12} & \cdots & a_{11}b_{1q} & \cdots & a_{1n}b_{11} & a_{1n}b_{12} & \cdots & a_{1n}b_{1q} \\
-   * a_{11}b_{21} & a_{11}b_{22} & \cdots & a_{11}b_{2q} & \cdots & a_{1n}b_{21} & a_{1n}b_{22} & \cdots & a_{1n}b_{2q} \\
-   * \vdots      & \vdots      & \ddots & \vdots      & \cdots & \vdots      & \vdots      & \ddots & \cdots        \\
-   * a_{11}b_{p1} & a_{11}b_{p2} & \cdots & a_{11}b_{pq} & \cdots & a_{1n}b_{p1} & a_{1n}b_{p2} & \cdots & a_{1n}b_{pq} \\
-   * \vdots      & \vdots      &         & \vdots      & \ddots & \vdots      & \vdots      &         & \cdots        \\
-   * a_{m1}b_{11} & a_{m1}b_{12} & \cdots & a_{m1}b_{1q} & \cdots & a_{mn}b_{11} & a_{mn}b_{12} & \cdots & a_{mn}b_{1q} \\
-   * a_{m1}b_{21} & a_{m1}b_{22} & \cdots & a_{m1}b_{2q} & \cdots & a_{mn}b_{21} & a_{mn}b_{22} & \cdots & a_{mn}b_{2q} \\
-   * \vdots      & \vdots      & \ddots & \vdots      & \cdots & \vdots      & \vdots      & \ddots & \cdots        \\
-   * a_{m1}b_{p1} & a_{m1}b_{p2} & \cdots & a_{m1}b_{pq} & \cdots & a_{mn}b_{p1} & a_{mn}b_{p2} & \cdots & a_{mn}b_{pq}       
-   * \end{pmatrix}
-   * \end{align*}
-   * $$
-   * @param m1 The first matrix, not null. This matrix must be a {@link DoubleMatrix2D}.
-   * @param m2 The second matrix, not null. This matrix must be a {@link DoubleMatrix2D}.
+   * Returns the Kronecker product of two matrices.
+   * 
+   * @param m1
+   *          The first matrix, not null. This matrix must be a {@link DoubleMatrix2D}.
+   * @param m2
+   *          The second matrix, not null. This matrix must be a {@link DoubleMatrix2D}.
    * @return The Kronecker product
    */
   public Matrix<?> kroneckerProduct(final Matrix<?> m1, final Matrix<?> m2) {
@@ -134,18 +113,18 @@ public abstract class MatrixAlgebra {
   }
 
   /**
-   * Multiplies two matrices. 
-   * @param m1 The first matrix, not null. 
+   * Multiplies two matrices.
+   * @param m1 The first matrix, not null.
    * @param m2 The second matrix, not null.
-   * @return The product of the two matrices. 
+   * @return The product of the two matrices.
    */
   public abstract Matrix<?> multiply(final Matrix<?> m1, final Matrix<?> m2);
 
   /**
    * Scale a vector or matrix by a given amount, i.e. each element is multiplied by the scale.
    * @param m A vector or matrix, not null
-   * @param scale The scale 
-   * @return the scaled vector or matrix 
+   * @param scale The scale
+   * @return the scaled vector or matrix
    */
   public Matrix<?> scale(final Matrix<?> m, final double scale) {
     Validate.notNull(m, "m");
@@ -229,7 +208,7 @@ public abstract class MatrixAlgebra {
    */
   public abstract double getDeterminant(final Matrix<?> m);
 
-  /** 
+  /**
    * Returns the inverse (or pseudo-inverse) of the matrix.
    * @param m A matrix, not null
    * @return The inverse matrix
@@ -249,14 +228,14 @@ public abstract class MatrixAlgebra {
    * Returns the outer product.
    * @param m1 A vector, not null
    * @param m2 A vector, not null
-   * @return The outer product 
+   * @return The outer product
    * @exception IllegalArgumentException If the vectors are not the same size
    */
   public abstract DoubleMatrix2D getOuterProduct(final Matrix<?> m1, final Matrix<?> m2);
 
   /**
    * For a vector, returns the <a href="http://mathworld.wolfram.com/L1-Norm.html">$L_1$ norm</a>
-   * (also known as the Taxicab norm or Manhattan norm), i.e.  $\Sigma |x_i|$. 
+   * (also known as the Taxicab norm or Manhattan norm), i.e.  $\Sigma |x_i|$.
    * <p>
    * For a matrix, returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteColumnSumNorm.html">maximum absolute column sum norm</a> of the matrix.
    * @param m A vector or matrix, not null
@@ -287,7 +266,7 @@ public abstract class MatrixAlgebra {
    * Returns a matrix raised to an integer power, e.g. $\mathbf{A}^3 = \mathbf{A}\mathbf{A}\mathbf{A}$.
    * @param m A square matrix, not null
    * @param p An integer power
-   * @return The result 
+   * @return The result
    */
   public abstract DoubleMatrix2D getPower(final Matrix<?> m, final int p);
 
@@ -295,14 +274,14 @@ public abstract class MatrixAlgebra {
    * Returns a matrix raised to a power, $\mathbf{A}^3 = \mathbf{A}\mathbf{A}\mathbf{A}$.
    * @param m A square matrix, not null
    * @param p The power
-   * @return The result 
+   * @return The result
    */
   public abstract DoubleMatrix2D getPower(Matrix<?> m, double p);
 
   /**
    * Returns the trace (i.e. sum of diagonal elements) of a matrix.
    * @param m A matrix, not null. The matrix must be square.
-   * @return The trace 
+   * @return The trace
    */
   public abstract double getTrace(final Matrix<?> m);
 

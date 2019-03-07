@@ -54,11 +54,12 @@ import com.opengamma.util.ClassUtils;
 /**
  * Tool class that compiles a view against a function repository to identify any ambiguities.
  * <p>
- * The configuration is fetched from the server, but the function exclusion groups and priorities must be specified manually as these are not readily available via REST interfaces (at the moment -
- * there is no reason why the data couldn't be available). Any ambiguities are written to a nominated output file.
+ * The configuration is fetched from the server, but the function exclusion groups and priorities must be specified manually as these are not readily available
+ * via REST interfaces (at the moment - there is no reason why the data couldn't be available). Any ambiguities are written to a nominated output file.
  * <p>
- * Note that this can be an expensive operation - very expensive if there are multiple deep ambiguities which will cause an incredibly large number of possible terminal output resolutions (based on
- * the cross product of all possible inputs). It is normally only necessary to run on small portfolio samples, for example by setting {@link SimplePortfolioNode#DEBUG_FLAG}.
+ * Note that this can be an expensive operation - very expensive if there are multiple deep ambiguities which will cause an incredibly large number of possible
+ * terminal output resolutions (based on the cross product of all possible inputs). It is normally only necessary to run on small portfolio samples, for example
+ * by setting the system property <code>SimplePortfolioNode.debugFlag</code> to <code>TRUE</code>.
  */
 @Scriptable
 public class FindViewAmbiguities extends AbstractTool<ToolContext> {

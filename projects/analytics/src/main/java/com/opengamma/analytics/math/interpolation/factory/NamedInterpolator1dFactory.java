@@ -219,10 +219,13 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
   }
 
   /**
-   * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -> EXTRAPOLATOR_NAME[NAME].
-   * @param extrapolatorName  the version of the name of the linear extrapolator, not null
-   * @param interpolatorName  the interpolator name, not null
-   * @return  the transformed name
+   * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -&gt; EXTRAPOLATOR_NAME[NAME].
+   * 
+   * @param extrapolatorName
+   *          the version of the name of the linear extrapolator, not null
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @return the transformed name
    */
   public static String transformName(final String extrapolatorName, final String interpolatorName) {
     return ArgumentChecker.notNull(extrapolatorName, "extrapolatorName") + "[" + ArgumentChecker.notNull(interpolatorName, "name") + "]";

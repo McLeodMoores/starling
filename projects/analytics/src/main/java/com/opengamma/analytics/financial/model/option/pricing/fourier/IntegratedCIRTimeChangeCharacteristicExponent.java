@@ -21,22 +21,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * The Cox-Ingersoll-Ross process is a mean-reverting positive process, with SDE:
- * $$
- * \begin{align*}
- * dy_t = \kappa(\theta - y_t)dt + \lambda\sqrt{y_t}dW_t
- * \end{align*}
- * $$
- * and characteristic exponent
- * $$
- * \begin{align*}
- * \psi(u, t; \kappa, \theta, \lambda) &= \frac{2\kappa\theta}{\lambda^2}\left[
- * \frac{\kappa t}{2} - \ln\left(\cosh\left(\frac{\gamma t}{2}\right) + \frac{\kappa}{\gamma}\sinh\left(\frac{\gamma t}{2}\right)\right)
- * + \frac{2iu}{\kappa + \gamma \coth\left(\frac{\gamma t}{2}\right)}\right]\\
- * \text{where}\\
- * \gamma &= \sqrt{\kappa^2 - 2 \lambda^2 iu}
- * \end{align*}
- * $$
+ * The characteristic exponent function of a Cox-Ingersoll-Ross process.
  */
 public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticClockCharcteristicExponent {
   private final double _kappa;
