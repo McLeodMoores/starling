@@ -59,12 +59,10 @@ public class LoggedResolutionPortfolioNodeTest {
     Mockito.when(node.getChildNodes()).thenReturn(childNodes);
     final Collection<PortfolioNode> loggedChildNodes = logged.getChildNodes();
     assertEquals(loggedChildNodes.size(), 3);
-    int i = 0;
     for (final PortfolioNode childNode : loggedChildNodes) {
       assertTrue(childNode instanceof LoggedResolutionPortfolioNode);
-      //Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+      // Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
       // UniqueId.of("Node", Integer.toString(i))), UniqueId.of("Node", Integer.toString(i), "0"));
-      i++;
     }
     Mockito.verifyNoMoreInteractions(logger);
   }
@@ -85,8 +83,8 @@ public class LoggedResolutionPortfolioNodeTest {
     int i = 0;
     for (final Position position : loggedPositions) {
       assertTrue(position instanceof LoggedResolutionPosition);
-      Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.POSITION,
-          UniqueId.of("Position", Integer.toString(i))), UniqueId.of("Position", Integer.toString(i), "0"));
+      Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Position", Integer.toString(i))),
+          UniqueId.of("Position", Integer.toString(i), "0"));
       i++;
     }
     Mockito.verifyNoMoreInteractions(logger);

@@ -161,7 +161,6 @@ public class BondFutureDefinitionTest {
   /**
    * Tests the toDerivative method.
    */
-  @SuppressWarnings("deprecation")
   @Test
   public void toDerivativeDeprecated() {
     final ZonedDateTime firstDeliveryDate = ScheduleCalculator.getAdjustedDate(FIRST_NOTICE_DATE, SETTLEMENT_DAYS, CALENDAR);

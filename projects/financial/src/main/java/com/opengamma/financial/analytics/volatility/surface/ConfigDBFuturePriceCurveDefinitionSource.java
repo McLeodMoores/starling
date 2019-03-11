@@ -28,7 +28,6 @@ public class ConfigDBFuturePriceCurveDefinitionSource implements FuturePriceCurv
     this(configSource, VersionCorrection.LATEST);
   }
 
-  @SuppressWarnings("rawtypes")
   public ConfigDBFuturePriceCurveDefinitionSource(final ConfigSource configSource, final VersionCorrection versionCorrection) {
     this(new ConfigSourceQuery<>(configSource, FuturePriceCurveDefinition.class, versionCorrection));
   }

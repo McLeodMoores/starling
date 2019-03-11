@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.testng.annotations.Test;
-import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
@@ -210,8 +209,8 @@ public class BillNodeConverterTest {
   public void testMissingSecurity() {
     final SnapshotDataBundle data = new SnapshotDataBundle();
     data.setDataPoint(DATA_ID.toBundle(), 0.01);
-    final BillNodeConverter converter = new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE,
-        data, DATA_ID, VALUATION_DATE);
+    final BillNodeConverter converter = new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, data,
+        DATA_ID, VALUATION_DATE);
     final BillNode node = new BillNode(Tenor.ONE_YEAR, MAPPER_NAME);
     node.accept(converter);
   }
@@ -227,8 +226,8 @@ public class BillNodeConverterTest {
     final EquitySecurity equity = new EquitySecurity("", "", "", Currency.USD);
     equity.addExternalId(DATA_ID);
     securityMaster.add(new SecurityDocument(equity));
-    final BillNodeConverter converter = new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, new MasterSecuritySource(securityMaster), EMPTY_LEGAL_ENTITY_SOURCE,
-        data, DATA_ID, VALUATION_DATE);
+    final BillNodeConverter converter = new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, new MasterSecuritySource(securityMaster),
+        EMPTY_LEGAL_ENTITY_SOURCE, data, DATA_ID, VALUATION_DATE);
     final BillNode node = new BillNode(Tenor.ONE_YEAR, MAPPER_NAME);
     node.accept(converter);
   }
@@ -244,22 +243,21 @@ public class BillNodeConverterTest {
     final InMemoryRegionMaster regionMaster = new InMemoryRegionMaster();
     regionMaster.add(new RegionDocument(region));
     final RegionSource regionSource = new MasterRegionSource(regionMaster);
-    final SimpleHolidayWithWeekend holiday = new SimpleHolidayWithWeekend(Collections.<LocalDate>emptySet(), WeekendType.FRIDAY_SATURDAY);
+    final SimpleHolidayWithWeekend holiday = new SimpleHolidayWithWeekend(Collections.<LocalDate> emptySet(), WeekendType.FRIDAY_SATURDAY);
     holiday.setType(HolidayType.BANK);
     holiday.setRegionExternalId(regionId);
     final InMemoryHolidayMaster holidayMaster = new InMemoryHolidayMaster();
     holidayMaster.add(new HolidayDocument(holiday));
     final HolidaySource holidaySource = new MasterHolidaySource(holidayMaster);
-    final WorkingDayCalendar calendar =
-        new WorkingDayCalendarAdapter(CalendarUtils.getCalendar(regionSource, holidaySource, regionId), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    final WorkingDayCalendar calendar = WorkingDayCalendarAdapter.of(CalendarUtils.getCalendar(regionSource, holidaySource, regionId));
     final ExternalId legalEntityId = ExternalId.of("Len", "Test");
     final ZonedDateTime maturityDate = DateUtils.getUTCDate(2016, 1, 1);
     final int daysToSettle = 2;
     final YieldConvention yieldConvention = SimpleYieldConvention.DISCOUNT;
     final DayCount dayCount = DayCounts.ACT_360;
     final String isin = "US00000000";
-    final BillSecurity billSecurity = new BillSecurity(Currency.USD, new Expiry(maturityDate), DateUtils.getUTCDate(2015, 9, 1), 1000, daysToSettle,
-        regionId, yieldConvention, dayCount, legalEntityId);
+    final BillSecurity billSecurity = new BillSecurity(Currency.USD, new Expiry(maturityDate), DateUtils.getUTCDate(2015, 9, 1), 1000, daysToSettle, regionId,
+        yieldConvention, dayCount, legalEntityId);
     billSecurity.addExternalId(DATA_ID);
     billSecurity.addExternalId(ExternalSchemes.isinSecurityId(isin));
     final InMemorySecurityMaster securityMaster = new InMemorySecurityMaster();
@@ -278,25 +276,27 @@ public class BillNodeConverterTest {
     assertEquals(billDefinition, expectedBillDefinition);
     // no legal entity available from source
     try {
-      converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), EMPTY_LEGAL_ENTITY_SOURCE, data, DATA_ID, VALUATION_DATE);
+      converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), EMPTY_LEGAL_ENTITY_SOURCE, data, DATA_ID,
+          VALUATION_DATE);
       billDefinition = (BillTransactionDefinition) billNode.accept(converter);
       fail();
     } catch (final DataNotFoundException e) {
-      //expected
+      // expected
     }
     // legal entity available from source
     final ManageableLegalEntity legalEntity = new ManageableLegalEntity("US Government", legalEntityId.toBundle());
-    legalEntity.setRatings(Arrays.asList(new Rating("Moodys", CreditRating.A, SeniorityLevel.SNRFOR), new Rating("S&P", CreditRating.AA, SeniorityLevel.SNRFOR)));
+    legalEntity
+        .setRatings(Arrays.asList(new Rating("Moodys", CreditRating.A, SeniorityLevel.SNRFOR), new Rating("S&P", CreditRating.AA, SeniorityLevel.SNRFOR)));
     final InMemoryLegalEntityMaster legalEntityMaster = new InMemoryLegalEntityMaster();
     legalEntityMaster.add(new LegalEntityDocument(legalEntity));
     final Set<com.opengamma.analytics.financial.legalentity.CreditRating> creditRatings = Sets.newHashSet(
         com.opengamma.analytics.financial.legalentity.CreditRating.of("Moodys", CreditRating.A.toString(), true),
         com.opengamma.analytics.financial.legalentity.CreditRating.of("S&P", CreditRating.AA.toString(), true));
     expectedLegalEntity = new LegalEntity(isin, legalEntity.getName(), creditRatings, null, Region.of(regionId.getValue(), Country.US, Currency.USD));
-    expectedBillSecurity = new BillSecurityDefinition(Currency.USD, maturityDate, 1, daysToSettle, calendar, yieldConvention, dayCount,
-        expectedLegalEntity);
+    expectedBillSecurity = new BillSecurityDefinition(Currency.USD, maturityDate, 1, daysToSettle, calendar, yieldConvention, dayCount, expectedLegalEntity);
     expectedBillDefinition = BillTransactionDefinition.fromYield(expectedBillSecurity, 1, VALUATION_DATE, yield, calendar);
-    converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), new MasterLegalEntitySource(legalEntityMaster), data, DATA_ID, VALUATION_DATE);
+    converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), new MasterLegalEntitySource(legalEntityMaster),
+        data, DATA_ID, VALUATION_DATE);
     billDefinition = (BillTransactionDefinition) billNode.accept(converter);
     assertEquals(billDefinition, expectedBillDefinition);
   }
@@ -312,7 +312,7 @@ public class BillNodeConverterTest {
     final InMemoryRegionMaster regionMaster = new InMemoryRegionMaster();
     regionMaster.add(new RegionDocument(region));
     final RegionSource regionSource = new MasterRegionSource(regionMaster);
-    final SimpleHolidayWithWeekend holiday = new SimpleHolidayWithWeekend(Collections.<LocalDate>emptySet(), WeekendType.FRIDAY_SATURDAY);
+    final SimpleHolidayWithWeekend holiday = new SimpleHolidayWithWeekend(Collections.<LocalDate> emptySet(), WeekendType.FRIDAY_SATURDAY);
     holiday.setType(HolidayType.BANK);
     holiday.setRegionExternalId(regionId);
     final InMemoryHolidayMaster holidayMaster = new InMemoryHolidayMaster();
@@ -329,15 +329,18 @@ public class BillNodeConverterTest {
     data.setDataPoint(DATA_ID.toBundle(), 0.01);
     final BillNode billNode = new BillNode(Tenor.THREE_MONTHS, MAPPER_NAME);
     final InMemoryLegalEntityMaster legalEntityMaster = new InMemoryLegalEntityMaster();
-    final BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, securitySource, new MasterLegalEntitySource(legalEntityMaster), data, DATA_ID, VALUATION_DATE);
+    final BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, securitySource, new MasterLegalEntitySource(legalEntityMaster), data,
+        DATA_ID, VALUATION_DATE);
     // no ISIN
     ManageableLegalEntity legalEntity = new ManageableLegalEntity("US Government", legalEntityId.toBundle());
-    legalEntity.setRatings(Arrays.asList(new Rating("Moodys", CreditRating.A, SeniorityLevel.SNRFOR), new Rating("S&P", CreditRating.AA, SeniorityLevel.SNRFOR)));
+    legalEntity
+        .setRatings(Arrays.asList(new Rating("Moodys", CreditRating.A, SeniorityLevel.SNRFOR), new Rating("S&P", CreditRating.AA, SeniorityLevel.SNRFOR)));
     LegalEntityDocument legalEntityDocument = legalEntityMaster.add(new LegalEntityDocument(legalEntity));
     final Set<com.opengamma.analytics.financial.legalentity.CreditRating> creditRatings = Sets.newHashSet(
         com.opengamma.analytics.financial.legalentity.CreditRating.of("Moodys", CreditRating.A.toString(), true),
         com.opengamma.analytics.financial.legalentity.CreditRating.of("S&P", CreditRating.AA.toString(), true));
-    LegalEntity expectedLegalEntity = new LegalEntity(null, legalEntity.getName(), creditRatings, null, Region.of(regionId.getValue(), Country.US, Currency.USD));
+    LegalEntity expectedLegalEntity = new LegalEntity(null, legalEntity.getName(), creditRatings, null,
+        Region.of(regionId.getValue(), Country.US, Currency.USD));
     assertEquals(((BillTransactionDefinition) billNode.accept(converter)).getUnderlying().getIssuerEntity(), expectedLegalEntity);
     legalEntityMaster.remove(legalEntityDocument);
     // no credit ratings
@@ -348,4 +351,3 @@ public class BillNodeConverterTest {
     legalEntityMaster.remove(legalEntityDocument);
   }
 }
-

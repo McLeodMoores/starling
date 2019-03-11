@@ -116,7 +116,7 @@ public class IborDepositConventionTest {
     final Tenor startTenor = Tenor.of(Period.ZERO);
     final Tenor endTenor = Tenor.ONE_MONTH;
     final double rate = 0.01;
-    final GeneratorDepositIbor generator = new GeneratorDepositIbor("", IndexConverter.toIborIndex(INDEX), new CalendarAdapter(CALENDAR));
+    final GeneratorDepositIbor generator = new GeneratorDepositIbor("", IndexConverter.toIborIndex(INDEX), CalendarAdapter.of(CALENDAR));
     final GeneratorAttributeIR attribute = new GeneratorAttributeIR(startTenor.getPeriod(), endTenor.getPeriod());
     assertEquals(CONVENTION.toCurveInstrument(date, startTenor, endTenor, 1, rate), generator.generateInstrument(date, rate, 1, attribute));
   }

@@ -25,23 +25,28 @@ import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
  */
 public class WorkingDayCalendarAdapterTest {
   /** Holiday dates */
-  private static final Collection<LocalDate> DATES = Arrays.asList(
-      LocalDate.of(2015, 9, 14),
-      LocalDate.of(2015, 10, 9),
-      LocalDate.of(2015, 12, 23));
+  private static final Collection<LocalDate> DATES = Arrays.asList(LocalDate.of(2015, 9, 14), LocalDate.of(2015, 10, 9), LocalDate.of(2015, 12, 23));
   /** A calendar */
   private static final TestCalendar CALENDAR = new TestCalendar(DATES);
   /** A working day calendar */
   private static final WorkingDayCalendar WORKING_DAY_CALENDAR = new SimpleWorkingDayCalendar("Simple", DATES, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
   /** The adapter */
-  private static final WorkingDayCalendar ADAPTER = new WorkingDayCalendarAdapter(CALENDAR, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+  private static final WorkingDayCalendar ADAPTER = WorkingDayCalendarAdapter.of(CALENDAR);
 
   /**
    * Tests the behaviour when the calendar is null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testNullCalendar() {
-    new WorkingDayCalendarAdapter(null, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+  public void testNullCalendar1() {
+    WorkingDayCalendarAdapter.of(null);
+  }
+
+  /**
+   * Tests the behaviour when the calendar is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullCalendar2() {
+    WorkingDayCalendarAdapter.of(null, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
   }
 
   /**
@@ -49,7 +54,7 @@ public class WorkingDayCalendarAdapterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullWeekendDay1() {
-    new WorkingDayCalendarAdapter(CALENDAR, null, DayOfWeek.SUNDAY);
+    WorkingDayCalendarAdapter.of(CALENDAR, null, DayOfWeek.SUNDAY);
   }
 
   /**
@@ -57,7 +62,7 @@ public class WorkingDayCalendarAdapterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullWeekendDay2() {
-    new WorkingDayCalendarAdapter(CALENDAR, DayOfWeek.SATURDAY, null);
+    WorkingDayCalendarAdapter.of(CALENDAR, DayOfWeek.SATURDAY, null);
   }
 
   /**
@@ -68,14 +73,14 @@ public class WorkingDayCalendarAdapterTest {
     assertEquals(ADAPTER.getName(), CALENDAR.getName());
     assertEquals(ADAPTER, ADAPTER);
     assertFalse(ADAPTER.equals(WORKING_DAY_CALENDAR));
-    WorkingDayCalendar other = new WorkingDayCalendarAdapter(CALENDAR, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    WorkingDayCalendar other = WorkingDayCalendarAdapter.of(CALENDAR, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     assertEquals(other, ADAPTER);
     assertEquals(other.hashCode(), ADAPTER.hashCode());
-    other = new WorkingDayCalendarAdapter(new MondayToFridayCalendar("Weekend"), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    other = WorkingDayCalendarAdapter.of(new MondayToFridayCalendar("Weekend"), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     assertNotEquals(other, ADAPTER);
-    other = new WorkingDayCalendarAdapter(CALENDAR, DayOfWeek.FRIDAY, DayOfWeek.SUNDAY);
+    other = WorkingDayCalendarAdapter.of(CALENDAR, DayOfWeek.FRIDAY, DayOfWeek.SUNDAY);
     assertNotEquals(other, ADAPTER);
-    other = new WorkingDayCalendarAdapter(CALENDAR, DayOfWeek.SATURDAY, DayOfWeek.MONDAY);
+    other = WorkingDayCalendarAdapter.of(CALENDAR, DayOfWeek.SATURDAY, DayOfWeek.MONDAY);
     assertNotEquals(other, ADAPTER);
   }
 

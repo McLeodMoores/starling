@@ -58,7 +58,7 @@ public class BillTransactionDiscountingMethodTest {
 
   private static final Currency EUR = Currency.EUR;
   private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
-  private static final Calendar CALENDAR_OLD = new CalendarAdapter(CALENDAR);
+  private static final Calendar CALENDAR_OLD = CalendarAdapter.of(CALENDAR);
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 17);
 
   private static final DayCount ACT360 = DayCounts.ACT_360;

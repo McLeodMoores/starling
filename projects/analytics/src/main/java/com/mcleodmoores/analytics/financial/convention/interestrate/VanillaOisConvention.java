@@ -248,7 +248,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     ArgumentChecker.notNull(startTenor, "startTenor");
     ArgumentChecker.notNull(endTenor, "endTenor");
     final Currency currency = _index.getCurrency();
-    final Calendar holidays = new CalendarAdapter(_calendar);
+    final Calendar holidays = CalendarAdapter.of(_calendar);
     final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);
     final ZonedDateTime[] fixingPeriodEndDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endTenor, _paymentTenor,
         _isShortStub, _isLegGeneratedFromEnd, _businessDayConvention, _calendar, _endOfMonth);

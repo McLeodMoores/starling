@@ -41,7 +41,7 @@ public final class DefaultDateAdjustmentCalculator implements TenorOffsetDateAdj
     ArgumentChecker.notNull(tenor, "tenor");
     ArgumentChecker.notNull(convention, "convention");
     ArgumentChecker.notNull(workingDayCalendar, "workingDayCalendar");
-    final Calendar calendar = new CalendarAdapter(workingDayCalendar);
+    final Calendar calendar = CalendarAdapter.of(workingDayCalendar);
     final LocalDate endDate = TenorUtils.adjustDateByTenor(date, tenor, calendar, 0);
     if (tenor.isBusinessDayTenor()) {
       // ON, T/N, S/N

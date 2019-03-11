@@ -344,7 +344,7 @@ public class VanillaOisConventionTest {
     final double rate = 0.01;
     final GeneratorSwapFixedON generator =
         new GeneratorSwapFixedON("", IndexConverter.toIndexOn(INDEX), PAYMENT_TENOR.getPeriod(), DayCounts.ACT_365,
-            BDC, EOM == EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH, SPOT_LAG, PAYMENT_LAG, new CalendarAdapter(CALENDAR));
+            BDC, EOM == EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH, SPOT_LAG, PAYMENT_LAG, CalendarAdapter.of(CALENDAR));
     final GeneratorAttributeIR attribute = new GeneratorAttributeIR(startTenor.getPeriod(), endTenor.getPeriod());
     assertEquals(convention.toCurveInstrument(date, startTenor, endTenor, 1, rate), generator.generateInstrument(date, rate, 1, attribute));
   }

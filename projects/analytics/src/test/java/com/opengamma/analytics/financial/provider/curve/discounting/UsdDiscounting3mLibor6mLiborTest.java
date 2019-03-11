@@ -79,6 +79,7 @@ import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAd
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.util.time.TimeCalculator;
+import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
@@ -94,8 +95,7 @@ public class UsdDiscounting3mLibor6mLiborTest {
 
   private static final Interpolator1D INTERPOLATOR_DQ = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
       FlatExtrapolator1dAdapter.NAME);
-  private static final Interpolator1D INTERPOLATOR_LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
-      FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR_LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final Interpolator1D INTERPOLATOR_LL = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
       ExponentialExtrapolator1dAdapter.NAME);
 
@@ -103,7 +103,7 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final double TOLERANCE_ROOT = 1.0E-12;
   private static final int STEP_MAX = 100;
 
-  private static final CalendarAdapter NYC = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+  private static final Calendar NYC = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.USD);
 
   private static final double NOTIONAL = 1.0;
@@ -124,20 +124,20 @@ public class UsdDiscounting3mLibor6mLiborTest {
 
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2011, 9, 28);
 
-  private static final ZonedDateTimeDoubleTimeSeries TS_ON_USD_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
-    DateUtils.getUTCDate(2011, 9, 28) }, new double[] {0.07, 0.08 });
-  private static final ZonedDateTimeDoubleTimeSeries TS_ON_USD_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27)},
-      new double[] {0.07});
+  private static final ZonedDateTimeDoubleTimeSeries TS_ON_USD_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { DateUtils.getUTCDate(2011, 9, 27), DateUtils.getUTCDate(2011, 9, 28) }, new double[] { 0.07, 0.08 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_ON_USD_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { DateUtils.getUTCDate(2011, 9, 27) }, new double[] { 0.07 });
 
-  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD3M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
-    DateUtils.getUTCDate(2011, 9, 28) }, new double[] {0.0035, 0.0036 });
-  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD3M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27) },
-      new double[] {0.0035 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD3M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { DateUtils.getUTCDate(2011, 9, 27), DateUtils.getUTCDate(2011, 9, 28) }, new double[] { 0.0035, 0.0036 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD3M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { DateUtils.getUTCDate(2011, 9, 27) }, new double[] { 0.0035 });
 
-  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD6M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
-      DateUtils.getUTCDate(2011, 9, 28) }, new double[] {0.0036, 0.0037 });
-    private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD6M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27) },
-        new double[] {0.0036 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD6M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { DateUtils.getUTCDate(2011, 9, 27), DateUtils.getUTCDate(2011, 9, 28) }, new double[] { 0.0036, 0.0037 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD6M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { DateUtils.getUTCDate(2011, 9, 27) }, new double[] { 0.0036 });
 
   /** Fixing time series created before the valuation date fixing is available */
   private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXING_TS_WITHOUT_TODAY = new HashMap<>();
@@ -157,13 +157,16 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final String CURVE_NAME_FWD6_USD = "USD Fwd 6M";
 
   /** Market values for the dsc USD curve */
-  private static final double[] DSC_USD_MARKET_QUOTES = new double[] {0.0010, 0.0011, 0.0013, 0.0009, 0.0010, 0.0015, 0.0014, 0.0020, 0.0020, 0.0030, 0.0040, 0.0050, 0.0130 };
+  private static final double[] DSC_USD_MARKET_QUOTES = new double[] { 0.0010, 0.0011, 0.0013, 0.0009, 0.0010, 0.0015, 0.0014, 0.0020, 0.0020, 0.0030, 0.0040,
+      0.0050, 0.0130 };
   /** Generators for the dsc USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_USD_GENERATORS = new GeneratorInstrument<?>[] {GENERATOR_DEPOSIT_ON_USD, GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD,
-    GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_USD_GENERATORS = new GeneratorInstrument<?>[] { GENERATOR_DEPOSIT_ON_USD,
+      GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
   /** Tenors for the dsc USD curve */
-  private static final Period[] DSC_USD_TENOR = new Period[] {Period.ofDays(0), Period.ofDays(1), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3), Period.ofMonths(6), Period.ofMonths(9),
-    Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(10) };
+  private static final Period[] DSC_USD_TENOR = new Period[] { Period.ofDays(0), Period.ofDays(1), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3),
+      Period.ofMonths(6), Period.ofMonths(9), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5),
+      Period.ofYears(10) };
   private static final GeneratorAttributeIR[] DSC_USD_ATTR = new GeneratorAttributeIR[DSC_USD_TENOR.length];
   static {
     DSC_USD_ATTR[0] = new GeneratorAttributeIR(DSC_USD_TENOR[0], Period.ZERO);
@@ -174,13 +177,13 @@ public class UsdDiscounting3mLibor6mLiborTest {
   }
 
   /** Market values for the Fwd 3M USD curve */
-  private static final double[] FWD3_USD_MARKET_QUOTES_2 = new double[] {0.0045, 0.0045, 0.0045, 0.0050, 0.0060, 0.0080, 0.0075, 0.0090, 0.0160 };
+  private static final double[] FWD3_USD_MARKET_QUOTES_2 = new double[] { 0.0045, 0.0045, 0.0045, 0.0050, 0.0060, 0.0080, 0.0075, 0.0090, 0.0160 };
   /** Generators for the Fwd 3M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_2 = new GeneratorInstrument<?>[] {GENERATOR_USDLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M,
-    USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_2 = new GeneratorInstrument<?>[] { GENERATOR_USDLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Tenors for the Fwd 3M USD curve */
-  private static final Period[] FWD3_USD_TENOR_2 = new Period[] {Period.ofMonths(0), Period.ofMonths(6), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5),
-    Period.ofYears(7), Period.ofYears(10) };
+  private static final Period[] FWD3_USD_TENOR_2 = new Period[] { Period.ofMonths(0), Period.ofMonths(6), Period.ofYears(1), Period.ofYears(2),
+      Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
   private static final GeneratorAttributeIR[] FWD3_USD_ATTR_2 = new GeneratorAttributeIR[FWD3_USD_TENOR_2.length];
   static {
     for (int loopins = 0; loopins < FWD3_USD_TENOR_2.length; loopins++) {
@@ -189,13 +192,14 @@ public class UsdDiscounting3mLibor6mLiborTest {
   }
 
   /** Market values for the Fwd 3M USD curve */
-  private static final double[] FWD3_USD_MARKET_QUOTES_3 = new double[] {0.0045, 0.0045, 0.0045, 0.0050, 0.0060, 0.0080, 0.0075, 0.0090, 0.0160, 0.0200, 0.0180 };
+  private static final double[] FWD3_USD_MARKET_QUOTES_3 = new double[] { 0.0045, 0.0045, 0.0045, 0.0050, 0.0060, 0.0080, 0.0075, 0.0090, 0.0160, 0.0200,
+      0.0180 };
   /** Generators for the Fwd 3M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_3 = new GeneratorInstrument<?>[] {GENERATOR_USDLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M,
-    USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_3 = new GeneratorInstrument<?>[] { GENERATOR_USDLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Tenors for the Fwd 3M USD curve */
-  private static final Period[] FWD3_USD_TENOR_3 = new Period[] {Period.ofMonths(0), Period.ofMonths(6), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5),
-    Period.ofYears(7), Period.ofYears(10), Period.ofYears(15), Period.ofYears(20) };
+  private static final Period[] FWD3_USD_TENOR_3 = new Period[] { Period.ofMonths(0), Period.ofMonths(6), Period.ofYears(1), Period.ofYears(2),
+      Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10), Period.ofYears(15), Period.ofYears(20) };
   private static final GeneratorAttributeIR[] FWD3_USD_ATTR_3 = new GeneratorAttributeIR[FWD3_USD_TENOR_3.length];
   static {
     for (int loopins = 0; loopins < FWD3_USD_TENOR_3.length; loopins++) {
@@ -204,14 +208,13 @@ public class UsdDiscounting3mLibor6mLiborTest {
   }
 
   /** Market values for the Fwd 3M USD curve */
-  private static final double[] FWD3_USD_MARKET_QUOTES_4 = new double[] {0.0100, 0.0125, 0.0150, 0.0140, 0.0113, 0.0131, 0.0136, 0.0142, 0.0146, 0.0135 };
+  private static final double[] FWD3_USD_MARKET_QUOTES_4 = new double[] { 0.0100, 0.0125, 0.0150, 0.0140, 0.0113, 0.0131, 0.0136, 0.0142, 0.0146, 0.0135 };
   /** Generators for the Fwd 3M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_4 = new GeneratorInstrument<?>[] {GENERATOR_USDLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M,
-    USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_4 = new GeneratorInstrument<?>[] { GENERATOR_USDLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Tenors for the Fwd 3M USD curve */
-  private static final Period[] FWD3_USD_TENOR_4 = new Period[] {Period.ofMonths(0), Period.ofYears(1), Period.ofYears(5), Period.ofYears(10), Period.ofMonths(6), Period.ofYears(2),
-    Period.ofYears(3),
-    Period.ofYears(4), Period.ofYears(7), Period.ofYears(15) };
+  private static final Period[] FWD3_USD_TENOR_4 = new Period[] { Period.ofMonths(0), Period.ofYears(1), Period.ofYears(5), Period.ofYears(10),
+      Period.ofMonths(6), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(7), Period.ofYears(15) };
   private static final GeneratorAttributeIR[] FWD3_USD_ATTR_4 = new GeneratorAttributeIR[FWD3_USD_TENOR_4.length];
   static {
     for (int loopins = 0; loopins < FWD3_USD_TENOR_4.length; loopins++) {
@@ -220,11 +223,12 @@ public class UsdDiscounting3mLibor6mLiborTest {
   }
 
   /** Market values for the Fwd 6M USD curve */
-  private static final double[] FWD6_USD_MARKET_QUOTES = new double[] {0.0065, 0.0055, 0.0080, 0.0170 };
+  private static final double[] FWD6_USD_MARKET_QUOTES = new double[] { 0.0065, 0.0055, 0.0080, 0.0170 };
   /** Generators for the Fwd 6M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_USD_GENERATORS = new GeneratorInstrument<?>[] {GENERATOR_USDLIBOR6M, USD6MLIBOR6M, USD6MLIBOR6M, USD6MLIBOR6M };
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_USD_GENERATORS = new GeneratorInstrument<?>[] { GENERATOR_USDLIBOR6M,
+      USD6MLIBOR6M, USD6MLIBOR6M, USD6MLIBOR6M };
   /** Tenors for the Fwd 6M USD curve */
-  private static final Period[] FWD6_USD_TENOR = new Period[] {Period.ofMonths(0), Period.ofYears(2), Period.ofYears(5), Period.ofYears(10) };
+  private static final Period[] FWD6_USD_TENOR = new Period[] { Period.ofMonths(0), Period.ofYears(2), Period.ofYears(5), Period.ofYears(10) };
   private static final GeneratorAttributeIR[] FWD6_USD_ATTR = new GeneratorAttributeIR[FWD6_USD_TENOR.length];
   static {
     for (int loopins = 0; loopins < FWD6_USD_TENOR.length; loopins++) {
@@ -233,38 +237,36 @@ public class UsdDiscounting3mLibor6mLiborTest {
   }
 
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
-  private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR)
+  private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp().building(CURVE_NAME_DSC_USD)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR)
       .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
       .withKnownData(KNOWN_DATA);
-  private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LL).continuousInterpolationOnDiscountFactors()
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LL)
-      .withKnownData(KNOWN_DATA);
+  private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_2 = DiscountingMethodCurveBuilder.setUp().building(CURVE_NAME_DSC_USD)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LL)
+      .continuousInterpolationOnDiscountFactors().thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD)
+      .forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LL).withKnownData(KNOWN_DATA);
   private static final DiscountingMethodCurveSetUp PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1).thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD)
+      .forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1).withKnownData(KNOWN_DATA);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_DQ).withKnownData(KNOWN_DATA);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD).withKnownData(KNOWN_DATA);
   private static final DiscountingMethodCurveSetUp LIBOR_AND_DISCOUNTING_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_DQ).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_DQ).withKnownData(KNOWN_DATA);
   private static final DiscountingMethodCurveSetUp LIBOR_AND_DISCOUNTING_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD).withKnownData(KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_USD_MARKET_QUOTES.length; i++) {
       DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);
@@ -312,12 +314,18 @@ public class UsdDiscounting3mLibor6mLiborTest {
     DSC_THEN_3M_LIBOR_AFTER_FIXING_1 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
     DSC_THEN_3M_LIBOR_BEFORE_FIXING_2 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
     DSC_THEN_3M_LIBOR_AFTER_FIXING_2 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
-    PERIODIC_DSC_THEN_3M_LIBOR_BEFORE_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    PERIODIC_DSC_THEN_3M_LIBOR_AFTER_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    PERIODIC_DSC_THEN_3M_LIBOR_BEFORE_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
+        .buildCurves(NOW);
+    PERIODIC_DSC_THEN_3M_LIBOR_AFTER_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
+        .buildCurves(NOW);
+    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
+        .buildCurves(NOW);
+    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
+        .buildCurves(NOW);
+    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
+        .buildCurves(NOW);
+    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
+        .buildCurves(NOW);
     LIBOR_THEN_DSC_BEFORE_FIXING_1 = LIBOR_AND_DISCOUNTING_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
     LIBOR_THEN_DSC_AFTER_FIXING_1 = LIBOR_AND_DISCOUNTING_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
     LIBOR_THEN_DSC_BEFORE_FIXING_2 = LIBOR_AND_DISCOUNTING_BUILDER_2.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
@@ -336,7 +344,7 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final InstrumentDefinition<?>[] DEFINITIONS_FWD6_USD;
 
   /** Units of curves */
-  private static final int[] NB_UNITS = new int[] {2, 2, 2, 3, 3, 1, 1, 2, 1, 1 };
+  private static final int[] NB_UNITS = new int[] { 2, 2, 2, 3, 3, 1, 1, 2, 1, 1 };
   private static final int NB_BLOCKS = NB_UNITS.length;
   private static final InstrumentDefinition<?>[][][][] DEFINITIONS_UNITS = new InstrumentDefinition<?>[NB_BLOCKS][][][];
   private static final GeneratorYDCurve[][][] GENERATORS_UNITS = new GeneratorYDCurve[NB_BLOCKS][][];
@@ -356,24 +364,24 @@ public class UsdDiscounting3mLibor6mLiborTest {
       GENERATORS_UNITS[loopblock] = new GeneratorYDCurve[NB_UNITS[loopblock]][];
       NAMES_UNITS[loopblock] = new String[NB_UNITS[loopblock]][];
     }
-    DEFINITIONS_UNITS[0][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[0][1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_2 };
-    DEFINITIONS_UNITS[1][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[1][1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_2 };
-    DEFINITIONS_UNITS[2][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[2][1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_2 };
-    DEFINITIONS_UNITS[3][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[3][1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_2 };
-    DEFINITIONS_UNITS[3][2] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD6_USD };
-    DEFINITIONS_UNITS[4][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[4][1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_2 };
-    DEFINITIONS_UNITS[4][2] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD6_USD };
-    DEFINITIONS_UNITS[5][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_3, DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[6][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_3, DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[7][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[7][1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD_4 };
-    DEFINITIONS_UNITS[8][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[9][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[0][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[0][1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_2 };
+    DEFINITIONS_UNITS[1][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[1][1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_2 };
+    DEFINITIONS_UNITS[2][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[2][1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_2 };
+    DEFINITIONS_UNITS[3][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[3][1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_2 };
+    DEFINITIONS_UNITS[3][2] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD6_USD };
+    DEFINITIONS_UNITS[4][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[4][1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_2 };
+    DEFINITIONS_UNITS[4][2] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD6_USD };
+    DEFINITIONS_UNITS[5][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_3, DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[6][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_3, DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[7][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[7][1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD_4 };
+    DEFINITIONS_UNITS[8][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
+    DEFINITIONS_UNITS[9][0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
     final GeneratorYDCurve genIntDQ = new GeneratorCurveYieldInterpolated(MATURITY_CALCULATOR, INTERPOLATOR_DQ);
     final GeneratorYDCurve genIntLin = new GeneratorCurveYieldInterpolated(MATURITY_CALCULATOR, INTERPOLATOR_LINEAR);
     final int compoundingRate = 1;
@@ -390,62 +398,63 @@ public class UsdDiscounting3mLibor6mLiborTest {
     final LocalDate endTOQ = LocalDate.of(2012, 4, 2);
     final double spreadTOQ = 0.0010; // 10bps
     final double dfTOQ = 1.0 / (1 + USD_3M_LIBOR_INDEX.getDayCount().getDayCountFraction(startTOQ, endTOQ) * spreadTOQ);
-    final double[] times = {TimeCalculator.getTimeBetween(NOW, startTOY), TimeCalculator.getTimeBetween(NOW, endTOY), TimeCalculator.getTimeBetween(NOW, startTOQ),
-      TimeCalculator.getTimeBetween(NOW, endTOQ) };
-    final double[] df = {1.0, dfTOY, dfTOY, dfTOY * dfTOQ };
+    final double[] times = { TimeCalculator.getTimeBetween(NOW, startTOY), TimeCalculator.getTimeBetween(NOW, endTOY),
+        TimeCalculator.getTimeBetween(NOW, startTOQ), TimeCalculator.getTimeBetween(NOW, endTOQ) };
+    final double[] df = { 1.0, dfTOY, dfTOY, dfTOY * dfTOQ };
     final YieldAndDiscountCurve curveTOY = new DiscountCurve("TOY", new InterpolatedDoublesCurve(times, df, INTERPOLATOR_LINEAR, true));
     final GeneratorYDCurve genAddFixed = new GeneratorCurveAddYieldFixed(genIntDQ, false, curveTOY);
     final GeneratorYDCurve genIntDQ0 = new GeneratorCurveYieldInterpolatedAnchor(MATURITY_CALCULATOR, INTERPOLATOR_DQ);
-    final int[] nbParameters = {5, DSC_USD_MARKET_QUOTES.length - 5 };
-    final GeneratorYDCurve gen2Blocks = new GeneratorCurveAddYieldNb(new GeneratorYDCurve[] {genIntDFLL, genIntDQ0 }, nbParameters, false);
-    GENERATORS_UNITS[0][0] = new GeneratorYDCurve[] {genIntLin };
-    GENERATORS_UNITS[0][1] = new GeneratorYDCurve[] {genIntLin };
-    GENERATORS_UNITS[1][0] = new GeneratorYDCurve[] {genIntRPLin };
-    GENERATORS_UNITS[1][1] = new GeneratorYDCurve[] {genIntRPLin };
-    GENERATORS_UNITS[2][0] = new GeneratorYDCurve[] {genIntDFLL };
-    GENERATORS_UNITS[2][1] = new GeneratorYDCurve[] {genIntDFLL };
+    final int[] nbParameters = { 5, DSC_USD_MARKET_QUOTES.length - 5 };
+    final GeneratorYDCurve gen2Blocks = new GeneratorCurveAddYieldNb(new GeneratorYDCurve[] { genIntDFLL, genIntDQ0 }, nbParameters, false);
+    GENERATORS_UNITS[0][0] = new GeneratorYDCurve[] { genIntLin };
+    GENERATORS_UNITS[0][1] = new GeneratorYDCurve[] { genIntLin };
+    GENERATORS_UNITS[1][0] = new GeneratorYDCurve[] { genIntRPLin };
+    GENERATORS_UNITS[1][1] = new GeneratorYDCurve[] { genIntRPLin };
+    GENERATORS_UNITS[2][0] = new GeneratorYDCurve[] { genIntDFLL };
+    GENERATORS_UNITS[2][1] = new GeneratorYDCurve[] { genIntDFLL };
     // 3xinterpolated / 2xinterpolated + spread over existing
-    GENERATORS_UNITS[3][0] = new GeneratorYDCurve[] {genIntDQ };
-    GENERATORS_UNITS[3][1] = new GeneratorYDCurve[] {genIntDQ };
-    GENERATORS_UNITS[3][2] = new GeneratorYDCurve[] {genIntDQ };
-    GENERATORS_UNITS[4][0] = new GeneratorYDCurve[] {genIntDQ };
-    GENERATORS_UNITS[4][1] = new GeneratorYDCurve[] {genIntDQ };
-    GENERATORS_UNITS[4][2] = new GeneratorYDCurve[] {genAddExistFwd3 };
+    GENERATORS_UNITS[3][0] = new GeneratorYDCurve[] { genIntDQ };
+    GENERATORS_UNITS[3][1] = new GeneratorYDCurve[] { genIntDQ };
+    GENERATORS_UNITS[3][2] = new GeneratorYDCurve[] { genIntDQ };
+    GENERATORS_UNITS[4][0] = new GeneratorYDCurve[] { genIntDQ };
+    GENERATORS_UNITS[4][1] = new GeneratorYDCurve[] { genIntDQ };
+    GENERATORS_UNITS[4][2] = new GeneratorYDCurve[] { genAddExistFwd3 };
     // 2xinterpolated / interpolated + spread over existing
-    GENERATORS_UNITS[5][0] = new GeneratorYDCurve[] {genIntDQ, genIntDQ };
-    GENERATORS_UNITS[6][0] = new GeneratorYDCurve[] {genIntLin, genAddExistFwd3 };
+    GENERATORS_UNITS[5][0] = new GeneratorYDCurve[] { genIntDQ, genIntDQ };
+    GENERATORS_UNITS[6][0] = new GeneratorYDCurve[] { genIntLin, genAddExistFwd3 };
     // interpolated + functional+interpolated
-    GENERATORS_UNITS[7][0] = new GeneratorYDCurve[] {genIntDQ };
-    GENERATORS_UNITS[7][1] = new GeneratorYDCurve[] {new GeneratorCurveAddYield(new GeneratorYDCurve[] {genNS, genInt0 }, false) };
-    GENERATORS_UNITS[8][0] = new GeneratorYDCurve[] {genAddFixed };
-    GENERATORS_UNITS[9][0] = new GeneratorYDCurve[] {gen2Blocks };
-    NAMES_UNITS[0][0] = new String[] {CURVE_NAME_DSC_USD };
-    NAMES_UNITS[0][1] = new String[] {CURVE_NAME_FWD3_USD };
-    NAMES_UNITS[1][0] = new String[] {CURVE_NAME_DSC_USD };
-    NAMES_UNITS[1][1] = new String[] {CURVE_NAME_FWD3_USD };
-    NAMES_UNITS[2][0] = new String[] {CURVE_NAME_DSC_USD };
-    NAMES_UNITS[2][1] = new String[] {CURVE_NAME_FWD3_USD };
-    NAMES_UNITS[3][0] = new String[] {CURVE_NAME_DSC_USD };
-    NAMES_UNITS[3][1] = new String[] {CURVE_NAME_FWD3_USD };
-    NAMES_UNITS[3][2] = new String[] {CURVE_NAME_FWD6_USD };
-    NAMES_UNITS[4][0] = new String[] {CURVE_NAME_DSC_USD };
-    NAMES_UNITS[4][1] = new String[] {CURVE_NAME_FWD3_USD };
-    NAMES_UNITS[4][2] = new String[] {CURVE_NAME_FWD6_USD };
-    NAMES_UNITS[5][0] = new String[] {CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD };
-    NAMES_UNITS[6][0] = new String[] {CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD };
-    NAMES_UNITS[7][0] = new String[] {CURVE_NAME_DSC_USD };
-    NAMES_UNITS[7][1] = new String[] {CURVE_NAME_FWD3_USD };
+    GENERATORS_UNITS[7][0] = new GeneratorYDCurve[] { genIntDQ };
+    GENERATORS_UNITS[7][1] = new GeneratorYDCurve[] { new GeneratorCurveAddYield(new GeneratorYDCurve[] { genNS, genInt0 }, false) };
+    GENERATORS_UNITS[8][0] = new GeneratorYDCurve[] { genAddFixed };
+    GENERATORS_UNITS[9][0] = new GeneratorYDCurve[] { gen2Blocks };
+    NAMES_UNITS[0][0] = new String[] { CURVE_NAME_DSC_USD };
+    NAMES_UNITS[0][1] = new String[] { CURVE_NAME_FWD3_USD };
+    NAMES_UNITS[1][0] = new String[] { CURVE_NAME_DSC_USD };
+    NAMES_UNITS[1][1] = new String[] { CURVE_NAME_FWD3_USD };
+    NAMES_UNITS[2][0] = new String[] { CURVE_NAME_DSC_USD };
+    NAMES_UNITS[2][1] = new String[] { CURVE_NAME_FWD3_USD };
+    NAMES_UNITS[3][0] = new String[] { CURVE_NAME_DSC_USD };
+    NAMES_UNITS[3][1] = new String[] { CURVE_NAME_FWD3_USD };
+    NAMES_UNITS[3][2] = new String[] { CURVE_NAME_FWD6_USD };
+    NAMES_UNITS[4][0] = new String[] { CURVE_NAME_DSC_USD };
+    NAMES_UNITS[4][1] = new String[] { CURVE_NAME_FWD3_USD };
+    NAMES_UNITS[4][2] = new String[] { CURVE_NAME_FWD6_USD };
+    NAMES_UNITS[5][0] = new String[] { CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD };
+    NAMES_UNITS[6][0] = new String[] { CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD };
+    NAMES_UNITS[7][0] = new String[] { CURVE_NAME_DSC_USD };
+    NAMES_UNITS[7][1] = new String[] { CURVE_NAME_FWD3_USD };
 
-    NAMES_UNITS[8][0] = new String[] {CURVE_NAME_DSC_USD };
-    NAMES_UNITS[9][0] = new String[] {CURVE_NAME_DSC_USD };
+    NAMES_UNITS[8][0] = new String[] { CURVE_NAME_DSC_USD };
+    NAMES_UNITS[9][0] = new String[] { CURVE_NAME_DSC_USD };
     DSC_MAP.put(CURVE_NAME_DSC_USD, Currency.USD);
-    FWD_ON_MAP.put(CURVE_NAME_DSC_USD, new IndexON[] {FED_FUNDS });
-    FWD_IBOR_MAP.put(CURVE_NAME_FWD3_USD, new IborIndex[] {USD_3M_LIBOR_INDEX });
-    FWD_IBOR_MAP.put(CURVE_NAME_FWD6_USD, new IborIndex[] {USD_6M_LIBOR_INDEX });
+    FWD_ON_MAP.put(CURVE_NAME_DSC_USD, new IndexON[] { FED_FUNDS });
+    FWD_IBOR_MAP.put(CURVE_NAME_FWD3_USD, new IborIndex[] { USD_3M_LIBOR_INDEX });
+    FWD_IBOR_MAP.put(CURVE_NAME_FWD6_USD, new IborIndex[] { USD_6M_LIBOR_INDEX });
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked" })
-  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators,
+      final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
     for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
       definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
@@ -458,16 +467,19 @@ public class UsdDiscounting3mLibor6mLiborTest {
   // Calculator
   private static final PresentValueDiscountingCalculator PVC = PresentValueDiscountingCalculator.getInstance();
   private static final ParSpreadMarketQuoteDiscountingCalculator PSMQC = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PSMQCSC = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PSMQCSC = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
+      .getInstance();
 
-  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT, STEP_MAX);
+  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT,
+      STEP_MAX);
 
   private static final double TOLERANCE_CAL = 1.0E-9;
 
   @BeforeSuite
   static void initClass() {
     for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[loopblock], GENERATORS_UNITS[loopblock], NAMES_UNITS[loopblock], KNOWN_DATA, PSMQC, PSMQCSC, false));
+      CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK
+          .add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[loopblock], GENERATORS_UNITS[loopblock], NAMES_UNITS[loopblock], KNOWN_DATA, PSMQC, PSMQCSC, false));
     }
   }
 
@@ -557,7 +569,6 @@ public class UsdDiscounting3mLibor6mLiborTest {
     assertEquals(libor3mJacobianMatrix.getNumberOfRows(), FWD3_USD_MARKET_QUOTES_3.length);
     assertEquals(libor3mJacobianMatrix.getNumberOfColumns(), DSC_USD_MARKET_QUOTES.length + FWD3_USD_MARKET_QUOTES_3.length);
 
-
     final MulticurveProviderDiscount test1 = LIBOR_THEN_DSC_BEFORE_FIXING_2.getFirst();
     final CurveBuildingBlockBundle test2 = LIBOR_THEN_DSC_BEFORE_FIXING_2.getSecond();
     final MulticurveProviderDiscount test3 = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(6).getFirst();
@@ -565,49 +576,52 @@ public class UsdDiscounting3mLibor6mLiborTest {
     assertEquals(test1, test3);
     assertEquals(test2, test4);
   }
-  //  @Test
-  //  public void comparison1Unit2Units() {
-  //    MulticurveProviderDiscount[] units = new MulticurveProviderDiscount[2];
-  //    CurveBuildingBlockBundle[] bb = new CurveBuildingBlockBundle[2];
-  //    YieldAndDiscountCurve[] curveDsc = new YieldAndDiscountCurve[2];
-  //    YieldAndDiscountCurve[] curveFwd = new YieldAndDiscountCurve[2];
-  //    for (int loopblock = 0; loopblock < 2; loopblock++) {
-  //      units[loopblock] = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getFirst();
-  //      bb[loopblock] = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getSecond();
-  //      curveDsc[loopblock] = units[loopblock].getCurve(USD);
-  //      curveFwd[loopblock] = units[loopblock].getCurve(USDLIBOR3M);
-  //    }
-  //    assertEquals("Curve construction: 1 unit / 2 units ", curveDsc[0].getNumberOfParameters(), curveDsc[1].getNumberOfParameters());
-  //    assertEquals("Curve construction: 1 unit / 2 units ", curveFwd[0].getNumberOfParameters(), curveFwd[1].getNumberOfParameters());
-  //    assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveDsc[0]).getCurve().getXData()),
-  //        ArrayUtils.toPrimitive(((YieldCurve) curveDsc[1]).getCurve().getXData()), TOLERANCE_CAL);
-  //    assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveDsc[0]).getCurve().getYData()),
-  //        ArrayUtils.toPrimitive(((YieldCurve) curveDsc[1]).getCurve().getYData()), TOLERANCE_CAL);
-  //    assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveFwd[0]).getCurve().getXData()),
-  //        ArrayUtils.toPrimitive(((YieldCurve) curveFwd[1]).getCurve().getXData()), TOLERANCE_CAL);
-  //    assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveFwd[0]).getCurve().getYData()),
-  //        ArrayUtils.toPrimitive(((YieldCurve) curveFwd[1]).getCurve().getYData()), TOLERANCE_CAL);
+  // @Test
+  // public void comparison1Unit2Units() {
+  // MulticurveProviderDiscount[] units = new MulticurveProviderDiscount[2];
+  // CurveBuildingBlockBundle[] bb = new CurveBuildingBlockBundle[2];
+  // YieldAndDiscountCurve[] curveDsc = new YieldAndDiscountCurve[2];
+  // YieldAndDiscountCurve[] curveFwd = new YieldAndDiscountCurve[2];
+  // for (int loopblock = 0; loopblock < 2; loopblock++) {
+  // units[loopblock] = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getFirst();
+  // bb[loopblock] = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getSecond();
+  // curveDsc[loopblock] = units[loopblock].getCurve(USD);
+  // curveFwd[loopblock] = units[loopblock].getCurve(USDLIBOR3M);
+  // }
+  // assertEquals("Curve construction: 1 unit / 2 units ", curveDsc[0].getNumberOfParameters(), curveDsc[1].getNumberOfParameters());
+  // assertEquals("Curve construction: 1 unit / 2 units ", curveFwd[0].getNumberOfParameters(), curveFwd[1].getNumberOfParameters());
+  // assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveDsc[0]).getCurve().getXData()),
+  // ArrayUtils.toPrimitive(((YieldCurve) curveDsc[1]).getCurve().getXData()), TOLERANCE_CAL);
+  // assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveDsc[0]).getCurve().getYData()),
+  // ArrayUtils.toPrimitive(((YieldCurve) curveDsc[1]).getCurve().getYData()), TOLERANCE_CAL);
+  // assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveFwd[0]).getCurve().getXData()),
+  // ArrayUtils.toPrimitive(((YieldCurve) curveFwd[1]).getCurve().getXData()), TOLERANCE_CAL);
+  // assertArrayEquals("Curve construction: 1 unit / 2 units ", ArrayUtils.toPrimitive(((YieldCurve) curveFwd[0]).getCurve().getYData()),
+  // ArrayUtils.toPrimitive(((YieldCurve) curveFwd[1]).getCurve().getYData()), TOLERANCE_CAL);
   //
-  //    assertEquals("Curve construction: 1 unit / 2 units ", bb[0].getBlock(CURVE_NAME_FWD3_USD).getFirst(), bb[1].getBlock(CURVE_NAME_FWD3_USD).getFirst());
-  //    // Test note: the discounting curve building blocks are not the same; in one case both curves are build together in the other one after the other.
-  //    int nbLineDsc = bb[0].getBlock(CURVE_NAME_DSC_USD).getSecond().getNumberOfRows();
-  //    int nbLineFwd = bb[0].getBlock(CURVE_NAME_FWD3_USD).getSecond().getNumberOfRows();
-  //    assertEquals("Curve construction: 1 unit / 2 units ", bb[1].getBlock(CURVE_NAME_DSC_USD).getSecond().getNumberOfRows(), nbLineDsc);
-  //    assertEquals("Curve construction: 1 unit / 2 units ", bb[1].getBlock(CURVE_NAME_FWD3_USD).getSecond().getNumberOfRows(), nbLineFwd);
-  //    for (int loopline = 0; loopline < nbLineFwd; loopline++) {
-  //      assertArrayEquals("Curve construction: 1 unit / 2 units ", bb[0].getBlock(CURVE_NAME_FWD3_USD).getSecond().getRowVector(loopline).getData(), bb[1].getBlock(CURVE_NAME_FWD3_USD).getSecond()
-  //          .getRowVector(loopline).getData(), TOLERANCE_CAL);
-  //      for (int loopcol = 0; loopcol < nbLineDsc; loopcol++) { // Test rely on dsc being first
-  //        assertEquals("Curve construction: 1 unit / 2 units ", bb[0].getBlock(CURVE_NAME_FWD3_USD).getSecond().getRowVector(loopline).getData()[loopcol], bb[1].getBlock(CURVE_NAME_FWD3_USD)
-  //            .getSecond().getRowVector(loopline).getData()[loopcol], TOLERANCE_CAL);
-  //      }
-  //      for (int loopcol = 0; loopcol < nbLineFwd - nbLineDsc; loopcol++) { // Test rely on dsc being first
-  //        assertEquals("Curve construction: 1 unit / 2 units ", 0, bb[1].getBlock(CURVE_NAME_FWD3_USD).getSecond().getRowVector(loopline).getData()[loopcol + nbLineDsc], TOLERANCE_CAL);
-  //      }
-  //    }
-  //  }
+  // assertEquals("Curve construction: 1 unit / 2 units ", bb[0].getBlock(CURVE_NAME_FWD3_USD).getFirst(), bb[1].getBlock(CURVE_NAME_FWD3_USD).getFirst());
+  // // Test note: the discounting curve building blocks are not the same; in one case both curves are build together in the other one after the other.
+  // int nbLineDsc = bb[0].getBlock(CURVE_NAME_DSC_USD).getSecond().getNumberOfRows();
+  // int nbLineFwd = bb[0].getBlock(CURVE_NAME_FWD3_USD).getSecond().getNumberOfRows();
+  // assertEquals("Curve construction: 1 unit / 2 units ", bb[1].getBlock(CURVE_NAME_DSC_USD).getSecond().getNumberOfRows(), nbLineDsc);
+  // assertEquals("Curve construction: 1 unit / 2 units ", bb[1].getBlock(CURVE_NAME_FWD3_USD).getSecond().getNumberOfRows(), nbLineFwd);
+  // for (int loopline = 0; loopline < nbLineFwd; loopline++) {
+  // assertArrayEquals("Curve construction: 1 unit / 2 units ", bb[0].getBlock(CURVE_NAME_FWD3_USD).getSecond().getRowVector(loopline).getData(),
+  // bb[1].getBlock(CURVE_NAME_FWD3_USD).getSecond()
+  // .getRowVector(loopline).getData(), TOLERANCE_CAL);
+  // for (int loopcol = 0; loopcol < nbLineDsc; loopcol++) { // Test rely on dsc being first
+  // assertEquals("Curve construction: 1 unit / 2 units ", bb[0].getBlock(CURVE_NAME_FWD3_USD).getSecond().getRowVector(loopline).getData()[loopcol],
+  // bb[1].getBlock(CURVE_NAME_FWD3_USD)
+  // .getSecond().getRowVector(loopline).getData()[loopcol], TOLERANCE_CAL);
+  // }
+  // for (int loopcol = 0; loopcol < nbLineFwd - nbLineDsc; loopcol++) { // Test rely on dsc being first
+  // assertEquals("Curve construction: 1 unit / 2 units ", 0, bb[1].getBlock(CURVE_NAME_FWD3_USD).getSecond().getRowVector(loopline).getData()[loopcol +
+  // nbLineDsc], TOLERANCE_CAL);
+  // }
+  // }
+  // }
 
-  //TODO: test on the correctness of the Jacobian matrix in the CurveBuildingBlock's.
+  // TODO: test on the correctness of the Jacobian matrix in the CurveBuildingBlock's.
 
   @Test(enabled = false)
   public void performance() {
@@ -632,7 +646,8 @@ public class UsdDiscounting3mLibor6mLiborTest {
 
   }
 
-  private void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final MulticurveProviderDiscount curves, final boolean withToday, final int block) {
+  private void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final MulticurveProviderDiscount curves, final boolean withToday,
+      final int block) {
     final int nbBlocks = definitions.length;
     for (int loopblock = 0; loopblock < nbBlocks; loopblock++) {
       final InstrumentDerivative[][] instruments = CurveUtils.convert(definitions[loopblock], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
@@ -691,27 +706,30 @@ public class UsdDiscounting3mLibor6mLiborTest {
       // Shift data - PLUS
       final double[] dscMarketQuoteShifted = DSC_USD_MARKET_QUOTES.clone();
       dscMarketQuoteShifted[loopnodedsc] -= shift;
-      final InstrumentDefinition<?>[][][] definitionDscM =
-          new InstrumentDefinition<?>[][][] {{getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
-      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockM = makeCurvesFromDefinitions(definitionDscM, GENERATORS_UNITS[8], NAMES_UNITS[8], KNOWN_DATA,
-          PSMQC, PSMQCSC, false);
-      final Double[] parametersDscDscM = ((YieldCurve) ((YieldAndDiscountAddZeroFixedCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurve()).getCurve().getYData();
+      final InstrumentDefinition<?>[][][] definitionDscM = new InstrumentDefinition<?>[][][] {
+          { getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
+      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockM = makeCurvesFromDefinitions(definitionDscM, GENERATORS_UNITS[8],
+          NAMES_UNITS[8], KNOWN_DATA, PSMQC, PSMQCSC, false);
+      final Double[] parametersDscDscM = ((YieldCurve) ((YieldAndDiscountAddZeroFixedCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurve())
+          .getCurve().getYData();
 
       // Shift data - MINUS
       dscMarketQuoteShifted[loopnodedsc] += 2 * shift;
-      final InstrumentDefinition<?>[][][] definitionDscP =
-          new InstrumentDefinition<?>[][][] {{getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
-      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockP = makeCurvesFromDefinitions(definitionDscP, GENERATORS_UNITS[8], NAMES_UNITS[8], KNOWN_DATA,
-          PSMQC, PSMQCSC, false);
-      final Double[] parametersDscDscP = ((YieldCurve) ((YieldAndDiscountAddZeroFixedCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurve()).getCurve().getYData();
+      final InstrumentDefinition<?>[][][] definitionDscP = new InstrumentDefinition<?>[][][] {
+          { getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
+      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockP = makeCurvesFromDefinitions(definitionDscP, GENERATORS_UNITS[8],
+          NAMES_UNITS[8], KNOWN_DATA, PSMQC, PSMQCSC, false);
+      final Double[] parametersDscDscP = ((YieldCurve) ((YieldAndDiscountAddZeroFixedCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurve())
+          .getCurve().getYData();
 
       // Finite Difference
       final double[] parameterDeltaFDDsc = new double[nbParamDsc];
       for (int loopdsc = 0; loopdsc < nbParamDsc; loopdsc++) {
         parameterDeltaFDDsc[loopdsc] = (parametersDscDscP[loopdsc] - parametersDscDscM[loopdsc]) / (2 * shift);
-        assertEquals("MulticurveBuildingDiscounting Jacobian - Dsc-Dsc - " + loopdsc, pdscDm[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc], parameterDeltaFDDsc[loopdsc],
-            toleranceDelta);
-        //        System.out.println(loopdsc + " " + loopnodedsc + " difference " + (pdscDm[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc] - parameterDeltaFDDsc[loopdsc]));
+        assertEquals("MulticurveBuildingDiscounting Jacobian - Dsc-Dsc - " + loopdsc, pdscDm[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc],
+            parameterDeltaFDDsc[loopdsc], toleranceDelta);
+        // System.out.println(loopdsc + " " + loopnodedsc + " difference " + (pdscDm[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc] -
+        // parameterDeltaFDDsc[loopdsc]));
       }
     }
   }
@@ -734,30 +752,36 @@ public class UsdDiscounting3mLibor6mLiborTest {
       // Shift data - PLUS
       final double[] dscMarketQuoteShifted = DSC_USD_MARKET_QUOTES.clone();
       dscMarketQuoteShifted[loopnodedsc] -= shift;
-      final InstrumentDefinition<?>[][][] definitionDscM =
-          new InstrumentDefinition<?>[][][] {{DEFINITIONS_FWD3_USD_3, getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
-      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockM = makeCurvesFromDefinitions(definitionDscM, GENERATORS_UNITS[6], NAMES_UNITS[6], KNOWN_DATA,
-          PSMQC, PSMQCSC, false);
-      final Double[] parametersDscDscM = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurves()[1]).getCurve().getYData();
+      final InstrumentDefinition<?>[][][] definitionDscM = new InstrumentDefinition<?>[][][] {
+          { DEFINITIONS_FWD3_USD_3, getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
+      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockM = makeCurvesFromDefinitions(definitionDscM, GENERATORS_UNITS[6],
+          NAMES_UNITS[6], KNOWN_DATA, PSMQC, PSMQCSC, false);
+      final Double[] parametersDscDscM = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_DSC_USD))
+          .getCurves()[1]).getCurve().getYData();
       final Double[] parametersDscFwd3M = ((YieldCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       // Shift data - MINUS
       dscMarketQuoteShifted[loopnodedsc] += 2 * shift;
-      final InstrumentDefinition<?>[][][] definitionDscP =
-          new InstrumentDefinition<?>[][][] {{DEFINITIONS_FWD3_USD_3, getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
-      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockP = makeCurvesFromDefinitions(definitionDscP, GENERATORS_UNITS[6], NAMES_UNITS[6], KNOWN_DATA,
-          PSMQC, PSMQCSC, false);
-      final Double[] parametersDscDscP = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurves()[1]).getCurve().getYData();
+      final InstrumentDefinition<?>[][][] definitionDscP = new InstrumentDefinition<?>[][][] {
+          { DEFINITIONS_FWD3_USD_3, getDefinitions(dscMarketQuoteShifted, DSC_USD_GENERATORS, DSC_USD_ATTR) } };
+      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockP = makeCurvesFromDefinitions(definitionDscP, GENERATORS_UNITS[6],
+          NAMES_UNITS[6], KNOWN_DATA, PSMQC, PSMQCSC, false);
+      final Double[] parametersDscDscP = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_DSC_USD))
+          .getCurves()[1]).getCurve().getYData();
       final Double[] parametersDscFwd3P = ((YieldCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       // Finite Difference
-      //      final double[] parameterDeltaFDDsc = new double[nbParamDsc];
+      // final double[] parameterDeltaFDDsc = new double[nbParamDsc];
       for (int loopdsc = 0; loopdsc < nbParamDsc; loopdsc++) {
-        parameterDeltaFDDsc[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc] = (parametersDscDscP[loopdsc] - parametersDscDscM[loopdsc]) / (2 * shift);
-        assertEquals("MulticurveBuildingDiscounting Jacobian - Dsc-Dsc: " + loopnodedsc + " - " + loopdsc, pdscDm[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc],
+        parameterDeltaFDDsc[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc] = (parametersDscDscP[loopdsc] - parametersDscDscM[loopdsc])
+            / (2 * shift);
+        assertEquals("MulticurveBuildingDiscounting Jacobian - Dsc-Dsc: " + loopnodedsc + " - " + loopdsc,
+            pdscDm[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc],
             parameterDeltaFDDsc[loopdsc][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc], toleranceDelta);
       }
       for (int loopfwd3 = 0; loopfwd3 < nbParamFwd3; loopfwd3++) {
-        parameterDeltaFDFwd3[loopfwd3][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc] = (parametersDscFwd3P[loopfwd3] - parametersDscFwd3M[loopfwd3]) / (2 * shift);
-        assertEquals("MulticurveBuildingDiscounting Jacobian - Dsc-Fwd3 - " + loopnodedsc + " - " + loopfwd3, pfwd3Dm[loopfwd3][blockFwd3.getStart(CURVE_NAME_DSC_USD) + loopnodedsc],
+        parameterDeltaFDFwd3[loopfwd3][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc] = (parametersDscFwd3P[loopfwd3] - parametersDscFwd3M[loopfwd3])
+            / (2 * shift);
+        assertEquals("MulticurveBuildingDiscounting Jacobian - Dsc-Fwd3 - " + loopnodedsc + " - " + loopfwd3,
+            pfwd3Dm[loopfwd3][blockFwd3.getStart(CURVE_NAME_DSC_USD) + loopnodedsc],
             parameterDeltaFDFwd3[loopfwd3][blockDsc.getStart(CURVE_NAME_DSC_USD) + loopnodedsc], toleranceDelta);
       }
     }
@@ -766,37 +790,43 @@ public class UsdDiscounting3mLibor6mLiborTest {
       // Shift data - PLUS
       final double[] fwd3MarketQuoteShifted = FWD3_USD_MARKET_QUOTES_3.clone();
       fwd3MarketQuoteShifted[loopnodefwd3] -= shift;
-      final InstrumentDefinition<?>[][][] definitionFwd3M =
-          new InstrumentDefinition<?>[][][] {{getDefinitions(fwd3MarketQuoteShifted, FWD3_USD_GENERATORS_3, FWD3_USD_ATTR_3), DEFINITIONS_DSC_USD } };
-      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockM = makeCurvesFromDefinitions(definitionFwd3M, GENERATORS_UNITS[6], NAMES_UNITS[6], KNOWN_DATA,
-          PSMQC, PSMQCSC, false);
-      final Double[] parametersFwd3DscM = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurves()[1]).getCurve().getYData();
+      final InstrumentDefinition<?>[][][] definitionFwd3M = new InstrumentDefinition<?>[][][] {
+          { getDefinitions(fwd3MarketQuoteShifted, FWD3_USD_GENERATORS_3, FWD3_USD_ATTR_3), DEFINITIONS_DSC_USD } };
+      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockM = makeCurvesFromDefinitions(definitionFwd3M, GENERATORS_UNITS[6],
+          NAMES_UNITS[6], KNOWN_DATA, PSMQC, PSMQCSC, false);
+      final Double[] parametersFwd3DscM = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_DSC_USD))
+          .getCurves()[1]).getCurve().getYData();
       final Double[] parametersFwd3Fwd3M = ((YieldCurve) curveBlockM.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       // Shift data - MINUS
       fwd3MarketQuoteShifted[loopnodefwd3] += 2 * shift;
-      final InstrumentDefinition<?>[][][] definitionFwd3P =
-          new InstrumentDefinition<?>[][][] {{getDefinitions(fwd3MarketQuoteShifted, FWD3_USD_GENERATORS_3, FWD3_USD_ATTR_3), DEFINITIONS_DSC_USD } };
-      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockP = makeCurvesFromDefinitions(definitionFwd3P, GENERATORS_UNITS[6], NAMES_UNITS[6], KNOWN_DATA,
-          PSMQC, PSMQCSC, false);
-      final Double[] parametersFwd3DscP = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurves()[1]).getCurve().getYData();
+      final InstrumentDefinition<?>[][][] definitionFwd3P = new InstrumentDefinition<?>[][][] {
+          { getDefinitions(fwd3MarketQuoteShifted, FWD3_USD_GENERATORS_3, FWD3_USD_ATTR_3), DEFINITIONS_DSC_USD } };
+      final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> curveBlockP = makeCurvesFromDefinitions(definitionFwd3P, GENERATORS_UNITS[6],
+          NAMES_UNITS[6], KNOWN_DATA, PSMQC, PSMQCSC, false);
+      final Double[] parametersFwd3DscP = ((YieldCurve) ((YieldAndDiscountAddZeroSpreadCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_DSC_USD))
+          .getCurves()[1]).getCurve().getYData();
       final Double[] parametersFwd3Fwd3P = ((YieldCurve) curveBlockP.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       // Finite Difference
       for (int loopdsc = 0; loopdsc < nbParamDsc; loopdsc++) {
-        parameterDeltaFDDsc[loopdsc][blockDsc.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3] = (parametersFwd3DscP[loopdsc] - parametersFwd3DscM[loopdsc]) / (2 * shift);
+        parameterDeltaFDDsc[loopdsc][blockDsc.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3] = (parametersFwd3DscP[loopdsc] - parametersFwd3DscM[loopdsc])
+            / (2 * shift);
         assertEquals("MulticurveBuildingDiscounting Jacobian - Fwd3-Dsc - " + loopdsc, pdscDm[loopdsc][blockDsc.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3],
             parameterDeltaFDDsc[loopdsc][blockDsc.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3], toleranceDelta);
       }
       for (int loopfwd3 = 0; loopfwd3 < nbParamFwd3; loopfwd3++) {
-        parameterDeltaFDFwd3[loopfwd3][blockDsc.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3] = (parametersFwd3Fwd3P[loopfwd3] - parametersFwd3Fwd3M[loopfwd3]) / (2 * shift);
-        assertEquals("MulticurveBuildingDiscounting Jacobian - Fwd3-Fwd3: " + loopnodefwd3 + " - " + loopfwd3, pfwd3Dm[loopfwd3][blockFwd3.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3],
+        parameterDeltaFDFwd3[loopfwd3][blockDsc.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3] = (parametersFwd3Fwd3P[loopfwd3] - parametersFwd3Fwd3M[loopfwd3])
+            / (2 * shift);
+        assertEquals("MulticurveBuildingDiscounting Jacobian - Fwd3-Fwd3: " + loopnodefwd3 + " - " + loopfwd3,
+            pfwd3Dm[loopfwd3][blockFwd3.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3],
             parameterDeltaFDFwd3[loopfwd3][blockDsc.getStart(CURVE_NAME_FWD3_USD) + loopnodefwd3], toleranceDelta);
       }
     }
   }
 
   @SuppressWarnings("unchecked")
-  private static Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(final InstrumentDefinition<?>[][][] definitions, final GeneratorYDCurve[][] curveGenerators,
-      final String[][] curveNames, final MulticurveProviderDiscount knownData, final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
+  private static Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(final InstrumentDefinition<?>[][][] definitions,
+      final GeneratorYDCurve[][] curveGenerators, final String[][] curveNames, final MulticurveProviderDiscount knownData,
+      final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator, final boolean withToday) {
     final int nUnits = definitions.length;
     final MultiCurveBundle<GeneratorYDCurve>[] curveBundles = new MultiCurveBundle[nUnits];

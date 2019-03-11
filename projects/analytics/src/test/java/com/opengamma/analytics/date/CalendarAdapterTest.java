@@ -35,14 +35,14 @@ public class CalendarAdapterTest {
   /** A working day calendar */
   private static final WorkingDayCalendar WORKING_DAY_CALENDAR = new SimpleWorkingDayCalendar("Simple", DATES, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
   /** The adapter */
-  private static final Calendar ADAPTER = new CalendarAdapter(WORKING_DAY_CALENDAR);
+  private static final Calendar ADAPTER = CalendarAdapter.of(WORKING_DAY_CALENDAR);
 
   /**
    * Tests the behaviour when the working day calendar is null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
-    new CalendarAdapter(null);
+    CalendarAdapter.of(null);
   }
 
   /**
@@ -54,10 +54,10 @@ public class CalendarAdapterTest {
     assertEquals(ADAPTER.getName(), WORKING_DAY_CALENDAR.getName());
     assertEquals(ADAPTER, ADAPTER);
     assertFalse(ADAPTER.equals(CALENDAR));
-    Calendar other = new CalendarAdapter(new SimpleWorkingDayCalendar("Simple", DATES, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+    Calendar other = CalendarAdapter.of(new SimpleWorkingDayCalendar("Simple", DATES, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
     assertEquals(other, ADAPTER);
     assertEquals(other.hashCode(), ADAPTER.hashCode());
-    other = new CalendarAdapter(WeekendWorkingDayCalendar.FRIDAY_SATURDAY);
+    other = CalendarAdapter.of(WeekendWorkingDayCalendar.FRIDAY_SATURDAY);
     assertNotEquals(other, ADAPTER);
   }
 

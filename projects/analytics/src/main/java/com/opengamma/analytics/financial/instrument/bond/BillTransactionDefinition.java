@@ -11,7 +11,6 @@ package com.opengamma.analytics.financial.instrument.bond;
 
 import java.util.Objects;
 
-import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.date.CalendarAdapter;
@@ -26,8 +25,8 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Describes a (Treasury) bill transaction, which includes information about the date on which the transaction settles
- * and the amount paid or received when entered.
+ * Describes a (Treasury) bill transaction, which includes information about the date on which the transaction settles and the amount paid or received when
+ * entered.
  */
 public class BillTransactionDefinition implements InstrumentDefinition<BillTransaction> {
 
@@ -44,17 +43,21 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
    */
   private final ZonedDateTime _settlementDate;
   /**
-   * The amount paid or received at settlement date for the bill transaction.
-   * The amount is negative for a purchase and positive for a sale.
+   * The amount paid or received at settlement date for the bill transaction. The amount is negative for a purchase and positive for a sale.
    */
   private final double _settlementAmount;
 
   /**
    * Creates a transaction.
-   * @param underlying  the bill security underlying the transaction, not null
-   * @param quantity  the quantity of bills, not null
-   * @param settlementDate  the date on which the bill transaction is settled, not null
-   * @param settlementAmount  the amount paid at settlement date for the bill transaction, negative for a purchase and positive for a sale
+   * 
+   * @param underlying
+   *          the bill security underlying the transaction, not null
+   * @param quantity
+   *          the quantity of bills, not null
+   * @param settlementDate
+   *          the date on which the bill transaction is settled, not null
+   * @param settlementAmount
+   *          the amount paid at settlement date for the bill transaction, negative for a purchase and positive for a sale
    */
   public BillTransactionDefinition(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate,
       final double settlementAmount) {
@@ -67,45 +70,57 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
 
   /**
    * Creates a transaction using the yield and yield convention of the underlying to calculate the settlement amount.
-   * @param underlying  the bill security underlying the transaction, not null
-   * @param quantity  the bill quantity, not null
-   * @param settlementDate  the date at which the bill transaction is settled, not null
-   * @param yield  the transaction yield, should be consistent with the yield convention of the underlying security
-   * @param calendar  the holiday calendar, not null
-   * @return  a bill transaction
-   * @deprecated  Use {@link #fromYield(BillSecurityDefinition, double, ZonedDateTime, double, WorkingDayCalendar)}, which
-   * takes the non-deprecated version of a calendar.
+   * 
+   * @param underlying
+   *          the bill security underlying the transaction, not null
+   * @param quantity
+   *          the bill quantity, not null
+   * @param settlementDate
+   *          the date at which the bill transaction is settled, not null
+   * @param yield
+   *          the transaction yield, should be consistent with the yield convention of the underlying security
+   * @param calendar
+   *          the holiday calendar, not null
+   * @return a bill transaction
+   * @deprecated Use {@link #fromYield(BillSecurityDefinition, double, ZonedDateTime, double, WorkingDayCalendar)}, which takes the non-deprecated version of a
+   *             calendar.
    */
   @Deprecated
   public static BillTransactionDefinition fromYield(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate,
       final double yield, final Calendar calendar) {
-    return fromYield(underlying, quantity, settlementDate, yield,
-        new WorkingDayCalendarAdapter(calendar, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+    return fromYield(underlying, quantity, settlementDate, yield, WorkingDayCalendarAdapter.of(calendar));
   }
 
   /**
    * Creates a transaction using the yield and yield convention of the underlying to calculate the settlement amount.
-   * @param underlying  the bill security underlying the transaction, not null
-   * @param quantity  the bill quantity, not null
-   * @param settlementDate  the date at which the bill transaction is settled, not null
-   * @param yield  the transaction yield, should be consistent with the yield convention of the underlying security
-   * @param workingDayCalendar  the holiday calendar, not null
-   * @return  a bill transaction
+   * 
+   * @param underlying
+   *          the bill security underlying the transaction, not null
+   * @param quantity
+   *          the bill quantity, not null
+   * @param settlementDate
+   *          the date at which the bill transaction is settled, not null
+   * @param yield
+   *          the transaction yield, should be consistent with the yield convention of the underlying security
+   * @param workingDayCalendar
+   *          the holiday calendar, not null
+   * @return a bill transaction
    */
   public static BillTransactionDefinition fromYield(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate,
       final double yield, final WorkingDayCalendar workingDayCalendar) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(settlementDate, "settlementDate");
-    final Calendar calendar = new CalendarAdapter(workingDayCalendar);
+    final Calendar calendar = CalendarAdapter.of(workingDayCalendar);
     final double accrualFactor = underlying.getDayCount().getDayCountFraction(settlementDate, underlying.getEndDate(), calendar);
-    final double settlementAmount = -quantity * underlying.getNotional() * PriceFromYieldCalculator.priceFromYield(underlying.getYieldConvention(),
-        yield, accrualFactor);
+    final double settlementAmount = -quantity * underlying.getNotional()
+        * PriceFromYieldCalculator.priceFromYield(underlying.getYieldConvention(), yield, accrualFactor);
     return new BillTransactionDefinition(underlying, quantity, settlementDate, settlementAmount);
   }
 
   /**
    * Gets the bill security underlying the transaction.
-   * @return  the bill
+   * 
+   * @return the bill
    */
   public BillSecurityDefinition getUnderlying() {
     return _underlying;
@@ -113,7 +128,8 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
 
   /**
    * Gets quantity of bills in the transaction.
-   * @return  the quantity
+   * 
+   * @return the quantity
    */
   public double getQuantity() {
     return _quantity;
@@ -121,7 +137,8 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
 
   /**
    * Gets the date on which the bill transaction is settled.
-   * @return  the date
+   * 
+   * @return the date
    */
   public ZonedDateTime getSettlementDate() {
     return _settlementDate;
@@ -129,7 +146,8 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
 
   /**
    * Gets the amount paid on the settlement date for the bill transaction.
-   * @return  the amount
+   * 
+   * @return the amount
    */
   public double getSettlementAmount() {
     return _settlementAmount;
@@ -142,7 +160,8 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
 
   /**
    * {@inheritDoc}
-   * @deprecated  Use the method that does not take yield curve names
+   * 
+   * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override

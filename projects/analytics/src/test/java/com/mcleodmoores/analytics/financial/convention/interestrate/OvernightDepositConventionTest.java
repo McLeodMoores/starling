@@ -123,7 +123,7 @@ public class OvernightDepositConventionTest {
     final Tenor startTenor = Tenor.of(Period.ZERO);
     final Tenor endTenor = Tenor.ONE_MONTH;
     final double rate = 0.01;
-    final GeneratorDepositON generator = new GeneratorDepositON("", CCY, new CalendarAdapter(CALENDAR), DAY_COUNT);
+    final GeneratorDepositON generator = new GeneratorDepositON("", CCY, CalendarAdapter.of(CALENDAR), DAY_COUNT);
     final GeneratorAttributeIR attribute = new GeneratorAttributeIR(startTenor.getPeriod(), endTenor.getPeriod());
     assertEquals(CONVENTION.toCurveInstrument(date, startTenor, endTenor, 1, rate), generator.generateInstrument(date, rate, 1, attribute));
   }

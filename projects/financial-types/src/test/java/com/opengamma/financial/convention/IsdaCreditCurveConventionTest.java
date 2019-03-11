@@ -3,8 +3,8 @@
  */
 package com.opengamma.financial.convention;
 
-import static org.testng.Assert.fail;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 import java.util.Arrays;
 
@@ -19,6 +19,7 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
 import com.opengamma.financial.AbstractBeanTestCase;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
+import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalIdBundle;
@@ -38,7 +39,7 @@ public class IsdaCreditCurveConventionTest extends AbstractBeanTestCase {
   private static final StubType STUB_TYPE = StubType.BACKLONG;
   private static final boolean PROTECT_FROM_START = false;
   private static final BusinessDayConvention BDC = BusinessDayConventions.FOLLOWING;
-  private static final CalendarAdapter CALENDAR = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+  private static final Calendar CALENDAR = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
   private static final DayCount ACCRUAL_DAY_COUNT = DayCounts.ACT_360;
   private static final DayCount CURVE_DAY_COUNT = DayCounts.ACT_365;
   private static final IsdaCreditCurveConvention CONVENTION = new IsdaCreditCurveConvention();
@@ -62,16 +63,15 @@ public class IsdaCreditCurveConventionTest extends AbstractBeanTestCase {
     return new JodaBeanProperties<>(IsdaCreditCurveConvention.class,
         Arrays.asList("name", "externalIdBundle", "accrualDayCount", "businessDayConvention", "cashSettle", "couponInterval", "curveDayCount",
             "payAccOnDefault", "protectFromStartOfDay", "regionCalendar", "stepIn", "stubType"),
-        Arrays.asList(NAME, IDS, ACCRUAL_DAY_COUNT, BDC, CASH_SETTLE, COUPON_INTERVAL, CURVE_DAY_COUNT, PAY_ACCRUAL_ON_DEFAULT, PROTECT_FROM_START,
-            CALENDAR, STEP_IN, STUB_TYPE),
-        Arrays.asList("other", ExternalIdBundle.of("eid", "2"), CURVE_DAY_COUNT, BusinessDayConventions.MODIFIED_FOLLOWING, CASH_SETTLE + 1,
-            Period.ofYears(1), ACCRUAL_DAY_COUNT, !PAY_ACCRUAL_ON_DEFAULT, !PROTECT_FROM_START, new CalendarAdapter(WeekendWorkingDayCalendar.FRIDAY_SATURDAY),
-            STEP_IN + 1, StubType.NONE));
+        Arrays.asList(NAME, IDS, ACCRUAL_DAY_COUNT, BDC, CASH_SETTLE, COUPON_INTERVAL, CURVE_DAY_COUNT, PAY_ACCRUAL_ON_DEFAULT, PROTECT_FROM_START, CALENDAR,
+            STEP_IN, STUB_TYPE),
+        Arrays.asList("other", ExternalIdBundle.of("eid", "2"), CURVE_DAY_COUNT, BusinessDayConventions.MODIFIED_FOLLOWING, CASH_SETTLE + 1, Period.ofYears(1),
+            ACCRUAL_DAY_COUNT, !PAY_ACCRUAL_ON_DEFAULT, !PROTECT_FROM_START, CalendarAdapter.of(WeekendWorkingDayCalendar.FRIDAY_SATURDAY), STEP_IN + 1,
+            StubType.NONE));
   }
 
   /**
-   * This object cannot be converted to a Fudge message or Joda bean because of
-   * the CalendarAdapter.
+   * This object cannot be converted to a Fudge message or Joda bean because of the CalendarAdapter.
    */
   @Override
   @Test(dataProvider = "propertyValues")

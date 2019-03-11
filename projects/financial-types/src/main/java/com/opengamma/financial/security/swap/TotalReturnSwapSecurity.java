@@ -19,10 +19,9 @@ import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
-import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.analytics.convention.businessday.BusinessDayConventionAdapter;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.financial.instrument.annuity.DateRelativeTo;
@@ -120,26 +119,37 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
 
   /**
    * Sets only the security type.
-   * @param securityType The security type string.
+   *
+   * @param securityType
+   *          The security type string.
    */
   protected TotalReturnSwapSecurity(final String securityType) {
     super(securityType);
   }
 
   /**
-   * @param securityType The security type string, not null
-   * @param fundingLeg The funding leg, not null
-   * @param assetId The asset external id bundle, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param paymentSettlementDays The number of days to settle for the payments
-   * @param paymentBusinessDayConvention The business day convention for the payments, not null
-   * @param paymentFrequency The payment frequency, not null
-   * @param rollConvention The payment roll convention, not null
+   * @param securityType
+   *          The security type string, not null
+   * @param fundingLeg
+   *          The funding leg, not null
+   * @param assetId
+   *          The asset external id bundle, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param paymentSettlementDays
+   *          The number of days to settle for the payments
+   * @param paymentBusinessDayConvention
+   *          The business day convention for the payments, not null
+   * @param paymentFrequency
+   *          The payment frequency, not null
+   * @param rollConvention
+   *          The payment roll convention, not null
    */
   public TotalReturnSwapSecurity(final String securityType, final FloatingInterestRateSwapLeg fundingLeg, final ExternalIdBundle assetId,
-      final LocalDate effectiveDate, final LocalDate maturityDate, final int paymentSettlementDays,
-      final BusinessDayConvention paymentBusinessDayConvention, final Frequency paymentFrequency, final RollConvention rollConvention) {
+      final LocalDate effectiveDate, final LocalDate maturityDate, final int paymentSettlementDays, final BusinessDayConvention paymentBusinessDayConvention,
+      final Frequency paymentFrequency, final RollConvention rollConvention) {
     super(securityType);
     setFundingLeg(fundingLeg);
     setAssetId(assetId);
@@ -152,8 +162,7 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
   }
 
   /**
-   * Gets the <i>n</i>th payment date by returning a custom date if supplied for
-   * <i>n</i> or by using the payment convention information in this security.
+   * Gets the <i>n</i>th payment date by returning a custom date if supplied for <i>n</i> or by using the payment convention information in this security.
    *
    * @param n
    *          The number of the payment date
@@ -162,17 +171,15 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
    * @param calendar
    *          The calendar, not null
    * @return The <i>n</i>th payment date
-   * @deprecated Use the
-   *             {@link #getPaymentDate(int, LocalDate, WorkingDayCalendar)}.
+   * @deprecated Use the {@link #getPaymentDate(int, LocalDate, WorkingDayCalendar)}.
    */
   @Deprecated
   public LocalDate getPaymentDate(final int n, final LocalDate startDate, final Calendar calendar) {
-    return getPaymentDate(n, startDate, new WorkingDayCalendarAdapter(calendar, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+    return getPaymentDate(n, startDate, WorkingDayCalendarAdapter.of(calendar));
   }
 
   /**
-   * Gets the <i>n</i>th payment date by returning a custom date if supplied for
-   * <i>n</i> or by using the payment convention information in this security.
+   * Gets the <i>n</i>th payment date by returning a custom date if supplied for <i>n</i> or by using the payment convention information in this security.
    *
    * @param n
    *          The number of the payment date
@@ -196,11 +203,10 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
     // override not provided - fall back to convention
     final int monthsToAdvance = (int) PeriodFrequency.convertToPeriodFrequency(getPaymentFrequency()).getPeriod().toTotalMonths() * n;
     final RollDateAdjuster adjuster = getRollConvention().getRollDateAdjuster(monthsToAdvance);
-    final BusinessDayConvention convention = getPaymentBusinessDayConvention();
+    final com.mcleodmoores.analytics.convention.businessday.BusinessDayConvention convention = BusinessDayConventionAdapter
+        .of(getPaymentBusinessDayConvention());
     final int settlementDays = getPaymentSettlementDays();
-    // TODO temporary fix
-    final CalendarAdapter adapter = new CalendarAdapter(calendar);
-    return convention.adjustDate(adapter, startDate.plusMonths(adjuster.getMonthsToAdjust()).minusDays(settlementDays).with(adjuster));
+    return convention.adjustDate(calendar, startDate.plusMonths(adjuster.getMonthsToAdjust()).minusDays(settlementDays).with(adjuster));
   }
 
   //------------------------- AUTOGENERATED START -------------------------
