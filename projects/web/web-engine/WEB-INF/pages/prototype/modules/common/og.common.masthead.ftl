@@ -1,6 +1,6 @@
 <section class="OG-masthead">
   <ul  class="og-nav">
-    <li><a href="analytics.ftl" class="og-home"><span class="OG-logo-light-small"></span><span>OpenGamma</span></a></li>
+    <li><a href="analytics.ftl" class="og-home"><span class="OG-logo-light-small"></span><span>Starling</span></a></li>
     <!--<li><a href="analytics_legacy.ftl" class="og-analytics">Analytics Legacy</a></li>-->
     <li><a href="analytics.ftl" class="og-analytics-beta">Analytics</a></li>
     <li><a href="blotter.ftl" class="og-blotter">Booking</a></li>

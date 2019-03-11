@@ -4,7 +4,7 @@
 <#-- SECTION Main -->
 <@section title="Login">
   <p>
-    Please login to OpenGamma risk analytics.
+    Please login to Starling risk analytics.
   </p>
   <@form method="POST" action="${userSecurity.loginUri}">
   <p>

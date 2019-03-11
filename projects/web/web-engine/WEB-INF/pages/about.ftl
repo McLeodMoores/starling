@@ -3,14 +3,14 @@
 <#-- SECTION Main options -->
 <@section title="About">
   <p>
-    Information about this OpenGamma instance.
+    Information about this Starling instance.
   </p>
   <p>
     Basics
     <table>
-      <tr><td>OpenGamma version</td><td>${about.openGammaVersion}</td></tr>
-      <tr><td>OpenGamma build</td><td>${about.openGammaBuild}</td></tr>
-      <tr><td>OpenGamma build ID</td><td>${about.openGammaBuildId}</td></tr>
+      <tr><td>Starling version</td><td>${about.opengammaVersion}</td></tr>
+      <tr><td>Starling build</td><td>${about.opengammaBuild}</td></tr>
+      <tr><td>Starling build ID</td><td>${about.opengammaBuildId}</td></tr>
       <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
       <tr><td>Time</td><td>${now.toInstant()} (UTC)</td></tr>
       <tr><td>Zoned time</td><td>${now}</td></tr>

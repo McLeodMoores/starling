@@ -6,7 +6,7 @@ CREATE TABLE eng_schema_version (
 );
 INSERT INTO eng_schema_version (version_key, version_value) VALUES ('schema_patch', '47');
 
-CREATE SEQUENCE eng_fncost_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS eng_fncost_seq AS bigint
     START WITH 1 INCREMENT BY 1 NO CYCLE;
 
 CREATE TABLE eng_functioncosts (

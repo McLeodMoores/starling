@@ -7,7 +7,7 @@
   </head>
   <body onload="document.getElementById('username').focus()">
     <div class="OG-login">
-      <img class="og-logo" src="/prototype/images/common/logos/opengamma_shiny.png" alt="OpenGamma Logo" />
+      <img class="og-logo" src="/prototype/images/common/logos/starling-inline.png" alt="Starling Logo" />
       <form id="og-login" method="POST" action="${userSecurity.loginUri}/og">
         <table>
 <#if err_invalidLogin??>
