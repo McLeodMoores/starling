@@ -54,8 +54,12 @@ public final class ConventionTypesProvider {
    * Map of convention detailed descriptions.
    */
   private final ImmutableSortedMap<String, Map<String, String>> _conventionDetails;
+  /**
+   * Map of simple class names to class.
+   */
+  private final ImmutableSortedMap<String, Class<? extends ManageableConvention>> _simpleClassNames;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the singleton instance.
    *
@@ -65,7 +69,7 @@ public final class ConventionTypesProvider {
     return INSTANCE;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Restricted constructor
    */
@@ -74,6 +78,7 @@ public final class ConventionTypesProvider {
     final ImmutableSortedMap.Builder<String, String> descriptions = ImmutableSortedMap.naturalOrder();
     final Map<String, Map<String, String>> groups = new TreeMap<>();
     final Map<String, Map<String, String>> details = new TreeMap<>();
+    final Map<String, Class<? extends ManageableConvention>> simpleNames = new TreeMap<>();
     final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
     final Set<Class<? extends ManageableConvention>> conventionClasses = reflector.getReflector().getSubTypesOf(ManageableConvention.class);
     for (final Class<? extends ManageableConvention> conventionClass : conventionClasses) {
@@ -91,8 +96,8 @@ public final class ConventionTypesProvider {
         continue;
       }
       // extract description
-      final String description = type.getName().replaceAll(
-          String.format("%s|%s|%s", "(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])", "(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
+      final String description = type.getName()
+          .replaceAll(String.format("%s|%s|%s", "(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])", "(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
       // store
       final Class<?> old = result.put(type.getName(), conventionClass);
       if (old != null) {
@@ -100,6 +105,7 @@ public final class ConventionTypesProvider {
         continue;
       }
       descriptions.put(type.getName(), description);
+      simpleNames.put(conventionClass.getSimpleName(), conventionClass);
       // if there's an annotation, extract the information
       final ConventionMetaData annotation = conventionClass.getAnnotation(ConventionMetaData.class);
       if (annotation != null) {
@@ -127,9 +133,10 @@ public final class ConventionTypesProvider {
     _conventionDescriptionMap = descriptions.build();
     _conventionGroups = ImmutableSortedMap.copyOf(groups);
     _conventionDetails = ImmutableSortedMap.copyOf(details);
+    _simpleClassNames = ImmutableSortedMap.copyOf(simpleNames);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the set of convention keys.
    *
@@ -160,7 +167,8 @@ public final class ConventionTypesProvider {
   /**
    * Gets the description for a type.
    *
-   * @param clazz  the convention class, not null
+   * @param clazz
+   *          the convention class, not null
    * @return the description, not null
    */
   public String getDescription(final Class<?> clazz) {
@@ -175,7 +183,7 @@ public final class ConventionTypesProvider {
   /**
    * Gets a map from the group to the class / short description.
    *
-   * @return  the convention descriptions, not null
+   * @return the convention descriptions, not null
    */
   public ImmutableSortedMap<String, Map<String, String>> getConventionDescriptions() {
     return _conventionGroups;
@@ -184,22 +192,26 @@ public final class ConventionTypesProvider {
   /**
    * Gets a map from the group to the class / detailed information.
    *
-   * @return  the convention details, not null
+   * @return the convention details, not null
    */
   public ImmutableSortedMap<String, Map<String, String>> getConventionDetails() {
     return _conventionDetails;
   }
 
   public Class<? extends ManageableConvention> getClassFromDisplayName(final String displayName) {
-    final String typeName = HashBiMap.create(_conventionDescriptionMap).inverse().get(displayName);
-    Class<? extends ManageableConvention> clazz = null;
-    if (typeName != null) {
-      clazz = _conventionTypeMap.get(typeName);
+    // when creating a new class, the display name is the class name
+    Class<? extends ManageableConvention> clazz = _simpleClassNames.get(displayName);
+    if (clazz == null) {
+      // the display name is different from the class name if an existing convention is being saved
+      final String typeName = HashBiMap.create(_conventionDescriptionMap).inverse().get(displayName);
+      if (typeName != null) {
+        clazz = _conventionTypeMap.get(typeName);
+      }
     }
     return clazz != null ? clazz : _conventionTypeMap.get(displayName);
   }
 
-  //TODO temporary method
+  // TODO temporary method
   public ConventionType getConventionTypeForClassName(final String className) {
     for (final Map.Entry<String, Class<? extends ManageableConvention>> entry : _conventionTypeMap.entrySet()) {
       if (entry.getValue().getSimpleName().equals(className)) {

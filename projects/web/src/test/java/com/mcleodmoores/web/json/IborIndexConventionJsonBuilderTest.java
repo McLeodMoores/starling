@@ -18,10 +18,12 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link IborIndexConventionJsonBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class IborIndexConventionJsonBuilderTest {
 
   /**
@@ -33,9 +35,8 @@ public class IborIndexConventionJsonBuilderTest {
     final Map<String, String> attributes = new HashMap<>();
     attributes.put("ATTR1", "VAL1");
     attributes.put("ATTR2", "VAL2");
-    final IborIndexConvention convention = new IborIndexConvention("IBOR", externalIds,
-        DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD, LocalTime.of(11, 0),
-        "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
+    final IborIndexConvention convention = new IborIndexConvention("IBOR", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true,
+        Currency.AUD, LocalTime.of(11, 0), "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
     convention.setAttributes(attributes);
     assertEquals(convention, IborIndexConventionJsonBuilder.INSTANCE.fromJSON(IborIndexConventionJsonBuilder.INSTANCE.toJSON(convention)));
     // template convention
@@ -52,14 +53,12 @@ public class IborIndexConventionJsonBuilderTest {
     final Map<String, String> attributes = new HashMap<>();
     attributes.put("ATTR1", "VAL1");
     attributes.put("ATTR2", "VAL2");
-    final IborIndexConvention convention = new IborIndexConvention("IBOR", externalIds,
-        DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD, LocalTime.of(11, 0),
-        "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
+    final IborIndexConvention convention = new IborIndexConvention("IBOR", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true,
+        Currency.AUD, LocalTime.of(11, 0), "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
     final IborIndexConvention copy = IborIndexConventionJsonBuilder.INSTANCE.getCopy(convention);
     copy.addAttribute("ATTR3", "VAL3");
     assertNotEquals(convention, copy);
-    assertEquals(convention, new IborIndexConvention("IBOR", externalIds,
-        DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD, LocalTime.of(11, 0),
-        "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), ""));
+    assertEquals(convention, new IborIndexConvention("IBOR", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD,
+        LocalTime.of(11, 0), "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), ""));
   }
 }

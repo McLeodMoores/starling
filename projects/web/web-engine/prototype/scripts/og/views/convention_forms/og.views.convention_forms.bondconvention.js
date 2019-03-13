@@ -48,7 +48,6 @@ $.register_module({
 	        	convention_type = config.type,
             	isEom = master.isEOM,
             	isCalculateScheduleFromMaturity = master.isCalculateScheduleFromMaturity,
-	        	sep = '~', 
 	        	form = new Form({
 	        		module: 'og.views.forms.bond-convention_tash',
 	        		data: master,
@@ -70,7 +69,7 @@ $.register_module({
         				as_new = result.extras.as_new;
         			data.isEOM = isEom;
         			data.isCalculateScheduleFromMaturity = isCalculateScheduleFromMaturity;
-        			if (as_new && (orig.name == data.name)) { return window.alert('Please select a new name.') };
+        			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
         			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
         				name: data.name,

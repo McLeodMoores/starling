@@ -2,7 +2,7 @@
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 $.register_module({
-	name: 'og.views.convention_forms.priceindexconvention',
+	name: 'og.views.convention_forms.swapindexconvention',
 	dependencies: [
 		'og.api.rest',
 		'og.common.util.ui'
@@ -19,8 +19,8 @@ $.register_module({
 			type_map = [
 				[['0', INDX].join('.'),								Form.type.STR],
 				['name', 											Form.type.STR],
-				['currency',  										Form.type.STR],
-				['region',		 									Form.type.STR],
+				['fixingTime', 										Form.type.STR],
+				['swapConvention',		 							Form.type.STR],
 				['uniqueId',										Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
@@ -45,7 +45,7 @@ $.register_module({
 	        	convention_type = config.type,
 	        	sep = '~', 
 	        	form = new Form({
-	        		module: 'og.views.forms.price-index-convention_tash',
+	        		module: 'og.views.forms.swap-index-convention_tash',
 	        		data: master,
 	        		type_map: type_map,
 	        		selector: selector,
@@ -81,33 +81,17 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			  &nbsp(Price Index Convention)\
+            			  &nbsp(Swap Index Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
             		$(form_id);
             		setTimeout(load_handler.partial(form));
-        		},
-            	holiday_handler = function (handler) {
-                    api.regions.get({page: '*'}).pipe(function (result) {
-                        handler(result.data.data.map(function (region) {
-                            var split = region.split('|');
-                            return !split[3] ? null : {value: split[3], text: split[3] + ' - ' + split[1]}
-                        }).filter(Boolean).sort(function (a, b) { // alphabetize
-                            return a.text < b.text ? -1 : a === b ? 0 : 1;
-                        }));
-                    });
                 };
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource);
             form.children = [
-            	// item_0
-            	new form.Block({ 
-            		module: 'og.views.forms.currency_tash' 
-            	}).on('form:load', function () {
-            		$(form_id + ' select[name=currency]').val(master.currency);
-            	}),
-            	// item_1
+/*            	// item_1
             	new ui.Dropdown({
             		form: form,
             		placeholder: 'Please select...',
@@ -117,15 +101,21 @@ $.register_module({
             			data.region = master.region.split(sep)[0] + sep + $(selector).val();
             		},
             		data_generator: holiday_handler
+            	}),*/
+            	new ui.Dropdown({
+            		form: form,
+            		placeholder: 'Please select...',
+            		resource: 'conventionIds', 
+            		index: 'swapConvention',
+            		value: master.swapConvention ? master.swapConvention : ""
             	}),
-            	// item_2
+            	// item_1
             	new og.views.convention_forms.ExternalIdBundle({
             		form: form,
             		data: master.externalIdBundle,
             		index: 'externalIdBundle',
-            		name: "Price Index Identifiers"
             	}),
-            	// item_3
+            	// item_2
             	new og.views.convention_forms.Attributes({
             		form: form,
             		attributes: master.attributes,

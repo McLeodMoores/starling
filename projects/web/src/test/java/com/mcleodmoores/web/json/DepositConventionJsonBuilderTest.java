@@ -18,10 +18,12 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link DepositConventionJsonBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class DepositConventionJsonBuilderTest {
 
   /**
@@ -33,8 +35,8 @@ public class DepositConventionJsonBuilderTest {
     final Map<String, String> attributes = new HashMap<>();
     attributes.put("ATTR1", "VAL1");
     attributes.put("ATTR2", "VAL2");
-    final DepositConvention convention = new DepositConvention("GB", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING,
-        2, false, Currency.USD, ExternalSchemes.countryRegionId(Country.US));
+    final DepositConvention convention = new DepositConvention("GB", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, false, Currency.USD,
+        ExternalSchemes.countryRegionId(Country.US));
     convention.setAttributes(attributes);
     assertEquals(convention, DepositConventionJsonBuilder.INSTANCE.fromJSON(DepositConventionJsonBuilder.INSTANCE.toJSON(convention)));
     // template convention
@@ -51,12 +53,12 @@ public class DepositConventionJsonBuilderTest {
     final Map<String, String> attributes = new HashMap<>();
     attributes.put("ATTR1", "VAL1");
     attributes.put("ATTR2", "VAL2");
-    final DepositConvention convention = new DepositConvention("GB", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING,
-        2, false, Currency.USD, ExternalSchemes.countryRegionId(Country.US));
+    final DepositConvention convention = new DepositConvention("GB", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, false, Currency.USD,
+        ExternalSchemes.countryRegionId(Country.US));
     final DepositConvention copy = DepositConventionJsonBuilder.INSTANCE.getCopy(convention);
     copy.addAttribute("ATTR3", "VAL3");
     assertNotEquals(convention, copy);
-    assertEquals(convention, new DepositConvention("GB", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING,
-        2, false, Currency.USD, ExternalSchemes.countryRegionId(Country.US)));
+    assertEquals(convention, new DepositConvention("GB", externalIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, false, Currency.USD,
+        ExternalSchemes.countryRegionId(Country.US)));
   }
 }

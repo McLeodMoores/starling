@@ -65,7 +65,7 @@ $.register_module({
         			var data = result.data,
         				meta = result.meta,
         				as_new = result.extras.as_new;
-        			if (as_new && (orig.name == data.name)) { return window.alert('Please select a new name.') };
+        			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
         			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
         				name: data.name,

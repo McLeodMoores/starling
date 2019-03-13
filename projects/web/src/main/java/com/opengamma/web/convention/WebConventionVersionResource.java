@@ -33,13 +33,15 @@ public class WebConventionVersionResource extends AbstractWebConventionResource 
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebConventionVersionResource(final AbstractWebConventionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final FlexiBean out = createRootData();
@@ -61,9 +63,10 @@ public class WebConventionVersionResource extends AbstractWebConventionResource 
     return Response.ok(json).tag(etag).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -76,15 +79,17 @@ public class WebConventionVersionResource extends AbstractWebConventionResource 
     out.put("conventionDoc", versionedConvention);
     out.put("convention", versionedConvention.getConvention());
     out.put("conventionDescription", getConventionTypesProvider().getDescription(versionedConvention.getConvention().getClass()));
-    out.put("conventionXml", StringEscapeUtils.escapeJavaScript(createXML(versionedConvention.getConvention())));
+    out.put("conventionXML", StringEscapeUtils.escapeJavaScript(createXML(versionedConvention.getConvention())));
     out.put("deleted", !latestDoc.isLatest());
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebConventionData data) {
@@ -93,8 +98,11 @@ public class WebConventionVersionResource extends AbstractWebConventionResource 
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideVersionId  the override version id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideVersionId
+   *          the override version id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebConventionData data, final UniqueId overrideVersionId) {

@@ -15,10 +15,12 @@ import com.opengamma.financial.convention.FXForwardAndSwapConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link FxForwardAndSwapConventionJsonBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class FxForwardAndSwapConventionJsonBuilderTest {
 
   /**
@@ -54,7 +56,7 @@ public class FxForwardAndSwapConventionJsonBuilderTest {
     final FXForwardAndSwapConvention copy = FxForwardAndSwapConventionJsonBuilder.INSTANCE.getCopy(convention);
     copy.addAttribute("ATTR3", "VAL3");
     assertNotEquals(convention, copy);
-    assertEquals(convention, new FXForwardAndSwapConvention("GBP/USD", externalIds, ExternalId.of("CONVENTION", "SPOT"),
-        BusinessDayConventions.FOLLOWING, true));
+    assertEquals(convention,
+        new FXForwardAndSwapConvention("GBP/USD", externalIds, ExternalId.of("CONVENTION", "SPOT"), BusinessDayConventions.FOLLOWING, true));
   }
 }

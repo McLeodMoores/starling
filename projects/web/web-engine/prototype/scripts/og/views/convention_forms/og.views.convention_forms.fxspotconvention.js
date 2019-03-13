@@ -44,7 +44,6 @@ $.register_module({
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
 	        	useIntermediateUsHolidays = master.useIntermediateUsHolidays,
-	        	sep = '~', 
 	        	form = new Form({
 	        		module: 'og.views.forms.fx-spot-convention_tash',
 	        		data: master,
@@ -65,7 +64,7 @@ $.register_module({
         				meta = result.meta,
         				as_new = result.extras.as_new;
         			data.useIntermediateUsHolidays = useIntermediateUsHolidays;
-        			if (as_new && (orig.name == data.name)) { return window.alert('Please select a new name.') };
+        			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
         			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
         				name: data.name,

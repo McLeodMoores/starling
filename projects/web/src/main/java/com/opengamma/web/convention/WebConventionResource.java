@@ -45,19 +45,21 @@ public class WebConventionResource extends AbstractWebConventionResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebConventionResource(final AbstractWebConventionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
     final FlexiBean out = createRootData();
     final ConventionDocument doc = data().getConvention();
-    out.put("conventionXml", StringEscapeUtils.escapeJava(createBeanXML(doc.getConvention())));
+    out.put("conventionXML", StringEscapeUtils.escapeJava(createBeanXML(doc.getConvention())));
     return getFreemarker().build(HTML_DIR + "convention.ftl", out);
   }
 
@@ -88,13 +90,12 @@ public class WebConventionResource extends AbstractWebConventionResource {
     }
     return AbstractJSONBuilder.fudgeToJson(convention);
   }
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response putHTML(
-      @FormParam("name") final String name,
-      @FormParam("conventionxml") final String xml) {
+  public Response putHTML(@FormParam("name") final String name, @FormParam("conventionXML") final String xml) {
     if (data().getConvention().isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
@@ -119,8 +120,8 @@ public class WebConventionResource extends AbstractWebConventionResource {
       return Response.seeOther(uri).build();
     } catch (final Exception ex) {
       final FlexiBean out = createRootData();
-      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(trimmedXml)));
-      out.put("err_conventionXmlMsg", StringUtils.defaultString(ex.getMessage()));
+      out.put("conventionXML", StringEscapeUtils.escapeJava(StringUtils.defaultString(trimmedXml)));
+      out.put("err_conventionXMLMsg", StringUtils.defaultString(ex.getMessage()));
       final String html = getFreemarker().build(HTML_DIR + "convention-update.ftl", out);
       return Response.ok(html).build();
     }
@@ -129,10 +130,7 @@ public class WebConventionResource extends AbstractWebConventionResource {
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response putJSON(
-      @FormParam("name") final String name,
-      @FormParam("conventionJSON") final String json,
-      @FormParam("conventionXML") final String xml,
+  public Response putJSON(@FormParam("name") final String name, @FormParam("conventionJSON") final String json, @FormParam("conventionXML") final String xml,
       @FormParam("type") final String typeName) {
     if (data().getConvention().isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
@@ -147,7 +145,8 @@ public class WebConventionResource extends AbstractWebConventionResource {
     }
     ManageableConvention conventionValue = null;
     if (trimmedJson != null) {
-      final Class<? extends ManageableConvention> typeClazz = trimmedTypeName != null ? getConventionTypesProvider().getClassFromDisplayName(trimmedTypeName) : null;
+      final Class<? extends ManageableConvention> typeClazz = trimmedTypeName != null ? getConventionTypesProvider().getClassFromDisplayName(trimmedTypeName)
+          : null;
       final JSONBuilder<?> jsonBuilder = data().getJsonBuilderMap().get(typeClazz);
       conventionValue = (ManageableConvention) jsonBuilder.fromJSON(trimmedJson);
     } else if (trimmedXml != null) {
@@ -167,7 +166,7 @@ public class WebConventionResource extends AbstractWebConventionResource {
     return WebConventionResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
@@ -190,9 +189,10 @@ public class WebConventionResource extends AbstractWebConventionResource {
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -206,16 +206,18 @@ public class WebConventionResource extends AbstractWebConventionResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebConventionVersionsResource findVersions() {
     return new WebConventionVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebConventionData data) {
@@ -224,8 +226,11 @@ public class WebConventionResource extends AbstractWebConventionResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideConventionId  the override convention id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideConventionId
+   *          the override convention id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebConventionData data, final UniqueId overrideConventionId) {

@@ -15,10 +15,12 @@ import com.opengamma.financial.convention.PriceIndexConvention;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link PriceIndexConventionJsonBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class PriceIndexConventionJsonBuilderTest {
 
   /**
@@ -30,8 +32,7 @@ public class PriceIndexConventionJsonBuilderTest {
     final Map<String, String> attributes = new HashMap<>();
     attributes.put("ATTR1", "VAL1");
     attributes.put("ATTR2", "VAL2");
-    final PriceIndexConvention convention = new PriceIndexConvention("O/N", externalIds,
-        Currency.AUD, ExternalId.of("TEST", "LONDON"));
+    final PriceIndexConvention convention = new PriceIndexConvention("UKCPI", externalIds, Currency.GBP, ExternalId.of("TEST", "LONDON"));
     convention.setAttributes(attributes);
     assertEquals(convention, PriceIndexConventionJsonBuilder.INSTANCE.fromJSON(PriceIndexConventionJsonBuilder.INSTANCE.toJSON(convention)));
     // template convention
@@ -48,12 +49,10 @@ public class PriceIndexConventionJsonBuilderTest {
     final Map<String, String> attributes = new HashMap<>();
     attributes.put("ATTR1", "VAL1");
     attributes.put("ATTR2", "VAL2");
-    final PriceIndexConvention convention = new PriceIndexConvention("O/N", externalIds,
-        Currency.AUD, ExternalId.of("TEST", "LONDON"));
+    final PriceIndexConvention convention = new PriceIndexConvention("UKCPI", externalIds, Currency.GBP, ExternalId.of("TEST", "LONDON"));
     final PriceIndexConvention copy = PriceIndexConventionJsonBuilder.INSTANCE.getCopy(convention);
     copy.addAttribute("ATTR3", "VAL3");
     assertNotEquals(convention, copy);
-    assertEquals(convention, new PriceIndexConvention("O/N", externalIds,
-        Currency.AUD, ExternalId.of("TEST", "LONDON")));
+    assertEquals(convention, new PriceIndexConvention("UKCPI", externalIds, Currency.GBP, ExternalId.of("TEST", "LONDON")));
   }
 }

@@ -14,10 +14,12 @@ import org.testng.annotations.Test;
 import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link BondConventionJsonBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class BondConventionJsonBuilderTest {
 
   /**

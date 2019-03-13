@@ -83,36 +83,13 @@ import com.opengamma.util.time.Expiry;
 
   // TODO this should be configurable, should be able to add from client projects
   /** All the securities and related types supported by the blotter. */
-  private static final Set<MetaBean> META_BEANS = Sets.<MetaBean>newHashSet(
-      FXForwardSecurity.meta(),
-      SwapSecurity.meta(),
-      SwaptionSecurity.meta(),
-      CapFloorCMSSpreadSecurity.meta(),
-      NonDeliverableFXOptionSecurity.meta(),
-      FXOptionSecurity.meta(),
-      FRASecurity.meta(),
-      CapFloorSecurity.meta(),
-      EquityVarianceSwapSecurity.meta(),
-      FXBarrierOptionSecurity.meta(),
-      FXDigitalOptionSecurity.meta(),
-      FixedInterestRateLeg.meta(),
-      FloatingInterestRateLeg.meta(),
-      FloatingSpreadIRLeg.meta(),
-      FloatingGearingIRLeg.meta(),
-      FixedInflationSwapLeg.meta(),
-      InflationIndexSwapLeg.meta(),
-      InterestRateNotional.meta(),
-      LegacyVanillaCDSSecurity.meta(),
-      LegacyRecoveryLockCDSSecurity.meta(),
-      LegacyFixedRecoveryCDSSecurity.meta(),
-      StandardVanillaCDSSecurity.meta(),
-      StandardRecoveryLockCDSSecurity.meta(),
-      StandardFixedRecoveryCDSSecurity.meta(),
-      CreditDefaultSwapIndexSecurity.meta(),
-      CreditDefaultSwapOptionSecurity.meta(),
-      YearOnYearInflationSwapSecurity.meta(),
-      ZeroCouponInflationSwapSecurity.meta(),
-      CashSecurity.meta());
+  private static final Set<MetaBean> META_BEANS = Sets.<MetaBean> newHashSet(FXForwardSecurity.meta(), SwapSecurity.meta(), SwaptionSecurity.meta(),
+      CapFloorCMSSpreadSecurity.meta(), NonDeliverableFXOptionSecurity.meta(), FXOptionSecurity.meta(), FRASecurity.meta(), CapFloorSecurity.meta(),
+      EquityVarianceSwapSecurity.meta(), FXBarrierOptionSecurity.meta(), FXDigitalOptionSecurity.meta(), FixedInterestRateLeg.meta(),
+      FloatingInterestRateLeg.meta(), FloatingSpreadIRLeg.meta(), FloatingGearingIRLeg.meta(), FixedInflationSwapLeg.meta(), InflationIndexSwapLeg.meta(),
+      InterestRateNotional.meta(), LegacyVanillaCDSSecurity.meta(), LegacyRecoveryLockCDSSecurity.meta(), LegacyFixedRecoveryCDSSecurity.meta(),
+      StandardVanillaCDSSecurity.meta(), StandardRecoveryLockCDSSecurity.meta(), StandardFixedRecoveryCDSSecurity.meta(), CreditDefaultSwapIndexSecurity.meta(),
+      CreditDefaultSwapOptionSecurity.meta(), YearOnYearInflationSwapSecurity.meta(), ZeroCouponInflationSwapSecurity.meta(), CashSecurity.meta());
 
   /** Meta bean factory for looking up meta beans by type name. */
   private static final MetaBeanFactory META_BEAN_FACTORY = new MapMetaBeanFactory(META_BEANS);
@@ -127,13 +104,11 @@ import com.opengamma.util.time.Expiry;
   };
 
   /**
-   * For traversing trade and security {@link MetaBean}s and building instances from the data sent from the blotter.
-   * The security type name is filtered out because it is a read-only property. The external ID bundle is filtered
-   * out because it is always empty for trades and securities entered via the blotter but isn't nullable. Therefore
-   * it has to be explicitly set to an empty bundle after the client data is processed but before the object is built.
+   * For traversing trade and security {@link MetaBean}s and building instances from the data sent from the blotter. The security type name is filtered out
+   * because it is a read-only property. The external ID bundle is filtered out because it is always empty for trades and securities entered via the blotter but
+   * isn't nullable. Therefore it has to be explicitly set to an empty bundle after the client data is processed but before the object is built.
    */
-  private static final BeanTraverser BEAN_BUILDING_TRAVERSER = new BeanTraverser(
-      new PropertyFilter(FinancialSecurity.meta().externalIdBundle()),
+  private static final BeanTraverser BEAN_BUILDING_TRAVERSER = new BeanTraverser(new PropertyFilter(FinancialSecurity.meta().externalIdBundle()),
       new PropertyFilter(ManageableSecurity.meta().securityType()));
 
   /** For converting between strings values used by the UI and real objects. */
@@ -147,27 +122,17 @@ import com.opengamma.util.time.Expiry;
     final StringToRegionIdConverter stringToRegionIdConverter = new StringToRegionIdConverter();
     // for building beans from JSON
     final Map<MetaProperty<?>, Converter<?, ?>> beanRegionConverters = Maps.newHashMap();
-    beanRegionConverters.putAll(
-        ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
-            CashSecurity.meta().regionId(), stringToRegionIdConverter,
-            CreditDefaultSwapSecurity.meta().regionId(), stringToRegionIdConverter,
-            EquityVarianceSwapSecurity.meta().regionId(), stringToRegionIdConverter,
-            FRASecurity.meta().regionId(), stringToRegionIdConverter,
-            SwapLeg.meta().regionId(), stringToRegionIdConverter));
-    beanRegionConverters.putAll(
-        ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
-            FXForwardSecurity.meta().regionId(), new FXRegionConverter(),
-            NonDeliverableFXForwardSecurity.meta().regionId(), new FXRegionConverter()));
+    beanRegionConverters.putAll(ImmutableMap.<MetaProperty<?>, Converter<?, ?>> of(CashSecurity.meta().regionId(), stringToRegionIdConverter,
+        CreditDefaultSwapSecurity.meta().regionId(), stringToRegionIdConverter, EquityVarianceSwapSecurity.meta().regionId(), stringToRegionIdConverter,
+        FRASecurity.meta().regionId(), stringToRegionIdConverter, SwapLeg.meta().regionId(), stringToRegionIdConverter));
+    beanRegionConverters.putAll(ImmutableMap.<MetaProperty<?>, Converter<?, ?>> of(FXForwardSecurity.meta().regionId(), new FXRegionConverter(),
+        NonDeliverableFXForwardSecurity.meta().regionId(), new FXRegionConverter()));
 
     // for building JSON from beans
     final RegionIdToStringConverter regionIdToStringConverter = new RegionIdToStringConverter();
-    final Map<MetaProperty<?>, Converter<?, ?>> jsonRegionConverters =
-        ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
-            CashSecurity.meta().regionId(), regionIdToStringConverter,
-            CreditDefaultSwapSecurity.meta().regionId(), regionIdToStringConverter,
-            EquityVarianceSwapSecurity.meta().regionId(), regionIdToStringConverter,
-            FRASecurity.meta().regionId(), regionIdToStringConverter,
-            SwapLeg.meta().regionId(), regionIdToStringConverter);
+    final Map<MetaProperty<?>, Converter<?, ?>> jsonRegionConverters = ImmutableMap.<MetaProperty<?>, Converter<?, ?>> of(CashSecurity.meta().regionId(),
+        regionIdToStringConverter, CreditDefaultSwapSecurity.meta().regionId(), regionIdToStringConverter, EquityVarianceSwapSecurity.meta().regionId(),
+        regionIdToStringConverter, FRASecurity.meta().regionId(), regionIdToStringConverter, SwapLeg.meta().regionId(), regionIdToStringConverter);
 
     STRING_CONVERT = new StringConvert();
     STRING_CONVERT.register(BigDecimal.class, new BigDecimalConverter());
@@ -191,37 +156,33 @@ import com.opengamma.util.time.Expiry;
   }
 
   /**
-   * Filters out region ID for FX forwards when building JSON for the security and HTML screens showing the structure.
-   * The property value is hard-coded to {@code FINANCIAL_REGION~GB} for FX forwards so its value is of no interest
-   * to the client and it can't be updated.
+   * Filters out region ID for FX forwards when building JSON for the security and HTML screens showing the structure. The property value is hard-coded to
+   * {@code FINANCIAL_REGION~GB} for FX forwards so its value is of no interest to the client and it can't be updated.
    */
-  private static final PropertyFilter FX_REGION_FILTER =
-      new PropertyFilter(FXForwardSecurity.meta().regionId(), NonDeliverableFXForwardSecurity.meta().regionId());
+  private static final PropertyFilter FX_REGION_FILTER = new PropertyFilter(FXForwardSecurity.meta().regionId(),
+      NonDeliverableFXForwardSecurity.meta().regionId());
 
   /**
-   * Filters out the {@code externalIdBundle} property from OTC securities when building the HTML showing the security
-   * structure. OTC security details are passed to the blotter back end which generates the ID so this
-   * info is irrelevant to the client.
+   * Filters out the {@code externalIdBundle} property from OTC securities when building the HTML showing the security structure. OTC security details are
+   * passed to the blotter back end which generates the ID so this info is irrelevant to the client.
    */
   private static final BeanVisitorDecorator EXTERNAL_ID_BUNDLE_FILTER = new PropertyNameFilter("externalIdBundle");
 
   /**
-   * Filters out the underlying ID field of {@link SwaptionSecurity} when building the HTML showing the security
-   * structure. The back end creates the underlying security and fills this field in so it's of no interest
-   * to the client.
+   * Filters out the underlying ID field of {@link SwaptionSecurity} when building the HTML showing the security structure. The back end creates the underlying
+   * security and fills this field in so it's of no interest to the client.
    */
   private static final PropertyFilter SWAPTION_UNDERLYING_FILTER = new PropertyFilter(SwaptionSecurity.meta().underlyingId());
 
   /**
-   * Filters out the underlying ID field of {@link CreditDefaultSwapOptionSecurity} when building the HTML showing the security
-   * structure. The back end creates the underlying security and fills this field in so it's of no interest
-   * to the client.
+   * Filters out the underlying ID field of {@link CreditDefaultSwapOptionSecurity} when building the HTML showing the security structure. The back end creates
+   * the underlying security and fills this field in so it's of no interest to the client.
    */
   private static final PropertyFilter CDS_OPTION_UNDERLYING_FILTER = new PropertyFilter(CreditDefaultSwapOptionSecurity.meta().underlyingId());
 
   /**
-   * Filters out the {@code securityType} field for all securities when building the HTML showing the security
-   * structure. This value is read-only in each security type and is of no interest to the client.
+   * Filters out the {@code securityType} field for all securities when building the HTML showing the security structure. This value is read-only in each
+   * security type and is of no interest to the client.
    */
   private static final PropertyFilter SECURITY_TYPE_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
@@ -238,8 +199,7 @@ import com.opengamma.util.time.Expiry;
 
   @SuppressWarnings("unchecked")
   /* package */ static FinancialSecurity buildSecurity(final BeanDataSource data, final ExternalIdBundle idBundle) {
-    final BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, META_BEAN_FACTORY,
-        BEAN_BUILDING_CONVERTERS);
+    final BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, META_BEAN_FACTORY, BEAN_BUILDING_CONVERTERS);
     final MetaBean metaBean = META_BEAN_FACTORY.beanFor(data);
     // TODO check it's a FinancialSecurity metaBean
     if (!(metaBean instanceof FinancialSecurity.Meta)) {
@@ -251,7 +211,6 @@ import com.opengamma.util.time.Expiry;
     return builder.build();
   }
 
-  // TODO move to BlotterUtils
   /* package */ static StringConvert getStringConvert() {
     return STRING_CONVERT;
   }
@@ -280,19 +239,20 @@ import com.opengamma.util.time.Expiry;
 
 // ----------------------------------------------------------------------------------
 
-
 /**
- * For converting between enum instances and strings. The enum value names are made more readable by downcasing
- * and capitalizing them and replacing underscores with spaces.
- * @param <T> Type of the enum
+ * For converting between enum instances and strings. The enum value names are made more readable by downcasing and capitalizing them and replacing underscores
+ * with spaces.
+ * 
+ * @param <T>
+ *          Type of the enum
  */
-@SuppressWarnings({"rawtypes", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked" })
 /* package */ class EnumConverter<T extends Enum> implements StringConverter<T> {
 
   @Override
   public T convertFromString(final Class<? extends T> type, final String str) {
     // IntelliJ says this cast is redundant but javac disagrees
-    //noinspection RedundantCast
+    // noinspection RedundantCast
     return (T) Enum.valueOf(type, str.toUpperCase().replace(' ', '_'));
   }
 
@@ -303,8 +263,8 @@ import com.opengamma.util.time.Expiry;
 }
 
 /**
- * Converts {@link ZonedDateTime} to a local date string (e.g. 2012-12-21) and creates a {@link ZonedDateTime} from
- * a local date string with a time of 11:00 and a zone of UTC.
+ * Converts {@link ZonedDateTime} to a local date string (e.g. 2012-12-21) and creates a {@link ZonedDateTime} from a local date string with a time of 11:00 and
+ * a zone of UTC.
  */
 /* package */ class ZonedDateTimeConverter implements StringConverter<ZonedDateTime> {
 
@@ -321,8 +281,8 @@ import com.opengamma.util.time.Expiry;
 }
 
 /**
- * Converts an {@link OffsetTime} to a time string (e.g. 11:35) and discards the offset. Creates
- * an {@link OffsetTime} instance by parsing a local date string and using UTC as the offset.
+ * Converts an {@link OffsetTime} to a time string (e.g. 11:35) and discards the offset. Creates an {@link OffsetTime} instance by parsing a local date string
+ * and using UTC as the offset.
  */
 /* package */ class OffsetTimeConverter implements StringConverter<OffsetTime> {
 
@@ -410,7 +370,9 @@ import com.opengamma.util.time.Expiry;
 
   /**
    * Converts a string to an {@link ExternalId} with a scheme of {@link ExternalSchemes#FINANCIAL}.
-   * @param region The region name, not empty
+   * 
+   * @param region
+   *          The region name, not empty
    * @return An {@link ExternalId} with a scheme of {@link ExternalSchemes#FINANCIAL} and a value of {@code region}.
    */
   @Override
@@ -429,7 +391,9 @@ import com.opengamma.util.time.Expiry;
 
   /**
    * Converts an {@link ExternalId} to a string
-   * @param regionId The region ID, not null
+   * 
+   * @param regionId
+   *          The region ID, not null
    * @return {@code regionId}'s value
    */
   @Override

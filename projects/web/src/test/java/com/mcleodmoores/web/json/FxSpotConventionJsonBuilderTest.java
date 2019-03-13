@@ -13,10 +13,12 @@ import org.testng.annotations.Test;
 
 import com.opengamma.financial.convention.FXSpotConvention;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link FxSpotConventionJsonBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class FxSpotConventionJsonBuilderTest {
 
   /**
