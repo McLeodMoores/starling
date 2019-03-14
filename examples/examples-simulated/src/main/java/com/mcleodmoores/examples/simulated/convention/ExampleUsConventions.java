@@ -15,6 +15,7 @@ import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OISLegConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.StubType;
+import com.opengamma.financial.convention.SwapConvention;
 import com.opengamma.financial.convention.SwapFixedLegConvention;
 import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -46,38 +47,39 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
   @Override
   public void init(final ConventionMaster master) {
     // Deposit
-    final DepositConvention deposit = new DepositConvention("USD Deposit", ExternalIdBundle.of("CONVENTION", "USD Deposit"),
-        DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, Currency.USD, US);
-    final DepositConvention overnightDeposit = new DepositConvention("USD O/N Deposit", ExternalIdBundle.of("CONVENTION", "USD O/N Deposit"),
-        DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 0, false, Currency.USD, US);
+    final DepositConvention deposit = new DepositConvention("USD Deposit", ExternalIdBundle.of("CONVENTION", "USD Deposit"), DayCounts.ACT_360,
+        BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, Currency.USD, US);
+    final DepositConvention overnightDeposit = new DepositConvention("USD O/N Deposit", ExternalIdBundle.of("CONVENTION", "USD O/N Deposit"), DayCounts.ACT_360,
+        BusinessDayConventions.FOLLOWING, 0, false, Currency.USD, US);
     // IBOR
     final ExternalIdBundle iborIds = ExternalIdBundle.of(ExternalId.of("CONVENTION", "USDLIBORP3M"), ExternalId.of("CONVENTION", "USDLIBORP6M"),
         ExternalSchemes.syntheticSecurityId("USDLIBORP3M"), ExternalSchemes.syntheticSecurityId("USDLIBORP6M"), ExternalId.of("CONVENTION", "USD LIBOR"));
     final IborIndexConvention ibor = new IborIndexConvention("USD LIBOR", iborIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 0, false, Currency.USD,
         LocalTime.of(11, 0), "US", NYLON, US, "");
     // Overnight
-    final OvernightIndexConvention overnight =
-        new OvernightIndexConvention("USDFF", ExternalIdBundle.of(ExternalId.of("CONVENTION", "USDFF"), ExternalSchemes.syntheticSecurityId("USDFF")),
-        DayCounts.ACT_360, 0, Currency.USD, US);
+    final OvernightIndexConvention overnight = new OvernightIndexConvention("USDFF",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USDFF"), ExternalSchemes.syntheticSecurityId("USDFF")), DayCounts.ACT_360, 0, Currency.USD, US);
     // OIS
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("USD OIS Fixed",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD OIS Fixed"), ExternalSchemes.currencyRegionId(Currency.USD)),
-        Tenor.ONE_YEAR, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD, US, 1, true, StubType.SHORT_START, false, 0);
-    final OISLegConvention oisLeg = new OISLegConvention("USD OIS", ExternalId.of("CONVENTION", "USD OIS").toBundle(),
-        ExternalId.of("CONVENTION", "USDFF"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
-        0, false, StubType.SHORT_START, false, 0);
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD OIS Fixed"), ExternalSchemes.currencyRegionId(Currency.USD)), Tenor.ONE_YEAR, DayCounts.ACT_360,
+        BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD, US, 1, true, StubType.SHORT_START, false, 0);
+    final OISLegConvention oisLeg = new OISLegConvention("USD OIS", ExternalId.of("CONVENTION", "USD OIS").toBundle(), ExternalId.of("CONVENTION", "USDFF"),
+        Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 0, false, StubType.SHORT_START, false, 0);
     // IBOR Swaps
     final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("USD IBOR Fixed",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD IBOR Fixed"), ExternalSchemes.currencyRegionId(Currency.USD)),
-        Tenor.SIX_MONTHS, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD, US, 1, true, StubType.SHORT_START, false, 0);
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD IBOR Fixed"), ExternalSchemes.currencyRegionId(Currency.USD)), Tenor.SIX_MONTHS, DayCounts.ACT_360,
+        BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD, US, 1, true, StubType.SHORT_START, false, 0);
     final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("USD 3M IBOR",
         ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD 3M IBOR"), ExternalSchemes.currencyRegionId(Currency.USD)),
         ExternalId.of("CONVENTION", "USDLIBORP3M"), false, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     // Bond conventions
-    final BondConvention bondConvention = new BondConvention("USD Government Bond",
-        ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.USD), US), 0, 2,
-        BusinessDayConventions.FOLLOWING, true, true);
+    final BondConvention bondConvention = new BondConvention("USD Government Bond", ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.USD), US), 0,
+        2, BusinessDayConventions.FOLLOWING, true, true);
+
+    // Swap conventions for index
+    final SwapConvention vanillaSwap = new SwapConvention("USD Fixed/3M IBOR", ExternalIdBundle.of("CONVENTION", "USD Fixed/3M IBOR"),
+        iborFixedLeg.getExternalIdBundle().iterator().next(), ibor3mLeg.getExternalIdBundle().iterator().next());
 
     addConvention(master, deposit);
     addConvention(master, overnightDeposit);
@@ -88,6 +90,7 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
     addConvention(master, iborFixedLeg);
     addConvention(master, ibor3mLeg);
     addConvention(master, bondConvention);
+    addConvention(master, vanillaSwap);
   }
 
 }

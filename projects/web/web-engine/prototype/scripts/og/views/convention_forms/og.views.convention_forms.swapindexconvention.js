@@ -51,7 +51,6 @@ $.register_module({
 	        		selector: selector,
 	        		extras: {
 	        			name: master.name,
-	        			currency: master.currency || (master.currency = 'USD')
 	        		},
 	        		processor: function (data) {
 	        			data.id = data.id.filter(function (v) { return v !== void 0; });
@@ -85,29 +84,27 @@ $.register_module({
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
+            		$(form_id + ' input[name=fixingTime]').val(master.fixingTime);
             		$(form_id);
             		setTimeout(load_handler.partial(form));
                 };
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource);
             form.children = [
-/*            	// item_1
             	new ui.Dropdown({
             		form: form,
             		placeholder: 'Please select...',
-            		value: master.region ? master.region.split(sep)[1] : "",
-       				//TODO
-            		processor: function (selector, data, errors) {
-            			data.region = master.region.split(sep)[0] + sep + $(selector).val();
+            		value: master.swapConvention === ' ~ ' ? "" : master.swapConvention,
+            		resource: 'conventions.conventionIds',
+            		data_generator: function (handler) {
+            			api.conventions.conventionIds.get({ conventionType: 'Swap'}).pipe(function (result) {
+            				handler(result.data.map(function (convention) {
+            					var split = convention.split('|');
+            					return {value: split[0], text: split[1]};
+            				}))
+            			})
             		},
-            		data_generator: holiday_handler
-            	}),*/
-            	new ui.Dropdown({
-            		form: form,
-            		placeholder: 'Please select...',
-            		resource: 'conventionIds', 
-            		index: 'swapConvention',
-            		value: master.swapConvention ? master.swapConvention : ""
+            		index: 'swapConvention'
             	}),
             	// item_1
             	new og.views.convention_forms.ExternalIdBundle({

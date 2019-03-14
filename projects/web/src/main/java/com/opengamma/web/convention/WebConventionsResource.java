@@ -6,6 +6,7 @@
 package com.opengamma.web.convention;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -25,9 +26,11 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
+import org.json.JSONArray;
 
 import com.google.common.collect.BiMap;
 import com.opengamma.DataNotFoundException;
+import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.convention.ConventionDocument;
@@ -286,6 +289,21 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   public static URI uri(final WebConventionData data) {
     final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebConventionsResource.class);
     return builder.build();
+  }
+
+  @GET
+  @Path("conventionIds")
+  @Produces(MediaType.APPLICATION_JSON)
+  @SubscribeMaster(MasterType.CONVENTION)
+  public String getIdsForConventionType(@QueryParam("conventionType") final String conventionType) {
+    final ConventionSearchRequest request = new ConventionSearchRequest();
+    request.setConventionType(ConventionType.of(conventionType));
+    final ConventionSearchResult result = data().getConventionMaster().search(request);
+    final List<String> names = new ArrayList<>();
+    for (final ManageableConvention convention : result.getConventions()) {
+      names.add(convention.getExternalIdBundle().toStringList() + "|" + convention.getName());
+    }
+    return new JSONArray(names).toString();
   }
 
 }

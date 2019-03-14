@@ -109,11 +109,20 @@ $.register_module({
             		value: master.businessDayConvention ? master.businessDayConvention : ""
             	}),
             	// item_1
-            	new og.views.convention_forms.ReferencedConvention({
+            	new ui.Dropdown({
             		form: form,
-            		data: spotConvention,
+            		placeholder: 'Please select...',
+            		value: master.spotConvention === ' ~ ' ? "" : master.spotConvention,
+            		resource: 'conventions.conventionIds',
+            		data_generator: function (handler) {
+            			api.conventions.conventionIds.get({ conventionType: 'FXSpot'}).pipe(function (result) {
+            				handler(result.data.map(function (convention) {
+            					var split = convention.split('|');
+            					return {value: split[0], text: split[1]};
+            				}))
+            			})
+            		},
             		index: 'spotConvention',
-            		name: 'Underlying Spot Convention'
             	}),
             	// item_2
             	new og.views.convention_forms.ExternalIdBundle({
