@@ -37,7 +37,10 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
 
   private static final long serialVersionUID = 1L;
 
-  private static final ConventionType TYPE = ConventionType.of("ISDACreditCurve");
+  /**
+   * The convention type.
+   */
+  public static final ConventionType TYPE = ConventionType.of("ISDACreditCurve");
 
   /**
    * The step-in date, relative to T.
@@ -98,7 +101,6 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _curveDayCount;
-
 
   @Override
   public ConventionType getConventionType() {
