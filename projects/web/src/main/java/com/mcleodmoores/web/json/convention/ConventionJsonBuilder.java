@@ -200,25 +200,31 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
       final JSONObject jsonObject = new JSONObject(new JSONTokener(sr));
       final JSONObject data = jsonObject.getJSONObject("data");
       if (data != null) {
-        final String conventionName;
-        if (data.has(UNDERLYING_CONVENTION_NAME)) {
-          conventionName = data.getString(underlyingConventionFieldName);
-        } else if (data.has(underlyingConventionFieldName)) {
-          conventionName = data.getString(underlyingConventionFieldName);
-        } else {
-          conventionName = null;
+        try {
+          // can the underlying field be parsed as an external id
+          ExternalId.parse(data.getString(underlyingConventionFieldName));
+        } catch (final IllegalArgumentException e) {
+          // if not, use the convention name to get the id from the master
+          final String conventionName;
+          if (data.has(UNDERLYING_CONVENTION_NAME)) {
+            conventionName = data.getString(underlyingConventionFieldName);
+          } else if (data.has(underlyingConventionFieldName)) {
+            conventionName = data.getString(underlyingConventionFieldName);
+          } else {
+            conventionName = null;
+          }
+          data.remove(underlyingConventionFieldName);
+          final ConventionSearchRequest request = new ConventionSearchRequest();
+          request.setName(conventionName);
+          request.setConventionType(conventionType);
+          final ConventionSearchResult result = conventionMaster.search(request);
+          if (result.getConventions().size() == 1) {
+            final ExternalId conventionId = result.getSingleConvention().getExternalIdBundle().iterator().next();
+            data.put(underlyingConventionFieldName, conventionId.toString());
+          }
+          jsonObject.remove("data");
+          jsonObject.put("data", data);
         }
-        data.remove(underlyingConventionFieldName);
-        final ConventionSearchRequest request = new ConventionSearchRequest();
-        request.setName(conventionName);
-        request.setConventionType(conventionType);
-        final ConventionSearchResult result = conventionMaster.search(request);
-        if (result.getConventions().size() == 1) {
-          final ExternalId conventionId = result.getSingleConvention().getExternalIdBundle().iterator().next();
-          data.put(underlyingConventionFieldName, conventionId.toString());
-        }
-        jsonObject.remove("data");
-        jsonObject.put("data", data);
       }
       return jsonObject.toString();
     } catch (final JSONException e) {
