@@ -62,8 +62,10 @@ public class FudgeMsgJSONReader {
   /**
    * Creates a new instance for reading a Fudge stream from a JSON reader.
    *
-   * @param fudgeContext  the Fudge context, not null
-   * @param reader  the underlying reader, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
+   * @param reader
+   *          the underlying reader, not null
    */
   public FudgeMsgJSONReader(final FudgeContext fudgeContext, final Reader reader) {
     this(fudgeContext, reader, new FudgeJSONSettings());
@@ -72,9 +74,12 @@ public class FudgeMsgJSONReader {
   /**
    * Creates a new instance for reading a Fudge stream from a JSON reader.
    *
-   * @param fudgeContext  the Fudge context, not null
-   * @param reader  the underlying reader, not null
-   * @param settings  the JSON settings to fine tune the read, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
+   * @param reader
+   *          the underlying reader, not null
+   * @param settings
+   *          the JSON settings to fine tune the read, not null
    */
   public FudgeMsgJSONReader(final FudgeContext fudgeContext, final Reader reader, final FudgeJSONSettings settings) {
     _fudgeContext = fudgeContext;
@@ -107,7 +112,7 @@ public class FudgeMsgJSONReader {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the underlying reader.
    *
@@ -119,6 +124,7 @@ public class FudgeMsgJSONReader {
 
   /**
    * Gets the fudgeContext.
+   * 
    * @return the fudgeContext
    */
   public FudgeContext getFudgeContext() {
@@ -127,6 +133,7 @@ public class FudgeMsgJSONReader {
 
   /**
    * Gets the settings.
+   * 
    * @return the settings
    */
   public FudgeJSONSettings getSettings() {
@@ -141,7 +148,6 @@ public class FudgeMsgJSONReader {
     return new FudgeRuntimeException(newMessage, ex);
   }
 
-
   /**
    * Reads the next message, discarding the envelope.
    *
@@ -154,7 +160,6 @@ public class FudgeMsgJSONReader {
     }
     return msgEnv.getMessage();
   }
-
 
   /**
    * Reads the next message, returning the envelope.
@@ -240,8 +245,7 @@ public class FudgeMsgJSONReader {
 
   private MutableFudgeMsg processFields(final JSONObject data, final JSONObject meta) {
     final MutableFudgeMsg fudgeMsg = getFudgeContext().newMessage();
-    final
-    Iterator<String> keys = data.keys();
+    final Iterator<String> keys = data.keys();
     while (keys.hasNext()) {
       final String fieldName = keys.next();
       final Object dataValue = getFieldValue(data, fieldName);
@@ -264,7 +268,7 @@ public class FudgeMsgJSONReader {
               wrapException("converting json array to primitive array", e);
             }
           } else {
-            //treat as repeated fields
+            // treat as repeated fields
             addRepeatedFields(fudgeMsg, fieldName, dataArray, (JSONArray) metaValue);
           }
         }

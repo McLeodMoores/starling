@@ -18,9 +18,6 @@ $.register_module({
     				if (result.error) return view.error(result.message);
     				view.search(args);
                     routes.go(routes.hash(rule, args, {add: {id: result.meta.id}, del: ['version']}));
-/*                    if (result.meta.id)
-                        return routes.go(routes.hash(rule, args, {add: {id: result.meta.id}}));
-                    routes.go(routes.hash(view.rules.load, args));*/
                 },                
     			holiday_type: ui.dialog({return_field_value: 'holiday_type'}),
     			identifier: ui.dialog({return_field_value: 'identifier'}),

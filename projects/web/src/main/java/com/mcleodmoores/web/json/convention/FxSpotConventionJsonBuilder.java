@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.web.json;
+package com.mcleodmoores.web.json.convention;
 
 import java.util.Map;
 

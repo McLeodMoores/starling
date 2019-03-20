@@ -9,14 +9,16 @@ import java.util.Map.Entry;
 
 import org.joda.beans.impl.flexi.FlexiBean;
 
-import com.mcleodmoores.web.json.BondConventionJsonBuilder;
-import com.mcleodmoores.web.json.DepositConventionJsonBuilder;
-import com.mcleodmoores.web.json.FxForwardAndSwapConventionJsonBuilder;
-import com.mcleodmoores.web.json.FxSpotConventionJsonBuilder;
-import com.mcleodmoores.web.json.IborIndexConventionJsonBuilder;
-import com.mcleodmoores.web.json.OvernightIndexConventionJsonBuilder;
-import com.mcleodmoores.web.json.PriceIndexConventionJsonBuilder;
-import com.mcleodmoores.web.json.SwapIndexConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.BondConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.DepositConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.FxForwardAndSwapConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.FxSpotConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.IborIndexConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.OvernightIndexConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.PriceIndexConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.SwapFixedLegConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.SwapIndexConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.VanillaIborLegConventionJsonBuilder;
 import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.FXForwardAndSwapConvention;
@@ -24,7 +26,9 @@ import com.opengamma.financial.convention.FXSpotConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.PriceIndexConvention;
+import com.opengamma.financial.convention.SwapFixedLegConvention;
 import com.opengamma.financial.convention.SwapIndexConvention;
+import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.convention.ManageableConvention;
 import com.opengamma.util.ArgumentChecker;
@@ -80,11 +84,13 @@ public abstract class AbstractWebConventionResource extends AbstractPerRequestWe
     data().getJsonBuilderMap().put(BondConvention.class, BondConventionJsonBuilder.INSTANCE);
     data().getJsonBuilderMap().put(DepositConvention.class, DepositConventionJsonBuilder.INSTANCE);
     data().getJsonBuilderMap().put(FXSpotConvention.class, FxSpotConventionJsonBuilder.INSTANCE);
-    data().getJsonBuilderMap().put(FXForwardAndSwapConvention.class, FxForwardAndSwapConventionJsonBuilder.INSTANCE);
+    data().getJsonBuilderMap().put(FXForwardAndSwapConvention.class, new FxForwardAndSwapConventionJsonBuilder(data().getConventionMaster()));
     data().getJsonBuilderMap().put(IborIndexConvention.class, IborIndexConventionJsonBuilder.INSTANCE);
     data().getJsonBuilderMap().put(OvernightIndexConvention.class, OvernightIndexConventionJsonBuilder.INSTANCE);
     data().getJsonBuilderMap().put(PriceIndexConvention.class, PriceIndexConventionJsonBuilder.INSTANCE);
-    data().getJsonBuilderMap().put(SwapIndexConvention.class, SwapIndexConventionJsonBuilder.INSTANCE);
+    data().getJsonBuilderMap().put(SwapIndexConvention.class, new SwapIndexConventionJsonBuilder(data().getConventionMaster()));
+    data().getJsonBuilderMap().put(SwapFixedLegConvention.class, SwapFixedLegConventionJsonBuilder.INSTANCE);
+    data().getJsonBuilderMap().put(VanillaIborLegConvention.class, new VanillaIborLegConventionJsonBuilder(data().getConventionMaster()));
   }
 
   /**

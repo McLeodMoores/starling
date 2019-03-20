@@ -21,8 +21,9 @@ $.register_module({
 				[['0', INDX].join('.'),								Form.type.STR],
 				['name',											Form.type.STR],
 				['businessDayConvention',	 						Form.type.STR],
-				['spotConvention', 									Form.type.STR],
+				['spotConvention', 									Form.type.STR],				
 				['isEOM',											Form.type.BOO],
+				['underlyingConventionName', 						Form.type.STR],
 				['uniqueId',										Form.type.STR],
 				[[SPOT, 'ID', INDX, 'Scheme'].join('.'),			Form.type.STR],
 				[[SPOT, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
@@ -47,8 +48,8 @@ $.register_module({
 	        	save_handler = config.save_handler,
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
-	        	isEom = master.isEOM,
-	        	spotConvention = master.spotConvention,
+	        	isEOM = master.isEOM,
+	        	underlyingConventionName = master.underlyingConventionName,
 	        	form = new Form({
 	        		module: 'og.views.forms.fx-forward-and-swap-convention_tash',
 	        		data: master,
@@ -68,7 +69,7 @@ $.register_module({
         			var data = result.data,
         				meta = result.meta,
         				as_new = result.extras.as_new;
-        			data.isEOM = isEom;
+        			data.isEOM = isEOM;
         			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
         			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
@@ -91,14 +92,12 @@ $.register_module({
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
             		$(form_id);
-            		$(form_id + ' input[name=isEom]').prop('checked', isEom);
+            		$(form_id + ' input[name=isEOM]').prop('checked', isEOM);
             		setTimeout(load_handler.partial(form));
         		};
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource)
-            	.on('click', form_id + ' input[name=isEom]', function (event) {
-            		isEom = !isEom;
-            	});
+            	.on('click', form_id + ' input[name=isEOM]', function (event) { isEOM = !isEOM; });
             form.children = [
             	// item_0
             	new ui.Dropdown({
@@ -112,13 +111,13 @@ $.register_module({
             	new ui.Dropdown({
             		form: form,
             		placeholder: 'Please select...',
-            		value: master.spotConvention === ' ~ ' ? "" : master.spotConvention,
+            		value: !underlyingConventionName ? "" : underlyingConventionName, 
             		resource: 'conventions.conventionIds',
             		data_generator: function (handler) {
-            			api.conventions.conventionIds.get({ conventionType: 'FXSpot'}).pipe(function (result) {
+            			api.conventions.convention_ids.get({ conventionType: 'FXSpot'}).pipe(function (result) {
             				handler(result.data.map(function (convention) {
             					var split = convention.split('|');
-            					return {value: split[0], text: split[1]};
+            					return { value: split[0], text: split[0], selected: split[0] === underlyingConventionName };
             				}))
             			})
             		},

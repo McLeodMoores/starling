@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.web.json;
+package com.mcleodmoores.web.json.convention;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
+import com.mcleodmoores.web.json.convention.OvernightIndexConventionJsonBuilder;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalId;

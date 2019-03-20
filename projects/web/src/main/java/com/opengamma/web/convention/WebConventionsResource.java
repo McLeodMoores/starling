@@ -297,11 +297,12 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   @SubscribeMaster(MasterType.CONVENTION)
   public String getIdsForConventionType(@QueryParam("conventionType") final String conventionType) {
     final ConventionSearchRequest request = new ConventionSearchRequest();
-    request.setConventionType(ConventionType.of(conventionType));
+    request.setConventionType(ConventionType.of(StringUtils.trimToNull(conventionType)));
+    request.setSortOrder(ConventionSearchSortOrder.NAME_ASC);
     final ConventionSearchResult result = data().getConventionMaster().search(request);
     final List<String> names = new ArrayList<>();
     for (final ManageableConvention convention : result.getConventions()) {
-      names.add(convention.getExternalIdBundle().toStringList() + "|" + convention.getName());
+      names.add(convention.getName() + "|" + convention.getExternalIdBundle().toStringList());
     }
     return new JSONArray(names).toString();
   }

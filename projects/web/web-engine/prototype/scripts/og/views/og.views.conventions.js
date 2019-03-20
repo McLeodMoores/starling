@@ -169,7 +169,7 @@ $.register_module({
 						},
 						handler: function (form) {
 							var json = details_json.template_data,
-								error_html = '<section class="OG-box og-box-glass og-box-error OG-shadow-light">This configuration has been deleted</section>';
+								error_html = '<section class="OG-box og-box-glass og-box-error OG-shadow-light">This convention has been deleted</section>';
 							if (json.deleted) {
 								$('.OG-layout-admin-details-north').html(error_html);
 								view.layout.inner.sizePane('north', '0');

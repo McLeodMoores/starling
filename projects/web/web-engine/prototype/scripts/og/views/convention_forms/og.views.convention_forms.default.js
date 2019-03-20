@@ -12,7 +12,7 @@ $.register_module({
 		constructor = function (config) {
 			var load_handler = config.handler || $.noop, 
 				selector = config.selector, 
-				master = config.data.template_data.conventionXML,
+				master = config.data.template_data.configXML,
 				convention_type = config.type,
 				loading = config.loading || $.noop,
 				deleted = config.data.template_data.deleted,

@@ -7,7 +7,6 @@ package com.mcleodmoores.examples.simulated.convention;
 
 import org.threeten.bp.LocalTime;
 
-import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.DepositConvention;
@@ -21,6 +20,7 @@ import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.initializer.ConventionMasterInitializer;
+import com.opengamma.financial.security.swap.InterpolationMethod;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.convention.ConventionMaster;
@@ -71,7 +71,7 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
         BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD, US, 1, true, StubType.SHORT_START, false, 0);
     final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("USD 3M IBOR",
         ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD 3M IBOR"), ExternalSchemes.currencyRegionId(Currency.USD)),
-        ExternalId.of("CONVENTION", "USDLIBORP3M"), false, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, false, StubType.SHORT_START, false, 0);
+        ExternalId.of("CONVENTION", "USDLIBORP3M"), false, InterpolationMethod.NONE.name(), Tenor.THREE_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     // Bond conventions
     final BondConvention bondConvention = new BondConvention("USD Government Bond", ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.USD), US), 0,

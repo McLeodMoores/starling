@@ -508,6 +508,8 @@
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.overnightindexconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.priceindexconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.swapindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.swapfixedlegconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.vanillaiborlegconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.attributes.js</fragment> 
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.externalidbundle.js</fragment> 
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.referencedconvention.js</fragment> 

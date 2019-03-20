@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.web.json;
+package com.mcleodmoores.web.json.convention;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -15,6 +15,7 @@ import com.opengamma.financial.convention.FXForwardAndSwapConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.master.convention.impl.InMemoryConventionMaster;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -22,6 +23,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class FxForwardAndSwapConventionJsonBuilderTest {
+  private static final FxForwardAndSwapConventionJsonBuilder BUILDER = new FxForwardAndSwapConventionJsonBuilder(new InMemoryConventionMaster());
 
   /**
    * Tests a round trip.
@@ -35,11 +37,10 @@ public class FxForwardAndSwapConventionJsonBuilderTest {
     final FXForwardAndSwapConvention convention = new FXForwardAndSwapConvention("GBP/USD", externalIds, ExternalId.of("CONVENTION", "SPOT"),
         BusinessDayConventions.FOLLOWING, true);
     convention.setAttributes(attributes);
-    assertEquals(convention, FxForwardAndSwapConventionJsonBuilder.INSTANCE.fromJSON(FxForwardAndSwapConventionJsonBuilder.INSTANCE.toJSON(convention)));
+    assertEquals(convention, BUILDER.fromJSON(BUILDER.toJSON(convention)));
     // template convention
-    final String conventionJson = FxForwardAndSwapConventionJsonBuilder.INSTANCE.getTemplate();
-    assertEquals(conventionJson,
-        FxForwardAndSwapConventionJsonBuilder.INSTANCE.toJSON(FxForwardAndSwapConventionJsonBuilder.INSTANCE.fromJSON(conventionJson)));
+    final String conventionJson = BUILDER.getTemplate();
+    assertEquals(conventionJson, BUILDER.toJSON(BUILDER.fromJSON(conventionJson)));
   }
 
   /**
@@ -53,7 +54,7 @@ public class FxForwardAndSwapConventionJsonBuilderTest {
     attributes.put("ATTR2", "VAL2");
     final FXForwardAndSwapConvention convention = new FXForwardAndSwapConvention("GBP/USD", externalIds, ExternalId.of("CONVENTION", "SPOT"),
         BusinessDayConventions.FOLLOWING, true);
-    final FXForwardAndSwapConvention copy = FxForwardAndSwapConventionJsonBuilder.INSTANCE.getCopy(convention);
+    final FXForwardAndSwapConvention copy = BUILDER.getCopy(convention);
     copy.addAttribute("ATTR3", "VAL3");
     assertNotEquals(convention, copy);
     assertEquals(convention,

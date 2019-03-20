@@ -21,6 +21,7 @@ $.register_module({
 				['name', 											Form.type.STR],
 				['fixingTime', 										Form.type.STR],
 				['swapConvention',		 							Form.type.STR],
+				['underlyingConventionName', 						Form.type.STR],
 				['uniqueId',										Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
@@ -43,7 +44,8 @@ $.register_module({
 	        	save_handler = config.save_handler,
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
-	        	sep = '~', 
+	        	fixingTime = master.fixingTime,
+	        	underlyingConventionName = master.underlyingConventionName,
 	        	form = new Form({
 	        		module: 'og.views.forms.swap-index-convention_tash',
 	        		data: master,
@@ -84,7 +86,7 @@ $.register_module({
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
-            		$(form_id + ' input[name=fixingTime]').val(master.fixingTime);
+            		$(form_id + ' input[name=fixingTime]').val(fixingTime);
             		$(form_id);
             		setTimeout(load_handler.partial(form));
                 };
@@ -94,13 +96,13 @@ $.register_module({
             	new ui.Dropdown({
             		form: form,
             		placeholder: 'Please select...',
-            		value: master.swapConvention === ' ~ ' ? "" : master.swapConvention,
+            		value: !underlyingConventionName ? "" : underlyingConventionName,
             		resource: 'conventions.conventionIds',
             		data_generator: function (handler) {
-            			api.conventions.conventionIds.get({ conventionType: 'Swap'}).pipe(function (result) {
+            			api.conventions.convention_ids.get({ conventionType: 'Swap'}).pipe(function (result) {
             				handler(result.data.map(function (convention) {
             					var split = convention.split('|');
-            					return {value: split[0], text: split[1]};
+            					return { value: split[0], text: split[0], selected: split[0] === underlyingConventionName };
             				}))
             			})
             		},

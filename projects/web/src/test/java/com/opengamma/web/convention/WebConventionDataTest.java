@@ -15,7 +15,7 @@ import org.threeten.bp.Instant;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.mcleodmoores.web.json.DepositConventionJsonBuilder;
+import com.mcleodmoores.web.json.convention.DepositConventionJsonBuilder;
 import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.EquityConvention;
 import com.opengamma.id.ExternalIdBundle;
