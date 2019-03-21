@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.id.ExternalId;
@@ -27,8 +29,9 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Convention for a fixed leg based on roll date adjuster. This convention should be used only in a IMMSwapConvention.
+ * Convention for a fixed leg based on roll date adjuster. This convention should be used only for IMM swaps.
  */
+@ConventionMetaData(description = "IMM fixed swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
 @BeanDefinition
 public class FixedLegRollDateConvention extends FinancialConvention {
 
@@ -86,20 +89,27 @@ public class FixedLegRollDateConvention extends FinancialConvention {
   /**
    * Creates an instance.
    *
-   * @param name  the name of the convention, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param paymentTenor  the payment tenor, not null
-   * @param dayCount  the day-count, not null
-   * @param currency  the currency, not null
-   * @param regionCalendar  the region calendar, not null
-   * @param stubType  the stub type, not null
-   * @param isExchangeNotional  true if notional is to be exchanged
-   * @param paymentLag  the payment lag
+   * @param name
+   *          the name of the convention, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param paymentTenor
+   *          the payment tenor, not null
+   * @param dayCount
+   *          the day-count, not null
+   * @param currency
+   *          the currency, not null
+   * @param regionCalendar
+   *          the region calendar, not null
+   * @param stubType
+   *          the stub type, not null
+   * @param isExchangeNotional
+   *          true if notional is to be exchanged
+   * @param paymentLag
+   *          the payment lag
    */
-  public FixedLegRollDateConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final Tenor paymentTenor, final DayCount dayCount,
-      final Currency currency, final ExternalId regionCalendar, final StubType stubType, final boolean isExchangeNotional,
-      final int paymentLag) {
+  public FixedLegRollDateConvention(final String name, final ExternalIdBundle externalIdBundle, final Tenor paymentTenor, final DayCount dayCount,
+      final Currency currency, final ExternalId regionCalendar, final StubType stubType, final boolean isExchangeNotional, final int paymentLag) {
     super(name, externalIdBundle);
     setPaymentTenor(paymentTenor);
     setDayCount(dayCount);
@@ -110,7 +120,7 @@ public class FixedLegRollDateConvention extends FinancialConvention {
     setPaymentLag(paymentLag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
    *
@@ -124,8 +134,10 @@ public class FixedLegRollDateConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

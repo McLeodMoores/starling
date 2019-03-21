@@ -19,6 +19,8 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -28,6 +30,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Conventions for a compounding ibor swap leg.
  */
+@ConventionMetaData(description = "Compounding *IBOR swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
 @BeanDefinition
 public class CompoundingIborLegConvention extends FinancialConvention {
 
@@ -55,8 +58,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
   @PropertyDefinition(validate = "notNull")
   private CompoundingType _compoundingType;
   /**
-   * The composition tenor.
-   * This is the tenor of the sub-periods compounded into the payment tenor.
+   * The composition tenor. This is the tenor of the sub-periods compounded into the payment tenor.
    */
   @PropertyDefinition(validate = "notNull")
   private Tenor _compositionTenor;
@@ -100,24 +102,35 @@ public class CompoundingIborLegConvention extends FinancialConvention {
   /**
    * Creates an instance.
    *
-   * @param name  the name of the convention, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param iborIndexConvention  the id of the underlying ibor index convention, not null
-   * @param paymentTenor  the payment tenor, not null
-   * @param compoundingType  the compounding type, not null
-   * @param compositionTenor  the composition tenor, not null TODO: Remove: in the ibor Index.
-   * @param stubTypeCompound  the stub type used in each coupon for the compounding, not null
-   * @param settlementDays  the number of settlement days
-   * @param isEOM  true if dates follow the end-of-month rule
-   * @param stubTypeLeg  the stub type used in the leg for the different coupons, not null
-   * @param isExchangeNotional  true if notional is to be exchanged
-   * @param paymentLag  the payment lag in days
+   * @param name
+   *          the name of the convention, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param iborIndexConvention
+   *          the id of the underlying ibor index convention, not null
+   * @param paymentTenor
+   *          the payment tenor, not null
+   * @param compoundingType
+   *          the compounding type, not null
+   * @param compositionTenor
+   *          the composition tenor, not null
+   * @param stubTypeCompound
+   *          the stub type used in each coupon for the compounding, not null
+   * @param settlementDays
+   *          the number of settlement days
+   * @param isEOM
+   *          true if dates follow the end-of-month rule
+   * @param stubTypeLeg
+   *          the stub type used in the leg for the different coupons, not null
+   * @param isExchangeNotional
+   *          true if notional is to be exchanged
+   * @param paymentLag
+   *          the payment lag in days
    */
-  public CompoundingIborLegConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId iborIndexConvention,
-      final Tenor paymentTenor, final CompoundingType compoundingType, final Tenor compositionTenor,
-      final StubType stubTypeCompound, final int settlementDays, final boolean isEOM,
-      final StubType stubTypeLeg, final boolean isExchangeNotional, final int paymentLag) {
+  // TODO: Remove composition tenor: in the ibor Index.
+  public CompoundingIborLegConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId iborIndexConvention,
+      final Tenor paymentTenor, final CompoundingType compoundingType, final Tenor compositionTenor, final StubType stubTypeCompound, final int settlementDays,
+      final boolean isEOM, final StubType stubTypeLeg, final boolean isExchangeNotional, final int paymentLag) {
     super(name, externalIdBundle);
     setIborIndexConvention(iborIndexConvention);
     setPaymentTenor(paymentTenor);
@@ -131,7 +144,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
     setPaymentLag(paymentLag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
    *
@@ -145,8 +158,10 @@ public class CompoundingIborLegConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override
@@ -254,8 +269,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the composition tenor.
-   * This is the tenor of the sub-periods compounded into the payment tenor.
+   * Gets the composition tenor. This is the tenor of the sub-periods compounded into the payment tenor.
    * @return the value of the property, not null
    */
   public Tenor getCompositionTenor() {
@@ -263,8 +277,7 @@ public class CompoundingIborLegConvention extends FinancialConvention {
   }
 
   /**
-   * Sets the composition tenor.
-   * This is the tenor of the sub-periods compounded into the payment tenor.
+   * Sets the composition tenor. This is the tenor of the sub-periods compounded into the payment tenor.
    * @param compositionTenor  the new value of the property, not null
    */
   public void setCompositionTenor(Tenor compositionTenor) {
@@ -274,7 +287,6 @@ public class CompoundingIborLegConvention extends FinancialConvention {
 
   /**
    * Gets the the {@code compositionTenor} property.
-   * This is the tenor of the sub-periods compounded into the payment tenor.
    * @return the property, not null
    */
   public final Property<Tenor> compositionTenor() {

@@ -2,7 +2,7 @@
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 $.register_module({
-	name: 'og.views.convention_forms.iborindexconvention',
+	name: 'og.views.convention_forms.inflationlegconvention',
 	dependencies: [
 		'og.api.rest',
 		'og.common.util.ui',
@@ -20,16 +20,13 @@ $.register_module({
 			type_map = [
 				[['0', INDX].join('.'),									Form.type.STR],
 				['name', 												Form.type.STR],
-				['currency', 											Form.type.STR],
 				['businessDayConvention',             		            Form.type.STR],
 				['dayCount',      										Form.type.STR],
-				['fixingCalendar',										Form.type.STR],
-				['fixingPage',											Form.type.STR],
-				['fixingTime',											Form.type.STR],
-				['fixingTimeZone',										Form.type.STR],
-				['isEOM',												Form.type.BOO],
-				['regionCalendar',										Form.type.STR],
-				['settlementDays',										Form.type.BYT],
+				['isEOM', 												Form.type.BOO],
+				['monthLag',											Form.type.STR],
+				['spotLag',												Form.type.STR],
+				['priceIndexConvention', 								Form.type.STR],
+				['underlyingConventionName', 							Form.type.STR],
 				['uniqueId',											Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 			Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
@@ -52,10 +49,11 @@ $.register_module({
             	save_handler = config.save_handler,
             	master = config.data.template_data.configJSON.data, 
             	convention_type = config.type,
-            	isEom = master.isEOM,
+	        	underlyingConventionName = master.underlyingConventionName,
+            	isEOM = master.isEOM,
             	sep = '~',
             	form = new Form({
-            		module: 'og.views.forms.ibor-index-convention_tash',
+            		module: 'og.views.forms.inflation-leg-convention_tash',
             		data: master, 
             		type_map:  type_map,
             		selector: selector,
@@ -73,7 +71,7 @@ $.register_module({
             		var data = result.data, 
             			meta = result.meta,
             			as_new = result.extras.as_new;
-            		data.isEOM = isEom;
+            		data.isEOM = isEOM;
             		if (as_new && (orig_name === data.name)) { return window.alert('Please select a new name.') };
             		api.conventions.put({
             			id: as_new ? void 0 : resource_id,
@@ -91,71 +89,19 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			  &nbsp(*IBOR Index Convention)\
+            			  &nbsp(Fixed Swap Leg Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
-            		$(form_id + ' input[name=fixingTime]').val(master.fixingTime);
-            		$(form_id + ' input[name=fixingTimeZone]').val(master.fixingTimeZone);
-            		$(form_id + ' input[name=fixingPage]').val(master.fixingPage);
-            		$(form_id + ' input[name=isEOM]').prop('checked', isEom);
-            		$(form_id + ' input[name=settlementDays]').val(master.settlementDays.toString());
+            		$(form_id + ' input[name=isEOM]').prop('checked', isEOM);
+            		$(form_id + ' input[name=monthLag]').val(master.monthLag.toString());
+            		$(form_id + ' input[name=spotLag]').val(master.spotLag.toString());
             		setTimeout(load_handler.partial(form));
             	};
-            	holiday_handler = function (handler) {
-                	api.holidays.get({ page: '*' }).pipe(function (result) {
-                		handler(result.data.data.map(function (holiday) {
-                			var split = holiday.split('|');
-                			//TODO make currency type more readable
-                			return !split[1] ? null : { value: split[1], text: split[1] + ' - ' + split[2] + ' Calendar'}                    			
-                		}).filter(Boolean).sort(function (a, b) {
-                			return a.text < b.text ? -1 : a === b ? 0 : 1;
-                		}));
-                	});
-                };
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource)
-            	.on('click', form_id + ' input[name=isEOM]', function (event) {
-            		isEom = !isEom;
-            	});
+            	.on('click', form_id + ' input[name=isEOM]', function (event) { isEOM = !isEOM; });
             form.children = [
-            	// item_0
-            	new form.Block({ 
-            		module: 'og.views.forms.currency_tash' 
-            	}).on('form:load', function () {
-            		$(form_id + ' select[name=currency]').val(master.currency);
-            	}), 
-            	// item_1
-                new ui.Dropdown({ 
-                    form: form, 
-                    placeholder: 'Please select...',
-            		value: master.fixingCalendar ? master.fixingCalendar.split(sep)[1] : "",
-                    //TODO 
-                    processor: function (selector, data, errors) {
-                        data.fixingCalendar = master.fixingCalendar.split(sep)[0] + sep + $(selector).val();
-                    },
-                    data_generator: holiday_handler
-                }),
-                // item_2
-                new ui.Dropdown({ 
-                    form: form, 
-                    placeholder: 'Please select...',
-            		value: master.regionCalendar ? master.regionCalendar.split(sep)[1] : "",
-                    //TODO
-                    processor: function (selector, data, errors) {
-                        data.regionCalendar = master.regionCalendar.split(sep)[0] + sep + $(selector).val();
-                    },
-                    data_generator: holiday_handler
-                }),
-                // item_3
-                new ui.Dropdown({
-                	form: form, 
-            		placeholder: 'Please select...',
-                	resource: 'blotter.daycountconventions',
-                	index: 'dayCount',
-                	value: master.dayCount ? master.dayCount : ""
-                }),
-                // item_4
                 new ui.Dropdown({
                 	form: form, 
                 	placeholder: 'Please select...',
@@ -163,13 +109,33 @@ $.register_module({
                 	index: 'businessDayConvention',
                 	value: master.businessDayConvention ? master.businessDayConvention : ""
                 }),
-                // item_5
+                new ui.Dropdown({
+                	form: form, 
+            		placeholder: 'Please select...',
+                	resource: 'blotter.daycountconventions',
+                	index: 'dayCount',
+                	value: master.dayCount ? master.dayCount : ""
+                }),
+            	new ui.Dropdown({
+            		form: form,
+            		placeholder: 'Please select...',
+            		value: !underlyingConventionName ? "" : underlyingConventionName,
+            		resource: 'conventions.conventionIds',
+            		data_generator: function (handler) {
+            			api.conventions.convention_ids.get({ conventionType: 'PriceIndex'}).pipe(function (result) {
+            				handler(result.data.map(function (convention) {
+            					var split = convention.split('|');
+            					return { value: split[0], text: split[0], selected: split[0] === underlyingConventionName };
+            				}))
+            			})
+            		},
+            		index: 'priceIndexConvention'
+            	}),
                 new og.views.convention_forms.ExternalIdBundle({
                 	form: form,
                 	data: master.externalIdBundle,
                 	index: 'externalIdBundle'
                 }),
-            	// item_6
             	new og.views.convention_forms.Attributes({
             		form: form,
             		attributes: master.attributes,

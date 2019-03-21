@@ -15,7 +15,7 @@ $.register_module({
 			ATTR = 'attributes',
 			EIDS = 'externalIdBundle',
 			INDX = '<INDEX>',
-			EMPT = '<EMPTY>'
+			EMPT = '<EMPTY>',
 			type_map = [
 				[['0', INDX].join('.'),								Form.type.STR],
 				['name', 											Form.type.STR],
@@ -66,6 +66,7 @@ $.register_module({
         				meta = result.meta,
         				as_new = result.extras.as_new;
         			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
+        			if (!data.externalIdBundle.ID.length) { return window.alert('Please add at least one external identifier') }; 
         			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
         				name: data.name,

@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.WordUtils;
 import org.json.JSONArray;
 
+import com.opengamma.analytics.financial.interestrate.CompoundingType;
 import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.security.swap.InterpolationMethod;
 import com.opengamma.util.time.Tenor;
@@ -53,6 +54,18 @@ public class WebConventionsUtils {
   @Produces(MediaType.APPLICATION_JSON)
   public String getInterpolationMethod() {
     return convertEnumToJsonArray(Arrays.asList(InterpolationMethod.values()), EnumComparator.INSTANCE);
+  }
+
+  /**
+   * Gets all compounding types as an array of <code>[compounding type]|display name]</code>
+   *
+   * @return the compounding types
+   */
+  @GET
+  @Path("compoundingtype")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getCompoundingTypes() {
+    return convertEnumToJsonArray(Arrays.asList(CompoundingType.values()), EnumComparator.INSTANCE);
   }
 
   /**

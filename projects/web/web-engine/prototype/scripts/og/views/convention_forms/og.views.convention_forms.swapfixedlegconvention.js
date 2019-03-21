@@ -103,17 +103,6 @@ $.register_module({
             		$(form_id + ' input[name=paymentLag]').val(master.paymentLag.toString());
             		setTimeout(load_handler.partial(form));
             	};
-            	holiday_handler = function (handler) {
-                	api.holidays.get({ page: '*' }).pipe(function (result) {
-                		handler(result.data.data.map(function (holiday) {
-                			var split = holiday.split('|');
-                			//TODO make currency type more readable
-                			return !split[1] ? null : { value: split[1], text: split[1] + ' - ' + split[2] + ' Calendar'}                    			
-                		}).filter(Boolean).sort(function (a, b) {
-                			return a.text < b.text ? -1 : a === b ? 0 : 1;
-                		}));
-                	});
-                };
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource)
             	.on('click', form_id + ' input[name=isEOM]', function (event) { isEOM = !isEOM; })

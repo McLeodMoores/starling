@@ -14,19 +14,27 @@ public final class ConventionGroups {
   public static final String INDEX = "Index";
 
   /**
-   * Group representing conventions for swap legs. These are not complete conventions
-   * but are combined to produce a full convention.
+   * Group representing conventions for swap legs. These are not complete conventions but are combined to produce a full convention.
    */
   public static final String SWAP_LEG_CONVENTION = "Swap Leg";
 
   /**
-   * Group representing fixed income conventions e.g. a swap convention
-   * for a currency.
+   * Group representing exchange-traded futures.
+   */
+  public static final String ETF = "ETF";
+
+  /**
+   * Group representing fixed income conventions e.g. a swap convention for a currency.
    */
   public static final String FIXED_INCOME = "Fixed Income";
 
   /**
-   * Group representing FX conventions e.g. number of settlement days.
+   * Group representing inflation conventions.
+   */
+  public static final String INFLATION = "Inflation";
+
+  /**
+   * Group representing FX conventions.
    */
   public static final String FX = "FX";
 

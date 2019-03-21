@@ -15,7 +15,7 @@ $.register_module({
 		ATTR = 'attributes',
 		EIDS = 'externalIdBundle',
 		INDX = '<INDEX>',
-		EMPT = '<EMPTY>'
+		EMPT = '<EMPTY>',
 		type_map = [
 			[['0', INDX].join('.'),								Form.type.STR],
 			['name', 											Form.type.STR],

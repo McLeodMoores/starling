@@ -5,14 +5,12 @@ $.register_module({
 	name: 'og.views.convention_forms.depositconvention',
 	dependencies: [
 		'og.api.rest',
-		'og.common.util.ui'
 	],
 	obj: function () {
 		var ui = og.common.util.ui,
 			forms = og.views.forms,
 			api = og.api.rest,
 			Form = ui.Form,
-			common = og.views.common,
 			ATTR = 'attributes',
 			EIDS = 'externalIdBundle',
 			INDX = '<INDEX>', 

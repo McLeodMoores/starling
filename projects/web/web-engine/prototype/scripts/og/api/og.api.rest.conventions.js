@@ -27,6 +27,12 @@ $.register_module({
 							put: common.not_available_put,
 							del: common.not_available_del
 						},
+						compoundingtype: {
+							root: 'conventionutils/compoundingtype',
+							get: api.simple_get,
+							put: common.not_available_put,
+							del: common.not_available_del
+						},
 						tenor: {
 							root: 'conventionutils/tenor',
 							get: api.simple_get,
