@@ -14,6 +14,11 @@ public final class ConventionGroups {
   public static final String INDEX = "Index";
 
   /**
+   * Group representing conventions for instruments with defined roll dates (e.g. IMM dates).
+   */
+  public static final String ROLL_DATE_CONVENTION = "Roll Date";
+
+  /**
    * Group representing conventions for swap legs. These are not complete conventions but are combined to produce a full convention.
    */
   public static final String SWAP_LEG_CONVENTION = "Swap Leg";

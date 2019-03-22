@@ -29,7 +29,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Convention for a vanilla ibor swap leg.
  */
-@ConventionMetaData(description = "Vanilla swap *IBOR leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
+@ConventionMetaData(description = "Vanilla *IBOR swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
 @BeanDefinition
 public class VanillaIborLegConvention extends FinancialConvention {
 

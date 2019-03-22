@@ -22,6 +22,8 @@ import org.json.JSONArray;
 
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
 import com.opengamma.financial.convention.StubType;
+import com.opengamma.financial.convention.rolldate.RollDateAdjuster;
+import com.opengamma.financial.convention.rolldate.RollDateAdjusterFactory;
 import com.opengamma.financial.security.swap.InterpolationMethod;
 import com.opengamma.util.time.Tenor;
 import com.opengamma.util.time.TenorFactory;
@@ -33,7 +35,7 @@ import com.opengamma.util.time.TenorFactory;
 public class WebConventionsUtils {
 
   /**
-   * Gets all possible stub types as an array of <code>[stub type]|[display name]</code>
+   * Gets all possible stub types as an array of <code>[stub type]|[display name]</code>.
    *
    * @return the stub types
    */
@@ -45,7 +47,7 @@ public class WebConventionsUtils {
   }
 
   /**
-   * Gets all possible interpolation methods as an array of <code>[interpolation method]|[display name]</code>
+   * Gets all possible interpolation methods as an array of <code>[interpolation method]|[display name]</code>.
    *
    * @return the interpolation methods
    */
@@ -57,7 +59,7 @@ public class WebConventionsUtils {
   }
 
   /**
-   * Gets all compounding types as an array of <code>[compounding type]|display name]</code>
+   * Gets all compounding types as an array of <code>[compounding type]|display name]</code>.
    *
    * @return the compounding types
    */
@@ -69,7 +71,22 @@ public class WebConventionsUtils {
   }
 
   /**
-   * Gets all tenors stored in the {@link TenorFactory} as an array of <code>[display name]</code>
+   * Gets all roll date adjusters stored in the {@link RollDateAdjusterFactory} as an array of <code>[display name]</code>.
+   *
+   * @return the roll date adjusters
+   */
+  @GET
+  @Path("rolldateadjuster")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getRollDateTypes() {
+    final Map<String, RollDateAdjuster> adjusters = RollDateAdjusterFactory.INSTANCE.instanceMap();
+    final List<String> results = new ArrayList<>(adjusters.keySet());
+    Collections.sort(results);
+    return new JSONArray(results).toString();
+  }
+
+  /**
+   * Gets all tenors stored in the {@link TenorFactory} as an array of <code>[display name]</code>.
    *
    * @return the tenors
    */

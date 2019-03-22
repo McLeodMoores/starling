@@ -31,7 +31,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Convention for a fixed leg based on roll date adjuster. This convention should be used only for IMM swaps.
  */
-@ConventionMetaData(description = "IMM fixed swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
+@ConventionMetaData(description = "Fixed IMM swap leg", group = ConventionGroups.ROLL_DATE_CONVENTION)
 @BeanDefinition
 public class FixedLegRollDateConvention extends FinancialConvention {
 

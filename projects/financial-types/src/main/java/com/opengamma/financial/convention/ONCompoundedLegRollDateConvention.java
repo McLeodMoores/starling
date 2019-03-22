@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -25,8 +27,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Convention for an ON (simple rate, compounded) leg based on roll date adjuster. This convention should be used only in a IMMSwapConvention.
+ * Convention for an ON (simple rate, compounded) leg based on roll date adjuster. This convention should be used only for IMM swaps.
  */
+@ConventionMetaData(description = "Overnight compounded IMM swap leg", group = ConventionGroups.ROLL_DATE_CONVENTION)
 @BeanDefinition
 public class ONCompoundedLegRollDateConvention extends FinancialConvention {
 
@@ -74,18 +77,23 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
   /**
    * Creates an instance.
    *
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param overnightIndexConvention  the underlying overnight index convention, not null
-   * @param paymentTenor  the reset tenor, not null
-   * @param stubType  the stub type, not null
-   * @param isExchangeNotional  true if notional is to be exchanged
-   * @param paymentLag  the payment lag in days
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param overnightIndexConvention
+   *          the underlying overnight index convention, not null
+   * @param paymentTenor
+   *          the reset tenor, not null
+   * @param stubType
+   *          the stub type, not null
+   * @param isExchangeNotional
+   *          true if notional is to be exchanged
+   * @param paymentLag
+   *          the payment lag in days
    */
-  public ONCompoundedLegRollDateConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId overnightIndexConvention,
-      final Tenor paymentTenor, final StubType stubType,
-      final boolean isExchangeNotional, final int paymentLag) {
+  public ONCompoundedLegRollDateConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId overnightIndexConvention,
+      final Tenor paymentTenor, final StubType stubType, final boolean isExchangeNotional, final int paymentLag) {
     super(name, externalIdBundle);
     setOvernightIndexConvention(overnightIndexConvention);
     setPaymentTenor(paymentTenor);
@@ -94,7 +102,7 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
     setPaymentLag(paymentLag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
    *
@@ -108,8 +116,10 @@ public class ONCompoundedLegRollDateConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

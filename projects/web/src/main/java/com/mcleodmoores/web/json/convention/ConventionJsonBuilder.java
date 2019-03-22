@@ -57,6 +57,8 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
   private static final String VALUE_FIELD_NAME = "Value";
   /** The current Fudge context */
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
+  /** A Fudge serializer */
+  private static final FudgeSerializer FUDGE_SERIALIZER = new FudgeSerializer(FUDGE_CONTEXT);
   /** An external id with blank fields */
   static final ExternalId EMPTY_EID = ExternalId.of(" ", " ");
 
@@ -111,26 +113,10 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
   }
 
   @Override
-  public String toJSON(final T object) {
-    final Map<String, String> attributes = object.getAttributes();
-    final T copy = getCopy(object);
-    final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
-    final FudgeMsg fudgeMsg = FUDGE_CONTEXT.toFudgeMsg(copy).getMessage();
-    final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.buildMessage(serializer, attributes);
-    final MutableFudgeMsg newMsg = serializer.newMessage();
-    for (final FudgeField field : fudgeMsg.getAllFields()) {
-      if (!ATTR_FIELD_NAME.equals(field.getName())) {
-        newMsg.add(field);
-      }
-    }
-    for (final FudgeField field : attributesFudgeMsg.getAllFields()) {
-      newMsg.add(field);
-    }
-    final StringWriter sw = new StringWriter();
-    try (FudgeMsgJSONWriter fudgeJSONWriter = new FudgeMsgJSONWriter(FUDGE_CONTEXT, sw)) {
-      fudgeJSONWriter.writeMessage(newMsg);
-      return sw.toString();
-    }
+  public String toJSON(final T convention) {
+    final MutableFudgeMsg newMsg = FUDGE_SERIALIZER.newMessage();
+    addAttributes(convention, newMsg);
+    return convertToJson(newMsg);
   }
 
   /**
@@ -145,35 +131,71 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
    * @return the message
    */
   String toJSONWithUnderlyingConvention(final T convention, final ExternalId underlyingConventionId, final ConventionMaster conventionMaster) {
+    final MutableFudgeMsg newMsg = FUDGE_SERIALIZER.newMessage();
+    addAttributes(convention, newMsg);
+    addConventionName(underlyingConventionId, conventionMaster, newMsg);
+    return convertToJson(newMsg);
+  }
+
+  /**
+   * Adds attribute information to the message.
+   *
+   * @param convention
+   *          the convention
+   * @param msg
+   *          the message
+   */
+  void addAttributes(final T convention, final MutableFudgeMsg msg) {
     final Map<String, String> attributes = convention.getAttributes();
     final T copy = getCopy(convention);
-    final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     final FudgeMsg fudgeMsg = FUDGE_CONTEXT.toFudgeMsg(copy).getMessage();
-    final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.buildMessage(serializer, attributes);
-    final MutableFudgeMsg newMsg = serializer.newMessage();
+    final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.buildMessage(FUDGE_SERIALIZER, attributes);
     for (final FudgeField field : fudgeMsg.getAllFields()) {
       if (!ATTR_FIELD_NAME.equals(field.getName())) {
-        newMsg.add(field);
+        msg.add(field);
       }
     }
     for (final FudgeField field : attributesFudgeMsg.getAllFields()) {
-      newMsg.add(field);
+      msg.add(field);
     }
+  }
+
+  /**
+   * Adds the convention name to the message.
+   *
+   * @param underlyingConventionId
+   *          the convention id
+   * @param conventionMaster
+   *          a convention master
+   * @param msg
+   *          the message
+   */
+  void addConventionName(final ExternalId underlyingConventionId, final ConventionMaster conventionMaster, final MutableFudgeMsg msg) {
     final ConventionSearchRequest request = new ConventionSearchRequest();
     request.setExternalIdSearch(ExternalIdSearch.of(ExternalIdSearchType.ANY, underlyingConventionId));
     try {
       final ConventionSearchResult result = conventionMaster.search(request);
       if (result.getConventions().size() == 1) {
         final String underlyingConventionName = result.getSingleConvention().getName();
-        newMsg.add(UNDERLYING_CONVENTION_NAME, underlyingConventionName);
+        msg.add(UNDERLYING_CONVENTION_NAME, underlyingConventionName);
       }
     } catch (final DataNotFoundException e) {
       // log but ignore this for now
       LOGGER.warn("Could not get any convention for request {}", request);
     }
+  }
+
+  /**
+   * Converts a Fudge message to JSON.
+   *
+   * @param msg
+   *          the message
+   * @return the message as JSON
+   */
+  String convertToJson(final MutableFudgeMsg msg) {
     final StringWriter sw = new StringWriter();
     try (FudgeMsgJSONWriter fudgeJSONWriter = new FudgeMsgJSONWriter(FUDGE_CONTEXT, sw)) {
-      fudgeJSONWriter.writeMessage(newMsg);
+      fudgeJSONWriter.writeMessage(msg);
       return sw.toString();
     }
   }
@@ -230,6 +252,15 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
     } catch (final JSONException e) {
       throw new IllegalArgumentException(e);
     }
+  }
+
+  /**
+   * Gets the Fudge serializer.
+   *
+   * @return the Fudge serializer
+   */
+  FudgeSerializer getFudgeSerializer() {
+    return FUDGE_SERIALIZER;
   }
 
   /**

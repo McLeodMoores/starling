@@ -88,7 +88,7 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			  &nbsp(Fixed Swap Leg Convention)\
+            			  &nbsp(Fixed IMM Swap Leg Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);

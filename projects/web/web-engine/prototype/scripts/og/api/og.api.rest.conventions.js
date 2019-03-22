@@ -33,6 +33,12 @@ $.register_module({
 							put: common.not_available_put,
 							del: common.not_available_del
 						},
+						rolldateadjuster: {
+							root: 'conventionutils/rolldateadjuster',
+							get: api.simple_get,
+							put: common.not_available_put,
+							del: common.not_available_del
+						},
 						tenor: {
 							root: 'conventionutils/tenor',
 							get: api.simple_get,
