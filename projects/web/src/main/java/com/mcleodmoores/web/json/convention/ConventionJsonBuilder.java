@@ -215,7 +215,7 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
    */
   static String replaceUnderlyingConventionName(final String json, final String underlyingConventionFieldName, final ConventionType conventionType,
       final ConventionMaster conventionMaster) {
-    // TODO temporary fix - only the name of the underlying index convention is returned from the GUI
+    // TODO temporary fix - only the name of the underlying convention is returned from the GUI
     final String toParse = json;
     try {
       final StringReader sr = new StringReader(toParse);

@@ -2,7 +2,7 @@
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 $.register_module({
-	name: 'og.views.convention_forms.rolldatefraconvention',
+	name: 'og.views.convention_forms.vanillaiborlegrolldateconvention',
 	dependencies: [
 		'og.api.rest',
 		'og.common.util.ui'
@@ -19,10 +19,13 @@ $.register_module({
 		type_map = [
 			[['0', INDX].join('.'),								Form.type.STR],
 			['name', 											Form.type.STR],
-			['indexConvention',									Form.type.STR],
-			['rollDateConvention',	 							Form.type.STR],
+			['iborIndexConvention',								Form.type.STR],
+			['isAdvanceFixing',		 							Form.type.BOO],
+			['resetTenor', 										Form.type.STR],
+			['stubType',										Form.type.STR],
 			['underlyingConventionName', 						Form.type.STR],
-			['rollDateConventionName', 							Form.type.STR],
+			['isExchangeNotional', 								Form.type.BOO],
+			['paymentLag', 										Form.type.BYT],	
 			['uniqueId',										Form.type.STR],
 			[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
 			[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
@@ -45,10 +48,11 @@ $.register_module({
         	save_handler = config.save_handler,
         	master = config.data.template_data.configJSON.data,
         	convention_type = config.type,
+        	isAdvanceFixing = master.isAdvanceFixing,
+        	isExchangeNotional = master.isExchangeNotional,
 			underlyingConventionName = master.underlyingConventionName,
-			rollDateConventionName = master.rollDateConventionName,
         	form = new Form({
-        		module: 'og.views.forms.roll-date-fra-convention_tash',
+        		module: 'og.views.forms.vanilla-ibor-leg-roll-date-convention_tash',
         		data: master,
         		type_map: type_map,
         		selector: selector,
@@ -66,10 +70,11 @@ $.register_module({
     			var data = result.data,
     				meta = result.meta,
     				as_new = result.extras.as_new;
-    			data.rollDateConventionName = data.rollDateConvention;
+    			data.isAdvanceFixing = isAdvanceFixing;
+    			data.isExchangeNotional = isExchangeNotional;
     			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
     			if (!data.externalIdBundle.ID.length) { return window.alert('Please add at least one external identifier') }; 
-   			api.conventions.put({
+    			api.conventions.put({
     				id: as_new ? void 0 : resource_id,
     				name: data.name,
     				json: JSON.stringify({ data: data, meta: meta }),
@@ -85,14 +90,19 @@ $.register_module({
         			<h1>\
         			<span class="og-js-name">' + master.name + '</span>\
         			</h1>\
-        			  &nbsp(IMM FRA Convention)\
+        			  &nbsp(Vanilla *IBOR IMM Leg Convention)\
         			</header>\
         			';
         		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
+        		$(form_id + ' input[name=isAdvanceFixing').prop('checked', isAdvanceFixing);
+        		$(form_id + ' input[name=isExchangeNotional').prop('checked', isExchangeNotional);
+        		$(form_id + ' input[name=paymentLag').val(master.paymentLag.toString());
         		setTimeout(load_handler.partial(form));
             };
         form.on('form:submit', save_resource)
-        	.on('form:load', load_resource);
+        	.on('form:load', load_resource)
+        	.on('click', form_id + ' input[name=isAdvanceFixing]', function (event) { isAdvanceFixing = !isAdvanceFixing })
+        	.on('click', form_id + ' input[name=isExchangeNotional]', function (event) { isExchangeNotional = !isExchangeNotional });
         form.children = [
         	new ui.Dropdown({
         		form: form,
@@ -107,21 +117,36 @@ $.register_module({
         				}))
         			});
         		},
-        		index: 'indexConvention'
+        		index: 'iborIndexConvention'
         	}),
         	new ui.Dropdown({
         		form: form,
         		placeholder: 'Please select...',
-        		value: !rollDateConventionName ? "" : rollDateConventionName,
-        		resource: 'conventionutils.rolldateadjuster',
+        		value: master.resetTenor ? master.resetTenor : "",
+        		resource: 'conventionutils.tenor',
         		data_generator: function (handler) {
-        			api.conventions.convention_utils.rolldateadjuster.get().pipe(function (result) {
-        				handler(result.data.map(function (roll_date_adjuster) {
-        					return { value: roll_date_adjuster, text: roll_date_adjuster };
+        			api.conventions.convention_utils.tenor.get().pipe(function (result) {
+        				handler(result.data.map(function (tenor) {
+        					return { value: tenor, text: tenor };
         				}))
         			})
         		},
-        		index: 'rollDateConvention'
+        		index: 'resetTenor'
+        	}),
+        	new ui.Dropdown({
+        		form: form,
+        		placeholder: 'Please select...',
+        		value: master.stubType[1] ? master.stubType[1] : "",
+        		resource: 'conventionutils.stubtype',
+        		data_generator: function (handler) {
+        			api.conventions.convention_utils.stubtype.get().pipe(function (result) {
+        				handler(result.data.map(function (stub_type) {
+        					var split = stub_type.split('|');
+        					return { value: split[0], text: split[1] };
+        				}))
+        			})
+        		},
+        		index: 'stubType'
         	}),
         	new og.views.convention_forms.ExternalIdBundle({
         		form: form,

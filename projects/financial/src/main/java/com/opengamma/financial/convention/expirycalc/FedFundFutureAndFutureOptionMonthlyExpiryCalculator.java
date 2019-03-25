@@ -9,12 +9,15 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Expiry calculator for Fed fund futures.
  */
+@ExpiryCalculator
 public final class FedFundFutureAndFutureOptionMonthlyExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   /** Name of the calculator */
@@ -28,7 +31,7 @@ public final class FedFundFutureAndFutureOptionMonthlyExpiryCalculator implement
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static FedFundFutureAndFutureOptionMonthlyExpiryCalculator getInstance() {
@@ -41,9 +44,15 @@ public final class FedFundFutureAndFutureOptionMonthlyExpiryCalculator implement
   private FedFundFutureAndFutureOptionMonthlyExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  @Deprecated
   @Override
   public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero");
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holiday calendar");
@@ -58,7 +67,7 @@ public final class FedFundFutureAndFutureOptionMonthlyExpiryCalculator implement
     return today.plusMonths(n - 1);
   }
 
-  private LocalDate adjustForSettlement(final LocalDate date, final Calendar holidayCalendar) {
+  private static LocalDate adjustForSettlement(final LocalDate date, final WorkingDayCalendar holidayCalendar) {
     int days = 0;
     LocalDate result = date;
     while (days < WORKING_DAYS_TO_SETTLE) {

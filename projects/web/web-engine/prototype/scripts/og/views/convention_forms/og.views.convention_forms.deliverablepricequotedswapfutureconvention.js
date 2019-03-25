@@ -2,7 +2,7 @@
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 $.register_module({
-	name: 'og.views.convention_forms.priceindexconvention',
+	name: 'og.views.convention_forms.deliverablepricequotedswapfutureconvention',
 	dependencies: [
 		'og.api.rest',
 		'og.common.util.ui'
@@ -19,8 +19,11 @@ $.register_module({
 			type_map = [
 				[['0', INDX].join('.'),								Form.type.STR],
 				['name', 											Form.type.STR],
-				['currency',  										Form.type.STR],
-				['region',		 									Form.type.STR],
+				['swapConvention',		 							Form.type.STR],
+				['expiryConvention', 								Form.type.STR],
+				['exchangeCalendar', 								Form.type.STR],
+				['notional', 										Form.type.STR],
+				['underlyingConventionName', 						Form.type.STR],
 				['uniqueId',										Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
@@ -43,15 +46,15 @@ $.register_module({
 	        	save_handler = config.save_handler,
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
-	        	sep = '~', 
+	        	underlyingConventionName = master.underlyingConventionName,
+	        	sep = '~',
 	        	form = new Form({
-	        		module: 'og.views.forms.price-index-convention_tash',
+	        		module: 'og.views.forms.deliverable-price-quoted-swap-future-convention_tash',
 	        		data: master,
 	        		type_map: type_map,
 	        		selector: selector,
 	        		extras: {
 	        			name: master.name,
-	        			currency: master.currency || (master.currency = 'USD')
 	        		},
 	        		processor: function (data) {
 	        			data.id = data.id.filter(function (v) { return v !== void 0; });
@@ -66,7 +69,7 @@ $.register_module({
         				as_new = result.extras.as_new;
         			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
         			if (!data.externalIdBundle.ID.length) { return window.alert('Please add at least one external identifier') }; 
-       			api.conventions.put({
+        			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
         				name: data.name,
         				json: JSON.stringify({ data: data, meta: meta }),
@@ -82,51 +85,73 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			  &nbsp(Price Index Convention)\
+            			  &nbsp(Price-Quoted Deliverable Swap Future Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
+            		$(form_id + ' input[name=notional]').val(master.notional.toString());
             		$(form_id);
             		setTimeout(load_handler.partial(form));
-        		},
+                };
             	holiday_handler = function (handler) {
-                    api.regions.get({page: '*'}).pipe(function (result) {
-                        handler(result.data.data.map(function (region) {
-                            var split = region.split('|');
-                            return !split[3] ? null : {value: split[3], text: split[3] + ' - ' + split[1]}
-                        }).filter(Boolean).sort(function (a, b) { // alphabetize
-                            return a.text < b.text ? -1 : a === b ? 0 : 1;
-                        }));
-                    });
+                	api.holidays.get({ page: '*' }).pipe(function (result) {
+                		handler(result.data.data.map(function (holiday) {
+                			var split = holiday.split('|');
+                			//TODO make currency type more readable
+                			return !split[1] ? null : { value: split[1], text: split[1] + ' - ' + split[2] + ' Calendar'}                    			
+                		}).filter(Boolean).sort(function (a, b) {
+                			return a.text < b.text ? -1 : a === b ? 0 : 1;
+                		}));
+                	});
                 };
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource);
             form.children = [
-            	// item_0
-            	new form.Block({ 
-            		module: 'og.views.forms.currency_tash' 
-            	}).on('form:load', function () {
-            		$(form_id + ' select[name=currency]').val(master.currency);
-            	}),
-            	// item_1
             	new ui.Dropdown({
             		form: form,
             		placeholder: 'Please select...',
-            		value: master.region ? master.region.split(sep)[1] : "",
-       				//TODO
-            		processor: function (selector, data, errors) {
-            			data.region = master.region.split(sep)[0] + sep + $(selector).val();
+            		value: !underlyingConventionName ? "" : underlyingConventionName,
+            		resource: 'conventions.conventionIds',
+            		data_generator: function (handler) {
+            			api.conventions.convention_ids.get({ conventionType: 'Swap'}).pipe(function (result) {
+            				handler(result.data.map(function (convention) {
+            					var split = convention.split('|');
+            					return { value: split[0], text: split[0], selected: split[0] === underlyingConventionName };
+            				}))
+            			})
             		},
-            		data_generator: holiday_handler
+            		index: 'swapConvention'
             	}),
-            	// item_2
+            	new ui.Dropdown({
+            		form: form,
+            		placeholder: 'Please select...',
+            		value: master.expiryConvention ? master.expiryConvention.split(sep)[1] : "",
+            		resource: 'conventionutils.expirycalculator',
+            		data_generator: function (handler) {
+            			api.conventions.convention_utils.expirycalculator.get().pipe(function (result) {
+            				handler(result.data.map(function (expiry_calculator) {
+            					var split = expiry_calculator.split('|');
+            					return { value: split[0], text: split[1] };
+            				}))
+            			})
+            		},
+            		index: 'expiryConvention'
+            	}),
+                new ui.Dropdown({ 
+                    form: form, 
+                    placeholder: 'Please select...',
+            		value: master.exchangeCalendar ? master.exchangeCalendar.split(sep)[1] : "",
+                    //TODO 
+                    processor: function (selector, data, errors) {
+                        data.exchangeCalendar = master.exchangeCalendar.split(sep)[0] + sep + $(selector).val();
+                    },
+                    data_generator: holiday_handler
+                }),
             	new og.views.convention_forms.ExternalIdBundle({
             		form: form,
             		data: master.externalIdBundle,
             		index: 'externalIdBundle',
-            		name: "Price Index Identifiers"
             	}),
-            	// item_3
             	new og.views.convention_forms.Attributes({
             		form: form,
             		attributes: master.attributes,

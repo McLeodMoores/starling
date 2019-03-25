@@ -10,12 +10,15 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Expiry calculator for bond future options.
  */
+@ExpiryCalculator
 public final class BondFutureOptionExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   /** Name of the calculator */
@@ -31,7 +34,7 @@ public final class BondFutureOptionExpiryCalculator implements ExchangeTradedIns
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static BondFutureOptionExpiryCalculator getInstance() {
@@ -44,9 +47,15 @@ public final class BondFutureOptionExpiryCalculator implements ExchangeTradedIns
   private BondFutureOptionExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  @Deprecated
   @Override
   public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero; have {}", n);
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holiday calendar");

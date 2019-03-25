@@ -9,6 +9,8 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
@@ -17,6 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Expiry calculator for gold future options.
  */
+@ExpiryCalculator
 public final class GoldFutureOptionExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   /** Name of the calculator */
@@ -28,7 +31,7 @@ public final class GoldFutureOptionExpiryCalculator implements ExchangeTradedIns
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static GoldFutureOptionExpiryCalculator getInstance() {
@@ -41,20 +44,39 @@ public final class GoldFutureOptionExpiryCalculator implements ExchangeTradedIns
   private GoldFutureOptionExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Expiry date of Gold Future Options:
-   * Four days before the end of the month preceding the option month.
-   * If expiration falls on a Friday or a day before a holiday it moves to the previous business day
-   * See http://www.cmegroup.com/trading/metals/precious/gold_contractSpecs_options.html#prodType=AME
+   * Expiry date of Gold Future Options: Four days before the end of the month preceding the option month. If expiration falls on a Friday or a day before a
+   * holiday it moves to the previous business day See http://www.cmegroup.com/trading/metals/precious/gold_contractSpecs_options.html#prodType=AME
    *
-   * @param n  the n'th expiry date after today, greater than zero
-   * @param today  the valuation date, not null
-   * @param holidayCalendar  the holiday calendar, not null
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
+   * @return the expiry date, not null
+   */
+  @Deprecated
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  /**
+   * Expiry date of Gold Future Options: Four days before the end of the month preceding the option month. If expiration falls on a Friday or a day before a
+   * holiday it moves to the previous business day See http://www.cmegroup.com/trading/metals/precious/gold_contractSpecs_options.html#prodType=AME
+   *
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
    * @return the expiry date, not null
    */
   @Override
-  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero; have {}", n);
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holiday calendar");

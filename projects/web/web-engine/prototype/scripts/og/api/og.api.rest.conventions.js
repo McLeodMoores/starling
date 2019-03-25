@@ -14,6 +14,9 @@ $.register_module({
 				convention_name: {
 					root: 'conventions/conventionName'
 				},
+				all_convention_ids: {
+					root: 'conventions/allConventionIds'
+				},
 				convention_utils: { 
 						stubtype: {
 							root: 'conventionutils/stubtype',
@@ -35,6 +38,12 @@ $.register_module({
 						},
 						rolldateadjuster: {
 							root: 'conventionutils/rolldateadjuster',
+							get: api.simple_get,
+							put: common.not_available_put,
+							del: common.not_available_del
+						},
+						expirycalculator: {
+							root: 'conventionutils/expirycalculator',
 							get: api.simple_get,
 							put: common.not_available_put,
 							del: common.not_available_del
@@ -107,7 +116,17 @@ $.register_module({
 			meta = check({
 				bundle: {method: root + '#get', config: config}
 			});
-			return api.request(method, {data: { conventionType: config.conventionType }, meta: meta});
+			return api.request(method, { data: { conventionType: config.conventionType }, meta: meta });
+		};
+		conventions.all_convention_ids.get = function (config) {
+			config = config || {};
+			var root = this.root, 
+				method = root.split('/'), 
+				meta;
+			meta = check({
+				bundle: {method: root + '#get', config: config}
+			});
+			return api.request(method, { data: { conventionTypes: config.conventionTypes }, meta: meta });
 		};
 		conventions.convention_name.get = function (config) {
 			config = config || {};

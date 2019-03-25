@@ -75,7 +75,8 @@ $.register_module({
     			data.isEOM = isEOM;
     			data.isExchangeNotional = isExchangeNotional;
     			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
-    			api.conventions.put({
+    			if (!data.externalIdBundle.ID.length) { return window.alert('Please add at least one external identifier') }; 
+   			api.conventions.put({
     				id: as_new ? void 0 : resource_id,
     				name: data.name,
     				json: JSON.stringify({ data: data, meta: meta }),

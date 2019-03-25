@@ -10,6 +10,8 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.HMUZAdjuster;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
@@ -17,6 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Expiry calculator for IMM futures with two days spot lag.
  */
+@ExpiryCalculator
 public final class IMMFutureAndFutureOptionQuarterlyExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   /** Name of the calculator */
@@ -34,7 +37,7 @@ public final class IMMFutureAndFutureOptionQuarterlyExpiryCalculator implements 
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static IMMFutureAndFutureOptionQuarterlyExpiryCalculator getInstance() {
@@ -47,9 +50,15 @@ public final class IMMFutureAndFutureOptionQuarterlyExpiryCalculator implements 
   private IMMFutureAndFutureOptionQuarterlyExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  @Deprecated
   @Override
   public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero");
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holiday calendar");
@@ -79,7 +88,7 @@ public final class IMMFutureAndFutureOptionQuarterlyExpiryCalculator implements 
     return nextExpiryMonth.plusMonths(3 * (n - 1));
   }
 
-  private LocalDate adjustForSettlement(final LocalDate date, final Calendar holidayCalendar) { // Use ScheduleCalculator
+  private static LocalDate adjustForSettlement(final LocalDate date, final WorkingDayCalendar holidayCalendar) { // Use ScheduleCalculator
     int days = 0;
     LocalDate result = date;
     while (days < WORKING_DAYS_TO_SETTLE) {

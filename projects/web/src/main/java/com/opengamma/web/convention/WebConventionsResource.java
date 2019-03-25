@@ -7,6 +7,7 @@ package com.opengamma.web.convention;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -304,6 +305,26 @@ public class WebConventionsResource extends AbstractWebConventionResource {
     for (final ManageableConvention convention : result.getConventions()) {
       names.add(convention.getName() + "|" + convention.getExternalIdBundle().toStringList());
     }
+    return new JSONArray(names).toString();
+  }
+
+  @GET
+  @Path("allConventionIds")
+  @Produces(MediaType.APPLICATION_JSON)
+  @SubscribeMaster(MasterType.CONVENTION)
+  public String getIdsForConventionTypes(@QueryParam("conventionTypes") final String conventionType) {
+    final ConventionSearchRequest request = new ConventionSearchRequest();
+    final String[] types = StringUtils.trimToEmpty(conventionType).split("&");
+    final List<String> names = new ArrayList<>();
+    for (final String type : types) {
+      request.setConventionType(ConventionType.of(type));
+      request.setSortOrder(ConventionSearchSortOrder.NAME_ASC);
+      final ConventionSearchResult result = data().getConventionMaster().search(request);
+      for (final ManageableConvention convention : result.getConventions()) {
+        names.add(convention.getName() + "|" + convention.getExternalIdBundle().toStringList());
+      }
+    }
+    Collections.sort(names);
     return new JSONArray(names).toString();
   }
 

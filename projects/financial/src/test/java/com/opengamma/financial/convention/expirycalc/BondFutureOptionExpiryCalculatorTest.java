@@ -10,8 +10,8 @@ import static org.testng.AssertJUnit.assertEquals;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -21,8 +21,8 @@ import com.opengamma.util.test.TestGroup;
 public class BondFutureOptionExpiryCalculatorTest {
 
   private static final BondFutureOptionExpiryCalculator CALCULATOR = BondFutureOptionExpiryCalculator.getInstance();
-  static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("a");
-  private static final Calendar CALENDAR = new MyCalendar();
+  static final WorkingDayCalendar WEEKEND_CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+  private static final WorkingDayCalendar CALENDAR = new MyCalendar();
   private static final LocalDate AUGUST = LocalDate.of(2012, 8, 1);
   private static final LocalDate SEPTEMBER_START = LocalDate.of(2012, 9, 1);
   private static final LocalDate SEPTEMBER_END = LocalDate.of(2012, 9, 29);
@@ -44,10 +44,10 @@ public class BondFutureOptionExpiryCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    CALCULATOR.getExpiryDate(2, AUGUST, null);
+    CALCULATOR.getExpiryDate(2, AUGUST, (WorkingDayCalendar) null);
   }
 
-//  @Test
+  // @Test
   public void testExpiryMonthBeforeExpiry() {
     assertEquals(LocalDate.of(2012, 9, 21), CALCULATOR.getExpiryDate(1, SEPTEMBER_START, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2012, 9, 21), CALCULATOR.getExpiryDate(1, SEPTEMBER_START, CALENDAR));
@@ -84,7 +84,7 @@ public class BondFutureOptionExpiryCalculatorTest {
 
   }
 
-  private static class MyCalendar implements Calendar {
+  private static class MyCalendar implements WorkingDayCalendar {
     private static final LocalDate HOLIDAY1 = LocalDate.of(2012, 12, 28);
     private static final LocalDate HOLIDAY2 = LocalDate.of(2012, 11, 23);
     private static final LocalDate HOLIDAY3 = LocalDate.of(2013, 2, 2);
@@ -94,21 +94,26 @@ public class BondFutureOptionExpiryCalculatorTest {
     }
 
     @Override
-    public boolean isWorkingDay(final LocalDate date) {
-      if (date.equals(HOLIDAY1) || date.equals(HOLIDAY2) || date.equals(HOLIDAY3) || date.equals(HOLIDAY4)) {
-        return false;
-      }
-      return WEEKEND_CALENDAR.isWorkingDay(date);
-    }
-
-    @Override
-    public String getConventionName() {
-      return null;
-    }
-
-    @Override
     public String getName() {
-      return null;
+      return "MyCalendar";
+    }
+
+    @Override
+    public boolean isWorkingDay(final LocalDate date) {
+      return !isHoliday(date);
+    }
+
+    @Override
+    public boolean isHoliday(final LocalDate date) {
+      if (date.equals(HOLIDAY1) || date.equals(HOLIDAY2) || date.equals(HOLIDAY3) || date.equals(HOLIDAY4)) {
+        return true;
+      }
+      return WEEKEND_CALENDAR.isHoliday(date);
+    }
+
+    @Override
+    public boolean isWeekend(final LocalDate date) {
+      return WEEKEND_CALENDAR.isWeekend(date);
     }
 
   }

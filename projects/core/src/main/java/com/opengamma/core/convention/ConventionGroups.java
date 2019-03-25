@@ -36,17 +36,12 @@ public final class ConventionGroups {
   /**
    * Group representing inflation conventions.
    */
-  public static final String INFLATION = "Inflation";
+  public static final String INFLATION = "Inflation Leg";
 
   /**
    * Group representing FX conventions.
    */
   public static final String FX = "FX";
-
-  /**
-   * Group representing bond conventions e.g. the day-count and yield convention.
-   */
-  public static final String BOND = "Bond";
 
   /**
    * Group representing miscellaneous conventions.

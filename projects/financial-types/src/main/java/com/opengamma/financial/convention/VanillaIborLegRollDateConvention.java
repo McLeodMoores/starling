@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -25,8 +27,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Convention for an Ibor leg based on roll date adjuster. This convention should be used only in a IMMSwapConvention.
+ * Convention for an Ibor leg based on roll date adjuster. This convention should be only be used for IMM swaps.
  */
+@ConventionMetaData(description = "Vanilla *IBOR IMM swap leg", group = ConventionGroups.ROLL_DATE_CONVENTION)
 @BeanDefinition
 public class VanillaIborLegRollDateConvention extends FinancialConvention {
 
@@ -79,19 +82,25 @@ public class VanillaIborLegRollDateConvention extends FinancialConvention {
   /**
    * Creates an instance.
    *
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param iborIndexConvention  the underlying ibor index convention, not null
-   * @param isAdvanceFixing  true if fixing is in advance
-   * @param resetTenor  the reset tenor, not null TODO: Remove: in iborIndex
-   * @param stubType  the stub type, not null
-   * @param isExchangeNotional  true if notional is to be exchanged
-   * @param paymentLag  the payment lag in days
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param iborIndexConvention
+   *          the underlying ibor index convention, not null
+   * @param isAdvanceFixing
+   *          true if fixing is in advance
+   * @param resetTenor
+   *          the reset tenor, not null TODO: Remove: in iborIndex
+   * @param stubType
+   *          the stub type, not null
+   * @param isExchangeNotional
+   *          true if notional is to be exchanged
+   * @param paymentLag
+   *          the payment lag in days
    */
-  public VanillaIborLegRollDateConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId iborIndexConvention,
-      final boolean isAdvanceFixing, final Tenor resetTenor, final StubType stubType,
-      final boolean isExchangeNotional, final int paymentLag) {
+  public VanillaIborLegRollDateConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId iborIndexConvention,
+      final boolean isAdvanceFixing, final Tenor resetTenor, final StubType stubType, final boolean isExchangeNotional, final int paymentLag) {
     super(name, externalIdBundle);
     setIborIndexConvention(iborIndexConvention);
     setIsAdvanceFixing(isAdvanceFixing);
@@ -101,7 +110,7 @@ public class VanillaIborLegRollDateConvention extends FinancialConvention {
     setPaymentLag(paymentLag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
    *
@@ -115,8 +124,10 @@ public class VanillaIborLegRollDateConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

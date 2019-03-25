@@ -7,12 +7,15 @@ package com.opengamma.financial.convention.expirycalc;
 
 import org.threeten.bp.LocalDate;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Expiry calculator for Brent crude futures.
  */
+@ExpiryCalculator
 public final class BrentCrudeFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   /** Name of the calculator */
@@ -22,7 +25,7 @@ public final class BrentCrudeFutureExpiryCalculator implements ExchangeTradedIns
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static BrentCrudeFutureExpiryCalculator getInstance() {
@@ -35,20 +38,41 @@ public final class BrentCrudeFutureExpiryCalculator implements ExchangeTradedIns
   private BrentCrudeFutureExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Expiry date of Brent crude Futures:
-   * The business day preceding the 15th day of the contract month.
-   * See http://www.cmegroup.com/trading/energy/crude-oil/brent-crude-oil-last-day_contractSpecs_futures.html#prodType=AME
-   * Note: Logic to handle holidays in London is not handled currently.
-   * 
-   * @param n  the n'th expiry date after today, greater than zero
-   * @param today  the valuation date, not null
-   * @param holidayCalendar  the holiday calendar, not null
+   * Expiry date of Brent crude Futures: The business day preceding the 15th day of the contract month. See
+   * http://www.cmegroup.com/trading/energy/crude-oil/brent-crude-oil-last-day_contractSpecs_futures.html#prodType=AME Note: Logic to handle holidays in London
+   * is not handled currently.
+   *
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
+   * @return the expiry date, not null
+   */
+  @Deprecated
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  /**
+   * Expiry date of Brent crude Futures: The business day preceding the 15th day of the contract month. See
+   * http://www.cmegroup.com/trading/energy/crude-oil/brent-crude-oil-last-day_contractSpecs_futures.html#prodType=AME Note: Logic to handle holidays in London
+   * is not handled currently.
+   *
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
    * @return the expiry date, not null
    */
   @Override
-  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero; have {}", n);
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holiday calendar");

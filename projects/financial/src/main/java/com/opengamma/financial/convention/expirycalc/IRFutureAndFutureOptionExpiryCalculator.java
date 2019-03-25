@@ -7,17 +7,19 @@ package com.opengamma.financial.convention.expirycalc;
 
 import org.threeten.bp.LocalDate;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
 import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 
 /**
  * Expiry calculator for IR futures.
  * <p>
-* Provides Expiries of IR Future Options from ordinals (i.e. nth future after valuationDate).
-* This Calculator looks for Serial (Monthly) expiries for the first 6, and then quarterly from then on,
-* thus n=7 will be the first quarterly expiry after the 6th monthly one.
-*/
+ * Provides Expiries of IR Future Options from ordinals (i.e. nth future after valuationDate). This Calculator looks for Serial (Monthly) expiries for the first
+ * 6, and then quarterly from then on, thus n=7 will be the first quarterly expiry after the 6th monthly one.
+ */
+@ExpiryCalculator
 public final class IRFutureAndFutureOptionExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   /** Name of the calculator */
@@ -25,7 +27,7 @@ public final class IRFutureAndFutureOptionExpiryCalculator implements ExchangeTr
   /** Singleton. */
   private static final IRFutureAndFutureOptionExpiryCalculator INSTANCE = new IRFutureAndFutureOptionExpiryCalculator();
   /** Calendar for weekdays. */
-  private static final Calendar WEEKDAYS = new MondayToFridayCalendar("MTWThF");
+  private static final WorkingDayCalendar WEEKDAYS = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
 
   /**
    * Gets the singleton instance.
@@ -42,9 +44,15 @@ public final class IRFutureAndFutureOptionExpiryCalculator implements ExchangeTr
   private IRFutureAndFutureOptionExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  @Deprecated
   @Override
   public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     return FutureOptionUtils.getIRFutureOptionWithSerialOptionsExpiry(n, today, holidayCalendar);
   }
 

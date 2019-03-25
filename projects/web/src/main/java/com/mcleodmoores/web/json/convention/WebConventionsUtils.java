@@ -22,6 +22,7 @@ import org.json.JSONArray;
 
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
 import com.opengamma.financial.convention.StubType;
+import com.opengamma.financial.convention.expirycalc.ExchangeTradedInstrumentExpiryCalculatorFactory;
 import com.opengamma.financial.convention.rolldate.RollDateAdjuster;
 import com.opengamma.financial.convention.rolldate.RollDateAdjusterFactory;
 import com.opengamma.financial.security.swap.InterpolationMethod;
@@ -99,6 +100,33 @@ public class WebConventionsUtils {
     final List<String> results = new ArrayList<>();
     for (final Tenor tenor : sorted) {
       results.add(tenor.toFormattedString());
+    }
+    return new JSONArray(results).toString();
+  }
+
+  /**
+   * Gets all expiry calculators stored in the {@link ExpiryCalculatorFactory} as an array of <code>[expiry calculator]|display name]</code>.
+   *
+   * @return the calculators
+   */
+  @GET
+  @Path("expirycalculator")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getExpiryCalculators() {
+    final SortedSet<String> sorted = new TreeSet<>(ExchangeTradedInstrumentExpiryCalculatorFactory.INSTANCE.instanceMap().keySet());
+    final List<String> results = new ArrayList<>();
+    for (final String item : sorted) {
+      final String displayName;
+      if (item.startsWith("IMM")) {
+        displayName = "IMM " + item.substring(3, item.indexOf("ExpiryCalculator")).replaceAll("(.)([A-Z0-9]\\w)", "$1 $2");
+      } else if (item.startsWith("IR")) {
+        displayName = "IR " + item.substring(2, item.indexOf("ExpiryCalculator")).replaceAll("(.)([A-Z0-9]\\w)", "$1 $2");
+      } else if (item.startsWith("VIX")) {
+        displayName = "VIX " + item.substring(3, item.indexOf("ExpiryCalculator")).replaceAll("(.)([A-Z0-9]\\w)", "$1 $2");
+      } else {
+        displayName = item.substring(0, item.indexOf("ExpiryCalculator")).replaceAll("(.)([A-Z]\\w)", "$1 $2");
+      }
+      results.add(item + "|" + displayName);
     }
     return new JSONArray(results).toString();
   }

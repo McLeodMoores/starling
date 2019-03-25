@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -26,6 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for price-quoted deliverable swap futures (as traded on CME).
  */
+@ConventionMetaData(description = "Price-quoted deliverable swap future", group = ConventionGroups.ETF)
 @BeanDefinition
 public class DeliverablePriceQuotedSwapFutureConvention extends ExchangeTradedFutureAndOptionConvention {
 
@@ -56,22 +59,27 @@ public class DeliverablePriceQuotedSwapFutureConvention extends ExchangeTradedFu
   }
 
   /**
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The external identifiers for this convention, not null
-   * @param expiryConvention The expiry convention, not null
-   * @param exchangeCalendar The exchange calendar, not null
-   * @param swapConvention The underlying swap convention, not null
-   * @param notional The notional of the future
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The external identifiers for this convention, not null
+   * @param expiryConvention
+   *          The expiry convention, not null
+   * @param exchangeCalendar
+   *          The exchange calendar, not null
+   * @param swapConvention
+   *          The underlying swap convention, not null
+   * @param notional
+   *          The notional of the future
    */
-  public DeliverablePriceQuotedSwapFutureConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId expiryConvention,
+  public DeliverablePriceQuotedSwapFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId expiryConvention,
       final ExternalId exchangeCalendar, final ExternalId swapConvention, final double notional) {
     super(name, externalIdBundle, expiryConvention, exchangeCalendar);
     setSwapConvention(swapConvention);
     setNotional(notional);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
    *
@@ -85,8 +93,10 @@ public class DeliverablePriceQuotedSwapFutureConvention extends ExchangeTradedFu
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

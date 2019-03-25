@@ -14,12 +14,15 @@ import org.threeten.bp.Month;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Expiry calculator for gold future contracts.
  */
+@ExpiryCalculator
 public final class GoldFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   /** Name of the calculator */
@@ -31,7 +34,7 @@ public final class GoldFutureExpiryCalculator implements ExchangeTradedInstrumen
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static GoldFutureExpiryCalculator getInstance() {
@@ -44,20 +47,21 @@ public final class GoldFutureExpiryCalculator implements ExchangeTradedInstrumen
   private GoldFutureExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets trading months (not static as depends on current date).
-   * 
-   * @param now  the date today, not null
+   *
+   * @param now
+   *          the date today, not null
    * @return the valid trading months, not null
    */
   private Month[] getTradingMonths(final LocalDate now) {
     // this may need improvements as the year end approaches
-    Set<Month> ret = new TreeSet<>();
+    final Set<Month> ret = new TreeSet<>();
     ret.add(now.getMonth()); // this month
     ret.add(now.getMonth().plus(1)); // next month
     ret.add(now.getMonth().plus(2)); // next 2 months
-    //  February, April, August, and October in next 23 months
+    // February, April, August, and October in next 23 months
     ret.add(Month.FEBRUARY);
     ret.add(Month.APRIL);
     ret.add(Month.AUGUST);
@@ -70,17 +74,37 @@ public final class GoldFutureExpiryCalculator implements ExchangeTradedInstrumen
   }
 
   /**
-   * Expiry date of Soybean Futures:
-   * The 3rd last business day of the month.
-   * See http://www.cmegroup.com/trading/metals/precious/gold_contract_specifications.html
-   * 
-   * @param n  the n'th expiry date after today, greater than zero
-   * @param today  the valuation date, not null
-   * @param holidayCalendar  the holiday calendar, not null
+   * Expiry date of Soybean Futures: The 3rd last business day of the month. See
+   * http://www.cmegroup.com/trading/metals/precious/gold_contract_specifications.html
+   *
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
+   * @return the expiry date, not null
+   */
+  @Deprecated
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  /**
+   * Expiry date of Soybean Futures: The 3rd last business day of the month. See
+   * http://www.cmegroup.com/trading/metals/precious/gold_contract_specifications.html
+   *
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
    * @return the expiry date, not null
    */
   @Override
-  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero; have {}", n);
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holiday calendar");
@@ -105,7 +129,7 @@ public final class GoldFutureExpiryCalculator implements ExchangeTradedInstrumen
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero");
     ArgumentChecker.notNull(today, "today");
     LocalDate expiryDate = today;
-    Month[] validMonths = getTradingMonths(today);
+    final Month[] validMonths = getTradingMonths(today);
     for (int m = n; m > 0; m--) {
       expiryDate = getNextExpiryMonth(validMonths, expiryDate);
     }
@@ -113,9 +137,9 @@ public final class GoldFutureExpiryCalculator implements ExchangeTradedInstrumen
   }
 
   private LocalDate getNextExpiryMonth(final Month[] validMonths, final LocalDate dtCurrent) {
-    Month mthCurrent = dtCurrent.getMonth();
-    int idx = Arrays.binarySearch(validMonths, mthCurrent);
-    if (Math.abs(idx) >= (validMonths.length - 1)) {
+    final Month mthCurrent = dtCurrent.getMonth();
+    final int idx = Arrays.binarySearch(validMonths, mthCurrent);
+    if (Math.abs(idx) >= validMonths.length - 1) {
       return LocalDate.of(dtCurrent.getYear() + 1, validMonths[0], dtCurrent.getDayOfMonth());
     } else if (idx >= 0) {
       return dtCurrent.with(validMonths[idx + 1]);

@@ -20,6 +20,8 @@ $.register_module({
 				[['0', INDX].join('.'),								Form.type.STR],
 				['name', 											Form.type.STR],
 				['indexConvention',		 							Form.type.STR],
+				['expiryConvention', 								Form.type.STR],
+				['exchangeCalendar', 								Form.type.STR],
 				['underlyingConventionName', 						Form.type.STR],
 				['uniqueId',										Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
@@ -44,6 +46,7 @@ $.register_module({
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
 	        	underlyingConventionName = master.underlyingConventionName,
+	        	sep = '~',
 	        	form = new Form({
 	        		module: 'og.views.forms.interest-rate-future-convention_tash',
 	        		data: master,
@@ -88,6 +91,17 @@ $.register_module({
             		$(form_id);
             		setTimeout(load_handler.partial(form));
                 };
+            	holiday_handler = function (handler) {
+                	api.holidays.get({ page: '*' }).pipe(function (result) {
+                		handler(result.data.data.map(function (holiday) {
+                			var split = holiday.split('|');
+                			//TODO make currency type more readable
+                			return !split[1] ? null : { value: split[1], text: split[1] + ' - ' + split[2] + ' Calendar'}                    			
+                		}).filter(Boolean).sort(function (a, b) {
+                			return a.text < b.text ? -1 : a === b ? 0 : 1;
+                		}));
+                	});
+                };
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource);
             form.children = [
@@ -106,6 +120,31 @@ $.register_module({
             		},
             		index: 'indexConvention'
             	}),
+            	new ui.Dropdown({
+            		form: form,
+            		placeholder: 'Please select...',
+            		value: master.expiryConvention ? master.expiryConvention.split(sep)[1] : "",
+            		resource: 'conventionutils.expirycalculator',
+            		data_generator: function (handler) {
+            			api.conventions.convention_utils.expirycalculator.get().pipe(function (result) {
+            				handler(result.data.map(function (expiry_calculator) {
+            					var split = expiry_calculator.split('|');
+            					return { value: split[0], text: split[1] };
+            				}))
+            			})
+            		},
+            		index: 'expiryConvention'
+            	}),
+                new ui.Dropdown({ 
+                    form: form, 
+                    placeholder: 'Please select...',
+            		value: master.exchangeCalendar ? master.exchangeCalendar.split(sep)[1] : "",
+                    //TODO 
+                    processor: function (selector, data, errors) {
+                        data.exchangeCalendar = master.exchangeCalendar.split(sep)[0] + sep + $(selector).val();
+                    },
+                    data_generator: holiday_handler
+                }),
             	new og.views.convention_forms.ExternalIdBundle({
             		form: form,
             		data: master.externalIdBundle,
