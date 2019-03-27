@@ -19,8 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- *
- * @deprecated Deprecated
+ * @deprecated These are legacy configurations
  */
 @Deprecated
 public class MultiCurveCalculationConfigPopulator {
@@ -35,27 +34,27 @@ public class MultiCurveCalculationConfigPopulator {
     final String forward3MCurveName = "Forward3M";
     final String forward6MCurveName = "Forward6M";
     final String forward3MFutCurveName = "Forward3MFut";
-    final MultiCurveCalculationConfig defaultUSDConfig = new MultiCurveCalculationConfig("DefaultTwoCurveUSDConfig", new String[] {discountingCurveName, forward3MCurveName},
-        ComputationTargetSpecification.of(Currency.USD), MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
-        getTwoCurveUSDInstrumentConfig(discountingCurveName, forward3MCurveName));
-    final MultiCurveCalculationConfig defaultGBPConfig = new MultiCurveCalculationConfig("DefaultTwoCurveGBPConfig", new String[] {discountingCurveName, forward6MCurveName},
-        ComputationTargetSpecification.of(Currency.GBP), MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
-        getTwoCurveGBPInstrumentConfig(discountingCurveName, forward6MCurveName));
-    final MultiCurveCalculationConfig defaultEURConfig = new MultiCurveCalculationConfig("DefaultTwoCurveEURConfig", new String[] {discountingCurveName, forward6MCurveName},
-        ComputationTargetSpecification.of(Currency.EUR), MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
-        getTwoCurveEURInstrumentConfig(discountingCurveName, forward6MCurveName));
-    final MultiCurveCalculationConfig defaultJPYConfig = new MultiCurveCalculationConfig("DefaultTwoCurveJPYConfig", new String[] {discountingCurveName, forward6MCurveName},
-        ComputationTargetSpecification.of(Currency.JPY), MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
-        getTwoCurveJPYInstrumentConfig(discountingCurveName, forward6MCurveName));
-    final MultiCurveCalculationConfig defaultCHFConfig = new MultiCurveCalculationConfig("DefaultTwoCurveCHFConfig", new String[] {discountingCurveName, forward6MCurveName},
-        ComputationTargetSpecification.of(Currency.CHF), MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
-        getTwoCurveCHFInstrumentConfig(discountingCurveName, forward6MCurveName));
-    final MultiCurveCalculationConfig eurOIS3M6M = new MultiCurveCalculationConfig("EUR-OIS-3M-6M", new String[] {discountingCurveName, forward3MCurveName, forward6MCurveName},
-        ComputationTargetSpecification.of(Currency.EUR), MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
-        getEUROISInstrumentConfig1(discountingCurveName, forward3MCurveName, forward6MCurveName));
-    final MultiCurveCalculationConfig eurOIS3MFut6M = new MultiCurveCalculationConfig("EUR-OIS-3MFut-6M", new String[] {discountingCurveName, forward3MFutCurveName, forward6MCurveName},
-        ComputationTargetSpecification.of(Currency.EUR), MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING,
-        getEUROISFutInstrumentConfig1(discountingCurveName, forward3MFutCurveName, forward6MCurveName));
+    final MultiCurveCalculationConfig defaultUSDConfig = new MultiCurveCalculationConfig("DefaultTwoCurveUSDConfig",
+        new String[] { discountingCurveName, forward3MCurveName }, ComputationTargetSpecification.of(Currency.USD),
+        MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, getTwoCurveUSDInstrumentConfig(discountingCurveName, forward3MCurveName));
+    final MultiCurveCalculationConfig defaultGBPConfig = new MultiCurveCalculationConfig("DefaultTwoCurveGBPConfig",
+        new String[] { discountingCurveName, forward6MCurveName }, ComputationTargetSpecification.of(Currency.GBP),
+        MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, getTwoCurveGBPInstrumentConfig(discountingCurveName, forward6MCurveName));
+    final MultiCurveCalculationConfig defaultEURConfig = new MultiCurveCalculationConfig("DefaultTwoCurveEURConfig",
+        new String[] { discountingCurveName, forward6MCurveName }, ComputationTargetSpecification.of(Currency.EUR),
+        MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, getTwoCurveEURInstrumentConfig(discountingCurveName, forward6MCurveName));
+    final MultiCurveCalculationConfig defaultJPYConfig = new MultiCurveCalculationConfig("DefaultTwoCurveJPYConfig",
+        new String[] { discountingCurveName, forward6MCurveName }, ComputationTargetSpecification.of(Currency.JPY),
+        MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, getTwoCurveJPYInstrumentConfig(discountingCurveName, forward6MCurveName));
+    final MultiCurveCalculationConfig defaultCHFConfig = new MultiCurveCalculationConfig("DefaultTwoCurveCHFConfig",
+        new String[] { discountingCurveName, forward6MCurveName }, ComputationTargetSpecification.of(Currency.CHF),
+        MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, getTwoCurveCHFInstrumentConfig(discountingCurveName, forward6MCurveName));
+    final MultiCurveCalculationConfig eurOIS3M6M = new MultiCurveCalculationConfig("EUR-OIS-3M-6M",
+        new String[] { discountingCurveName, forward3MCurveName, forward6MCurveName }, ComputationTargetSpecification.of(Currency.EUR),
+        MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, getEUROISInstrumentConfig1(discountingCurveName, forward3MCurveName, forward6MCurveName));
+    final MultiCurveCalculationConfig eurOIS3MFut6M = new MultiCurveCalculationConfig("EUR-OIS-3MFut-6M",
+        new String[] { discountingCurveName, forward3MFutCurveName, forward6MCurveName }, ComputationTargetSpecification.of(Currency.EUR),
+        MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING, getEUROISFutInstrumentConfig1(discountingCurveName, forward3MFutCurveName, forward6MCurveName));
     ConfigMasterUtils.storeByName(configMaster, makeConfig(defaultUSDConfig));
     ConfigMasterUtils.storeByName(configMaster, makeConfig(defaultGBPConfig));
     ConfigMasterUtils.storeByName(configMaster, makeConfig(defaultEURConfig));
@@ -75,11 +74,12 @@ public class MultiCurveCalculationConfigPopulator {
     return config;
   }
 
-  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveUSDInstrumentConfig(final String discountingCurveName, final String forward3MCurveName) {
-    final String[] discountingOnly = new String[] {discountingCurveName};
-    final String[] forward3MOnly = new String[] {forward3MCurveName};
-    final String[] discountingForward3M = new String[] {discountingCurveName, forward3MCurveName};
-    final String[] discountingDiscounting = new String[] {discountingCurveName, discountingCurveName};
+  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveUSDInstrumentConfig(final String discountingCurveName,
+      final String forward3MCurveName) {
+    final String[] discountingOnly = new String[] { discountingCurveName };
+    final String[] forward3MOnly = new String[] { forward3MCurveName };
+    final String[] discountingForward3M = new String[] { discountingCurveName, forward3MCurveName };
+    final String[] discountingDiscounting = new String[] { discountingCurveName, discountingCurveName };
     final LinkedHashMap<String, CurveInstrumentConfig> result = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
     discountingConfig.put(StripInstrumentType.CASH, discountingOnly);
@@ -95,12 +95,12 @@ public class MultiCurveCalculationConfigPopulator {
 
   private static LinkedHashMap<String, CurveInstrumentConfig> getEUROISInstrumentConfig1(final String discountingCurveName, final String forward3MCurveName,
       final String forward6MCurveName) {
-    final String[] discountingOnly = new String[] {discountingCurveName};
-    final String[] forward3MOnly = new String[] {forward3MCurveName};
-    final String[] forward6MOnly = new String[] {forward6MCurveName};
-    final String[] discountingForward3M = new String[] {discountingCurveName, forward3MCurveName};
-    final String[] discountingForward6M = new String[] {discountingCurveName, forward6MCurveName};
-    final String[] discountingDiscounting = new String[] {discountingCurveName, discountingCurveName};
+    final String[] discountingOnly = new String[] { discountingCurveName };
+    final String[] forward3MOnly = new String[] { forward3MCurveName };
+    final String[] forward6MOnly = new String[] { forward6MCurveName };
+    final String[] discountingForward3M = new String[] { discountingCurveName, forward3MCurveName };
+    final String[] discountingForward6M = new String[] { discountingCurveName, forward6MCurveName };
+    final String[] discountingDiscounting = new String[] { discountingCurveName, discountingCurveName };
     final LinkedHashMap<String, CurveInstrumentConfig> result = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
     discountingConfig.put(StripInstrumentType.CASH, discountingOnly);
@@ -121,12 +121,12 @@ public class MultiCurveCalculationConfigPopulator {
 
   private static LinkedHashMap<String, CurveInstrumentConfig> getEUROISFutInstrumentConfig1(final String discountingCurveName, final String forward3MCurveName,
       final String forward6MCurveName) {
-    final String[] discountingOnly = new String[] {discountingCurveName};
-    final String[] forward3MOnly = new String[] {forward3MCurveName};
-    final String[] forward6MOnly = new String[] {forward6MCurveName};
-    final String[] discountingForward3M = new String[] {discountingCurveName, forward3MCurveName};
-    final String[] discountingForward6M = new String[] {discountingCurveName, forward6MCurveName};
-    final String[] discountingDiscounting = new String[] {discountingCurveName, discountingCurveName};
+    final String[] discountingOnly = new String[] { discountingCurveName };
+    final String[] forward3MOnly = new String[] { forward3MCurveName };
+    final String[] forward6MOnly = new String[] { forward6MCurveName };
+    final String[] discountingForward3M = new String[] { discountingCurveName, forward3MCurveName };
+    final String[] discountingForward6M = new String[] { discountingCurveName, forward6MCurveName };
+    final String[] discountingDiscounting = new String[] { discountingCurveName, discountingCurveName };
     final LinkedHashMap<String, CurveInstrumentConfig> result = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
     discountingConfig.put(StripInstrumentType.CASH, discountingOnly);
@@ -146,11 +146,12 @@ public class MultiCurveCalculationConfigPopulator {
     return result;
   }
 
-  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveGBPInstrumentConfig(final String discountingCurveName, final String forward6MCurveName) {
-    final String[] discountingOnly = new String[] {discountingCurveName};
-    final String[] forward6MOnly = new String[] {forward6MCurveName};
-    final String[] discountingForward6M = new String[] {discountingCurveName, forward6MCurveName};
-    final String[] discountingDiscounting = new String[] {discountingCurveName, discountingCurveName};
+  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveGBPInstrumentConfig(final String discountingCurveName,
+      final String forward6MCurveName) {
+    final String[] discountingOnly = new String[] { discountingCurveName };
+    final String[] forward6MOnly = new String[] { forward6MCurveName };
+    final String[] discountingForward6M = new String[] { discountingCurveName, forward6MCurveName };
+    final String[] discountingDiscounting = new String[] { discountingCurveName, discountingCurveName };
     final LinkedHashMap<String, CurveInstrumentConfig> result = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
     discountingConfig.put(StripInstrumentType.CASH, discountingOnly);
@@ -164,11 +165,12 @@ public class MultiCurveCalculationConfigPopulator {
     return result;
   }
 
-  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveEURInstrumentConfig(final String discountingCurveName, final String forward6MCurveName) {
-    final String[] discountingOnly = new String[] {discountingCurveName};
-    final String[] forward6MOnly = new String[] {forward6MCurveName};
-    final String[] discountingForward6M = new String[] {discountingCurveName, forward6MCurveName};
-    final String[] discountingDiscounting = new String[] {discountingCurveName, discountingCurveName};
+  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveEURInstrumentConfig(final String discountingCurveName,
+      final String forward6MCurveName) {
+    final String[] discountingOnly = new String[] { discountingCurveName };
+    final String[] forward6MOnly = new String[] { forward6MCurveName };
+    final String[] discountingForward6M = new String[] { discountingCurveName, forward6MCurveName };
+    final String[] discountingDiscounting = new String[] { discountingCurveName, discountingCurveName };
     final LinkedHashMap<String, CurveInstrumentConfig> result = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
     discountingConfig.put(StripInstrumentType.CASH, discountingOnly);
@@ -182,11 +184,12 @@ public class MultiCurveCalculationConfigPopulator {
     return result;
   }
 
-  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveJPYInstrumentConfig(final String discountingCurveName, final String forward6MCurveName) {
-    final String[] discountingOnly = new String[] {discountingCurveName};
-    final String[] forward6MOnly = new String[] {forward6MCurveName};
-    final String[] discountingForward6M = new String[] {discountingCurveName, forward6MCurveName};
-    final String[] discountingDiscounting = new String[] {discountingCurveName, discountingCurveName};
+  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveJPYInstrumentConfig(final String discountingCurveName,
+      final String forward6MCurveName) {
+    final String[] discountingOnly = new String[] { discountingCurveName };
+    final String[] forward6MOnly = new String[] { forward6MCurveName };
+    final String[] discountingForward6M = new String[] { discountingCurveName, forward6MCurveName };
+    final String[] discountingDiscounting = new String[] { discountingCurveName, discountingCurveName };
     final LinkedHashMap<String, CurveInstrumentConfig> result = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
     discountingConfig.put(StripInstrumentType.CASH, discountingOnly);
@@ -200,11 +203,12 @@ public class MultiCurveCalculationConfigPopulator {
     return result;
   }
 
-  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveCHFInstrumentConfig(final String discountingCurveName, final String forward6MCurveName) {
-    final String[] discountingOnly = new String[] {discountingCurveName};
-    final String[] forward6MOnly = new String[] {forward6MCurveName};
-    final String[] discountingForward6M = new String[] {discountingCurveName, forward6MCurveName};
-    final String[] discountingDiscounting = new String[] {discountingCurveName, discountingCurveName};
+  private static LinkedHashMap<String, CurveInstrumentConfig> getTwoCurveCHFInstrumentConfig(final String discountingCurveName,
+      final String forward6MCurveName) {
+    final String[] discountingOnly = new String[] { discountingCurveName };
+    final String[] forward6MOnly = new String[] { forward6MCurveName };
+    final String[] discountingForward6M = new String[] { discountingCurveName, forward6MCurveName };
+    final String[] discountingDiscounting = new String[] { discountingCurveName, discountingCurveName };
     final LinkedHashMap<String, CurveInstrumentConfig> result = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
     discountingConfig.put(StripInstrumentType.CASH, discountingOnly);
@@ -219,63 +223,65 @@ public class MultiCurveCalculationConfigPopulator {
   }
 
   private static MultiCurveCalculationConfig getAUDThreeCurveConfig() {
-    final String[] yieldCurveNames = new String[] {"Discounting", "ForwardBasis3M", "ForwardBasis6M"};
+    final String[] yieldCurveNames = new String[] { "Discounting", "ForwardBasis3M", "ForwardBasis6M" };
     final Currency target = Currency.AUD;
     final String calculationMethod = MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING;
     final LinkedHashMap<String, CurveInstrumentConfig> curveExposuresForInstruments = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
-    discountingConfig.put(StripInstrumentType.CASH, new String[] {"Discounting"});
-    discountingConfig.put(StripInstrumentType.OIS_SWAP, new String[] {"Discounting", "Discounting"});
+    discountingConfig.put(StripInstrumentType.CASH, new String[] { "Discounting" });
+    discountingConfig.put(StripInstrumentType.OIS_SWAP, new String[] { "Discounting", "Discounting" });
     final Map<StripInstrumentType, String[]> forwardBasis3MConfig = new HashMap<>();
-    forwardBasis3MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] {"Discounting", "ForwardBasis3M", "ForwardBasis6M"});
-    forwardBasis3MConfig.put(StripInstrumentType.SWAP_3M, new String[] {"Discounting", "ForwardBasis3M"});
-    forwardBasis3MConfig.put(StripInstrumentType.LIBOR, new String[] {"ForwardBasis3M"});
+    forwardBasis3MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] { "Discounting", "ForwardBasis3M", "ForwardBasis6M" });
+    forwardBasis3MConfig.put(StripInstrumentType.SWAP_3M, new String[] { "Discounting", "ForwardBasis3M" });
+    forwardBasis3MConfig.put(StripInstrumentType.LIBOR, new String[] { "ForwardBasis3M" });
     final Map<StripInstrumentType, String[]> forwardBasis6MConfig = new HashMap<>();
-    forwardBasis6MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] {"Discounting", "ForwardBasis3M", "ForwardBasis6M"});
-    forwardBasis6MConfig.put(StripInstrumentType.SWAP_6M, new String[] {"Discounting", "ForwardBasis6M"});
-    forwardBasis6MConfig.put(StripInstrumentType.LIBOR, new String[] {"ForwardBasis6M"});
+    forwardBasis6MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] { "Discounting", "ForwardBasis3M", "ForwardBasis6M" });
+    forwardBasis6MConfig.put(StripInstrumentType.SWAP_6M, new String[] { "Discounting", "ForwardBasis6M" });
+    forwardBasis6MConfig.put(StripInstrumentType.LIBOR, new String[] { "ForwardBasis6M" });
     curveExposuresForInstruments.put("Discounting", new CurveInstrumentConfig(discountingConfig));
     curveExposuresForInstruments.put("ForwardBasis3M", new CurveInstrumentConfig(forwardBasis3MConfig));
     curveExposuresForInstruments.put("ForwardBasis6M", new CurveInstrumentConfig(forwardBasis6MConfig));
-    return new MultiCurveCalculationConfig("DefaultThreeCurveAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod, curveExposuresForInstruments);
+    return new MultiCurveCalculationConfig("DefaultThreeCurveAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod,
+        curveExposuresForInstruments);
   }
 
   private static MultiCurveCalculationConfig getAUDDiscountingCurveConfig() {
-    final String[] yieldCurveNames = new String[] {"Discounting"};
+    final String[] yieldCurveNames = new String[] { "Discounting" };
     final Currency target = Currency.AUD;
     final String calculationMethod = MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING;
     final LinkedHashMap<String, CurveInstrumentConfig> curveExposuresForInstruments = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> discountingConfig = new HashMap<>();
-    discountingConfig.put(StripInstrumentType.CASH, new String[] {"Discounting"});
-    discountingConfig.put(StripInstrumentType.OIS_SWAP, new String[] {"Discounting", "Discounting"});
+    discountingConfig.put(StripInstrumentType.CASH, new String[] { "Discounting" });
+    discountingConfig.put(StripInstrumentType.OIS_SWAP, new String[] { "Discounting", "Discounting" });
     curveExposuresForInstruments.put("Discounting", new CurveInstrumentConfig(discountingConfig));
-    return new MultiCurveCalculationConfig("DiscountingAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod, curveExposuresForInstruments);
+    return new MultiCurveCalculationConfig("DiscountingAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod,
+        curveExposuresForInstruments);
   }
 
   private static MultiCurveCalculationConfig getAUDForwardCurvesConfig() {
-    final String[] yieldCurveNames = new String[] {"ForwardBasis3M", "ForwardBasis6M"};
+    final String[] yieldCurveNames = new String[] { "ForwardBasis3M", "ForwardBasis6M" };
     final Currency target = Currency.AUD;
     final String calculationMethod = MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING;
     final LinkedHashMap<String, CurveInstrumentConfig> curveExposuresForInstruments = new LinkedHashMap<>();
     final Map<StripInstrumentType, String[]> forwardBasis3MConfig = new HashMap<>();
-    forwardBasis3MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] {"Discounting", "ForwardBasis3M", "ForwardBasis6M"});
-    forwardBasis3MConfig.put(StripInstrumentType.SWAP_3M, new String[] {"Discounting", "ForwardBasis3M"});
-    forwardBasis3MConfig.put(StripInstrumentType.LIBOR, new String[] {"ForwardBasis3M"});
+    forwardBasis3MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] { "Discounting", "ForwardBasis3M", "ForwardBasis6M" });
+    forwardBasis3MConfig.put(StripInstrumentType.SWAP_3M, new String[] { "Discounting", "ForwardBasis3M" });
+    forwardBasis3MConfig.put(StripInstrumentType.LIBOR, new String[] { "ForwardBasis3M" });
     final Map<StripInstrumentType, String[]> forwardBasis6MConfig = new HashMap<>();
-    forwardBasis6MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] {"Discounting", "ForwardBasis3M", "ForwardBasis6M"});
-    forwardBasis6MConfig.put(StripInstrumentType.SWAP_6M, new String[] {"Discounting", "ForwardBasis6M"});
-    forwardBasis6MConfig.put(StripInstrumentType.LIBOR, new String[] {"ForwardBasis6M"});
+    forwardBasis6MConfig.put(StripInstrumentType.BASIS_SWAP, new String[] { "Discounting", "ForwardBasis3M", "ForwardBasis6M" });
+    forwardBasis6MConfig.put(StripInstrumentType.SWAP_6M, new String[] { "Discounting", "ForwardBasis6M" });
+    forwardBasis6MConfig.put(StripInstrumentType.LIBOR, new String[] { "ForwardBasis6M" });
     curveExposuresForInstruments.put("ForwardBasis3M", new CurveInstrumentConfig(forwardBasis3MConfig));
     curveExposuresForInstruments.put("ForwardBasis6M", new CurveInstrumentConfig(forwardBasis6MConfig));
     final LinkedHashMap<String, String[]> exogenousConfigAndCurveNames = new LinkedHashMap<>();
-    exogenousConfigAndCurveNames.put("DiscountingAUDConfig", new String[] {"Discounting"});
-    return new MultiCurveCalculationConfig("ForwardFromDiscountingAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod, curveExposuresForInstruments,
-        exogenousConfigAndCurveNames);
+    exogenousConfigAndCurveNames.put("DiscountingAUDConfig", new String[] { "Discounting" });
+    return new MultiCurveCalculationConfig("ForwardFromDiscountingAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod,
+        curveExposuresForInstruments, exogenousConfigAndCurveNames);
   }
 
   private static MultiCurveCalculationConfig getSingleAUDCurveConfig() {
-    final String[] yieldCurveNames = new String[] {"Single"};
-    final String[] twoCurveNames = new String[] {"Single", "Single"};
+    final String[] yieldCurveNames = new String[] { "Single" };
+    final String[] twoCurveNames = new String[] { "Single", "Single" };
     final Currency target = Currency.AUD;
     final String calculationMethod = MultiYieldCurvePropertiesAndDefaults.PAR_RATE_STRING;
     final LinkedHashMap<String, CurveInstrumentConfig> curveExposuresForInstruments = new LinkedHashMap<>();
@@ -285,6 +291,7 @@ public class MultiCurveCalculationConfigPopulator {
     singleConfig.put(StripInstrumentType.SWAP_3M, twoCurveNames);
     singleConfig.put(StripInstrumentType.SWAP_6M, twoCurveNames);
     curveExposuresForInstruments.put("Single", new CurveInstrumentConfig(singleConfig));
-    return new MultiCurveCalculationConfig("SingleAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod, curveExposuresForInstruments);
+    return new MultiCurveCalculationConfig("SingleAUDConfig", yieldCurveNames, ComputationTargetSpecification.of(target), calculationMethod,
+        curveExposuresForInstruments);
   }
 }

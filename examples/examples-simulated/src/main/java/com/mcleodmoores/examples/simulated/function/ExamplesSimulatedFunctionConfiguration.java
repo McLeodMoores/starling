@@ -20,12 +20,21 @@ import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
+/**
+ *
+ */
 public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConfiguration {
 
+  /**
+   * @return the configuration source
+   */
   public static FunctionConfigurationSource instance() {
     return new ExamplesSimulatedFunctionConfiguration().getObjectCreating();
   }
 
+  /**
+   *
+   */
   public ExamplesSimulatedFunctionConfiguration() {
     setMark2MarketField("CLOSE");
     setCostOfCarryField("COST_OF_CARRY");
@@ -78,9 +87,11 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
 
   /**
    * Creates empty default per-equity information objects for equity options.
-   * @param ticker The equity ticker
-   * @param curveCurrency The currency target of the discounting curve (usually, but not necessarily,
-   * the currency of the equity).
+   * 
+   * @param ticker
+   *          The equity ticker
+   * @param curveCurrency
+   *          The currency target of the discounting curve (usually, but not necessarily, the currency of the equity).
    */
   protected void setEquityOptionInfo(final String ticker, final String curveCurrency) {
     final EquityInfo i = defaultEquityInfo(ticker);

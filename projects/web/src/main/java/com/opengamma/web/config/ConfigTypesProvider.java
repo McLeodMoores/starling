@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Maps;
 import com.opengamma.core.config.Config;
+import com.opengamma.core.config.ConfigGroups;
 
 /**
  * Provides all supported configuration types
@@ -44,7 +45,7 @@ public final class ConfigTypesProvider {
    */
   private final Map<String, Map<String, String>> _configGroupMap;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the singleton instance.
    *
@@ -54,7 +55,7 @@ public final class ConfigTypesProvider {
     return INSTANCE;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Restricted constructor
    */
@@ -66,7 +67,7 @@ public final class ConfigTypesProvider {
     final Set<Class<?>> configClasses = reflector.getReflector().getTypesAnnotatedWith(Config.class);
     for (final Class<?> configClass : configClasses) {
       final Config configValueAnnotation = configClass.getAnnotation(Config.class);
-      if (configValueAnnotation != null) {
+      if (configValueAnnotation != null && !configValueAnnotation.group().equals(ConfigGroups.CURVES_LEGACY)) {
         // extract config type
         Class<?> configType = configValueAnnotation.searchType();
         if (configType == Object.class) {
@@ -99,7 +100,7 @@ public final class ConfigTypesProvider {
     _configDescriptionMap = descriptions.build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the set of config keys.
    *
@@ -139,7 +140,8 @@ public final class ConfigTypesProvider {
   /**
    * Gets the description for a type.
    *
-   * @param type  the type, not null
+   * @param type
+   *          the type, not null
    * @return the description, not null
    */
   public String getDescription(final Class<?> type) {
