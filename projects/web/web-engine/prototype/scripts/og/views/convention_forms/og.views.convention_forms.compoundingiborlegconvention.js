@@ -98,11 +98,11 @@ $.register_module({
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
-            		$(form_id);
             		$(form_id + ' input[name=isEOM').prop('checked', isEOM);
             		$(form_id + ' input[name=isExchangeNotional').prop('checked', isExchangeNotional);
             		$(form_id + ' input[name=settlementDays').val(master.settlementDays.toString());
             		$(form_id + ' input[name=paymentLag').val(master.paymentLag.toString());
+            		$(form_id + ' p[id=warning]')[0].hidden = ($('#' + form.children[0].id)[0].options.length > 1);
             		setTimeout(load_handler.partial(form));
                 };
             form.on('form:submit', save_resource)

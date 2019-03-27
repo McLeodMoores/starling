@@ -88,7 +88,7 @@ $.register_module({
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
             		$(form_id + ' input[name=fixingTime]').val(fixingTime);
-            		$(form_id);
+            		$(form_id + ' p[id=warning]')[0].hidden = ($('#' + form.children[0].id)[0].options.length > 1);
             		setTimeout(load_handler.partial(form));
                 };
             form.on('form:submit', save_resource)

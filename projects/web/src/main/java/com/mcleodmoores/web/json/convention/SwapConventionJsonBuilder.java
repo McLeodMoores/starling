@@ -106,7 +106,7 @@ public class SwapConventionJsonBuilder extends ConventionJsonBuilder<SwapConvent
           jsonObject.put("data", data);
         }
       }
-      final SwapConvention convention = fromJSON(jsonObject.toString());
+      final SwapConvention convention = fromJSON(SwapConvention.class, jsonObject.toString());
       convention.setAttributes(attributes);
       return convention;
     } catch (final JSONException e) {

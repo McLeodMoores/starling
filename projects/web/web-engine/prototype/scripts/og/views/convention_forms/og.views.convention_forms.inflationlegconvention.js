@@ -90,13 +90,14 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			  &nbsp(Fixed Swap Leg Convention)\
+            			  &nbsp(Inflation Leg Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
             		$(form_id + ' input[name=isEOM]').prop('checked', isEOM);
             		$(form_id + ' input[name=monthLag]').val(master.monthLag.toString());
             		$(form_id + ' input[name=spotLag]').val(master.spotLag.toString());
+            		$(form_id + ' p[id=warning]')[0].hidden = ($('#' + form.children[2].id)[0].options.length > 1);
             		setTimeout(load_handler.partial(form));
             	};
             form.on('form:submit', save_resource)

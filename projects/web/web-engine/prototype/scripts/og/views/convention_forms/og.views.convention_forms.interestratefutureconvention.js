@@ -88,7 +88,7 @@ $.register_module({
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
-            		$(form_id);
+            		$(form_id + ' p[id=warning]')[0].hidden = ($('#' + form.children[0].id)[0].options.length > 1);
             		setTimeout(load_handler.partial(form));
                 };
             	holiday_handler = function (handler) {
