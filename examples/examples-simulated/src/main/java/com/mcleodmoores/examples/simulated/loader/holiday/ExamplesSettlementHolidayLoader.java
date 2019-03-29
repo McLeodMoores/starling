@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.loader.holiday;
 
@@ -26,7 +26,7 @@ import com.opengamma.master.region.RegionSearchResult;
 import com.opengamma.scripts.Scriptable;
 
 /**
- *
+ * Populates the holiday master with settlement calendars.
  */
 @Scriptable
 public class ExamplesSettlementHolidayLoader extends AbstractTool<ToolContext> {
@@ -40,6 +40,10 @@ public class ExamplesSettlementHolidayLoader extends AbstractTool<ToolContext> {
     }
   }
 
+  /**
+   * @param args
+   *          the arguments
+   */
   public static void main(final String[] args) {
     new ExamplesSettlementHolidayLoader().invokeAndTerminate(args);
   }

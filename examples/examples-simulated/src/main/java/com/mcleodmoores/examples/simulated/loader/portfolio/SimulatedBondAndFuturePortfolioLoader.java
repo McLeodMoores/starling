@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.loader.portfolio;
 
@@ -62,18 +62,25 @@ import com.opengamma.util.time.ExpiryAccuracy;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- *
+ * Loads an example bond and bond future portfolio.
  */
-public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ExamplesBondAndFuturePortfolioLoader.class);
+public class SimulatedBondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedBondAndFuturePortfolioLoader.class);
   private static final LocalTime EXPIRY_TIME = LocalTime.of(16, 00);
   private static final ZoneOffset ZONE = ZoneOffset.UTC;
   private final String _portfolioName;
   private final File _tradeFile;
   private final boolean _updateTrades;
-  private static final int UPDATE_AFTER_DAY = 15;
 
-  public ExamplesBondAndFuturePortfolioLoader(final String portfolioName, final String tradeFileName, final boolean updateTrades) {
+  /**
+   * @param portfolioName
+   *          the portfolio name, not null
+   * @param tradeFileName
+   *          the trade file name, not null
+   * @param updateTrades
+   *          true to update trades i.e. adjust maturities
+   */
+  public SimulatedBondAndFuturePortfolioLoader(final String portfolioName, final String tradeFileName, final boolean updateTrades) {
     _portfolioName = ArgumentChecker.notNull(portfolioName, "portfolioName");
     _tradeFile = new File(ArgumentChecker.notNull(tradeFileName, "tradeFileName"));
     _updateTrades = updateTrades;
@@ -153,8 +160,8 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       final String issuerDomicile = details[3];
       final String market = details[4];
       final Currency currency = Currency.of(details[5]);
-      final Expiry lastTradeDate =
-          new Expiry(ZonedDateTime.of(LocalDateTime.of(LocalDate.parse(details[6]), EXPIRY_TIME), ZONE), ExpiryAccuracy.DAY_MONTH_YEAR);
+      final Expiry lastTradeDate = new Expiry(ZonedDateTime.of(LocalDateTime.of(LocalDate.parse(details[6]), EXPIRY_TIME), ZONE),
+          ExpiryAccuracy.DAY_MONTH_YEAR);
       final YieldConvention yieldConvention = YieldConventionFactory.INSTANCE.getYieldConvention(details[7]);
       final String couponType = details[8];
       final double couponRate = Double.parseDouble(details[9]);
@@ -171,9 +178,9 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       final double redemptionValue = Double.parseDouble(details[20]);
       final BondSecurity security;
       if (issuerType.equalsIgnoreCase("Sovereign")) {
-        security = new GovernmentBondSecurity(issuerName, issuerType, issuerDomicile, market, currency, yieldConvention, lastTradeDate, couponType,
-            couponRate, frequency, dayCount, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount,
-            minimumIncrement, parAmount, redemptionValue);
+        security = new GovernmentBondSecurity(issuerName, issuerType, issuerDomicile, market, currency, yieldConvention, lastTradeDate, couponType, couponRate,
+            frequency, dayCount, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement,
+            parAmount, redemptionValue);
       } else {
         LOGGER.error("Unhandled issuer type {}", issuerType);
         return null;
@@ -211,8 +218,8 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       final String issuerDomicile = details[3];
       final String market = details[4];
       final Currency currency = Currency.of(details[5]);
-      final Expiry lastTradeDate =
-          new Expiry(ZonedDateTime.of(LocalDateTime.of(LocalDate.parse(details[6]), EXPIRY_TIME), ZONE), ExpiryAccuracy.DAY_MONTH_YEAR);
+      final Expiry lastTradeDate = new Expiry(ZonedDateTime.of(LocalDateTime.of(LocalDate.parse(details[6]), EXPIRY_TIME), ZONE),
+          ExpiryAccuracy.DAY_MONTH_YEAR);
       final YieldConvention yieldConvention = YieldConventionFactory.INSTANCE.getYieldConvention(details[7]);
       final DayCount dayCount = DayCountFactory.of(details[8]);
       final ZonedDateTime settlementDate = ZonedDateTime.of(LocalDateTime.of(LocalDate.parse(details[9]), EXPIRY_TIME), ZONE);
@@ -222,8 +229,8 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       final ExternalId regionId = ExternalSchemes.countryRegionId(Country.of(issuerDomicile));
       final BillSecurity security;
       if (issuerType.equalsIgnoreCase("Sovereign")) {
-        security = new BillSecurity(currency, lastTradeDate, settlementDate, minimumIncrement, daysToSettle,
-            regionId, yieldConvention, dayCount, legalEntityId);
+        security = new BillSecurity(currency, lastTradeDate, settlementDate, minimumIncrement, daysToSettle, regionId, yieldConvention, dayCount,
+            legalEntityId);
       } else {
         LOGGER.error("Unhandled issuer type {}", issuerType);
         return null;

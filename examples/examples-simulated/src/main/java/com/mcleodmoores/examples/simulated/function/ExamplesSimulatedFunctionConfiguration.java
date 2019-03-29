@@ -21,7 +21,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- *
+ * Populates the config master with functions.
  */
 public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConfiguration {
 
@@ -33,7 +33,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   /**
-   *
+   * Default constructor.
    */
   public ExamplesSimulatedFunctionConfiguration() {
     setMark2MarketField("CLOSE");
@@ -87,7 +87,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
 
   /**
    * Creates empty default per-equity information objects for equity options.
-   * 
+   *
    * @param ticker
    *          The equity ticker
    * @param curveCurrency
@@ -111,6 +111,14 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
     setEquityInfo(ticker, i);
   }
 
+  /**
+   * Creates empty defaults for vanilla FX options,
+   *
+   * @param ccy1
+   *          the first currency
+   * @param ccy2
+   *          the second currency
+   */
   protected void setVanillaFxOptionInfo(final Currency ccy1, final Currency ccy2) {
     final FxOptionInfo i = new FxOptionInfo();
     i.setSurfaceName("model/vanillafxoption", "DEFAULT");
@@ -121,18 +129,38 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
     setVanillaFxOptionInfo(ccy1, ccy2, i);
   }
 
+  /**
+   * Creates empty defaults for FX forwards.
+   *
+   * @param ccy1
+   *          the first currency
+   * @param ccy2
+   *          the second currency
+   */
   protected void setFxForwardInfo(final Currency ccy1, final Currency ccy2) {
     final FxForwardInfo i = new FxForwardInfo();
     i.setCurveExposureName("model/fxforward", "FX Exposures");
     setFxForwardInfo(ccy1, ccy2, i);
   }
 
+  /**
+   * Creates empty defaults for linear interest rate products.
+   *
+   * @param ccy
+   *          the currency
+   */
   protected void setLinearRatesInfo(final Currency ccy) {
     final LinearRatesInfo i = new LinearRatesInfo();
     i.setCurveExposureName("model/linearrates", "Fixed Income Exposures");
     setLinearRatesInfo(ccy, i);
   }
 
+  /**
+   * Creates empty defaults for government bonds.
+   * 
+   * @param country
+   *          the country
+   */
   protected void setGovernmentBondPerCountryInfo(final Country country) {
     final BondInfo i = new BondInfo();
     i.setCurveExposureName("model/bond/govt", "Govt Bond Exposures");

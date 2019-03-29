@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.examples.simulated.loader.legalentity;
 
 import java.util.Arrays;
@@ -9,7 +12,6 @@ import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.legalentity.Rating;
 import com.opengamma.core.obligor.CreditRating;
 import com.opengamma.financial.tool.ToolContext;
-import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.legalentity.LegalEntityDocument;
 import com.opengamma.master.legalentity.LegalEntityMaster;
@@ -29,7 +31,9 @@ public class ExamplesLegalEntityLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run this loader.
-   * @param args The program arguments
+   *
+   * @param args
+   *          The program arguments
    */
   public static void main(final String[] args) {
     new ExamplesLegalEntityLoader().invokeAndTerminate(args);
@@ -37,16 +41,21 @@ public class ExamplesLegalEntityLoader extends AbstractTool<ToolContext> {
 
   @Override
   protected void doRun() {
+    addGovernments();
+  }
+
+  private void addGovernments() {
     final ManageableLegalEntity usGovernment = new ManageableLegalEntity("US Government",
-        ExternalIdBundle.of(ExternalId.of(DbLegalEntityBeanMaster.IDENTIFIER_SCHEME_DEFAULT, "USGVT")));
+        ExternalIdBundle.of(DbLegalEntityBeanMaster.IDENTIFIER_SCHEME_DEFAULT, "USGVT"));
     usGovernment.setRatings(Arrays.asList(new Rating("Fitch", CreditRating.AAA, null)));
     storeLegalEntity(usGovernment);
   }
 
   /**
-   * Stores a legal entity in the legal entity database. If the entity is already
-   * present, updates it. Otherwise, adds a new entry.
-   * @param entity The legal entity
+   * Stores a legal entity in the legal entity database. If the entity is already present, updates it. Otherwise, adds a new entry.
+   *
+   * @param entity
+   *          The legal entity
    */
   private void storeLegalEntity(final ManageableLegalEntity entity) {
     final LegalEntityMaster master = getToolContext().getLegalEntityMaster();

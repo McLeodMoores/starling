@@ -23,6 +23,7 @@ import com.mcleodmoores.examples.simulated.loader.config.ExamplesExposureFunctio
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesFunctionConfigsPopulator;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesFxImpliedCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesFxVolatilitySurfaceConfigsLoader;
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesIsdaCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesUsTreasuryCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionMasterInitializer;
@@ -30,7 +31,7 @@ import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGene
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesSettlementHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.legalentity.ExamplesLegalEntityLoader;
-import com.mcleodmoores.examples.simulated.loader.portfolio.ExamplesBondAndFuturePortfolioLoader;
+import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedBondAndFuturePortfolioLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedOisPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedUsBondPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.securities.SimulatedIndexSecuritiesGenerator;
@@ -143,18 +144,19 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   /** Logger. */
   /* package */static final Logger LOGGER = LoggerFactory.getLogger(ExamplesDatabasePopulator.class);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     LOGGER.info("Populating example database");
     new ExamplesDatabasePopulator().invokeAndTerminate(args, TOOLCONTEXT_EXAMPLE_PROPERTIES, null);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     loadIndexSecurities();
@@ -173,18 +175,18 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     // GBP corporate bonds
 
     loadAudSwapPortfolio();
-    //    loadSwaptionParityPortfolio();
-    //    loadMixedCMPortfolio();
+    // loadSwaptionParityPortfolio();
+    // loadMixedCMPortfolio();
     loadVanillaFxOptionPortfolio();
     loadEquityPortfolio();
-    //    loadEquityOptionPortfolio();
+    // loadEquityOptionPortfolio();
     loadFuturePortfolio();
-    //    loadBondPortfolio();
-    //    loadSwaptionPortfolio();
-    //    loadEURFixedIncomePortfolio();
+    // loadBondPortfolio();
+    // loadSwaptionPortfolio();
+    // loadEURFixedIncomePortfolio();
     loadFXForwardPortfolio();
-    //    loadERFuturePortfolio();
-    //    loadFXVolatilitySwapPortfolio();
+    // loadERFuturePortfolio();
+    // loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();
     loadBondAndFuturePortfolio();
     loadViews();
@@ -194,6 +196,8 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadFxVolatilitySurfaceConfigurations();
     loadFxImpliedCurveCalculationConfigurations();
     loadUsTreasuryCurveConfigurations();
+    loadIsdaCurveConfigurations();
+    // loadCreditPortfolio();
   }
 
   /**
@@ -212,6 +216,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
 
   /**
    * Creates a synthetic portfolio generator tool.
+   *
    * @return The tool
    */
   private static SyntheticPortfolioGeneratorTool portfolioGeneratorTool() {
@@ -222,6 +227,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
 
   /**
    * Creates a simulated securities generator tool.
+   *
    * @return The tool
    */
   private static SimulatedSecuritiesGenerator securitiesGeneratorTool() {
@@ -229,8 +235,8 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages
-   * formatted in this fashion and route them towards the progress indicators.
+   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages formatted in this
+   * fashion and route them towards the progress indicators.
    */
   private static final class Log {
     /** The string */
@@ -238,9 +244,11 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
 
     /**
      * Create an instance
-     * @param str The string
+     *
+     * @param str
+     *          The string
      */
-    /* package */Log(final String str) {
+    /* package */ Log(final String str) {
       LOGGER.info("{}", str);
       _str = str;
     }
@@ -254,7 +262,9 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
 
     /**
      * Appends an error message.
-     * @param e The error
+     *
+     * @param e
+     *          The error
      */
     /* package */void fail(final RuntimeException e) {
       LOGGER.error("{} - failed - {}", _str, e.getMessage());
@@ -338,9 +348,8 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     try {
       final URL resource = ExampleEquityPortfolioLoader.class.getResource("equityOptions.zip");
       final String file = unpackJar(resource);
-      final PortfolioLoader equityOptionLoader = new PortfolioLoader(getToolContext(), EQUITY_OPTION_PORTFOLIO_NAME, null,
-          file, true,
-          true, true, false, true, false, null);
+      final PortfolioLoader equityOptionLoader = new PortfolioLoader(getToolContext(), EQUITY_OPTION_PORTFOLIO_NAME, null, file, true, true, true, false, true,
+          false, null);
       equityOptionLoader.execute();
       log.done();
     } catch (final RuntimeException t) {
@@ -351,9 +360,9 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   private void loadBondAndFuturePortfolio() {
     final Log log = new Log("Creating example bond / bond future portfolio");
     try {
-      final URL resource = ExamplesBondAndFuturePortfolioLoader.class.getResource("usd-bond-and-futures.csv");
+      final URL resource = SimulatedBondAndFuturePortfolioLoader.class.getResource("usd-bond-and-futures.csv");
       final String file = unpackJar(resource);
-      final ExamplesBondAndFuturePortfolioLoader loader = new ExamplesBondAndFuturePortfolioLoader(USD_TREASURIES_PORTFOLIO_NAME, file, true);
+      final SimulatedBondAndFuturePortfolioLoader loader = new SimulatedBondAndFuturePortfolioLoader(USD_TREASURIES_PORTFOLIO_NAME, file, true);
       loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
@@ -366,8 +375,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     try {
       final URL resource = ExampleEquityPortfolioLoader.class.getResource("futures.zip");
       final String file = unpackJar(resource);
-      final PortfolioLoader futureLoader = new PortfolioLoader(getToolContext(), FUTURE_PORTFOLIO_NAME, null,
-          file, true, true, true, false, true, false, null);
+      final PortfolioLoader futureLoader = new PortfolioLoader(getToolContext(), FUTURE_PORTFOLIO_NAME, null, file, true, true, true, false, true, false, null);
       futureLoader.execute();
       log.done();
     } catch (final RuntimeException t) {
@@ -586,6 +594,20 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
+  /**
+   * Loads example ISDA curve configurations.
+   */
+  private void loadIsdaCurveConfigurations() {
+    final Log log = new Log("Creating ISDA curve configurations");
+    try {
+      final ExamplesIsdaCurveConfigsLoader loader = new ExamplesIsdaCurveConfigsLoader();
+      loader.run(getToolContext());
+      log.done();
+    } catch (final RuntimeException e) {
+      log.fail(e);
+    }
+  }
+
   private void loadFxImpliedCurveCalculationConfigurations() {
     final Log log = new Log("Creating FX implied curve construction configurations");
     try {
@@ -638,7 +660,6 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
-
   /**
    * Loads hard-coded legal entity data.
    */
@@ -653,7 +674,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // workaround for poor handling of resources, see PLAT-3919
   private static String unpackJar(final URL resource) {
     String file = resource.getPath();

@@ -11,6 +11,7 @@ import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OISLegConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.StubType;
+import com.opengamma.financial.convention.SwapConvention;
 import com.opengamma.financial.convention.SwapFixedLegConvention;
 import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -53,17 +54,25 @@ public final class ExampleAuConventions extends ConventionMasterInitializer {
     // OIS
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("AUD OIS Fixed", ExternalIdBundle.of("CONVENTION", "AUD OIS Fixed"), Tenor.ONE_YEAR,
         DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.AUD, AU, 1, true, StubType.SHORT_START, false, 0);
-    final OISLegConvention oisLeg = new OISLegConvention("AUD OIS", ExternalId.of("CONVENTION", "AUD OIS").toBundle(), ExternalId.of("CONVENTION", "RBA IBOC"),
-        Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 0, false, StubType.SHORT_START, false, 0);
+    final OISLegConvention oisLeg = new OISLegConvention("AUD RBA IBOC OIS", ExternalId.of("CONVENTION", "AUD RBA IBOC OIS").toBundle(),
+        ExternalId.of("CONVENTION", "RBA IBOC"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 0, false, StubType.SHORT_START, false, 0);
     // IBOR Swaps
-    final SwapFixedLegConvention ibor3mFixedLeg = new SwapFixedLegConvention("AUD 3M IBOR Fixed", ExternalIdBundle.of("CONVENTION", "AUD 3M IBOR Fixed"),
+    final SwapFixedLegConvention ibor3mFixedLeg = new SwapFixedLegConvention("AUD 3M LIBOR Fixed", ExternalIdBundle.of("CONVENTION", "AUD 3M LIBOR Fixed"),
         Tenor.THREE_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.AUD, AU, 1, true, StubType.SHORT_START, false, 0);
-    final SwapFixedLegConvention ibor6mFixedLeg = new SwapFixedLegConvention("AUD 6M IBOR Fixed", ExternalIdBundle.of("CONVENTION", "AUD 6M IBOR Fixed"),
+    final SwapFixedLegConvention ibor6mFixedLeg = new SwapFixedLegConvention("AUD 6M LIBOR Fixed", ExternalIdBundle.of("CONVENTION", "AUD 6M LIBOR Fixed"),
         Tenor.SIX_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.AUD, AU, 1, true, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("AUD 3M IBOR", ExternalIdBundle.of("CONVENTION", "AUD 3M IBOR"),
+    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("AUD 3M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD 3M LIBOR"),
         ExternalId.of("CONVENTION", "AUDLIBORP3M"), false, InterpolationMethod.NONE.name(), Tenor.THREE_MONTHS, 0, false, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor6mLeg = new VanillaIborLegConvention("AUD 6M IBOR", ExternalIdBundle.of("CONVENTION", "AUD 6M IBOR"),
+    final VanillaIborLegConvention ibor6mLeg = new VanillaIborLegConvention("AUD 6M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD 6M LIBOR"),
         ExternalId.of("CONVENTION", "AUDLIBORP6M"), false, InterpolationMethod.NONE.name(), Tenor.SIX_MONTHS, 0, false, StubType.SHORT_START, false, 0);
+
+    // Swap conventions
+    final SwapConvention shortVanillaSwap = new SwapConvention("AUD Fixed/3M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD Fixed/3M LIBOR"),
+        ibor3mFixedLeg.getExternalIdBundle().iterator().next(), ibor6mLeg.getExternalIdBundle().iterator().next());
+    final SwapConvention longVanillaSwap = new SwapConvention("AUD Fixed/6M LIBOR", ExternalIdBundle.of("CONVENTION", "AUD Fixed/6M LIBOR"),
+        ibor6mFixedLeg.getExternalIdBundle().iterator().next(), ibor6mLeg.getExternalIdBundle().iterator().next());
+    final SwapConvention oisSwap = new SwapConvention("AUD OIS", ExternalIdBundle.of("CONVENTION", "AUD OIS"),
+        oisFixedLeg.getExternalIdBundle().iterator().next(), oisLeg.getExternalIdBundle().iterator().next());
 
     addConvention(master, deposit);
     addConvention(master, overnightDeposit);
@@ -75,6 +84,9 @@ public final class ExampleAuConventions extends ConventionMasterInitializer {
     addConvention(master, ibor6mFixedLeg);
     addConvention(master, ibor3mLeg);
     addConvention(master, ibor6mLeg);
+    addConvention(master, shortVanillaSwap);
+    addConvention(master, longVanillaSwap);
+    addConvention(master, oisSwap);
   }
 
   private ExampleAuConventions() {

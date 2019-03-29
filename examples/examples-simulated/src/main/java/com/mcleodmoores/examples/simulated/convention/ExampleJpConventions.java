@@ -17,6 +17,7 @@ import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OISLegConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.StubType;
+import com.opengamma.financial.convention.SwapConvention;
 import com.opengamma.financial.convention.SwapFixedLegConvention;
 import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -67,19 +68,25 @@ public class ExampleJpConventions extends ConventionMasterInitializer {
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("JPY OIS Fixed",
         ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY OIS Fixed"), ExternalSchemes.currencyRegionId(Currency.JPY)), Tenor.ONE_YEAR, DayCounts.ACT_365,
         BusinessDayConventions.MODIFIED_FOLLOWING, Currency.JPY, JP, 1, true, StubType.SHORT_START, false, 0);
-    final OISLegConvention oisLeg = new OISLegConvention("JPY OIS", ExternalId.of("CONVENTION", "JPY OIS").toBundle(), ExternalId.of("CONVENTION", "TONAR"),
-        Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 0, false, StubType.SHORT_START, false, 1);
+    final OISLegConvention oisLeg = new OISLegConvention("JPY OIS TONAR", ExternalId.of("CONVENTION", "JPY OIS TONAR").toBundle(),
+        ExternalId.of("CONVENTION", "TONAR"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 0, false, StubType.SHORT_START, false, 1);
     // IBOR Swaps
-    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("JPY IBOR Fixed",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY IBOR Fixed"), ExternalSchemes.currencyRegionId(Currency.JPY)), Tenor.SIX_MONTHS, DayCounts.ACT_365,
-        BusinessDayConventions.MODIFIED_FOLLOWING, Currency.JPY, JP, 0, true, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("JPY 6M IBOR",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY 6M IBOR"), ExternalSchemes.currencyRegionId(Currency.JPY)),
+    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("JPY LIBOR Fixed",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY LIBOR Fixed"), ExternalSchemes.currencyRegionId(Currency.JPY)), Tenor.SIX_MONTHS,
+        DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.JPY, JP, 0, true, StubType.SHORT_START, false, 0);
+    final VanillaIborLegConvention ibor6mLeg = new VanillaIborLegConvention("JPY 6M LIBOR",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY 6M LIBOR"), ExternalSchemes.currencyRegionId(Currency.JPY)),
         ExternalId.of("CONVENTION", "JPYLIBORP6M"), false, InterpolationMethod.NONE.name(), Tenor.SIX_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     // Bond conventions
     final BondConvention bondConvention = new BondConvention("JPY Government Bond", ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.JPY), JP), 0,
         2, BusinessDayConventions.FOLLOWING, true, true);
+
+    // Swap conventions
+    final SwapConvention vanillaSwap = new SwapConvention("JPY Fixed/6M LIBOR", ExternalIdBundle.of("CONVENTION", "JPY Fixed/6M LIBOR"),
+        iborFixedLeg.getExternalIdBundle().iterator().next(), ibor6mLeg.getExternalIdBundle().iterator().next());
+    final SwapConvention oisSwap = new SwapConvention("JPY OIS", ExternalIdBundle.of("CONVENTION", "JPY OIS"),
+        oisFixedLeg.getExternalIdBundle().iterator().next(), oisLeg.getExternalIdBundle().iterator().next());
 
     addConvention(master, deposit);
     addConvention(master, overnightDeposit);
@@ -88,8 +95,10 @@ public class ExampleJpConventions extends ConventionMasterInitializer {
     addConvention(master, oisFixedLeg);
     addConvention(master, oisLeg);
     addConvention(master, iborFixedLeg);
-    addConvention(master, ibor3mLeg);
+    addConvention(master, ibor6mLeg);
     addConvention(master, bondConvention);
+    addConvention(master, vanillaSwap);
+    addConvention(master, oisSwap);
   }
 
 }
