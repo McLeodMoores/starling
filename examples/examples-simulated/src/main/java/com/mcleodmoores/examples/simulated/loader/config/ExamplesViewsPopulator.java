@@ -4,6 +4,7 @@
 package com.mcleodmoores.examples.simulated.loader.config;
 
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.AUD_SWAP_PORFOLIO_NAME;
+import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.CORPORATE_CREDIT_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.FUTURE_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.FX_FORWARD_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.MULTI_CURRENCY_SWAP_PORTFOLIO_NAME;
@@ -77,6 +78,7 @@ import com.opengamma.financial.analytics.model.discounting.DiscountingYCNSFuncti
 import com.opengamma.financial.currency.CurrencyConversionFunction;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
+import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
@@ -141,6 +143,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     storeViewDefinition(getFxForwardDetailsViewDefinition(FX_FORWARD_PORTFOLIO_NAME, "FX Forward Details View"));
     storeViewDefinition(getFutureViewDefinition(FUTURE_PORTFOLIO_NAME, "Futures View"));
     storeViewDefinition(getUsTreasuriesViewDefinition(USD_TREASURIES_PORTFOLIO_NAME, "US Treasuries View"));
+    storeViewDefinition(getCreditViewDefinition(CORPORATE_CREDIT_PORTFOLIO_NAME, "Credit View"));
   }
 
   /**
@@ -636,9 +639,24 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     return viewDefinition;
   }
 
+  private ViewDefinition getCreditViewDefinition(final String portfolioName, final String viewName) {
+    final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
+    final ViewDefinition definition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
+    definition.setDefaultCurrency(Currency.USD);
+    definition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    definition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    definition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    definition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
+    final ViewCalculationConfiguration config = new ViewCalculationConfiguration(definition, DEFAULT_CALC_CONFIG);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
+    definition.addViewCalculationConfiguration(config);
+    return definition;
+  }
+
   /**
    * Adds a list of value requirement names to a calculation configuration for a particular security type.
-   * 
+   *
    * @param calcConfiguration
    *          The calculation configuration
    * @param securityType
@@ -655,7 +673,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
 
   /**
    * Gets the id for a portfolio name.
-   * 
+   *
    * @param portfolioName
    *          The portfolio name
    * @return The unique id of the portfolio
@@ -673,7 +691,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
 
   /**
    * Stores a view definition in the config master.
-   * 
+   *
    * @param viewDefinition
    *          The view definition
    */

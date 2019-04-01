@@ -52,12 +52,14 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * The securities generator creates the list of securities.
+   * 
    * @return The securities generator
    */
   public abstract SecuritiesGenerator createSecuritiesGenerator();
 
   /**
    * Creates a list of {@link ManageableSecurity} from the securities generator.
+   * 
    * @return The list of securities
    */
   public List<ManageableSecurity> createSecurities() {
@@ -65,11 +67,13 @@ public abstract class AbstractSecuritiesGeneratorTool {
   }
 
   /**
-   * Runs this tool given a tool context and command line options. The -s option
-   * is required (this sets the name of the securities generator), and -w will
-   * save the securities to the security master.
-   * @param context The tool context, not null
-   * @param commandLine The command line options, not null
+   * Runs this tool given a tool context and command line options. The -s option is required (this sets the name of the securities generator), and -w will save
+   * the securities to the security master.
+   * 
+   * @param context
+   *          The tool context, not null
+   * @param commandLine
+   *          The command line options, not null
    */
   public void run(final ToolContext context, final CommandLine commandLine) {
     ArgumentChecker.notNull(context, "context");
@@ -78,11 +82,14 @@ public abstract class AbstractSecuritiesGeneratorTool {
   }
 
   /**
-   * Runs this tool given a tool context, the securities generator name and a flag
-   * indicating whether or not to write the securities to the database.
-   * @param context The tool context, not null
-   * @param generatorName The securities generator name, not null
-   * @param write True if the securities are to be written to the security master
+   * Runs this tool given a tool context, the securities generator name and a flag indicating whether or not to write the securities to the database.
+   * 
+   * @param context
+   *          The tool context, not null
+   * @param generatorName
+   *          The securities generator name, not null
+   * @param write
+   *          True if the securities are to be written to the security master
    */
   public void run(final ToolContext context, final String generatorName, final boolean write) {
     ArgumentChecker.notNull(context, "context");
@@ -118,11 +125,14 @@ public abstract class AbstractSecuritiesGeneratorTool {
   }
 
   /**
-   * Runs this tool given a tool context, the securities generator name and a flag
-   * indicating whether or not to write the securities to the database.
-   * @param context The tool context, not null
-   * @param instance The securities generator, not null
-   * @param write True if the securities are to be written to the security master
+   * Runs this tool given a tool context, the securities generator name and a flag indicating whether or not to write the securities to the database.
+   * 
+   * @param context
+   *          The tool context, not null
+   * @param instance
+   *          The securities generator, not null
+   * @param write
+   *          True if the securities are to be written to the security master
    */
   public void run(final ToolContext context, final AbstractSecuritiesGeneratorTool instance, final boolean write) {
     ArgumentChecker.notNull(context, "context");
@@ -158,6 +168,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the tool context.
+   * 
    * @return The tool context
    */
   public ToolContext getToolContext() {
@@ -166,7 +177,9 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the tool context.
-   * @param toolContext The tool context
+   * 
+   * @param toolContext
+   *          The tool context
    */
   public void setToolContext(final ToolContext toolContext) {
     _toolContext = toolContext;
@@ -174,6 +187,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the security persister.
+   * 
    * @return The security persister
    */
   public SecurityPersister getSecurityPersister() {
@@ -182,7 +196,9 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the security persister.
-   * @param securityPersister The security persister, not null
+   * 
+   * @param securityPersister
+   *          The security persister, not null
    */
   public void setSecurityPersister(final SecurityPersister securityPersister) {
     ArgumentChecker.notNull(securityPersister, "securityPersister");
@@ -190,20 +206,23 @@ public abstract class AbstractSecuritiesGeneratorTool {
   }
 
   /**
-   * Configures the tool context. If the tool context has been set, sets<p>
+   * Configures the tool context. If the tool context has been set, sets
+   * <p>
    * <ul>
-   * <li> config source
-   * <li> convention source
-   * <li> convention bundle source
-   * <li> holiday source
-   * <li> historical source
-   * <li> exchange master
-   * <li> region source
-   * <li> legal entity source
-   * <li> security master
-   * <li> historical time series master
+   * <li>config source
+   * <li>convention source
+   * <li>convention bundle source
+   * <li>holiday source
+   * <li>historical source
+   * <li>exchange master
+   * <li>region source
+   * <li>legal entity source
+   * <li>security master
+   * <li>historical time series master
    * </ul>
-   * @param securityGenerator The security generator, not null if the tool context is not null
+   * 
+   * @param securityGenerator
+   *          The security generator, not null if the tool context is not null
    */
   protected final void configure(final SecurityGenerator<?> securityGenerator) {
     if (getToolContext() != null) {
@@ -216,6 +235,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
       securityGenerator.setExchangeMaster(getToolContext().getExchangeMaster());
       securityGenerator.setRegionSource(getToolContext().getRegionSource());
       securityGenerator.setLegalEntitySource(getToolContext().getLegalEntitySource());
+      securityGenerator.setLegalEntityMaster(getToolContext().getLegalEntityMaster());
       securityGenerator.setSecurityMaster(getToolContext().getSecurityMaster());
       securityGenerator.setHistoricalTimeSeriesMaster(getToolContext().getHistoricalTimeSeriesMaster());
     }
@@ -224,7 +244,9 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Configures the chain for this tool and security generator.
-   * @param securityGenerator The security generator, not null if the object context is not null
+   * 
+   * @param securityGenerator
+   *          The security generator, not null if the object context is not null
    */
   protected void configureChain(final SecurityGenerator<?> securityGenerator) {
     if (getObjectContext() != null) {
@@ -235,7 +257,9 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Configures the chain for this tool by setting the tool context and security persister.
-   * @param tool The tool, not null
+   * 
+   * @param tool
+   *          The tool, not null
    */
   protected void configure(final AbstractSecuritiesGeneratorTool tool) {
     if (getToolContext() != null) {
@@ -250,8 +274,11 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the class context and the object context for this tool.
-   * @param classContext The class context
-   * @param objectContext The object context
+   * 
+   * @param classContext
+   *          The class context
+   * @param objectContext
+   *          The object context
    */
   private void setContext(final Class<? extends AbstractSecuritiesGeneratorTool> classContext, final AbstractSecuritiesGeneratorTool objectContext) {
     _classContext = classContext;
@@ -260,6 +287,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the class context.
+   * 
    * @return The class context
    */
   private Class<? extends AbstractSecuritiesGeneratorTool> getClassContext() {
@@ -268,6 +296,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the object context.
+   * 
    * @return The object context
    */
   private AbstractSecuritiesGeneratorTool getObjectContext() {
@@ -275,14 +304,17 @@ public abstract class AbstractSecuritiesGeneratorTool {
   }
 
   /**
-   * Gets an instance of the tool given its class and name. If the generator name is not a
-   * full path (i.e. contains a "."), this tool looks in the directory of this class for a
-   * class named [generatorName]SecuritiesGeneratorTool or [generatorName]SecurityGeneratorTool.
-   * If the class is not found, tries the superclass of the required tool.
-   * @param clazz The class of the required securities generator tool
-   * @param generatorName The name
+   * Gets an instance of the tool given its class and name. If the generator name is not a full path (i.e. contains a "."), this tool looks in the directory of
+   * this class for a class named [generatorName]SecuritiesGeneratorTool or [generatorName]SecurityGeneratorTool. If the class is not found, tries the
+   * superclass of the required tool.
+   * 
+   * @param clazz
+   *          The class of the required securities generator tool
+   * @param generatorName
+   *          The name
    * @return The tool
-   * @throws OpenGammaRuntimeException If the securities generator cannot be found or instantiated
+   * @throws OpenGammaRuntimeException
+   *           If the securities generator cannot be found or instantiated
    */
   private AbstractSecuritiesGeneratorTool getInstance(final Class<?> clazz, final String generatorName) {
     if (!AbstractSecuritiesGeneratorTool.class.isAssignableFrom(clazz)) {
@@ -321,7 +353,9 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the required field on an option to true.
-   * @param option The option
+   * 
+   * @param option
+   *          The option
    * @return The option with the required field set to true
    */
   private static Option required(final Option option) {
@@ -330,9 +364,10 @@ public abstract class AbstractSecuritiesGeneratorTool {
   }
 
   /**
-   * Sets the options for this tool: -s for the security generator name, -w to write to the
-   * security master.
-   * @param options The options
+   * Sets the options for this tool: -s for the security generator name, -w to write to the security master.
+   * 
+   * @param options
+   *          The options
    */
   public void createOptions(final Options options) {
     options.addOption(required(new Option("s", GENERATOR_OPT, true, "selects the security generator")));

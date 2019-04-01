@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2019 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.loader.config;
 
@@ -21,7 +21,6 @@ import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
 import com.opengamma.financial.analytics.curve.CurveTypeConfiguration;
 import com.opengamma.financial.analytics.curve.DiscountingCurveTypeConfiguration;
 import com.opengamma.financial.analytics.curve.InterpolatedCurveDefinition;
-import com.opengamma.financial.analytics.ircurve.strips.CashNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
 import com.opengamma.financial.analytics.ircurve.strips.SwapNode;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -86,7 +85,7 @@ public class ExamplesIsdaCurveConfigsPopulator {
     for (final Currency ccy : CCYS) {
       final String cccName = ccy.getCode() + " ISDA";
       final String curveName = ccy.getCode() + " ISDA";
-      final String idMapperName = ccy.getCode() + " Tickers";
+      final String idMapperName = ccy.getCode() + " " + iborTenors.get(ccy).toFormattedString().substring(1) + " Tickers";
       final DiscountingCurveTypeConfiguration dctc = new DiscountingCurveTypeConfiguration(ccy.getCode());
       final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
       curveTypes.put(curveName, Arrays.asList(dctc));
@@ -96,8 +95,7 @@ public class ExamplesIsdaCurveConfigsPopulator {
       cccItem.setName(ccc.getName());
       ConfigMasterUtils.storeByName(configMaster, cccItem);
       final Set<CurveNode> curveNodes = new LinkedHashSet<>();
-      curveNodes.add(new CashNode(Tenor.of(Period.ZERO), iborTenors.get(ccy), iborConventionIds.get(ccy), idMapperName));
-      for (int i = 0; i < 20; i++) {
+      for (int i = 1; i <= 10; i++) {
         curveNodes.add(new SwapNode(Tenor.of(Period.ZERO), Tenor.ofYears(i), payLegIds.get(ccy), receiveLegIds.get(ccy), idMapperName));
       }
       final InterpolatedCurveDefinition interpolatedCurve = new InterpolatedCurveDefinition(curveName, curveNodes,

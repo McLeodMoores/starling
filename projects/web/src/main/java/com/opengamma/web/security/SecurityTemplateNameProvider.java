@@ -29,6 +29,8 @@ import com.opengamma.financial.security.cds.LegacyVanillaCDSSecurity;
 import com.opengamma.financial.security.cds.StandardFixedRecoveryCDSSecurity;
 import com.opengamma.financial.security.cds.StandardRecoveryLockCDSSecurity;
 import com.opengamma.financial.security.cds.StandardVanillaCDSSecurity;
+import com.opengamma.financial.security.credit.LegacyCDSSecurity;
+import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.financial.security.equity.EquityVarianceSwapSecurity;
 import com.opengamma.financial.security.fra.FRASecurity;
@@ -293,32 +295,32 @@ public class SecurityTemplateNameProvider extends FinancialSecurityVisitorSameVa
 
   @Override
   public String visitStandardFixedRecoveryCDSSecurity(final StandardFixedRecoveryCDSSecurity security) {
-    return "standard-fixed-recovery-cds.ftl";
+    return null;
   }
 
   @Override
   public String visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
-    return "standard-vanilla-cds.ftl";
+    return null;
   }
 
   @Override
   public String visitStandardRecoveryLockCDSSecurity(final StandardRecoveryLockCDSSecurity security) {
-    return "standard-recovery-lock-cds.ftl";
+    return null;
   }
 
   @Override
   public String visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
-    return "legacy-vanilla-cds.ftl";
+    return null;
   }
 
   @Override
   public String visitLegacyFixedRecoveryCDSSecurity(final LegacyFixedRecoveryCDSSecurity security) {
-    return "legacy-fixed-recovery-cds.ftl";
+    return null;
   }
 
   @Override
   public String visitLegacyRecoveryLockCDSSecurity(final LegacyRecoveryLockCDSSecurity security) {
-    return "legacy-recovery-lock-cds.ftl";
+    return null;
   }
 
   @Override
@@ -371,8 +373,19 @@ public class SecurityTemplateNameProvider extends FinancialSecurityVisitorSameVa
     return "equity-total-return-swap.ftl";
   }
 
+  @Override
+  public String visitStandardCDSSecurity(final StandardCDSSecurity security) {
+    return "standard-cds-security.ftl";
+  }
+
+  @Override
+  public String visitLegacyCDSSecurity(final LegacyCDSSecurity security) {
+    return "legacy-cds-security.ftl";
+  }
+
   /**
    * Gets the template for all bonds.
+   *
    * @return The bond template
    */
   private static String getBond() {
@@ -381,6 +394,7 @@ public class SecurityTemplateNameProvider extends FinancialSecurityVisitorSameVa
 
   /**
    * Gets the template for all futures.
+   *
    * @return The future template
    */
   private static String getFuture() {

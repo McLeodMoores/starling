@@ -31,6 +31,7 @@ import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGene
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesSettlementHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.legalentity.ExamplesLegalEntityLoader;
+import com.mcleodmoores.examples.simulated.loader.portfolio.ExamplesCreditPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedBondAndFuturePortfolioLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedOisPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedUsBondPortfolioGenerator;
@@ -137,6 +138,10 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
    */
   public static final String OIS_PORTFOLIO_NAME = "OIS Portfolio";
   /**
+   * The name of a corporate credit portfolio.
+   */
+  public static final String CORPORATE_CREDIT_PORTFOLIO_NAME = "Corporate Credit Portfolio";
+  /**
    * The name of a bond portfolio.
    */
   public static final String BONDS_PORTFOLIO_NAME = "Bond Portfolio";
@@ -189,7 +194,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     // loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();
     loadBondAndFuturePortfolio();
-    loadViews();
+    loadCorporateCreditPortfolio();
     loadFunctionConfigurations();
     loadExposureFunctions();
     loadCurveConfigurations();
@@ -197,7 +202,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadFxImpliedCurveCalculationConfigurations();
     loadUsTreasuryCurveConfigurations();
     loadIsdaCurveConfigurations();
-    // loadCreditPortfolio();
+    loadViews();
   }
 
   /**
@@ -536,6 +541,18 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);
+    }
+  }
+
+  /**
+   * Loads an example corporate credit portfolio.
+   */
+  private void loadCorporateCreditPortfolio() {
+    final Log log = new Log("Creating example corporate credit portfolio");
+    try {
+      portfolioGeneratorTool().run(getToolContext(), CORPORATE_CREDIT_PORTFOLIO_NAME, new ExamplesCreditPortfolioGenerator(), true, null);
+    } catch (final RuntimeException e) {
+      log.fail(e);
     }
   }
 

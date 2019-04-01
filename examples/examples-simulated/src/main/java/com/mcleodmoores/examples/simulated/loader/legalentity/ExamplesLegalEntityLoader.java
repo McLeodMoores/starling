@@ -20,6 +20,7 @@ import com.opengamma.master.legalentity.LegalEntitySearchResult;
 import com.opengamma.master.legalentity.ManageableLegalEntity;
 import com.opengamma.masterdb.legalentity.DbLegalEntityBeanMaster;
 import com.opengamma.scripts.Scriptable;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Simple implementation of a legal entity loader.
@@ -48,17 +49,19 @@ public class ExamplesLegalEntityLoader extends AbstractTool<ToolContext> {
     final ManageableLegalEntity usGovernment = new ManageableLegalEntity("US Government",
         ExternalIdBundle.of(DbLegalEntityBeanMaster.IDENTIFIER_SCHEME_DEFAULT, "USGVT"));
     usGovernment.setRatings(Arrays.asList(new Rating("Fitch", CreditRating.AAA, null)));
-    storeLegalEntity(usGovernment);
+    storeLegalEntity(getToolContext().getLegalEntityMaster(), usGovernment);
   }
 
   /**
    * Stores a legal entity in the legal entity database. If the entity is already present, updates it. Otherwise, adds a new entry.
    *
+   * @param master
+   *          the master in which to store the legal entity
    * @param entity
    *          The legal entity
    */
-  private void storeLegalEntity(final ManageableLegalEntity entity) {
-    final LegalEntityMaster master = getToolContext().getLegalEntityMaster();
+  public static void storeLegalEntity(final LegalEntityMaster master, final ManageableLegalEntity entity) {
+    ArgumentChecker.notNull(master, "master");
     final LegalEntitySearchRequest request = new LegalEntitySearchRequest();
     request.setName(entity.getName());
     final LegalEntitySearchResult result = master.search(request);

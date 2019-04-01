@@ -1,13 +1,14 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.curve.interestrate;
 
 /**
- * 
+ *
  */
+@Deprecated
 public class MultiYieldCurvePropertiesAndDefaults {
   /** Root finder absolute tolerance property name */
   public static final String PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE = "RootFinderAbsoluteTolerance";

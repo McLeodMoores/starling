@@ -61,7 +61,7 @@ public class ExampleChConventions extends ConventionMasterInitializer {
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("CHF OIS Fixed",
         ExternalIdBundle.of(ExternalId.of("CONVENTION", "CHF OIS Fixed"), ExternalSchemes.currencyRegionId(Currency.CHF)), Tenor.ONE_YEAR, DayCounts.ACT_365,
         BusinessDayConventions.MODIFIED_FOLLOWING, Currency.CHF, CH, 1, true, StubType.SHORT_START, false, 0);
-    final OISLegConvention oisLeg = new OISLegConvention("CHF TOISTOIS", ExternalId.of("CONVENTION", "CHF TOISTOIS").toBundle(),
+    final OISLegConvention oisLeg = new OISLegConvention("CHF OIS TOISTOIS", ExternalId.of("CONVENTION", "CHF OIS TOISTOIS").toBundle(),
         ExternalId.of("CONVENTION", "TOISTOIS"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 0, false, StubType.SHORT_START, false, 1);
     // IBOR Swaps
     final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("CHF LIBOR Fixed",

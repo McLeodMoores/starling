@@ -6,7 +6,6 @@
 package com.opengamma.analytics.financial.equity.future.definition;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.Validate;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.commodity.definition.SettlementType;
@@ -17,6 +16,7 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+
 /**
  * Generic index future definition. An IndexFuture is always cash-settled.
  */
@@ -34,43 +34,44 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
   private final double _unitAmount;
 
   /**
-   * Basic setup for an Equity Future. TODO resolve conventions; complete param set
-   * @param expiryDate The date-time at which the reference rate is fixed and the future is cash settled
-   * @param settlementDate The date on which exchange is made, whether physical asset or cash equivalent
-   * @param strikePrice The reference price at which the future will be settled
-   * @param currency The reporting currency of the future
-   * @param unitValue The currency value that the price of one contract will move by when the asset's price moves by one point
-   * @param underlying ExtenalId of the underlying index
+   * Basic setup for an index Future.
+   *
+   * @param expiryDate
+   *          The date-time at which the reference rate is fixed and the future is cash settled
+   * @param settlementDate
+   *          The date on which exchange is made, whether physical asset or cash equivalent
+   * @param strikePrice
+   *          The reference price at which the future will be settled
+   * @param currency
+   *          The reporting currency of the future
+   * @param unitValue
+   *          The currency value that the price of one contract will move by when the asset's price moves by one point
+   * @param underlying
+   *          ExtenalId of the underlying index
    */
-  public IndexFutureDefinition(
-      final ZonedDateTime expiryDate,
-      final ZonedDateTime settlementDate,
-      final double strikePrice,
-      final Currency currency,
-      final double unitValue,
-      final ExternalId underlying) {
-    Validate.notNull(expiryDate, "expiry");
-    Validate.notNull(settlementDate, "settlement date");
-    Validate.notNull(currency, "currency");
-    _expiryDate = expiryDate;
-    _settlementDate = settlementDate;
+  public IndexFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice, final Currency currency,
+      final double unitValue, final ExternalId underlying) {
+    _expiryDate = ArgumentChecker.notNull(expiryDate, "expiry");
+    _settlementDate = ArgumentChecker.notNull(settlementDate, "settlement date");
+    _currency = ArgumentChecker.notNull(currency, "currency");
     _referencePrice = strikePrice;
-    _currency = currency;
     _unitAmount = unitValue;
     _underlying = underlying;
   }
 
   /**
-   * Gets the _expiryDate.
-   * @return the _expiryDate
+   * Gets the expiry date: the date on which the reference index level is fixed and the future is cash settled.
+   *
+   * @return the expiry date
    */
   public ZonedDateTime getExpiryDate() {
     return _expiryDate;
   }
 
   /**
-   * Gets the _settlementDate.
-   * @return the _settlementDate
+   * Gets the settlement date: the date on which the cash exchange is made.
+   *
+   * @return the settlement date
    */
   public ZonedDateTime getSettlementDate() {
     return _settlementDate;
@@ -78,31 +79,35 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
 
   /**
    * Gets the reference price.
-   * @return referencePrice
+   *
+   * @return the reference
    */
   public double getReferencePrice() {
     return _referencePrice;
   }
 
   /**
-   * Gets the reference price.
-   * @return referencePrice
+   * Gets the strike price.
+   *
+   * @return the strike price
    */
   public double getStrikePrice() {
     return getReferencePrice();
   }
 
   /**
-   * Gets the _currency.
-   * @return the _currency
+   * Gets the currency.
+   *
+   * @return the currency
    */
   public Currency getCurrency() {
     return _currency;
   }
 
   /**
-   * Gets the _unitAmount.
-   * @return the _unitAmount
+   * Gets the unit amount.
+   *
+   * @return the unit amount
    */
   public double getUnitAmount() {
     return _unitAmount;
@@ -110,6 +115,7 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
 
   /**
    * Gets the underlying.
+   *
    * @return the underlying
    */
   public ExternalId getUnderlying() {
@@ -118,7 +124,8 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
 
   /**
    * Gets the settlementType.
-   * @return CASH
+   *
+   * @return {@link SettlementType.CASH}
    */
   public SettlementType getSettlementType() {
     return SettlementType.CASH;
@@ -199,11 +206,11 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
   @Override
   public IndexFuture toDerivative(final ZonedDateTime date, final Double referencePrice) {
     ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(_expiryDate), "Valuation date is after expiry date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, getExpiryDate());
     final double timeToDelivery = TimeCalculator.getTimeBetween(date, getSettlementDate());
     final IndexFuture newDeriv = new IndexFuture(timeToFixing, timeToDelivery, referencePrice, getCurrency(), getUnitAmount());
     return newDeriv;
   }
-
 
 }
