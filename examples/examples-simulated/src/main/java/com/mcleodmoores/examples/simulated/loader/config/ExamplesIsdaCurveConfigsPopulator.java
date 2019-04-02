@@ -20,7 +20,9 @@ import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
 import com.opengamma.financial.analytics.curve.CurveTypeConfiguration;
 import com.opengamma.financial.analytics.curve.DiscountingCurveTypeConfiguration;
+import com.opengamma.financial.analytics.curve.IborCurveTypeConfiguration;
 import com.opengamma.financial.analytics.curve.InterpolatedCurveDefinition;
+import com.opengamma.financial.analytics.ircurve.strips.CashNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
 import com.opengamma.financial.analytics.ircurve.strips.SwapNode;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -87,14 +89,20 @@ public class ExamplesIsdaCurveConfigsPopulator {
       final String curveName = ccy.getCode() + " ISDA";
       final String idMapperName = ccy.getCode() + " " + iborTenors.get(ccy).toFormattedString().substring(1) + " Tickers";
       final DiscountingCurveTypeConfiguration dctc = new DiscountingCurveTypeConfiguration(ccy.getCode());
-      final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
-      curveTypes.put(curveName, Arrays.asList(dctc));
-      final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
-      final CurveConstructionConfiguration ccc = new CurveConstructionConfiguration(cccName, Arrays.asList(group), Collections.<String> emptyList());
+      final IborCurveTypeConfiguration ictc = new IborCurveTypeConfiguration(iborConventionIds.get(ccy), iborTenors.get(ccy));
+      final Map<String, List<? extends CurveTypeConfiguration>> discountingCurveTypes = Collections
+          .<String, List<? extends CurveTypeConfiguration>> singletonMap(curveName, Arrays.asList(dctc));
+      final Map<String, List<? extends CurveTypeConfiguration>> iborCurveTypes = Collections
+          .<String, List<? extends CurveTypeConfiguration>> singletonMap(curveName, Arrays.asList(ictc));
+      final CurveGroupConfiguration discountingGroup = new CurveGroupConfiguration(0, discountingCurveTypes);
+      final CurveGroupConfiguration iborGroup = new CurveGroupConfiguration(1, iborCurveTypes);
+      final CurveConstructionConfiguration ccc = new CurveConstructionConfiguration(cccName, Arrays.asList(discountingGroup, iborGroup),
+          Collections.<String> emptyList());
       final ConfigItem<CurveConstructionConfiguration> cccItem = ConfigItem.of(ccc);
       cccItem.setName(ccc.getName());
       ConfigMasterUtils.storeByName(configMaster, cccItem);
       final Set<CurveNode> curveNodes = new LinkedHashSet<>();
+      curveNodes.add(new CashNode(Tenor.of(Period.ZERO), iborTenors.get(ccy), iborConventionIds.get(ccy), idMapperName));
       for (int i = 1; i <= 10; i++) {
         curveNodes.add(new SwapNode(Tenor.of(Period.ZERO), Tenor.ofYears(i), payLegIds.get(ccy), receiveLegIds.get(ccy), idMapperName));
       }

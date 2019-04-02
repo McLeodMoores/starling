@@ -25,6 +25,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Instant;
 
+import com.mcleodmoores.financial.function.credit.cds.isda.config.IsdaFunctions;
 import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
@@ -70,11 +71,11 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
   @PropertyDefinition(validate = "notNull")
   private ConfigMaster _configMaster;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final FunctionConfigurationSource source = initSource();
-    //final RepositoryConfigurationSource source = sorted(initSource());
+    // final RepositoryConfigurationSource source = sorted(initSource());
 
     final ComponentInfo info = new ComponentInfo(FunctionConfigurationSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
@@ -93,7 +94,8 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
   /**
    * Debug utility to sort a repository. This allows two to be compared more easily.
    *
-   * @param source the raw repository configuration source
+   * @param source
+   *          the raw repository configuration source
    * @return a source that return a sorted list of functions
    */
   protected FunctionConfigurationSource sorted(final FunctionConfigurationSource source) {
@@ -128,7 +130,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
                   }
                 }
                 // Equal? Put a breakpoint here; we don't really want this to be happening.
-                //assert false;
+                // assert false;
                 return 0;
               } else if (o2 instanceof StaticFunctionConfiguration) {
                 // Static goes first
@@ -188,7 +190,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
   }
 
   protected FunctionConfigurationSource curveConfigurations() {
-    return CurveFunctions.providers(getConfigMaster());
+    return CombiningFunctionConfigurationSource.of(CurveFunctions.providers(getConfigMaster()), IsdaFunctions.providers(getConfigMaster()));
   }
 
   protected FunctionConfigurationSource curveParameterConfigurations() {
@@ -201,6 +203,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Adds volatility cube functions.
+   * 
    * @return A source of volatility cube functions
    */
   protected FunctionConfigurationSource volatilityCubeConfigConfigurations() {
@@ -209,6 +212,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Adds surface functions.
+   * 
    * @return A source of surface functions
    */
   protected FunctionConfigurationSource surfaceConfigConfigurations() {
@@ -247,6 +251,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Gets the list of cube function configuration sources.
+   * 
    * @return The cube function configuration sources, not null
    */
   protected List<FunctionConfigurationSource> cubeSources() {

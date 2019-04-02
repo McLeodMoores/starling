@@ -11,6 +11,7 @@ import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulat
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.OIS_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.USD_TREASURIES_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.VANILLA_FX_OPTION_PORTFOLIO_NAME;
+import static com.mcleodmoores.financial.function.properties.CurveCalculationProperties.ISDA;
 import static com.opengamma.engine.value.ValuePropertyNames.CALCULATION_METHOD;
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
@@ -648,6 +649,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     definition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     definition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration config = new ViewCalculationConfiguration(definition, DEFAULT_CALC_CONFIG);
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+        ValueProperties.with(PROPERTY_CURVE_TYPE, ISDA).with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").get()));
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
     config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
     definition.addViewCalculationConfiguration(config);
