@@ -6,8 +6,9 @@
 package com.opengamma.financial.analytics.ircurve;
 
 /**
- *
+ * @deprecated {@link FixedIncomeStrip}s are deprecated.
  */
+@Deprecated
 public enum IndexType {
   /** Libor */
   Libor,

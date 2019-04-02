@@ -28,7 +28,9 @@ import com.opengamma.util.tuple.Triple;
 
 /**
  *
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class YieldCurveFunctionHelper {
 
   private final Currency _currency;
@@ -56,44 +58,31 @@ public class YieldCurveFunctionHelper {
     return _definition;
   }
 
-  public Triple<Instant, Instant, InterpolatedYieldCurveSpecification> compile(final FunctionCompilationContext context, final Instant atInstant, final FunctionDefinition functionDefinition) {
+  public Triple<Instant, Instant, InterpolatedYieldCurveSpecification> compile(final FunctionCompilationContext context, final Instant atInstant,
+      final FunctionDefinition functionDefinition) {
     init(context, functionDefinition);
 
-    //TODO: avoid doing this compile twice all the time
+    // TODO: avoid doing this compile twice all the time
     final ZonedDateTime atInstantZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     final LocalDate curveDate = atInstantZDT.toLocalDate();
     final InterpolatedYieldCurveSpecification specification = buildCurve(curveDate);
-    final Instant expiry = findCurveExpiryDate(context.getSecuritySource(), atInstant, specification, atInstantZDT.with(LocalTime.MIDNIGHT).plusDays(1).minusNanos(1000000).toInstant());
+    final Instant expiry = findCurveExpiryDate(context.getSecuritySource(), atInstant, specification,
+        atInstantZDT.with(LocalTime.MIDNIGHT).plusDays(1).minusNanos(1000000).toInstant());
     return Triple.of(expiry != null ? atInstantZDT.with(LocalTime.MIDNIGHT).toInstant() : null, expiry, specification);
   }
 
-  private Instant findCurveExpiryDate(final SecuritySource securitySource, final Instant curveDate, final InterpolatedYieldCurveSpecification specification, final Instant eod) {
+  private Instant findCurveExpiryDate(final SecuritySource securitySource, final Instant curveDate, final InterpolatedYieldCurveSpecification specification,
+      final Instant eod) {
     // ENG-252; logic is wrong so always go for EOD
     return eod;
     /*
-    boolean useEOD = false;
-    for (final FixedIncomeStripWithIdentifier strip : specification.getStrips()) {
-      if (strip.getInstrumentType() == StripInstrumentType.FUTURE) {
-        if (strip.getNumberOfFuturesAfterTenor() == 1) {
-          //ENG-252 This logic may be wrong
-          final FutureSecurity future = (FutureSecurity) securitySource.getSecurity(ExternalIdBundle.of(strip.getSecurity()));
-          final Instant futureExpiry = future.getExpiry().toInstant();
-          final Instant tenor = curveDate.plus(strip.getMaturity().getPeriod().toDuration());
-          // Duration ahead of the tenor that the first future expires. The curve is valid for this duration - after
-          // this, the first future to expire will be something else.
-          final Duration d = Duration.between(tenor, futureExpiry);
-          final Instant expiry = curveDate.plus(d);
-          if (expiry.isBefore(eod)) {
-            return eod;
-          } else {
-            return expiry;
-          }
-        }
-        useEOD = true;
-      }
-    }
-    // useEOD is set if there are futures but not the first after a tenor that we can calculate the expiry from
-    return useEOD ? eod : null;
+     * boolean useEOD = false; for (final FixedIncomeStripWithIdentifier strip : specification.getStrips()) { if (strip.getInstrumentType() ==
+     * StripInstrumentType.FUTURE) { if (strip.getNumberOfFuturesAfterTenor() == 1) { //ENG-252 This logic may be wrong final FutureSecurity future =
+     * (FutureSecurity) securitySource.getSecurity(ExternalIdBundle.of(strip.getSecurity())); final Instant futureExpiry = future.getExpiry().toInstant(); final
+     * Instant tenor = curveDate.plus(strip.getMaturity().getPeriod().toDuration()); // Duration ahead of the tenor that the first future expires. The curve is
+     * valid for this duration - after // this, the first future to expire will be something else. final Duration d = Duration.between(tenor, futureExpiry);
+     * final Instant expiry = curveDate.plus(d); if (expiry.isBefore(eod)) { return eod; } else { return expiry; } } useEOD = true; } } // useEOD is set if
+     * there are futures but not the first after a tenor that we can calculate the expiry from return useEOD ? eod : null;
      */
   }
 
@@ -110,7 +99,8 @@ public class YieldCurveFunctionHelper {
   }
 
   public ValueRequirement getMarketDataValueRequirement() {
-    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, ComputationTargetSpecification.of(_currency), ValueProperties.with(ValuePropertyNames.CURVE, _curveName).get());
+    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, ComputationTargetSpecification.of(_currency),
+        ValueProperties.with(ValuePropertyNames.CURVE, _curveName).get());
   }
 
   public SnapshotDataBundle getMarketDataMap(final FunctionInputs inputs) {

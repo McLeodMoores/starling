@@ -19,7 +19,10 @@ import net.sf.ehcache.Element;
 
 /**
  * A cache to optimize the results of {@code InterpolatedYieldCurveDefinitionSource}.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class EHCachingInterpolatedYieldCurveDefinitionSource implements InterpolatedYieldCurveDefinitionSource {
 
   /**
@@ -43,8 +46,10 @@ public class EHCachingInterpolatedYieldCurveDefinitionSource implements Interpol
   /**
    * Creates the cache around an underlying definition source.
    *
-   * @param underlying  the underlying data, not null
-   * @param cacheManager  the cache manager, not null
+   * @param underlying
+   *          the underlying data, not null
+   * @param cacheManager
+   *          the cache manager, not null
    */
   public EHCachingInterpolatedYieldCurveDefinitionSource(final InterpolatedYieldCurveDefinitionSource underlying, final CacheManager cacheManager) {
     _underlying = underlying;
@@ -54,7 +59,7 @@ public class EHCachingInterpolatedYieldCurveDefinitionSource implements Interpol
     _latestDefinitionCache = EHCacheUtils.getCacheFromManager(cacheManager, LATEST_DEFINITION_CACHE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the cache manager.
    *
@@ -64,7 +69,7 @@ public class EHCachingInterpolatedYieldCurveDefinitionSource implements Interpol
     return _cacheManager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public YieldCurveDefinition getDefinition(final Currency currency, final String name) {
     final Pair<Currency, String> cacheKey = Pairs.of(currency, name);

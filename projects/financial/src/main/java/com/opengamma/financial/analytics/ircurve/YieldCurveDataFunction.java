@@ -32,11 +32,13 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Function to produce {@link InterpolatedYieldCurveSpecificationWithSecurities} and {@link YieldCurveData} values for a
- * named curve/currency pair. An instance must be created and put into the repository for each curve
- * definition to be made available to downstream functions which can reference the required curves using property
- * constraints.
+ * Function to produce {@link InterpolatedYieldCurveSpecificationWithSecurities} and {@link YieldCurveData} values for a named curve/currency pair. An instance
+ * must be created and put into the repository for each curve definition to be made available to downstream functions which can reference the required curves
+ * using property constraints.
+ *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class YieldCurveDataFunction extends AbstractFunction {
 
   private final YieldCurveFunctionHelper _helper;
@@ -98,16 +100,13 @@ public class YieldCurveDataFunction extends AbstractFunction {
     public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
         final Set<ValueRequirement> desiredValues) {
       try {
-        final FixedIncomeStripIdentifierAndMaturityBuilder builder =
-            new FixedIncomeStripIdentifierAndMaturityBuilder(OpenGammaExecutionContext.getRegionSource(executionContext),
-                                                             OpenGammaExecutionContext.getConventionBundleSource(executionContext),
-                                                             executionContext.getSecuritySource(),
-                                                             OpenGammaExecutionContext.getHolidaySource(executionContext));
+        final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(
+            OpenGammaExecutionContext.getRegionSource(executionContext), OpenGammaExecutionContext.getConventionBundleSource(executionContext),
+            executionContext.getSecuritySource(), OpenGammaExecutionContext.getHolidaySource(executionContext));
         final SnapshotDataBundle marketData = _helper.getMarketDataMap(inputs);
         final InterpolatedYieldCurveSpecificationWithSecurities curveSpecificationWithSecurities = builder.resolveToSecurity(_curveSpecification, marketData);
         final YieldCurveData curveData = new YieldCurveData(curveSpecificationWithSecurities, marketData.getDataPoints());
-        return ImmutableSet.of(new ComputedValue(_curveSpec, curveSpecificationWithSecurities),
-                               new ComputedValue(_curveDataSpec, curveData));
+        return ImmutableSet.of(new ComputedValue(_curveSpec, curveSpecificationWithSecurities), new ComputedValue(_curveDataSpec, curveData));
       } catch (final OpenGammaRuntimeException e) {
         throw new OpenGammaRuntimeException("Error in constructing " + _helper.getCurveName() + "_" + _helper.getCurrency() + ": " + e.getMessage());
       }

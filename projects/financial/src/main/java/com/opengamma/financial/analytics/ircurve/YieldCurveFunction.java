@@ -25,22 +25,27 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Defines static helpers for yield curve functions.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public final class YieldCurveFunction {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveFunction.class);
 
   /**
-   * Identifies the name of the forward curve used for a value. A value dependent on just one
-   * curve should use the default "CURVE" name and not this prefixed name.
+   * Identifies the name of the forward curve used for a value. A value dependent on just one curve should use the default "CURVE" name and not this prefixed
+   * name.
+   * 
    * @deprecated This is used in old yield curve code - do not use
    */
   @Deprecated
   public static final String PROPERTY_FORWARD_CURVE = "Forward" + ValuePropertyNames.CURVE;
 
   /**
-   * Identifies the name of the funding curve used for a value. A value dependent on just one
-   * curve should use the default "CURVE" name and not this prefixed name.
+   * Identifies the name of the funding curve used for a value. A value dependent on just one curve should use the default "CURVE" name and not this prefixed
+   * name.
+   * 
    * @deprecated This is used in old yield curve code - do not use
    */
   @Deprecated
@@ -121,10 +126,10 @@ public final class YieldCurveFunction {
   }
 
   /**
-   * Returns the curve name specified as a requirement constraint, null if there is no constraint
-   * or a wildcard.
+   * Returns the curve name specified as a requirement constraint, null if there is no constraint or a wildcard.
    *
-   * @param requirement the requirement
+   * @param requirement
+   *          the requirement
    * @return the curve name, may be null
    */
   public static String getCurveName(final ValueRequirement requirement) {
@@ -132,11 +137,12 @@ public final class YieldCurveFunction {
   }
 
   /**
-   * Returns the curve name specified as a requirement constraint or the view's default curve name if there is
-   * no constraint or a wildcard.
+   * Returns the curve name specified as a requirement constraint or the view's default curve name if there is no constraint or a wildcard.
    *
-   * @param context the function compilation context
-   * @param requirement the requirement
+   * @param context
+   *          the function compilation context
+   * @param requirement
+   *          the requirement
    * @return the curve name, not null
    */
   public static String getCurveName(final FunctionCompilationContext context, final ValueRequirement requirement) {
@@ -159,7 +165,8 @@ public final class YieldCurveFunction {
     return getPropertyValue(PROPERTY_FUNDING_CURVE, context, requirement);
   }
 
-  public static ValueRequirement getCurveRequirement(final Currency currency, final String curveName, final String advisoryForward, final String advisoryFunding) {
+  public static ValueRequirement getCurveRequirement(final Currency currency, final String curveName, final String advisoryForward,
+      final String advisoryFunding) {
     final ValueProperties.Builder props = ValueProperties.with(ValuePropertyNames.CURVE, curveName);
     if (advisoryForward != null) {
       props.with(PROPERTY_FORWARD_CURVE, advisoryForward).withOptional(PROPERTY_FORWARD_CURVE);
@@ -170,7 +177,8 @@ public final class YieldCurveFunction {
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), props.get());
   }
 
-  public static ValueRequirement getCurveRequirement(final Currency currency, final String curveName, final String advisoryForward, final String advisoryFunding, final String calculationMethod) {
+  public static ValueRequirement getCurveRequirement(final Currency currency, final String curveName, final String advisoryForward,
+      final String advisoryFunding, final String calculationMethod) {
     final ValueProperties.Builder props = ValueProperties.with(ValuePropertyNames.CURVE, curveName);
     if (advisoryForward != null) {
       props.with(PROPERTY_FORWARD_CURVE, advisoryForward).withOptional(PROPERTY_FORWARD_CURVE);
@@ -183,40 +191,31 @@ public final class YieldCurveFunction {
   }
 
   public static ValueRequirement getJacobianRequirement(final Currency currency, final String forwardCurveName, final String fundingCurveName) {
-    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency),
-        ValueProperties.with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, forwardCurveName)
-        .with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, fundingCurveName)
-        .get());
+    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency), ValueProperties
+        .with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, forwardCurveName).with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, fundingCurveName).get());
   }
 
-  public static ValueRequirement getJacobianRequirement(final Currency currency, final String forwardCurveName, final String fundingCurveName, final String calculationMethod) {
+  public static ValueRequirement getJacobianRequirement(final Currency currency, final String forwardCurveName, final String fundingCurveName,
+      final String calculationMethod) {
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency),
-        ValueProperties.with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, forwardCurveName)
-        .with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, fundingCurveName)
-        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, calculationMethod)
-        .get());
+        ValueProperties.with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, forwardCurveName).with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, fundingCurveName)
+            .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, calculationMethod).get());
   }
 
   public static ValueRequirement getCouponSensitivityRequirement(final Currency currency, final String forwardCurveName, final String fundingCurveName) {
-    return new ValueRequirement(ValueRequirementNames.PRESENT_VALUE_COUPON_SENSITIVITY, ComputationTargetSpecification.of(currency),
-        ValueProperties.builder()
-        .with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, forwardCurveName)
-        .with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, fundingCurveName).get());
+    return new ValueRequirement(ValueRequirementNames.PRESENT_VALUE_COUPON_SENSITIVITY, ComputationTargetSpecification.of(currency), ValueProperties.builder()
+        .with(YieldCurveFunction.PROPERTY_FORWARD_CURVE, forwardCurveName).with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, fundingCurveName).get());
   }
 
   public static ValueRequirement getCouponSensitivityRequirement(final Currency currency) {
     return new ValueRequirement(ValueRequirementNames.PRESENT_VALUE_COUPON_SENSITIVITY, ComputationTargetSpecification.of(currency),
-        ValueProperties.withAny(YieldCurveFunction.PROPERTY_FORWARD_CURVE)
-        .withAny(YieldCurveFunction.PROPERTY_FUNDING_CURVE)
-        .get());
+        ValueProperties.withAny(YieldCurveFunction.PROPERTY_FORWARD_CURVE).withAny(YieldCurveFunction.PROPERTY_FUNDING_CURVE).get());
   }
 
   public static ValueRequirement getJacobianRequirement(final Currency currency, final String calculationMethod) {
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency),
-        ValueProperties.withAny(YieldCurveFunction.PROPERTY_FORWARD_CURVE)
-        .withAny(YieldCurveFunction.PROPERTY_FUNDING_CURVE)
-        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, calculationMethod)
-        .get());
+        ValueProperties.withAny(YieldCurveFunction.PROPERTY_FORWARD_CURVE).withAny(YieldCurveFunction.PROPERTY_FUNDING_CURVE)
+            .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, calculationMethod).get());
   }
 
   public static Pair<String, String> getDesiredValueCurveNames(final Set<ValueRequirement> desiredValues) {

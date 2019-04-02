@@ -13,7 +13,10 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Curve instrument provider for tickers that represent a spread over a base value.
+ *
+ * @deprecated {@link FixedIncomeStrip}s are deprecated.
  */
+@Deprecated
 public class StaticCurvePointsInstrumentProvider extends StaticCurveInstrumentProvider {
   /** The underlying market data identifier */
   private final ExternalId _underlyingIdentifier;
@@ -21,11 +24,16 @@ public class StaticCurvePointsInstrumentProvider extends StaticCurveInstrumentPr
   private final String _underlyingDataField;
 
   /**
-   * @param identifier The market data identifier, not null
-   * @param dataField The market data field, not null
-   * @param fieldType The field type, not null
-   * @param underlyingIdentifier The underlying market data identifier, not null
-   * @param underlyingDataField The underlying data field, not null
+   * @param identifier
+   *          The market data identifier, not null
+   * @param dataField
+   *          The market data field, not null
+   * @param fieldType
+   *          The field type, not null
+   * @param underlyingIdentifier
+   *          The underlying market data identifier, not null
+   * @param underlyingDataField
+   *          The underlying data field, not null
    */
   public StaticCurvePointsInstrumentProvider(final ExternalId identifier, final String dataField, final DataFieldType fieldType,
       final ExternalId underlyingIdentifier, final String underlyingDataField) {
@@ -65,8 +73,7 @@ public class StaticCurvePointsInstrumentProvider extends StaticCurveInstrumentPr
       return false;
     }
     final StaticCurvePointsInstrumentProvider other = (StaticCurvePointsInstrumentProvider) obj;
-    return ObjectUtils.equals(_underlyingIdentifier, other._underlyingIdentifier) &&
-        ObjectUtils.equals(_underlyingDataField, other._underlyingDataField);
+    return ObjectUtils.equals(_underlyingIdentifier, other._underlyingIdentifier) && ObjectUtils.equals(_underlyingDataField, other._underlyingDataField);
   }
 
 }

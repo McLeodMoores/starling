@@ -48,8 +48,9 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Triple;
 
 /**
- *
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction {
 
   @SuppressWarnings("unused")
@@ -149,21 +150,24 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final Set<ValueRequirement> result = new HashSet<>();
         result.add(_helper.getMarketDataValueRequirement());
         return result;
       }
 
       @Override
-      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues) {
         final SnapshotDataBundle marketData = _helper.getMarketDataMap(inputs);
         // Gather market data rates
         // Note that this assumes that all strips are priced in decimal percent. We need to resolve
         // that ultimately in OG-LiveData normalization and pull out the OGRate key rather than
         // the crazy IndicativeValue name.
-        final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(OpenGammaExecutionContext.getRegionSource(executionContext),
-            OpenGammaExecutionContext.getConventionBundleSource(executionContext), executionContext.getSecuritySource(), OpenGammaExecutionContext.getHolidaySource(executionContext));
+        final FixedIncomeStripIdentifierAndMaturityBuilder builder = new FixedIncomeStripIdentifierAndMaturityBuilder(
+            OpenGammaExecutionContext.getRegionSource(executionContext), OpenGammaExecutionContext.getConventionBundleSource(executionContext),
+            executionContext.getSecuritySource(), OpenGammaExecutionContext.getHolidaySource(executionContext));
         final InterpolatedYieldCurveSpecificationWithSecurities specWithSecurities = builder.resolveToSecurity(specification, marketData);
         final Clock snapshotClock = executionContext.getValuationClock();
         final ZonedDateTime today = ZonedDateTime.now(snapshotClock); // TODO: change to times
@@ -187,8 +191,8 @@ public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction 
             timeInYearsToRates.put(years, Math.exp(-price * years));
           }
         }
-        final YieldAndDiscountCurve curve = _isYieldCurve ? YieldCurve.from(InterpolatedDoublesCurve.from(timeInYearsToRates, _interpolator)) : DiscountCurve.from(InterpolatedDoublesCurve.from(
-            timeInYearsToRates, _interpolator));
+        final YieldAndDiscountCurve curve = _isYieldCurve ? YieldCurve.from(InterpolatedDoublesCurve.from(timeInYearsToRates, _interpolator))
+            : DiscountCurve.from(InterpolatedDoublesCurve.from(timeInYearsToRates, _interpolator));
         final ComputedValue resultValue = new ComputedValue(_result, curve);
         final ComputedValue specValue = new ComputedValue(_specResult, specWithSecurities);
         return Sets.newHashSet(resultValue, specValue);

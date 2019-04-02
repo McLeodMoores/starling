@@ -24,8 +24,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  *
- *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class InterpolatedYieldCurveSpecificationWithSecurities implements Serializable {
 
   /** Serialization version. */
@@ -38,13 +39,13 @@ public class InterpolatedYieldCurveSpecificationWithSecurities implements Serial
   private final boolean _interpolateYield;
   private final SortedSet<FixedIncomeStripWithSecurity> _strips = new TreeSet<>();
 
-  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
-      final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
+  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency,
+      final Interpolator1D interpolator, final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
     this(curveDate, name, currency, interpolator, true, resolvedStrips);
   }
 
-  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency, final Interpolator1D interpolator,
-      final boolean interpolateYield, final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
+  public InterpolatedYieldCurveSpecificationWithSecurities(final LocalDate curveDate, final String name, final Currency currency,
+      final Interpolator1D interpolator, final boolean interpolateYield, final Collection<FixedIncomeStripWithSecurity> resolvedStrips) {
     Validate.notNull(curveDate, "CurveDate");
     Validate.notNull(currency, "Currency");
     Validate.notNull(interpolator, "Interpolator1D");
@@ -96,6 +97,7 @@ public class InterpolatedYieldCurveSpecificationWithSecurities implements Serial
   public boolean interpolateYield() {
     return _interpolateYield;
   }
+
   /**
    * @return the strips
    */

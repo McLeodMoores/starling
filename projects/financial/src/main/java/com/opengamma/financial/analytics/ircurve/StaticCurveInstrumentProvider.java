@@ -30,16 +30,21 @@ public class StaticCurveInstrumentProvider implements CurveInstrumentProvider {
 
   /**
    * Sets the data field for market data to {@link MarketDataRequirementNames#MARKET_VALUE}
-   * @param identifier The market data identifier, not null
+   *
+   * @param identifier
+   *          The market data identifier, not null
    */
   public StaticCurveInstrumentProvider(final ExternalId identifier) {
     this(identifier, MarketDataRequirementNames.MARKET_VALUE, DataFieldType.OUTRIGHT);
   }
 
   /**
-   * @param identifier The market data identifier, not null
-   * @param dataField The market data field, not null
-   * @param fieldType The market data field type, not null
+   * @param identifier
+   *          The market data identifier, not null
+   * @param dataField
+   *          The market data field, not null
+   * @param fieldType
+   *          The market data field type, not null
    */
   public StaticCurveInstrumentProvider(final ExternalId identifier, final String dataField, final DataFieldType fieldType) {
     ArgumentChecker.notNull(identifier, "identifier");
@@ -108,9 +113,7 @@ public class StaticCurveInstrumentProvider implements CurveInstrumentProvider {
       return false;
     }
     final StaticCurveInstrumentProvider other = (StaticCurveInstrumentProvider) o;
-    return ObjectUtils.equals(_identifier, other._identifier) &&
-        ObjectUtils.equals(_dataField, other._dataField) &&
-        _fieldType == other._fieldType;
+    return ObjectUtils.equals(_identifier, other._identifier) && ObjectUtils.equals(_dataField, other._dataField) && _fieldType == other._fieldType;
   }
 
   @Override

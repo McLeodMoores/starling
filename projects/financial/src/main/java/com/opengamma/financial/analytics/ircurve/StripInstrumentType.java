@@ -7,6 +7,8 @@ package com.opengamma.financial.analytics.ircurve;
 
 /**
  * Temporary enum until we replace these with proper securities
+ * 
+ * @deprecated {@link FixedIncomeStrip}s are deprecated.
  */
 public enum StripInstrumentType {
   /** Libor rate */

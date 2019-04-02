@@ -25,7 +25,10 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * A document used to pass into and out of the yield curve definition master.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated
  */
+@Deprecated
 @BeanDefinition
 public class YieldCurveDefinitionDocument extends AbstractDocument implements Serializable {
 
@@ -33,8 +36,7 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
   private static final long serialVersionUID = 1L;
 
   /**
-   * The unique identifier.
-   * This field is managed by the master but must be set for updates.
+   * The unique identifier. This field is managed by the master but must be set for updates.
    */
   @PropertyDefinition
   private UniqueId _uniqueId;
@@ -53,8 +55,10 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
   /**
    * Creates an instance.
    *
-   * @param uniqueId  the unique identifier, not null
-   * @param yieldCurveDefinition  the yield curve definition, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param yieldCurveDefinition
+   *          the yield curve definition, not null
    */
   public YieldCurveDefinitionDocument(final UniqueId uniqueId, final YieldCurveDefinition yieldCurveDefinition) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -64,10 +68,10 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
   }
 
   /**
-   * Creates an instance.
-   * This sets the unique identifier from the definition.
+   * Creates an instance. This sets the unique identifier from the definition.
    *
-   * @param yieldCurveDefinition  the yield curve definition, not null
+   * @param yieldCurveDefinition
+   *          the yield curve definition, not null
    */
   public YieldCurveDefinitionDocument(final YieldCurveDefinition yieldCurveDefinition) {
     ArgumentChecker.notNull(yieldCurveDefinition, "yieldCurveDefinition");
@@ -75,7 +79,7 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
     setYieldCurveDefinition(yieldCurveDefinition);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public YieldCurveDefinition getValue() {
     return _yieldCurveDefinition;
@@ -102,8 +106,7 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier.
-   * This field is managed by the master but must be set for updates.
+   * Gets the unique identifier. This field is managed by the master but must be set for updates.
    * @return the value of the property
    */
   public UniqueId getUniqueId() {
@@ -111,8 +114,7 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
   }
 
   /**
-   * Sets the unique identifier.
-   * This field is managed by the master but must be set for updates.
+   * Sets the unique identifier. This field is managed by the master but must be set for updates.
    * @param uniqueId  the new value of the property
    */
   public void setUniqueId(UniqueId uniqueId) {
@@ -121,7 +123,6 @@ public class YieldCurveDefinitionDocument extends AbstractDocument implements Se
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This field is managed by the master but must be set for updates.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {

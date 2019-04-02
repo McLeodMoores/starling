@@ -17,7 +17,10 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Populates the yield curve configuration.
+ *
+ * @deprecated {@link YieldCurveDefinition}s and {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class YieldCurveConfigPopulator {
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveConfigPopulator.class);
 
@@ -70,7 +73,8 @@ public class YieldCurveConfigPopulator {
           dumpDefinition(definition);
         }
       }
-      final Map<String, Map<Currency, YieldCurveDefinition>> secondaryCurveDefinitions = SecondaryCurveDefinitionAndSpecifications.buildSecondaryCurveDefinitions();
+      final Map<String, Map<Currency, YieldCurveDefinition>> secondaryCurveDefinitions = SecondaryCurveDefinitionAndSpecifications
+          .buildSecondaryCurveDefinitions();
       for (final Map.Entry<String, Map<Currency, YieldCurveDefinition>> entry : secondaryCurveDefinitions.entrySet()) {
         final String curveName = entry.getKey();
         final Map<Currency, YieldCurveDefinition> definitions = entry.getValue();
@@ -125,7 +129,8 @@ public class YieldCurveConfigPopulator {
   }
 
   public static void populateCurveSpecificationBuilderConfigMaster(final ConfigMaster configMaster) {
-    final Map<Currency, CurveSpecificationBuilderConfiguration> configurations = CurveDefinitionAndSpecifications.buildStandardCurveSpecificationBuilderConfigurations();
+    final Map<Currency, CurveSpecificationBuilderConfiguration> configurations = CurveDefinitionAndSpecifications
+        .buildStandardCurveSpecificationBuilderConfigurations();
     for (final Map.Entry<Currency, CurveSpecificationBuilderConfiguration> entry : configurations.entrySet()) {
       final ConfigItem<CurveSpecificationBuilderConfiguration> item = ConfigItem.of(entry.getValue());
       item.setName("DEFAULT_" + entry.getKey().getCode());
@@ -134,7 +139,8 @@ public class YieldCurveConfigPopulator {
   }
 
   public static void populateSyntheticCurveSpecificationBuilderConfigMaster(final ConfigMaster configMaster) {
-    final Map<Currency, CurveSpecificationBuilderConfiguration> syntheticConfigurations = CurveDefinitionAndSpecifications.buildSyntheticCurveSpecificationBuilderConfigurations();
+    final Map<Currency, CurveSpecificationBuilderConfiguration> syntheticConfigurations = CurveDefinitionAndSpecifications
+        .buildSyntheticCurveSpecificationBuilderConfigurations();
     for (final Map.Entry<Currency, CurveSpecificationBuilderConfiguration> entry : syntheticConfigurations.entrySet()) {
       final ConfigItem<CurveSpecificationBuilderConfiguration> item = ConfigItem.of(entry.getValue());
       item.setName("SECONDARY_" + entry.getKey().getCode());

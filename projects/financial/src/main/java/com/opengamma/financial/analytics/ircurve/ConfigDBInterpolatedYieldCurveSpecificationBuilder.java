@@ -20,8 +20,9 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- *
+ * @deprecated {@link YieldCurveSpecification}s are deprecated.
  */
+@Deprecated
 public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements InterpolatedYieldCurveSpecificationBuilder {
   private final ConfigSource _configSource;
 
@@ -53,8 +54,8 @@ public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements Inter
         final String conventionName = strip.getConventionName() + "_" + curveDefinition.getCurrency().getCode();
         final CurveSpecificationBuilderConfiguration builderConfig = getBuilderConfig(cache, conventionName, version);
         if (builderConfig == null) {
-          throw new OpenGammaRuntimeException("Could not get specification builder configuration for curve="
-              + curveDefinition.getName() + ", currency=" + curveDefinition.getCurrency() + ", strip=" + strip);
+          throw new OpenGammaRuntimeException("Could not get specification builder configuration for curve=" + curveDefinition.getName() + ", currency="
+              + curveDefinition.getCurrency() + ", strip=" + strip);
         }
         ExternalId identifier;
         switch (strip.getInstrumentType()) {
@@ -74,7 +75,7 @@ public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements Inter
           case FUTURE:
             identifier = builderConfig.getFutureSecurity(curveDate, strip.getCurveNodePointTime(), strip.getNumberOfFuturesAfterTenor());
             break;
-          case LIBOR: //TODO is this right? It seems that we should have a generic IBOR strip. We will need to think about how we deal with *ibor providers
+          case LIBOR: // TODO is this right? It seems that we should have a generic IBOR strip. We will need to think about how we deal with *ibor providers
             identifier = builderConfig.getLiborSecurity(curveDate, strip.getCurveNodePointTime());
             break;
           case EURIBOR:
@@ -132,13 +133,12 @@ public class ConfigDBInterpolatedYieldCurveSpecificationBuilder implements Inter
       final String leftExtrapolatorName = curveDefinition.getLeftExtrapolatorName();
       final String rightExtrapolatorName = curveDefinition.getRightExtrapolatorName();
       final boolean interpolateYield = curveDefinition.isInterpolateYields();
-      final Interpolator1D interpolator =
-          NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
-      return new InterpolatedYieldCurveSpecification(curveDate, curveDefinition.getName(), curveDefinition.getCurrency(), interpolator,
-          interpolateYield, securities, curveDefinition.getRegionId());
+      final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+      return new InterpolatedYieldCurveSpecification(curveDate, curveDefinition.getName(), curveDefinition.getCurrency(), interpolator, interpolateYield,
+          securities, curveDefinition.getRegionId());
     } catch (final OpenGammaRuntimeException e) {
-      throw new OpenGammaRuntimeException("Error constructing " + curveDefinition.getName() + "_"
-          + curveDefinition.getCurrency().getCode() + ": " + e.getMessage());
+      throw new OpenGammaRuntimeException(
+          "Error constructing " + curveDefinition.getName() + "_" + curveDefinition.getCurrency().getCode() + ": " + e.getMessage());
     }
   }
 }

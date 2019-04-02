@@ -49,7 +49,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   /**
-   * @param futurePrefix The future prefix, not null
+   * @param futurePrefix
+   *          The future prefix, not null
    */
   public SyntheticFutureCurveInstrumentProvider(final String futurePrefix) {
     ArgumentChecker.notNull(futurePrefix, "future prefix");
@@ -73,6 +74,7 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
 
   /**
    * Gets the future prefix.
+   *
    * @return The future prefix
    */
   public String getFuturePrefix() {
@@ -100,7 +102,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   @Override
-  public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType, final IndexType receiveIndexType) {
+  public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType,
+      final IndexType receiveIndexType) {
     throw new OpenGammaRuntimeException("Only futures supported");
   }
 
@@ -114,7 +117,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
     throw new UnsupportedOperationException("Only futures supported");
   }
 
-  private static ExternalId createQuarterlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numQuartlyFuturesFromTenor, final String prefix) {
+  private static ExternalId createQuarterlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numQuartlyFuturesFromTenor,
+      final String prefix) {
     final StringBuilder futureCode = new StringBuilder();
     futureCode.append(prefix);
     final LocalDate curveFutureStartDate = curveDate.plus(tenor.getPeriod());
@@ -123,7 +127,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
     return ExternalId.of(SCHEME, futureCode.toString());
   }
 
-  private static ExternalId createMonthlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numMonthlyFuturesFromTenor, final String prefix) {
+  private static ExternalId createMonthlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numMonthlyFuturesFromTenor,
+      final String prefix) {
     final StringBuilder futureCode = new StringBuilder();
     futureCode.append(prefix);
     final LocalDate curveFutureStartDate = curveDate.plus(tenor.getPeriod());

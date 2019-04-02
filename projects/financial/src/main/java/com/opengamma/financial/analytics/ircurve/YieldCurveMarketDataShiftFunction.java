@@ -35,7 +35,10 @@ import com.opengamma.id.ExternalIdBundle;
  * Function to shift a yield curve's market data, implemented using properties and constraints.
  * <p>
  * The shift expression is applied to each of the market data value lines.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompiledInvoker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveMarketDataShiftFunction.class);
@@ -64,7 +67,7 @@ public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompi
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> shift = constraints.getValues(SHIFT);
-    if ((shift == null) || shift.isEmpty() || constraints.isOptional(SHIFT)) {
+    if (shift == null || shift.isEmpty() || constraints.isOptional(SHIFT)) {
       return null;
     }
     final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(SHIFT).with(SHIFT, "0").withOptional(SHIFT).get();
@@ -76,14 +79,16 @@ public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueProperties properties = createValueProperties(input).withAny(SHIFT).get();
     return Collections.singleton(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), properties));
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ComputedValue input = inputs.getAllValues().iterator().next();
     final ValueSpecification inputSpec = input.getSpecification();
     final SnapshotDataBundle marketData = (SnapshotDataBundle) input.getValue();
@@ -107,6 +112,7 @@ public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompi
         LOGGER.warn("Result of override operation was not numeric");
       }
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), marketData));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), marketData));
   }
 }

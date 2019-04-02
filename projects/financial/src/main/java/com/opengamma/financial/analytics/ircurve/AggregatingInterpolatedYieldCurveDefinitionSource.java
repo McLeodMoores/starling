@@ -18,7 +18,10 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Aggregates an ordered set of sources into a single source.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class AggregatingInterpolatedYieldCurveDefinitionSource implements InterpolatedYieldCurveDefinitionSource {
 
   /**
@@ -34,7 +37,8 @@ public class AggregatingInterpolatedYieldCurveDefinitionSource implements Interp
   /**
    * Creates an instance specifying the sources.
    *
-   * @param sources  the sources to aggregate, not null
+   * @param sources
+   *          the sources to aggregate, not null
    */
   public AggregatingInterpolatedYieldCurveDefinitionSource(final Iterable<InterpolatedYieldCurveDefinitionSource> sources) {
     _sources = ImmutableList.copyOf(sources);
@@ -42,10 +46,10 @@ public class AggregatingInterpolatedYieldCurveDefinitionSource implements Interp
     for (final InterpolatedYieldCurveDefinitionSource source : _sources) {
       underlyingChangeProviders.add(source);
     }
-    _changeManager = new AggregatingChangeManager(underlyingChangeProviders);;
+    _changeManager = new AggregatingChangeManager(underlyingChangeProviders);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public YieldCurveDefinition getDefinition(final Currency currency, final String name) {
     for (final InterpolatedYieldCurveDefinitionSource source : _sources) {

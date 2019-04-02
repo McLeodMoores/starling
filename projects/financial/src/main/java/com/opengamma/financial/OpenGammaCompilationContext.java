@@ -38,8 +38,8 @@ public final class OpenGammaCompilationContext {
   /**
    * The name under which an instance of {@link ConfigSource} should be bound.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by a ConfigSource, allows the flexibility
-   * to source that data from an external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by
+   * a ConfigSource, allows the flexibility to source that data from an external system, or a more efficient storage mechanism, in the future.
    */
   public static final String CONFIG_SOURCE_NAME = "configSource";
   /**
@@ -104,12 +104,13 @@ public final class OpenGammaCompilationContext {
    */
   public static final String RISK_FACTORS_GATHERER_NAME = "riskFactorsGatherer";
   /**
-   * The name under which a {@link Boolean#TRUE} value should be bound to put functions which support it into a permissive requirement mode. Note that this is a non-default mode of behavior that is
-   * not usually required.
+   * The name under which a {@link Boolean#TRUE} value should be bound to put functions which support it into a permissive requirement mode. Note that this is a
+   * non-default mode of behavior that is not usually required.
    */
   private static final String PERMISSIVE_FLAG_NAME = "permissive";
   /**
    * The name under which an instance of {@link PnLRequirementsGatherer} should be bound.
+   * 
    * @deprecated this functionality will be removed
    */
   @Deprecated
@@ -134,7 +135,8 @@ public final class OpenGammaCompilationContext {
   /**
    * Gets a {@code ConfigSource} from the context.
    *
-   * @param compilationContext the context to examine, not null
+   * @param compilationContext
+   *          the context to examine, not null
    * @return the config source, null if not found
    */
   public static ConfigSource getConfigSource(final FunctionCompilationContext compilationContext) {
@@ -144,8 +146,10 @@ public final class OpenGammaCompilationContext {
   /**
    * Stores a {@code ConfigSource} in the context.
    *
-   * @param compilationContext the context to store in, not null
-   * @param configSource the config source to store, not null
+   * @param compilationContext
+   *          the context to store in, not null
+   * @param configSource
+   *          the config source to store, not null
    */
   public static void setConfigSource(final FunctionCompilationContext compilationContext, final ConfigSource configSource) {
     set(compilationContext, CONFIG_SOURCE_NAME, configSource);
@@ -155,7 +159,8 @@ public final class OpenGammaCompilationContext {
   /**
    * Gets a {@code RegionSource} from the context.
    *
-   * @param compilationContext the context to examine, not null
+   * @param compilationContext
+   *          the context to examine, not null
    * @return the region source, null if not found
    */
   public static RegionSource getRegionSource(final FunctionCompilationContext compilationContext) {
@@ -165,8 +170,10 @@ public final class OpenGammaCompilationContext {
   /**
    * Stores a {@code RegionSource} in the context.
    *
-   * @param compilationContext the context to store in, not null
-   * @param regionSource the region source to store, not null
+   * @param compilationContext
+   *          the context to store in, not null
+   * @param regionSource
+   *          the region source to store, not null
    */
   public static void setRegionSource(final FunctionCompilationContext compilationContext, final RegionSource regionSource) {
     set(compilationContext, REGION_SOURCE_NAME, regionSource);
@@ -176,7 +183,8 @@ public final class OpenGammaCompilationContext {
   /**
    * Gets a {@code ConventionSource} from the context.
    *
-   * @param compilationContext the context to examine, not null
+   * @param compilationContext
+   *          the context to examine, not null
    * @return the convention source, null if not found
    */
   public static ConventionSource getConventionSource(final FunctionCompilationContext compilationContext) {
@@ -186,8 +194,10 @@ public final class OpenGammaCompilationContext {
   /**
    * Stores a {@code ConventionSource} in the context.
    *
-   * @param compilationContext the context to store in, not null
-   * @param conventionSource the convention source to store, not null
+   * @param compilationContext
+   *          the context to store in, not null
+   * @param conventionSource
+   *          the convention source to store, not null
    */
   public static void setConventionSource(final FunctionCompilationContext compilationContext, final ConventionSource conventionSource) {
     set(compilationContext, CONVENTION_SOURCE_NAME, conventionSource);
@@ -197,9 +207,12 @@ public final class OpenGammaCompilationContext {
   /**
    * Gets a {@code ConventionBundleSource} from the context.
    *
-   * @param compilationContext the context to examine, not null
+   * @param compilationContext
+   *          the context to examine, not null
    * @return the convention bundle source, null if not found
+   * @deprecated {@link ConventionBundleSource} is deprecated. Use {@link ConventionSource} instead
    */
+  @Deprecated
   public static ConventionBundleSource getConventionBundleSource(final FunctionCompilationContext compilationContext) {
     return get(compilationContext, CONVENTION_BUNDLE_SOURCE_NAME);
   }
@@ -207,16 +220,21 @@ public final class OpenGammaCompilationContext {
   /**
    * Stores a {@code ConventionBundleSource} in the context.
    *
-   * @param compilationContext the context to store in, not null
-   * @param conventionBundleSource the convention bundle source to store, not null
+   * @param compilationContext
+   *          the context to store in, not null
+   * @param conventionBundleSource
+   *          the convention bundle source to store, not null
+   * @deprecated {@link ConventionBundleSource} is deprecated. Use {@link ConventionSource} instead
    */
+  @Deprecated
   public static void setConventionBundleSource(final FunctionCompilationContext compilationContext, final ConventionBundleSource conventionBundleSource) {
     set(compilationContext, CONVENTION_BUNDLE_SOURCE_NAME, conventionBundleSource);
   }
 
   /**
    * @deprecated Use config source instead.
-   * @param compilationContext the compilation context
+   * @param compilationContext
+   *          the compilation context
    * @return the InterpolatedYieldCurveDefinitionSource
    */
   @Deprecated
@@ -226,11 +244,14 @@ public final class OpenGammaCompilationContext {
 
   /**
    * @deprecated Use config source instead.
-   * @param compilationContext the compilation context
-   * @param source the InterpolatedYieldCurveDefinitionSource
+   * @param compilationContext
+   *          the compilation context
+   * @param source
+   *          the InterpolatedYieldCurveDefinitionSource
    */
   @Deprecated
-  public static void setInterpolatedYieldCurveDefinitionSource(final FunctionCompilationContext compilationContext, final InterpolatedYieldCurveDefinitionSource source) {
+  public static void setInterpolatedYieldCurveDefinitionSource(final FunctionCompilationContext compilationContext,
+      final InterpolatedYieldCurveDefinitionSource source) {
     set(compilationContext, INTERPOLATED_YIELD_CURVE_DEFINITION_SOURCE_NAME, source);
   }
 
@@ -238,7 +259,8 @@ public final class OpenGammaCompilationContext {
     return get(compilationContext, INTERPOLATED_YIELD_CURVE_SPECIFICATION_BUILDER_NAME);
   }
 
-  public static void setInterpolatedYieldCurveSpecificationBuilder(final FunctionCompilationContext compilationContext, final InterpolatedYieldCurveSpecificationBuilder builder) {
+  public static void setInterpolatedYieldCurveSpecificationBuilder(final FunctionCompilationContext compilationContext,
+      final InterpolatedYieldCurveSpecificationBuilder builder) {
     set(compilationContext, INTERPOLATED_YIELD_CURVE_SPECIFICATION_BUILDER_NAME, builder);
   }
 
@@ -286,7 +308,8 @@ public final class OpenGammaCompilationContext {
     return get(compilationContext, HISTORICAL_TIME_SERIES_SOURCE_NAME);
   }
 
-  public static void setHistoricalTimeSeriesSource(final FunctionCompilationContext compilationContext, final HistoricalTimeSeriesSource historicalTimeSeriesSource) {
+  public static void setHistoricalTimeSeriesSource(final FunctionCompilationContext compilationContext,
+      final HistoricalTimeSeriesSource historicalTimeSeriesSource) {
     set(compilationContext, HISTORICAL_TIME_SERIES_SOURCE_NAME, historicalTimeSeriesSource);
   }
 
@@ -294,7 +317,8 @@ public final class OpenGammaCompilationContext {
     return get(compilationContext, HISTORICAL_TIME_SERIES_RESOLVER_NAME);
   }
 
-  public static void setHistoricalTimeSeriesResolver(final FunctionCompilationContext compilationContext, final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
+  public static void setHistoricalTimeSeriesResolver(final FunctionCompilationContext compilationContext,
+      final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     set(compilationContext, HISTORICAL_TIME_SERIES_RESOLVER_NAME, historicalTimeSeriesResolver);
   }
 
@@ -307,12 +331,14 @@ public final class OpenGammaCompilationContext {
   }
 
   /**
-   * Tests whether functions should allow more permissive constraints. Permissive behavior, if implemented by a function, will prefer to satisfy a constraint by assuming (possibly inappropriate)
-   * values rather than abandon the production. This increases the chance of a successful graph build for an inaccurately specified view but the graph may not be as the user intended/expected.
+   * Tests whether functions should allow more permissive constraints. Permissive behavior, if implemented by a function, will prefer to satisfy a constraint by
+   * assuming (possibly inappropriate) values rather than abandon the production. This increases the chance of a successful graph build for an inaccurately
+   * specified view but the graph may not be as the user intended/expected.
    * <p>
    * This flag is off by default.
    *
-   * @param compilationContext the context to test, not null
+   * @param compilationContext
+   *          the context to test, not null
    * @return true if permissive behavior is enabled, false otherwise.
    */
   public static boolean isPermissive(final FunctionCompilationContext compilationContext) {
@@ -320,13 +346,16 @@ public final class OpenGammaCompilationContext {
   }
 
   /**
-   * Sets whether functions should allow more permissive constraints. Permissive behavior, if implemented by a function, will prefer to satisfy a constraint by assuming (possibly inappropriate) values
-   * rather than abandon the production. This increases the chance of a successful graph build for an inaccurately specified view but the graph may not be as the user intended/expected.
+   * Sets whether functions should allow more permissive constraints. Permissive behavior, if implemented by a function, will prefer to satisfy a constraint by
+   * assuming (possibly inappropriate) values rather than abandon the production. This increases the chance of a successful graph build for an inaccurately
+   * specified view but the graph may not be as the user intended/expected.
    * <p>
    * This flag is off by default.
    *
-   * @param compilationContext the context to update, not null
-   * @param permissive true to enable permissive behavior, false to disable it
+   * @param compilationContext
+   *          the context to update, not null
+   * @param permissive
+   *          true to enable permissive behavior, false to disable it
    */
   public static void setPermissive(final FunctionCompilationContext compilationContext, final boolean permissive) {
     if (permissive) {
