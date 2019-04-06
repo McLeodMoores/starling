@@ -649,7 +649,7 @@
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-core</artifactId>
         <!-- version>${og.spring.version}</version-->
-        <version>4.2.7.RELEASE</version>
+        <version>4.2.12.RELEASE</version>
         <exclusions>
           <exclusion>
             <groupId>org.springframework</groupId>
