@@ -6,7 +6,9 @@
 package com.opengamma.examples.simulated.livedata;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.credit.CdsRecoveryRateIdentifier;
 import com.opengamma.id.ExternalId;
+import com.opengamma.id.ExternalScheme;
 import com.opengamma.livedata.resolver.AbstractResolver;
 import com.opengamma.livedata.resolver.JmsTopicNameResolveRequest;
 import com.opengamma.livedata.resolver.JmsTopicNameResolver;
@@ -19,7 +21,9 @@ public class ExampleJmsTopicNameResolver extends AbstractResolver<JmsTopicNameRe
   @Override
   public String resolve(final JmsTopicNameResolveRequest request) {
     final ExternalId identifier = request.getMarketDataUniqueId();
-    if (ExternalSchemes.OG_SYNTHETIC_TICKER.equals(identifier.getScheme())) {
+    final ExternalScheme scheme = identifier.getScheme();
+    if (ExternalSchemes.OG_SYNTHETIC_TICKER.equals(scheme) || CdsRecoveryRateIdentifier.SAMEDAY_CDS_SCHEME.equals(scheme)
+        || CdsRecoveryRateIdentifier.COMPOSITE_CDS_SCHEME.equals(scheme)) {
       return "LiveData" + SEPARATOR + "EXAMPLE" + SEPARATOR + identifier.getValue() + request.getNormalizationRule().getJmsTopicSuffix();
     }
     return null;

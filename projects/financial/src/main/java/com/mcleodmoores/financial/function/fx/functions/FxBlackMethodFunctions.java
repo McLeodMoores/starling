@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.financial.function.fx.config;
+package com.mcleodmoores.financial.function.fx.functions;
 
 import java.util.HashMap;
 import java.util.List;

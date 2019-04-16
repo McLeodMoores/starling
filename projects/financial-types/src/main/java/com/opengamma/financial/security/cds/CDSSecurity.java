@@ -25,13 +25,17 @@ import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
+import com.opengamma.financial.security.credit.LegacyCDSSecurity;
+import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
  * CDS Security object
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
+ * @deprecated use {@link StandardCDSSecurity} or {@link LegacyCDSSecurity}
  */
+@Deprecated
 @BeanDefinition
 public class CDSSecurity extends FinancialSecurity {
 
@@ -117,15 +121,14 @@ public class CDSSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private String _restructuringClause;
 
-
   CDSSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public CDSSecurity(final double notional, final double recoveryRate, final double spread, final Currency currency,
-      final ZonedDateTime maturity, final ZonedDateTime startDate, final Frequency premiumFrequency,
-      final DayCount dayCount, final BusinessDayConvention businessDayConvention, final StubType stubType, final int settlementDays,
-      final String underlyingIssuer, final Currency underlyingCurrency, final String underlyingSeniority, final String restructuringClause) {
+  public CDSSecurity(final double notional, final double recoveryRate, final double spread, final Currency currency, final ZonedDateTime maturity,
+      final ZonedDateTime startDate, final Frequency premiumFrequency, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+      final StubType stubType, final int settlementDays, final String underlyingIssuer, final Currency underlyingCurrency, final String underlyingSeniority,
+      final String restructuringClause) {
 
     super(SECURITY_TYPE);
     setNotional(notional);

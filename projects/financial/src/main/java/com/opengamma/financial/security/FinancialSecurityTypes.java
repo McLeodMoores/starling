@@ -20,6 +20,8 @@ import com.opengamma.financial.security.cds.CDSSecurity;
 import com.opengamma.financial.security.cds.CreditDefaultSwapIndexSecurity;
 import com.opengamma.financial.security.cds.LegacyVanillaCDSSecurity;
 import com.opengamma.financial.security.cds.StandardVanillaCDSSecurity;
+import com.opengamma.financial.security.credit.LegacyCDSSecurity;
+import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.financial.security.deposit.ContinuousZeroDepositSecurity;
 import com.opengamma.financial.security.deposit.PeriodicZeroDepositSecurity;
 import com.opengamma.financial.security.deposit.SimpleZeroDepositSecurity;
@@ -80,7 +82,8 @@ public class FinancialSecurityTypes {
   /**
    * The Agricultural Future security type.
    */
-  public static final ObjectComputationTargetType<AgricultureFutureSecurity> AGRICULTURE_FUTURE_SECURITY = ObjectComputationTargetType.of(AgricultureFutureSecurity.class);
+  public static final ObjectComputationTargetType<AgricultureFutureSecurity> AGRICULTURE_FUTURE_SECURITY = ObjectComputationTargetType
+      .of(AgricultureFutureSecurity.class);
 
   /**
    * The Bill security type.
@@ -90,7 +93,8 @@ public class FinancialSecurityTypes {
   /**
    * The Bond Future Option security type.
    */
-  public static final ObjectComputationTargetType<BondFutureOptionSecurity> BOND_FUTURE_OPTION_SECURITY = ObjectComputationTargetType.of(BondFutureOptionSecurity.class);
+  public static final ObjectComputationTargetType<BondFutureOptionSecurity> BOND_FUTURE_OPTION_SECURITY = ObjectComputationTargetType
+      .of(BondFutureOptionSecurity.class);
 
   /**
    * The Bond Future security type.
@@ -105,7 +109,8 @@ public class FinancialSecurityTypes {
   /**
    * The CAP/Floor CMS Spread security type.
    */
-  public static final ObjectComputationTargetType<CapFloorCMSSpreadSecurity> CAP_FLOOR_CMS_SPREAD_SECURITY = ObjectComputationTargetType.of(CapFloorCMSSpreadSecurity.class);
+  public static final ObjectComputationTargetType<CapFloorCMSSpreadSecurity> CAP_FLOOR_CMS_SPREAD_SECURITY = ObjectComputationTargetType
+      .of(CapFloorCMSSpreadSecurity.class);
 
   /**
    * The CAP/Floor security type.
@@ -135,12 +140,14 @@ public class FinancialSecurityTypes {
   /**
    * The Commodity Future Option security type.
    */
-  public static final ObjectComputationTargetType<CommodityFutureOptionSecurity> COMMODITY_FUTURE_OPTION_SECURITY = ObjectComputationTargetType.of(CommodityFutureOptionSecurity.class);
+  public static final ObjectComputationTargetType<CommodityFutureOptionSecurity> COMMODITY_FUTURE_OPTION_SECURITY = ObjectComputationTargetType
+      .of(CommodityFutureOptionSecurity.class);
 
   /**
    * The Continuous Zero Deposit security type.
    */
-  public static final ObjectComputationTargetType<ContinuousZeroDepositSecurity> CONTINUOUS_ZERO_DEPOSIT_SECURITY = ObjectComputationTargetType.of(ContinuousZeroDepositSecurity.class);
+  public static final ObjectComputationTargetType<ContinuousZeroDepositSecurity> CONTINUOUS_ZERO_DEPOSIT_SECURITY = ObjectComputationTargetType
+      .of(ContinuousZeroDepositSecurity.class);
 
   /**
    * The Corporate Bond security type.
@@ -150,17 +157,20 @@ public class FinancialSecurityTypes {
   /**
    * The credit default swap index security type
    */
-  public static final ObjectComputationTargetType<CreditDefaultSwapIndexSecurity> CREDIT_DEFAULT_SWAP_INDEX_SECURITY = ObjectComputationTargetType.of(CreditDefaultSwapIndexSecurity.class);
+  public static final ObjectComputationTargetType<CreditDefaultSwapIndexSecurity> CREDIT_DEFAULT_SWAP_INDEX_SECURITY = ObjectComputationTargetType
+      .of(CreditDefaultSwapIndexSecurity.class);
 
   /**
    * The credit default swap option security type.
    */
-  public static final ObjectComputationTargetType<CreditDefaultSwapOptionSecurity> CREDIT_DEFAULT_SWAP_OPTION_SECURITY = ObjectComputationTargetType.of(CreditDefaultSwapOptionSecurity.class);
+  public static final ObjectComputationTargetType<CreditDefaultSwapOptionSecurity> CREDIT_DEFAULT_SWAP_OPTION_SECURITY = ObjectComputationTargetType
+      .of(CreditDefaultSwapOptionSecurity.class);
 
   /**
    * A deliverable swap future security type.
    */
-  public static final ObjectComputationTargetType<DeliverableSwapFutureSecurity> DELIVERABLE_SWAP_FUTURE_SECURITY = ObjectComputationTargetType.of(DeliverableSwapFutureSecurity.class);
+  public static final ObjectComputationTargetType<DeliverableSwapFutureSecurity> DELIVERABLE_SWAP_FUTURE_SECURITY = ObjectComputationTargetType
+      .of(DeliverableSwapFutureSecurity.class);
 
   /**
    * The Energy Future Option security type.
@@ -170,7 +180,8 @@ public class FinancialSecurityTypes {
   /**
    * The Equity Barrier Option security type.
    */
-  public static final ObjectComputationTargetType<EquityBarrierOptionSecurity> EQUITY_BARRIER_OPTION_SECURITY = ObjectComputationTargetType.of(EquityBarrierOptionSecurity.class);
+  public static final ObjectComputationTargetType<EquityBarrierOptionSecurity> EQUITY_BARRIER_OPTION_SECURITY = ObjectComputationTargetType
+      .of(EquityBarrierOptionSecurity.class);
 
   /**
    * The Equity Future security type.
@@ -186,12 +197,14 @@ public class FinancialSecurityTypes {
   /**
    * The Equity Index Dividend Future security type.
    */
-  public static final ObjectComputationTargetType<EquityIndexDividendFutureSecurity> EQUITY_INDEX_DIVIDEND_FUTURE_SECURITY = ObjectComputationTargetType.of(EquityIndexDividendFutureSecurity.class);
+  public static final ObjectComputationTargetType<EquityIndexDividendFutureSecurity> EQUITY_INDEX_DIVIDEND_FUTURE_SECURITY = ObjectComputationTargetType
+      .of(EquityIndexDividendFutureSecurity.class);
 
   /**
    * The Equity Index Option security type.
    */
-  public static final ObjectComputationTargetType<EquityIndexOptionSecurity> EQUITY_INDEX_OPTION_SECURITY = ObjectComputationTargetType.of(EquityIndexOptionSecurity.class);
+  public static final ObjectComputationTargetType<EquityIndexOptionSecurity> EQUITY_INDEX_OPTION_SECURITY = ObjectComputationTargetType
+      .of(EquityIndexOptionSecurity.class);
 
   /**
    * The Equity Option security type.
@@ -201,7 +214,8 @@ public class FinancialSecurityTypes {
   /**
    * The Equity Index Future Option security type.
    */
-  public static final ObjectComputationTargetType<EquityIndexFutureOptionSecurity> EQUITY_INDEX_FUTURE_OPTION_SECURITY = ObjectComputationTargetType.of(EquityIndexFutureOptionSecurity.class);
+  public static final ObjectComputationTargetType<EquityIndexFutureOptionSecurity> EQUITY_INDEX_FUTURE_OPTION_SECURITY = ObjectComputationTargetType
+      .of(EquityIndexFutureOptionSecurity.class);
 
   /**
    * The Equity security type.
@@ -211,7 +225,8 @@ public class FinancialSecurityTypes {
   /**
    * The Equity Variance Swap security type.
    */
-  public static final ObjectComputationTargetType<EquityVarianceSwapSecurity> EQUITY_VARIANCE_SWAP_SECURITY = ObjectComputationTargetType.of(EquityVarianceSwapSecurity.class);
+  public static final ObjectComputationTargetType<EquityVarianceSwapSecurity> EQUITY_VARIANCE_SWAP_SECURITY = ObjectComputationTargetType
+      .of(EquityVarianceSwapSecurity.class);
 
   /**
    * The Forward Swap security type.
@@ -226,7 +241,8 @@ public class FinancialSecurityTypes {
   /**
    * The FRA security type.
    */
-  public static final ObjectComputationTargetType<ForwardRateAgreementSecurity> FORWARD_RATE_AGREEMENT_SECURITY = ObjectComputationTargetType.of(ForwardRateAgreementSecurity.class);
+  public static final ObjectComputationTargetType<ForwardRateAgreementSecurity> FORWARD_RATE_AGREEMENT_SECURITY = ObjectComputationTargetType
+      .of(ForwardRateAgreementSecurity.class);
 
   /**
    * The Future security type.
@@ -236,12 +252,14 @@ public class FinancialSecurityTypes {
   /**
    * The FX Barrier Option security type.
    */
-  public static final ObjectComputationTargetType<FXBarrierOptionSecurity> FX_BARRIER_OPTION_SECURITY = ObjectComputationTargetType.of(FXBarrierOptionSecurity.class);
+  public static final ObjectComputationTargetType<FXBarrierOptionSecurity> FX_BARRIER_OPTION_SECURITY = ObjectComputationTargetType
+      .of(FXBarrierOptionSecurity.class);
 
   /**
    * The FX Digital Option security type.
    */
-  public static final ObjectComputationTargetType<FXDigitalOptionSecurity> FX_DIGITAL_OPTION_SECURITY = ObjectComputationTargetType.of(FXDigitalOptionSecurity.class);
+  public static final ObjectComputationTargetType<FXDigitalOptionSecurity> FX_DIGITAL_OPTION_SECURITY = ObjectComputationTargetType
+      .of(FXDigitalOptionSecurity.class);
 
   /**
    * The FX Forward security type.
@@ -261,7 +279,8 @@ public class FinancialSecurityTypes {
   /**
    * The Government Bond security type.
    */
-  public static final ObjectComputationTargetType<GovernmentBondSecurity> GOVERNMENT_BOND_SECURITY = ObjectComputationTargetType.of(GovernmentBondSecurity.class);
+  public static final ObjectComputationTargetType<GovernmentBondSecurity> GOVERNMENT_BOND_SECURITY = ObjectComputationTargetType
+      .of(GovernmentBondSecurity.class);
 
   /**
    * The Index Future security type.
@@ -271,17 +290,28 @@ public class FinancialSecurityTypes {
   /**
    * The IR Future security type.
    */
-  public static final ObjectComputationTargetType<InterestRateFutureSecurity> INTEREST_RATE_FUTURE_SECURITY = ObjectComputationTargetType.of(InterestRateFutureSecurity.class);
+  public static final ObjectComputationTargetType<InterestRateFutureSecurity> INTEREST_RATE_FUTURE_SECURITY = ObjectComputationTargetType
+      .of(InterestRateFutureSecurity.class);
 
   /**
    * The IR Future Option security type.
    */
-  public static final ObjectComputationTargetType<IRFutureOptionSecurity> IR_FUTURE_OPTION_SECURITY = ObjectComputationTargetType.of(IRFutureOptionSecurity.class);
+  public static final ObjectComputationTargetType<IRFutureOptionSecurity> IR_FUTURE_OPTION_SECURITY = ObjectComputationTargetType
+      .of(IRFutureOptionSecurity.class);
 
   /**
-   * The Legacy Vanilla CDS security type
+   * The Legacy Vanilla CDS security type.
    */
-  public static final ObjectComputationTargetType<LegacyVanillaCDSSecurity> LEGACY_VANILLA_CDS_SECURITY = ObjectComputationTargetType.of(LegacyVanillaCDSSecurity.class);
+  public static final ObjectComputationTargetType<LegacyCDSSecurity> LEGACY_CDS_SECURITY = ObjectComputationTargetType.of(LegacyCDSSecurity.class);
+
+  /**
+   * The Legacy Vanilla CDS security type.
+   *
+   * @deprecated use {@link #LEGACY_CDS_SECURITY}
+   */
+  @Deprecated
+  public static final ObjectComputationTargetType<LegacyVanillaCDSSecurity> LEGACY_VANILLA_CDS_SECURITY = ObjectComputationTargetType
+      .of(LegacyVanillaCDSSecurity.class);
 
   /**
    * The Metal Future security type.
@@ -296,35 +326,46 @@ public class FinancialSecurityTypes {
   /**
    * The Non-Deliverable FX Digital Option security type.
    */
-  public static final ObjectComputationTargetType<NonDeliverableFXDigitalOptionSecurity> NON_DELIVERABLE_FX_DIGITAL_OPTION_SECURITY =
-      ObjectComputationTargetType.of(NonDeliverableFXDigitalOptionSecurity.class);
+  public static final ObjectComputationTargetType<NonDeliverableFXDigitalOptionSecurity> NON_DELIVERABLE_FX_DIGITAL_OPTION_SECURITY = ObjectComputationTargetType
+      .of(NonDeliverableFXDigitalOptionSecurity.class);
 
   /**
    * The Non-Deliverable FX Forward security type.
    */
-  public static final ObjectComputationTargetType<NonDeliverableFXForwardSecurity> NON_DELIVERABLE_FX_FORWARD_SECURITY =
-      ObjectComputationTargetType.of(NonDeliverableFXForwardSecurity.class);
+  public static final ObjectComputationTargetType<NonDeliverableFXForwardSecurity> NON_DELIVERABLE_FX_FORWARD_SECURITY = ObjectComputationTargetType
+      .of(NonDeliverableFXForwardSecurity.class);
 
   /**
    * The Non-Deliverable FX Option security type.
    */
-  public static final ObjectComputationTargetType<NonDeliverableFXOptionSecurity> NON_DELIVERABLE_FX_OPTION_SECURITY =
-      ObjectComputationTargetType.of(NonDeliverableFXOptionSecurity.class);
+  public static final ObjectComputationTargetType<NonDeliverableFXOptionSecurity> NON_DELIVERABLE_FX_OPTION_SECURITY = ObjectComputationTargetType
+      .of(NonDeliverableFXOptionSecurity.class);
 
   /**
    * The Periodic Zero Deposit security type.
    */
-  public static final ObjectComputationTargetType<PeriodicZeroDepositSecurity> PERIODIC_ZERO_DEPOSIT_SECURITY = ObjectComputationTargetType.of(PeriodicZeroDepositSecurity.class);
+  public static final ObjectComputationTargetType<PeriodicZeroDepositSecurity> PERIODIC_ZERO_DEPOSIT_SECURITY = ObjectComputationTargetType
+      .of(PeriodicZeroDepositSecurity.class);
 
   /**
    * The Simple Zero Deposit security type.
    */
-  public static final ObjectComputationTargetType<SimpleZeroDepositSecurity> SIMPLE_ZERO_DEPOSIT_SECURITY = ObjectComputationTargetType.of(SimpleZeroDepositSecurity.class);
+  public static final ObjectComputationTargetType<SimpleZeroDepositSecurity> SIMPLE_ZERO_DEPOSIT_SECURITY = ObjectComputationTargetType
+      .of(SimpleZeroDepositSecurity.class);
 
   /**
-   * The Standard Vanilla CDS security type
+   * The Standard Vanilla CDS security type.
    */
-  public static final ObjectComputationTargetType<StandardVanillaCDSSecurity> STANDARD_VANILLA_CDS_SECURITY = ObjectComputationTargetType.of(StandardVanillaCDSSecurity.class);
+  public static final ObjectComputationTargetType<StandardCDSSecurity> STANDARD_CDS_SECURITY = ObjectComputationTargetType.of(StandardCDSSecurity.class);
+
+  /**
+   * The Standard Vanilla CDS security type.
+   * 
+   * @deprecated Use {@link #STANDARD_CDS_SECURITY}
+   */
+  @Deprecated
+  public static final ObjectComputationTargetType<StandardVanillaCDSSecurity> STANDARD_VANILLA_CDS_SECURITY = ObjectComputationTargetType
+      .of(StandardVanillaCDSSecurity.class);
 
   /**
    * The Stock Future security type.
@@ -339,7 +380,8 @@ public class FinancialSecurityTypes {
   /**
    * The Interest Rate Swap security type.
    */
-  public static final ObjectComputationTargetType<InterestRateSwapSecurity> INTEREST_RATE_SWAP_SECURITY = ObjectComputationTargetType.of(InterestRateSwapSecurity.class);
+  public static final ObjectComputationTargetType<InterestRateSwapSecurity> INTEREST_RATE_SWAP_SECURITY = ObjectComputationTargetType
+      .of(InterestRateSwapSecurity.class);
 
   /**
    * The Swaption security type.
@@ -349,6 +391,7 @@ public class FinancialSecurityTypes {
   /**
    * The FX Volatility Swap security type.
    */
-  public static final ObjectComputationTargetType<FXVolatilitySwapSecurity> FX_VOLATILITY_SWAP_SECURITY = ObjectComputationTargetType.of(FXVolatilitySwapSecurity.class);
+  public static final ObjectComputationTargetType<FXVolatilitySwapSecurity> FX_VOLATILITY_SWAP_SECURITY = ObjectComputationTargetType
+      .of(FXVolatilitySwapSecurity.class);
 
 }

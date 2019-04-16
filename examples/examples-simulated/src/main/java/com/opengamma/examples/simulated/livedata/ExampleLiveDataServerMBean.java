@@ -25,9 +25,9 @@ public class ExampleLiveDataServerMBean extends LiveDataServerMBean {
   }
 
   @ManagedOperation(description = "Reset initial market value for a security")
-  @ManagedOperationParameters({@ManagedOperationParameter(name = "uniqueId", description = "Unique secuirty Id.)"),
-    @ManagedOperationParameter(name = "fieldName", description = "field name.)"),
-    @ManagedOperationParameter(name = "initialValue", description = "initial value.)") })
+  @ManagedOperationParameters({ @ManagedOperationParameter(name = "uniqueId", description = "Unique secuirty Id.)"),
+      @ManagedOperationParameter(name = "fieldName", description = "field name.)"),
+      @ManagedOperationParameter(name = "initialValue", description = "initial value.)") })
   public void resetInitialMarketValue(final String uniqueId, final String fieldName, final Double initialValue) {
     _server.addTicks(uniqueId, fieldName, initialValue);
   }
@@ -50,8 +50,7 @@ public class ExampleLiveDataServerMBean extends LiveDataServerMBean {
   }
 
   @ManagedOperation(description = "Set the maximum milli seconds between ticks.")
-  @ManagedOperationParameters({
-      @ManagedOperationParameter(name = "maxMillisBetweenTicks", description = "set the maximum milli seconds between ticks.)") })
+  @ManagedOperationParameters({ @ManagedOperationParameter(name = "maxMillisBetweenTicks", description = "set the maximum milli seconds between ticks.)") })
   public void setMaxMillisBetweenTicks(final int maxMillisBetweenTicks) {
     _server.setMaxMillisBetweenTicks(maxMillisBetweenTicks);
   }

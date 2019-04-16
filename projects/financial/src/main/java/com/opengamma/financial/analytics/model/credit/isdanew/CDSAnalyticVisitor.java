@@ -20,8 +20,7 @@ import com.opengamma.financial.security.cds.LegacyVanillaCDSSecurity;
 import com.opengamma.financial.security.cds.StandardVanillaCDSSecurity;
 
 /**
- * Creates a {@link CDSAnalytic} object from the security
- * Throws an exception if the security cannot be converted.
+ * Creates a {@link CDSAnalytic} object from the security Throws an exception if the security cannot be converted.
  */
 public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnalytic> {
 
@@ -55,8 +54,8 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
    * @param recoveryRate
    *          the recovery rate
    */
-  public CDSAnalyticVisitor(final LocalDate valuationDate, final HolidaySource holidaySource, final RegionSource regionSource,
-      final LocalDate startDate, final LocalDate maturityDate, final double recoveryRate) {
+  public CDSAnalyticVisitor(final LocalDate valuationDate, final HolidaySource holidaySource, final RegionSource regionSource, final LocalDate startDate,
+      final LocalDate maturityDate, final double recoveryRate) {
     _valuationDate = valuationDate;
     _holidaySource = holidaySource;
     _startDate = startDate;
@@ -68,22 +67,13 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
   public CDSAnalytic visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getNotional().getCurrency());
     final StubType stubType = security.getStubType().toAnalyticsType();
-    final Period period = IMMDateGenerator.isIMMDate(security.getMaturityDate()) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod() :
-      Period.ofMonths(6); // non IMM forced to semi annual
-    final CDSAnalytic cdsAnalytic = new CDSAnalytic(_valuationDate,
-        security.getEffectiveDate().toLocalDate(),
+    final Period period = IMMDateGenerator.isIMMDate(security.getMaturityDate()) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod()
+        : Period.ofMonths(6); // non IMM forced to semi annual
+    final CDSAnalytic cdsAnalytic = new CDSAnalytic(_valuationDate, security.getEffectiveDate().toLocalDate(),
         // Hard code or get from somewhere?
-        BusinessDayDateUtils.addWorkDays(_valuationDate, 3, calendar),
-        _startDate == null ? security.getStartDate().toLocalDate() : _startDate,
-            _maturityDate == null ? security.getMaturityDate().toLocalDate() : _maturityDate,
-                true, // Do we have this info anywhere?
-                period,
-                stubType,
-                security.isProtectionStart(),
-                _recoveryRate,
-                security.getBusinessDayConvention(),
-                calendar,
-                security.getDayCount());
+        BusinessDayDateUtils.addWorkDays(_valuationDate, 3, calendar), _startDate == null ? security.getStartDate().toLocalDate() : _startDate,
+        _maturityDate == null ? security.getMaturityDate().toLocalDate() : _maturityDate, true, // Do we have this info anywhere?
+        period, stubType, security.isProtectionStart(), _recoveryRate, security.getBusinessDayConvention(), calendar, security.getDayCount());
     return cdsAnalytic;
   }
 
@@ -91,23 +81,13 @@ public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnaly
   public CDSAnalytic visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getNotional().getCurrency());
     final StubType stubType = security.getStubType().toAnalyticsType();
-    final Period period = IMMDateGenerator.isIMMDate(security.getMaturityDate()) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod() :
-      Period.ofMonths(6); // non IMM forced to semi annual
-    final CDSAnalytic cdsAnalytic = new CDSAnalytic(_valuationDate,
-        security.getEffectiveDate().toLocalDate(),
+    final Period period = IMMDateGenerator.isIMMDate(security.getMaturityDate()) ? getPeriodFrequency(security.getCouponFrequency()).getPeriod()
+        : Period.ofMonths(6); // non IMM forced to semi annual
+    final CDSAnalytic cdsAnalytic = new CDSAnalytic(_valuationDate, security.getEffectiveDate().toLocalDate(),
         // Hard code or get from somewhere?
-        BusinessDayDateUtils.addWorkDays(_valuationDate, 3, calendar),
-        _startDate == null ? security.getStartDate().toLocalDate() : _startDate,
-            _maturityDate == null ? security.getMaturityDate().toLocalDate() : _maturityDate,
-                true, // Do we have this info anywhere?
-                period,
-                stubType,
-                security.isProtectionStart(),
-                _recoveryRate,
-                security.getBusinessDayConvention(),
-                calendar,
-                security.getDayCount()
-        );
+        BusinessDayDateUtils.addWorkDays(_valuationDate, 3, calendar), _startDate == null ? security.getStartDate().toLocalDate() : _startDate,
+        _maturityDate == null ? security.getMaturityDate().toLocalDate() : _maturityDate, true, // Do we have this info anywhere?
+        period, stubType, security.isProtectionStart(), _recoveryRate, security.getBusinessDayConvention(), calendar, security.getDayCount());
     return cdsAnalytic;
   }
 

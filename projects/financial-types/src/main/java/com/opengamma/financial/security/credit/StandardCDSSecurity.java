@@ -28,7 +28,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- *  A standard (i.e post big bang) credit default swap.
+ * A standard (i.e post big bang) credit default swap.
  */
 @BeanDefinition
 @SecurityDescription(type = StandardCDSSecurity.SECURITY_TYPE, description = "cds")
@@ -84,7 +84,6 @@ public class StandardCDSSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private double _coupon;
 
-
   /**
    * For the builder.
    */
@@ -106,7 +105,7 @@ public class StandardCDSSecurity extends FinancialSecurity {
    * @param notional
    *          the notional
    * @param isBuy
-   *          is protecting being bought
+   *          is protection being bought
    * @param coupon
    *          the premium leg coupon (fractional i.e. 100 bps = 0.01)
    * @param debtSeniority
@@ -141,15 +140,14 @@ public class StandardCDSSecurity extends FinancialSecurity {
    * @param notional
    *          the notional
    * @param isBuy
-   *          is protecting being bought
+   *          is protection being bought
    * @param coupon
    *          the premium leg coupon (fractional i.e. 100 bps = 0.01)
    * @param debtSeniority
    *          the debt seniority
    */
   public StandardCDSSecurity(final ExternalIdBundle ids, final String name, final LocalDate tradeDate, final LocalDate maturityDate,
-      final ExternalId referenceEntity, final InterestRateNotional notional, final boolean isBuy, final double coupon,
-      final DebtSeniority debtSeniority) {
+      final ExternalId referenceEntity, final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ids);
     setName(name);

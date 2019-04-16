@@ -550,7 +550,9 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   private void loadCorporateCreditPortfolio() {
     final Log log = new Log("Creating example corporate credit portfolio");
     try {
-      portfolioGeneratorTool().run(getToolContext(), CORPORATE_CREDIT_PORTFOLIO_NAME, new ExamplesCreditPortfolioGenerator(), true, null);
+      final ExamplesCreditPortfolioGenerator generator = new ExamplesCreditPortfolioGenerator();
+      generator.setCounterPartyGenerator(new StaticNameGenerator(AbstractPortfolioGeneratorTool.DEFAULT_COUNTER_PARTY));
+      generator.run(getToolContext(), CORPORATE_CREDIT_PORTFOLIO_NAME, true);
     } catch (final RuntimeException e) {
       log.fail(e);
     }

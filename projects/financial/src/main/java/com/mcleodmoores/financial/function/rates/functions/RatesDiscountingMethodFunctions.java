@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.financial.function.fx.config;
+package com.mcleodmoores.financial.function.rates.functions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,36 +9,30 @@ import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import com.mcleodmoores.financial.function.defaults.FxForwardAndNdfPerCurrencyPairDefaults;
-import com.mcleodmoores.financial.function.fx.FxForwardDiscountingPvFunction;
+import com.mcleodmoores.financial.function.defaults.LinearRatesPerCurrencyDefaults;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
+import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions;
 import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.money.UnorderedCurrencyPair;
+import com.opengamma.util.money.Currency;
 
 /**
  *
  */
-public class FxDiscountingMethodFunctions extends AbstractFunctionConfigurationBean {
+public class RatesDiscountingMethodFunctions extends AbstractFunctionConfigurationBean {
 
-  /**
-   * Creates an instance of this function configuration source.
-   * @return A function configuration source populated with pricing functions
-   * from this package.
-   */
   public static FunctionConfigurationSource instance() {
-    return new FxDiscountingMethodFunctions().getObjectCreating();
+    return new DiscountingPricingFunctions().getObjectCreating();
   }
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(FxForwardDiscountingPvFunction.class));
   }
 
-  public static class FxForwardDefaults extends AbstractFunctionConfigurationBean {
+  public static class LinearRatesDefaults extends AbstractFunctionConfigurationBean {
 
-    public static class CurrencyPairInfo implements InitializingBean {
+    public static class CurrencyInfo implements InitializingBean {
       private String _curveExposuresName;
 
       public void setCurveExposuresName(final String curveExposuresName) {
@@ -55,23 +49,22 @@ public class FxDiscountingMethodFunctions extends AbstractFunctionConfigurationB
       }
     }
 
-    private final Map<UnorderedCurrencyPair, CurrencyPairInfo> _info = new HashMap<>();
+    private final Map<Currency, CurrencyInfo> _info = new HashMap<>();
 
-    public void setCurrencyPairInfo(final Map<UnorderedCurrencyPair, CurrencyPairInfo> info) {
+    public void setCurrencyInfo(final Map<Currency, CurrencyInfo> info) {
       _info.clear();
       _info.putAll(info);
     }
 
     protected void addDefaults(final List<FunctionConfiguration> functions) {
-      for (final Map.Entry<UnorderedCurrencyPair, CurrencyPairInfo> entry : _info.entrySet()) {
-        final UnorderedCurrencyPair key = entry.getKey();
-        final CurrencyPairInfo value = entry.getValue();
+      for (final Map.Entry<Currency, CurrencyInfo> entry : _info.entrySet()) {
+        final Currency key = entry.getKey();
+        final CurrencyInfo value = entry.getValue();
         final String[] args = {
-            key.getFirstCurrency().getCode(),
-            key.getSecondCurrency().getCode(),
+            key.getCode(),
             value.getCurveExposuresName()
         };
-        functions.add(functionConfiguration(FxForwardAndNdfPerCurrencyPairDefaults.class, args));
+        functions.add(functionConfiguration(LinearRatesPerCurrencyDefaults.class, args));
       }
     }
 

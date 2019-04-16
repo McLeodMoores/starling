@@ -32,6 +32,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_VEGA;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.HAZARD_RATE_CURVE;
 import static com.opengamma.engine.value.ValueRequirementNames.HISTORICAL_VAR;
 import static com.opengamma.engine.value.ValueRequirementNames.MACAULAY_DURATION;
 import static com.opengamma.engine.value.ValueRequirementNames.MODIFIED_DURATION;
@@ -71,6 +72,7 @@ import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
+import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
@@ -92,6 +94,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.master.portfolio.PortfolioSearchRequest;
 import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.scripts.Scriptable;
+import com.opengamma.util.credit.CreditCurveIdentifier;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
@@ -651,8 +654,11 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration config = new ViewCalculationConfiguration(definition, DEFAULT_CALC_CONFIG);
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
         ValueProperties.with(PROPERTY_CURVE_TYPE, ISDA).with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").get()));
+    config.addSpecificRequirement(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA,
+        ComputationTargetSpecification.of(CreditCurveIdentifier.of("123456", Currency.USD, "SENIOR")), ValueProperties.none()));
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
-    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, HAZARD_RATE_CURVE, ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").get());
+    // config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").get());
     definition.addViewCalculationConfiguration(config);
     return definition;
   }

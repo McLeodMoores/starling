@@ -11,8 +11,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Generates identifiers for CDS recovery rates whcih can be stored in the
- * HTS or snapshots.
+ * Generates identifiers for CDS recovery rates which can be stored in the HTS or snapshots.
  */
 public final class CdsRecoveryRateIdentifier {
 
@@ -24,12 +23,12 @@ public final class CdsRecoveryRateIdentifier {
   /**
    * The scheme to use in external identifiers for Same Day CDS recovery rate data.
    */
-  private static final ExternalScheme SAMEDAY_CDS_SCHEME = ExternalScheme.of("SAMEDAY_CDS_RECOVERY_RATE");
+  public static final ExternalScheme SAMEDAY_CDS_SCHEME = ExternalScheme.of("SAMEDAY_CDS_RECOVERY_RATE");
 
   /**
    * The scheme to use in external identifiers for Composite CDS recovery rate data.
    */
-  private static final ExternalScheme COMPOSITE_CDS_SCHEME = ExternalScheme.of("COMPOSITE_CDS_RECOVERY_RATE");
+  public static final ExternalScheme COMPOSITE_CDS_SCHEME = ExternalScheme.of("COMPOSITE_CDS_RECOVERY_RATE");
 
   /**
    * The external id for this recovery rate.
@@ -44,16 +43,37 @@ public final class CdsRecoveryRateIdentifier {
   /**
    * Create an identifier for a Sameday recovery rate with the specified properties.
    *
-   * @param redCode the red code of the CDS
-   * @param currency the currency of the CDS
-   * @param seniority the seniority of the CDS
-   * @param restructuringClause the restructuring clause of the CDS
+   * @param redCode
+   *          the red code of the CDS
+   * @param currency
+   *          the currency of the CDS
+   * @param seniority
+   *          the seniority of the CDS
+   * @param restructuringClause
+   *          the restructuring clause of the CDS
    * @return a new identifier
    */
-  public static CdsRecoveryRateIdentifier forSamedayCds(final String redCode,
-                                                        final Currency currency,
-                                                        final String seniority,
-                                                        final String restructuringClause) {
+  public static CdsRecoveryRateIdentifier forSamedayCds(final String redCode, final Currency currency, final String seniority) {
+
+    final String idValue = generateCdsId(redCode, currency, seniority);
+    return new CdsRecoveryRateIdentifier(SAMEDAY_CDS_SCHEME, idValue);
+  }
+
+  /**
+   * Create an identifier for a Sameday recovery rate with the specified properties.
+   *
+   * @param redCode
+   *          the red code of the CDS
+   * @param currency
+   *          the currency of the CDS
+   * @param seniority
+   *          the seniority of the CDS
+   * @param restructuringClause
+   *          the restructuring clause of the CDS
+   * @return a new identifier
+   */
+  public static CdsRecoveryRateIdentifier forSamedayCds(final String redCode, final Currency currency, final String seniority,
+      final String restructuringClause) {
 
     final String idValue = generateCdsId(redCode, currency, seniority, restructuringClause);
     return new CdsRecoveryRateIdentifier(SAMEDAY_CDS_SCHEME, idValue);
@@ -62,27 +82,29 @@ public final class CdsRecoveryRateIdentifier {
   /**
    * Create an identifier for a Composite CDS with the specified properties.
    *
-   * @param redCode the red code of the CDS
-   * @param currency the currency of the CDS
-   * @param seniority the seniority of the CDS
-   * @param restructuringClause the restructuring clause of the CDS
+   * @param redCode
+   *          the red code of the CDS
+   * @param currency
+   *          the currency of the CDS
+   * @param seniority
+   *          the seniority of the CDS
+   * @param restructuringClause
+   *          the restructuring clause of the CDS
    * @return a new identifier
    */
-  public static CdsRecoveryRateIdentifier forCompositeCds(final String redCode,
-                                                          final Currency currency,
-                                                          final String seniority,
-                                                          final String restructuringClause) {
+  public static CdsRecoveryRateIdentifier forCompositeCds(final String redCode, final Currency currency, final String seniority,
+      final String restructuringClause) {
 
     final String idValue = generateCdsId(redCode, currency, seniority, restructuringClause);
     return new CdsRecoveryRateIdentifier(COMPOSITE_CDS_SCHEME, idValue);
   }
 
-  private static String generateCdsId(final String redCode,
-                                      final Currency currency,
-                                      final String seniority,
-                                      final String restructuringClause) {
-    return convertRed(redCode) + SEPARATOR + currency.getCode() + SEPARATOR +
-        seniority + SEPARATOR + restructuringClause;
+  private static String generateCdsId(final String redCode, final Currency currency, final String seniority, final String restructuringClause) {
+    return convertRed(redCode) + SEPARATOR + currency.getCode() + SEPARATOR + seniority + SEPARATOR + restructuringClause;
+  }
+
+  private static String generateCdsId(final String redCode, final Currency currency, final String seniority) {
+    return convertRed(redCode) + SEPARATOR + currency.getCode() + SEPARATOR + seniority;
   }
 
   private static String convertRed(final String redCode) {
@@ -120,7 +142,8 @@ public final class CdsRecoveryRateIdentifier {
   /**
    * Checks if this identifier equals another identifier.
    *
-   * @param obj the other identifier, null returns false
+   * @param obj
+   *          the other identifier, null returns false
    * @return true if equal
    */
   @Override
@@ -130,8 +153,7 @@ public final class CdsRecoveryRateIdentifier {
       return true;
     }
 
-    return obj instanceof CdsRecoveryRateIdentifier &&
-        _externalId.equals(((CdsRecoveryRateIdentifier) obj)._externalId);
+    return obj instanceof CdsRecoveryRateIdentifier && _externalId.equals(((CdsRecoveryRateIdentifier) obj)._externalId);
   }
 
   /**

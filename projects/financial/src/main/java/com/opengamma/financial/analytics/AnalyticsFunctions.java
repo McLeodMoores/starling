@@ -7,7 +7,7 @@ package com.opengamma.financial.analytics;
 
 import java.util.List;
 
-import com.mcleodmoores.financial.function.trade.TradeFunctions;
+import com.mcleodmoores.financial.function.trade.functions.TradeFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;

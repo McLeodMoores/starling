@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.financial.function.curve.config;
+package com.mcleodmoores.financial.function.curve.functions;
 
 import java.util.List;
 

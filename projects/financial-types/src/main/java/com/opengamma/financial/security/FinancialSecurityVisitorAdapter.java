@@ -85,14 +85,16 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Adapter for visiting all concrete asset classes.
  *
- * @param <T> Return type for visitor.
+ * @param <T>
+ *          Return type for visitor.
  */
 public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAdapter<T> implements FinancialSecurityVisitor<T> {
 
   /**
-   * Creates builder for a {@link FinancialSecurityVisitor}. The underlying visitor
-   * has no implemented methods.
-   * @param <T> The return type of the visitor
+   * Creates builder for a {@link FinancialSecurityVisitor}. The underlying visitor has no implemented methods.
+   * 
+   * @param <T>
+   *          The return type of the visitor
    * @return A builder
    */
   public static <T> Builder<T> builder() {
@@ -100,10 +102,12 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
   }
 
   /**
-   * Creates a builder for a {@link FinancialSecurityVisitor} that uses the
-   * supplied visitor as the initial underlying.
-   * @param <T> The return type of the visitor
-   * @param visitor The underlying visitor, not null
+   * Creates a builder for a {@link FinancialSecurityVisitor} that uses the supplied visitor as the initial underlying.
+   * 
+   * @param <T>
+   *          The return type of the visitor
+   * @param visitor
+   *          The underlying visitor, not null
    * @return A builder
    */
   public static <T> Builder<T> builder(final FinancialSecurityVisitor<T> visitor) {
@@ -428,8 +432,10 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
   /**
    * Generic message for unsupported methods in FinancialSecurityVisitor implementations
    *
-   * @param clazz the implementation class, not null
-   * @param security the financial security, not null
+   * @param clazz
+   *          the implementation class, not null
+   * @param security
+   *          the financial security, not null
    * @return the message, not null;
    */
   public static String getUnsupportedOperationMessage(final Class<?> clazz, final FinancialSecurity security) {
@@ -441,7 +447,8 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
   /**
    * Builder for the visitor adapter.
    *
-   * @param <T> Return type for the visitor
+   * @param <T>
+   *          Return type for the visitor
    */
   public static class Builder<T> {
 
@@ -454,7 +461,9 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
 
     /**
      * Creates a builder with this underlying visitor.
-     * @param visitor The visitor, not null
+     * 
+     * @param visitor
+     *          The visitor, not null
      */
     protected Builder(final FinancialSecurityVisitor<T> visitor) {
       _visitor = visitor;
@@ -511,7 +520,7 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
       };
       return this;
     }
-    
+
     public Builder<T> cashBalanceSecurityVisitor(final FinancialSecurityVisitor<T> visitor) {
       _visitor = new FinancialSecurityVisitorDelegate<T>(_visitor) {
         @Override
@@ -1756,6 +1765,7 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
         public T visitCorporateBondSecurity(final CorporateBondSecurity security) {
           return visitor.visitCorporateBondSecurity(security);
         }
+
         @Override
         public T visitInflationBondSecurity(final InflationBondSecurity security) {
           return visitor.visitInflationBondSecurity(security);
@@ -1765,12 +1775,13 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
     }
 
     public Builder<T> sameValueForSecurityVisitor(final T value) {
-      _visitor = new SameValueVisitor<T>(_visitor, value);
+      _visitor = new SameValueVisitor<>(_visitor, value);
       return this;
     }
 
     /**
      * Creates the {@link FinancialSecurityVisitor}
+     * 
      * @return The visitor
      */
     public FinancialSecurityVisitor<T> create() {

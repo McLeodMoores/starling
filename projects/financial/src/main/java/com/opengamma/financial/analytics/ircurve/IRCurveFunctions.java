@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.mcleodmoores.financial.function.credit.configs.CreditCurveDefinition;
 import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
@@ -73,7 +74,8 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
    */
   public static class Providers extends VersionedFunctionConfigurationBean {
 
-    private static final Class<?>[] CURVE_CLASSES = new Class[] {CurveDefinition.class, InterpolatedCurveDefinition.class, ConstantCurveDefinition.class, SpreadCurveDefinition.class };
+    private static final Class<?>[] CURVE_CLASSES = new Class[] { CurveDefinition.class, InterpolatedCurveDefinition.class, ConstantCurveDefinition.class,
+        SpreadCurveDefinition.class };
     private static final Set<String> MONITORED_TYPES;
 
     static {
@@ -152,7 +154,9 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
         searchRequest.setVersionCorrection(getVersionCorrection());
         for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
           final String documentName = configDocument.getName();
-          addCurveFunctions(functions, documentName);
+          if (!(configDocument.getValue().getValue() instanceof CreditCurveDefinition)) {
+            addCurveFunctions(functions, documentName);
+          }
         }
       }
     }

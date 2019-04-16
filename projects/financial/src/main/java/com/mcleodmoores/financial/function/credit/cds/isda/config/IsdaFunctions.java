@@ -5,6 +5,8 @@ package com.mcleodmoores.financial.function.credit.cds.isda.config;
 
 import java.util.List;
 
+import com.mcleodmoores.financial.function.credit.cds.isda.CreditCurveMarketDataFunction;
+import com.mcleodmoores.financial.function.credit.cds.isda.IsdaCreditCurveFunction;
 import com.mcleodmoores.financial.function.credit.cds.isda.IsdaYieldCurveFunction;
 import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
@@ -66,6 +68,8 @@ public class IsdaFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
+    functions.add(functionConfiguration(IsdaCreditCurveFunction.class));
+    functions.add(functionConfiguration(CreditCurveMarketDataFunction.class));
   }
 
   /**

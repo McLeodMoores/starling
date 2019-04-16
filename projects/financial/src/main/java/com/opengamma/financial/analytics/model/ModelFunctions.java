@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
 import com.mcleodmoores.financial.function.credit.cds.isda.config.IsdaFunctions;
-import com.mcleodmoores.financial.function.fx.config.FxDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.fx.functions.FxDiscountingMethodFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -153,6 +153,15 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
+   * Adds functions that produce credit instrument analytics using the ISDA model.
+   *
+   * @return A configuration source containing ISDA model functions
+   */
+  protected FunctionConfigurationSource isdaModelFunctionConfiguration() {
+    return CombiningFunctionConfigurationSource.of(IsdaFunctions.instance());
+  }
+
+  /**
    * Adds credit functions.
    *
    * @return A configuration source containing credit functions
@@ -167,7 +176,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
    * @return A configuration source containing curve functions
    */
   protected FunctionConfigurationSource curveFunctionConfiguration() {
-    return CombiningFunctionConfigurationSource.of(CurveFunctions.instance(), com.mcleodmoores.financial.function.curve.config.CurveFunctions.instance());
+    return CombiningFunctionConfigurationSource.of(CurveFunctions.instance(), com.mcleodmoores.financial.function.curve.functions.CurveFunctions.instance());
   }
 
   /**
@@ -362,16 +371,15 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), bondFunctionConfiguration(), bondFutureOptionFunctionConfiguration(),
-        bondCleanPriceFunctionConfiguration(), bondCurveFunctionConfiguration(), inflationbondCurveFunctionConfiguration(), bondYieldFunctionConfiguration(),
-        carrLeeFunctionConfiguration(), cdsFunctionConfiguration(), creditFunctionConfiguration(), curveFunctionConfiguration(), equityFunctionConfiguration(),
-        fixedIncomeFunctionConfiguration(), forexFunctionConfiguration(), futureFunctionConfiguration(), futureOptionFunctionConfiguration(),
-        horizonFunctionConfiguration(), irFutureOptionFunctionConfiguration(), optionFunctionConfiguration(), pnlFunctionConfiguration(),
-        riskFactorFunctionConfiguration(), sabrCubeFunctionConfiguration(), sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(),
-        swaptionFunctionConfiguration(), varFunctionConfiguration(), volatilityFunctionConfiguration(), yieldCurveFunctionConfiguration(),
-        forwardFunctionConfiguration(), futureCurveFunctionConfiguration(), discountingFunctionConfiguration(), hullWhitePricingFunctionConfiguration(),
-        interestRateFutureFunctionConfiguration(), fxPricingFunctionConfiguration(), blackDiscountingFunctionConfiguration(),
-        sabrDiscountingFunctionConfiguration(), g2ppPricingFunctionConfiguration(), timeSeriesFunctionConfiguration(), totalReturnSwapFunctionConfiguration());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), bondCleanPriceFunctionConfiguration(), bondCurveFunctionConfiguration(),
+        inflationbondCurveFunctionConfiguration(), bondYieldFunctionConfiguration(), carrLeeFunctionConfiguration(), curveFunctionConfiguration(),
+        equityFunctionConfiguration(), forexFunctionConfiguration(), futureFunctionConfiguration(), futureOptionFunctionConfiguration(),
+        horizonFunctionConfiguration(), irFutureOptionFunctionConfiguration(), pnlFunctionConfiguration(), riskFactorFunctionConfiguration(),
+        sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(), swaptionFunctionConfiguration(), varFunctionConfiguration(),
+        volatilityFunctionConfiguration(), yieldCurveFunctionConfiguration(), forwardFunctionConfiguration(), futureCurveFunctionConfiguration(),
+        discountingFunctionConfiguration(), hullWhitePricingFunctionConfiguration(), fxPricingFunctionConfiguration(), blackDiscountingFunctionConfiguration(),
+        sabrDiscountingFunctionConfiguration(), g2ppPricingFunctionConfiguration(), timeSeriesFunctionConfiguration(), totalReturnSwapFunctionConfiguration(),
+        isdaModelFunctionConfiguration());
   }
 
 }

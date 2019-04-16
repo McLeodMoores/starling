@@ -1,10 +1,16 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.financial.function.trade;
+package com.mcleodmoores.financial.function.trade.functions;
 
 import java.util.List;
 
+import com.mcleodmoores.financial.function.trade.DiscountBondDetailsFunction;
+import com.mcleodmoores.financial.function.trade.FixedCouponBondDetailsFunction;
+import com.mcleodmoores.financial.function.trade.FixedRateFunction;
+import com.mcleodmoores.financial.function.trade.FxForwardDetailsFunction;
+import com.mcleodmoores.financial.function.trade.FxNdfDetailsFunction;
+import com.mcleodmoores.financial.function.trade.SwapDetailsFunction;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;

@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
-import com.mcleodmoores.financial.function.fx.config.FxBlackMethodFunctions;
-import com.mcleodmoores.financial.function.fx.config.FxDiscountingMethodFunctions;
-import com.mcleodmoores.financial.function.rates.config.RatesDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.fx.functions.FxBlackMethodFunctions;
+import com.mcleodmoores.financial.function.fx.functions.FxDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.rates.functions.RatesDiscountingMethodFunctions;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;

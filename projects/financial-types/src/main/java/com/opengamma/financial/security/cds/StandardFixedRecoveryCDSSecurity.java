@@ -31,8 +31,9 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- *
+ * @deprecated Use {@link com.opengamma.financial.security.credit.StandardCDSSecurity}.
  */
+@Deprecated
 @BeanDefinition
 @SecurityDescription(type = StandardFixedRecoveryCDSSecurity.SECURITY_TYPE, description = "Standard fixed recovery cds")
 public class StandardFixedRecoveryCDSSecurity extends StandardCDSSecurity {

@@ -9,7 +9,7 @@ package com.mcleodmoores.financial.function.properties;
 public final class CurveCalculationProperties {
 
   /**
-   * A yield curve calculated using the ISDA method.
+   * A value calculated using the ISDA method.
    */
   public static final String ISDA = "ISDA";
 

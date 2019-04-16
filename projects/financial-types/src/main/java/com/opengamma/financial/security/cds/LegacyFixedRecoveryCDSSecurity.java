@@ -31,8 +31,9 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- *
+ * @deprecated Use {@link com.opengamma.financial.security.credit.LegacyCDSSecurity}.
  */
+@Deprecated
 @BeanDefinition
 @SecurityDescription(type = LegacyFixedRecoveryCDSSecurity.SECURITY_TYPE, description = "Legacy fixed recovery cds")
 public class LegacyFixedRecoveryCDSSecurity extends LegacyCDSSecurity {
