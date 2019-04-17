@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.financial.convention.IsdaCreditCurveConvention;
+import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
@@ -37,14 +39,34 @@ public class CreditSpreadNode extends CurveNode {
   private Tenor _tenor;
 
   /**
+   * The coupon (usually 100bp or 500bp).
+   */
+  @PropertyDefinition
+  private Double _coupon;
+
+  /**
+   * The quote type.
+   */
+  @PropertyDefinition(validate = "notNull")
+  private String _quoteType;
+
+  /**
+   * The identifier of the {@link IsdaCreditCurveConvention} that is associated with the CDS.
+   */
+  @PropertyDefinition(validate = "notNull")
+  private ExternalId _creditCurveConventionId;
+
+  /**
    * For the fudge builder
    */
   public CreditSpreadNode() {
   }
 
   /**
-   * @param curveNodeIdMapperName The curve node id mapper name name, not null
-   * @param tenor The tenor, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name name, not null
+   * @param tenor
+   *          The tenor, not null
    */
   public CreditSpreadNode(final String curveNodeIdMapperName, final Tenor tenor) {
     super(curveNodeIdMapperName);
@@ -52,13 +74,60 @@ public class CreditSpreadNode extends CurveNode {
   }
 
   /**
-   * @param curveNodeIdMapperName The curve node id mapper name name, not null
-   * @param tenor The tenor, not null
-   * @param name The name
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name name, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param coupon
+   *          the CDS coupon, usually 100bp or 500bp
+   * @param quoteType
+   *          the quote type (FLAT_SPREAD, PAR_SPREAD or POINTS_UPFRONT)
+   * @param creditCurveConventionId
+   *          the id of the convention that is associated with the CDS
+   */
+  public CreditSpreadNode(final String curveNodeIdMapperName, final Tenor tenor, final double coupon, final String quoteType,
+      final ExternalId creditCurveConventionId) {
+    super(curveNodeIdMapperName);
+    setTenor(tenor);
+    setCoupon(coupon);
+    setQuoteType(quoteType);
+    setCreditCurveConventionId(creditCurveConventionId);
+  }
+
+  /**
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name name, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param name
+   *          The name
    */
   public CreditSpreadNode(final String curveNodeIdMapperName, final Tenor tenor, final String name) {
     super(curveNodeIdMapperName, name);
     setTenor(tenor);
+  }
+
+  /**
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name name, not null
+   * @param tenor
+   *          The tenor, not null
+   * @param coupon
+   *          the CDS coupon, usually 100bp or 500bp
+   * @param quoteType
+   *          the quote type (FLAT_SPREAD, PAR_SPREAD or POINTS_UPFRONT)
+   * @param creditCurveConventionId
+   *          the id of the convention that is associated with the CDS
+   * @param name
+   *          The name
+   */
+  public CreditSpreadNode(final String curveNodeIdMapperName, final Tenor tenor, final double coupon, final String quoteType,
+      final ExternalId creditCurveConventionId, final String name) {
+    super(curveNodeIdMapperName, name);
+    setTenor(tenor);
+    setCoupon(coupon);
+    setQuoteType(quoteType);
+    setCreditCurveConventionId(creditCurveConventionId);
   }
 
   @Override
@@ -118,6 +187,83 @@ public class CreditSpreadNode extends CurveNode {
   }
 
   //-----------------------------------------------------------------------
+  /**
+   * Gets the coupon (usually 100bp or 500bp).
+   * @return the value of the property
+   */
+  public Double getCoupon() {
+    return _coupon;
+  }
+
+  /**
+   * Sets the coupon (usually 100bp or 500bp).
+   * @param coupon  the new value of the property
+   */
+  public void setCoupon(Double coupon) {
+    this._coupon = coupon;
+  }
+
+  /**
+   * Gets the the {@code coupon} property.
+   * @return the property, not null
+   */
+  public final Property<Double> coupon() {
+    return metaBean().coupon().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets the quote type.
+   * @return the value of the property, not null
+   */
+  public String getQuoteType() {
+    return _quoteType;
+  }
+
+  /**
+   * Sets the quote type.
+   * @param quoteType  the new value of the property, not null
+   */
+  public void setQuoteType(String quoteType) {
+    JodaBeanUtils.notNull(quoteType, "quoteType");
+    this._quoteType = quoteType;
+  }
+
+  /**
+   * Gets the the {@code quoteType} property.
+   * @return the property, not null
+   */
+  public final Property<String> quoteType() {
+    return metaBean().quoteType().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets the identifier of the {@link IsdaCreditCurveConvention} that is associated with the CDS.
+   * @return the value of the property, not null
+   */
+  public ExternalId getCreditCurveConventionId() {
+    return _creditCurveConventionId;
+  }
+
+  /**
+   * Sets the identifier of the {@link IsdaCreditCurveConvention} that is associated with the CDS.
+   * @param creditCurveConventionId  the new value of the property, not null
+   */
+  public void setCreditCurveConventionId(ExternalId creditCurveConventionId) {
+    JodaBeanUtils.notNull(creditCurveConventionId, "creditCurveConventionId");
+    this._creditCurveConventionId = creditCurveConventionId;
+  }
+
+  /**
+   * Gets the the {@code creditCurveConventionId} property.
+   * @return the property, not null
+   */
+  public final Property<ExternalId> creditCurveConventionId() {
+    return metaBean().creditCurveConventionId().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
   @Override
   public CreditSpreadNode clone() {
     return JodaBeanUtils.cloneAlways(this);
@@ -131,6 +277,9 @@ public class CreditSpreadNode extends CurveNode {
     if (obj != null && obj.getClass() == this.getClass()) {
       CreditSpreadNode other = (CreditSpreadNode) obj;
       return JodaBeanUtils.equal(getTenor(), other.getTenor()) &&
+          JodaBeanUtils.equal(getCoupon(), other.getCoupon()) &&
+          JodaBeanUtils.equal(getQuoteType(), other.getQuoteType()) &&
+          JodaBeanUtils.equal(getCreditCurveConventionId(), other.getCreditCurveConventionId()) &&
           super.equals(obj);
     }
     return false;
@@ -140,12 +289,15 @@ public class CreditSpreadNode extends CurveNode {
   public int hashCode() {
     int hash = 7;
     hash = hash * 31 + JodaBeanUtils.hashCode(getTenor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCoupon());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCreditCurveConventionId());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(64);
+    StringBuilder buf = new StringBuilder(160);
     buf.append("CreditSpreadNode{");
     int len = buf.length();
     toString(buf);
@@ -160,6 +312,9 @@ public class CreditSpreadNode extends CurveNode {
   protected void toString(StringBuilder buf) {
     super.toString(buf);
     buf.append("tenor").append('=').append(JodaBeanUtils.toString(getTenor())).append(',').append(' ');
+    buf.append("coupon").append('=').append(JodaBeanUtils.toString(getCoupon())).append(',').append(' ');
+    buf.append("quoteType").append('=').append(JodaBeanUtils.toString(getQuoteType())).append(',').append(' ');
+    buf.append("creditCurveConventionId").append('=').append(JodaBeanUtils.toString(getCreditCurveConventionId())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -178,11 +333,29 @@ public class CreditSpreadNode extends CurveNode {
     private final MetaProperty<Tenor> _tenor = DirectMetaProperty.ofReadWrite(
         this, "tenor", CreditSpreadNode.class, Tenor.class);
     /**
+     * The meta-property for the {@code coupon} property.
+     */
+    private final MetaProperty<Double> _coupon = DirectMetaProperty.ofReadWrite(
+        this, "coupon", CreditSpreadNode.class, Double.class);
+    /**
+     * The meta-property for the {@code quoteType} property.
+     */
+    private final MetaProperty<String> _quoteType = DirectMetaProperty.ofReadWrite(
+        this, "quoteType", CreditSpreadNode.class, String.class);
+    /**
+     * The meta-property for the {@code creditCurveConventionId} property.
+     */
+    private final MetaProperty<ExternalId> _creditCurveConventionId = DirectMetaProperty.ofReadWrite(
+        this, "creditCurveConventionId", CreditSpreadNode.class, ExternalId.class);
+    /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
         this, (DirectMetaPropertyMap) super.metaPropertyMap(),
-        "tenor");
+        "tenor",
+        "coupon",
+        "quoteType",
+        "creditCurveConventionId");
 
     /**
      * Restricted constructor.
@@ -195,6 +368,12 @@ public class CreditSpreadNode extends CurveNode {
       switch (propertyName.hashCode()) {
         case 110246592:  // tenor
           return _tenor;
+        case -1354573786:  // coupon
+          return _coupon;
+        case -1482972202:  // quoteType
+          return _quoteType;
+        case 1266514178:  // creditCurveConventionId
+          return _creditCurveConventionId;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -223,12 +402,42 @@ public class CreditSpreadNode extends CurveNode {
       return _tenor;
     }
 
+    /**
+     * The meta-property for the {@code coupon} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<Double> coupon() {
+      return _coupon;
+    }
+
+    /**
+     * The meta-property for the {@code quoteType} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<String> quoteType() {
+      return _quoteType;
+    }
+
+    /**
+     * The meta-property for the {@code creditCurveConventionId} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<ExternalId> creditCurveConventionId() {
+      return _creditCurveConventionId;
+    }
+
     //-----------------------------------------------------------------------
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
       switch (propertyName.hashCode()) {
         case 110246592:  // tenor
           return ((CreditSpreadNode) bean).getTenor();
+        case -1354573786:  // coupon
+          return ((CreditSpreadNode) bean).getCoupon();
+        case -1482972202:  // quoteType
+          return ((CreditSpreadNode) bean).getQuoteType();
+        case 1266514178:  // creditCurveConventionId
+          return ((CreditSpreadNode) bean).getCreditCurveConventionId();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -239,6 +448,15 @@ public class CreditSpreadNode extends CurveNode {
         case 110246592:  // tenor
           ((CreditSpreadNode) bean).setTenor((Tenor) newValue);
           return;
+        case -1354573786:  // coupon
+          ((CreditSpreadNode) bean).setCoupon((Double) newValue);
+          return;
+        case -1482972202:  // quoteType
+          ((CreditSpreadNode) bean).setQuoteType((String) newValue);
+          return;
+        case 1266514178:  // creditCurveConventionId
+          ((CreditSpreadNode) bean).setCreditCurveConventionId((ExternalId) newValue);
+          return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);
     }
@@ -246,6 +464,8 @@ public class CreditSpreadNode extends CurveNode {
     @Override
     protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((CreditSpreadNode) bean)._tenor, "tenor");
+      JodaBeanUtils.notNull(((CreditSpreadNode) bean)._quoteType, "quoteType");
+      JodaBeanUtils.notNull(((CreditSpreadNode) bean)._creditCurveConventionId, "creditCurveConventionId");
       super.validate(bean);
     }
 

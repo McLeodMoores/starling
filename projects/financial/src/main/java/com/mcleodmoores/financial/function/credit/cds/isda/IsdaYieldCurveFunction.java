@@ -7,7 +7,6 @@ import static com.mcleodmoores.financial.function.properties.CurveCalculationPro
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_METHOD;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_MARKET_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
@@ -22,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.threeten.bp.Clock;
-import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -30,7 +28,6 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.date.SimpleWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
@@ -40,8 +37,6 @@ import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.core.holiday.WeekendType;
-import com.opengamma.core.holiday.WeekendTypeProvider;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -59,7 +54,6 @@ import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfigurationSource;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
 import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.curve.CurveUtils;
 import com.opengamma.financial.analytics.ircurve.strips.CashNode;
@@ -165,10 +159,9 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
       final LocalDate valuationDate = now.toLocalDate();
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
       final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
-      final CurveDefinition definition = (CurveDefinition) inputs.getComputedValue(CURVE_DEFINITION).getValue();
       final CurveSpecification specification = (CurveSpecification) inputs.getComputedValue(CURVE_SPECIFICATION).getValue();
       final SnapshotDataBundle marketData = (SnapshotDataBundle) inputs.getComputedValue(CURVE_MARKET_DATA).getValue();
-      final int nNodes = definition.getNodes().size();
+      final int nNodes = specification.getNodes().size();
       final ISDAInstrumentTypes[] instrumentTypes = new ISDAInstrumentTypes[nNodes];
       final Period[] tenors = new Period[nNodes];
       final double[] rates = new double[nNodes];
@@ -232,7 +225,7 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
         swapDayCount = cashDayCount;
       }
       final Collection<Holiday> holidays = holidaySource.get(currency);
-      final WorkingDayCalendar calendar = getCalendar(currency, holidays);
+      final WorkingDayCalendar calendar = IsdaFunctionUtils.getCalendar(currency, holidays);
       final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(valuationDate, valuationDate, instrumentTypes, tenors, rates, cashDayCount,
           swapDayCount, swapInterval, DayCounts.ACT_365, swapBusinessDayConvention, calendar);
       final ValueSpecification spec = new ValueSpecification(YIELD_CURVE, target.toSpecification(), _curveProperties);
@@ -255,7 +248,6 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
       final Set<ValueRequirement> requirements = new HashSet<>();
       final ValueProperties properties = ValueProperties.builder().with(CURVE, _curveName).get();
       final ValueProperties configProperties = ValueProperties.builder().with(CURVE_CONSTRUCTION_CONFIG, _configurationName).get();
-      requirements.add(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, properties));
       requirements.add(new ValueRequirement(CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties));
       requirements.add(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties));
       requirements.add(new ValueRequirement(CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES, ComputationTargetSpecification.NULL, configProperties));
@@ -326,18 +318,6 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
         throw new OpenGammaRuntimeException(
             "Inconsistent swap *IBOR leg currency found in underlying of receive leg in " + curveNode + " for " + specification.getName());
       }
-    }
-
-    private WorkingDayCalendar getCalendar(final Currency currency, final Collection<Holiday> holidays) {
-      if (holidays == null || holidays.size() != 1) {
-        throw new OpenGammaRuntimeException("Could not get currency holiday for " + currency);
-      }
-      final Holiday holiday = holidays.iterator().next();
-      if (holiday instanceof WeekendTypeProvider) {
-        final WeekendType weekendType = ((WeekendTypeProvider) holiday).getWeekendType();
-        return new SimpleWorkingDayCalendar(currency.getCode(), holiday.getHolidayDates(), weekendType.getFirstDay(), weekendType.getSecondDay());
-      }
-      return new SimpleWorkingDayCalendar(currency.getCode(), holiday.getHolidayDates(), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     }
   }
 }

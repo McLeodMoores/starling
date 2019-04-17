@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.businessday;
@@ -9,6 +9,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.TemporalAdjuster;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
@@ -28,17 +29,25 @@ public class BusinessDayDateUtils {
 
   // -------------------------------------------------------------------------
   /**
-   * Calculates the number of days in between two dates with the date count
-   * rule specified by the {@code TemporalAdjuster}.
-   * 
-   * @param startDate  the start date-time, not null
-   * @param includeStart  whether to include the start
-   * @param endDate  the end date-time, not null
-   * @param includeEnd  whether to include the end
-   * @param convention  the date adjuster, not null
+   * Calculates the number of days in between two dates with the date count rule specified by the {@code TemporalAdjuster}.
+   *
+   * @param startDate
+   *          the start date-time, not null
+   * @param includeStart
+   *          whether to include the start
+   * @param endDate
+   *          the end date-time, not null
+   * @param includeEnd
+   *          whether to include the end
+   * @param convention
+   *          the date adjuster, not null
    * @return the number of days between two dates
    */
-  public static int getDaysBetween(final ZonedDateTime startDate, final boolean includeStart, final ZonedDateTime endDate, final boolean includeEnd, final TemporalAdjuster convention) {
+  public static int getDaysBetween(final ZonedDateTime startDate, final boolean includeStart, final ZonedDateTime endDate, final boolean includeEnd,
+      final TemporalAdjuster convention) {
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(endDate, "endDate");
+    ArgumentChecker.notNull(convention, "convention");
     LocalDate date = startDate.toLocalDate();
     LocalDate localEndDate = endDate.toLocalDate();
     int mult = 1;
@@ -56,15 +65,47 @@ public class BusinessDayDateUtils {
   }
 
   /**
-   * Add a certain number of working days (defined by the holidayCalendar) to a date 
-   * @param startDate The start date
-   * @param workingDaysToAdd working days to add
-   * @param holidayCalendar Defines what is a non-working day
+   * Add a certain number of working days (defined by the holidayCalendar) to a date
+   *
+   * @param startDate
+   *          The start date
+   * @param workingDaysToAdd
+   *          working days to add
+   * @param holidayCalendar
+   *          Defines what is a non-working day
+   * @return a working day
+   * @deprecated use {@link #addWorkDays(LocalDate, int, WorkingDayCalendar)}
+   */
+  @Deprecated
+  public static LocalDate addWorkDays(final LocalDate startDate, final int workingDaysToAdd, final Calendar holidayCalendar) {
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(holidayCalendar, "holidayCalendar");
+
+    int daysLeft = workingDaysToAdd;
+    LocalDate temp = startDate;
+    while (daysLeft > 0) {
+      temp = temp.plusDays(1);
+      if (holidayCalendar.isWorkingDay(temp)) {
+        daysLeft--;
+      }
+    }
+    return temp;
+  }
+
+  /**
+   * Add a certain number of working days (defined by the holiday calendar) to a date
+   *
+   * @param startDate
+   *          The start date
+   * @param workingDaysToAdd
+   *          working days to add
+   * @param holidayCalendar
+   *          Defines what is a non-working day
    * @return a working day
    */
-  public static LocalDate addWorkDays(final LocalDate startDate, final int workingDaysToAdd, final Calendar holidayCalendar) {
-    ArgumentChecker.notNull(startDate, "null startDate");
-    ArgumentChecker.notNull(holidayCalendar, "null holidayCalendar");
+  public static LocalDate addWorkDays(final LocalDate startDate, final int workingDaysToAdd, final WorkingDayCalendar holidayCalendar) {
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(holidayCalendar, "holidayCalendar");
 
     int daysLeft = workingDaysToAdd;
     LocalDate temp = startDate;

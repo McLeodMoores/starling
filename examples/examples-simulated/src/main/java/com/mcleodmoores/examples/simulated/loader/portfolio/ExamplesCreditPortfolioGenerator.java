@@ -22,6 +22,7 @@ import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.examples.simulated.loader.legalentity.ExamplesLegalEntityLoader;
 import com.mcleodmoores.financial.function.credit.configs.CreditCurveDefinition;
 import com.opengamma.analytics.financial.credit.DebtSeniority;
+import com.opengamma.analytics.financial.credit.creditdefaultswap.StandardCDSQuotingConvention;
 import com.opengamma.analytics.util.time.TenorUtils;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.id.ExternalSchemes;
@@ -36,6 +37,7 @@ import com.opengamma.financial.analytics.ircurve.CurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.StaticCurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.strips.CreditSpreadNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
+import com.opengamma.financial.analytics.isda.credit.FlatSpreadQuote;
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifierVisitor;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -161,10 +163,10 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
           name = id.getObjectId().getValue();
         }
         value = id.getObjectId().getValue().replace("_", "") + tenor.toFormattedString();
-        nodes.add(new CreditSpreadNode(name, tenor));
+        nodes.add(new CreditSpreadNode(name, tenor, 100, FlatSpreadQuote.TYPE, ExternalId.of(Currency.OBJECT_SCHEME, "USD")));
         creditSpreadNodeIds.put(tenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(value)));
       }
-      final CreditCurveDefinition definition = new CreditCurveDefinition(name, id, nodes);
+      final CreditCurveDefinition definition = new CreditCurveDefinition(name, id, nodes, StandardCDSQuotingConvention.QUOTED_SPREAD);
       final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder().creditSpreadNodeIds(creditSpreadNodeIds).name(name).build();
       configMaster.add(new ConfigDocument(ConfigItem.of(definition)));
       configMaster.add(new ConfigDocument(ConfigItem.of(idMapper)));

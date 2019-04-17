@@ -58,10 +58,21 @@ public class CreditCurveMarketDataFunction extends AbstractFunction {
     return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), atZDT.toLocalDate());
   }
 
+  /**
+   * A compiled function that returns the curve market data.
+   */
   protected class MyCompiledFunction extends AbstractInvokingCompiledFunction {
     private final LocalDate _curveDate;
     private CreditCurveSpecification _specification;
 
+    /**
+     * @param earliestInvocation
+     *          the earliest time for which this function is valid
+     * @param latestInvocation
+     *          the latest time for which this function is valid
+     * @param curveDate
+     *          the curve date
+     */
     public MyCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final LocalDate curveDate) {
       super(earliestInvocation, latestInvocation);
       _curveDate = curveDate;

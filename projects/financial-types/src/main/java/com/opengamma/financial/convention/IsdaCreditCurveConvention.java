@@ -24,6 +24,7 @@ import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
+import com.opengamma.id.ExternalId;
 import com.opengamma.master.convention.ManageableConvention;
 
 /**
@@ -86,9 +87,18 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
 
   /**
    * The calendar to use.
+   * 
+   * @deprecated Use a calendar id.
    */
-  @PropertyDefinition(validate = "notNull")
+  @Deprecated
+  @PropertyDefinition
   private Calendar _regionCalendar;
+
+  /**
+   * The calendar id.
+   */
+  @PropertyDefinition
+  private ExternalId _regionCalendarId;
 
   /**
    * Day count for accrual calculations.
@@ -308,27 +318,60 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
   //-----------------------------------------------------------------------
   /**
    * Gets the calendar to use.
-   * @return the value of the property, not null
+   * 
+   * @deprecated Use a calendar id.
+   * @return the value of the property
    */
+  @Deprecated
   public Calendar getRegionCalendar() {
     return _regionCalendar;
   }
 
   /**
    * Sets the calendar to use.
-   * @param regionCalendar  the new value of the property, not null
+   * 
+   * @deprecated Use a calendar id.
+   * @param regionCalendar  the new value of the property
    */
+  @Deprecated
   public void setRegionCalendar(Calendar regionCalendar) {
-    JodaBeanUtils.notNull(regionCalendar, "regionCalendar");
     this._regionCalendar = regionCalendar;
   }
 
   /**
    * Gets the the {@code regionCalendar} property.
+   * 
+   * @deprecated Use a calendar id.
    * @return the property, not null
    */
+  @Deprecated
   public final Property<Calendar> regionCalendar() {
     return metaBean().regionCalendar().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets the calendar id.
+   * @return the value of the property
+   */
+  public ExternalId getRegionCalendarId() {
+    return _regionCalendarId;
+  }
+
+  /**
+   * Sets the calendar id.
+   * @param regionCalendarId  the new value of the property
+   */
+  public void setRegionCalendarId(ExternalId regionCalendarId) {
+    this._regionCalendarId = regionCalendarId;
+  }
+
+  /**
+   * Gets the the {@code regionCalendarId} property.
+   * @return the property, not null
+   */
+  public final Property<ExternalId> regionCalendarId() {
+    return metaBean().regionCalendarId().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -404,6 +447,7 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
           (isProtectFromStartOfDay() == other.isProtectFromStartOfDay()) &&
           JodaBeanUtils.equal(getBusinessDayConvention(), other.getBusinessDayConvention()) &&
           JodaBeanUtils.equal(getRegionCalendar(), other.getRegionCalendar()) &&
+          JodaBeanUtils.equal(getRegionCalendarId(), other.getRegionCalendarId()) &&
           JodaBeanUtils.equal(getAccrualDayCount(), other.getAccrualDayCount()) &&
           JodaBeanUtils.equal(getCurveDayCount(), other.getCurveDayCount()) &&
           super.equals(obj);
@@ -422,6 +466,7 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
     hash = hash * 31 + JodaBeanUtils.hashCode(isProtectFromStartOfDay());
     hash = hash * 31 + JodaBeanUtils.hashCode(getBusinessDayConvention());
     hash = hash * 31 + JodaBeanUtils.hashCode(getRegionCalendar());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRegionCalendarId());
     hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualDayCount());
     hash = hash * 31 + JodaBeanUtils.hashCode(getCurveDayCount());
     return hash ^ super.hashCode();
@@ -429,7 +474,7 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(352);
+    StringBuilder buf = new StringBuilder(384);
     buf.append("IsdaCreditCurveConvention{");
     int len = buf.length();
     toString(buf);
@@ -451,6 +496,7 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
     buf.append("protectFromStartOfDay").append('=').append(JodaBeanUtils.toString(isProtectFromStartOfDay())).append(',').append(' ');
     buf.append("businessDayConvention").append('=').append(JodaBeanUtils.toString(getBusinessDayConvention())).append(',').append(' ');
     buf.append("regionCalendar").append('=').append(JodaBeanUtils.toString(getRegionCalendar())).append(',').append(' ');
+    buf.append("regionCalendarId").append('=').append(JodaBeanUtils.toString(getRegionCalendarId())).append(',').append(' ');
     buf.append("accrualDayCount").append('=').append(JodaBeanUtils.toString(getAccrualDayCount())).append(',').append(' ');
     buf.append("curveDayCount").append('=').append(JodaBeanUtils.toString(getCurveDayCount())).append(',').append(' ');
   }
@@ -506,6 +552,11 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
     private final MetaProperty<Calendar> _regionCalendar = DirectMetaProperty.ofReadWrite(
         this, "regionCalendar", IsdaCreditCurveConvention.class, Calendar.class);
     /**
+     * The meta-property for the {@code regionCalendarId} property.
+     */
+    private final MetaProperty<ExternalId> _regionCalendarId = DirectMetaProperty.ofReadWrite(
+        this, "regionCalendarId", IsdaCreditCurveConvention.class, ExternalId.class);
+    /**
      * The meta-property for the {@code accrualDayCount} property.
      */
     private final MetaProperty<DayCount> _accrualDayCount = DirectMetaProperty.ofReadWrite(
@@ -528,6 +579,7 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
         "protectFromStartOfDay",
         "businessDayConvention",
         "regionCalendar",
+        "regionCalendarId",
         "accrualDayCount",
         "curveDayCount");
 
@@ -556,6 +608,8 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
           return _businessDayConvention;
         case 1932874322:  // regionCalendar
           return _regionCalendar;
+        case 2066353933:  // regionCalendarId
+          return _regionCalendarId;
         case -1387075166:  // accrualDayCount
           return _accrualDayCount;
         case -1661418270:  // curveDayCount
@@ -638,10 +692,20 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
 
     /**
      * The meta-property for the {@code regionCalendar} property.
+     * @deprecated Use a calendar id.
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<Calendar> regionCalendar() {
       return _regionCalendar;
+    }
+
+    /**
+     * The meta-property for the {@code regionCalendarId} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<ExternalId> regionCalendarId() {
+      return _regionCalendarId;
     }
 
     /**
@@ -680,6 +744,8 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
           return ((IsdaCreditCurveConvention) bean).getBusinessDayConvention();
         case 1932874322:  // regionCalendar
           return ((IsdaCreditCurveConvention) bean).getRegionCalendar();
+        case 2066353933:  // regionCalendarId
+          return ((IsdaCreditCurveConvention) bean).getRegionCalendarId();
         case -1387075166:  // accrualDayCount
           return ((IsdaCreditCurveConvention) bean).getAccrualDayCount();
         case -1661418270:  // curveDayCount
@@ -715,6 +781,9 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
         case 1932874322:  // regionCalendar
           ((IsdaCreditCurveConvention) bean).setRegionCalendar((Calendar) newValue);
           return;
+        case 2066353933:  // regionCalendarId
+          ((IsdaCreditCurveConvention) bean).setRegionCalendarId((ExternalId) newValue);
+          return;
         case -1387075166:  // accrualDayCount
           ((IsdaCreditCurveConvention) bean).setAccrualDayCount((DayCount) newValue);
           return;
@@ -731,7 +800,6 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
       JodaBeanUtils.notNull(((IsdaCreditCurveConvention) bean)._couponInterval, "couponInterval");
       JodaBeanUtils.notNull(((IsdaCreditCurveConvention) bean)._stubType, "stubType");
       JodaBeanUtils.notNull(((IsdaCreditCurveConvention) bean)._businessDayConvention, "businessDayConvention");
-      JodaBeanUtils.notNull(((IsdaCreditCurveConvention) bean)._regionCalendar, "regionCalendar");
       JodaBeanUtils.notNull(((IsdaCreditCurveConvention) bean)._accrualDayCount, "accrualDayCount");
       JodaBeanUtils.notNull(((IsdaCreditCurveConvention) bean)._curveDayCount, "curveDayCount");
       super.validate(bean);

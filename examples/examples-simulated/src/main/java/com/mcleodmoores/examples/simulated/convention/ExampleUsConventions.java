@@ -6,11 +6,13 @@
 package com.mcleodmoores.examples.simulated.convention;
 
 import org.threeten.bp.LocalTime;
+import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
+import com.opengamma.financial.convention.IsdaCreditCurveConvention;
 import com.opengamma.financial.convention.OISLegConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.StubType;
@@ -83,6 +85,18 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
     final SwapConvention oisSwap = new SwapConvention("USD OIS", ExternalIdBundle.of("CONVENTION", "USD OIS"),
         oisFixedLeg.getExternalIdBundle().iterator().next(), oisLeg.getExternalIdBundle().iterator().next());
 
+    final IsdaCreditCurveConvention cds = new IsdaCreditCurveConvention();
+    cds.setAccrualDayCount(DayCounts.ACT_360);
+    cds.setBusinessDayConvention(BusinessDayConventions.FOLLOWING);
+    cds.setPayAccOnDefault(true);
+    cds.setCashSettle(3);
+    cds.setCouponInterval(Period.ofMonths(6));
+    cds.setCurveDayCount(DayCounts.ACT_365);
+    cds.setPayAccOnDefault(true);
+    cds.setProtectFromStartOfDay(true);
+    cds.setStubType(com.opengamma.analytics.financial.credit.isdastandardmodel.StubType.FRONTSHORT);
+    cds.setExternalIdBundle(ExternalId.of(Currency.OBJECT_SCHEME, "USD").toBundle());
+
     addConvention(master, deposit);
     addConvention(master, overnightDeposit);
     addConvention(master, ibor);
@@ -94,6 +108,7 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
     addConvention(master, bondConvention);
     addConvention(master, vanillaSwap);
     addConvention(master, oisSwap);
+    addConvention(master, cds);
   }
 
 }

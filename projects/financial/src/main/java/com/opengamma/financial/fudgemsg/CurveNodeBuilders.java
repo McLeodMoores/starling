@@ -215,7 +215,7 @@ import com.opengamma.util.time.Tenor;
     @Override
     public ContinuouslyCompoundedRateNode buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String curveNodeIdMapperName = message.getString(CURVE_MAPPER_ID_FIELD);
-      //TODO should just use Tenor string for these objects
+      // TODO should just use Tenor string for these objects
       final Tenor tenor = deserializer.fieldValueToObject(Tenor.class, message.getByName(TENOR_FIELD));
       if (message.hasField(NAME_FIELD)) {
         final String name = message.getString(NAME_FIELD);
@@ -251,7 +251,7 @@ import com.opengamma.util.time.Tenor;
     @Override
     public PeriodicallyCompoundedRateNode buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String curveNodeIdMapperName = message.getString(CURVE_MAPPER_ID_FIELD);
-      //TODO should just use Tenor string for these objects
+      // TODO should just use Tenor string for these objects
       final Tenor tenor = deserializer.fieldValueToObject(Tenor.class, message.getByName(TENOR_FIELD));
       final int periodsPerYear = message.getInt(PERIODS_PER_YEAR_FIELD);
       if (message.hasField(NAME_FIELD)) {
@@ -267,18 +267,29 @@ import com.opengamma.util.time.Tenor;
    */
   @FudgeBuilderFor(CreditSpreadNode.class)
   public static class CreditSpreadNodeBuilder implements FudgeBuilder<CreditSpreadNode> {
-    /** The tenor field */
     private static final String TENOR_FIELD = "tenor";
+    private static final String COUPON_FIELD = "coupon";
+    private static final String QUOTE_TYPE_FIELD = "quoteType";
+    private static final String CREDIT_CURVE_CONVENTION_FIELD = "creditCurveConventionId";
 
     @Override
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CreditSpreadNode object) {
       final MutableFudgeMsg message = serializer.newMessage();
       message.add(null, 0, object.getClass().getName());
-      //TODO should just use the Tenor string for Tenor
+      // TODO should just use the Tenor string for Tenor
       message.add(CURVE_MAPPER_ID_FIELD, object.getCurveNodeIdMapperName());
       message.add(TENOR_FIELD, object.getTenor());
       if (object.getName() != null) {
         message.add(NAME_FIELD, object.getName());
+      }
+      if (object.getCoupon() != null) {
+        message.add(COUPON_FIELD, object.getCoupon());
+      }
+      if (object.getQuoteType() != null) {
+        message.add(QUOTE_TYPE_FIELD, object.getQuoteType());
+      }
+      if (object.getCreditCurveConventionId() != null) {
+        message.add(CREDIT_CURVE_CONVENTION_FIELD, object.getCreditCurveConventionId());
       }
       return message;
     }
@@ -287,11 +298,23 @@ import com.opengamma.util.time.Tenor;
     public CreditSpreadNode buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String curveNodeIdMapperName = message.getString(CURVE_MAPPER_ID_FIELD);
       final Tenor tenor = deserializer.fieldValueToObject(Tenor.class, message.getByName(TENOR_FIELD));
+      final CreditSpreadNode node;
       if (message.hasField(NAME_FIELD)) {
         final String name = message.getString(NAME_FIELD);
-        return new CreditSpreadNode(curveNodeIdMapperName, tenor, name);
+        node = new CreditSpreadNode(curveNodeIdMapperName, tenor, name);
+      } else {
+        node = new CreditSpreadNode(curveNodeIdMapperName, tenor);
       }
-      return new CreditSpreadNode(curveNodeIdMapperName, tenor);
+      if (message.hasField(COUPON_FIELD)) {
+        node.setCoupon(message.getDouble(COUPON_FIELD));
+      }
+      if (message.hasField(QUOTE_TYPE_FIELD)) {
+        node.setQuoteType(message.getString(QUOTE_TYPE_FIELD));
+      }
+      if (message.hasField(CREDIT_CURVE_CONVENTION_FIELD)) {
+        node.setCreditCurveConventionId(deserializer.fieldValueToObject(ExternalId.class, message.getByName(CREDIT_CURVE_CONVENTION_FIELD)));
+      }
+      return node;
     }
   }
 
@@ -341,12 +364,14 @@ import com.opengamma.util.time.Tenor;
       final String curveNodeIdMapperName = message.getString(CURVE_MAPPER_ID_FIELD);
       if (message.hasField(NAME_FIELD)) {
         final String name = message.getString(NAME_FIELD);
-        return new DeliverableSwapFutureNode(futureNumber, startTenor, futureTenor, underlyingTenor, futureConvention, swapConvention, curveNodeIdMapperName, name);
+        return new DeliverableSwapFutureNode(futureNumber, startTenor, futureTenor, underlyingTenor, futureConvention, swapConvention, curveNodeIdMapperName,
+            name);
       }
       return new DeliverableSwapFutureNode(futureNumber, startTenor, futureTenor, underlyingTenor, futureConvention, swapConvention, curveNodeIdMapperName);
     }
 
   }
+
   /**
    * Fudge builder for {@link DiscountFactorNode}
    */
@@ -370,7 +395,7 @@ import com.opengamma.util.time.Tenor;
     @Override
     public DiscountFactorNode buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String curveNodeIdMapperName = message.getString(CURVE_MAPPER_ID_FIELD);
-      //TODO should just use the period string for Tenor
+      // TODO should just use the period string for Tenor
       final Tenor tenor = deserializer.fieldValueToObject(Tenor.class, message.getByName(TENOR_FIELD));
       if (message.hasField(NAME_FIELD)) {
         final String name = message.getString(NAME_FIELD);
@@ -727,13 +752,15 @@ import com.opengamma.util.time.Tenor;
         final String name = message.getString(NAME_FIELD);
         if (message.hasField(USE_FIXINGS_FIELD)) {
           final boolean useFixings = message.getBoolean(USE_FIXINGS_FIELD);
-          return new ThreeLegBasisSwapNode(startTenor, maturityTenor, payLegConvention, receiveLegConvention, spreadLegConvention, useFixings, curveNodeIdMapperName, name);
+          return new ThreeLegBasisSwapNode(startTenor, maturityTenor, payLegConvention, receiveLegConvention, spreadLegConvention, useFixings,
+              curveNodeIdMapperName, name);
         }
         return new ThreeLegBasisSwapNode(startTenor, maturityTenor, payLegConvention, receiveLegConvention, spreadLegConvention, curveNodeIdMapperName, name);
       }
       if (message.hasField(USE_FIXINGS_FIELD)) {
         final boolean useFixings = message.getBoolean(USE_FIXINGS_FIELD);
-        return new ThreeLegBasisSwapNode(startTenor, maturityTenor, payLegConvention, receiveLegConvention, spreadLegConvention, useFixings, curveNodeIdMapperName);
+        return new ThreeLegBasisSwapNode(startTenor, maturityTenor, payLegConvention, receiveLegConvention, spreadLegConvention, useFixings,
+            curveNodeIdMapperName);
       }
       return new ThreeLegBasisSwapNode(startTenor, maturityTenor, payLegConvention, receiveLegConvention, spreadLegConvention, curveNodeIdMapperName);
     }
