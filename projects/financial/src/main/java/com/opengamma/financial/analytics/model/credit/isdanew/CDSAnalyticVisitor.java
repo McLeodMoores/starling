@@ -21,7 +21,10 @@ import com.opengamma.financial.security.cds.StandardVanillaCDSSecurity;
 
 /**
  * Creates a {@link CDSAnalytic} object from the security Throws an exception if the security cannot be converted.
+ * 
+ * @deprecated The securities converted by this class are deprecated
  */
+@Deprecated
 public class CDSAnalyticVisitor extends FinancialSecurityVisitorAdapter<CDSAnalytic> {
 
   private final LocalDate _valuationDate;

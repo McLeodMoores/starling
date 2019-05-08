@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.creditdefaultswap;
@@ -8,11 +8,11 @@ package com.opengamma.analytics.financial.credit.creditdefaultswap;
 import com.opengamma.OpenGammaRuntimeException;
 
 /**
- * Enumerate the types of quoting conventions in the marketplace for standard (post big-bang) CDS's
+ * Enumerate the types of quoting conventions in the marketplace for standard (post big-bang) CDS's.
  */
 public enum StandardCDSQuotingConvention {
   /**
-   * Quote is a spread level (in bps)
+   * Quote is a spread level (in bps).
    *
    * @deprecated use QUOTED_SPREAD or PAR_SPREAD in preference.
    */
@@ -20,17 +20,17 @@ public enum StandardCDSQuotingConvention {
   SPREAD,
 
   /**
-   * Quote is a percentage of the notional amount paid upfront
+   * Quote is a percentage of the notional amount paid upfront.
    */
   POINTS_UPFRONT,
 
   /**
-   * Quoted spread
+   * Quoted spread.
    */
   QUOTED_SPREAD,
 
   /**
-   * PAR spread
+   * Par spread.
    */
   PAR_SPREAD;
 
@@ -43,9 +43,8 @@ public enum StandardCDSQuotingConvention {
       return QUOTED_SPREAD;
     } else if (PAR_SPREAD.name().equals(convention)) {
       return PAR_SPREAD;
-    } else {
-      throw new OpenGammaRuntimeException("Unknown cds quoting convention: " + convention);
     }
+    throw new OpenGammaRuntimeException("Unknown cds quoting convention: " + convention);
   }
 
 }

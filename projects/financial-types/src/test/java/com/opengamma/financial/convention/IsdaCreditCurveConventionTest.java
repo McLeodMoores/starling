@@ -15,7 +15,6 @@ import org.threeten.bp.Period;
 
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
 import com.opengamma.financial.AbstractBeanTestCase;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -36,7 +35,7 @@ public class IsdaCreditCurveConventionTest extends AbstractBeanTestCase {
   private static final int CASH_SETTLE = 3;
   private static final boolean PAY_ACCRUAL_ON_DEFAULT = true;
   private static final Period COUPON_INTERVAL = Period.ofMonths(3);
-  private static final StubType STUB_TYPE = StubType.BACKLONG;
+  private static final StubType STUB_TYPE = StubType.LONG_END;
   private static final boolean PROTECT_FROM_START = false;
   private static final BusinessDayConvention BDC = BusinessDayConventions.FOLLOWING;
   private static final Calendar CALENDAR = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);

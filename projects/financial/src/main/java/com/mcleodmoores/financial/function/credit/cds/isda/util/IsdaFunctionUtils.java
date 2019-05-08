@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2019 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.financial.function.credit.cds.isda;
+package com.mcleodmoores.financial.function.credit.cds.isda.util;
 
 import java.util.Collection;
 
@@ -10,7 +10,11 @@ import org.threeten.bp.DayOfWeek;
 import com.mcleodmoores.date.SimpleWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.analytics.financial.credit.BuySellProtection;
+import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSQuoteConvention;
+import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
+import com.opengamma.analytics.financial.credit.isdastandardmodel.MarketQuoteConverter;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ParSpread;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.PointsUpFront;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.QuotedSpread;
@@ -28,6 +32,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 public final class IsdaFunctionUtils {
+  private static final MarketQuoteConverter PUF_CONVERTER = new MarketQuoteConverter();
 
   /**
    * Gets a working day calendar for a particular currency from holidays obtained from a {@link HolidaySource}.
@@ -54,7 +59,7 @@ public final class IsdaFunctionUtils {
 
   /**
    * Converts a CDS quote to the type used by the analytics library.
-   * 
+   *
    * @param coupon
    *          the coupon, can be null if the quote type is PAR_SPREAD
    * @param quote
@@ -75,6 +80,18 @@ public final class IsdaFunctionUtils {
       default:
         throw new IllegalArgumentException("Unsupported quote type " + quoteType);
     }
+  }
+
+  public static QuotedSpread getQuotedSpread(final CDSQuoteConvention quote, final PointsUpFront puf, final BuySellProtection buySellProtection,
+      final ISDACompliantYieldCurve yieldCurve, final CDSAnalytic cds) {
+    if (quote instanceof QuotedSpread) {
+      return (QuotedSpread) quote;
+    }
+    double quotedSpread = PUF_CONVERTER.pufToQuotedSpread(cds, puf.getCoupon(), yieldCurve, puf.getPointsUpFront());
+    // SELL protection reverses directions of legs
+    quotedSpread = buySellProtection == BuySellProtection.SELL ? -quotedSpread : quotedSpread;
+    return new QuotedSpread(quote.getCoupon(), quotedSpread);
+
   }
 
   private IsdaFunctionUtils() {

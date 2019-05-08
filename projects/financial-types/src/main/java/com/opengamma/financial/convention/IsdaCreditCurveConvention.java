@@ -19,7 +19,6 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Period;
 
-import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -87,7 +86,7 @@ public class IsdaCreditCurveConvention extends ManageableConvention {
 
   /**
    * The calendar to use.
-   * 
+   *
    * @deprecated Use a calendar id.
    */
   @Deprecated
