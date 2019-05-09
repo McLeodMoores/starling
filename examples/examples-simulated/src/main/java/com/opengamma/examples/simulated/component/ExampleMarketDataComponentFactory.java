@@ -35,6 +35,8 @@ import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityFilter
 import com.opengamma.engine.marketdata.live.InMemoryLKVLiveMarketDataProviderFactory;
 import com.opengamma.engine.marketdata.live.LiveDataFactory;
 import com.opengamma.engine.marketdata.spec.LiveMarketDataSpecification;
+import com.opengamma.financial.analytics.isda.credit.FlatSpreadQuote;
+import com.opengamma.financial.analytics.isda.credit.PointsUpFrontQuote;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.livedata.LiveDataClient;
 import com.opengamma.livedata.client.RemoteLiveDataClientFactoryBean;
@@ -71,7 +73,7 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
   @PropertyDefinition(validate = "notNull")
   private JmsConnector _jmsConnector;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     initLiveMarketDataProviderFactory(repo);
@@ -117,6 +119,8 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
   private MarketDataAvailabilityFilter createAvailabilityFilter(final LiveDataMetaDataProvider provider) {
     final List<ExternalScheme> acceptableSchemes = provider.metaData().getSupportedSchemes();
     final Collection<String> validMarketDataRequirementNames = MarketDataRequirementNamesHelper.constructValidRequirementNames();
+    validMarketDataRequirementNames.add(FlatSpreadQuote.TYPE);
+    validMarketDataRequirementNames.add(PointsUpFrontQuote.TYPE);
     return new DomainMarketDataAvailabilityFilter(acceptableSchemes, validMarketDataRequirementNames);
   }
 

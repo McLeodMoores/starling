@@ -37,6 +37,7 @@ import com.opengamma.financial.analytics.ircurve.CurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.StaticCurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.strips.CreditSpreadNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
+import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
 import com.opengamma.financial.analytics.isda.credit.FlatSpreadQuote;
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToIdentifierVisitor;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -125,7 +126,7 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
 
   @Override
   public PortfolioGenerator createPortfolioGenerator(final NameGenerator portfolioNameGenerator) {
-    final SecurityGenerator<FinancialSecurity> generator = new CreditSecurityGenerator();
+    final SecurityGenerator<FinancialSecurity> generator = new CreditSecurityGenerator(getToolContext().getSecuritySource());
     configure(generator);
     final PositionGenerator positions = new SimplePositionGenerator<>(generator, getSecurityPersister(), getCounterPartyGenerator());
     final PortfolioNodeGenerator rootNode = new LeafPortfolioNodeGenerator(new StaticNameGenerator("Credit"), positions, N * 2);
@@ -134,7 +135,7 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
 
   @Override
   public PortfolioNodeGenerator createPortfolioNodeGenerator(final int portfolioSize) {
-    final SecurityGenerator<FinancialSecurity> generator = new CreditSecurityGenerator();
+    final SecurityGenerator<FinancialSecurity> generator = new CreditSecurityGenerator(getToolContext().getSecuritySource());
     configure(generator);
     final PositionGenerator positions = new SimplePositionGenerator<>(generator, getSecurityPersister(), getCounterPartyGenerator());
     return new LeafPortfolioNodeGenerator(new StaticNameGenerator("Credit"), positions, portfolioSize);
@@ -163,8 +164,9 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
           name = id.getObjectId().getValue();
         }
         value = id.getObjectId().getValue().replace("_", "") + tenor.toFormattedString();
-        nodes.add(new CreditSpreadNode(name, tenor, 100, FlatSpreadQuote.TYPE, ExternalId.of(Currency.OBJECT_SCHEME, "USD")));
-        creditSpreadNodeIds.put(tenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(value)));
+        nodes.add(new CreditSpreadNode(name, tenor, 0.01, FlatSpreadQuote.TYPE, ExternalId.of(Currency.OBJECT_SCHEME, "USD")));
+        creditSpreadNodeIds.put(tenor,
+            new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(value), FlatSpreadQuote.TYPE, DataFieldType.OUTRIGHT));
       }
       final CreditCurveDefinition definition = new CreditCurveDefinition(name, id, nodes, StandardCDSQuotingConvention.QUOTED_SPREAD);
       final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder().creditSpreadNodeIds(creditSpreadNodeIds).name(name).build();
@@ -181,6 +183,15 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
     private static final DecimalFormat FORMAT = new DecimalFormat("##.##");
     private Iterator<FinancialSecurity> _securities = null;
     private boolean _set = false;
+    final CreditSecurityToIdentifierVisitor _idGenerator;
+
+    /**
+     * @param securitySource
+     *          the security source, not null
+     */
+    public CreditSecurityGenerator(final SecuritySource securitySource) {
+      _idGenerator = new CreditSecurityToIdentifierVisitor(securitySource);
+    }
 
     @Override
     public FinancialSecurity createSecurity() {
@@ -192,21 +203,24 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
         final List<FinancialSecurity> securities = new ArrayList<>();
         for (int i = 0; i < N * 2; i += 2) {
           final LegalEntity referenceEntity = ENTITIES.get(getRandom().nextInt(5));
-          final ExternalIdBundle eid = referenceEntity.getExternalIdBundle().getExternalId(SCHEME).toBundle();
           final int term = getRandom().nextInt(10) + 1;
           final double spread = (referenceEntity.getRatings().get(0).getScore().ordinal() + 0.001) / 10000.;
           final double bondCoupon = BigDecimal.valueOf(0.03 + spread * 6 * term + (1 - getRandom().nextDouble()) / 80.).round(MC).doubleValue();
-          final double cdsSpread = BigDecimal.valueOf(0.0025 + spread * term + (1 - getRandom().nextDouble()) / 9900).round(MC).doubleValue();
-          final ZonedDateTime maturity = TODAY.plusYears(term);
+          final double cdsCoupon = 0.01;
+          final ZonedDateTime startDate = TODAY.minusDays(7);
+          final ZonedDateTime maturity = startDate.plusYears(term);
           final CorporateBondSecurity bond = new CorporateBondSecurity(referenceEntity.getName(), "CORP", "US", "CORP", Currency.USD,
-              SimpleYieldConvention.US_STREET, new Expiry(maturity), "FIXED", bondCoupon, PeriodFrequency.SEMI_ANNUAL, DayCounts.ACT_360, TODAY, TODAY,
-              BusinessDayConventionAdapter.of(BusinessDayConventions.FOLLOWING).adjustDate(WeekendWorkingDayCalendar.SATURDAY_SUNDAY, TODAY.plusMonths(6)),
+              SimpleYieldConvention.US_STREET, new Expiry(maturity), "FIXED", bondCoupon, PeriodFrequency.SEMI_ANNUAL, DayCounts.ACT_360, startDate, startDate,
+              BusinessDayConventionAdapter.of(BusinessDayConventions.FOLLOWING).adjustDate(WeekendWorkingDayCalendar.SATURDAY_SUNDAY, startDate.plusMonths(6)),
               100., 2500000., 1., 100., 100., 100.);
           bond.setName(maturity.getMonth().name().toUpperCase().substring(0, 3) + " " + maturity.getYear() + " " + referenceEntity.getName() + " @ "
               + FORMAT.format(bondCoupon * 100) + "%");
-          final StandardCDSSecurity cds = new StandardCDSSecurity(eid, "", TODAY.toLocalDate(), maturity.toLocalDate(),
-              referenceEntity.getExternalIdBundle().iterator().next(), new InterestRateNotional(Currency.USD, NOTIONAL), true, cdsSpread, DebtSeniority.SENIOR);
-          cds.setName(term + "Y " + referenceEntity.getName() + " CDS @ " + FORMAT.format(cdsSpread * 10000) + "bp");
+          final StandardCDSSecurity cds = new StandardCDSSecurity(ExternalIdBundle.EMPTY, "", startDate.toLocalDate(), maturity.toLocalDate(),
+              referenceEntity.getExternalIdBundle().iterator().next(), new InterestRateNotional(Currency.USD, NOTIONAL), true, cdsCoupon, DebtSeniority.SENIOR);
+          cds.setName(term + "Y " + referenceEntity.getName() + " CDS @ " + FORMAT.format(cdsCoupon * 10000) + "bp");
+          final CreditCurveIdentifier id = cds.accept(_idGenerator);
+          final String value = id.getObjectId().getValue().replace("_", "") + Tenor.ofYears(term).toFormattedString();
+          cds.setExternalIdBundle(ExternalSchemes.syntheticSecurityId(value).toBundle());
           securities.add(bond);
           securities.add(cds);
         }

@@ -122,11 +122,11 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     }
     if (defaultFactory == null) {
       throw new OpenGammaRuntimeException("Unable to find a default provider matching one of [" + StringUtils.join(defaultProviders, ", ")
-      + "] from available providers [" + StringUtils.join(factories.keySet(), ", ") + "]");
+          + "] from available providers [" + StringUtils.join(factories.keySet(), ", ") + "]");
     }
 
-    final InMemoryLKVLiveMarketDataProviderFactory liveMarketDataProviderFactory =
-        new InMemoryLKVLiveMarketDataProviderFactory(defaultFactory, ImmutableMap.copyOf(factories));
+    final InMemoryLKVLiveMarketDataProviderFactory liveMarketDataProviderFactory = new InMemoryLKVLiveMarketDataProviderFactory(defaultFactory,
+        ImmutableMap.copyOf(factories));
     ComponentInfo info = new ComponentInfo(LiveMarketDataProviderFactory.class, getClassifier());
     repo.registerComponent(info, liveMarketDataProviderFactory);
 
@@ -135,8 +135,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     repo.registerComponent(info, liveMarketDataProviderFactory);
 
     if (!StringUtils.isBlank(getJmsMarketDataAvailabilityTopic())) {
-      final LiveDataAvailabilityNotificationListener availabilityNotificationListener =
-          new LiveDataAvailabilityNotificationListener(getJmsMarketDataAvailabilityTopic(), factories.values(), getJmsConnector());
+      final LiveDataAvailabilityNotificationListener availabilityNotificationListener = new LiveDataAvailabilityNotificationListener(
+          getJmsMarketDataAvailabilityTopic(), factories.values(), getJmsConnector());
       repo.registerLifecycle(availabilityNotificationListener);
     }
 
@@ -146,7 +146,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   /**
    * Creates a live data client based on the information in the remote metadata.
    *
-   * @param provider the metadata provider, null returns null
+   * @param provider
+   *          the metadata provider, null returns null
    * @return the client
    */
   protected LiveDataClient createLiveDataClient(final LiveDataMetaDataProvider provider) {
@@ -156,8 +157,10 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   /**
    * Creates a live data client based on the information in the remote metadata.
    *
-   * @param provider the metadata provider, null returns null
-   * @param jmsConnector the JMS connector, not null
+   * @param provider
+   *          the metadata provider, null returns null
+   * @param jmsConnector
+   *          the JMS connector, not null
    * @return the client
    */
   @SuppressWarnings("deprecation")
@@ -168,7 +171,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     final URI jmsUri = metaData.getJmsBrokerUri();
     if (metaData.getServerType() != LiveDataServerTypes.STANDARD || jmsUri == null) {
       LOGGER.warn("Unsupported live data server type " + metaData.getServerType() + " for " + metaData.getDescription()
-      + " live data provider. This provider will not be available.");
+          + " live data provider. This provider will not be available.");
       return null;
     }
     if (!jmsc.getClientBrokerUri().equals(jmsUri)) {
@@ -192,8 +195,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     final JmsByteArrayRequestSender jmsEntitlementRequestSender = new JmsByteArrayRequestSender(metaData.getJmsEntitlementTopic(), jmsTemplate);
     final ByteArrayFudgeRequestSender fudgeEntitlementRequestSender = new ByteArrayFudgeRequestSender(jmsEntitlementRequestSender);
 
-    final JmsLiveDataClient liveDataClient = new JmsLiveDataClient(fudgeSubscriptionRequestSender,
-        fudgeEntitlementRequestSender, jmsc, OpenGammaFudgeContext.getInstance(), JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
+    final JmsLiveDataClient liveDataClient = new JmsLiveDataClient(fudgeSubscriptionRequestSender, fudgeEntitlementRequestSender, jmsc,
+        OpenGammaFudgeContext.getInstance(), JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
     liveDataClient.setFudgeContext(OpenGammaFudgeContext.getInstance());
     if (metaData.getJmsHeartbeatTopic() != null) {
       final JmsByteArrayMessageSender jmsHeartbeatSender = new JmsByteArrayMessageSender(metaData.getJmsHeartbeatTopic(), jmsTemplate);
@@ -208,7 +211,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   /**
    * Creates a market data availability filter for a metadata provider.
    *
-   * @param metaDataProvider  the metadata provider, not null
+   * @param metaDataProvider
+   *          the metadata provider, not null
    * @return the availability filter, null if none can be created
    */
   protected MarketDataAvailabilityFilter createMarketDataAvailabilityFilter(final LiveDataMetaDataProvider metaDataProvider) {
@@ -224,7 +228,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   }
 
   protected Set<String> getMarketDataRequirementNames() {
-    return MarketDataRequirementNamesHelper.constructValidRequirementNames();
+    final Set<String> validNames = MarketDataRequirementNamesHelper.constructValidRequirementNames();
+    return validNames;
   }
 
   //------------------------- AUTOGENERATED START -------------------------

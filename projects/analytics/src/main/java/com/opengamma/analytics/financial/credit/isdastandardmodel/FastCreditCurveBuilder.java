@@ -39,7 +39,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
   /**
    * Construct a credit curve builder that uses the specified accrual-on-default formula.
-   * 
+   *
    * @param formula
    *          The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
    */
@@ -54,7 +54,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
   /**
    * Construct a credit curve builder that uses the specified accrual-on-default formula and arbitrage handling.
-   * 
+   *
    * @param formula
    *          The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
    * @param arbHandling
@@ -75,10 +75,10 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
   @Override
   public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] premiums, final ISDACompliantYieldCurve yieldCurve,
       final double[] pointsUpfront) {
-    ArgumentChecker.noNulls(cds, "null CDSs");
-    ArgumentChecker.notEmpty(premiums, "empty fractionalSpreads");
-    ArgumentChecker.notEmpty(pointsUpfront, "empty pointsUpfront");
-    ArgumentChecker.notNull(yieldCurve, "null yieldCurve");
+    ArgumentChecker.noNulls(cds, "CDSs");
+    ArgumentChecker.notEmpty(premiums, "fractionalSpreads");
+    ArgumentChecker.notEmpty(pointsUpfront, "pointsUpfront");
+    ArgumentChecker.notNull(yieldCurve, "yieldCurve");
     final int n = cds.length;
     ArgumentChecker.isTrue(n == premiums.length, "Number of CDSs does not match number of spreads");
     ArgumentChecker.isTrue(n == pointsUpfront.length, "Number of CDSs does not match number of pointsUpfront");

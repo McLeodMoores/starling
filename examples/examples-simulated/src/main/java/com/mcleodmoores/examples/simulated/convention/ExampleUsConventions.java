@@ -92,9 +92,10 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
     cds.setCashSettle(3);
     cds.setCouponInterval(Period.ofMonths(6));
     cds.setCurveDayCount(DayCounts.ACT_365);
+    cds.setName("USD CDS");
     cds.setPayAccOnDefault(true);
-    cds.setProtectFromStartOfDay(true);
-    cds.setStubType(com.opengamma.analytics.financial.credit.isdastandardmodel.StubType.FRONTSHORT);
+    cds.setStepIn(1);
+    cds.setStubType(StubType.SHORT_START);
     cds.setExternalIdBundle(ExternalId.of(Currency.OBJECT_SCHEME, "USD").toBundle());
 
     addConvention(master, deposit);

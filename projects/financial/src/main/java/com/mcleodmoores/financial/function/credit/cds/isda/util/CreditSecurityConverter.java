@@ -53,7 +53,7 @@ public final class CreditSecurityConverter {
     final WorkingDayCalendar calendar = IsdaFunctionUtils.getCalendar(currency, holidays);
     final StubType stubType = convention.getStubType().toAnalyticsType();
     final Period period = convention.getCouponInterval();
-    final CDSAnalytic cdsAnalytic = new CDSAnalytic(security.getTradeDate(), security.getTradeDate().plusDays(convention.getStepIn()),
+    final CDSAnalytic cdsAnalytic = new CDSAnalytic(valuationDate, valuationDate.plusDays(convention.getStepIn()),
         BusinessDayDateUtils.addWorkDays(valuationDate, convention.getCashSettle(), calendar), security.getTradeDate(), security.getMaturityDate(),
         convention.isPayAccOnDefault(), period, stubType, convention.isProtectFromStartOfDay(), recoveryRate, convention.getBusinessDayConvention(),
         CalendarAdapter.of(calendar), convention.getAccrualDayCount(), convention.getCurveDayCount());

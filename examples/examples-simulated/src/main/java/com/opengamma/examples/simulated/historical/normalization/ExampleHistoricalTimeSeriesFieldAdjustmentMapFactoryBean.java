@@ -11,6 +11,8 @@ package com.opengamma.examples.simulated.historical.normalization;
 
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.examples.simulated.historical.SimulatedHistoricalData;
+import com.opengamma.financial.analytics.isda.credit.FlatSpreadQuote;
+import com.opengamma.financial.analytics.isda.credit.PointsUpFrontQuote;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustmentMap;
 import com.opengamma.util.spring.SpringFactoryBean;
 
@@ -21,6 +23,10 @@ public class ExampleHistoricalTimeSeriesFieldAdjustmentMapFactoryBean extends Sp
   private static final String LAST_VOLATILITY = "IMPVOL_CLOSE";
   /** Value that the {@link MarketDataRequirementNames#YIELD_YIELD_TO_MATURITY_MID} field is adjusted into */
   private static final String LAST_YIELD = "YIELD_CLOSE";
+  /** Value that the {@link FlatSpreadQuote#TYPE} field is adjusted into */
+  private static final String LAST_SPREAD = "LAST_SPREAD";
+  /** Value that the {@link PointsUpFrontQuote#TYPE} field is adjusted into */
+  private static final String LAST_PUF = "LAST_PUF";
 
   /**
    * Default constructor.
@@ -29,7 +35,7 @@ public class ExampleHistoricalTimeSeriesFieldAdjustmentMapFactoryBean extends Sp
     super(HistoricalTimeSeriesFieldAdjustmentMap.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesFieldAdjustmentMap createObject() {
     final HistoricalTimeSeriesFieldAdjustmentMap fieldAdjustmentMap = new HistoricalTimeSeriesFieldAdjustmentMap(SimulatedHistoricalData.OG_DATA_SOURCE);
@@ -37,6 +43,8 @@ public class ExampleHistoricalTimeSeriesFieldAdjustmentMapFactoryBean extends Sp
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.MARKET_VALUE, null, LAST_PRICE, adjuster);
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.IMPLIED_VOLATILITY, null, LAST_VOLATILITY, adjuster);
     fieldAdjustmentMap.addFieldAdjustment(MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, null, LAST_YIELD, adjuster);
+    fieldAdjustmentMap.addFieldAdjustment(FlatSpreadQuote.TYPE, null, LAST_SPREAD, adjuster);
+    fieldAdjustmentMap.addFieldAdjustment(PointsUpFrontQuote.TYPE, null, LAST_PUF, adjuster);
     return fieldAdjustmentMap;
   }
 

@@ -3,6 +3,9 @@
  */
 package com.mcleodmoores.financial.function.credit.cds.isda;
 
+import static com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunctionUtils.getPointsUpfront;
+import static com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunctionUtils.getQuotedSpread;
+import static com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunctionUtils.getUpfrontAmount;
 import static com.mcleodmoores.financial.function.properties.CurveCalculationProperties.ISDA;
 import static com.opengamma.core.value.MarketDataRequirementNames.MARKET_VALUE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_METHOD;
@@ -31,6 +34,8 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.financial.function.credit.cds.isda.util.CreditSecurityConverter;
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.analytics.financial.credit.BuySellProtection;
+import com.opengamma.analytics.financial.credit.isdastandardmodel.AnalyticSpreadSensitivityCalculator;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSQuoteConvention;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantCreditCurve;
@@ -71,7 +76,7 @@ import com.opengamma.util.money.Currency;
  * <li>Accrued days</li>
  * <li>Clean present value (also aliased to present value and principal)</li>
  * <li>Clean price</li>
- * <li>Dirty present value (also aliased to upfront amount</li>
+ * <li>Dirty present value (also aliased to upfront amount)</li>
  * <li>Parallel CS01</li>
  * <li>Points up-front</li>
  * <li>Quoted spread</li>
@@ -83,6 +88,7 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
   private static final String[] RESULTS = new String[] { ACCRUED_DAYS, ACCRUED_PREMIUM, POINTS_UPFRONT, CLEAN_PRESENT_VALUE, DIRTY_PRESENT_VALUE, CLEAN_PRICE,
       QUOTED_SPREAD, UPFRONT_AMOUNT, PARALLEL_CS01, PRINCIPAL, PRESENT_VALUE };
   private CreditSecurityToIdentifierVisitor _identifierVisitor;
+  private static final AnalyticSpreadSensitivityCalculator CS01_CALCULATOR = new AnalyticSpreadSensitivityCalculator();
 
   @Override
   public void init(final FunctionCompilationContext context) {
@@ -103,32 +109,42 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
     final Currency currency = security.getNotional().getCurrency();
     final ExternalIdBundle currencyId = ExternalIdBundle.of(currency.getObjectId().getScheme(), currency.getObjectId().getValue());
     final IsdaCreditCurveConvention convention = (IsdaCreditCurveConvention) conventionSource.getSingle(currencyId);
-    final CDSAnalytic analytic = CreditSecurityConverter.convertStandardCdsSecurity(holidaySource, security, recoveryRate, convention, now.toLocalDate());
-    final CDSQuoteConvention quote = getQuote(security.getCoupon(), constraints, inputs); // IsdaFunctionUtils.getQuote(security.getCoupon(), quote, quoteType);
+    final CDSAnalytic cds = CreditSecurityConverter.convertStandardCdsSecurity(holidaySource, security, recoveryRate, convention, now.toLocalDate());
+    final CDSQuoteConvention quote = getQuote(security.getCoupon(), constraints, inputs);
     final double notional = security.getNotional().getAmount();
     final double coupon = security.getCoupon();
     final int buySellPremiumFactor = security.isBuyProtection() ? -1 : 1;
-    final double accruedPremium = analytic.getAccruedPremium(coupon) * notional * buySellPremiumFactor;
-    final double accruedDays = analytic.getAccruedDays();
-    final double quotedSpread = 0;
-    final double pointsUpfront = 0;
-    final double upfrontAmount = 0;
-    final double cleanPv = 0;
+    final double accruedPremium = cds.getAccruedPremium(coupon) * notional * buySellPremiumFactor;
+    final double accruedDays = cds.getAccruedDays();
+    final QuotedSpread quotedSpread;
+    final PointsUpFront pointsUpfront;
+    final BuySellProtection buySellProtection = security.isBuyProtection() ? BuySellProtection.BUY : BuySellProtection.SELL;
+    if (quote instanceof PointsUpFront) {
+      pointsUpfront = (PointsUpFront) quote;
+      quotedSpread = getQuotedSpread(pointsUpfront, buySellProtection, yieldCurve, cds);
+    } else if (quote instanceof QuotedSpread) {
+      quotedSpread = (QuotedSpread) quote;
+      pointsUpfront = getPointsUpfront(quotedSpread, buySellProtection, yieldCurve, cds, creditCurve);
+    } else {
+      throw new OpenGammaRuntimeException("Unhandled quote type " + quote);
+    }
+    final double upfrontAmount = getUpfrontAmount(cds, pointsUpfront, notional, buySellProtection);
+    final double cleanPv = pointsUpfront.getPointsUpFront() * notional;
     final double principal = cleanPv;
-    final double cleanPrice = 0;
-    final double parallelCs01 = 0;
+    final double cleanPrice = 100 * (1 - pointsUpfront.getPointsUpFront());
+    final double parallelCs01 = CS01_CALCULATOR.parallelCS01(cds, quotedSpread, yieldCurve);
     final Set<ComputedValue> results = new HashSet<>();
     results.add(new ComputedValue(new ValueSpecification(ACCRUED_DAYS, target.toSpecification(), constraints), accruedDays));
     results.add(new ComputedValue(new ValueSpecification(ACCRUED_PREMIUM, target.toSpecification(), constraints), accruedPremium));
-    results.add(new ComputedValue(new ValueSpecification(POINTS_UPFRONT, target.toSpecification(), constraints), pointsUpfront));
     results.add(new ComputedValue(new ValueSpecification(CLEAN_PRESENT_VALUE, target.toSpecification(), constraints), cleanPv));
-    results.add(new ComputedValue(new ValueSpecification(PRESENT_VALUE, target.toSpecification(), constraints), cleanPv));
-    results.add(new ComputedValue(new ValueSpecification(DIRTY_PRESENT_VALUE, target.toSpecification(), constraints), upfrontAmount));
     results.add(new ComputedValue(new ValueSpecification(CLEAN_PRICE, target.toSpecification(), constraints), cleanPrice));
-    results.add(new ComputedValue(new ValueSpecification(QUOTED_SPREAD, target.toSpecification(), constraints), quotedSpread));
-    results.add(new ComputedValue(new ValueSpecification(UPFRONT_AMOUNT, target.toSpecification(), constraints), upfrontAmount));
+    results.add(new ComputedValue(new ValueSpecification(DIRTY_PRESENT_VALUE, target.toSpecification(), constraints), upfrontAmount));
     results.add(new ComputedValue(new ValueSpecification(PARALLEL_CS01, target.toSpecification(), constraints), parallelCs01));
+    results.add(new ComputedValue(new ValueSpecification(POINTS_UPFRONT, target.toSpecification(), constraints), pointsUpfront.getPointsUpFront()));
+    results.add(new ComputedValue(new ValueSpecification(PRESENT_VALUE, target.toSpecification(), constraints), cleanPv));
     results.add(new ComputedValue(new ValueSpecification(PRINCIPAL, target.toSpecification(), constraints), principal));
+    results.add(new ComputedValue(new ValueSpecification(QUOTED_SPREAD, target.toSpecification(), constraints), quotedSpread.getQuotedSpread()));
+    results.add(new ComputedValue(new ValueSpecification(UPFRONT_AMOUNT, target.toSpecification(), constraints), upfrontAmount));
     return results;
   }
 
@@ -183,8 +199,10 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
     requirements.add(hazardRateCurve);
     requirements.add(recoveryRate);
     // ask for flat spread and PUF unless the properties request a specific one
-    final ValueRequirement flatSpread = new ValueRequirement(FlatSpreadQuote.TYPE, ComputationTargetType.PRIMITIVE, cdsId.getUniqueId());
-    final ValueRequirement puf = new ValueRequirement(PointsUpFrontQuote.TYPE, ComputationTargetType.PRIMITIVE, cdsId.getUniqueId());
+    final ValueRequirement flatSpread = new ValueRequirement(FlatSpreadQuote.TYPE, ComputationTargetType.PRIMITIVE,
+        security.getExternalIdBundle().iterator().next());
+    final ValueRequirement puf = new ValueRequirement(PointsUpFrontQuote.TYPE, ComputationTargetType.PRIMITIVE,
+        security.getExternalIdBundle().iterator().next());
     if (quoteType == null || quoteType.isEmpty()) {
       requirements.add(flatSpread);
       requirements.add(puf);

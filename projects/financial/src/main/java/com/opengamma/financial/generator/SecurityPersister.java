@@ -46,10 +46,11 @@ public abstract class SecurityPersister {
   /**
    * Produces an {@link ExternalIdBundle} referencing the security.
    *
-   * @param security the security to store, not null
+   * @param security
+   *          the security to store, not null
    * @return the identifier bundle, not null
    */
-  public final ExternalIdBundle storeSecurity(final ManageableSecurity security) {
+  public ExternalIdBundle storeSecurity(final ManageableSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final ManageableSecurity clone = JodaBeanUtils.clone(security);
     clone.setUniqueId(null);

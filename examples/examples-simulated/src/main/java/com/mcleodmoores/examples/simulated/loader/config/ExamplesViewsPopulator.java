@@ -11,7 +11,6 @@ import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulat
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.OIS_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.USD_TREASURIES_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.VANILLA_FX_OPTION_PORTFOLIO_NAME;
-import static com.mcleodmoores.financial.function.properties.CurveCalculationProperties.ISDA;
 import static com.opengamma.engine.value.ValuePropertyNames.CALCULATION_METHOD;
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
@@ -71,7 +70,6 @@ import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
@@ -80,6 +78,7 @@ import com.opengamma.financial.analytics.model.discounting.DiscountingYCNSFuncti
 import com.opengamma.financial.currency.CurrencyConversionFunction;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
+import com.opengamma.financial.security.credit.StandardCDSSecurity;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
@@ -92,7 +91,6 @@ import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.master.portfolio.PortfolioSearchRequest;
 import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.scripts.Scriptable;
-import com.opengamma.util.credit.CreditCurveIdentifier;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
@@ -650,13 +648,9 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     definition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     definition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration config = new ViewCalculationConfiguration(definition, DEFAULT_CALC_CONFIG);
-    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(PROPERTY_CURVE_TYPE, ISDA).with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").get()));
-    config.addSpecificRequirement(new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE,
-        ComputationTargetSpecification.of(CreditCurveIdentifier.of("123456", Currency.USD, "SENIOR")),
-        ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").get()));
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
-    // config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").get());
+    final ValueProperties properties = ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").withOptional(CURVE_CONSTRUCTION_CONFIG).get();
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
     definition.addViewCalculationConfiguration(config);
     return definition;
   }
