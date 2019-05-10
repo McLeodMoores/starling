@@ -35,17 +35,18 @@ public final class CreditSecurityConverter {
    * @param security
    *          the security to convert, not null
    * @param recoveryRate
-   *          the recovery rate
+   *          the recovery rate, not null
    * @param convention
    *          the convention to be used, not null
    * @param valuationDate
    *          the valuation date, not null
    * @return the analytics form of the security
    */
-  public static CDSAnalytic convertStandardCdsSecurity(final HolidaySource holidaySource, final StandardCDSSecurity security, final double recoveryRate,
+  public static CDSAnalytic convertStandardCdsSecurity(final HolidaySource holidaySource, final StandardCDSSecurity security, final Double recoveryRate,
       final IsdaCreditCurveConvention convention, final LocalDate valuationDate) {
     ArgumentChecker.notNull(holidaySource, "holidaySource");
     ArgumentChecker.notNull(security, "security");
+    ArgumentChecker.notNull(recoveryRate, "recoveryRate");
     ArgumentChecker.notNull(convention, "convention");
     ArgumentChecker.notNull(valuationDate, "valuationDate");
     final Currency currency = security.getNotional().getCurrency();

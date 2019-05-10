@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * Utility methods for pricing credit instruments using the ISDA model.
  */
 public final class IsdaFunctionUtils {
   private static final MarketQuoteConverter PUF_CONVERTER = new MarketQuoteConverter();
@@ -41,7 +41,7 @@ public final class IsdaFunctionUtils {
    * @param currency
    *          the currency, not null
    * @param holidays
-   *          the holidays as sourced from a source, not null or empty
+   *          the holiday dates from a source, not null or empty
    * @return the calendar
    */
   public static WorkingDayCalendar getCalendar(final Currency currency, final Collection<Holiday> holidays) {
@@ -83,22 +83,75 @@ public final class IsdaFunctionUtils {
     }
   }
 
+  /**
+   * Converts a points-upfront quote to a quoted spread.
+   *
+   * @param puf
+   *          the points up front, not null
+   * @param buySellProtection
+   *          whether protection is bought or sold, not null
+   * @param yieldCurve
+   *          the discounting curve, not null
+   * @param cds
+   *          the CDS, not null
+   * @return the quoted spread
+   */
   public static QuotedSpread getQuotedSpread(final PointsUpFront puf, final BuySellProtection buySellProtection, final ISDACompliantYieldCurve yieldCurve,
       final CDSAnalytic cds) {
+    ArgumentChecker.notNull(puf, "puf");
+    ArgumentChecker.notNull(buySellProtection, "buySellProtection");
+    ArgumentChecker.notNull(yieldCurve, "yieldCurve");
+    ArgumentChecker.notNull(cds, "cds");
     final double quotedSpread = PUF_CONVERTER.pufToQuotedSpread(cds, puf.getCoupon(), yieldCurve, puf.getPointsUpFront());
     // SELL protection reverses directions of legs
     return new QuotedSpread(puf.getCoupon(), buySellProtection == BuySellProtection.SELL ? -quotedSpread : quotedSpread);
 
   }
 
+  /**
+   * Converts a quoted spread quote to points upfront.
+   *
+   * @param quote
+   *          the quoted spread, not null
+   * @param buySellProtection
+   *          whether protection is bought or sold, not null
+   * @param yieldCurve
+   *          the discounting curve, not null
+   * @param cds
+   *          the CDS, not null
+   * @param creditCurve
+   *          the hazard rate curve, not null
+   * @return the points upfront
+   */
   public static PointsUpFront getPointsUpfront(final QuotedSpread quote, final BuySellProtection buySellProtection, final ISDACompliantYieldCurve yieldCurve,
       final CDSAnalytic cds, final ISDACompliantCreditCurve creditCurve) {
+    ArgumentChecker.notNull(quote, "quote");
+    ArgumentChecker.notNull(buySellProtection, "buySellProtection");
+    ArgumentChecker.notNull(yieldCurve, "yieldCurve");
+    ArgumentChecker.notNull(cds, "cds");
+    ArgumentChecker.notNull(creditCurve, "creditCurve");
     final double puf = PUF_CONVERTER.pointsUpFront(cds, quote.getCoupon(), yieldCurve, creditCurve);
     // SELL protection reverses directions of legs
     return new PointsUpFront(quote.getCoupon(), buySellProtection == BuySellProtection.SELL ? -puf : puf);
   }
 
+  /**
+   * Gets the upfront amount to be paid for a CDS.
+   *
+   * @param cds
+   *          the CDS, not null
+   * @param puf
+   *          the points upfront, not null
+   * @param notional
+   *          the notional
+   * @param buySellProtection
+   *          whether protection is bought or sold, not null
+   * @return the up-front amount
+   */
   public static double getUpfrontAmount(final CDSAnalytic cds, final PointsUpFront puf, final double notional, final BuySellProtection buySellProtection) {
+    ArgumentChecker.notNull(cds, "cds");
+    ArgumentChecker.notNull(puf, "puf");
+    ArgumentChecker.notNull(buySellProtection, "buySellProtection");
     final double cash = (puf.getPointsUpFront() - cds.getAccruedPremium(puf.getCoupon())) * notional;
     return buySellProtection == BuySellProtection.SELL ? -cash : cash;
   }

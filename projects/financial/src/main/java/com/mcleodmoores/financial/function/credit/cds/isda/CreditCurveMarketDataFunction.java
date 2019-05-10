@@ -22,7 +22,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.financial.function.credit.configs.CreditCurveDefinition;
 import com.mcleodmoores.financial.function.credit.configs.CreditCurveSpecification;
 import com.mcleodmoores.financial.function.credit.source.ConfigDbCreditCurveSpecificationSource;
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -33,6 +32,7 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.marketdata.ExternalIdBundleResolver;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
+import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeWithIdentifier;
@@ -81,10 +81,7 @@ public class CreditCurveMarketDataFunction extends AbstractFunction {
     @Override
     public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
         final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-      final CreditCurveSpecification specification = _source.getCreditCurveSpecification((CreditCurveIdentifier) target.getValue(), _curveDate);
-      if (specification == null) {
-        throw new OpenGammaRuntimeException("Could not get CreditCurveSpecification for " + target.getValue());
-      }
+      final CreditCurveSpecification specification = (CreditCurveSpecification) inputs.getValue(CURVE_SPECIFICATION);
       final Collection<CurveNodeWithIdentifier> nodes = specification.getNodes();
       final ExternalIdBundleResolver resolver = new ExternalIdBundleResolver(executionContext.getComputationTargetResolver());
       final SnapshotDataBundle marketData = new SnapshotDataBundle();
@@ -127,7 +124,6 @@ public class CreditCurveMarketDataFunction extends AbstractFunction {
     public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
       final Set<ValueSpecification> results = new HashSet<>();
       results.add(new ValueSpecification(CURVE_MARKET_DATA, target.toSpecification(), createValueProperties().get()));
-      results.add(new ValueSpecification(CURVE_SPECIFICATION, target.toSpecification(), createValueProperties().get()));
       return results;
     }
 
@@ -140,6 +136,7 @@ public class CreditCurveMarketDataFunction extends AbstractFunction {
         return null;
       }
       final Set<ValueRequirement> requirements = new HashSet<>();
+      requirements.add(new ValueRequirement(CURVE_SPECIFICATION, target.toSpecification(), ValueProperties.none()));
       for (final CurveNodeWithIdentifier node : specification.getNodes()) {
         requirements.add(new ValueRequirement(node.getDataField(), ComputationTargetType.PRIMITIVE, node.getIdentifier()));
       }

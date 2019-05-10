@@ -5,7 +5,9 @@ package com.mcleodmoores.financial.function.credit.cds.isda.config;
 
 import java.util.List;
 
+import com.mcleodmoores.financial.function.credit.cds.isda.CreditCurveDefinitionFunction;
 import com.mcleodmoores.financial.function.credit.cds.isda.CreditCurveMarketDataFunction;
+import com.mcleodmoores.financial.function.credit.cds.isda.CreditCurveSpecificationFunction;
 import com.mcleodmoores.financial.function.credit.cds.isda.IsdaCdsAnalyticsFunction;
 import com.mcleodmoores.financial.function.credit.cds.isda.IsdaCreditCurveFunction;
 import com.mcleodmoores.financial.function.credit.cds.isda.IsdaYieldCurveFunction;
@@ -71,6 +73,8 @@ public class IsdaFunctions extends AbstractFunctionConfigurationBean {
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(IsdaCreditCurveFunction.class));
     functions.add(functionConfiguration(CreditCurveMarketDataFunction.class));
+    functions.add(functionConfiguration(CreditCurveSpecificationFunction.class));
+    functions.add(functionConfiguration(CreditCurveDefinitionFunction.class));
     functions.add(functionConfiguration(IsdaCdsAnalyticsFunction.class));
   }
 

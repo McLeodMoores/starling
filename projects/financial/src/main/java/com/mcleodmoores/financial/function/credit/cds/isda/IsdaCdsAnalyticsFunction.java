@@ -105,7 +105,7 @@ public class IsdaCdsAnalyticsFunction extends AbstractFunction.NonCompiledInvoke
     final StandardCDSSecurity security = (StandardCDSSecurity) target.getTrade().getSecurity();
     final ISDACompliantYieldCurve yieldCurve = (ISDACompliantYieldCurve) inputs.getValue(YIELD_CURVE);
     final ISDACompliantCreditCurve creditCurve = (ISDACompliantCreditCurve) inputs.getValue(HAZARD_RATE_CURVE);
-    final double recoveryRate = (Double) inputs.getValue(MARKET_VALUE);
+    final Double recoveryRate = (Double) inputs.getValue(MARKET_VALUE);
     final Currency currency = security.getNotional().getCurrency();
     final ExternalIdBundle currencyId = ExternalIdBundle.of(currency.getObjectId().getScheme(), currency.getObjectId().getValue());
     final IsdaCreditCurveConvention convention = (IsdaCreditCurveConvention) conventionSource.getSingle(currencyId);
