@@ -85,6 +85,14 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
     }
   }
 
+  @Override
+  protected void setCorporateBondInfo() {
+    final Set<Country> countries = Country.getAvailableCountries();
+    for (final Country c : countries) {
+      setGovernmentBondPerCountryInfo(c);
+    }
+  }
+
   /**
    * Creates empty default per-equity information objects for equity options.
    *
@@ -157,13 +165,25 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
 
   /**
    * Creates empty defaults for government bonds.
-   * 
+   *
    * @param country
    *          the country
    */
   protected void setGovernmentBondPerCountryInfo(final Country country) {
     final BondInfo i = new BondInfo();
     i.setCurveExposureName("model/bond/govt", "Govt Bond Exposures");
+    setBondPerCountryInfo(country, i);
+  }
+
+  /**
+   * Creates empty defaults for corporate bonds.
+   *
+   * @param country
+   *          the country
+   */
+  protected void setCorporateBondPerCurrencyInfo(final Country country) {
+    final BondInfo i = new BondInfo();
+    i.setCurveExposureName("model/bond/corp", "Corp Bond Exposures");
     setBondPerCountryInfo(country, i);
   }
 }

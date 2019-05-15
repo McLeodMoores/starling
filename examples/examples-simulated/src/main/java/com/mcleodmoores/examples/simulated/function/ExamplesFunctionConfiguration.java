@@ -51,6 +51,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     setFxForwardInfo();
     setLinearRatesInfo();
     setGovernmentBondInfo();
+    setCorporateBondInfo();
   }
 
   @Override
@@ -87,6 +88,13 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
    *
    */
   protected void setGovernmentBondInfo() {
+  }
+
+  /**
+   *
+   */
+  protected void setCorporateBondInfo() {
+
   }
 
   @Override

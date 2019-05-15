@@ -8,6 +8,7 @@ import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -87,15 +88,15 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
 
   static {
     final ManageableLegalEntity entity1 = new ManageableLegalEntity("ABC Corp", ExternalIdBundle.of(SCHEME, "123456"));
-    entity1.setRatings(Arrays.asList(new Rating("S&P", CreditRating.B, SeniorityLevel.SNRFOR)));
+    entity1.setRatings(Arrays.asList(new Rating("RatingFitch", CreditRating.B, SeniorityLevel.SNRFOR)));
     final ManageableLegalEntity entity2 = new ManageableLegalEntity("X Ltd", ExternalIdBundle.of(SCHEME, "234567"));
-    entity2.setRatings(Arrays.asList(new Rating("S&P", CreditRating.A, SeniorityLevel.SNRFOR)));
+    entity2.setRatings(Arrays.asList(new Rating("RatingFitch", CreditRating.A, SeniorityLevel.SNRFOR)));
     final ManageableLegalEntity entity3 = new ManageableLegalEntity("CCC Inc", ExternalIdBundle.of(SCHEME, "345678"));
-    entity3.setRatings(Arrays.asList(new Rating("S&P", CreditRating.AA, SeniorityLevel.SNRFOR)));
+    entity3.setRatings(Arrays.asList(new Rating("RatingFitch", CreditRating.AA, SeniorityLevel.SNRFOR)));
     final ManageableLegalEntity entity4 = new ManageableLegalEntity("AD4 Group", ExternalIdBundle.of(SCHEME, "456789"));
-    entity4.setRatings(Arrays.asList(new Rating("S&P", CreditRating.C, SeniorityLevel.SNRFOR)));
+    entity4.setRatings(Arrays.asList(new Rating("RatingFitch", CreditRating.C, SeniorityLevel.SNRFOR)));
     final ManageableLegalEntity entity5 = new ManageableLegalEntity("GHJ Co", ExternalIdBundle.of(SCHEME, "567890"));
-    entity5.setRatings(Arrays.asList(new Rating("S&P", CreditRating.CC, SeniorityLevel.SNRFOR)));
+    entity5.setRatings(Arrays.asList(new Rating("RatingFitch", CreditRating.CC, SeniorityLevel.SNRFOR)));
     ENTITIES.add(entity1);
     ENTITIES.add(entity2);
     ENTITIES.add(entity3);
@@ -139,6 +140,15 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
     configure(generator);
     final PositionGenerator positions = new SimplePositionGenerator<>(generator, getSecurityPersister(), getCounterPartyGenerator());
     return new LeafPortfolioNodeGenerator(new StaticNameGenerator("Credit"), positions, portfolioSize);
+  }
+
+  /**
+   * Returns the legal entities referenced by the bonds and CDS.
+   *
+   * @return the entities
+   */
+  public static Collection<ManageableLegalEntity> getLegalEntities() {
+    return ENTITIES;
   }
 
   private void generateCreditSpreadCurves() {
@@ -205,7 +215,8 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
           final LegalEntity referenceEntity = ENTITIES.get(getRandom().nextInt(5));
           final int term = getRandom().nextInt(10) + 1;
           final double spread = (referenceEntity.getRatings().get(0).getScore().ordinal() + 0.001) / 10000.;
-          final double bondCoupon = BigDecimal.valueOf(0.03 + spread * 6 * term + (1 - getRandom().nextDouble()) / 80.).round(MC).doubleValue();
+          final double bondCoupon = BigDecimal.valueOf((getRandom().nextBoolean() ? 3 : 5) + spread * 1000 * term + (1 - getRandom().nextDouble()) / 80.)
+              .round(MC).doubleValue();
           final double cdsCoupon = 0.01;
           final ZonedDateTime startDate = TODAY.minusDays(7);
           final ZonedDateTime maturity = startDate.plusYears(term);
@@ -214,7 +225,9 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
               BusinessDayConventionAdapter.of(BusinessDayConventions.FOLLOWING).adjustDate(WeekendWorkingDayCalendar.SATURDAY_SUNDAY, startDate.plusMonths(6)),
               100., 2500000., 1., 100., 100., 100.);
           bond.setName(maturity.getMonth().name().toUpperCase().substring(0, 3) + " " + maturity.getYear() + " " + referenceEntity.getName() + " @ "
-              + FORMAT.format(bondCoupon * 100) + "%");
+              + FORMAT.format(bondCoupon) + "%");
+          bond.addExternalId(
+              ExternalSchemes.isinSecurityId("US" + referenceEntity.getExternalIdBundle().getValue(SCHEME) + "00" + (term < 10 ? "0" : "") + term));
           final StandardCDSSecurity cds = new StandardCDSSecurity(ExternalIdBundle.EMPTY, "", startDate.toLocalDate(), maturity.toLocalDate(),
               referenceEntity.getExternalIdBundle().iterator().next(), new InterestRateNotional(Currency.USD, NOTIONAL), true, cdsCoupon, DebtSeniority.SENIOR);
           cds.setName(term + "Y " + referenceEntity.getName() + " CDS @ " + FORMAT.format(cdsCoupon * 10000) + "bp");

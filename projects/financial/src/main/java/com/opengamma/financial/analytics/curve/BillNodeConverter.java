@@ -16,7 +16,6 @@ import java.util.Set;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.date.WorkingDayCalendar;
-import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
@@ -32,7 +31,7 @@ import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.analytics.conversion.CalendarUtils;
+import com.opengamma.financial.analytics.conversion.WorkingDayCalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.BillNode;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.yield.YieldConvention;
@@ -130,7 +129,7 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     }
     final BillSecurity billSecurity = (BillSecurity) security;
     final ExternalId regionId = billSecurity.getRegionId();
-    final WorkingDayCalendar calendar = WorkingDayCalendarAdapter.of(CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId));
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegion(_regionSource, _holidaySource, regionId);
     final Currency currency = billSecurity.getCurrency();
     final ZonedDateTime maturityDate = billSecurity.getMaturityDate().getExpiry();
     final DayCount dayCount = billSecurity.getDayCount();
@@ -138,7 +137,6 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     final int settlementDays = billSecurity.getDaysToSettle();
     final ExternalIdBundle identifiers = security.getExternalIdBundle();
     // TODO: [PLAT-5905] Add legal entity to node.
-    // Legal Entity
     final LegalEntity legalEntity;
     if (_legalEntitySource != null) {
       final com.opengamma.core.legalentity.LegalEntity legalEntityFromSource = _legalEntitySource.getSingle(billSecurity.getLegalEntityId());

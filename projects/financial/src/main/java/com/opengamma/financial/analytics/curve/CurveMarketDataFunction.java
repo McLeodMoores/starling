@@ -169,7 +169,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
 
   /**
    * Gets the market data requirements from a curve specification.
-   * 
+   *
    * @param abstractSpecification
    *          The curve specification
    * @param curveName
@@ -217,7 +217,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
 
   /**
    * Populates a market data snapshot for a curve specification.
-   * 
+   *
    * @param abstractSpecification
    *          The specification
    * @param inputs
@@ -254,7 +254,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
               value = inputs.getComputedValue(new ValueRequirement(id.getDataField(), ComputationTargetType.SECURITY, id.getIdentifier()));
             } catch (final NullPointerException e) {
               // happens when the target cannot be resolved
-              value = null;
+              value = inputs.getComputedValue(new ValueRequirement(id.getDataField(), ComputationTargetType.PRIMITIVE, id.getIdentifier()));
             }
           } else {
             value = inputs.getComputedValue(new ValueRequirement(id.getDataField(), ComputationTargetType.PRIMITIVE, id.getIdentifier()));

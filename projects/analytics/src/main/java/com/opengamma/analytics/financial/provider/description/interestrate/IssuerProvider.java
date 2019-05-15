@@ -54,7 +54,7 @@ public class IssuerProvider implements IssuerProviderInterface {
   /**
    * The map between the curves names and the curves themselves.
    */
-  //TODO these aren't the best names
+  // TODO these aren't the best names
   private final Map<String, YieldAndDiscountCurve> _issuerCurvesNames = new LinkedHashMap<>();
 
   /**
@@ -68,7 +68,9 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Constructs a multi-curve provider with empty maps for discounting and forward curves, and an empty issuer curve map.
-   * @param fxMatrix The FX matrix, not null
+   *
+   * @param fxMatrix
+   *          The FX matrix, not null
    */
   public IssuerProvider(final FXMatrix fxMatrix) {
     _multicurveProvider = new MulticurveProviderDiscount(fxMatrix);
@@ -78,12 +80,17 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Constructs a multi-curve provider and an empty issuer curve map.
-   * @param discountingCurves A map from currency to yield curve, not null
-   * @param forwardIborCurves A map from ibor index to yield curve, not null
-   * @param forwardONCurves A map from overnight index to yield curve, not null
-   * @param fxMatrix The FX matrix, not null
+   *
+   * @param discountingCurves
+   *          A map from currency to yield curve, not null
+   * @param forwardIborCurves
+   *          A map from ibor index to yield curve, not null
+   * @param forwardONCurves
+   *          A map from overnight index to yield curve, not null
+   * @param fxMatrix
+   *          The FX matrix, not null
    */
-  //TODO there is no guarantee that the maps are LinkedHashMaps, which could lead to unexpected behaviour
+  // TODO there is no guarantee that the maps are LinkedHashMaps, which could lead to unexpected behaviour
   public IssuerProvider(final Map<Currency, YieldAndDiscountCurve> discountingCurves, final Map<IborIndex, YieldAndDiscountCurve> forwardIborCurves,
       final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final FXMatrix fxMatrix) {
     _multicurveProvider = new MulticurveProviderDiscount(discountingCurves, forwardIborCurves, forwardONCurves, fxMatrix);
@@ -93,15 +100,22 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Constructs a multi-curve provider and sets the issuer curve map. The issuer curve map is not copied.
-   * @param discountingCurves A map from currency to yield curve, not null
-   * @param forwardIborCurves A map from ibor index to yield curve, not null
-   * @param forwardONCurves A map from overnight index to yield curve, not null
-   * @param issuerCurves An issuer curve map, not null
-   * @param fxMatrix The FX matrix, not null
+   *
+   * @param discountingCurves
+   *          A map from currency to yield curve, not null
+   * @param forwardIborCurves
+   *          A map from ibor index to yield curve, not null
+   * @param forwardONCurves
+   *          A map from overnight index to yield curve, not null
+   * @param issuerCurves
+   *          An issuer curve map, not null
+   * @param fxMatrix
+   *          The FX matrix, not null
    */
-  //TODO there is no guarantee that the map is a LinkedHashMap, which could lead to unexpected behaviour
+  // TODO there is no guarantee that the map is a LinkedHashMap, which could lead to unexpected behaviour
   public IssuerProvider(final Map<Currency, YieldAndDiscountCurve> discountingCurves, final Map<IborIndex, YieldAndDiscountCurve> forwardIborCurves,
-      final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves, final FXMatrix fxMatrix) {
+      final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves,
+      final FXMatrix fxMatrix) {
     ArgumentChecker.notNull(issuerCurves, "issuer curves");
     _multicurveProvider = new MulticurveProviderDiscount(discountingCurves, forwardIborCurves, forwardONCurves, fxMatrix);
     _issuerCurves = issuerCurves;
@@ -109,10 +123,13 @@ public class IssuerProvider implements IssuerProviderInterface {
   }
 
   /**
-   * Constructor from existing multicurve provider and issuer map. The given provider and map are used for the new provider
-   * (the same maps are used, not copied).
-   * @param multicurve The multi-curves provider, not null
-   * @param issuerCurves The issuer specific curves, not null
+   * Constructor from existing multicurve provider and issuer map. The given provider and map are used for the new provider (the same maps are used, not
+   * copied).
+   *
+   * @param multicurve
+   *          The multi-curves provider, not null
+   * @param issuerCurves
+   *          The issuer specific curves, not null
    */
   public IssuerProvider(final MulticurveProviderInterface multicurve,
       final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves) {
@@ -125,7 +142,9 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Constructs a provider from an existing multi-curve provider. The maps are not copied.
-   * @param multicurve The multi-curves provider, not null
+   *
+   * @param multicurve
+   *          The multi-curves provider, not null
    */
   public IssuerProvider(final MulticurveProviderDiscount multicurve) {
     ArgumentChecker.notNull(multicurve, "multicurve");
@@ -285,6 +304,7 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Gets all issuer curves.
+   *
    * @return The issuer curves
    */
   public Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> getIssuerCurves() {
@@ -293,7 +313,9 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Gets an issuer curve.
-   * @param key The key
+   *
+   * @param key
+   *          The key
    * @return The curve.
    */
   public YieldAndDiscountCurve getIssuerCurve(final Pair<Object, LegalEntityFilter<LegalEntity>> key) {
@@ -302,7 +324,9 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Gets a named issuer curve.
-   * @param name The name
+   *
+   * @param name
+   *          The name
    * @return The curve.
    */
   public YieldAndDiscountCurve getIssuerCurve(final String name) {
@@ -311,8 +335,11 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Sets the discounting curve for a given issuer.
-   * @param issuerCcy The issuer/currency.
-   * @param curve The yield curve used for discounting.
+   *
+   * @param issuerCcy
+   *          The issuer/currency.
+   * @param curve
+   *          The yield curve used for discounting.
    */
   public void setCurve(final Pair<Object, LegalEntityFilter<LegalEntity>> issuerCcy, final YieldAndDiscountCurve curve) {
     ArgumentChecker.notNull(issuerCcy, "Issuer/currency");
@@ -326,8 +353,11 @@ public class IssuerProvider implements IssuerProviderInterface {
 
   /**
    * Replaces an issuer curve.
-   * @param ic The key of the curve to replace
-   * @param replacement The replacement curve
+   *
+   * @param ic
+   *          The key of the curve to replace
+   * @param replacement
+   *          The replacement curve
    * @return A new provider with the curve replaced.
    */
   public IssuerProvider withIssuerCurve(final Pair<Object, LegalEntityFilter<LegalEntity>> ic, final YieldAndDiscountCurve replacement) {

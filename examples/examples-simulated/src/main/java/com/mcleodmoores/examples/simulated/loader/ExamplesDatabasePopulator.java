@@ -18,6 +18,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesCorporateBondCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesExposureFunctionLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesFunctionConfigsPopulator;
@@ -28,6 +29,7 @@ import com.mcleodmoores.examples.simulated.loader.config.ExamplesUsTreasuryCurve
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionMasterInitializer;
 import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGeneratorTool;
+import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesBankHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesSettlementHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.legalentity.ExamplesLegalEntityLoader;
@@ -202,6 +204,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadFxImpliedCurveCalculationConfigurations();
     loadUsTreasuryCurveConfigurations();
     loadIsdaCurveConfigurations();
+    loadCorporateBondConfigurations();
     loadViews();
   }
 
@@ -627,6 +630,20 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
+  /**
+   * Loads example corporate bond curves.
+   */
+  private void loadCorporateBondConfigurations() {
+    final Log log = new Log("Creating corporate bond curves");
+    try {
+      final ExamplesCorporateBondCurveConfigsLoader loader = new ExamplesCorporateBondCurveConfigsLoader();
+      loader.run(getToolContext());
+      log.done();
+    } catch (final RuntimeException e) {
+      log.fail(e);
+    }
+  }
+
   private void loadFxImpliedCurveCalculationConfigurations() {
     final Log log = new Log("Creating FX implied curve construction configurations");
     try {
@@ -671,8 +688,10 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
       loadCurrencyConfiguration();
       final ExamplesCurrencyHolidayLoader currency = new ExamplesCurrencyHolidayLoader();
       final ExamplesSettlementHolidayLoader settlement = new ExamplesSettlementHolidayLoader();
+      final ExamplesBankHolidayLoader bank = new ExamplesBankHolidayLoader();
       currency.run(getToolContext());
       settlement.run(getToolContext());
+      bank.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);

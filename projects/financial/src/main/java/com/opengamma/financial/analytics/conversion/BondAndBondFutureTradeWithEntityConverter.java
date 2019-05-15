@@ -29,8 +29,8 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Sets;
+import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WorkingDayCalendar;
-import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
@@ -63,7 +63,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -179,7 +178,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Converts a government bond security into an {@link InstrumentDefinition}.
-   * 
+   *
    * @param security
    *          The government bond security.
    * @return The security definition
@@ -192,7 +191,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Converts a corporate bond security into an {@link InstrumentDefinition}.
-   * 
+   *
    * @param security
    *          The corporate bond security.
    * @return The security definition
@@ -211,7 +210,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Converts a bond or bond future trade into a {@link InstrumentDefinition}.
-   * 
+   *
    * @param trade
    *          The trade, not null. Must be a {@link BondSecurity}, {@link BondFutureSecurity}, {@link BillSecurity} or {@link FloatingRateNoteSecurity}
    * @return The transaction definition
@@ -252,14 +251,14 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
       }
       final ZonedDateTime tradeDateTime = tradeDate.atTime(tradeTime).atZoneSameInstant(ZoneOffset.UTC);
       final InflationBondSecurity bondSecurity = (InflationBondSecurity) security;
-      final Calendar calendar;
+      final WorkingDayCalendar calendar;
       final ExternalId regionId = ExternalSchemes.financialRegionId(bondSecurity.getIssuerDomicile());
       // If the bond is Supranational, we use the calendar derived from the currency of the bond.
       // this may need revisiting.
       if (regionId.getValue().equals("SNAT")) { // Supranational
-        calendar = CalendarUtils.getCalendar(_holidaySource, bondSecurity.getCurrency());
+        calendar = WorkingDayCalendarUtils.getCalendarForCurrency(_holidaySource, bondSecurity.getCurrency());
       } else {
-        calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
+        calendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource, regionId, bondSecurity.getCurrency());
       }
       final ZonedDateTime settlementDateTime = ScheduleCalculator.getAdjustedDate(tradeDateTime,
           Integer.parseInt(bondSecurity.attributes().get().get("daysToSettle")), calendar);
@@ -308,7 +307,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Constructs a legal entity for a {@link BondSecurity}
-   * 
+   *
    * @param tradeAttributes
    *          The trade attributes
    * @param security
@@ -360,7 +359,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Constructs a legal entity for a {@link BillSecurity}
-   * 
+   *
    * @param tradeAttributes
    *          The trade attributes
    * @param security
@@ -389,7 +388,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Creates a fixed coupon bond using the full legal entity information available.
-   * 
+   *
    * @param security
    *          The bond security
    * @param legalEntity
@@ -403,15 +402,16 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
       @Override
       public InstrumentDefinition<?> visitCorporateBondSecurity(final CorporateBondSecurity bond) {
         final String domicile = bond.getIssuerDomicile();
-        final ExternalId genericCorporateBondId = ExternalId.of("CONVENTION", domicile + " Corporate Bond");
         ExternalIdBundle bundle = bond.getExternalIdBundle();
-        bundle = bundle.withExternalId(genericCorporateBondId);
         bundle = bundle.withExternalId(ExternalSchemes.financialRegionId(domicile));
         final BondConvention bondConvention = _conventionSource.getSingle(bundle, BondConvention.class);
         if (bondConvention == null) {
           if (_conventionBundleSource != null) {
+            final ExternalId genericCorporateBondId = ExternalId.of("CONVENTION", domicile + " Corporate Bond");
+            bundle = bundle.withExternalId(genericCorporateBondId);
             LOGGER.error("Could not get bond convention with ids {} from ConventionSource, trying ConventionBundleSource", bundle);
             final String conventionName = domicile + "_CORPORATE_BOND_CONVENTION";
+            @SuppressWarnings("deprecation")
             final ConventionBundle conventionBundle = _conventionBundleSource
                 .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
             if (conventionBundle == null) {
@@ -427,15 +427,16 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
       @Override
       public InstrumentDefinition<?> visitGovernmentBondSecurity(final GovernmentBondSecurity bond) {
         final String domicile = bond.getIssuerDomicile();
-        final ExternalId genericGovernmentBondId = ExternalId.of("CONVENTION", domicile + " Government Bond");
         ExternalIdBundle bundle = bond.getExternalIdBundle();
-        bundle = bundle.withExternalId(genericGovernmentBondId);
         bundle = bundle.withExternalId(ExternalSchemes.financialRegionId(domicile));
         final BondConvention bondConvention = _conventionSource.getSingle(bundle, BondConvention.class);
         if (bondConvention == null) {
           if (_conventionBundleSource != null) {
+            final ExternalId genericGovernmentBondId = ExternalId.of("CONVENTION", domicile + " Government Bond");
+            bundle = bundle.withExternalId(genericGovernmentBondId);
             LOGGER.error("Could not get bond convention with ids {} from ConventionSource, trying ConventionBundleSource", bundle);
             final String conventionName = domicile + "_GOVERNMENT_BOND_CONVENTION";
+            @SuppressWarnings("deprecation")
             final ConventionBundle conventionBundle = _conventionBundleSource
                 .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
             if (conventionBundle == null) {
@@ -450,7 +451,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
       /**
        * Creates {@link BondFixedSecurityDefinition} for fixed-coupon bonds or {@link PaymentFixedDefinition} for zero-coupon bonds.
-       * 
+       *
        * @param bond
        *          The security
        * @param convention
@@ -466,13 +467,13 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
           throw new OpenGammaRuntimeException("Could not find region for " + bond.getIssuerDomicile());
         }
         final Currency currency = bond.getCurrency();
-        final Calendar calendar;
+        final WorkingDayCalendar calendar;
         // If the bond is Supranational, we use the calendar derived from the currency of the bond.
         // this may need revisiting.
         if (regionId.getValue().equals("SNAT")) { // Supranational
-          calendar = CalendarUtils.getCalendar(_holidaySource, currency);
+          calendar = WorkingDayCalendarUtils.getCalendarForCurrency(_holidaySource, currency);
         } else {
-          calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
+          calendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource, regionId, currency);
         }
         if (bond.getInterestAccrualDate() == null) {
           throw new OpenGammaRuntimeException("Bond first interest accrual date was null");
@@ -491,13 +492,13 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
         final int settlementDays = convention.getSettlementDays();
         final Period paymentPeriod = ConversionUtils.getTenor(bond.getCouponFrequency());
         final ZonedDateTime firstCouponDate = ZonedDateTime.of(bond.getFirstCouponDate().toLocalDate().atStartOfDay(), zone);
-        return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar,
-            dayCount, businessDay, yieldConvention, isEOM, legalEntity);
+        return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays,
+            CalendarAdapter.of(calendar), dayCount, businessDay, yieldConvention, isEOM, legalEntity);
       }
 
       /**
        * Creates {@link BondFixedSecurityDefinition} for fixed-coupon bonds or {@link PaymentFixedDefinition} for zero-coupon bonds.
-       * 
+       *
        * @param bond
        *          The security
        * @param convention
@@ -515,13 +516,13 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
           throw new OpenGammaRuntimeException("Could not find region for " + bond.getIssuerDomicile());
         }
         final Currency currency = bond.getCurrency();
-        final Calendar calendar;
+        final WorkingDayCalendar calendar;
         // If the bond is Supranational, we use the calendar derived from the currency of the bond.
         // this may need revisiting.
         if (regionId.getValue().equals("SNAT")) { // Supranational
-          calendar = CalendarUtils.getCalendar(_holidaySource, currency);
+          calendar = WorkingDayCalendarUtils.getCalendarForCurrency(_holidaySource, currency);
         } else {
-          calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
+          calendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource, regionId, currency);
         }
         if (bond.getInterestAccrualDate() == null) {
           throw new OpenGammaRuntimeException("Bond first interest accrual date was null");
@@ -546,8 +547,8 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
         final int settlementDays = convention.getBondSettlementDays(firstAccrualDate, maturityDate);
         final Period paymentPeriod = ConversionUtils.getTenor(bond.getCouponFrequency());
         final ZonedDateTime firstCouponDate = ZonedDateTime.of(bond.getFirstCouponDate().toLocalDate().atStartOfDay(), zone);
-        return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar,
-            dayCount, businessDay, yieldConvention, isEOM, legalEntity);
+        return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays,
+            CalendarAdapter.of(calendar), dayCount, businessDay, yieldConvention, isEOM, legalEntity);
       }
 
     });
@@ -555,7 +556,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Creates a bill.
-   * 
+   *
    * @param security
    *          The bill security
    * @param legalEntity
@@ -567,7 +568,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
     final ZonedDateTime maturityDate = security.getMaturityDate().getExpiry();
     final double notional = 1;
     final int settlementDays = security.getDaysToSettle();
-    final WorkingDayCalendar calendar = WorkingDayCalendarAdapter.of(new HolidaySourceCalendarAdapter(_holidaySource, security.getRegionId()));
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource, security.getRegionId(), currency);
     final YieldConvention yieldConvention = security.getYieldConvention();
     final DayCount dayCount = security.getDayCount();
     return new BillSecurityDefinition(currency, maturityDate, notional, settlementDays, calendar, yieldConvention, dayCount, legalEntity);
@@ -575,7 +576,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Creates an ibor bond using the full legal entity information available.
-   * 
+   *
    * @param security
    *          The bond security
    * @param legalEntity
@@ -585,7 +586,8 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
   @SuppressWarnings("synthetic-access")
   private BondIborSecurityDefinition getIborBond(final FloatingRateNoteSecurity frn, final LegalEntity legalEntity) {
     final Currency currency = frn.getCurrency();
-    final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, ExternalSchemes.currencyRegionId(currency));
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource,
+        ExternalSchemes.currencyRegionId(currency), currency);
     final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) _securitySource
         .getSingle(frn.getBenchmarkRateId().toBundle());
     final IborIndexConvention iborConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
@@ -595,13 +597,14 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
     final ExternalId regionId = frn.getRegionId();
     final DayCount dayCount = frn.getDayCount();
     final BusinessDayConvention businessDay = BusinessDayConventions.FOLLOWING;
-    return null;
-    // return BondIborSecurityDefinition.from(maturityDate, firstAccrualDate, index, settlementDays, dayCount, businessDay, isEOM, legalEntity, calendar);
+    final int settlementDays = 0; // TODO
+    return BondIborSecurityDefinition.from(frn.getMaturityDate().getExpiry(), frn.getIssueDate(), index, settlementDays, dayCount, businessDay, isEOM,
+        legalEntity, CalendarAdapter.of(calendar));
   }
 
   /**
    * Creates a fixed coupon bond using the full legal entity information available.
-   * 
+   *
    * @param security
    *          The bond security
    * @param legalEntity
@@ -688,7 +691,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   /**
    * Constructs a {@link BondFuturesSecurityDefinition} from a {@link BondFutureSecurity}
-   * 
+   *
    * @param bondFuture
    *          The bond future security
    * @return The bond future definition

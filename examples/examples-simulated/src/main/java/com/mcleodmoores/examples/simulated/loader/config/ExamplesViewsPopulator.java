@@ -648,6 +648,16 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     definition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     definition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration config = new ViewCalculationConfiguration(definition, DEFAULT_CALC_CONFIG);
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+        ValueProperties.with(CURVE, "US AA Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+        ValueProperties.with(CURVE, "US A Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+        ValueProperties.with(CURVE, "US B Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+        ValueProperties.with(CURVE, "US CC Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+        ValueProperties.with(CURVE, "US C Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
     final ValueProperties properties = ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").withOptional(CURVE_CONSTRUCTION_CONFIG).get();
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
     config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
