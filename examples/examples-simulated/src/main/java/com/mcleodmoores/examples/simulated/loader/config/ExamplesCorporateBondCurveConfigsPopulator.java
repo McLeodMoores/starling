@@ -139,8 +139,9 @@ public class ExamplesCorporateBondCurveConfigsPopulator {
       final LegalEntityRegion regionFilter = new LegalEntityRegion(false, true, Collections.singleton(Country.US), false, Collections.<Currency> emptySet());
       final LegalEntityCreditRatings ratingFilter = new LegalEntityCreditRatings(true, Collections.singleton("RatingFitch"), false,
           Collections.<String> emptySet());
-      final CurveTypeConfiguration curveType = new IssuerCurveTypeConfiguration(new HashSet<>(Arrays.asList(Country.US, Pairs.of("RatingFitch", fitchRating))),
-          new HashSet<LegalEntityFilter<LegalEntity>>(Arrays.asList(ratingFilter, regionFilter)));
+      final Set<Object> keys = new HashSet<>(Arrays.asList(Country.US, Pairs.of("RatingFitch", fitchRating)));
+      final Set<LegalEntityFilter<LegalEntity>> filters = new HashSet<LegalEntityFilter<LegalEntity>>(Arrays.asList(ratingFilter, regionFilter));
+      final CurveTypeConfiguration curveType = new IssuerCurveTypeConfiguration(keys, filters);
       final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
       curveTypes.put(issuerName, Arrays.asList(curveType));
       configMaster.add(new ConfigDocument(ConfigItem.of(curveDefinition)));

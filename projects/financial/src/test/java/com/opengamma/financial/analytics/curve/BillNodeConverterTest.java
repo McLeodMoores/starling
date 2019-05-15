@@ -16,7 +16,6 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Sets;
 import com.mcleodmoores.date.WorkingDayCalendar;
-import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
@@ -36,7 +35,7 @@ import com.opengamma.core.obligor.CreditRating;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.region.impl.SimpleRegion;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.analytics.conversion.CalendarUtils;
+import com.opengamma.financial.analytics.conversion.WorkingDayCalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.BillNode;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -249,7 +248,7 @@ public class BillNodeConverterTest {
     final InMemoryHolidayMaster holidayMaster = new InMemoryHolidayMaster();
     holidayMaster.add(new HolidayDocument(holiday));
     final HolidaySource holidaySource = new MasterHolidaySource(holidayMaster);
-    final WorkingDayCalendar calendar = WorkingDayCalendarAdapter.of(CalendarUtils.getCalendar(regionSource, holidaySource, regionId));
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegion(regionSource, holidaySource, regionId);
     final ExternalId legalEntityId = ExternalId.of("Len", "Test");
     final ZonedDateTime maturityDate = DateUtils.getUTCDate(2016, 1, 1);
     final int daysToSettle = 2;
@@ -271,7 +270,8 @@ public class BillNodeConverterTest {
     BillSecurityDefinition expectedBillSecurity = new BillSecurityDefinition(Currency.USD, maturityDate, 1, daysToSettle, calendar, yieldConvention, dayCount,
         expectedLegalEntity);
     BillTransactionDefinition expectedBillDefinition = BillTransactionDefinition.fromYield(expectedBillSecurity, 1, VALUATION_DATE, yield, calendar);
-    BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), data, DATA_ID, VALUATION_DATE);
+    BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), data, DATA_ID,
+        VALUATION_DATE);
     BillTransactionDefinition billDefinition = (BillTransactionDefinition) billNode.accept(converter);
     assertEquals(billDefinition, expectedBillDefinition);
     // no legal entity available from source
