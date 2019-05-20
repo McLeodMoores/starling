@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.convention.businessday.BusinessDayConventionAdapter;
@@ -228,6 +229,9 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
               + FORMAT.format(bondCoupon) + "%");
           bond.addExternalId(
               ExternalSchemes.isinSecurityId("US" + referenceEntity.getExternalIdBundle().getValue(SCHEME) + "00" + (term < 10 ? "0" : "") + term));
+          for (final Rating rating : referenceEntity.getRatings()) {
+            bond.addAttribute(rating.getRater(), rating.getScore().name());
+          }
           final StandardCDSSecurity cds = new StandardCDSSecurity(ExternalIdBundle.EMPTY, "", startDate.toLocalDate(), maturity.toLocalDate(),
               referenceEntity.getExternalIdBundle().iterator().next(), new InterestRateNotional(Currency.USD, NOTIONAL), true, cdsCoupon, DebtSeniority.SENIOR);
           cds.setName(term + "Y " + referenceEntity.getName() + " CDS @ " + FORMAT.format(cdsCoupon * 10000) + "bp");
@@ -248,10 +252,21 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
       ManageableTrade trade = null;
       final FinancialSecurity security = createSecurity();
       if (security != null) {
-        final BigDecimal quantity = security instanceof CorporateBondSecurity ? BigDecimal.valueOf(NOTIONAL) : BigDecimal.ONE;
+        final BigDecimal quantity;
+        final Double premium;
+        final LocalDate premiumDate = LocalDate.now().minusDays(7);
+        if (security instanceof CorporateBondSecurity) {
+          quantity = BigDecimal.valueOf(NOTIONAL);
+          premium = ((CorporateBondSecurity) security).getIssuancePrice() / 100;
+        } else {
+          quantity = BigDecimal.ONE;
+          premium = 0.;
+        }
         final ZonedDateTime tradeDate = previousWorkingDay(ZonedDateTime.now().minusDays(getRandom(30)), getRandomCurrency());
         trade = new ManageableTrade(quantity, securityPersister.storeSecurity(security), tradeDate.toLocalDate(), tradeDate.toOffsetDateTime().toOffsetTime(),
             ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
+        trade.setPremium(premium);
+        trade.setPremiumDate(premiumDate);
       }
       return trade;
     }

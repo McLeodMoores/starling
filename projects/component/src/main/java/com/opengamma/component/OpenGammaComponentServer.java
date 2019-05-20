@@ -27,23 +27,18 @@ import com.opengamma.util.auth.AuthUtils;
 /**
  * Main entry point for OpenGamma component-based servers.
  * <p>
- * This class starts an OpenGamma JVM process using the specified config file.
- * A {@link OpenGammaComponentServerMonitor monitor} thread will also be started.
+ * This class starts an OpenGamma JVM process using the specified config file. A {@link OpenGammaComponentServerMonitor monitor} thread will also be started.
  * <p>
- * Two types of config file format are recognized - properties and INI.
- * A properties file must be in the standard Java format and contain a key "MANAGER.NEXT.FILE"
- * which is the resource location of the main INI file.
- * The INI file is described in {@link ComponentConfigIniLoader}.
+ * Two types of config file format are recognized - properties and INI. A properties file must be in the standard Java format and contain a key
+ * "MANAGER.NEXT.FILE" which is the resource location of the main INI file. The INI file is described in {@link ComponentConfigIniLoader}.
  * <p>
- * This class is not thread-safe.
- * A new instance should be created for each thread.
+ * This class is not thread-safe. A new instance should be created for each thread.
  */
 public class OpenGammaComponentServer {
 
   /**
-   * The server name property.
-   * DO NOT deduplicate with the same value in ComponentManager.
-   * This constant is used to set a system property before ComponentManager is class loaded.
+   * The server name property. DO NOT deduplicate with the same value in ComponentManager. This constant is used to set a system property before
+   * ComponentManager is class loaded.
    */
   private static final String OPENGAMMA_SERVER_NAME = "og.server.name";
   /**
@@ -83,6 +78,9 @@ public class OpenGammaComponentServer {
    */
   public static final String STARTUP_COMPLETE_MESSAGE = "======== OPENGAMMA STARTED in ";
 
+  private static String s_startingMessage = STARTING_MESSAGE;
+  private static String s_startupFailedMessage = STARTUP_FAILED_MESSAGE;
+  private static String s_startupCompleteMessage = STARTUP_COMPLETE_MESSAGE;
   /**
    * The logger in use.
    */
@@ -95,7 +93,8 @@ public class OpenGammaComponentServer {
   /**
    * Main method to start an OpenGamma JVM process.
    *
-   * @param args  the arguments
+   * @param args
+   *          the arguments
    */
   public static void main(final String[] args) { // CSIGNORE
     if (!new OpenGammaComponentServer().run(args)) {
@@ -103,15 +102,47 @@ public class OpenGammaComponentServer {
     }
   }
 
-  //-------------------------------------------------------------------------
+  /**
+   * Sets the starting message. If not set, {@link #STARTING_MESSAGE} is used.
+   * 
+   * @param message
+   *          the message, not null
+   */
+  public static void setStartingMessage(final String message) {
+    s_startingMessage = ArgumentChecker.notNull(message, "message");
+  }
+
+  /**
+   * Sets the startup failed message. If not set, {@link #STARTUP_FAILED_MESSAGE} is used.
+   * 
+   * @param message
+   *          the message, not null
+   */
+  public static void setStartupFailedMessage(final String message) {
+    s_startupFailedMessage = ArgumentChecker.notNull(message, "message");
+  }
+
+  /**
+   * Sets the startup complete message. If not set, {@link #STARTUP_COMPLETE_MESSAGE} is used.
+   * 
+   * @param message
+   *          the message, not null
+   */
+  public static void setStartupCompleteMessage(final String message) {
+    s_startupCompleteMessage = ArgumentChecker.notNull(message, "message");
+  }
+
+  // -------------------------------------------------------------------------
   /**
    * Runs the server.
    * <p>
    * This takes the same arguments as the standard main method command line.
    *
-   * @param args  the arguments, not null
+   * @param args
+   *          the arguments, not null
    * @return true if the server is started, false if there was a problem
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public boolean run(final String[] args) {
     // parse command line
@@ -175,22 +206,25 @@ public class OpenGammaComponentServer {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Runs the server from application code.
    * <p>
-   * This is intended for use by applications that wrap the server startup
-   * in another class with its own main method. This would typically be
-   * done to control the set of override properties using code.
+   * This is intended for use by applications that wrap the server startup in another class with its own main method. This would typically be done to control
+   * the set of override properties using code.
    * <p>
-   * A variety of loggers are provided in {@link ComponentLogger} nested classes.
-   * The {@code ComponentLogger.Console.VERBOSE} logger is used if null is passed in.
+   * A variety of loggers are provided in {@link ComponentLogger} nested classes. The {@code ComponentLogger.Console.VERBOSE} logger is used if null is passed
+   * in.
    *
-   * @param configFile  the configuration file to use, not null
-   * @param properties  the set of override properties to use, not null
-   * @param logger  the logger to use, null uses verbose
+   * @param configFile
+   *          the configuration file to use, not null
+   * @param properties
+   *          the set of override properties to use, not null
+   * @param logger
+   *          the logger to use, null uses verbose
    * @return the component repository, null if there was an error
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public ComponentRepository run(final String configFile, final Map<String, String> properties, final ComponentLogger logger) {
     ArgumentChecker.notNull(configFile, "configFile");
@@ -202,20 +236,21 @@ public class OpenGammaComponentServer {
   /**
    * Initializes a {@code ComponentManager} using a configuration file and properties.
    * <p>
-   * This is intended for use by applications that wrap this class.
-   * It allows the caller to initialize a {@link ComponentManager} in a manner
-   * identical to that of a standard system startup.
+   * This is intended for use by applications that wrap this class. It allows the caller to initialize a {@link ComponentManager} in a manner identical to that
+   * of a standard system startup.
    * <p>
-   * The manager will have had the {@code load(String)} method called.
-   * It can be queried to see the configuration loaded. It can also be used
-   * to actually start the system using {@code init()} and {@code start()}.
+   * The manager will have had the {@code load(String)} method called. It can be queried to see the configuration loaded. It can also be used to actually start
+   * the system using {@code init()} and {@code start()}.
    * <p>
    * This method will throw an exception on errors rather than using a logger.
    *
-   * @param configFile  the configuration file to use, not null
-   * @param properties  the set of override properties to use, not null
+   * @param configFile
+   *          the configuration file to use, not null
+   * @param properties
+   *          the set of override properties to use, not null
    * @return the property value, null if no such property
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public ComponentManager createManager(final String configFile, final Map<String, String> properties) {
     ArgumentChecker.notNull(configFile, "configFile");
@@ -226,12 +261,14 @@ public class OpenGammaComponentServer {
     return manager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the config files without starting the server.
    *
-   * @param configFile  the config file, not null
-   * @param properties  the properties read from the command line, not null
+   * @param configFile
+   *          the config file, not null
+   * @param properties
+   *          the properties read from the command line, not null
    * @return false always
    */
   protected boolean loadOnly(final String configFile, final Map<String, String> properties) {
@@ -248,13 +285,16 @@ public class OpenGammaComponentServer {
     return false;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Displays the value of the property from the config files without starting the server.
    *
-   * @param configFile  the config file, not null
-   * @param properties  the properties read from the command line, not null
-   * @param property  the property to display, not null
+   * @param configFile
+   *          the config file, not null
+   * @param properties
+   *          the properties read from the command line, not null
+   * @param property
+   *          the property to display, not null
    * @return false always
    */
   protected boolean displayProperty(final String configFile, final Map<String, String> properties, final String property) {
@@ -276,11 +316,15 @@ public class OpenGammaComponentServer {
   /**
    * Queries the value of the property from the config files without starting the server.
    *
-   * @param configFile  the config file, not null
-   * @param properties  the properties read from the command line, not null
-   * @param property  the property to display, not null
+   * @param configFile
+   *          the config file, not null
+   * @param properties
+   *          the properties read from the command line, not null
+   * @param property
+   *          the property to display, not null
    * @return the property value, null if no such property
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   protected String queryProperty(final String configFile, final Map<String, String> properties, final String property) {
     final ComponentManager manager = buildManager(configFile, properties);
@@ -288,17 +332,19 @@ public class OpenGammaComponentServer {
     return manager.getProperties().getValue(property);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Runs the server with config file.
    *
-   * @param configFile  the config file, not null
-   * @param properties  the properties read from the command line, not null
+   * @param configFile
+   *          the config file, not null
+   * @param properties
+   *          the properties read from the command line, not null
    * @return true if the server was started, false if there was a problem
    */
   protected ComponentRepository run(final String configFile, final Map<String, String> properties) {
     final long start = System.nanoTime();
-    _logger.logInfo(STARTING_MESSAGE);
+    _logger.logInfo(s_startingMessage);
     _logger.logDebug(" Config locator: " + configFile);
 
     ComponentRepository repo;
@@ -310,21 +356,23 @@ public class OpenGammaComponentServer {
 
     } catch (final Throwable ex) {
       _logger.logError(ex);
-      _logger.logError(STARTUP_FAILED_MESSAGE);
+      _logger.logError(s_startupFailedMessage);
       return null;
     }
 
     final long end = System.nanoTime();
-    _logger.logInfo(STARTUP_COMPLETE_MESSAGE + (end - start) / 1000000 + "ms ========");
+    _logger.logInfo(s_startupCompleteMessage + (end - start) / 1000000 + "ms ========");
     return repo;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds the component manager.
    *
-   * @param configFile  the config file, not null
-   * @param properties  the properties read from the command line, not null
+   * @param configFile
+   *          the config file, not null
+   * @param properties
+   *          the properties read from the command line, not null
    * @return the manager, not null
    */
   protected ComponentManager buildManager(final String configFile, final Map<String, String> properties) {
@@ -338,10 +386,10 @@ public class OpenGammaComponentServer {
   /**
    * Extracts the server name.
    * <p>
-   * This examines the first part of the file name and the last directory,
-   * merging these with a dash.
+   * This examines the first part of the file name and the last directory, merging these with a dash.
    *
-   * @param fileName  the name to extract from, not null
+   * @param fileName
+   *          the name to extract from, not null
    * @return the server name, not null
    */
   protected String extractServerName(final String fileName) {
@@ -359,10 +407,10 @@ public class OpenGammaComponentServer {
   }
 
   /**
-   * Called just before the server is started. The default implementation here
-   * creates a monitor thread that allows the server to be stopped remotely.
+   * Called just before the server is started. The default implementation here creates a monitor thread that allows the server to be stopped remotely.
    *
-   * @param manager the component manager
+   * @param manager
+   *          the component manager
    */
   protected void serverStarting(final ComponentManager manager) {
     OpenGammaComponentServerMonitor.create(manager.getRepository());
@@ -385,11 +433,12 @@ public class OpenGammaComponentServer {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the logger.
    *
-   * @param verbosity  the verbosity required, 0=errors, 3=debug
+   * @param verbosity
+   *          the verbosity required, 0=errors, 3=debug
    * @return the logger, not null
    */
   protected ComponentLogger createLogger(final int verbosity) {
@@ -399,14 +448,15 @@ public class OpenGammaComponentServer {
   /**
    * Creates the component manager.
    *
-   * @param serverName  the server name, not null
+   * @param serverName
+   *          the server name, not null
    * @return the manager, not null
    */
   protected ComponentManager createManager(final String serverName) {
     return new ComponentManager(serverName, _logger);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void usage() {
     final HelpFormatter helpFormatter = new HelpFormatter();
     helpFormatter.setWidth(100);
@@ -416,11 +466,9 @@ public class OpenGammaComponentServer {
   private static Options getOptions() {
     final Options options = new Options();
     options.addOption(new Option("h", HELP_OPTION, false, "print this help message"));
-    options.addOptionGroup(new OptionGroup()
-        .addOption(new Option("l", LOAD_ONLY_OPTION, false, "load the config, but do not start the server"))
+    options.addOptionGroup(new OptionGroup().addOption(new Option("l", LOAD_ONLY_OPTION, false, "load the config, but do not start the server"))
         .addOption(new Option("p", PROPERTY_DISPLAY_OPTION, true, "displays the calculated value of a property")));
-    options.addOptionGroup(new OptionGroup()
-        .addOption(new Option("q", QUIET_OPTION, false, "be quiet during startup"))
+    options.addOptionGroup(new OptionGroup().addOption(new Option("q", QUIET_OPTION, false, "be quiet during startup"))
         .addOption(new Option("v", VERBOSE_OPTION, false, "be verbose during startup")));
     return options;
   }

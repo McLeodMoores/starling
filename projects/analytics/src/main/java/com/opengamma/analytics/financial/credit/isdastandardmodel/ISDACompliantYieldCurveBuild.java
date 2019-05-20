@@ -115,6 +115,44 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
+   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if cdsTradeDate (today) is
+   * different from spotDate, the curve is adjusted accordingly.
+   *
+   * @param cdsTradeDate
+   *          The 'observation' date
+   * @param spotDate
+   *          The spot date of the instruments
+   * @param instrumentTypes
+   *          List of instruments - these are MoneyMarket or Swap
+   * @param tenors
+   *          The length of the instruments (e.g. a 5y swap would be Period.ofYears(5))
+   * @param rates
+   *          the par rates (as fractions) of the instruments
+   * @param moneyMarketDCC
+   *          The day count convention for money market instruments
+   * @param swapDCC
+   *          The day count convention for swap fixed payments
+   * @param swapInterval
+   *          Time between fixed payments (e.g. 3M fixed is Period.ofMonths(3))
+   * @param curveDCC
+   *          The day count convention used by the yield/discount curve - normally this is ACT/365
+   * @param convention
+   *          Specification for the handling of non-business days
+   * @param calendar
+   *          A calendar containing information about business days
+   * @param name
+   *          The curve name
+   * @return A yield curve observed from today
+   */
+  public static ISDACompliantYieldCurve build(final LocalDate cdsTradeDate, final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes,
+      final Period[] tenors, final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval, final DayCount curveDCC,
+      final BusinessDayConvention convention, final WorkingDayCalendar calendar, final String name) {
+    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(cdsTradeDate, spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC,
+        swapInterval, curveDCC, convention, calendar);
+    return builder.build(rates, name);
+  }
+
+  /**
    * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates.
    *
    * @param spotDate
@@ -364,7 +402,7 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
-   * build a yield curve
+   * Build a yield curve.
    *
    * @param rates
    *          The par rates of the instruments (as fractions)
@@ -377,6 +415,42 @@ public class ISDACompliantYieldCurveBuild {
 
     // set up curve with best guess rates
     ISDACompliantCurve curve = new ISDACompliantCurve(_t, rates);
+    // loop over the instruments and adjust the curve to price each in turn
+    int mmCount = 0;
+    int swapCount = 0;
+    for (int i = 0; i < n; i++) {
+      if (_instrumentTypes[i] == ISDAInstrumentTypes.MoneyMarket) {
+        // TODO in ISDA code money market instruments of less than 21 days have special treatment
+        final double z = 1.0 / (1 + rates[i] * _mmYF[mmCount++]);
+        curve = curve.withDiscountFactor(z, i);
+      } else {
+        curve = fitSwap(i, _swaps[swapCount++], curve, rates[i]);
+      }
+    }
+
+    final ISDACompliantYieldCurve baseCurve = new ISDACompliantYieldCurve(curve);
+    if (_offset == 0.0) {
+      return baseCurve;
+    }
+    return baseCurve.withOffset(_offset);
+  }
+
+  /**
+   * Build a yield curve and set the name.
+   *
+   * @param rates
+   *          The par rates of the instruments (as fractions)
+   * @param name
+   *          The curve name
+   * @return a yield curve
+   */
+  public ISDACompliantYieldCurve build(final double[] rates, final String name) {
+    ArgumentChecker.notEmpty(rates, "rates");
+    final int n = _instrumentTypes.length;
+    ArgumentChecker.isTrue(n == rates.length, "expecting " + n + " rates, given " + rates.length);
+
+    // set up curve with best guess rates
+    ISDACompliantCurve curve = new ISDACompliantCurve(_t, rates, name);
     // loop over the instruments and adjust the curve to price each in turn
     int mmCount = 0;
     int swapCount = 0;

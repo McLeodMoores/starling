@@ -17,63 +17,58 @@ import static com.opengamma.engine.value.ValueRequirementNames.YTM;
 import java.util.Collections;
 import java.util.Set;
 
-import com.opengamma.DataNotFoundException;
-import com.opengamma.core.position.Trade;
-import com.opengamma.core.region.Region;
+import com.mcleodmoores.financial.function.defaults.BondPerCountryDefaults.BondType;
 import com.opengamma.core.security.Security;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.financial.security.bond.BillSecurity;
+import com.opengamma.financial.security.bond.CorporateBondSecurity;
 import com.opengamma.financial.security.bond.GovernmentBondSecurity;
-import com.opengamma.id.ExternalId;
+import com.opengamma.financial.security.bond.MunicipalBondSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * Provides default property values per currency for bond trades to be used by functions.
  */
-public class GovernmentBondPerCountryDefaults extends DefaultPropertyFunction {
-  private static final String[] VALUE_REQUIREMENTS = new String[] {
-      PRESENT_VALUE,
-      PV01,
-      BUCKETED_PV01,
-      YIELD_CURVE_NODE_SENSITIVITIES,
-      BOND_DETAILS,
-      MODIFIED_DURATION,
-      MACAULAY_DURATION,
-      CONVEXITY,
-      YTM
-  };
-  private final String _countryCode;
+public class BondPerCurrencyDefaults extends DefaultPropertyFunction {
+  private static final String[] VALUE_REQUIREMENTS = new String[] { PRESENT_VALUE, PV01, BUCKETED_PV01, YIELD_CURVE_NODE_SENSITIVITIES, BOND_DETAILS,
+      MODIFIED_DURATION, MACAULAY_DURATION, CONVEXITY, YTM };
+  private final String _currency;
   private final String _curveExposuresName;
+  private final BondType _bondType;
 
-  public GovernmentBondPerCountryDefaults(final String countryCode, final String curveExposuresName) {
+  /**
+   * @param currency
+   *          the currency, not null
+   * @param curveExposuresName
+   *          the name of the curve exposure function, not null
+   * @param bondType
+   *          the type of the bond, not null
+   */
+  public BondPerCurrencyDefaults(final String currency, final String curveExposuresName, final String bondType) {
     super(ComputationTargetType.TRADE, true);
-    _countryCode = ArgumentChecker.notNull(countryCode, "countryCode");
+    _currency = ArgumentChecker.notNull(currency, "currency");
     _curveExposuresName = ArgumentChecker.notNull(curveExposuresName, "curveExposuresName");
+    _bondType = BondType.valueOf(ArgumentChecker.notNull(bondType, "bondType"));
   }
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Trade trade = target.getTrade();
-    final Security security = trade.getSecurity();
+    final Security security = target.getTrade().getSecurity();
     if (security instanceof GovernmentBondSecurity) {
-      return ((GovernmentBondSecurity) security).getIssuerDomicile().equals(_countryCode);
+      return _bondType == BondType.GOVERNMENT && ((GovernmentBondSecurity) security).getCurrency().getCode().equals(_currency);
+    }
+    if (security instanceof CorporateBondSecurity) {
+      return _bondType == BondType.CORPORATE && ((CorporateBondSecurity) security).getCurrency().getCode().equals(_currency);
+    }
+    if (security instanceof MunicipalBondSecurity) {
+      return _bondType == BondType.MUNICIPAL && ((MunicipalBondSecurity) security).getCurrency().getCode().equals(_currency);
     }
     if (security instanceof BillSecurity) {
-      // assuming all bills are government-issued
-      final ExternalId regionId = ((BillSecurity) security).getRegionId();
-      try {
-        final Region region = OpenGammaCompilationContext.getRegionSource(context).getSingle(regionId.toBundle());
-        if (region != null && region.getCountry().getCode().equals(_countryCode)) {
-          return true;
-        }
-      } catch (final DataNotFoundException e) {
-        return false;
-      }
+      return ((BillSecurity) security).getCurrency().getCode().equals(_currency);
     }
     return false;
   }
@@ -86,8 +81,8 @@ public class GovernmentBondPerCountryDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target,
-      final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     switch (propertyName) {
       case CURVE_EXPOSURES:
         return Collections.singleton(_curveExposuresName);
@@ -96,4 +91,3 @@ public class GovernmentBondPerCountryDefaults extends DefaultPropertyFunction {
     }
   }
 }
-

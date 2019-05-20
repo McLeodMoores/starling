@@ -109,6 +109,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   public static final UnorderedCurrencyPair[] CURRENCY_PAIRS = new UnorderedCurrencyPair[] { UnorderedCurrencyPair.of(Currency.USD, Currency.EUR),
       UnorderedCurrencyPair.of(Currency.USD, Currency.CHF), UnorderedCurrencyPair.of(Currency.USD, Currency.AUD),
       UnorderedCurrencyPair.of(Currency.USD, Currency.GBP), UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR) };
+  /** A list of currencies. */
+  public static final Currency[] CDS_CURRENCIES = new Currency[] { Currency.USD };
   /** The default maximum delta calculation period */
   private static final long MAX_DELTA_PERIOD = 500L;
   /** The default maximum full calculation period */
@@ -658,9 +660,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
         ValueProperties.with(CURVE, "US CC Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
         ValueProperties.with(CURVE, "US C Corp").with(CURVE_CONSTRUCTION_CONFIG, "US Corp").with(PROPERTY_CURVE_TYPE, DISCOUNTING).get()));
-    final ValueProperties properties = ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, "USD ISDA").withOptional(CURVE_CONSTRUCTION_CONFIG).get();
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
-    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
+    config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.none());
     definition.addViewCalculationConfiguration(config);
     return definition;
   }

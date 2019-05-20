@@ -44,8 +44,8 @@ import com.opengamma.util.time.Tenor;
  * Populates a config master with configurations for government bond curves.
  */
 public class ExamplesIsdaCurveConfigsPopulator {
-  private static final List<Currency> CCYS = Arrays.asList(Currency.AUD, /* Currency.CAD, */ Currency.CHF, Currency.EUR, Currency.GBP, Currency.JPY,
-      Currency.NZD, Currency.USD);
+  private static final List<Currency> CCYS = Arrays.asList(/* Currency.AUD, /* Currency.CAD, */ Currency.CHF, Currency.EUR, Currency.GBP, Currency.JPY,
+      /* Currency.NZD, */Currency.USD);
 
   /**
    * @param configMaster

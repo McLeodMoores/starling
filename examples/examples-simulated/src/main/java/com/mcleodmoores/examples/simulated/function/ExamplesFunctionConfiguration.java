@@ -11,7 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.bond.functions.BondDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.credit.cds.isda.functions.IsdaFunctions;
+import com.mcleodmoores.financial.function.curve.functions.CurveFunctions;
+import com.mcleodmoores.financial.function.curve.functions.CurveFunctions.CurveType;
+import com.mcleodmoores.financial.function.curve.functions.CurveFunctions.Providers;
 import com.mcleodmoores.financial.function.fx.functions.FxBlackMethodFunctions;
 import com.mcleodmoores.financial.function.fx.functions.FxDiscountingMethodFunctions;
 import com.mcleodmoores.financial.function.rates.functions.RatesDiscountingMethodFunctions;
@@ -22,13 +26,14 @@ import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctio
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
 import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
 import com.opengamma.lambdava.functions.Function1;
+import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.web.spring.StandardFunctionConfiguration;
 
 /**
- *
+ * Sets up the function configurations used for the examples project.
  */
 public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration {
   /** The logger */
@@ -39,19 +44,31 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   private final Map<UnorderedCurrencyPair, FxOptionInfo> _vanillaFxOptionInfo = new HashMap<>();
   private final Map<UnorderedCurrencyPair, FxForwardInfo> _fxForwardInfo = new HashMap<>();
   private final Map<Currency, LinearRatesInfo> _linearRatesInfo = new HashMap<>();
-  private final Map<Currency, BondInfo> _bondPerCurrencyInfo = new HashMap<>();
-  private final Map<Country, BondInfo> _bondPerCountryInfo = new HashMap<>();
+  private final Map<Currency, BondInfo> _governmentBondPerCurrencyInfo = new HashMap<>();
+  private final Map<Currency, BondInfo> _corporateBondPerCurrencyInfo = new HashMap<>();
+  private final Map<Country, BondInfo> _governmentBondPerCountryInfo = new HashMap<>();
+  private final Map<Country, BondInfo> _corporateBondPerCountryInfo = new HashMap<>();
+  private final Map<Currency, CdsInfo> _cdsPerCurrencyInfo = new HashMap<>();
+  private final Map<String, CurveType> _curveInfo = new HashMap<>();
+  private final ConfigMaster _configMaster;
 
   /**
    *
    */
-  public ExamplesFunctionConfiguration() {
+  public ExamplesFunctionConfiguration(final ConfigMaster configMaster) {
+    _configMaster = configMaster;
     setEquityOptionInfo();
     setVanillaFxOptionInfo();
     setFxForwardInfo();
     setLinearRatesInfo();
     setGovernmentBondInfo();
     setCorporateBondInfo();
+    setCdsInfo();
+    setCurveInfo();
+  }
+
+  protected ConfigMaster getConfigMaster() {
+    return _configMaster;
   }
 
   @Override
@@ -61,46 +78,57 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   /**
-   *
+   * Sets up equity option defaults.
    */
   protected void setEquityOptionInfo() {
   }
 
   /**
-   *
+   * Sets up vanilla FX options defaults.
    */
   protected void setVanillaFxOptionInfo() {
   }
 
   /**
-   *
+   * Sets up FX forward defaults.
    */
   protected void setFxForwardInfo() {
   }
 
   /**
-   *
+   * Sets up linear rates instrument defaults.
    */
   protected void setLinearRatesInfo() {
   }
 
   /**
-   *
+   * Sets up government bond defaults.
    */
   protected void setGovernmentBondInfo() {
   }
 
   /**
-   *
+   * Sets up corporate bond defaults.
    */
   protected void setCorporateBondInfo() {
+  }
 
+  /**
+   * Sets up CDS defaults.
+   */
+  protected void setCdsInfo() {
+  }
+
+  /**
+   * Sets up curve type defaults.
+   */
+  public void setCurveInfo() {
   }
 
   @Override
   protected FunctionConfigurationSource createObject() {
     return CombiningFunctionConfigurationSource.of(super.createObject(), curveFunctions(), multicurvePricingFunctions(),
-        blackDiscountingFunctionConfiguration(), discountingFunctionConfiguration());
+        blackDiscountingFunctionConfiguration(), discountingFunctionConfiguration(), creditFunctionConfiguration());
   }
 
   /**
@@ -157,89 +185,399 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return new EquityInfo(equity);
   }
 
+  /**
+   * Sets the defaults for vanilla FX options.
+   *
+   * @param info
+   *          the defaults
+   */
   public void setVanillaFxOptionInfo(final Map<UnorderedCurrencyPair, FxOptionInfo> info) {
     _vanillaFxOptionInfo.clear();
     _vanillaFxOptionInfo.putAll(info);
   }
 
+  /**
+   * Gets the defaults for vanilla FX options.
+   *
+   * @return the defaults
+   */
   public Map<UnorderedCurrencyPair, FxOptionInfo> getVanillaFxOptionInfo() {
     return _vanillaFxOptionInfo;
   }
 
+  /**
+   * Sets the defaults for a currency pair.
+   *
+   * @param ccy1
+   *          the first currency
+   * @param ccy2
+   *          the second currency
+   * @param info
+   *          the defaults
+   */
   public void setVanillaFxOptionInfo(final Currency ccy1, final Currency ccy2, final FxOptionInfo info) {
     _vanillaFxOptionInfo.put(UnorderedCurrencyPair.of(ccy1, ccy2), info);
   }
 
+  /**
+   * Gets the defaults for a currency pair.
+   *
+   * @param ccy1
+   *          the first currency
+   * @param ccy2
+   *          the second currency
+   * @return the defaults
+   */
   public FxOptionInfo getVanillaFxOptionInfo(final Currency ccy1, final Currency ccy2) {
     return _vanillaFxOptionInfo.get(UnorderedCurrencyPair.of(ccy1, ccy2));
   }
 
+  /**
+   * Sets the defaults for FX forwards.
+   *
+   * @param info
+   *          the defaults
+   */
   public void setFxForwardInfo(final Map<UnorderedCurrencyPair, FxForwardInfo> info) {
     _fxForwardInfo.clear();
     _fxForwardInfo.putAll(info);
   }
 
+  /**
+   * Gets the defaults for FX forwards.
+   *
+   * @return the defaults
+   */
   public Map<UnorderedCurrencyPair, FxForwardInfo> getFxForwardInfo() {
     return _fxForwardInfo;
   }
 
+  /**
+   * Sets the defaults for a currency pair.
+   *
+   * @param ccy1
+   *          the first currency
+   * @param ccy2
+   *          the second currency
+   * @param info
+   *          the defaults
+   */
   public void setFxForwardInfo(final Currency ccy1, final Currency ccy2, final FxForwardInfo info) {
     _fxForwardInfo.put(UnorderedCurrencyPair.of(ccy1, ccy2), info);
   }
 
+  /**
+   * Gets the defaults for a currency pair.
+   *
+   * @param ccy1
+   *          the first currency
+   * @param ccy2
+   *          the second currency
+   * @return the defaults
+   */
   public FxForwardInfo getFxForwardInfo(final Currency ccy1, final Currency ccy2) {
     return _fxForwardInfo.get(UnorderedCurrencyPair.of(ccy1, ccy2));
   }
 
+  /**
+   * Sets the defaults for linear rate instruments.
+   *
+   * @param info
+   *          the defaults
+   */
   public void setLinearRatesInfo(final Map<Currency, LinearRatesInfo> info) {
     _linearRatesInfo.clear();
     _linearRatesInfo.putAll(info);
   }
 
+  /**
+   * Gets the defaults for linear rate instruments.
+   *
+   * @return the defaults
+   */
   public Map<Currency, LinearRatesInfo> getLinearRatesInfo() {
     return _linearRatesInfo;
   }
 
+  /**
+   * Sets the defaults for a currency.
+   *
+   * @param ccy
+   *          the currency
+   * @param info
+   *          the defaults
+   */
   protected void setLinearRatesInfo(final Currency ccy, final LinearRatesInfo info) {
     _linearRatesInfo.put(ccy, info);
   }
 
+  /**
+   * Gets the defaults for a currency.
+   *
+   * @param ccy
+   *          the currency
+   * @return the defaults
+   */
   protected LinearRatesInfo getLinearRatesInfo(final Currency ccy) {
     return _linearRatesInfo.get(ccy);
   }
 
-  public void setBondPerCurrencyInfo(final Map<Currency, BondInfo> info) {
-    _bondPerCurrencyInfo.clear();
-    _bondPerCurrencyInfo.putAll(info);
+  /**
+   * Sets per-currency defaults for bonds.
+   *
+   * @param info
+   *          the defaults
+   */
+  public void setGovernmentBondPerCurrencyInfo(final Map<Currency, BondInfo> info) {
+    _governmentBondPerCurrencyInfo.clear();
+    _governmentBondPerCurrencyInfo.putAll(info);
   }
 
-  public Map<Currency, BondInfo> getBondPerCurrencyInfo() {
-    return _bondPerCurrencyInfo;
+  /**
+   * Sets per-currency defaults for bonds.
+   *
+   * @param info
+   *          the defaults
+   */
+  public void setCorporateBondPerCurrencyInfo(final Map<Currency, BondInfo> info) {
+    _corporateBondPerCurrencyInfo.clear();
+    _corporateBondPerCurrencyInfo.putAll(info);
   }
 
-  protected void setBondPerCurrencyInfo(final Currency ccy, final BondInfo info) {
-    _bondPerCurrencyInfo.put(ccy, info);
+  /**
+   * Sets per-currency defaults for bonds.
+   *
+   * @return the defaults
+   */
+  public Map<Currency, BondInfo> getGovernmentBondPerCurrencyInfo() {
+    return _governmentBondPerCurrencyInfo;
   }
 
-  protected BondInfo getBondPerCurrencyInfo(final Currency ccy) {
-    return _bondPerCurrencyInfo.get(ccy);
+  /**
+   * Sets per-currency defaults for bonds.
+   *
+   * @return the defaults
+   */
+  public Map<Currency, BondInfo> getCorporateBondPerCurrencyInfo() {
+    return _corporateBondPerCurrencyInfo;
   }
 
-  public void setBondPerCountryInfo(final Map<Country, BondInfo> info) {
-    _bondPerCountryInfo.clear();
-    _bondPerCountryInfo.putAll(info);
+  /**
+   * Sets the defaults for a currency.
+   *
+   * @param ccy
+   *          the currency
+   * @param info
+   *          the defaults
+   */
+  protected void setGovernmentBondPerCurrencyInfo(final Currency ccy, final BondInfo info) {
+    _governmentBondPerCurrencyInfo.put(ccy, info);
   }
 
-  public Map<Country, BondInfo> getBondPerCountryInfo() {
-    return _bondPerCountryInfo;
+  /**
+   * Sets the defaults for a currency.
+   *
+   * @param ccy
+   *          the currency
+   * @param info
+   *          the defaults
+   */
+  protected void setCorporateBondPerCurrencyInfo(final Currency ccy, final BondInfo info) {
+    _corporateBondPerCurrencyInfo.put(ccy, info);
   }
 
-  protected void setBondPerCountryInfo(final Country country, final BondInfo info) {
-    _bondPerCountryInfo.put(country, info);
+  /**
+   * Gets the defaults for a currency.
+   *
+   * @param ccy
+   *          the currency
+   * @return the defaults
+   */
+  protected BondInfo getGovernmentBondPerCurrencyInfo(final Currency ccy) {
+    return _governmentBondPerCurrencyInfo.get(ccy);
   }
 
-  protected BondInfo getBondPerCountryInfo(final Country country) {
-    return _bondPerCountryInfo.get(country);
+  /**
+   * Gets the defaults for a currency.
+   *
+   * @param ccy
+   *          the currency
+   * @return the defaults
+   */
+  protected BondInfo getCorporateBondPerCurrencyInfo(final Currency ccy) {
+    return _corporateBondPerCurrencyInfo.get(ccy);
+  }
+
+  /**
+   * Sets per-country defaults for bonds.
+   *
+   * @param info
+   *          the defaults
+   */
+  public void setGovernmentBondPerCountryInfo(final Map<Country, BondInfo> info) {
+    _governmentBondPerCountryInfo.clear();
+    _governmentBondPerCountryInfo.putAll(info);
+  }
+
+  /**
+   * Sets per-country defaults for bonds.
+   *
+   * @param info
+   *          the defaults
+   */
+  public void setCorporateBondPerCountryInfo(final Map<Country, BondInfo> info) {
+    _corporateBondPerCountryInfo.clear();
+    _corporateBondPerCountryInfo.putAll(info);
+  }
+
+  /**
+   * Gets per-country defaults for bonds.
+   *
+   * @return the defaults
+   */
+  public Map<Country, BondInfo> getGovernmentBondPerCountryInfo() {
+    return _governmentBondPerCountryInfo;
+  }
+
+  /**
+   * Gets per-country defaults for bonds.
+   *
+   * @return the defaults
+   */
+  public Map<Country, BondInfo> getCorporateBondPerCountryInfo() {
+    return _corporateBondPerCountryInfo;
+  }
+
+  /**
+   * Sets the defaults for a country.
+   *
+   * @param country
+   *          the country
+   * @param info
+   *          the defaults
+   */
+  protected void setGovernmentBondPerCountryInfo(final Country country, final BondInfo info) {
+    _governmentBondPerCountryInfo.put(country, info);
+  }
+
+  /**
+   * Sets the defaults for a country.
+   *
+   * @param country
+   *          the country
+   * @param info
+   *          the defaults
+   */
+  protected void setCorporateBondPerCountryInfo(final Country country, final BondInfo info) {
+    _corporateBondPerCountryInfo.put(country, info);
+  }
+
+  /**
+   * Gets the defaults for a country.
+   *
+   * @param country
+   *          the country
+   * @return the defaults
+   */
+  protected BondInfo getGovernmentBondPerCountryInfo(final Country country) {
+    return _governmentBondPerCountryInfo.get(country);
+  }
+
+  /**
+   * Gets the defaults for a country.
+   *
+   * @param country
+   *          the country
+   * @return the defaults
+   */
+  protected BondInfo getCorporateBondPerCountryInfo(final Country country) {
+    return _corporateBondPerCountryInfo.get(country);
+  }
+
+  /**
+   * Sets the defaults for CDS.
+   *
+   * @param info
+   *          the defaults
+   */
+  public void setCdsPerCurrencyInfo(final Map<Currency, CdsInfo> info) {
+    _cdsPerCurrencyInfo.clear();
+    _cdsPerCurrencyInfo.putAll(info);
+  }
+
+  /**
+   * Gets the defaults for CDS.
+   *
+   * @return the defaults
+   */
+  public Map<Currency, CdsInfo> getCdsPerCurrencyInfo() {
+    return _cdsPerCurrencyInfo;
+  }
+
+  /**
+   * Sets up defaults for a currency.
+   *
+   * @param currency
+   *          the currency
+   * @param info
+   *          the defaults
+   */
+  protected void setCdsPerCurrencyInfo(final Currency currency, final CdsInfo info) {
+    _cdsPerCurrencyInfo.put(currency, info);
+  }
+
+  /**
+   * Gets the defaults for a currency.
+   *
+   * @param currency
+   *          the currency
+   * @return the defaults
+   */
+  protected CdsInfo getCdsPerCurrencyInfo(final Currency currency) {
+    return _cdsPerCurrencyInfo.get(currency);
+  }
+
+  /**
+   * Sets the curve construction information.
+   *
+   * @param info
+   *          the information
+   */
+  public void setCurveInfo(final Map<String, CurveType> info) {
+    _curveInfo.clear();
+    _curveInfo.putAll(info);
+  }
+
+  /**
+   * Gets the types for curve construction configurations.
+   *
+   * @return the types
+   */
+  public Map<String, CurveType> getCurveInfo() {
+    return _curveInfo;
+  }
+
+  /**
+   * Sets the type of a curve construction configuration.
+   *
+   * @param name
+   *          the name
+   * @param type
+   *          the type
+   */
+  protected void setCurveInfo(final String name, final CurveType type) {
+    _curveInfo.put(name, type);
+  }
+
+  /**
+   * Gets the type of a curve construction configuration.
+   *
+   * @param name
+   *          the name of the configuration
+   * @return the type
+   */
+  protected CurveType getCurveInfo(final String name) {
+    return _curveInfo.get(name);
   }
 
   /**
@@ -373,6 +711,22 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     d.setXInterpolatorName(i.getXInterpolatorName("model/vanillafxoption"));
   }
 
+  protected void setCdsIsdaDefaults(final IsdaFunctions.CdsDefaults defaults) {
+    defaults.setCurrencyInfo(getCdsPerCurrencyInfo(new Function1<CdsInfo, IsdaFunctions.CdsDefaults.CurrencyInfo>() {
+
+      @Override
+      public IsdaFunctions.CdsDefaults.CurrencyInfo execute(final CdsInfo i) {
+        final IsdaFunctions.CdsDefaults.CurrencyInfo d = new IsdaFunctions.CdsDefaults.CurrencyInfo();
+        setCdsPerCurrencyDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+  protected void setCdsPerCurrencyDefaults(final CdsInfo i, final IsdaFunctions.CdsDefaults.CurrencyInfo d) {
+    d.setCurveExposuresName(i.getCurveExposureName("model/credit/cds"));
+  }
+
   protected void setFxForwardDefaults(final FxDiscountingMethodFunctions.FxForwardDefaults defaults) {
     defaults.setCurrencyPairInfo(getFxForwardInfo(new Function1<FxForwardInfo, FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo>() {
 
@@ -405,20 +759,43 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     d.setCurveExposuresName(i.getCurveExposureName("model/linearrates"));
   }
 
-  protected void setGovernmentBondDefaults(final BondDiscountingMethodFunctions.GovernmentBondDefaults defaults) {
-    defaults.setCountryInfo(getBondPerCountryInfo(new Function1<BondInfo, BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo>() {
+  protected void setGovernmentBondDefaults(final BondDiscountingMethodFunctions.BondDefaults defaults) {
+    defaults.setCountryInfo(getGovernmentBondPerCountryInfo(new Function1<BondInfo, BondDiscountingMethodFunctions.BondDefaults.CountryInfo>() {
 
       @Override
-      public BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo execute(final BondInfo i) {
-        final BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo();
-        setBondPerCountryDefaults(i, d);
+      public BondDiscountingMethodFunctions.BondDefaults.CountryInfo execute(final BondInfo i) {
+        final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.BondDefaults.CountryInfo();
+        setGovernmentBondPerCountryDefaults(i, d);
         return d;
       }
     }));
   }
 
-  protected void setBondPerCountryDefaults(final BondInfo i, final BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo d) {
+  protected void setGovernmentBondPerCountryDefaults(final BondInfo i, final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d) {
     d.setCurveExposuresName(i.getCurveExposureName("model/bond/govt"));
+    d.setBondType(i.getBondType("model/bond/govt"));
+  }
+
+  protected void setCorporateBondDefaults(final BondDiscountingMethodFunctions.BondDefaults defaults) {
+    defaults.setCountryInfo(getCorporateBondPerCountryInfo(new Function1<BondInfo, BondDiscountingMethodFunctions.BondDefaults.CountryInfo>() {
+
+      @Override
+      public BondDiscountingMethodFunctions.BondDefaults.CountryInfo execute(final BondInfo i) {
+        final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.BondDefaults.CountryInfo();
+        setCorporateBondPerCountryDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+  protected void setCorporateBondPerCountryDefaults(final BondInfo i, final BondDiscountingMethodFunctions.BondDefaults.CountryInfo d) {
+    d.setCurveExposuresName(i.getCurveExposureName("model/bond/corp"));
+    d.setBondType(i.getBondType("model/bond/corp"));
+  }
+
+  protected void setCurveTypeInformation(final CurveFunctions.Providers providers) {
+    providers.setConfigMaster(getConfigMaster());
+    providers.setCurveInfo(getCurveInfo());
   }
 
   protected FunctionConfigurationSource discountingFunctionConfiguration() {
@@ -426,9 +803,27 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     setFxForwardDefaults(fxForwardDefaults);
     final RatesDiscountingMethodFunctions.LinearRatesDefaults linearRatesDefaults = new RatesDiscountingMethodFunctions.LinearRatesDefaults();
     setLinearRatesDefaults(linearRatesDefaults);
-    final BondDiscountingMethodFunctions.GovernmentBondDefaults govtBondDefaults = new BondDiscountingMethodFunctions.GovernmentBondDefaults();
+    final BondDiscountingMethodFunctions.BondDefaults govtBondDefaults = new BondDiscountingMethodFunctions.BondDefaults();
     setGovernmentBondDefaults(govtBondDefaults);
-    return CombiningFunctionConfigurationSource.of(getRepository(fxForwardDefaults), getRepository(linearRatesDefaults), getRepository(govtBondDefaults));
+    final BondDiscountingMethodFunctions.BondDefaults corpBondDefaults = new BondDiscountingMethodFunctions.BondDefaults();
+    setCorporateBondDefaults(corpBondDefaults);
+    return CombiningFunctionConfigurationSource.of(getRepository(fxForwardDefaults), getRepository(linearRatesDefaults), getRepository(govtBondDefaults),
+        getRepository(corpBondDefaults));
+  }
+
+  @Override
+  protected FunctionConfigurationSource curveFunctions() {
+    final Providers providers = new CurveFunctions.Providers();
+    setCurveTypeInformation(providers);
+    final com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults defaults = new com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults();
+    setCurveDefaults(defaults);
+    return CombiningFunctionConfigurationSource.of(getRepository(defaults));
+  }
+
+  protected FunctionConfigurationSource creditFunctionConfiguration() {
+    final IsdaFunctions.CdsDefaults cdsIsdaDefaults = new IsdaFunctions.CdsDefaults();
+    setCdsIsdaDefaults(cdsIsdaDefaults);
+    return CombiningFunctionConfigurationSource.of(getRepository(cdsIsdaDefaults));
   }
 
   protected FunctionConfigurationSource blackDiscountingFunctionConfiguration() {
@@ -574,9 +969,9 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     }
   }
 
-  protected <T> Map<Currency, T> getBondPerCurrencyInfo(final Function1<BondInfo, T> filter) {
+  protected <T> Map<Currency, T> getGovernmentBondPerCurrencyInfo(final Function1<BondInfo, T> filter) {
     final Map<Currency, T> result = new HashMap<>();
-    for (final Map.Entry<Currency, BondInfo> e : getBondPerCurrencyInfo().entrySet()) {
+    for (final Map.Entry<Currency, BondInfo> e : getGovernmentBondPerCurrencyInfo().entrySet()) {
       final T entry = filter.execute(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
@@ -594,9 +989,49 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return result;
   }
 
-  protected <T> Map<Country, T> getBondPerCountryInfo(final Function1<BondInfo, T> filter) {
+  protected <T> Map<Currency, T> getCorporateBondPerCurrencyInfo(final Function1<BondInfo, T> filter) {
+    final Map<Currency, T> result = new HashMap<>();
+    for (final Map.Entry<Currency, BondInfo> e : getCorporateBondPerCurrencyInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
+  }
+
+  protected <T> Map<Country, T> getGovernmentBondPerCountryInfo(final Function1<BondInfo, T> filter) {
     final Map<Country, T> result = new HashMap<>();
-    for (final Map.Entry<Country, BondInfo> e : getBondPerCountryInfo().entrySet()) {
+    for (final Map.Entry<Country, BondInfo> e : getGovernmentBondPerCountryInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
+  }
+
+  protected <T> Map<Country, T> getCorporateBondPerCountryInfo(final Function1<BondInfo, T> filter) {
+    final Map<Country, T> result = new HashMap<>();
+    for (final Map.Entry<Country, BondInfo> e : getCorporateBondPerCountryInfo().entrySet()) {
       final T entry = filter.execute(e.getValue());
       if (entry instanceof InitializingBean) {
         try {
@@ -616,6 +1051,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
   public static class BondInfo {
     private final Value _curveExposuresName = new Value();
+    private final Value _bondType = new Value();
 
     public void setCurveExposureName(final String key, final String name) {
       _curveExposuresName.set(key, name);
@@ -623,6 +1059,46 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
     public String getCurveExposureName(final String key) {
       return _curveExposuresName.get(key);
+    }
+
+    public void setBondType(final String key, final String name) {
+      _bondType.set(key, name);
+    }
+
+    public String getBondType(final String key) {
+      return _bondType.get(key);
+    }
+  }
+
+  protected <T> Map<Currency, T> getCdsPerCurrencyInfo(final Function1<CdsInfo, T> filter) {
+    final Map<Currency, T> result = new HashMap<>();
+    for (final Map.Entry<Currency, CdsInfo> e : getCdsPerCurrencyInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
+  }
+
+  public static class CdsInfo {
+    private final Value _curveExposuresNames = new Value();
+
+    public void setCurveExposureName(final String key, final String name) {
+      _curveExposuresNames.set(key, name);
+    }
+
+    public String getCurveExposureName(final String key) {
+      return _curveExposuresNames.get(key);
     }
   }
 
@@ -998,4 +1474,5 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
       return _dividendType.get(key);
     }
   }
+
 }

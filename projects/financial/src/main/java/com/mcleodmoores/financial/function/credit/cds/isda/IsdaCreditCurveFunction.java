@@ -7,10 +7,10 @@ import static com.mcleodmoores.financial.function.properties.CurveCalculationPro
 import static com.opengamma.core.value.MarketDataRequirementNames.MARKET_VALUE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_METHOD;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_MARKET_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.HAZARD_RATE_CURVE;
-import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
 import java.util.Collections;
@@ -21,6 +21,7 @@ import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.data.IsdaCurveProvider;
 import com.mcleodmoores.financial.function.credit.cds.isda.util.CreditSecurityConverter;
 import com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunctionUtils;
 import com.mcleodmoores.financial.function.credit.configs.CreditCurveSpecification;
@@ -76,7 +77,11 @@ public class IsdaCreditCurveFunction extends AbstractFunction.NonCompiledInvoker
     }
     final CreditCurveSpecification specification = (CreditCurveSpecification) inputs.getValue(CURVE_SPECIFICATION);
     final SnapshotDataBundle marketData = (SnapshotDataBundle) inputs.getValue(CURVE_MARKET_DATA);
-    final ISDACompliantYieldCurve yieldCurve = (ISDACompliantYieldCurve) inputs.getValue(YIELD_CURVE);
+    final IsdaCurveProvider curves = (IsdaCurveProvider) inputs.getValue(CURVE_BUNDLE);
+    if (curves == null) {
+      throw new OpenGammaRuntimeException("Could not get yield curve");
+    }
+    final ISDACompliantYieldCurve yieldCurve = curves.getIsdaDiscountingCurve(cdsId.getCurrency());
     final int n = specification.getNodes().size();
     final CDSAnalytic[] creditAnalytics = new CDSAnalytic[n];
     final CDSQuoteConvention[] quotes = new CDSQuoteConvention[n];
@@ -132,7 +137,7 @@ public class IsdaCreditCurveFunction extends AbstractFunction.NonCompiledInvoker
     final CdsRecoveryRateIdentifier recoveryRateId = CdsRecoveryRateIdentifier.forSamedayCds(cdsId.getRedCode(), cdsId.getCurrency(), cdsId.getSeniority());
     final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties curveProperties = ValueProperties.builder().with(CURVE_CONSTRUCTION_CONFIG, config).with(PROPERTY_CURVE_TYPE, ISDA).get();
-    requirements.add(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
+    requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, curveProperties));
     requirements.add(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.of(cdsId), ValueProperties.none()));
     requirements.add(new ValueRequirement(CURVE_MARKET_DATA, ComputationTargetSpecification.of(cdsId), ValueProperties.none()));
     requirements.add(new ValueRequirement(MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateId.getExternalId()));

@@ -68,7 +68,7 @@ public class ExamplesFunctionConfigsPopulator extends AbstractTool<ToolContext> 
         Collections.<ParameterizedFunctionConfiguration> emptyList());
     storeFunctionDefinition(financialFunc);
 
-    storeFunctionDefinition(STANDARD, ExamplesSimulatedFunctionConfiguration.instance());
+    storeFunctionDefinition(STANDARD, ExamplesSimulatedFunctionConfiguration.instance(getToolContext().getConfigMaster()));
 
     final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE, ImmutableList.of(FINANCIAL, STANDARD, CUBE),
         Collections.<StaticFunctionConfiguration> emptyList(), Collections.<ParameterizedFunctionConfiguration> emptyList());

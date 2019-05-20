@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.examples.simulated.component;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,9 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.mcleodmoores.examples.simulated.function.ExamplesSimulatedFunctionConfiguration;
+import com.mcleodmoores.financial.function.curve.functions.CurveFunctions;
 import com.opengamma.component.factory.source.FunctionConfigurationSourceComponentFactory;
+import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 
 /**
@@ -25,7 +28,23 @@ public class ExampleFunctionConfigurationSourceComponentFactory extends Function
 
   @Override
   protected FunctionConfigurationSource standardConfiguration() {
-    return ExamplesSimulatedFunctionConfiguration.instance();
+    return ExamplesSimulatedFunctionConfiguration.instance(getConfigMaster());
+  }
+
+  @Override
+  protected List<FunctionConfigurationSource> curveAndSurfaceSources() {
+    final List<FunctionConfigurationSource> sources = new LinkedList<>();
+    sources.add(curveParameterConfigurations());
+    sources.add(fxForwardCurveConfigurations());
+    sources.add(timeSeriesConfigurations());
+    sources.add(surfaceConfigConfigurations());
+    return sources;
+  }
+
+  @Override
+  protected FunctionConfigurationSource curveConfigurations() {
+    final ExamplesSimulatedFunctionConfiguration functionsConfig = new ExamplesSimulatedFunctionConfiguration(getConfigMaster());
+    return CombiningFunctionConfigurationSource.of(CurveFunctions.providers(getConfigMaster(), functionsConfig.getCurveInfo()));
   }
 
   @Override

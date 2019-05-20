@@ -7,9 +7,11 @@ import static com.mcleodmoores.financial.function.properties.CurveCalculationPro
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_METHOD;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_MARKET_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
+import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.ROOT_FINDING;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import org.threeten.bp.Clock;
@@ -28,12 +31,18 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.data.IsdaCurveProvider;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.mcleodmoores.financial.function.credit.cds.isda.util.IsdaFunctionUtils;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurveBuild;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDAInstrumentTypes;
+import com.opengamma.analytics.financial.instrument.index.IborIndex;
+import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
+import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
+import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.Holiday;
@@ -119,6 +128,7 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
   private final class IsdaYieldCurveCompiledFunctionDefinition extends AbstractInvokingCompiledFunction {
     private final String _curveName;
     private final ValueProperties _curveProperties;
+    private final ValueProperties _bundleProperties;
     private final Set<ValueSpecification> _results;
 
     /**
@@ -136,16 +146,17 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
       super(earliestInvokation, latestInvokation);
       _curveName = ArgumentChecker.notNull(curveName, "curveName");
       _results = new HashSet<>();
-      // final ValueProperties properties = getBundleProperties(config.getName(), curveName);
       _curveProperties = getCurveProperties(config.getName(), curveName);
+      _bundleProperties = getBundleProperties(config.getName());
       _results.add(new ValueSpecification(YIELD_CURVE, ComputationTargetSpecification.NULL, _curveProperties));
-      // _results.add(new ValueSpecification(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
+      _results.add(new ValueSpecification(CURVE_BUNDLE, ComputationTargetSpecification.NULL, _bundleProperties));
+      _results.add(new ValueSpecification(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, _bundleProperties));
     }
 
-    // private ValueProperties getBundleProperties(final String configName, final String curveName) {
-    // return createValueProperties().with(CURVE, curveName).with(CURVE_CALCULATION_METHOD, ROOT_FINDING).with(PROPERTY_CURVE_TYPE, ISDA)
-    // .with(CURVE_CONSTRUCTION_CONFIG, configName).get();
-    // }
+    private ValueProperties getBundleProperties(final String configName) {
+      return createValueProperties().with(CURVE_CALCULATION_METHOD, ROOT_FINDING).with(PROPERTY_CURVE_TYPE, ISDA).with(CURVE_CONSTRUCTION_CONFIG, configName)
+          .get();
+    }
 
     private ValueProperties getCurveProperties(final String configName, final String curveName) {
       return createValueProperties().with(CURVE, curveName).with(CURVE_CALCULATION_METHOD, ROOT_FINDING).with(PROPERTY_CURVE_TYPE, ISDA)
@@ -227,10 +238,21 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
       }
       final Collection<Holiday> holidays = holidaySource.get(currency);
       final WorkingDayCalendar calendar = IsdaFunctionUtils.getCalendar(currency, holidays);
+      final String curveName = _curveProperties.getSingleValue(CURVE);
       final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(valuationDate, valuationDate, instrumentTypes, tenors, rates, cashDayCount,
-          swapDayCount, swapInterval, DayCounts.ACT_365, swapBusinessDayConvention, calendar);
-      final ValueSpecification spec = new ValueSpecification(YIELD_CURVE, target.toSpecification(), _curveProperties);
-      return Collections.singleton(new ComputedValue(spec, yieldCurve));
+          swapDayCount, swapInterval, DayCounts.ACT_365, swapBusinessDayConvention, calendar, curveName);
+      final IsdaCurveProvider bundle = IsdaCurveProvider.of(Collections.singletonMap(currency, yieldCurve),
+          Collections.<IborIndex, ISDACompliantYieldCurve> emptyMap(), Collections.<IndexON, ISDACompliantYieldCurve> emptyMap());
+      // TODO this is a dummy Jacobian for now
+      final CurveBuildingBlockBundle jacobian = getDummyJacobian(yieldCurve, _curveProperties.getSingleValue(CURVE));
+      final ValueSpecification yieldCurveSpec = new ValueSpecification(YIELD_CURVE, target.toSpecification(), _curveProperties);
+      final ValueSpecification bundleSpec = new ValueSpecification(CURVE_BUNDLE, target.toSpecification(), _bundleProperties);
+      final ValueSpecification jacobianSpec = new ValueSpecification(JACOBIAN_BUNDLE, target.toSpecification(), _bundleProperties);
+      final Set<ComputedValue> results = new HashSet<>();
+      results.add(new ComputedValue(yieldCurveSpec, yieldCurve));
+      results.add(new ComputedValue(bundleSpec, bundle));
+      results.add(new ComputedValue(jacobianSpec, jacobian));
+      return results;
     }
 
     @Override
@@ -319,6 +341,21 @@ public class IsdaYieldCurveFunction extends AbstractFunction {
         throw new OpenGammaRuntimeException(
             "Inconsistent swap *IBOR leg currency found in underlying of receive leg in " + curveNode + " for " + specification.getName());
       }
+    }
+
+    private CurveBuildingBlockBundle getDummyJacobian(final ISDACompliantYieldCurve yieldCurve, final String curveName) {
+      final int n = yieldCurve.getNumberOfKnots();
+      final double[][] data = new double[n][n];
+      for (int i = 0; i < n; i++) {
+        data[i][i] = 1;
+      }
+      final DoubleMatrix2D unit = new DoubleMatrix2D(data);
+      final LinkedHashMap<String, Pair<Integer, Integer>> dataMap = new LinkedHashMap<>();
+      dataMap.put(curveName, Pairs.of(0, n));
+      final CurveBuildingBlock block = new CurveBuildingBlock();
+      final LinkedHashMap<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> bundle = new LinkedHashMap<>();
+      bundle.put(curveName, Pairs.of(block, unit));
+      return new CurveBuildingBlockBundle(bundle);
     }
   }
 }

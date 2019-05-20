@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
+import com.mcleodmoores.financial.function.curve.functions.CurveFunctions.CurveType;
+import com.mcleodmoores.financial.function.defaults.BondPerCountryDefaults.BondType;
 import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
@@ -16,6 +18,7 @@ import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
+import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
@@ -28,14 +31,15 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   /**
    * @return the configuration source
    */
-  public static FunctionConfigurationSource instance() {
-    return new ExamplesSimulatedFunctionConfiguration().getObjectCreating();
+  public static FunctionConfigurationSource instance(final ConfigMaster configMaster) {
+    return new ExamplesSimulatedFunctionConfiguration(configMaster).getObjectCreating();
   }
 
   /**
    * Default constructor.
    */
-  public ExamplesSimulatedFunctionConfiguration() {
+  public ExamplesSimulatedFunctionConfiguration(final ConfigMaster configMaster) {
+    super(configMaster);
     setMark2MarketField("CLOSE");
     setCostOfCarryField("COST_OF_CARRY");
     setAbsoluteTolerance(0.0001);
@@ -89,12 +93,20 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   protected void setCorporateBondInfo() {
     final Set<Country> countries = Country.getAvailableCountries();
     for (final Country c : countries) {
-      setGovernmentBondPerCountryInfo(c);
+      setCorporateBondPerCountryInfo(c);
+    }
+  }
+
+  @Override
+  protected void setCdsInfo() {
+    final Currency[] currencies = ExamplesViewsPopulator.CDS_CURRENCIES;
+    for (final Currency c : currencies) {
+      setCdsPerCurrencyInfo(c);
     }
   }
 
   /**
-   * Creates empty default per-equity information objects for equity options.
+   * Creates default per-equity information objects for equity options.
    *
    * @param ticker
    *          The equity ticker
@@ -120,7 +132,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   /**
-   * Creates empty defaults for vanilla FX options,
+   * Creates defaults for vanilla FX options,
    *
    * @param ccy1
    *          the first currency
@@ -138,7 +150,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   /**
-   * Creates empty defaults for FX forwards.
+   * Creates defaults for FX forwards.
    *
    * @param ccy1
    *          the first currency
@@ -152,7 +164,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   /**
-   * Creates empty defaults for linear interest rate products.
+   * Creates defaults for linear interest rate products.
    *
    * @param ccy
    *          the currency
@@ -164,7 +176,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   /**
-   * Creates empty defaults for government bonds.
+   * Creates defaults for government bonds.
    *
    * @param country
    *          the country
@@ -172,18 +184,60 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   protected void setGovernmentBondPerCountryInfo(final Country country) {
     final BondInfo i = new BondInfo();
     i.setCurveExposureName("model/bond/govt", "Govt Bond Exposures");
-    setBondPerCountryInfo(country, i);
+    i.setBondType("model/bond/govt", BondType.GOVERNMENT.name());
+    setGovernmentBondPerCountryInfo(country, i);
   }
 
   /**
-   * Creates empty defaults for corporate bonds.
+   * Creates defaults for corporate bonds.
    *
    * @param country
    *          the country
    */
-  protected void setCorporateBondPerCurrencyInfo(final Country country) {
+  protected void setCorporateBondPerCountryInfo(final Country country) {
     final BondInfo i = new BondInfo();
     i.setCurveExposureName("model/bond/corp", "Corp Bond Exposures");
-    setBondPerCountryInfo(country, i);
+    i.setBondType("model/bond/corp", BondType.CORPORATE.name());
+    setCorporateBondPerCountryInfo(country, i);
   }
+
+  /**
+   * Creates defaults for CDS.
+   *
+   * @param currency
+   *          the currency
+   */
+  protected void setCdsPerCurrencyInfo(final Currency currency) {
+    final CdsInfo i = new CdsInfo();
+    i.setCurveExposureName("model/credit/cds", "CDS Exposures");
+    setCdsPerCurrencyInfo(currency, i);
+  }
+
+  /**
+   * Sets up curve functions.
+   */
+  @Override
+  public void setCurveInfo() {
+    setCurveInfo("AUD Bank Bill Curves (1)", CurveType.DISCOUNTING);
+    setCurveInfo("AUD Bank Bill Curves (2)", CurveType.DISCOUNTING);
+    setCurveInfo("AUD FX Implied Curve", CurveType.DISCOUNTING);
+    setCurveInfo("CHF FX Implied Curve", CurveType.DISCOUNTING);
+    setCurveInfo("EUR FX Implied Curve", CurveType.DISCOUNTING);
+    setCurveInfo("GBP FX Implied Curve", CurveType.DISCOUNTING);
+    setCurveInfo("JPY FX Implied Curve", CurveType.DISCOUNTING);
+    setCurveInfo("NZD FX Implied Curve", CurveType.DISCOUNTING);
+    setCurveInfo("Default CHF Curves", CurveType.DISCOUNTING);
+    setCurveInfo("Default EUR Curves", CurveType.DISCOUNTING);
+    setCurveInfo("Default GBP Curves", CurveType.DISCOUNTING);
+    setCurveInfo("Default JPY Curves", CurveType.DISCOUNTING);
+    setCurveInfo("Default USD Curves", CurveType.DISCOUNTING);
+    setCurveInfo("CHF ISDA", CurveType.ISDA);
+    setCurveInfo("EUR ISDA", CurveType.ISDA);
+    setCurveInfo("GBP ISDA", CurveType.ISDA);
+    setCurveInfo("JPY ISDA", CurveType.ISDA);
+    setCurveInfo("USD ISDA", CurveType.ISDA);
+    setCurveInfo("US Treasury", CurveType.BOND);
+    setCurveInfo("US Corp", CurveType.BOND);
+  }
+
 }

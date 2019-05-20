@@ -8,8 +8,8 @@ package com.opengamma.financial.analytics.model;
 import java.util.Collections;
 import java.util.List;
 
-import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
-import com.mcleodmoores.financial.function.credit.cds.isda.config.IsdaFunctions;
+import com.mcleodmoores.financial.function.bond.functions.BondDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.credit.cds.isda.functions.IsdaFunctions;
 import com.mcleodmoores.financial.function.fx.functions.FxDiscountingMethodFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;

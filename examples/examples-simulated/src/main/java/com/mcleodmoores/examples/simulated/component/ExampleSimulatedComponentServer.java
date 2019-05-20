@@ -18,6 +18,9 @@ public class ExampleSimulatedComponentServer extends OpenGammaComponentServer {
     } else {
       args = clArgs;
     }
+    OpenGammaComponentServer.setStartingMessage("======== STARTING STARLING ========");
+    OpenGammaComponentServer.setStartupCompleteMessage("======== STARLING STARTED in ");
+    OpenGammaComponentServer.setStartupFailedMessage("======== STARLING STARTUP FAILED ========");
     if (!new ExampleSimulatedComponentServer().run(args)) {
       ShutdownUtils.exit(-1);
     }

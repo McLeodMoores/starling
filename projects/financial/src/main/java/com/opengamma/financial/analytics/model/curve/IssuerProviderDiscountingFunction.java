@@ -21,6 +21,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
+import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -412,8 +413,7 @@ public class IssuerProviderDiscountingFunction
       result.add(new ComputedValue(jacobianSpec, pair.getSecond()));
       for (final String curveName : getCurveNames()) {
         final ValueProperties curveProperties = bundleProperties.copy().withoutAny(CURVE).withoutAny(CURVE_SENSITIVITY_CURRENCY).with(CURVE, curveName)
-            // .with(PROPERTY_CURVE_TYPE, ISSUER)
-            .get();
+            .with(PROPERTY_CURVE_TYPE, getCurveTypeProperty()).get();
         YieldAndDiscountCurve curve = provider.getIssuerCurve(curveName);
         if (curve == null) {
           curve = provider.getMulticurveProvider().getCurve(curveName);

@@ -25,7 +25,6 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Instant;
 
-import com.mcleodmoores.financial.function.credit.cds.isda.config.IsdaFunctions;
 import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
@@ -190,7 +189,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
   }
 
   protected FunctionConfigurationSource curveConfigurations() {
-    return CombiningFunctionConfigurationSource.of(CurveFunctions.providers(getConfigMaster()), IsdaFunctions.providers(getConfigMaster()));
+    return CombiningFunctionConfigurationSource.of(CurveFunctions.providers(getConfigMaster()));
   }
 
   protected FunctionConfigurationSource curveParameterConfigurations() {
@@ -203,7 +202,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Adds volatility cube functions.
-   * 
+   *
    * @return A source of volatility cube functions
    */
   protected FunctionConfigurationSource volatilityCubeConfigConfigurations() {
@@ -212,7 +211,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Adds surface functions.
-   * 
+   *
    * @return A source of surface functions
    */
   protected FunctionConfigurationSource surfaceConfigConfigurations() {
@@ -251,7 +250,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Gets the list of cube function configuration sources.
-   * 
+   *
    * @return The cube function configuration sources, not null
    */
   protected List<FunctionConfigurationSource> cubeSources() {

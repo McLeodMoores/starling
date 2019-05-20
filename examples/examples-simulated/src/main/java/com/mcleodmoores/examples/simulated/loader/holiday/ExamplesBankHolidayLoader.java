@@ -58,9 +58,14 @@ public class ExamplesBankHolidayLoader extends AbstractTool<ToolContext> {
     final RegionSearchResult searchResult = regionMaster.search(searchRequest);
     for (final RegionDocument doc : searchResult.getDocuments()) {
       final Region region = doc.getRegion();
-      final ManageableHoliday calendar = new ManageableHoliday();
+      ManageableHoliday calendar = new ManageableHoliday();
       calendar.setType(HolidayType.BANK);
       calendar.setRegionExternalId(ExternalSchemes.financialRegionId(region.getCountry().getCode()));
+      calendar.setHolidayDates(HOLIDAYS);
+      storeHolidays(calendar, holidayMaster);
+      calendar = new ManageableHoliday();
+      calendar.setType(HolidayType.BANK);
+      calendar.setRegionExternalId(ExternalSchemes.countryRegionId(region.getCountry()));
       calendar.setHolidayDates(HOLIDAYS);
       storeHolidays(calendar, holidayMaster);
     }
