@@ -32,15 +32,12 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
    */
   /* package */enum PivotField {
 
-    FUNCTION_IDENTIFIER(FUNCTION_IDENTIFIER_MASK),
-    FUNCTION_PARAMETERS(FUNCTION_PARAMETERS_MASK),
-    TARGET(TARGET_MASK),
-    INPUTS(INPUTS_MASK),
-    OUTPUTS(OUTPUTS_MASK);
+    FUNCTION_IDENTIFIER(FUNCTION_IDENTIFIER_MASK), FUNCTION_PARAMETERS(FUNCTION_PARAMETERS_MASK), TARGET(TARGET_MASK), INPUTS(INPUTS_MASK), OUTPUTS(
+        OUTPUTS_MASK);
 
     private int _mask;
 
-    private PivotField(final int mask) {
+    PivotField(final int mask) {
       _mask = mask;
     }
 
@@ -80,7 +77,7 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
 
     private final PivotField _pivot;
 
-    public TreeEntry(final PivotField pivot) {
+    TreeEntry(final PivotField pivot) {
       _pivot = pivot;
     }
 
@@ -305,7 +302,8 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     /**
      * Removes the rule from the tree.
      *
-     * @param rule the rule to remove
+     * @param rule
+     *          the rule to remove
      * @return true if the tree is non-empty, false if the tree fragment is empty after the removal
      */
     public boolean remove(final FunctionBlacklistRule rule) {
@@ -347,7 +345,7 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     private volatile TreeEntry _wildcard;
     private volatile Map<Object, TreeEntry> _values;
 
-    public MidTreeEntry(final PivotField pivot) {
+    MidTreeEntry(final PivotField pivot) {
       super(pivot);
     }
 
@@ -565,7 +563,7 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
     private volatile int _wildcard;
     private volatile Set<Object> _values;
 
-    public LeafTreeEntry(final PivotField pivot) {
+    LeafTreeEntry(final PivotField pivot) {
       super(pivot);
     }
 
@@ -793,7 +791,7 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
 
     private final WeakReference<DefaultFunctionBlacklistQuery> _ref;
 
-    public Listener(final FunctionBlacklist blacklist, final DefaultFunctionBlacklistQuery ref) {
+    Listener(final FunctionBlacklist blacklist, final DefaultFunctionBlacklistQuery ref) {
       super(blacklist);
       _ref = new WeakReference<>(ref);
     }
@@ -935,7 +933,8 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
   /**
    * Adds a rule to the collection used. The content of the rule is copied - no reference to the rule is retained. The caller must hold the monitor.
    *
-   * @param rule the rule to add, not null
+   * @param rule
+   *          the rule to add, not null
    */
   private void addRuleImpl(final FunctionBlacklistRule rule) {
     if (rule.getInputs() != null && !rule.isInputsExactMatch() || rule.getOutputs() != null && !rule.isOutputsExactMatch()) {
@@ -954,7 +953,8 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
   /**
    * Removes a rule from the collection used. The rule must exist in the collection. The caller must hold the monitor.
    *
-   * @param rule the rule to remove, not null
+   * @param rule
+   *          the rule to remove, not null
    */
   private void removeRuleImpl(final FunctionBlacklistRule rule) {
     if (!_root.remove(rule)) {

@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.quandl.util;
 
 /**
@@ -9,8 +12,11 @@ public class Quandl4OpenGammaRuntimeException extends RuntimeException {
 
   /**
    * Constructor when another exception is being included.
-   * @param message a message describing the exception, not null
-   * @param cause the cause of the exception if there is one, not null
+   * 
+   * @param message
+   *          a message describing the exception, not null
+   * @param cause
+   *          the cause of the exception if there is one, not null
    */
   public Quandl4OpenGammaRuntimeException(final String message, final Throwable cause) {
     super(message, cause);
@@ -18,7 +24,9 @@ public class Quandl4OpenGammaRuntimeException extends RuntimeException {
 
   /**
    * Constructor when exception is not caused by an underlying exception.
-   * @param message a message describing the exception, not null
+   * 
+   * @param message
+   *          a message describing the exception, not null
    */
   public Quandl4OpenGammaRuntimeException(final String message) {
     super(message);

@@ -74,7 +74,7 @@ public class PositionSourceResolver {
     public UniqueId resolveObjectId(final ObjectId identifier, final VersionCorrection versionCorrection) {
       try {
         // [PLAT-4491] TODO: PositionSource doesn't have a trade by OID lookup. This is probably wrong,
-        //  but no worse than treating the identifier as v/c resolved
+        // but no worse than treating the identifier as v/c resolved
         return getUnderlying().getTrade(identifier.atLatestVersion()).getUniqueId();
       } catch (final DataNotFoundException e) {
         return null;
@@ -90,7 +90,7 @@ public class PositionSourceResolver {
 
   private static class PositionResolver extends PositionSourceResolver implements Resolver<Position> {
 
-    public PositionResolver(final PositionSource underlying) {
+    PositionResolver(final PositionSource underlying) {
       super(underlying);
     }
 
@@ -140,7 +140,7 @@ public class PositionSourceResolver {
 
   private static class PortfolioResolver extends PositionSourceResolver implements Resolver<Portfolio>, DeepResolver {
 
-    public PortfolioResolver(final PositionSource underlying) {
+    PortfolioResolver(final PositionSource underlying) {
       super(underlying);
     }
 
@@ -200,7 +200,7 @@ public class PositionSourceResolver {
 
   private static class PortfolioNodeResolver extends PositionSourceResolver implements Resolver<PortfolioNode>, DeepResolver {
 
-    public PortfolioNodeResolver(final PositionSource underlying) {
+    PortfolioNodeResolver(final PositionSource underlying) {
       super(underlying);
     }
 

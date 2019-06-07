@@ -20,7 +20,7 @@ import com.opengamma.util.credit.CreditCurveIdentifier;
  */
 @FudgeBuilderFor(SingleNameIdentifiable.class)
 public class SingleNameIdentifiableFudgeBuilder implements FudgeBuilder<SingleNameIdentifiable> {
-  private static String ID_FIELD = "id";
+  private static final String ID_FIELD = "id";
 
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final SingleNameIdentifiable object) {

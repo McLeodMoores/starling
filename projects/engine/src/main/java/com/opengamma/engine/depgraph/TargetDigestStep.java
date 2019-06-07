@@ -25,8 +25,8 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Calculates the target digest and considers existing nodes for a pattern to use for direct application.
  * <p>
- * Note that this step will produce unexpected dependency graphs if functions in the repository have applicability rules or behaviors that differ for
- * two targets with the same digest. Care should be taken when enabling this algorithm.
+ * Note that this step will produce unexpected dependency graphs if functions in the repository have applicability rules or behaviors that differ for two
+ * targets with the same digest. Care should be taken when enabling this algorithm.
  */
 /* package */final class TargetDigestStep extends FunctionIterationStep.IterationBaseStep {
 
@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.Triple;
   private long _timeSpent;
   private ValueRequirement _desiredValue;
 
-  public TargetDigestStep(final ResolveTask task, final GraphBuildingContext.ResolutionIterator resolutions) {
+  TargetDigestStep(final ResolveTask task, final GraphBuildingContext.ResolutionIterator resolutions) {
     super(task);
     _resolutions = resolutions;
   }

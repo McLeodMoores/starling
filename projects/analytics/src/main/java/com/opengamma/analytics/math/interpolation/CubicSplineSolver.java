@@ -16,10 +16,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Abstract class of solving cubic spline problem
- * Implementation depends on endpoint conditions
- * "solve" for 1-dimensional problem and "solveMultiDim" for  multi-dimensional problem should be implemented in inherited classes
- * "getKnotsMat1D" is overridden in certain cases
+ * Abstract class of solving cubic spline problem. Implementation depends on endpoint conditions "solve" for 1-dimensional problem and "solveMultiDim" for
+ * multi-dimensional problem should be implemented in inherited classes "getKnotsMat1D" is overridden in certain cases
  */
 abstract class CubicSplineSolver {
 
@@ -28,7 +26,7 @@ abstract class CubicSplineSolver {
   /**
    * One-dimensional cubic spline. If (xValues length) = (yValues length), Not-A-Knot endpoint conditions are used If (xValues length) + 2 = (yValues length),
    * Clamped endpoint conditions are used
-   * 
+   *
    * @param xValues
    *          X values of data
    * @param yValues
@@ -36,12 +34,12 @@ abstract class CubicSplineSolver {
    * @return Coefficient matrix whose i-th row vector is (a_0,a_1,...) for i-th intervals, where a_0,a_1,... are coefficients of f(x) = a_0 + a_1 x^1 + ....
    *         Note that the degree of polynomial is NOT necessarily 3
    */
-  public abstract DoubleMatrix2D solve(final double[] xValues, final double[] yValues);
+  public abstract DoubleMatrix2D solve(double[] xValues, double[] yValues);
 
   /**
    * One-dimensional cubic spline. If (xValues length) = (yValues length), Not-A-Knot endpoint conditions are used If (xValues length) + 2 = (yValues length),
    * Clamped endpoint conditions are used
-   * 
+   *
    * @param xValues
    *          X values of data
    * @param yValues
@@ -49,12 +47,12 @@ abstract class CubicSplineSolver {
    * @return Array of matrices: the 0-th element is Coefficient Matrix (same as the solve method above), the i-th element is \frac{\partial a^{i-1}_j}{\partial
    *         yValues_k} where a_0^i,a_1^i,... are coefficients of f^i(x) = a_0^i + a_1^i (x - xValues_{i}) + .... with x \in [xValues_{i}, xValues_{i+1}]
    */
-  public abstract DoubleMatrix2D[] solveWithSensitivity(final double[] xValues, final double[] yValues);
+  public abstract DoubleMatrix2D[] solveWithSensitivity(double[] xValues, double[] yValues);
 
   /**
    * Multi-dimensional cubic spline. If (xValues length) = (yValuesMatrix NumberOfColumn), Not-A-Knot endpoint conditions are used If (xValues length) + 2 =
    * (yValuesMatrix NumberOfColumn), Clamped endpoint conditions are used
-   * 
+   *
    * @param xValues
    *          X values of data
    * @param yValuesMatrix
@@ -62,10 +60,11 @@ abstract class CubicSplineSolver {
    * @return A set of coefficient matrices whose i-th row vector is (a_0,a_1,...) for the i-th interval, where a_0,a_1,... are coefficients of f(x) = a_0 + a_1
    *         x^1 + .... Each matrix corresponds to an interpolation (xValues, yValuesMatrix RowVector) Note that the degree of polynomial is NOT necessarily 3
    */
-  public abstract DoubleMatrix2D[] solveMultiDim(final double[] xValues, final DoubleMatrix2D yValuesMatrix);
+  public abstract DoubleMatrix2D[] solveMultiDim(double[] xValues, DoubleMatrix2D yValuesMatrix);
 
   /**
-   * @param xValues X values of data
+   * @param xValues
+   *          X values of data
    * @return X values of knots (Note that these are NOT necessarily xValues if nDataPts=2,3)
    */
   public DoubleMatrix1D getKnotsMat1D(final double[] xValues) {
@@ -73,9 +72,9 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * @param xValues X values of Data
-   * @return {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
-   * xValues (and corresponding yValues) should be sorted before calling this method
+   * @param xValues
+   *          X values of Data
+   * @return {xValues[1]-xValues[0], xValues[2]-xValues[1],...} xValues (and corresponding yValues) should be sorted before calling this method
    */
   protected double[] getDiffs(final double[] xValues) {
 
@@ -90,10 +89,14 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * @param xValues X values of Data
-   * @param yValues Y values of Data
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
-   * @param solnVector Values of second derivative at knots
+   * @param xValues
+   *          X values of Data
+   * @param yValues
+   *          Y values of Data
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * @param solnVector
+   *          Values of second derivative at knots
    * @return Coefficient matrix whose i-th row vector is {a_0,a_1,...} for i-th intervals, where a_0,a_1,... are coefficients of f(x) = a_0 + a_1 x^1 + ....
    */
   protected DoubleMatrix2D getCommonSplineCoeffs(final double[] xValues, final double[] yValues, final double[] intervals, final double[] solnVector) {
@@ -103,15 +106,18 @@ abstract class CubicSplineSolver {
     for (int i = 0; i < nDataPts - 1; ++i) {
       res[i][0] = solnVector[i + 1] / 6. / intervals[i] - solnVector[i] / 6. / intervals[i];
       res[i][1] = 0.5 * solnVector[i];
-      res[i][2] = yValues[i + 1] / intervals[i] - yValues[i] / intervals[i] - intervals[i] * solnVector[i] / 2. - intervals[i] * solnVector[i + 1] / 6. + intervals[i] * solnVector[i] / 6.;
+      res[i][2] = yValues[i + 1] / intervals[i] - yValues[i] / intervals[i] - intervals[i] * solnVector[i] / 2. - intervals[i] * solnVector[i + 1] / 6.
+          + intervals[i] * solnVector[i] / 6.;
       res[i][3] = yValues[i];
     }
     return new DoubleMatrix2D(res);
   }
 
   /**
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
-   * @param solnMatrix Sensitivity of second derivatives (x 0.5)
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * @param solnMatrix
+   *          Sensitivity of second derivatives (x 0.5)
    * @return Array of i coefficient matrices \frac{\partial a^i_j}{\partial y_k}
    */
   protected DoubleMatrix2D[] getCommonSensitivityCoeffs(final double[] intervals, final double[][] solnMatrix) {
@@ -137,16 +143,25 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * Cubic spline and its node sensitivity are respectively obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector and AN=L where N,L are matrices
-   * @param xValues X values of data
-   * @param yValues Y values of data
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
-   * @param toBeInv The matrix A
-   * @param commonVector The vector b
-   * @param commonVecSensitivity The matrix L
+   * Cubic spline and its node sensitivity are respectively obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector and AN=L
+   * where N,L are matrices
+   * 
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * @param toBeInv
+   *          The matrix A
+   * @param commonVector
+   *          The vector b
+   * @param commonVecSensitivity
+   *          The matrix L
    * @return Coefficient matrices of interpolant (x) and its node sensitivity (N)
    */
-  protected DoubleMatrix2D[] getCommonCoefficientWithSensitivity(final double[] xValues, final double[] yValues, final double[] intervals, final double[][] toBeInv, final double[] commonVector,
+  protected DoubleMatrix2D[] getCommonCoefficientWithSensitivity(final double[] xValues, final double[] yValues, final double[] intervals,
+      final double[][] toBeInv, final double[] commonVector,
       final double[][] commonVecSensitivity) {
     final int nDataPts = xValues.length;
 
@@ -194,8 +209,11 @@ abstract class CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * @param yValues Y values of Data
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * 
+   * @param yValues
+   *          Y values of Data
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return Endpoint-independent part of vector b
    */
   protected double[] getCommonVectorElements(final double[] yValues, final double[] intervals) {
@@ -207,8 +225,8 @@ abstract class CubicSplineSolver {
     for (int i = 1; i < nDataPts - 1; ++i) {
       res[i] = 6. * yValues[i + 1] / intervals[i]
           - 6. * yValues[i] / intervals[i]
-              - 6. * yValues[i] / intervals[i - 1]
-                  + 6. * yValues[i - 1] / intervals[i - 1];
+          - 6. * yValues[i] / intervals[i - 1]
+          + 6. * yValues[i - 1] / intervals[i - 1];
     }
 
     return res;
@@ -216,7 +234,9 @@ abstract class CubicSplineSolver {
 
   /**
    * Node sensitivity is obtained by solving a linear problem AN = L where A,N,L are matrices
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * 
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return The matrix L
    */
   protected double[][] getCommonVectorSensitivity(final double[] intervals) {
@@ -236,10 +256,12 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * This can be done by LU decomposition
-   * @param doubMat Matrix A
-   * @param doubVec Vector B
+   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector This can be done by LU decomposition
+   * 
+   * @param doubMat
+   *          Matrix A
+   * @param doubVec
+   *          Vector B
    * @return Solution to the linear equation, x
    */
   protected double[] matrixEqnSolver(final double[][] doubMat, final double[] doubVec) {
@@ -253,10 +275,15 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * Cubic spline and its node sensitivity are respectively obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector and AN=L where N,L are matrices
-   * @param doubMat1 The matrix A
-   * @param doubVec The vector b
-   * @param doubMat2 The matrix L
+   * Cubic spline and its node sensitivity are respectively obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector and AN=L
+   * where N,L are matrices
+   * 
+   * @param doubMat1
+   *          The matrix A
+   * @param doubVec
+   *          The vector b
+   * @param doubMat2
+   *          The matrix L
    * @return The solutions to the linear systems, x,N
    */
   protected DoubleMatrix1D[] combinedMatrixEqnSolver(final double[][] doubMat1, final double[] doubVec, final double[][] doubMat2) {
@@ -281,8 +308,11 @@ abstract class CubicSplineSolver {
 
   /**
    * Linear problem Ax=b is solved by forward substitution if A is lower triangular
-   * @param lMat Lower triangular matrix
-   * @param doubVec Vector b
+   * 
+   * @param lMat
+   *          Lower triangular matrix
+   * @param doubVec
+   *          Vector b
    * @return Solution to the linear equation, x
    */
   private double[] forwardSubstitution(final double[][] lMat, final double[] doubVec) {
@@ -303,8 +333,11 @@ abstract class CubicSplineSolver {
 
   /**
    * Linear problem Ax=b is solved by backward substitution if A is upper triangular
-   * @param uMat Upper triangular matrix
-   * @param doubVec Vector b
+   * 
+   * @param uMat
+   *          Upper triangular matrix
+   * @param doubVec
+   *          Vector b
    * @return Solution to the linear equation, x
    */
   private double[] backSubstitution(final double[][] uMat, final double[] doubVec) {

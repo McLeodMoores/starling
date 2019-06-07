@@ -27,8 +27,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implements the hacks previously in {@link SingleComputationCycle} using the
- * {@link OverrideOperation} mechanism.
+ * Implements the hacks previously in {@link SingleComputationCycle} using the {@link OverrideOperation} mechanism.
  *
  * @deprecated Should not be used; the EL based compiler is more flexible
  */
@@ -43,7 +42,7 @@ public class MarketDataHackedExpressionCompiler implements OverrideOperationComp
 
     private final double _shift;
 
-    public Operation(final double shift) {
+    Operation(final double shift) {
       _shift = shift;
     }
 
@@ -51,7 +50,8 @@ public class MarketDataHackedExpressionCompiler implements OverrideOperationComp
     public Object apply(final ValueRequirement valueRequirement, final Object value) {
       final ComputationTargetReference targetSpec = valueRequirement.getTargetReference();
       // Only shift equities
-      if (targetSpec.getType().isTargetType(ComputationTargetType.SECURITY) || !MarketDataRequirementNames.MARKET_VALUE.equals(valueRequirement.getValueName())) {
+      if (targetSpec.getType().isTargetType(ComputationTargetType.SECURITY)
+          || !MarketDataRequirementNames.MARKET_VALUE.equals(valueRequirement.getValueName())) {
         return value;
       }
       final ExternalIdBundle bundle = targetSpec.accept(new ComputationTargetReferenceVisitor<ExternalIdBundle>() {
@@ -71,7 +71,7 @@ public class MarketDataHackedExpressionCompiler implements OverrideOperationComp
         }
 
       });
-      if ((bundle == null) || !bundle.getValue(ExternalSchemes.BLOOMBERG_TICKER).contains("Equity")) {
+      if (bundle == null || !bundle.getValue(ExternalSchemes.BLOOMBERG_TICKER).contains("Equity")) {
         return value;
       }
       if (value instanceof Number) {

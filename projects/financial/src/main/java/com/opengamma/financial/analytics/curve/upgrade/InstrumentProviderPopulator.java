@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -21,18 +21,18 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Base class for classes that convert {@link CurveSpecificationBuilderConfiguration} to {@link CurveNodeIdMapper}. These classes
- * copy the data for each strip type into the appropriate methods in the node mapper.
+ * Base class for classes that convert {@link CurveSpecificationBuilderConfiguration} to {@link CurveNodeIdMapper}. These classes copy the data for each strip
+ * type into the appropriate methods in the node mapper.
  * <p>
  * This class provides renaming functions for a given method that returns the map from {@link Tenor} to {@link CurveInstrumentProvider} in the
  * {@link CurveSpecificationBuilderConfiguration} for a particular {@link com.opengamma.financial.analytics.ircurve.StripInstrumentType} e.g.
  * {@link CurveSpecificationBuilderConfiguration#getCashInstrumentProviders()}.
  * <p>
- * If the curve instrument providers were null or could not be identified, an empty {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder}
- * is created. Otherwise, the appropriate curve instrument providers in the builder are populated..
+ * If the curve instrument providers were null or could not be identified, an empty {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder} is
+ * created. Otherwise, the appropriate curve instrument providers in the builder are populated..
  * <p>
- * This class uses reflection to call the correct method, but implementing classes should use a direct method call if they are intended to be
- * used for a single strip type.
+ * This class uses reflection to call the correct method, but implementing classes should use a direct method call if they are intended to be used for a single
+ * strip type.
  */
 public abstract class InstrumentProviderPopulator {
   /** The logger */
@@ -63,18 +63,21 @@ public abstract class InstrumentProviderPopulator {
     ArgumentChecker.isTrue(isValidStripInstrumentType(type), "Strips of type {} are not valid for {}", type, getClass().getSimpleName());
     ArgumentChecker.notNull(renamingFunction, "renamingFunction");
     _type = type;
-    //TODO test here that the method name exists?
+    // TODO test here that the method name exists?
     _renamingFunction = renamingFunction;
   }
 
   /**
-   * Returns a (name, {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder})
-   * pair with the id mapper populated with the appropriate (Tenor, CurveInstrumentProvider) map,
-   * depending on the method called in {@link #getInstrumentProviders(CurveSpecificationBuilderConfiguration)}.
-   * @param idMapper  the id mapper of which to create a copy, not null
-   * @param identifiers  the curve specification builder configuration from which to copy the map, not null
-   * @param currency  the currency of the curve specification builder configuration, not null
-   * @return  a (id mapper name, builder) pair.
+   * Returns a (name, {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder}) pair with the id mapper populated with the appropriate (Tenor,
+   * CurveInstrumentProvider) map, depending on the method called in {@link #getInstrumentProviders(CurveSpecificationBuilderConfiguration)}.
+   *
+   * @param idMapper
+   *          the id mapper of which to create a copy, not null
+   * @param identifiers
+   *          the curve specification builder configuration from which to copy the map, not null
+   * @param currency
+   *          the currency of the curve specification builder configuration, not null
+   * @return a (id mapper name, builder) pair.
    */
   public Pair<String, CurveNodeIdMapper.Builder> apply(final CurveNodeIdMapper idMapper, final CurveSpecificationBuilderConfiguration identifiers,
       final String currency) {
@@ -90,12 +93,15 @@ public abstract class InstrumentProviderPopulator {
   }
 
   /**
-   * Creates a builder from the id mapper, copying any maps that have already been populated,
-   * and populates the appropriate map for the strip instrument type.
-   * @param idMapper  the id mapper, not null
-   * @param instrumentProviders  the instrument provider map, not null
-   * @param mapperName  the new name for the mapper, not null
-   * @return  a curve node id mapper builder with populated instrument provider maps.
+   * Creates a builder from the id mapper, copying any maps that have already been populated, and populates the appropriate map for the strip instrument type.
+   *
+   * @param idMapper
+   *          the id mapper, not null
+   * @param instrumentProviders
+   *          the instrument provider map, not null
+   * @param mapperName
+   *          the new name for the mapper, not null
+   * @return a curve node id mapper builder with populated instrument provider maps.
    */
   private CurveNodeIdMapper.Builder createMapper(final CurveNodeIdMapper idMapper, final Map<Tenor, CurveInstrumentProvider> instrumentProviders,
       final String mapperName) {
@@ -106,11 +112,13 @@ public abstract class InstrumentProviderPopulator {
   }
 
   /**
-   * Populates the appropriate map for the strip instrument type. Note that the builder that is passed in is
-   * altered in place.
-   * @param idMapper  the id mapper, not null
-   * @param instrumentProviders  the instrument provider map, not null
-   * @return  a curve node id mapper builder with populated instrument provider maps.
+   * Populates the appropriate map for the strip instrument type. Note that the builder that is passed in is altered in place.
+   *
+   * @param idMapper
+   *          the id mapper, not null
+   * @param instrumentProviders
+   *          the instrument provider map, not null
+   * @return a curve node id mapper builder with populated instrument provider maps.
    */
   protected abstract CurveNodeIdMapper.Builder populateNodeIds(CurveNodeIdMapper.Builder idMapper, Map<Tenor, CurveInstrumentProvider> instrumentProviders);
 
@@ -120,17 +128,22 @@ public abstract class InstrumentProviderPopulator {
 
   /**
    * Gets the map of instrument providers from the curve specification builder configuration.
-   * @param csbc  the curve specification builder configuration, not null
-   * @return  a map from tenor to curve instrument provider.
+   *
+   * @param csbc
+   *          the curve specification builder configuration, not null
+   * @return a map from tenor to curve instrument provider.
    */
-  protected abstract Map<Tenor, CurveInstrumentProvider> getInstrumentProviders(final CurveSpecificationBuilderConfiguration csbc);
+  protected abstract Map<Tenor, CurveInstrumentProvider> getInstrumentProviders(CurveSpecificationBuilderConfiguration csbc);
 
   /**
-   * Applies a renaming function which generates a name for the curve node id mapper from
-   * the name of the curve specification builder configuration and optionally the currency.
-   * @param name  the name of the curve specification builder configuration, not null
-   * @param currency  the currency string, not null
-   * @return  the name of the curve node id mapper
+   * Applies a renaming function which generates a name for the curve node id mapper from the name of the curve specification builder configuration and
+   * optionally the currency.
+   *
+   * @param name
+   *          the name of the curve specification builder configuration, not null
+   * @param currency
+   *          the currency string, not null
+   * @return the name of the curve node id mapper
    */
   private String rename(final String name, final String currency) {
     ArgumentChecker.notNull(name, "name");
@@ -139,15 +152,17 @@ public abstract class InstrumentProviderPopulator {
   }
 
   /**
-   * Creates a curve node id mapper builder from an original id mapper. The original id mapper
-   * is not changed, and maps in the builder are copies of those in the original.
+   * Creates a curve node id mapper builder from an original id mapper. The original id mapper is not changed, and maps in the builder are copies of those in
+   * the original.
    * <p>
-   * This method copies cash, continuously compounded rate, FRA, periodically compounded rate,
-   * rate future and swap node maps. Other curve node types are not copied, as there is no
-   * equivalent strip instrument type.
-   * @param mapper  the mapper, not null
-   * @param mapperName  the new name for the mapper, not null
-   * @return  a builder with any non-null maps from the original mapper populated.
+   * This method copies cash, continuously compounded rate, FRA, periodically compounded rate, rate future and swap node maps. Other curve node types are not
+   * copied, as there is no equivalent strip instrument type.
+   *
+   * @param mapper
+   *          the mapper, not null
+   * @param mapperName
+   *          the new name for the mapper, not null
+   * @return a builder with any non-null maps from the original mapper populated.
    */
   private static CurveNodeIdMapper.Builder copyToBuilder(final CurveNodeIdMapper mapper, final String mapperName) {
     ArgumentChecker.notNull(mapper, "mapper");

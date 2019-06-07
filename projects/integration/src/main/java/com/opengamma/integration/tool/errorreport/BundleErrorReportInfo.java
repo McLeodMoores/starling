@@ -35,7 +35,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BundleErrorReportInfo implements Runnable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BundleErrorReportInfo.class);
-  private static final String[] SUBDIRS = new String[] {"Downloads" };
+  private static final String[] SUBDIRS = new String[] { "Downloads" };
   private static String s_userHome;
 
   protected static void setUserHome(final String userHome) {
@@ -51,11 +51,12 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Reads the contents of a file. Any lines are trimmed of leading/trailing whitespace. Any lines starting with # are skipped and any blank lines ignored.
    *
-   * @param pathToFile the file to read, not null
+   * @param pathToFile
+   *          the file to read, not null
    * @return the contents of the file, not null
    */
   private static String[] readFile(final String pathToFile) {
-    try (final BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
       final List<String> lines = new ArrayList<>();
       String line;
       while ((line = reader.readLine()) != null) {
@@ -80,10 +81,11 @@ public class BundleErrorReportInfo implements Runnable {
   }
 
   /**
-   * Find a preferred sub-directory under the user's home folder. We use the home folder as it is most likely writeable, but most systems have sub-folders called things like "Downloads" or
-   * "Downloaded Files" that the user might prefer things end up in.
+   * Find a preferred sub-directory under the user's home folder. We use the home folder as it is most likely writeable, but most systems have sub-folders
+   * called things like "Downloads" or "Downloaded Files" that the user might prefer things end up in.
    *
-   * @param path path the check, not null
+   * @param path
+   *          path the check, not null
    * @return the updated path, or the original if no candidate sub-folder is found
    */
   private String preferredSubFolder(final String path) {
@@ -107,7 +109,8 @@ public class BundleErrorReportInfo implements Runnable {
   protected String openReportOutput() {
     final String home = preferredSubFolder(s_userHome != null ? s_userHome : System.getProperty("user.home"));
     final LocalDateTime ldt = Instant.now().atZone(ZoneOffset.systemDefault()).toLocalDateTime();
-    final String path = String.format("%s%c%s-%04d-%02d-%02d-%02d-%02d-%02d.zip", home, File.separatorChar, "OpenGamma-ErrorReport", ldt.getYear(), ldt.getMonthValue(), ldt.getDayOfMonth(),
+    final String path = String.format("%s%c%s-%04d-%02d-%02d-%02d-%02d-%02d.zip", home, File.separatorChar, "OpenGamma-ErrorReport", ldt.getYear(),
+        ldt.getMonthValue(), ldt.getDayOfMonth(),
         ldt.getHour(), ldt.getMinute(), ldt.getSecond()).toString();
     LOGGER.info("Writing {}", path);
     try {
@@ -125,15 +128,17 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Copies a file from the local file system to the ZIP output.
    *
-   * @param source the file to copy from, not null
-   * @param name the name of the entry, not null
+   * @param source
+   *          the file to copy from, not null
+   * @param name
+   *          the name of the entry, not null
    */
   protected void attachFile(final File source, final String name) {
     try {
       final ZipEntry ze = new ZipEntry(name);
       _zip.putNextEntry(ze);
       final byte[] buffer = new byte[4096];
-      try (final FileInputStream in = new FileInputStream(source)) {
+      try (FileInputStream in = new FileInputStream(source)) {
         int bytes;
         while ((bytes = in.read(buffer)) > 0) {
           _zip.write(buffer, 0, bytes);
@@ -148,7 +153,8 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Creates a regex pattern that corresponds to wild cards written with * and ? notation.
    *
-   * @param name the * and ? based pattern
+   * @param name
+   *          the * and ? based pattern
    * @return the regex pattern
    */
   private Pattern fileNameMatch(final String name) {
@@ -215,7 +221,8 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Writes an entry of the form "AttachFiles=&lt;path&gt;".
    *
-   * @param path the path, including * and ? characters as wildcards
+   * @param path
+   *          the path, including * and ? characters as wildcards
    * @return the number of files written to the ZIP file
    */
   private int attachFiles(String path) {
@@ -236,7 +243,8 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Writes an entry of the form "X=Y", dispatching the call based on the value of X.
    *
-   * @param report the line from the configuration file, not null
+   * @param report
+   *          the line from the configuration file, not null
    * @return the number of files written to the ZIP file
    */
   private int writeReport(final String report) {
@@ -285,7 +293,8 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Logical program entry point.
    *
-   * @param args the command line arguments, not null
+   * @param args
+   *          the command line arguments, not null
    * @return the exit code
    */
   protected static int mainImpl(final String[] args) {
@@ -306,7 +315,8 @@ public class BundleErrorReportInfo implements Runnable {
   /**
    * Program entry point. The logical program entry point is called and {@link System#exit} called with the exit code.
    *
-   * @param args the command line arguments, not null
+   * @param args
+   *          the command line arguments, not null
    */
   public static void main(final String[] args) {
     System.exit(mainImpl(args));

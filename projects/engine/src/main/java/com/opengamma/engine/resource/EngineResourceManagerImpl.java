@@ -14,7 +14,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Default implementation of {@link EngineResourceManager}
  *
- * @param <T>  the type of resource
+ * @param <T>
+ *          the type of resource
  */
 public class EngineResourceManagerImpl<T extends EngineResource> implements EngineResourceManagerInternal<T> {
 
@@ -65,7 +66,7 @@ public class EngineResourceManagerImpl<T extends EngineResource> implements Engi
     return _resourceMap.size();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private T incrementCycleReferenceCountCore(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     final ReferenceCountedResource<T> refCountedResource = _resourceMap.get(uniqueId);
@@ -86,17 +87,16 @@ public class EngineResourceManagerImpl<T extends EngineResource> implements Engi
     return refCountedResource.get();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Holds reference counting state for a resource. Intentionally not thread-safe, so requires external
-   * synchronisation.
+   * Holds reference counting state for a resource. Intentionally not thread-safe, so requires external synchronisation.
    */
   private static class ReferenceCountedResource<T> {
 
     private final T _resource;
     private long _refCount = 1;
 
-    public ReferenceCountedResource(final T resource) {
+    ReferenceCountedResource(final T resource) {
       _resource = resource;
     }
 

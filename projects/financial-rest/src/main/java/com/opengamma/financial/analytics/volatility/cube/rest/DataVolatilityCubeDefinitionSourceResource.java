@@ -5,17 +5,12 @@
  */
 package com.opengamma.financial.analytics.volatility.cube.rest;
 
-import java.net.URI;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-
-import org.threeten.bp.Instant;
 
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinition;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
@@ -39,14 +34,15 @@ public class DataVolatilityCubeDefinitionSourceResource extends AbstractDataReso
   /**
    * Creates the resource, exposing the underlying source over REST.
    *
-   * @param source  the underlying source, not null
+   * @param source
+   *          the underlying source, not null
    */
   public DataVolatilityCubeDefinitionSourceResource(final VolatilityCubeDefinitionSource source) {
     ArgumentChecker.notNull(source, "source");
     _source = source;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the source.
    *
@@ -56,7 +52,7 @@ public class DataVolatilityCubeDefinitionSourceResource extends AbstractDataReso
     return _source;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);

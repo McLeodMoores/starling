@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.integration.tool.enginedebugger;
 
 import java.awt.event.ActionEvent;
@@ -39,7 +44,8 @@ public class MarketDataDialog extends JDialog {
   private final List<MarketDataSpecificationRowComponent> _components = new ArrayList<>();
   private volatile boolean _cancelled;
 
-  public MarketDataDialog(final List<LiveDataMetaDataProvider> liveDataMetaDataProvider, final ConfigMaster configMaster, final MarketDataSnapshotMaster snapshotMaster) {
+  public MarketDataDialog(final List<LiveDataMetaDataProvider> liveDataMetaDataProvider, final ConfigMaster configMaster,
+      final MarketDataSnapshotMaster snapshotMaster) {
     super();
     setModalityType(ModalityType.APPLICATION_MODAL);
     _liveDataMetaDataProvider = liveDataMetaDataProvider;
@@ -169,6 +175,5 @@ public class MarketDataDialog extends JDialog {
     }
     return null;
   }
-
 
 }

@@ -26,8 +26,9 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method to compute the present value of cash-settled European swaptions with with the Linear Terminal Swap Rate method.
- * The physical swaptions are priced with SABR.
+ * Method to compute the present value of cash-settled European swaptions with with the Linear Terminal Swap Rate method. The physical swaptions are priced with
+ * SABR.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionCashFixedIborLinearTSRMethod}
  */
 @Deprecated
@@ -42,8 +43,8 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
    */
   private final int _nbIteration = 6;
   /**
-   * Range of the integral. Used only for caps. Represent the approximation of infinity in the strike dimension.
-   * The range is [strike, strike+integrationInterval].
+   * Range of the integral. Used only for caps. Represent the approximation of infinity in the strike dimension. The range is [strike,
+   * strike+integrationInterval].
    */
   private final double _integrationInterval = 1.0;
 
@@ -54,8 +55,11 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
 
   /**
    * Computes the present value of a cash-settled European swaption in the linear TSR method.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data (used for physical swaptions).
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data (used for physical swaptions).
    * @return The present value.
    */
   public CurrencyAmount presentValue(final SwaptionCashFixedIbor swaption, final SABRInterestRateDataBundle sabrData) {
@@ -123,11 +127,15 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
 
     /**
      * Constructor with the required data.
-     * @param baseMethod The base method for the pricing of standard cap/floors.
-     * @param capStandard The standard cap/floor used for replication.
-     * @param sabrData The SABR data bundle used in the standard cap/floor pricing.
+     * 
+     * @param baseMethod
+     *          The base method for the pricing of standard cap/floors.
+     * @param capStandard
+     *          The standard cap/floor used for replication.
+     * @param sabrData
+     *          The SABR data bundle used in the standard cap/floor pricing.
      */
-    public LinearTSRIntegrant(final SwaptionCashFixedIbor swaption, final SABRInterestRateParameters sabrParameter, final double forward, final double[] linear) {
+    LinearTSRIntegrant(final SwaptionCashFixedIbor swaption, final SABRInterestRateParameters sabrParameter, final double forward, final double[] linear) {
       _forward = forward;
       _nbFixedPeriod = swaption.getUnderlyingSwap().getFixedLeg().getPayments().length;
       _nbFixedPaymentYear = (int) Math.round(1.0 / swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(0).getPaymentYearFraction());
@@ -155,7 +163,9 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
 
     /**
      * The factor used in the strike part and in the integration of the replication.
-     * @param x The swap rate.
+     * 
+     * @param x
+     *          The swap rate.
      * @return The factor.
      */
     private double k(final double x) {
@@ -166,14 +176,16 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
         final double nPeriodDiscount = Math.pow(periodFactor, -_nbFixedPeriod);
         g = 1.0 / x * (1.0 - nPeriodDiscount);
       } else {
-        g = ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+        g = (double) _nbFixedPeriod / _nbFixedPaymentYear;
       }
       return linear * g;
     }
 
     /**
      * The first and second derivative of the function k.
-     * @param x The swap rate.
+     * 
+     * @param x
+     *          The swap rate.
      * @return The derivative (first element is the first derivative, second element is second derivative).
      */
     private double[] kpkpp(final double x) {
@@ -186,22 +198,26 @@ public class SwaptionCashFixedIborLinearTSRMethod implements PricingMethod {
       if (x >= EPS) {
         g = 1.0 / x * (1.0 - nPeriodDiscount);
         gp = -g / x + _nbFixedPeriod / x / _nbFixedPaymentYear * nPeriodDiscount / periodFactor;
-        gpp = 2.0 / (x * x) * g - 2.0 * _nbFixedPeriod / (x * x) / _nbFixedPaymentYear * nPeriodDiscount / periodFactor - (_nbFixedPeriod + 1.0) * _nbFixedPeriod / x
-            / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
+        gpp = 2.0 / (x * x) * g - 2.0 * _nbFixedPeriod / (x * x) / _nbFixedPaymentYear * nPeriodDiscount / periodFactor
+            - (_nbFixedPeriod + 1.0) * _nbFixedPeriod / x
+                / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
       } else {
         // Implementation comment: When x is (almost) 0, useful for CMS swaps which are priced as CMS cap of strike 0.
-        g = ((double) _nbFixedPeriod) / _nbFixedPaymentYear;
+        g = (double) _nbFixedPeriod / _nbFixedPaymentYear;
         gp = -_nbFixedPeriod / 2.0 * (_nbFixedPeriod + 1.0) / (_nbFixedPaymentYear * _nbFixedPaymentYear);
-        gpp = _nbFixedPeriod / 2.0 * (_nbFixedPeriod + 1.0) * (1.0 + (_nbFixedPeriod + 2.0) / 3.0) / (_nbFixedPaymentYear * _nbFixedPaymentYear * _nbFixedPaymentYear);
+        gpp = _nbFixedPeriod / 2.0 * (_nbFixedPeriod + 1.0) * (1.0 + (_nbFixedPeriod + 2.0) / 3.0)
+            / (_nbFixedPaymentYear * _nbFixedPaymentYear * _nbFixedPaymentYear);
       }
       final double kp = _linear[0] * g + (_linear[0] * x + _linear[1]) * gp;
       final double kpp = 2 * _linear[0] * gp + (_linear[0] * x + _linear[1]) * gpp;
-      return new double[] {kp, kpp };
+      return new double[] { kp, kpp };
     }
 
     /**
      * The Black-Scholes formula with numeraire 1 as function of the strike.
-     * @param strike The strike.
+     * 
+     * @param strike
+     *          The strike.
      * @return The Black-Scholes formula.
      */
     double bs(final double strike) {

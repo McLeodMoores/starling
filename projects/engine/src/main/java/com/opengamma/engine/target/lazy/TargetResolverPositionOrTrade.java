@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -27,7 +27,7 @@ import com.opengamma.id.UniqueId;
   private final ComputationTargetSpecification _securitySpec;
   private transient volatile ComputationTarget _security;
 
-  public TargetResolverPositionOrTrade(final ComputationTargetResolver.AtVersionCorrection targetResolver, final PositionOrTrade copyFrom) {
+  TargetResolverPositionOrTrade(final ComputationTargetResolver.AtVersionCorrection targetResolver, final PositionOrTrade copyFrom) {
     super(targetResolver);
     _uniqueId = copyFrom.getUniqueId();
     _quantity = copyFrom.getQuantity();

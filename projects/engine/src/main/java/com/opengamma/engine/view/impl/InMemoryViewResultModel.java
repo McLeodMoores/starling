@@ -54,7 +54,8 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
   /**
    * Updates the data held in this model with data from (and about) a delta cycle.
    *
-   * @param delta the delta results, not null
+   * @param delta
+   *          the delta results, not null
    */
   public void update(final ViewResultModel delta) {
     setViewProcessId(delta.getViewProcessId());
@@ -150,6 +151,10 @@ public abstract class InMemoryViewResultModel implements ViewResultModel, Serial
 
   /**
    * For testing.
+   * 
+   * @param calcConfigurationName
+   *          the calculation configuration name
+   * @return the result model
    */
   /* package */ViewCalculationResultModelImpl getCalculationResultModelImpl(final String calcConfigurationName) {
     return _resultsByConfiguration.get(calcConfigurationName);

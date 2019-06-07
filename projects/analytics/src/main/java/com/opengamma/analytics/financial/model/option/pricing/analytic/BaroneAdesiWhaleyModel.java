@@ -17,8 +17,8 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * The Barone-Adesi and Whaley approximation for the price of an American Option. <b>Note:</b> The  Bjerksund and Stensland (2002) approximation ({@link BjerksundStenslandModel}) is
- * more accurate and should be used in place of this.
+ * The Barone-Adesi and Whaley approximation for the price of an American Option. <b>Note:</b> The Bjerksund and Stensland (2002) approximation
+ * ({@link BjerksundStenslandModel}) is more accurate and should be used in place of this.
  */
 public class BaroneAdesiWhaleyModel {
   /** A logger */
@@ -47,7 +47,7 @@ public class BaroneAdesiWhaleyModel {
    * @return The American option price
    */
   public double price(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
-    //TODO handle k = 0, t = 0 and sigma = 0
+    // TODO handle k = 0, t = 0 and sigma = 0
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
@@ -96,7 +96,8 @@ public class BaroneAdesiWhaleyModel {
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
-    //    ArgumentChecker.isTrue(sigma > 0.0, "sigma must be greater than zero"); //sigma<0 is passed when implied volatility computed by using {@link BjerksundStenslandModel}
+    // ArgumentChecker.isTrue(sigma > 0.0, "sigma must be greater than zero"); //sigma<0 is passed when implied volatility computed by using {@link
+    // BjerksundStenslandModel}
 
     if (isCall) {
       final CallSolver solver = new CallSolver(s0, k, r, b, t, sigma);
@@ -143,16 +144,24 @@ public class BaroneAdesiWhaleyModel {
   /**
    * Calculates the price and vega of an option and returns them as an array, with elements
    * <ol>
-   * <li> price
-   * <li> vega
+   * <li>price
+   * <li>vega
    * </ol>
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The interest rate
-   * @param b The cost-of-carry
-   * @param t The time to expiry, greater than zero
-   * @param sigma The volatility
-   * @param isCall is the option a call
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The interest rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time to expiry, greater than zero
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          is the option a call
    * @return The price and vega of the option
    */
   public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
@@ -161,8 +170,8 @@ public class BaroneAdesiWhaleyModel {
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
     ArgumentChecker.isTrue(sigma > 0.0, "sigma must be greater than zero");
     final double[] temp = getPriceAdjoint(s0, k, r, b, t, sigma, isCall);
-    //TODO calculate vega separate from other Greeks
-    return new double[] {temp[0], temp[6] };
+    // TODO calculate vega separate from other Greeks
+    return new double[] { temp[0], temp[6] };
   }
 
   /**
@@ -183,7 +192,8 @@ public class BaroneAdesiWhaleyModel {
    *          true for calls
    * @return A function from volatility (sigma) to price and vega
    */
-  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
+  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t,
+      final boolean isCall) {
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
@@ -236,13 +246,21 @@ public class BaroneAdesiWhaleyModel {
 
   /**
    * critical spot price - when the spot is above (below) this for a call (put), it is optimal to excise early
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
    * @return The critical spot price
    */
   protected double sCrit(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
@@ -257,13 +275,21 @@ public class BaroneAdesiWhaleyModel {
   /**
    * The critical spot price (when the spot is above (below) this for a call (put), it is optimal to excise early) and its sensitivity to spot (r), strike (k),
    * risk-free rate (r), cost-of-carry (b), expiry (t) and volatility (sigma)
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
    * @return The critical spot price and its sensitivities
    */
   protected double[] getsCritAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma,
@@ -316,7 +342,7 @@ public class BaroneAdesiWhaleyModel {
     /** s star */
     private final double _sStar;
 
-    public CallSolver(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
+    CallSolver(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
 
       _s0 = s0;
       _k = k;
@@ -405,13 +431,14 @@ public class BaroneAdesiWhaleyModel {
       if (count == MAX_INT) {
         throw new MathException("max iterations exceeded");
       }
-      s = (_k + rhs - h * s) / (1 - h); //since we've calculated h & rhs, might as well update s
+      s = (_k + rhs - h * s) / (1 - h); // since we've calculated h & rhs, might as well update s
 
       return s;
     }
 
     /**
-     * The sensitivity of price to the parameters  s0, k, r, b, t, sigma
+     * The sensitivity of price to the parameters s0, k, r, b, t, sigma
+     * 
      * @return arrays in order s0 (delta), k (dual-delta), r (rho), b (b-rho), t (theta), sigma (vega)
      */
     public double[] getPriceAdjoint() {
@@ -442,12 +469,12 @@ public class BaroneAdesiWhaleyModel {
       final double q2Bar = a2 * logRatio * x;
 
       res[0] = bsmAdjoint[0] + a2 * x;
-      res[1] = bsmAdjoint[1] + a2 * q2 * x / _s0; //delta - no dependence on sStar
-      res[2] = bsmAdjoint[2] + x * (a2Adjoint[2] + a2Adjoint[1] * sStarAdjoint[0]) + sStarAdjoint[0] * sStarBar; //dual-delta
-      res[3] = bsmAdjoint[3] + x * (a2Adjoint[3] + a2Adjoint[1] * sStarAdjoint[1]) + sStarAdjoint[1] * sStarBar + q2Adjoint[1] * q2Bar; //rho
-      res[4] = bsmAdjoint[4] + x * (a2Adjoint[4] + a2Adjoint[1] * sStarAdjoint[2]) + sStarAdjoint[2] * sStarBar + q2Adjoint[2] * q2Bar; //b-rho
-      res[5] = bsmAdjoint[5] + x * (a2Adjoint[5] + a2Adjoint[1] * sStarAdjoint[3]) + sStarAdjoint[3] * sStarBar + q2Adjoint[3] * q2Bar; //theta
-      res[6] = bsmAdjoint[6] + x * (a2Adjoint[6] + a2Adjoint[1] * sStarAdjoint[4]) + sStarAdjoint[4] * sStarBar + q2Adjoint[4] * q2Bar; //vega
+      res[1] = bsmAdjoint[1] + a2 * q2 * x / _s0; // delta - no dependence on sStar
+      res[2] = bsmAdjoint[2] + x * (a2Adjoint[2] + a2Adjoint[1] * sStarAdjoint[0]) + sStarAdjoint[0] * sStarBar; // dual-delta
+      res[3] = bsmAdjoint[3] + x * (a2Adjoint[3] + a2Adjoint[1] * sStarAdjoint[1]) + sStarAdjoint[1] * sStarBar + q2Adjoint[1] * q2Bar; // rho
+      res[4] = bsmAdjoint[4] + x * (a2Adjoint[4] + a2Adjoint[1] * sStarAdjoint[2]) + sStarAdjoint[2] * sStarBar + q2Adjoint[2] * q2Bar; // b-rho
+      res[5] = bsmAdjoint[5] + x * (a2Adjoint[5] + a2Adjoint[1] * sStarAdjoint[3]) + sStarAdjoint[3] * sStarBar + q2Adjoint[3] * q2Bar; // theta
+      res[6] = bsmAdjoint[6] + x * (a2Adjoint[6] + a2Adjoint[1] * sStarAdjoint[4]) + sStarAdjoint[4] * sStarBar + q2Adjoint[4] * q2Bar; // vega
 
       return res;
     }
@@ -478,7 +505,9 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The price and first order Greeks for BSM call
-     * @param s spot level
+     * 
+     * @param s
+     *          spot level
      * @return Order is price, delta, dual-delta, rho, b-rho, theta and vega
      */
     @SuppressWarnings("synthetic-access")
@@ -492,12 +521,12 @@ public class BaroneAdesiWhaleyModel {
       final double cnd2 = NORMAL.getCDF(d2);
       final double pnd1 = NORMAL.getPDF(d1);
       res[0] = _df2 * s * cnd1 - _df1 * _k * cnd2;
-      res[1] = _df2 * cnd1; //delta
-      res[2] = -_df1 * cnd2; //dual delta
-      res[3] = -_t * (_df2 * s * cnd1 - _df1 * _k * cnd2); //rho (r sensitivity)
-      res[4] = s * _t * _df2 * cnd1; //b sensitivity
-      res[5] = _df2 * s * (_sigma / 2 / _rootT * pnd1 + (_b - _r) * cnd1) + _r * _k * _df1 * cnd2; //theta
-      res[6] = s * _df2 * pnd1 * _rootT; //vega
+      res[1] = _df2 * cnd1; // delta
+      res[2] = -_df1 * cnd2; // dual delta
+      res[3] = -_t * (_df2 * s * cnd1 - _df1 * _k * cnd2); // rho (r sensitivity)
+      res[4] = s * _t * _df2 * cnd1; // b sensitivity
+      res[5] = _df2 * s * (_sigma / 2 / _rootT * pnd1 + (_b - _r) * cnd1) + _r * _k * _df1 * cnd2; // theta
+      res[6] = s * _df2 * pnd1 * _rootT; // vega
       return res;
     }
 
@@ -518,9 +547,12 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * Sensitivity of sStar to k, r, b, t & sigma
-     * @param s sStar
-     * @param a2Ajoint - get this by calling getA2Adjoint
-     * @return array of sensitivities to  k, r, b, t & sigma
+     * 
+     * @param s
+     *          sStar
+     * @param a2Ajoint
+     *          - get this by calling getA2Adjoint
+     * @return array of sensitivities to k, r, b, t & sigma
      */
     public double[] getSStarAdjoint(final double s, final double[] a2Ajoint) {
 
@@ -545,8 +577,11 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The internal parameter A2 and its sensitivities
-     * @param s the critical value of s (sCrit or sStar)
-     * @param q2Adjoint get by calling getQ2Adjoint
+     * 
+     * @param s
+     *          the critical value of s (sCrit or sStar)
+     * @param q2Adjoint
+     *          get by calling getQ2Adjoint
      * @return A2 and sensitivity to s, k, r, b, t, sigma
      */
     @SuppressWarnings("synthetic-access")
@@ -554,13 +589,13 @@ public class BaroneAdesiWhaleyModel {
 
       final double w2 = Math.log(s / _k);
       final double w3 = _phi + w2;
-      final double w4 = w3 / _sigmaRootT; //d1
-      final double w5 = NORMAL.getCDF(w4); //N(d1)
+      final double w4 = w3 / _sigmaRootT; // d1
+      final double w5 = NORMAL.getCDF(w4); // N(d1)
       final double w6 = s / q2Adjoint[0];
       final double w7 = 1 - _df2 * w5;
-      final double w8 = w6 * w7; //A2
+      final double w8 = w6 * w7; // A2
 
-      //backwards sweep
+      // backwards sweep
       final double w8Bar = 1.0;
       final double w7Bar = w6 * w8Bar;
       final double w6Bar = w7 * w8Bar;
@@ -574,18 +609,19 @@ public class BaroneAdesiWhaleyModel {
       final double sigmaRootTBar = -w4 / _sigmaRootT * w4Bar;
 
       final double[] res = new double[7];
-      res[0] = w8; //A2
+      res[0] = w8; // A2
       res[1] = 1 / q2Adjoint[0] * w6Bar + 1 / s * w2Bar; // 'delta'
       res[2] = -1 / _k * w2Bar; // 'dual-delta'
-      res[3] = -_t * _df2 * df2Bar + q2Bar * q2Adjoint[1]; //rho
-      res[4] = _t * w1Bar + _t * _df2 * df2Bar + q2Bar * q2Adjoint[2]; //b-rho
-      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar + q2Bar * q2Adjoint[3]; //theta
-      res[6] = _sigma * _t * w1Bar + _rootT * sigmaRootTBar + q2Bar * q2Adjoint[4]; //vega
+      res[3] = -_t * _df2 * df2Bar + q2Bar * q2Adjoint[1]; // rho
+      res[4] = _t * w1Bar + _t * _df2 * df2Bar + q2Bar * q2Adjoint[2]; // b-rho
+      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar + q2Bar * q2Adjoint[3]; // theta
+      res[6] = _sigma * _t * w1Bar + _rootT * sigmaRootTBar + q2Bar * q2Adjoint[4]; // vega
       return res;
     }
 
     /**
      * The internal parameter q2 and its sensitivities
+     * 
      * @return array of q2 and sensitivity to r,b,t,sigma
      */
     protected double[] getQ2Adjoint() {
@@ -595,11 +631,11 @@ public class BaroneAdesiWhaleyModel {
       final double w4 = 2 * _r * w3; // M
       final double w5 = 2 * _b * w3 - 1; // N-1
       final double w6 = 1 - _df1; // K
-      final double w7 = w5 * w5; //(N-1)^2
+      final double w7 = w5 * w5; // (N-1)^2
       final double w8 = 4 * w4 / w6; // 4M/K
-      final double w9 = w7 + w8; //(N-1)^2 + 4M/K
-      final double w10 = Math.sqrt(w9); //sqrt((N-1)^2 + 4M/K)
-      final double w11 = (-w5 + w10) / 2.0; //q2
+      final double w9 = w7 + w8; // (N-1)^2 + 4M/K
+      final double w10 = Math.sqrt(w9); // sqrt((N-1)^2 + 4M/K)
+      final double w11 = (-w5 + w10) / 2.0; // q2
 
       final double w11Bar = 1.0;
       final double w10Bar = 0.5 * w11Bar;
@@ -660,7 +696,7 @@ public class BaroneAdesiWhaleyModel {
     /** Can the option be treated as European (i.e. is r <= 0) */
     private final boolean _isEuropean;
 
-    public PutSolver(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
+    PutSolver(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
 
       _s0 = s0;
       _k = k;
@@ -756,7 +792,8 @@ public class BaroneAdesiWhaleyModel {
     }
 
     /**
-     * The price and its sensitivity  to the parameters  s0, k, r, b, t, sigma
+     * The price and its sensitivity to the parameters s0, k, r, b, t, sigma
+     * 
      * @return arrays in order price, s0 (delta), k (dual-delta), r (rho), b (b-rho), t (theta), sigma (vega)
      */
     public double[] getPriceAdjoint() {
@@ -788,12 +825,12 @@ public class BaroneAdesiWhaleyModel {
       final double q1Bar = a1 * logRatio * x;
 
       res[0] = bsmAdjoint[0] + a1 * x;
-      res[1] = bsmAdjoint[1] + a1 * q1 * x / _s0; //delta - no dependence on sStar
-      res[2] = bsmAdjoint[2] + x * (a1Adjoint[2] + a1Adjoint[1] * sStarAdjoint[0]) + sStarAdjoint[0] * sStarBar; //dual-delta
-      res[3] = bsmAdjoint[3] + x * (a1Adjoint[3] + a1Adjoint[1] * sStarAdjoint[1]) + sStarAdjoint[1] * sStarBar + q1Adjoint[1] * q1Bar; //rho
-      res[4] = bsmAdjoint[4] + x * (a1Adjoint[4] + a1Adjoint[1] * sStarAdjoint[2]) + sStarAdjoint[2] * sStarBar + q1Adjoint[2] * q1Bar; //b-rho
-      res[5] = bsmAdjoint[5] + x * (a1Adjoint[5] + a1Adjoint[1] * sStarAdjoint[3]) + sStarAdjoint[3] * sStarBar + q1Adjoint[3] * q1Bar; //theta
-      res[6] = bsmAdjoint[6] + x * (a1Adjoint[6] + a1Adjoint[1] * sStarAdjoint[4]) + sStarAdjoint[4] * sStarBar + q1Adjoint[4] * q1Bar; //vega
+      res[1] = bsmAdjoint[1] + a1 * q1 * x / _s0; // delta - no dependence on sStar
+      res[2] = bsmAdjoint[2] + x * (a1Adjoint[2] + a1Adjoint[1] * sStarAdjoint[0]) + sStarAdjoint[0] * sStarBar; // dual-delta
+      res[3] = bsmAdjoint[3] + x * (a1Adjoint[3] + a1Adjoint[1] * sStarAdjoint[1]) + sStarAdjoint[1] * sStarBar + q1Adjoint[1] * q1Bar; // rho
+      res[4] = bsmAdjoint[4] + x * (a1Adjoint[4] + a1Adjoint[1] * sStarAdjoint[2]) + sStarAdjoint[2] * sStarBar + q1Adjoint[2] * q1Bar; // b-rho
+      res[5] = bsmAdjoint[5] + x * (a1Adjoint[5] + a1Adjoint[1] * sStarAdjoint[3]) + sStarAdjoint[3] * sStarBar + q1Adjoint[3] * q1Bar; // theta
+      res[6] = bsmAdjoint[6] + x * (a1Adjoint[6] + a1Adjoint[1] * sStarAdjoint[4]) + sStarAdjoint[4] * sStarBar + q1Adjoint[4] * q1Bar; // vega
 
       return res;
     }
@@ -821,7 +858,9 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The price and first order Greeks for BSM put
-     * @param s spot level
+     * 
+     * @param s
+     *          spot level
      * @return Order is price, delta, dual-delta, rho, b-rho, theta and vega
      */
     @SuppressWarnings("synthetic-access")
@@ -835,12 +874,12 @@ public class BaroneAdesiWhaleyModel {
       final double cnd2 = NORMAL.getCDF(-d2);
       final double pnd1 = NORMAL.getPDF(-d1);
       res[0] = _df1 * _k * cnd2 - _df2 * s * cnd1;
-      res[1] = -_df2 * cnd1; //delta
-      res[2] = _df1 * cnd2; //dual delta
-      res[3] = _t * (_df2 * s * cnd1 - _df1 * _k * cnd2); //rho (r sensitivity)
-      res[4] = -s * _t * _df2 * cnd1; //b sensitivity
-      res[5] = _df2 * s * (_sigma / 2 / _rootT * pnd1 - (_b - _r) * cnd1) - _r * _k * _df1 * cnd2; //theta
-      res[6] = s * _df2 * pnd1 * _rootT; //vega
+      res[1] = -_df2 * cnd1; // delta
+      res[2] = _df1 * cnd2; // dual delta
+      res[3] = _t * (_df2 * s * cnd1 - _df1 * _k * cnd2); // rho (r sensitivity)
+      res[4] = -s * _t * _df2 * cnd1; // b sensitivity
+      res[5] = _df2 * s * (_sigma / 2 / _rootT * pnd1 - (_b - _r) * cnd1) - _r * _k * _df1 * cnd2; // theta
+      res[6] = s * _df2 * pnd1 * _rootT; // vega
       return res;
     }
 
@@ -861,9 +900,12 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * Sensitivity of sStar to k, r, b, t & sigma
-     * @param s sStar
-     * @param a1Ajoint - get this by calling getA1Adjoint
-     * @return array of sensitivities to  k, r, b, t & sigma
+     * 
+     * @param s
+     *          sStar
+     * @param a1Ajoint
+     *          - get this by calling getA1Adjoint
+     * @return array of sensitivities to k, r, b, t & sigma
      */
     public double[] getSStarAdjoint(final double s, final double[] a1Ajoint) {
 
@@ -887,8 +929,11 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The internal parameter A1 and its sensitivities
-     * @param s the critical value of s (sCrit or sStar)
-     * @param q1Adjoint get by calling getQ2Adjoint
+     * 
+     * @param s
+     *          the critical value of s (sCrit or sStar)
+     * @param q1Adjoint
+     *          get by calling getQ2Adjoint
      * @return A1 and sensitivity to s, k, r, b, t, sigma
      */
     @SuppressWarnings("synthetic-access")
@@ -896,13 +941,13 @@ public class BaroneAdesiWhaleyModel {
 
       final double w2 = Math.log(s / _k);
       final double w3 = _phi + w2;
-      final double w4 = w3 / _sigmaRootT; //d1
-      final double w5 = NORMAL.getCDF(-w4); //N(-d1)
+      final double w4 = w3 / _sigmaRootT; // d1
+      final double w5 = NORMAL.getCDF(-w4); // N(-d1)
       final double w6 = s / q1Adjoint[0];
       final double w7 = 1 - _df2 * w5;
-      final double w8 = -w6 * w7; //A1
+      final double w8 = -w6 * w7; // A1
 
-      //backwards sweep
+      // backwards sweep
       final double w8Bar = 1.0;
       final double w7Bar = -w6 * w8Bar;
       final double w6Bar = -w7 * w8Bar;
@@ -916,18 +961,19 @@ public class BaroneAdesiWhaleyModel {
       final double sigmaRootTBar = -w4 / _sigmaRootT * w4Bar;
 
       final double[] res = new double[7];
-      res[0] = w8; //A1
+      res[0] = w8; // A1
       res[1] = 1 / q1Adjoint[0] * w6Bar + 1 / s * w2Bar; // 'delta'
       res[2] = -1 / _k * w2Bar; // 'dual-delta'
-      res[3] = -_t * _df2 * df2Bar + q1Bar * q1Adjoint[1]; //rho
-      res[4] = _t * w1Bar + _t * _df2 * df2Bar + q1Bar * q1Adjoint[2]; //b-rho
-      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar + q1Bar * q1Adjoint[3]; //theta
-      res[6] = _sigma * _t * w1Bar + _rootT * sigmaRootTBar + q1Bar * q1Adjoint[4]; //vega
+      res[3] = -_t * _df2 * df2Bar + q1Bar * q1Adjoint[1]; // rho
+      res[4] = _t * w1Bar + _t * _df2 * df2Bar + q1Bar * q1Adjoint[2]; // b-rho
+      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar + q1Bar * q1Adjoint[3]; // theta
+      res[6] = _sigma * _t * w1Bar + _rootT * sigmaRootTBar + q1Bar * q1Adjoint[4]; // vega
       return res;
     }
 
     /**
      * The internal parameter q1 and its sensitivities
+     * 
      * @return array of q1 and sensitivity to r,b,t,sigma
      */
     protected double[] getQ1Adjoint() {
@@ -937,11 +983,11 @@ public class BaroneAdesiWhaleyModel {
       final double w4 = 2 * _r * w3; // M
       final double w5 = 2 * _b * w3 - 1; // N-1
       final double w6 = 1 - _df1; // K
-      final double w7 = w5 * w5; //(N-1)^2
+      final double w7 = w5 * w5; // (N-1)^2
       final double w8 = 4 * w4 / w6; // 4M/K
-      final double w9 = w7 + w8; //(N-1)^2 + 4M/K
-      final double w10 = Math.sqrt(w9); //sqrt((N-1)^2 + 4M/K)
-      final double w11 = -(w5 + w10) / 2.0; //q1
+      final double w9 = w7 + w8; // (N-1)^2 + 4M/K
+      final double w10 = Math.sqrt(w9); // sqrt((N-1)^2 + 4M/K)
+      final double w11 = -(w5 + w10) / 2.0; // q1
 
       final double w11Bar = 1.0;
       final double w10Bar = -0.5 * w11Bar;

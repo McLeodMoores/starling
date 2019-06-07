@@ -36,8 +36,7 @@ public class UserPermissionNodeChecker implements NodeChecker {
 
   @Override
   public PortfolioPermission check(final PortfolioNode node) {
-    return portfolioIsRestricted(node) && userIsDeniedAccess(node) ?
-        DENY : ALLOW;
+    return portfolioIsRestricted(node) && userIsDeniedAccess(node) ? DENY : ALLOW;
   }
 
   private boolean userIsDeniedAccess(final PortfolioNode node) {

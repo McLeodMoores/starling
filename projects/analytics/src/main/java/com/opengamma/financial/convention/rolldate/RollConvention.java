@@ -36,8 +36,7 @@ public enum RollConvention {
   },
 
   /**
-   * IMM settlement dates roll date adjuster.
-   * 3rd Wednesday of March, June, September or December
+   * IMM settlement dates roll date adjuster. 3rd Wednesday of March, June, September or December
    */
   IMM {
     @Override
@@ -496,9 +495,11 @@ public enum RollConvention {
   /**
    * Get convention for this day of month.
    *
-   * @param dayOfMonth  the day of the month
+   * @param dayOfMonth
+   *          the day of the month
    * @return the convention, not null
-   * @throws IllegalArgumentException if the day of month is invalid
+   * @throws IllegalArgumentException
+   *           if the day of month is invalid
    */
   public static RollConvention dayOfMonth(final int dayOfMonth) {
     switch (dayOfMonth) {
@@ -570,9 +571,10 @@ public enum RollConvention {
   /**
    * Gets the roll date adjuster.
    *
-   * @param numMonthsToAdjust  the number of months to adjust, not null
+   * @param numMonthsToAdjust
+   *          the number of months to adjust, not null
    * @return the adjuster, not null
    */
-  public abstract RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust);
+  public abstract RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust);
 
 }

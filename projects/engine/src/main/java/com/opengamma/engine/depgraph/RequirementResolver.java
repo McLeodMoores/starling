@@ -14,9 +14,8 @@ import com.opengamma.engine.function.exclusion.FunctionExclusionGroup;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Resolves an individual requirement by aggregating the results of any existing tasks already resolving that requirement.
- * If these missed an exploration because of a recursion constraint introduced by their parent tasks, a "fallback" task is
- * created to finish the job for the caller's parent.
+ * Resolves an individual requirement by aggregating the results of any existing tasks already resolving that requirement. If these missed an exploration
+ * because of a recursion constraint introduced by their parent tasks, a "fallback" task is created to finish the job for the caller's parent.
  */
 /* package */final class RequirementResolver extends AggregateResolvedValueProducer {
 
@@ -29,7 +28,7 @@ import com.opengamma.engine.value.ValueRequirement;
   private ResolveTask _fallback;
   private ResolvedValue[] _coreResults;
 
-  public RequirementResolver(final ValueRequirement valueRequirement, final ResolveTask parentTask,
+  RequirementResolver(final ValueRequirement valueRequirement, final ResolveTask parentTask,
       final Collection<FunctionExclusionGroup> functionExclusion) {
     super(valueRequirement);
     LOGGER.debug("Created requirement resolver {}/{}", valueRequirement, parentTask);

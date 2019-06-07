@@ -45,14 +45,15 @@ public class DataHolidaySourceResource extends AbstractDataResource {
   /**
    * Creates the resource, exposing the underlying source over REST.
    *
-   * @param holidaySource  the underlying holiday source, not null
+   * @param holidaySource
+   *          the underlying holiday source, not null
    */
   public DataHolidaySourceResource(final HolidaySource holidaySource) {
     ArgumentChecker.notNull(holidaySource, "holidaySource");
     _holSource = holidaySource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the holiday source.
    *
@@ -62,7 +63,7 @@ public class DataHolidaySourceResource extends AbstractDataResource {
     return _holSource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
@@ -93,14 +94,14 @@ public class DataHolidaySourceResource extends AbstractDataResource {
       @QueryParam("currency") final String currencyCode,
       @QueryParam("id") final List<String> externalIdStrs) {
 
-    final Collection<Holiday> result = holidayType == HolidayType.CURRENCY ?
-        getHolidaySource().get(Currency.of(currencyCode)) :
-          getHolidaySource().get(holidayType, ExternalIdBundle.parse(externalIdStrs));
-        return responseOkObject(result);
+    final Collection<Holiday> result = holidayType == HolidayType.CURRENCY
+        ? getHolidaySource().get(Currency.of(currencyCode))
+        : getHolidaySource().get(holidayType, ExternalIdBundle.parse(externalIdStrs));
+    return responseOkObject(result);
   }
 
   // deprecated
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("deprecation")
   @GET
   @Path("holidaySearches/check")

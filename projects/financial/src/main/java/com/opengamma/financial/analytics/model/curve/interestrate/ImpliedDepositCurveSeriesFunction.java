@@ -103,7 +103,7 @@ import com.opengamma.util.time.Tenor;
  * Constructs a single yield curve and its Jacobian from an FX-implied yield curve calculation configuration and a yield curve definition that contains
  * <b>only</b> {@link StripInstrumentType#CASH} strips. The transformation of the yield curve allows risk to be displayed with respect to implied deposit rates,
  * not FX forwards.
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -223,7 +223,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
      * @param originalCurveName
      *          The original curve name
      */
-    public MyCompiledFunction(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final YieldCurveDefinition impliedDefinition,
+    MyCompiledFunction(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final YieldCurveDefinition impliedDefinition,
         final MultiCurveCalculationConfig originalConfiguration, final String originalCurveName) {
       super(earliestInvokation, latestInvokation);
       _impliedDefinition = impliedDefinition;

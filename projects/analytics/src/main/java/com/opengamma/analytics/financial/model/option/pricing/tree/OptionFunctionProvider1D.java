@@ -9,7 +9,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides payoff function and option price function for one-dimensional tree model
+ * Provides payoff function and option price function for one-dimensional tree model.
  */
 public abstract class OptionFunctionProvider1D {
   private final double _strike;
@@ -18,11 +18,16 @@ public abstract class OptionFunctionProvider1D {
   private final double _sign;
 
   /**
-   * Superclass constructor
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
+   * Superclass constructor.
+   *
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
    */
   public OptionFunctionProvider1D(final double strike, final double timeToExpiry, final int steps, final boolean isCall) {
     ArgumentChecker.isTrue(strike > 0., "strike should be positive");
@@ -38,17 +43,20 @@ public abstract class OptionFunctionProvider1D {
   }
 
   /**
-   * @param assetPrice The base asset price: spot or modified spot
-   * @param downFactor Down factor
-   * @param upOverDown (up factor)/(down factor)
+   * @param assetPrice
+   *          The base asset price: spot or modified spot
+   * @param downFactor
+   *          Down factor
+   * @param upOverDown
+   *          (up factor)/(down factor)
    * @return Payoff at expiry
    */
-  public abstract double[] getPayoffAtExpiry(final double assetPrice, final double downFactor, final double upOverDown);
+  public abstract double[] getPayoffAtExpiry(double assetPrice, double downFactor, double upOverDown);
 
   /**
    * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer For an option with early exercise feature, this method
-   * should be overridden
-   * 
+   * should be overridden.
+   *
    * @param discount
    *          Discount factor
    * @param upProbability
@@ -69,7 +77,8 @@ public abstract class OptionFunctionProvider1D {
    *          the number of steps
    * @return Option values in the (steps)-th layer
    */
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values,
+      final double baseAssetPrice,
       final double sumCashDiv, final double downFactor, final double upOverDown, final int steps) {
     final int nStepsP = steps + 1;
 
@@ -81,17 +90,20 @@ public abstract class OptionFunctionProvider1D {
   }
 
   /**
-   * @param assetPrice (Modified) assetPrice at (0,0)
-   * @param downFactor Down factor
-   * @param middleOverDown (middle factor)/(down factor)
+   * @param assetPrice
+   *          (Modified) assetPrice at (0,0)
+   * @param downFactor
+   *          Down factor
+   * @param middleOverDown
+   *          (middle factor)/(down factor)
    * @return Payoff at expiry
    */
-  public abstract double[] getPayoffAtExpiryTrinomial(final double assetPrice, final double downFactor, final double middleOverDown);
+  public abstract double[] getPayoffAtExpiryTrinomial(double assetPrice, double downFactor, double middleOverDown);
 
   /**
    * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer For an option with early exercise feature or barriers,
    * this method should be overridden
-   * 
+   *
    * @param discount
    *          Discount factor
    * @param upProbability
@@ -114,7 +126,8 @@ public abstract class OptionFunctionProvider1D {
    *          the number of steps
    * @return Option values in the (steps)-th layer
    */
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability,
+      final double[] values,
       final double baseAssetPrice, final double sumCashDiv, final double downFactor, final double middleOverDown, final int steps) {
     final int nNodes = 2 * steps + 1;
 
@@ -126,7 +139,8 @@ public abstract class OptionFunctionProvider1D {
   }
 
   /**
-   * Access strike price
+   * Access strike price.
+   *
    * @return _strike
    */
   public double getStrike() {
@@ -134,7 +148,8 @@ public abstract class OptionFunctionProvider1D {
   }
 
   /**
-   * Access time to expiry
+   * Access time to expiry.
+   *
    * @return _timeToExpiry
    */
   public double getTimeToExpiry() {
@@ -142,7 +157,8 @@ public abstract class OptionFunctionProvider1D {
   }
 
   /**
-   * Access number of steps
+   * Access number of steps.
+   *
    * @return _steps
    */
   public int getNumberOfSteps() {
@@ -150,7 +166,8 @@ public abstract class OptionFunctionProvider1D {
   }
 
   /**
-   * Access signature in payoff formula
+   * Access signature in payoff formula.
+   *
    * @return +1 if call, -1 if put
    */
   public double getSign() {

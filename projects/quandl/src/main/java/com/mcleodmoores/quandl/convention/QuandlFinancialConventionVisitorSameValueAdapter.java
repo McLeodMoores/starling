@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -32,9 +32,10 @@ import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.VanillaIborLegRollDateConvention;
 
 /**
- * Adapter for a Quandl financial convention visitor that by default returns the same value for all convention
- * types.
- * @param <T> The type of the return value
+ * Adapter for a Quandl financial convention visitor that by default returns the same value for all convention types.
+ * 
+ * @param <T>
+ *          The type of the return value
  */
 public class QuandlFinancialConventionVisitorSameValueAdapter<T> implements QuandlFinancialConventionVisitor<T> {
   /** The result */
@@ -42,7 +43,9 @@ public class QuandlFinancialConventionVisitorSameValueAdapter<T> implements Quan
 
   /**
    * Creates an instance.
-   * @param result  the result returned by all methods, can be null
+   * 
+   * @param result
+   *          the result returned by all methods, can be null
    */
   public QuandlFinancialConventionVisitorSameValueAdapter(final T result) {
     _result = result;

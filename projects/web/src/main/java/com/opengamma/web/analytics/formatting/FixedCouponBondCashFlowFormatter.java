@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -30,7 +30,7 @@ import com.opengamma.util.money.CurrencyAmount;
  */
 public class FixedCouponBondCashFlowFormatter extends AbstractFormatter<FixedCouponBondCashFlows> {
   private static final String[] COLUMN_LABELS = { NOTIONAL, COUPON_RATE, START_ACCRUAL_DATES, END_ACCRUAL_DATES, NOMINAL_PAYMENT_DATES, ACCRUAL_YEAR_FRACTION,
-      PAYMENT_AMOUNT, PAYMENT_TIME, DISCOUNT_FACTOR, DISCOUNTED_PAYMENT_AMOUNT};
+      PAYMENT_AMOUNT, PAYMENT_TIME, DISCOUNT_FACTOR, DISCOUNTED_PAYMENT_AMOUNT };
   private static final String X_LABELS = "xLabels";
   private static final String Y_LABELS = "yLabels";
   private static final String MATRIX = "matrix";
@@ -40,9 +40,12 @@ public class FixedCouponBondCashFlowFormatter extends AbstractFormatter<FixedCou
   private final CurrencyAmountFormatter _currencyAmountFormatter;
 
   /**
-   * @param doubleFormatter  formats the discount factors
-   * @param rateFormatter  formats the zero rates
-   * @param currencyAmountFormatter  formats the currency amounts
+   * @param doubleFormatter
+   *          formats the discount factors
+   * @param rateFormatter
+   *          formats the zero rates
+   * @param currencyAmountFormatter
+   *          formats the currency amounts
    */
   FixedCouponBondCashFlowFormatter(final DoubleFormatter doubleFormatter, final RateFormatter rateFormatter,
       final CurrencyAmountFormatter currencyAmountFormatter) {
@@ -65,9 +68,12 @@ public class FixedCouponBondCashFlowFormatter extends AbstractFormatter<FixedCou
 
   /**
    * Transforms the details object to an amount that can be displayed.
-   * @param value  the FX forward details
-   * @param valueSpec  the value specification
-   * @return  the data
+   * 
+   * @param value
+   *          the FX forward details
+   * @param valueSpec
+   *          the value specification
+   * @return the data
    */
   /* package */ Map<String, Object> formatExpanded(final FixedCouponBondCashFlows value, final ValueSpecification valueSpec) {
     final int columnCount = COLUMN_LABELS.length;

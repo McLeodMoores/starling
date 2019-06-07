@@ -35,7 +35,7 @@ class WebFunctionQueryDelegate {
 
   private final FunctionConfigurationSource _functionConfigurationSource;
 
-  public WebFunctionQueryDelegate(final FunctionConfigurationSource functionConfigurationSource) {
+  WebFunctionQueryDelegate(final FunctionConfigurationSource functionConfigurationSource) {
     _functionConfigurationSource = functionConfigurationSource;
   }
 
@@ -43,7 +43,7 @@ class WebFunctionQueryDelegate {
    * @return all function type details
    */
   public SortedMap<String, WebFunctionTypeDetails> queryAll() {
-    return query(Predicates.<WebFunctionTypeDetails>alwaysTrue());
+    return query(Predicates.<WebFunctionTypeDetails> alwaysTrue());
   }
 
   /**

@@ -126,17 +126,17 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
     callback.traverse(portfolio.getRootNode());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private class RiskFactorPortfolioTraverser extends AbstractPortfolioNodeTraversalCallback {
 
     private final ViewCalculationConfiguration _calcConfig;
     private final Set<ValueRequirement> _valueRequirements = new HashSet<>();
 
-    public RiskFactorPortfolioTraverser() {
+    RiskFactorPortfolioTraverser() {
       this(null);
     }
 
-    public RiskFactorPortfolioTraverser(final ViewCalculationConfiguration calcConfig) {
+    RiskFactorPortfolioTraverser(final ViewCalculationConfiguration calcConfig) {
       _calcConfig = calcConfig;
     }
 
@@ -175,7 +175,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Securities
 
   @Override
@@ -229,7 +229,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   @Override
   public Set<Pair<String, ValueProperties>> visitSwapSecurity(final SwapSecurity security) {
-    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>>builder();
+    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>> builder();
 
     // At the moment pay and receive must be the same currency, so any one of them is sufficient
     final Notional payNotional = security.getPayLeg().getNotional();
@@ -258,7 +258,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   @Override
   public Set<Pair<String, ValueProperties>> visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
     final ExternalId underlyingId = security.getUnderlyingId();
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getEquityValue(ValueRequirementNames.PRESENT_VALUE, underlyingId))
         .add(getEquityValue(ValueRequirementNames.VEGA_QUOTE_MATRIX, underlyingId))
         .add(getEquityValue(ValueRequirementNames.VEGA_MATRIX, underlyingId))
@@ -275,7 +275,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   @Override
   public Set<Pair<String, ValueProperties>> visitEquityOptionSecurity(final EquityOptionSecurity security) {
     final ExternalId underlyingId = security.getUnderlyingId();
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getEquityValue(ValueRequirementNames.PRESENT_VALUE, underlyingId))
         .add(getEquityValue(ValueRequirementNames.VEGA_QUOTE_MATRIX, underlyingId))
         .add(getEquityValue(ValueRequirementNames.VEGA_MATRIX, underlyingId))
@@ -292,7 +292,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   @Override
   public Set<Pair<String, ValueProperties>> visitEquityBarrierOptionSecurity(final EquityBarrierOptionSecurity security) {
     final ExternalId underlyingId = security.getUnderlyingId();
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getEquityValue(ValueRequirementNames.PRESENT_VALUE, underlyingId))
         .add(getEquityValue(ValueRequirementNames.VEGA_QUOTE_MATRIX, underlyingId))
         .add(getEquityValue(ValueRequirementNames.VALUE_VEGA, underlyingId))
@@ -307,7 +307,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   @Override
   public Set<Pair<String, ValueProperties>> visitFXOptionSecurity(final FXOptionSecurity security) {
-    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>>builder()
+    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getFXPresentValueWithCalculationMethod())
         .add(getFXCurrencyExposureWithCalculationMethod())
         .add(getFXYieldCurveNodeSensitivities(_configProvider.getFXCurve(security.getCallCurrency()), security.getCallCurrency()))
@@ -327,7 +327,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   @Override
   public Set<Pair<String, ValueProperties>> visitNonDeliverableFXDigitalOptionSecurity(final NonDeliverableFXDigitalOptionSecurity security) {
-    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>>builder()
+    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getFXPresentValueWithCalculationMethod())
         .add(getFXCurrencyExposureWithCalculationMethod())
         .add(getFXYieldCurveNodeSensitivities(_configProvider.getFXCurve(security.getCallCurrency()), security.getCallCurrency()))
@@ -347,7 +347,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   @Override
   public Set<Pair<String, ValueProperties>> visitNonDeliverableFXOptionSecurity(final NonDeliverableFXOptionSecurity security) {
-    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>>builder()
+    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getFXPresentValueWithCalculationMethod())
         .add(getFXCurrencyExposureWithCalculationMethod())
         .add(getFXYieldCurveNodeSensitivities(_configProvider.getFXCurve(security.getCallCurrency()), security.getCallCurrency()))
@@ -367,7 +367,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   @Override
   public Set<Pair<String, ValueProperties>> visitSwaptionSecurity(final SwaptionSecurity security) {
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getYieldCurveNodeSensitivities(getFundingCurve(), security.getCurrency()))
         .add(getYieldCurveNodeSensitivities(getForwardCurve(security.getCurrency()), security.getCurrency()))
         .addAll(getSabrSensitivities())
@@ -381,7 +381,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
     final String tickerStr = security.getExternalIdBundle().getValue(ExternalSchemes.BLOOMBERG_TICKER);
     final String futurePrefix = tickerStr.substring(0, 2);
     final String surfaceName = _configProvider.getIRFutureOptionVolatilitySurfaceName(futurePrefix);
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .addAll(getSabrSensitivities())
         .add(getYieldCurveNodeSensitivities(getFundingCurve(), ccy))
         .add(getYieldCurveNodeSensitivities(getForwardCurve(ccy), ccy))
@@ -389,7 +389,8 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
             .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_OPTION)))
         .add(getVegaQuoteMatrix(ValueProperties
             .with(ValuePropertyNames.SURFACE, surfaceName)
-            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_OPTION))).build();
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_OPTION)))
+        .build();
   }
 
   @Override
@@ -401,17 +402,19 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   @Override
   public Set<Pair<String, ValueProperties>> visitFxFutureOptionSecurity(final FxFutureOptionSecurity security) {
     LOGGER.warn("FX Future Option risk factors not implemented");
-    return Collections.emptySet();  }
+    return Collections.emptySet();
+  }
 
   @Override
-  public Set<Pair<String, ValueProperties>> visitEquityIndexDividendFutureOptionSecurity(final EquityIndexDividendFutureOptionSecurity equityIndexDividendFutureOptionSecurity) {
+  public Set<Pair<String, ValueProperties>> visitEquityIndexDividendFutureOptionSecurity(
+      final EquityIndexDividendFutureOptionSecurity equityIndexDividendFutureOptionSecurity) {
     LOGGER.warn("Equity index dividend future option risk factors not implemented");
     return Collections.emptySet();
   }
 
   @Override
   public Set<Pair<String, ValueProperties>> visitFXBarrierOptionSecurity(final FXBarrierOptionSecurity security) {
-    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>>builder()
+    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getFXPresentValueWithCalculationMethod())
         .add(getFXCurrencyExposureWithCalculationMethod())
         .add(getFXYieldCurveNodeSensitivities(_configProvider.getFXCurve(security.getCallCurrency()), security.getCallCurrency()))
@@ -431,7 +434,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   @Override
   public Set<Pair<String, ValueProperties>> visitFXDigitalOptionSecurity(final FXDigitalOptionSecurity security) {
-    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>>builder()
+    final ImmutableSet.Builder<Pair<String, ValueProperties>> builder = ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getFXPresentValueWithCalculationMethod())
         .add(getFXCurrencyExposureWithCalculationMethod())
         .add(getFXYieldCurveNodeSensitivities(_configProvider.getFXCurve(security.getCallCurrency()), security.getCallCurrency()))
@@ -472,7 +475,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   @Override
   public Set<Pair<String, ValueProperties>> visitCapFloorSecurity(final CapFloorSecurity security) {
     final String cubeName = _configProvider.getSwaptionVolatilityCubeName(security.getCurrency());
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getYieldCurveNodeSensitivities(getFundingCurve(), security.getCurrency()))
         .add(getYieldCurveNodeSensitivities(getForwardCurve(security.getCurrency()), security.getCurrency()))
         .addAll(getSabrSensitivities())
@@ -483,7 +486,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   @Override
   public Set<Pair<String, ValueProperties>> visitCapFloorCMSSpreadSecurity(final CapFloorCMSSpreadSecurity security) {
     final String cubeName = _configProvider.getSwaptionVolatilityCubeName(security.getCurrency());
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getYieldCurveNodeSensitivities(getFundingCurve(), security.getCurrency()))
         .add(getYieldCurveNodeSensitivities(getForwardCurve(security.getCurrency()), security.getCurrency()))
         .addAll(getSabrSensitivities())
@@ -495,20 +498,21 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   public Set<Pair<String, ValueProperties>> visitEquityVarianceSwapSecurity(final EquityVarianceSwapSecurity security) {
     final String ticker = security.getSpotUnderlyingId().getValue();
     if (ticker != null) {
-      return ImmutableSet.<Pair<String, ValueProperties>>builder()
+      return ImmutableSet.<Pair<String, ValueProperties>> builder()
           .add(getPresentValue(ValueProperties.builder()))
           .add(getYieldCurveNodeSensitivities(getFundingCurve(), security.getCurrency()))
           .add(getVegaQuoteMatrix(ValueProperties
               .with(ValuePropertyNames.SURFACE, "DEFAULT")
-              .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, "EQUITY_OPTION"))).build();
+              .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, "EQUITY_OPTION")))
+          .build();
     }
     LOGGER.warn("Could not get underlying ticker for equity variance swap security, so excluding surface");
-    return ImmutableSet.<Pair<String, ValueProperties>>builder()
+    return ImmutableSet.<Pair<String, ValueProperties>> builder()
         .add(getPresentValue(ValueProperties.builder()))
         .add(getYieldCurveNodeSensitivities(getFundingCurve(), security.getCurrency())).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Futures
 
   @Override
@@ -588,7 +592,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
     throw new OpenGammaRuntimeException("Continuous zero deposit security not supported");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private Pair<String, ValueProperties> getYieldCurveNodeSensitivities(final String curve, final Currency currency) {
     final ValueProperties.Builder constraints = ValueProperties
         .with(ValuePropertyNames.CURVE_CURRENCY, currency.getCode())
@@ -604,15 +608,15 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
     return getRiskFactor(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, constraints);
   }
 
-  //FIXME properties aren't correct
+  // FIXME properties aren't correct
   private Pair<String, ValueProperties> getEquityValue(final String requirementName, final ExternalId underlying) {
-    final com.opengamma.engine.value.ValueProperties.Builder builder = ValueProperties.builder().with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, _configProvider.getEquityFundingCurve())
+    final com.opengamma.engine.value.ValueProperties.Builder builder = ValueProperties.builder()
+        .with(YieldCurveFunction.PROPERTY_FUNDING_CURVE, _configProvider.getEquityFundingCurve())
         .with(ValuePropertyNames.SURFACE, _configProvider.getEquityIndexOptionVolatilitySurfaceName(underlying.getValue()))
         .with(ValuePropertyNames.CALCULATION_METHOD, _configProvider.getEquityCalculationMethod())
         .with(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR, _configProvider.getEquitySmileInterpolator());
     return getRiskFactor(requirementName, builder);
   }
-
 
   private Pair<String, ValueProperties> getPresentValue(final ValueProperties.Builder constraints) {
     return getRiskFactor(ValueRequirementNames.PRESENT_VALUE, constraints);
@@ -647,7 +651,8 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   }
 
   private Pair<String, ValueProperties> getFXVegaMatrix(final ValueProperties.Builder constraints) {
-    return getRiskFactor(ValueRequirementNames.VEGA_MATRIX, constraints.with(ValuePropertyNames.CALCULATION_METHOD, _configProvider.getFXCalculationMethod()), false);
+    return getRiskFactor(ValueRequirementNames.VEGA_MATRIX, constraints.with(ValuePropertyNames.CALCULATION_METHOD, _configProvider.getFXCalculationMethod()),
+        false);
   }
 
   private Pair<String, ValueProperties> getVegaQuoteMatrix(final ValueProperties.Builder constraints) {
@@ -655,7 +660,8 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   }
 
   private Pair<String, ValueProperties> getFXVegaQuoteMatrix(final ValueProperties.Builder constraints) {
-    return getRiskFactor(ValueRequirementNames.VEGA_QUOTE_MATRIX, constraints.with(ValuePropertyNames.CALCULATION_METHOD, _configProvider.getFXCalculationMethod()), false);
+    return getRiskFactor(ValueRequirementNames.VEGA_QUOTE_MATRIX,
+        constraints.with(ValuePropertyNames.CALCULATION_METHOD, _configProvider.getFXCalculationMethod()), false);
   }
 
   private Pair<String, ValueProperties> getVegaQuoteCubeMatrix(final ValueProperties.Builder constraints) {
@@ -697,7 +703,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
     return getRiskFactor(ValueRequirementNames.PRESENT_VALUE_SABR_NU_SENSITIVITY);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private Pair<String, ValueProperties> getRiskFactor(final String valueName) {
     return getRiskFactor(valueName, ValueProperties.builder(), true);
   }
@@ -720,7 +726,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
     return new ValueRequirement(valueName, ComputationTargetSpecification.of(position), constraints);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private String getFundingCurve() {
     return getConfigProvider().getFundingCurve();
   }
@@ -729,7 +735,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
     return getConfigProvider().getForwardCurve(currency);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("unused")
   private SecuritySource getSecuritySource() {
     return _securities;
@@ -738,6 +744,5 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
   private RiskFactorsConfigurationProvider getConfigProvider() {
     return _configProvider;
   }
-
 
 }

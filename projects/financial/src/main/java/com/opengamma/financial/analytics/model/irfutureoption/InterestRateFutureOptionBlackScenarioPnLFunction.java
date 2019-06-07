@@ -31,13 +31,14 @@ import com.opengamma.financial.analytics.model.equity.ScenarioPnLPropertyNamesAn
 // CSOFF
 /**
  * Simple scenario Function returns the difference in PresentValue between defined Scenario and current market conditions.
+ * 
  * @deprecated The parent class of this function is deprecated
  */
 @Deprecated
 public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRateFutureOptionBlackFunction {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PNL}
+   * Sets the value requirement name to {@link ValueRequirementNames#PNL}.
    */
   public InterestRateFutureOptionBlackScenarioPnLFunction() {
     super(ValueRequirementNames.PNL, true);
@@ -47,13 +48,13 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
   private static final PresentValueBlackCalculator PV_CALCULATOR = PresentValueBlackCalculator.getInstance();
 
   /** Property to define the price shift */
-  private static final String s_priceShift = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT;
+  private static final String PRICE_SHIFT = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT;
   /** Property to define the volatility shift */
-  private static final String s_volShift = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT;
+  private static final String VOL_SHIFT = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT;
   /** Property to define the price shift type */
-  private static final String s_priceShiftType = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT_TYPE;
+  private static final String PRICE_SHIFT_TYPE = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT_TYPE;
   /** Property to define the volatility shift type */
-  private static final String s_volShiftType = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT_TYPE;
+  private static final String VOL_SHIFT_TYPE = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT_TYPE;
   /** Logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackScenarioPnLFunction.class);
 
@@ -70,8 +71,8 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
 
     // Apply shift to yield curve(s)
     final YieldCurveBundle curvesScen = new YieldCurveBundle();
-    final String priceShiftTypeConstraint = constraints.getValues(s_priceShiftType).iterator().next();
-    final String priceConstraint = constraints.getValues(s_priceShift).iterator().next();
+    final String priceShiftTypeConstraint = constraints.getValues(PRICE_SHIFT_TYPE).iterator().next();
+    final String priceConstraint = constraints.getValues(PRICE_SHIFT).iterator().next();
 
     if (priceConstraint.equals("")) {
       // use base market prices
@@ -98,24 +99,26 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
     }
 
     // Apply shift to vol surface
-    final String volConstraint = constraints.getValues(s_volShift).iterator().next();
+    final String volConstraint = constraints.getValues(VOL_SHIFT).iterator().next();
     if (volConstraint.equals("")) {
       // use base market vols
       marketScen = market;
     } else {
       // bump vol surface
       final Double shiftVol = Double.valueOf(volConstraint);
-      final String volShiftTypeConstraint = constraints.getValues(s_volShiftType).iterator().next();
+      final String volShiftTypeConstraint = constraints.getValues(VOL_SHIFT_TYPE).iterator().next();
       final boolean additiveShift;
       if (volShiftTypeConstraint.equalsIgnoreCase("Additive")) {
         additiveShift = true;
       } else if (volShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
         additiveShift = false;
       } else {
-        LOGGER.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug(
+            "In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         additiveShift = false;
       }
-      final Surface<Double, Double, Double> volSurfaceScen = SurfaceShiftFunctionFactory.getShiftedSurface(market.getBlackParameters(), shiftVol, additiveShift);
+      final Surface<Double, Double, Double> volSurfaceScen = SurfaceShiftFunctionFactory.getShiftedSurface(market.getBlackParameters(), shiftVol,
+          additiveShift);
       marketScen = new YieldCurveWithBlackCubeBundle(volSurfaceScen, curvesScen);
     }
 
@@ -137,32 +140,32 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
     final ValueProperties constraints = desiredValue.getConstraints();
     ValueProperties.Builder scenarioDefaults = null;
 
-    final Set<String> priceShiftSet = constraints.getValues(s_priceShift);
+    final Set<String> priceShiftSet = constraints.getValues(PRICE_SHIFT);
     if (priceShiftSet == null || priceShiftSet.isEmpty()) {
-      scenarioDefaults = constraints.copy().withoutAny(s_priceShift).with(s_priceShift, "");
+      scenarioDefaults = constraints.copy().withoutAny(PRICE_SHIFT).with(PRICE_SHIFT, "");
     }
-    final Set<String> priceShiftTypeSet = constraints.getValues(s_priceShiftType);
+    final Set<String> priceShiftTypeSet = constraints.getValues(PRICE_SHIFT_TYPE);
     if (priceShiftTypeSet == null || priceShiftTypeSet.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_priceShiftType).with(s_priceShiftType, "Multiplicative");
+        scenarioDefaults = constraints.copy().withoutAny(PRICE_SHIFT_TYPE).with(PRICE_SHIFT_TYPE, "Multiplicative");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_priceShiftType).with(s_priceShiftType, "Multiplicative");
+        scenarioDefaults = scenarioDefaults.withoutAny(PRICE_SHIFT_TYPE).with(PRICE_SHIFT_TYPE, "Multiplicative");
       }
     }
-    final Set<String> volShiftSet = constraints.getValues(s_volShift);
+    final Set<String> volShiftSet = constraints.getValues(VOL_SHIFT);
     if (volShiftSet == null || volShiftSet.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_volShift).with(s_volShift, "");
+        scenarioDefaults = constraints.copy().withoutAny(VOL_SHIFT).with(VOL_SHIFT, "");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_volShift).with(s_volShift, "");
+        scenarioDefaults = scenarioDefaults.withoutAny(VOL_SHIFT).with(VOL_SHIFT, "");
       }
     }
-    final Set<String> volShiftSetType = constraints.getValues(s_volShiftType);
+    final Set<String> volShiftSetType = constraints.getValues(VOL_SHIFT_TYPE);
     if (volShiftSetType == null || volShiftSetType.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_volShiftType).with(s_volShiftType, "Multiplicative");
+        scenarioDefaults = constraints.copy().withoutAny(VOL_SHIFT_TYPE).with(VOL_SHIFT_TYPE, "Multiplicative");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_volShiftType).with(s_volShiftType, "Multiplicative");
+        scenarioDefaults = scenarioDefaults.withoutAny(VOL_SHIFT_TYPE).with(VOL_SHIFT_TYPE, "Multiplicative");
       }
     }
 
@@ -176,14 +179,15 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
   @Override
   protected ValueProperties.Builder getResultProperties(final String currency) {
     return super.getResultProperties(currency)
-        .withAny(s_priceShift)
-        .withAny(s_volShift)
-        .withAny(s_priceShiftType)
-        .withAny(s_volShiftType);
+        .withAny(PRICE_SHIFT)
+        .withAny(VOL_SHIFT)
+        .withAny(PRICE_SHIFT_TYPE)
+        .withAny(VOL_SHIFT_TYPE);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = inputs.keySet().iterator().next();
       if (ValueRequirementNames.PNL.equals(input.getValueName())) {

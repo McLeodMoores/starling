@@ -23,8 +23,10 @@ public class DataMarketDataSnapshotSourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param uniqueId  the unique identifier, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param uniqueId
+   *          the unique identifier, may be null
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final UniqueId uniqueId) {
@@ -39,8 +41,10 @@ public class DataMarketDataSnapshotSourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param objectId  the object identifier, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param objectId
+   *          the object identifier, may be null
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final ObjectId objectId) {
@@ -51,9 +55,12 @@ public class DataMarketDataSnapshotSourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param objectId  the object identifier, may be null
-   * @param vc  the version-correction, null means latest
+   * @param baseUri
+   *          the base URI, not null
+   * @param objectId
+   *          the object identifier, may be null
+   * @param vc
+   *          the version-correction, null means latest
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final ObjectId objectId, final VersionCorrection vc) {
@@ -68,10 +75,14 @@ public class DataMarketDataSnapshotSourceUris {
   /**
    * Builds a URI for snapshot search.
    *
-   * @param baseUri  the base URI, not null
-   * @param type  the snapshot type, not null
-   * @param name  the name, not null
-   * @param versionCorrection  the version to fetch, null means latest
+   * @param baseUri
+   *          the base URI, not null
+   * @param type
+   *          the snapshot type, not null
+   * @param name
+   *          the name, not null
+   * @param versionCorrection
+   *          the version to fetch, null means latest
    * @return the URI, not null
    */
   public static URI uriSearchSingle(final URI baseUri, final Class<?> type, final String name, final VersionCorrection versionCorrection) {
@@ -79,15 +90,15 @@ public class DataMarketDataSnapshotSourceUris {
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(name, "name");
 
-    final String vc = versionCorrection != null ?
-        versionCorrection.toString() :
-          VersionCorrection.LATEST.toString();
+    final String vc = versionCorrection != null
+        ? versionCorrection.toString()
+        : VersionCorrection.LATEST.toString();
 
-        return UriBuilder.fromUri(baseUri)
-            .path("snapshotSearches/single")
-            .queryParam("name", name)
-            .queryParam("type", type.getName())
-            .queryParam("versionCorrection", vc)
-            .build();
+    return UriBuilder.fromUri(baseUri)
+        .path("snapshotSearches/single")
+        .queryParam("name", name)
+        .queryParam("type", type.getName())
+        .queryParam("versionCorrection", vc)
+        .build();
   }
 }

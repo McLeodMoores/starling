@@ -20,19 +20,19 @@ import com.opengamma.core.position.Trade;
 
   private final Map<String, String> _attributes;
 
-  public PositionInfo(final ComparisonContext context, final Position position) {
+  PositionInfo(final ComparisonContext context, final Position position) {
     super(context, position);
     final Collection<Trade> trades = position.getTrades();
     if (trades.isEmpty()) {
       _trades = Collections.emptySet();
     } else {
       final Set<TradeInfo> tradeInfos = Sets.newHashSetWithExpectedSize(trades.size());
-      for (Trade trade : trades) {
+      for (final Trade trade : trades) {
         tradeInfos.add(new TradeInfo(context, trade));
       }
       _trades = Collections.unmodifiableSet(tradeInfos);
     }
-    _attributes = context.isIgnorePositionAttributes() ? Collections.<String, String>emptyMap() : position.getAttributes();
+    _attributes = context.isIgnorePositionAttributes() ? Collections.<String, String> emptyMap() : position.getAttributes();
   }
 
   public Set<TradeInfo> getTrades() {
@@ -42,7 +42,7 @@ import com.opengamma.core.position.Trade;
   public Map<String, String> getAttributes() {
     return _attributes;
   }
-  
+
   @Override
   public String toString() {
     return "PositionInfo[quantity=" + getQuantity() + ", security=" + getSecurity() + ", trades=" + getTrades() + ", attributes=" + getAttributes() + "]";

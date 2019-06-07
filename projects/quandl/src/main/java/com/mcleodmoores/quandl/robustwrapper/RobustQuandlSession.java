@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.quandl.robustwrapper;
 
 import java.util.ArrayList;
@@ -43,9 +46,10 @@ public class RobustQuandlSession {
   private static final long BACKOFF_PERIOD_MILLIS = 60 * 1000;
 
   /**
-   * Public constructor.
-   * Takes a QuandlSession that it wraps.
-   * @param session  the underlying quandl session
+   * Public constructor. Takes a QuandlSession that it wraps.
+   * 
+   * @param session
+   *          the underlying quandl session
    */
   public RobustQuandlSession(final QuandlSession session) {
     _session = session;
@@ -53,7 +57,9 @@ public class RobustQuandlSession {
 
   /**
    * Get a tabular data set from Quandl.
-   * @param request the request object containing details of what is required
+   * 
+   * @param request
+   *          the request object containing details of what is required
    * @return a TabularResult set
    */
   public TabularResult getDataSet(final DataSetRequest request) {
@@ -62,7 +68,9 @@ public class RobustQuandlSession {
 
   /**
    * Get meta data from Quandl about a particular quandlCode.
-   * @param request the request object containing details of what is required
+   * 
+   * @param request
+   *          the request object containing details of what is required
    * @return a MetaDataResult
    */
   public MetaDataResult getMetaData(final MetaDataRequest request) {
@@ -71,7 +79,9 @@ public class RobustQuandlSession {
 
   /**
    * Get a multiple data sets from quandl and return as single tabular result.
-   * @param request the multi data set request object containing details of what is required
+   * 
+   * @param request
+   *          the multi data set request object containing details of what is required
    * @return a single TabularResult set containing all requested results
    */
   public TabularResult getDataSets(final MultiDataSetRequest request) {
@@ -168,8 +178,8 @@ public class RobustQuandlSession {
         columnNames.add(codeRequest.getQuandlCode() + " - " + colName);
       }
     }
-    final SortedMap<LocalDate, String[]> rows =
-        new TreeMap<>(sortOrder == SortOrder.ASCENDING ? LocalDate.timeLineOrder() : Collections.reverseOrder(LocalDate.timeLineOrder()));
+    final SortedMap<LocalDate, String[]> rows = new TreeMap<>(
+        sortOrder == SortOrder.ASCENDING ? LocalDate.timeLineOrder() : Collections.reverseOrder(LocalDate.timeLineOrder()));
     for (final Map.Entry<QuandlCodeRequest, TabularResult> mapEntry : results.entrySet()) {
       final QuandlCodeRequest codeRequest = mapEntry.getKey();
       final TabularResult table1 = mapEntry.getValue();
@@ -204,7 +214,9 @@ public class RobustQuandlSession {
 
   /**
    * Get meta data from Quandl about a range of quandlCodes returned as a single MetaDataResult.
-   * @param request the request object containing details of what is required
+   * 
+   * @param request
+   *          the request object containing details of what is required
    * @return a TabularResult set
    */
   public MetaDataResult getMetaData(final MultiMetaDataRequest request) {
@@ -212,16 +224,16 @@ public class RobustQuandlSession {
   }
 
   /**
-   * Get header definitions from Quandl about a range of quandlCodes returned as a Map of Quandl code to HeaderDefinition.
-   * The keys of the map will retain the order of the request and are backed by an unmodifiable LinkedHashMap.
-   * Throws a QuandlRuntimeException if it can't find a parsable quandl code or Date column in the result.
+   * Get header definitions from Quandl about a range of quandlCodes returned as a Map of Quandl code to HeaderDefinition. The keys of the map will retain the
+   * order of the request and are backed by an unmodifiable LinkedHashMap. Throws a QuandlRuntimeException if it can't find a parsable quandl code or Date
+   * column in the result.
    *
-   * This method handles errors from Quandl4J and splits up bulk requests if they fail.  In particular if
-   * Quandl indicates there have been too many requests, it first backs off for a minute and does five
-   * retries.  It will then fail.  If there are other errors, it will split the request up into a sequence
-   * of single requests in an attempt to stop a 'bad apple' spoiling the whole request.
+   * This method handles errors from Quandl4J and splits up bulk requests if they fail. In particular if Quandl indicates there have been too many requests, it
+   * first backs off for a minute and does five retries. It will then fail. If there are other errors, it will split the request up into a sequence of single
+   * requests in an attempt to stop a 'bad apple' spoiling the whole request.
    *
-   * @param request the request object containing details of what is required, not null
+   * @param request
+   *          the request object containing details of what is required, not null
    * @return an unmodifiable Map of Quandl codes to MetaDataResult for each code, keys ordered according to request, not null
    */
   public Map<String, HeaderDefinition> getMultipleHeaderDefinition(final MultiMetaDataRequest request) {
@@ -270,13 +282,16 @@ public class RobustQuandlSession {
         LOGGER.warn("Quandl indicated too many requests have been made.  Giving up because tried 5 retries and limit unlikely to be reset until tomorrow.");
         throw new Quandl4OpenGammaRuntimeException("Giving up because request limit unlikely to be reset until tomorrow.");
       }
-    } catch (final InterruptedException ie) { }
+    } catch (final InterruptedException ie) {
+    }
 
   }
 
   /**
    * Get search results from Quandl.
-   * @param request the search query parameter, not null
+   * 
+   * @param request
+   *          the search query parameter, not null
    * @return the search result, not null
    */
   public SearchResult search(final SearchRequest request) {

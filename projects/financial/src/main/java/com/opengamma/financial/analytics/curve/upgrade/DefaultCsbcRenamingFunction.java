@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -9,9 +9,8 @@ import com.opengamma.util.result.Function2;
 
 /**
  *
- * The default renaming function for {@link com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration}.
- * If the name is null, the new name is "[original name] [ISO currency string].
- * If the name is not null, the new name is "[original name] [_name] [ISO currency string]".
+ * The default renaming function for {@link com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration}. If the name is null, the new name
+ * is "[original name] [ISO currency string]. If the name is not null, the new name is "[original name] [_name] [ISO currency string]".
  *
  */
 public class DefaultCsbcRenamingFunction implements Function2<String, String, String> {
@@ -26,7 +25,8 @@ public class DefaultCsbcRenamingFunction implements Function2<String, String, St
   }
 
   /**
-   * @param name  the additional string, can be null
+   * @param name
+   *          the additional string, can be null
    */
   public DefaultCsbcRenamingFunction(final String name) {
     _name = name;

@@ -33,7 +33,8 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Computes the par rate for different instrument. The meaning of "par rate" is instrument dependent.
  */
-public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MulticurveSensitivity> {
+public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator
+    extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -42,6 +43,7 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static FuturesPriceCurveSensitivityHullWhiteIssuerCalculator getInstance() {
@@ -54,7 +56,7 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
   private FuturesPriceCurveSensitivityHullWhiteIssuerCalculator() {
   }
 
-  /** The number of points used in the numerical integration process.*/
+  /** The number of points used in the numerical integration process. */
   private static final int DEFAULT_NB_POINTS = 81;
   /** The normal distribution implementation. */
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -63,34 +65,41 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
   /** The model used in computations. */
   private static final HullWhiteOneFactorPiecewiseConstantInterestRateModel MODEL = new HullWhiteOneFactorPiecewiseConstantInterestRateModel();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
-  public MulticurveSensitivity visitBondFuturesSecurity(final BondFuturesSecurity futures, final HullWhiteIssuerProviderInterface multicurve) {
+  public MulticurveSensitivity visitBondFuturesSecurity(final BondFuturesSecurity futures,
+      final HullWhiteIssuerProviderInterface multicurve) {
     return visitBondFuturesSecurity(futures, multicurve, DEFAULT_NB_POINTS);
   }
 
   /**
    * Computes the future price curve sensitivity.
-   * @param futures The future security.
-   * @param data The curve and Hull-White parameters.
-   * @param nbPoint The number of point in the numerical cross estimation.
+   * 
+   * @param futures
+   *          The future security.
+   * @param data
+   *          The curve and Hull-White parameters.
+   * @param nbPoint
+   *          The number of point in the numerical cross estimation.
    * @return The curve sensitivity.
    */
-  public MulticurveSensitivity visitBondFuturesSecurity(final BondFuturesSecurity futures, final HullWhiteIssuerProviderInterface data, final int nbPoint) {
+  public MulticurveSensitivity visitBondFuturesSecurity(final BondFuturesSecurity futures, final HullWhiteIssuerProviderInterface data,
+      final int nbPoint) {
     ArgumentChecker.notNull(futures, "Future");
     ArgumentChecker.notNull(data, "Hull-White data bundle");
     final int nbBond = futures.getDeliveryBasketAtDeliveryDate().length;
     final LegalEntity issuer = futures.getDeliveryBasketAtDeliveryDate()[0].getIssuerEntity();
     final HullWhiteOneFactorPiecewiseConstantParameters parameters = data.getHullWhiteParameters();
     final IssuerProviderInterface issuerProvider = data.getIssuerProvider();
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerProvider, futures.getCurrency(), issuer);
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerProvider,
+        futures.getCurrency(), issuer);
 
     final double expiry = futures.getNoticeLastTime();
     final double delivery = futures.getDeliveryLastTime();
     final double dfdelivery = data.getIssuerProvider().getDiscountFactor(issuer, delivery);
     // Constructing non-homogeneous point series for the numerical estimations.
-    final int nbPtWing = ((int) Math.floor(nbPoint / 20.)); // Number of point on each wing.
+    final int nbPtWing = (int) Math.floor(nbPoint / 20.); // Number of point on each wing.
     final int nbPtCenter = nbPoint - 2 * nbPtWing;
     final double prob = 1.0 / (2.0 * nbPtCenter);
     final double xStart = NORMAL.getInverseCDF(prob);
@@ -124,9 +133,11 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
         df[loopbnd][loopcf] = issuerProvider.getDiscountFactor(issuer, cfTime[loopbnd][loopcf]);
         alpha[loopbnd][loopcf] = MODEL.alpha(parameters, 0.0, expiry, delivery, cfTime[loopbnd][loopcf]);
         beta[loopbnd][loopcf] = MODEL.futuresConvexityFactor(parameters, expiry, cfTime[loopbnd][loopcf], delivery);
-        cfaAdjusted[loopbnd][loopcf] = df[loopbnd][loopcf] / dfdelivery * beta[loopbnd][loopcf] * cf[loopbnd].getNthPayment(loopcf).getAmount() / futures.getConversionFactor()[loopbnd];
+        cfaAdjusted[loopbnd][loopcf] = df[loopbnd][loopcf] / dfdelivery * beta[loopbnd][loopcf]
+            * cf[loopbnd].getNthPayment(loopcf).getAmount() / futures.getConversionFactor()[loopbnd];
         for (int looppt = 0; looppt < nbPoint; looppt++) {
-          pv[looppt][loopbnd] += cfaAdjusted[loopbnd][loopcf] * Math.exp(-alpha[loopbnd][loopcf] * alpha[loopbnd][loopcf] / 2.0 - alpha[loopbnd][loopcf] * x[looppt]);
+          pv[looppt][loopbnd] += cfaAdjusted[loopbnd][loopcf]
+              * Math.exp(-alpha[loopbnd][loopcf] * alpha[loopbnd][loopcf] / 2.0 - alpha[loopbnd][loopcf] * x[looppt]);
         }
       }
       e[loopbnd] = futures.getDeliveryBasketAtDeliveryDate()[loopbnd].getAccruedInterest() / futures.getConversionFactor()[loopbnd];
@@ -160,14 +171,15 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
     // Sum on each interval
     final int nbInt = ctd.size();
     final double[] kappa = new double[nbInt - 1];
-    //    double price = 0.0;
+    // double price = 0.0;
     if (nbInt != 1) {
       // The intersections
       final BracketRoot bracketer = new BracketRoot();
       final double accuracy = 1.0E-8;
       final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(accuracy);
       for (int loopint = 1; loopint < nbInt; loopint++) {
-        final BondDifference cross = new BondDifference(cfaAdjusted[ctd.get(loopint - 1)], alpha[ctd.get(loopint - 1)], e[ctd.get(loopint - 1)], cfaAdjusted[ctd.get(loopint)],
+        final BondDifference cross = new BondDifference(cfaAdjusted[ctd.get(loopint - 1)], alpha[ctd.get(loopint - 1)],
+            e[ctd.get(loopint - 1)], cfaAdjusted[ctd.get(loopint)],
             alpha[ctd.get(loopint)], e[ctd.get(loopint)]);
         final double[] range = bracketer.getBracketedPoints(cross, refx.get(loopint - 1) - 0.01, refx.get(loopint - 1) + 0.01);
         kappa[loopint - 1] = rootFinder.getRoot(cross, range[0], range[1]);
@@ -189,9 +201,11 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
     if (nbInt == 1) {
       for (int loopcf = 0; loopcf < cfaAdjusted[ctd.get(0)].length; loopcf++) {
         cfaAdjustedBar[ctd.get(0)][loopcf] = priceBar;
-        dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount() / futures.getConversionFactor()[ctd.get(0)]
+        dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount()
+            / futures.getConversionFactor()[ctd.get(0)]
             * cfaAdjustedBar[ctd.get(0)][loopcf];
-        listCredit.add(DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
+        listCredit.add(
+            DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
         dfdeliveryBar += -cfaAdjusted[ctd.get(0)][loopcf] / dfdelivery * cfaAdjustedBar[ctd.get(0)][loopcf];
       }
       listCredit.add(DoublesPair.of(delivery, -delivery * dfdelivery * dfdeliveryBar));
@@ -203,7 +217,8 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
       // Between cross
       for (int loopint = 1; loopint < nbInt - 1; loopint++) {
         for (int loopcf = 0; loopcf < cfaAdjusted[ctd.get(loopint)].length; loopcf++) {
-          cfaAdjustedBar[ctd.get(loopint)][loopcf] = (NORMAL.getCDF(kappa[loopint] + alpha[ctd.get(loopint)][loopcf]) - NORMAL.getCDF(kappa[loopint - 1] + alpha[ctd.get(loopint)][loopcf])) * priceBar;
+          cfaAdjustedBar[ctd.get(loopint)][loopcf] = (NORMAL.getCDF(kappa[loopint] + alpha[ctd.get(loopint)][loopcf])
+              - NORMAL.getCDF(kappa[loopint - 1] + alpha[ctd.get(loopint)][loopcf])) * priceBar;
         }
       }
       // From last cross to +infinity
@@ -212,7 +227,8 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
       }
       for (int loopbnd = 0; loopbnd < nbBond; loopbnd++) { // Could be reduced to only the ctd intervals.
         for (int loopcf = 0; loopcf < cfaAdjusted[loopbnd].length; loopcf++) {
-          dfBar[loopbnd][loopcf] = beta[loopbnd][loopcf] / dfdelivery * cf[loopbnd].getNthPayment(loopcf).getAmount() / futures.getConversionFactor()[loopbnd] * cfaAdjustedBar[loopbnd][loopcf];
+          dfBar[loopbnd][loopcf] = beta[loopbnd][loopcf] / dfdelivery * cf[loopbnd].getNthPayment(loopcf).getAmount()
+              / futures.getConversionFactor()[loopbnd] * cfaAdjustedBar[loopbnd][loopcf];
           listCredit.add(DoublesPair.of(cfTime[loopbnd][loopcf], -cfTime[loopbnd][loopcf] * df[loopbnd][loopcf] * dfBar[loopbnd][loopcf]));
           dfdeliveryBar += -cfaAdjusted[loopbnd][loopcf] / dfdelivery * cfaAdjustedBar[loopbnd][loopcf];
         }
@@ -234,7 +250,8 @@ public final class FuturesPriceCurveSensitivityHullWhiteIssuerCalculator extends
     private final double[] _alpha2;
     private final double _e2;
 
-    public BondDifference(final double[] cfa1, final double[] alpha1, final double e1, final double[] cfa2, final double[] alpha2, final double e2) {
+    BondDifference(final double[] cfa1, final double[] alpha1, final double e1, final double[] cfa2, final double[] alpha2,
+        final double e2) {
       _cfa1 = cfa1;
       _alpha1 = alpha1;
       _e1 = e1;

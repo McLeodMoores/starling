@@ -37,12 +37,11 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * Produces an execution plan for a graph that will execute on multiple calculation nodes.
  * <p>
- * Note that the parameters used to control job partitioning are guidance values and not hard constraints. The planner may produce jobs that do
- * not meet one or more of the limits. It is therefore possible, but perhaps not useful, to specify conflicting values.
+ * Note that the parameters used to control job partitioning are guidance values and not hard constraints. The planner may produce jobs that do not meet one or
+ * more of the limits. It is therefore possible, but perhaps not useful, to specify conflicting values.
  * <p>
- * Job cost estimates are in nanoseconds. These are using the (normalized) time estimate for the function execution and the estimated input/output
- * data volumes using an approximate data rate. The actual jobs produced may take longer to execute because of additional scheduling and housekeeping
- * overheads.
+ * Job cost estimates are in nanoseconds. These are using the (normalized) time estimate for the function execution and the estimated input/output data volumes
+ * using an approximate data rate. The actual jobs produced may take longer to execute because of additional scheduling and housekeeping overheads.
  */
 public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
@@ -59,10 +58,11 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   /**
    * Sets the minimum number of items for each job.
    * <p>
-   * The planner will do its best to honor this limit, but may produce jobs smaller than this if the maximum cost would be exceeded or there is not
-   * enough work to make a larger job.
+   * The planner will do its best to honor this limit, but may produce jobs smaller than this if the maximum cost would be exceeded or there is not enough work
+   * to make a larger job.
    *
-   * @param minimumJobItems the number of items, must be more than 0
+   * @param minimumJobItems
+   *          the number of items, must be more than 0
    */
   public void setMininumJobItems(final int minimumJobItems) {
     ArgumentChecker.isTrue(minimumJobItems > 0, "minimumJobItems");
@@ -83,7 +83,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * <p>
    * The planner will do its best to honor this limit, but may produce jobs larger than this if the minimum cost would not be met.
    *
-   * @param maximumJobItems the number of items, must be more than 0
+   * @param maximumJobItems
+   *          the number of items, must be more than 0
    */
   public void setMaximimJobItems(final int maximumJobItems) {
     ArgumentChecker.isTrue(maximumJobItems > 0, "maximumJobItems");
@@ -102,10 +103,11 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   /**
    * Sets the minimum estimated cost of jobs.
    * <p>
-   * The planner will do its best to honor this limit, but may produce jobs with a lower cost if the maximum number of job items would be exceeded or
-   * there is not enough work to make a larger job.
+   * The planner will do its best to honor this limit, but may produce jobs with a lower cost if the maximum number of job items would be exceeded or there is
+   * not enough work to make a larger job.
    *
-   * @param minimumJobCost the estimated cost in nanoseconds, must be at least 0
+   * @param minimumJobCost
+   *          the estimated cost in nanoseconds, must be at least 0
    */
   public void setMinimumJobCost(final long minimumJobCost) {
     ArgumentChecker.isTrue(minimumJobCost >= 0, "minimumJobCost");
@@ -127,7 +129,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
    * <p>
    * The planner will do its best to honor this limit, but may produce more expensive jobs if the minimum number of job items would be exceeded.
    *
-   * @param maximumJobCost the estimated cost in nanoseconds, must be at least 0
+   * @param maximumJobCost
+   *          the estimated cost in nanoseconds, must be at least 0
    */
   public void setMaximumJobCost(final long maximumJobCost) {
     ArgumentChecker.isTrue(maximumJobCost >= 0, "maximumJobCost");
@@ -147,8 +150,9 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   /**
    * Sets the concurrency limit for job tails.
    *
-   * @param maximumConcurrency the number of job tails that are expected to be executing in parallel, must be more than 0 for tail execution.
-   * If set to 0, tail execution is disabled.
+   * @param maximumConcurrency
+   *          the number of job tails that are expected to be executing in parallel, must be more than 0 for tail execution. If set to 0, tail execution is
+   *          disabled.
    */
   public void setMaximumConcurrency(final int maximumConcurrency) {
     ArgumentChecker.isTrue(maximumConcurrency >= 0, "maximumConcurrency");
@@ -186,7 +190,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
     private final FunctionCostsPerConfiguration _costs;
     private final Set<ValueSpecification> _sharedValues;
 
-    public FragmentGatherer(final int size, final FunctionCostsPerConfiguration costs, final Set<ValueSpecification> sharedValues) {
+    FragmentGatherer(final int size, final FunctionCostsPerConfiguration costs, final Set<ValueSpecification> sharedValues) {
       _node2Fragment = Maps.newHashMapWithExpectedSize(size);
       _allFragments = Sets.newHashSetWithExpectedSize(size);
       _costs = costs;
@@ -228,7 +232,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   private Set<GraphFragment> createGraphFragments(final DependencyGraph graph, final FragmentGatherer fragments) {
     final int rootCount = graph.getRootCount();
     final Set<GraphFragment> roots = Sets.newHashSetWithExpectedSize(rootCount);
-    rootLoop: for (int i = 0; i < rootCount; i++) { //CSIGNORE
+    rootLoop: for (int i = 0; i < rootCount; i++) { // CSIGNORE
       final DependencyNode root = graph.getRootNode(i);
       final int outputs = root.getOutputCount();
       for (int j = 0; j < outputs; j++) {
@@ -339,8 +343,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   }
 
   /**
-   * If a fragment has only a single input, it can be a tail to the fragment generating that input. A fragment with multiple inputs
-   * can be a tail to all of them iff they are tails to a common fragment (ie all will end up at the same calculation node).
+   * If a fragment has only a single input, it can be a tail to the fragment generating that input. A fragment with multiple inputs can be a tail to all of them
+   * iff they are tails to a common fragment (ie all will end up at the same calculation node).
    */
   private void findTailFragments(final Set<GraphFragment> allFragments) {
     // Estimate start times based on fragment costs and dependencies
@@ -381,7 +385,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
         }
       }
       if (event.getFirst() != null) {
-        eventFragment: for (final GraphFragment starting : event.getFirst()) { //CSIGNORE
+        eventFragment: for (final GraphFragment starting : event.getFirst()) { // CSIGNORE
           if (starting.getInputFragments().isEmpty()) {
             // No inputs, so we're a leaf node = new graph color
             starting.setExecutionId(nextExecutionId);
@@ -445,8 +449,10 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   /**
    * Updates the shared value cache with details of any "private" values that, as a result of tail jobs, do not need to leave the calculation node.
    *
-   * @param context the operating context, not null
-   * @param allFragments all discovered fragments, not null
+   * @param context
+   *          the operating context, not null
+   * @param allFragments
+   *          all discovered fragments, not null
    */
   private void exportPrivateValues(final GraphFragmentContext context, final Collection<GraphFragment> allFragments) {
     final Map<ValueSpecification, Boolean> sharedValues = context.getSharedCacheValues();
@@ -458,8 +464,8 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   private GraphExecutionPlan createMultipleNodePlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource,
       final long functionInitializationId,
       final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
-    final GraphFragmentContext context =
-        new GraphFragmentContext(graph.getCalculationConfigurationName(), logModeSource, functionInitializationId, sharedValues, parameters);
+    final GraphFragmentContext context = new GraphFragmentContext(graph.getCalculationConfigurationName(), logModeSource, functionInitializationId,
+        sharedValues, parameters);
     context.setTerminalOutputs(DependencyGraphImpl.getTerminalOutputSpecifications(graph));
     FragmentGatherer gatherer = new FragmentGatherer(graph.getSize(), getFunctionCosts().getStatistics(graph.getCalculationConfigurationName()), sharedValues);
     final Set<GraphFragment> rootFragments = createGraphFragments(graph, gatherer);

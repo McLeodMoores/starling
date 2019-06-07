@@ -36,9 +36,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.OpenGammaClock;
 
 /**
- * TODO document the slightly awkward design because of the requirements:
- *   provider needs to know what's been updated so it can notify the listeners
- *   only the snapshot knows the IDs of the data in the underlying snapshot
+ * TODO document the slightly awkward design because of the requirements: provider needs to know what's been updated so it can notify the listeners only the
+ * snapshot knows the IDs of the data in the underlying snapshot.
  */
 /* package */ class RandomizingMarketDataProvider extends AbstractMarketDataProvider {
 
@@ -60,7 +59,7 @@ import com.opengamma.util.OpenGammaClock;
   /** Randomized values derived from {@link #_values}, repopulated each time the randomized task executes. */
   private final Map<ValueSpecification, Object> _randomizedValues = Maps.newHashMap();
 
-  public RandomizingMarketDataProvider(final RandomizingMarketDataSpecification spec, final MarketDataProvider underlying) {
+  RandomizingMarketDataProvider(final RandomizingMarketDataSpecification spec, final MarketDataProvider underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(spec, "spec");
     _marketDataSpec = spec;
@@ -131,13 +130,13 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /**
-   * @param value The value to randomize
+   * @param value
+   *          The value to randomize
    * @return The randomized object or null if its value wasn't changed
    */
   private Object randomize(final Object value) {
     @SuppressWarnings("unchecked")
-    final
-    Randomizer<Object> randomizer = (Randomizer<Object>) _randomizers.get(value.getClass());
+    final Randomizer<Object> randomizer = (Randomizer<Object>) _randomizers.get(value.getClass());
     if (randomizer == null) {
       return null;
     }
@@ -145,16 +144,14 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /**
-   * Schedules a new {@link RandomizingTask} to run after a delay of
-   * {@link RandomizingMarketDataSpecification#getAverageCycleInterval()} +/-50%
+   * Schedules a new {@link RandomizingTask} to run after a delay of {@link RandomizingMarketDataSpecification#getAverageCycleInterval()} +/-50%
    */
   private void scheduleRandomizingTask() {
     TIMER.schedule(new RandomizingTask(), (long) (_marketDataSpec.getAverageCycleInterval() * (0.5 + Math.random())));
   }
 
   /**
-   * Populates a map of randomized values by traversing the previous set of snapshot values and randomly permuting
-   * a random subset.
+   * Populates a map of randomized values by traversing the previous set of snapshot values and randomly permuting a random subset.
    */
   private void randomizeSnapshot() {
     final Set<ValueSpecification> updatedSpecs = Sets.newHashSet();
@@ -264,8 +261,7 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /**
-   * Listener that receives notifications from the underlying provider and forwards them to listeners attached to
-   * this provider.
+   * Listener that receives notifications from the underlying provider and forwards them to listeners attached to this provider.
    */
   private class Listener implements MarketDataListener {
 
@@ -305,7 +301,9 @@ import com.opengamma.util.OpenGammaClock;
 
     /**
      * Possibly randomizes a value, returning the value if it was randomized, null if not
-     * @param value The value to randomize
+     * 
+     * @param value
+     *          The value to randomize
      * @return The randomized value, null if it wasn't randomized
      */
     T randomize(T value);
@@ -352,21 +350,15 @@ import com.opengamma.util.OpenGammaClock;
     }
   }
 
-  /*private class VolatilitySurfaceDataRandomizer implements Randomizer<VolatilitySurfaceData<Object, Object>> {
-
-    @Override
-    public VolatilitySurfaceData<Object, Object> randomize(VolatilitySurfaceData<Object, Object> value) {
-      // TODO implement randomize()
-      throw new UnsupportedOperationException("randomize not implemented");
-    }
-  }
-
-  private class VolatilityCubeDataRandomizer implements Randomizer<VolatilityCubeData> {
-
-    @Override
-    public VolatilityCubeData randomize(VolatilityCubeData value) {
-      // TODO implement randomize()
-      throw new UnsupportedOperationException("randomize not implemented");
-    }
-  }*/
+  /*
+   * private class VolatilitySurfaceDataRandomizer implements Randomizer<VolatilitySurfaceData<Object, Object>> {
+   * 
+   * @Override public VolatilitySurfaceData<Object, Object> randomize(VolatilitySurfaceData<Object, Object> value) { // TODO implement randomize() throw new
+   * UnsupportedOperationException("randomize not implemented"); } }
+   * 
+   * private class VolatilityCubeDataRandomizer implements Randomizer<VolatilityCubeData> {
+   * 
+   * @Override public VolatilityCubeData randomize(VolatilityCubeData value) { // TODO implement randomize() throw new
+   * UnsupportedOperationException("randomize not implemented"); } }
+   */
 }

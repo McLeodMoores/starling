@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.opengamma.util.auth.AuthUtils;
 import com.opengamma.web.analytics.push.ConnectionManager;
+import com.opengamma.web.analytics.push.LongPollingServlet;
 import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
@@ -19,9 +20,9 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
 /**
- * Jersey filter that sets up subscriptions for masters that are queried via the REST interface.  When any data changes
- * in the master a notification is sent to the client containing the REST URL used to perform the original query.
- * An instance of the filter is associated with each REST method annotated with {@link SubscribeMaster}.
+ * Jersey filter that sets up subscriptions for masters that are queried via the REST interface. When any data changes in the master a notification is sent to
+ * the client containing the REST URL used to perform the original query. An instance of the filter is associated with each REST method annotated with
+ * {@link SubscribeMaster}.
  */
 public class MasterSubscriptionFilter implements ResourceFilter {
 
@@ -31,9 +32,9 @@ public class MasterSubscriptionFilter implements ResourceFilter {
   private final HttpServletRequest _servletRequest;
 
   public MasterSubscriptionFilter(final ConnectionManager updateManager,
-                                  final List<MasterType> masterTypes,
-                                  final HttpContext httpContext,
-                                  final HttpServletRequest servletRequest) {
+      final List<MasterType> masterTypes,
+      final HttpContext httpContext,
+      final HttpServletRequest servletRequest) {
     _httpContext = httpContext;
     _updateManager = updateManager;
     _masterTypes = masterTypes;
@@ -57,8 +58,7 @@ public class MasterSubscriptionFilter implements ResourceFilter {
   }
 
   /**
-   * Filter that examines the response and sets up a subscription with
-   * {@link ConnectionManager#subscribe(String, String, MasterType, String)}.
+   * Filter that examines the response and sets up a subscription with {@link ConnectionManager#subscribe(String, String, MasterType, String)}.
    */
   private class ResponseFilter implements ContainerResponseFilter {
 
@@ -66,17 +66,21 @@ public class MasterSubscriptionFilter implements ResourceFilter {
     private final List<MasterType> _mastersTypes;
 
     /**
-     * @param masterTypes The masters whose data is returned by the REST method
+     * @param masterTypes
+     *          The masters whose data is returned by the REST method
      */
-    public ResponseFilter(final List<MasterType> masterTypes) {
+    ResponseFilter(final List<MasterType> masterTypes) {
       _mastersTypes = masterTypes;
     }
 
     /**
-     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes
-     * for updates when the data changes in any of the masters in {@link #_mastersTypes}.
-     * @param request The request
-     * @param response The response
+     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes for updates when the data changes in any of the
+     * masters in {@link #_mastersTypes}.
+     * 
+     * @param request
+     *          The request
+     * @param response
+     *          The response
      * @return The unmodified response
      */
     @Override

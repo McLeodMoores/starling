@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.capfloor.CapFloorCMSSpreadSecurity;
-
 /**
  * Utility for constructing a random Cap/Floor CMS spread portfolio.
  */

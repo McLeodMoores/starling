@@ -15,10 +15,14 @@ public abstract class MatrixAlgebra {
 
   /**
    * Adds two matrices. This operation can only be performed if the matrices are of the same type and dimensions.
-   * @param m1 The first matrix, not null
-   * @param m2 The second matrix, not null
+   *
+   * @param m1
+   *          The first matrix, not null
+   * @param m2
+   *          The second matrix, not null
    * @return The sum of the two matrices
-   * @throws IllegalArgumentException If the matrices are not of the same type, if the matrices are not the same shape.
+   * @throws IllegalArgumentException
+   *           If the matrices are not of the same type, if the matrices are not the same shape.
    */
   public Matrix<?> add(final Matrix<?> m1, final Matrix<?> m2) {
     Validate.notNull(m1, "m1");
@@ -59,10 +63,12 @@ public abstract class MatrixAlgebra {
   }
 
   /**
-   * Returns the quotient of two matrices $C = \frac{A}{B} = AB^{-1}$, where
-   * $B^{-1}$ is the pseudo-inverse of $B$ i.e.  $BB^{-1} = \mathbb{1}$.
-   * @param m1 The numerator matrix, not null. This matrix must be a {@link DoubleMatrix2D}.
-   * @param m2 The denominator, not null. This matrix must be a {@link DoubleMatrix2D}.
+   * Returns the quotient of two matrices $C = \frac{A}{B} = AB^{-1}$, where $B^{-1}$ is the pseudo-inverse of $B$ i.e. $BB^{-1} = \mathbb{1}$.
+   *
+   * @param m1
+   *          The numerator matrix, not null. This matrix must be a {@link DoubleMatrix2D}.
+   * @param m2
+   *          The denominator, not null. This matrix must be a {@link DoubleMatrix2D}.
    * @return The result
    */
   public Matrix<?> divide(final Matrix<?> m1, final Matrix<?> m2) {
@@ -75,7 +81,7 @@ public abstract class MatrixAlgebra {
 
   /**
    * Returns the Kronecker product of two matrices.
-   * 
+   *
    * @param m1
    *          The first matrix, not null. This matrix must be a {@link DoubleMatrix2D}.
    * @param m2
@@ -114,16 +120,22 @@ public abstract class MatrixAlgebra {
 
   /**
    * Multiplies two matrices.
-   * @param m1 The first matrix, not null.
-   * @param m2 The second matrix, not null.
+   *
+   * @param m1
+   *          The first matrix, not null.
+   * @param m2
+   *          The second matrix, not null.
    * @return The product of the two matrices.
    */
-  public abstract Matrix<?> multiply(final Matrix<?> m1, final Matrix<?> m2);
+  public abstract Matrix<?> multiply(Matrix<?> m1, Matrix<?> m2);
 
   /**
    * Scale a vector or matrix by a given amount, i.e. each element is multiplied by the scale.
-   * @param m A vector or matrix, not null
-   * @param scale The scale
+   *
+   * @param m
+   *          A vector or matrix, not null
+   * @param scale
+   *          The scale
    * @return the scaled vector or matrix
    */
   public Matrix<?> scale(final Matrix<?> m, final double scale) {
@@ -152,10 +164,14 @@ public abstract class MatrixAlgebra {
 
   /**
    * Subtracts two matrices. This operation can only be performed if the matrices are of the same type and dimensions.
-   * @param m1 The first matrix, not null
-   * @param m2 The second matrix, not null
+   *
+   * @param m1
+   *          The first matrix, not null
+   * @param m2
+   *          The second matrix, not null
    * @return The second matrix subtracted from the first
-   * @throws IllegalArgumentException If the matrices are not of the same type, if the matrices are not the same shape.
+   * @throws IllegalArgumentException
+   *           If the matrices are not of the same type, if the matrices are not the same shape.
    */
   public Matrix<?> subtract(final Matrix<?> m1, final Matrix<?> m2) {
     Validate.notNull(m1, "m1");
@@ -196,99 +212,129 @@ public abstract class MatrixAlgebra {
 
   /**
    * Returns the condition number of the matrix.
-   * @param m A matrix, not null
+   *
+   * @param m
+   *          A matrix, not null
    * @return The condition number of the matrix
    */
-  public abstract double getCondition(final Matrix<?> m);
+  public abstract double getCondition(Matrix<?> m);
 
   /**
    * Returns the determinant of the matrix.
-   * @param m A matrix, not null
+   *
+   * @param m
+   *          A matrix, not null
    * @return The determinant of the matrix
    */
-  public abstract double getDeterminant(final Matrix<?> m);
+  public abstract double getDeterminant(Matrix<?> m);
 
   /**
    * Returns the inverse (or pseudo-inverse) of the matrix.
-   * @param m A matrix, not null
+   *
+   * @param m
+   *          A matrix, not null
    * @return The inverse matrix
    */
-  public abstract DoubleMatrix2D getInverse(final Matrix<?> m);
+  public abstract DoubleMatrix2D getInverse(Matrix<?> m);
 
   /**
    * Returns the inner (or dot) product.
-   * @param m1 A vector, not null
-   * @param m2 A vector, not null
+   *
+   * @param m1
+   *          A vector, not null
+   * @param m2
+   *          A vector, not null
    * @return The scalar dot product
-   * @exception IllegalArgumentException If the vectors are not the same size
+   * @exception IllegalArgumentException
+   *              If the vectors are not the same size
    */
-  public abstract double getInnerProduct(final Matrix<?> m1, final Matrix<?> m2);
+  public abstract double getInnerProduct(Matrix<?> m1, Matrix<?> m2);
 
   /**
    * Returns the outer product.
-   * @param m1 A vector, not null
-   * @param m2 A vector, not null
+   *
+   * @param m1
+   *          A vector, not null
+   * @param m2
+   *          A vector, not null
    * @return The outer product
-   * @exception IllegalArgumentException If the vectors are not the same size
+   * @exception IllegalArgumentException
+   *              If the vectors are not the same size
    */
-  public abstract DoubleMatrix2D getOuterProduct(final Matrix<?> m1, final Matrix<?> m2);
+  public abstract DoubleMatrix2D getOuterProduct(Matrix<?> m1, Matrix<?> m2);
 
   /**
-   * For a vector, returns the <a href="http://mathworld.wolfram.com/L1-Norm.html">$L_1$ norm</a>
-   * (also known as the Taxicab norm or Manhattan norm), i.e.  $\Sigma |x_i|$.
+   * For a vector, returns the <a href="http://mathworld.wolfram.com/L1-Norm.html">$L_1$ norm</a> (also known as the Taxicab norm or Manhattan norm), i.e.
+   * $\Sigma |x_i|$.
    * <p>
    * For a matrix, returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteColumnSumNorm.html">maximum absolute column sum norm</a> of the matrix.
-   * @param m A vector or matrix, not null
+   *
+   * @param m
+   *          A vector or matrix, not null
    * @return The $L_1$ norm
    */
-  public abstract double getNorm1(final Matrix<?> m);
+  public abstract double getNorm1(Matrix<?> m);
 
   /**
    * For a vector, returns <a href="http://mathworld.wolfram.com/L2-Norm.html">$L_2$ norm</a> (also known as the Euclidean norm).
    * <p>
    * For a matrix, returns the <a href="http://mathworld.wolfram.com/SpectralNorm.html">spectral norm</a>
-   * @param m A vector or matrix, not null
+   *
+   * @param m
+   *          A vector or matrix, not null
    * @return the norm
    */
-  public abstract double getNorm2(final Matrix<?> m);
+  public abstract double getNorm2(Matrix<?> m);
 
   /**
-   * For a vector, returns the <a href="http://mathworld.wolfram.com/L-Infinity-Norm.html">$L_\infty$ norm</a>.
-   * $L_\infty$ norm is the maximum of the absolute values of the elements.
+   * For a vector, returns the <a href="http://mathworld.wolfram.com/L-Infinity-Norm.html">$L_\infty$ norm</a>. $L_\infty$ norm is the maximum of the absolute
+   * values of the elements.
    * <p>
    * For a matrix, returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteRowSumNorm.html">maximum absolute row sum norm</a>
-   * @param m a vector or a matrix, not null
+   *
+   * @param m
+   *          a vector or a matrix, not null
    * @return the norm
    */
-  public abstract double getNormInfinity(final Matrix<?> m);
+  public abstract double getNormInfinity(Matrix<?> m);
 
   /**
    * Returns a matrix raised to an integer power, e.g. $\mathbf{A}^3 = \mathbf{A}\mathbf{A}\mathbf{A}$.
-   * @param m A square matrix, not null
-   * @param p An integer power
+   *
+   * @param m
+   *          A square matrix, not null
+   * @param p
+   *          An integer power
    * @return The result
    */
-  public abstract DoubleMatrix2D getPower(final Matrix<?> m, final int p);
+  public abstract DoubleMatrix2D getPower(Matrix<?> m, int p);
 
   /**
    * Returns a matrix raised to a power, $\mathbf{A}^3 = \mathbf{A}\mathbf{A}\mathbf{A}$.
-   * @param m A square matrix, not null
-   * @param p The power
+   *
+   * @param m
+   *          A square matrix, not null
+   * @param p
+   *          The power
    * @return The result
    */
   public abstract DoubleMatrix2D getPower(Matrix<?> m, double p);
 
   /**
    * Returns the trace (i.e. sum of diagonal elements) of a matrix.
-   * @param m A matrix, not null. The matrix must be square.
+   *
+   * @param m
+   *          A matrix, not null. The matrix must be square.
    * @return The trace
    */
-  public abstract double getTrace(final Matrix<?> m);
+  public abstract double getTrace(Matrix<?> m);
 
   /**
    * Returns the transpose of a matrix.
-   * @param m A matrix, not null
+   *
+   * @param m
+   *          A matrix, not null
    * @return The transpose matrix
    */
-  public abstract DoubleMatrix2D getTranspose(final Matrix<?> m);
+  public abstract DoubleMatrix2D getTranspose(Matrix<?> m);
 }

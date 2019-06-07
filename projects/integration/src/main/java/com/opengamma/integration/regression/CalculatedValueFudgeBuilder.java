@@ -55,15 +55,17 @@ public class CalculatedValueFudgeBuilder implements FudgeBuilder<CalculatedValue
     return CalculatedValue.of(value, specificationProperties, targetType, targetName);
   }
 
-
-
   /**
    * Bypasses secondary types.
-   * @param serializer serializer
-   * @param message message
-   * @param name name
-   * @param ordinal ordinal
-   * @param object object
+   *
+   * @param serializer
+   *          serializer
+   * @param message
+   *          message
+   * @param name
+   *          name
+   * @param object
+   *          object
    */
   static void addToMessageWithHeader(final FudgeSerializer serializer, final MutableFudgeMsg message, final String name, final Object object) {
     final Class<?> clazz = object.getClass();
@@ -88,8 +90,8 @@ public class CalculatedValueFudgeBuilder implements FudgeBuilder<CalculatedValue
     if (fieldType == null) {
       return false;
     }
-    return FudgeWireType.SUB_MESSAGE.equals(fieldType) == false ||
-            FudgeWireType.SUB_MESSAGE.equals(fieldType) && object instanceof FudgeMsg;
+    return !FudgeWireType.SUB_MESSAGE.equals(fieldType)
+        || FudgeWireType.SUB_MESSAGE.equals(fieldType) && object instanceof FudgeMsg;
   }
 
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -62,10 +62,10 @@ public class EuropeanStandardBarrierOptionDefinition extends OptionDefinition {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_barrier == null) ? 0 : _barrier.hashCode());
+    result = prime * result + (_barrier == null ? 0 : _barrier.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_rebate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -84,14 +84,14 @@ public class EuropeanStandardBarrierOptionDefinition extends OptionDefinition {
     return ObjectUtils.equals(_barrier, other._barrier) && Double.doubleToLongBits(_rebate) == Double.doubleToLongBits(other._rebate);
   }
 
-  //TODO promote to its own class
+  // TODO promote to its own class
   private static final class MyOptionPayoffFunction implements OptionPayoffFunction<StandardOptionDataBundle> {
     private boolean _isAlive;
     private final Barrier _b;
     private final EuropeanVanillaOptionDefinition _vanillaOption;
     private final double _r;
 
-    public MyOptionPayoffFunction(final Barrier barrier, final EuropeanVanillaOptionDefinition vanillaOption, final double rebate) {
+    MyOptionPayoffFunction(final Barrier barrier, final EuropeanVanillaOptionDefinition vanillaOption, final double rebate) {
       _isAlive = barrier.getKnockType() == KnockType.IN ? false : true;
       _b = barrier;
       _vanillaOption = vanillaOption;

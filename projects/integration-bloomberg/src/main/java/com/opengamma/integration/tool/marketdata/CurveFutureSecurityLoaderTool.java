@@ -54,7 +54,7 @@ import com.opengamma.scripts.Scriptable;
 public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static Logger LOGGER = LoggerFactory.getLogger(CurveFutureSecurityLoaderTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveFutureSecurityLoaderTool.class);
 
   /** Portfolio name option flag */
   private static final String CURVE_NAME_OPT = "n";
@@ -63,17 +63,18 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
   /** Verbose option flag */
   private static final String VERBOSE_OPT = "v";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new CurveFutureSecurityLoaderTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final ConfigSource configSource = getToolContext().getConfigSource();
@@ -115,7 +116,8 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
    * Get all the curve definition config object names specified by glob expression.
    *
    * @param configMaster
-   * @param nameExpr glob type expression - e.g. blah*
+   * @param nameExpr
+   *          glob type expression - e.g. blah*
    * @return list of names of config objects matching glob expression
    */
   private List<YieldCurveDefinition> getCurveDefinitionNames(final ConfigMaster configMaster, final String nameExpr) {
@@ -129,8 +131,7 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
   }
 
   /**
-   * For a given list of curve definitions, on a given list of dates, get all
-   * ids on futures required by those curves.
+   * For a given list of curve definitions, on a given list of dates, get all ids on futures required by those curves.
    *
    * @param configSource
    *          configuration source
@@ -140,7 +141,8 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
    *          list of dates to construct the curve on
    * @return list of all futures ids required by curves
    */
-  private Set<ExternalId> getCurveFutureExternalIds(final ConfigSource configSource, final Collection<YieldCurveDefinition> curveDefs, final List<LocalDate> dates) {
+  private Set<ExternalId> getCurveFutureExternalIds(final ConfigSource configSource, final Collection<YieldCurveDefinition> curveDefs,
+      final List<LocalDate> dates) {
     final Set<ExternalId> externalIds = newHashSet();
     for (final YieldCurveDefinition curveDefinition : curveDefs) {
       if (curveDefinition != null) {
@@ -169,7 +171,8 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
   }
 
   private void loadSecurityData(final boolean write, final Set<ExternalId> externalIds) {
-    final BloombergBulkSecurityLoader bulkSecurityLoader = new BloombergBulkSecurityLoader(getToolContext().getBloombergReferenceDataProvider(), DefaultExchangeDataProvider.getInstance());
+    final BloombergBulkSecurityLoader bulkSecurityLoader = new BloombergBulkSecurityLoader(getToolContext().getBloombergReferenceDataProvider(),
+        DefaultExchangeDataProvider.getInstance());
     final SecurityMaster secMaster = getToolContext().getSecurityMaster();
     final Set<ExternalIdBundle> externalIdBundles = new HashSet<>();
     for (final ExternalId externalId : externalIds) {
@@ -213,7 +216,8 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
     curveNameOption.setRequired(true);
     options.addOption(curveNameOption);
 
-    final Option writeOption = new Option(WRITE_OPT, "write", false, "Actually persists the time series to the database if specified, otherwise pretty-prints without persisting");
+    final Option writeOption = new Option(WRITE_OPT, "write", false,
+        "Actually persists the time series to the database if specified, otherwise pretty-prints without persisting");
     options.addOption(writeOption);
 
     final Option verboseOption = new Option(VERBOSE_OPT, "verbose", false, "Displays progress messages on the terminal");

@@ -45,6 +45,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Converts swaptions from {@link SwaptionSecurity} to the {@link InstrumentDefinition}s.
+ * 
  * @deprecated Replaced by {@link SwaptionSecurityConverter}, which does not use curve name information
  */
 @Deprecated
@@ -59,18 +60,24 @@ public class SwaptionSecurityConverterDeprecated extends FinancialSecurityVisito
   private final ConventionBundleSource _conventionSource;
 
   /**
-   * @param securitySource The security source, not null
-   * @param swapConverter The underlying swap converter, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param swapConverter
+   *          The underlying swap converter, not null
    */
   public SwaptionSecurityConverterDeprecated(final SecuritySource securitySource, final SwapSecurityConverterDeprecated swapConverter) {
     this(securitySource, swapConverter.getConventionBundleSource(), swapConverter.getHolidaySource(), swapConverter.getRegionSource());
   }
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
    */
   public SwaptionSecurityConverterDeprecated(final SecuritySource securitySource, final ConventionBundleSource conventionSource,
       final HolidaySource holidaySource, final RegionSource regionSource) {
@@ -96,8 +103,8 @@ public class SwaptionSecurityConverterDeprecated extends FinancialSecurityVisito
     final boolean isCall = underlyingSecurity.getPayLeg() instanceof FixedInterestRateLeg;
     if (swaptionSecurity.getCurrency().equals(Currency.BRL)) {
       final SwapFixedCompoundedONCompoundedDefinition swapDefinition = getBRLSwapDefinition(underlyingSecurity, isCall);
-      return isCashSettled ? SwaptionCashFixedCompoundedONCompoundingDefinition.from(expiry, swapDefinition, isCall, isLong) :
-        SwaptionPhysicalFixedCompoundedONCompoundedDefinition.from(expiry, swapDefinition, isCall, isLong);
+      return isCashSettled ? SwaptionCashFixedCompoundedONCompoundingDefinition.from(expiry, swapDefinition, isCall, isLong)
+          : SwaptionPhysicalFixedCompoundedONCompoundedDefinition.from(expiry, swapDefinition, isCall, isLong);
     }
     if (swapType != InterestRateInstrumentType.SWAP_FIXED_IBOR) {
       throw new OpenGammaRuntimeException("Underlying swap of a swaption must be a fixed / ibor swap; have " + swapType);
@@ -135,14 +142,18 @@ public class SwaptionSecurityConverterDeprecated extends FinancialSecurityVisito
     final int paymentLag = brlSwapConvention.getSwapFixedLegSettlementDays();
     final double notional = ((InterestRateNotional) fixedLeg.getNotional()).getAmount();
     final double fixedRate = fixedLeg.getRate();
-    final GeneratorSwapFixedCompoundedONCompounded generator = new GeneratorSwapFixedCompoundedONCompounded(name, index, fixedLegDayCount, businessDayConvention, isEOM, spotLag, paymentLag, calendar);
+    final GeneratorSwapFixedCompoundedONCompounded generator = new GeneratorSwapFixedCompoundedONCompounded(name, index, fixedLegDayCount,
+        businessDayConvention, isEOM, spotLag, paymentLag, calendar);
     return SwapFixedCompoundedONCompoundedDefinition.from(effectiveDate, maturityDate, notional, generator, fixedRate, payFixed);
   }
 
   /**
    * Creates a fixed / ibor swap definition.
-   * @param swapSecurity The swap security
-   * @param payFixed True if the underlying swap is payer
+   * 
+   * @param swapSecurity
+   *          The swap security
+   * @param payFixed
+   *          True if the underlying swap is payer
    * @return The swap definition
    */
   private SwapFixedIborDefinition getFixedIborSwapDefinition(final SwapSecurity swapSecurity, final boolean payFixed) {
@@ -157,8 +168,9 @@ public class SwaptionSecurityConverterDeprecated extends FinancialSecurityVisito
     final Currency currency = ((InterestRateNotional) payLeg.getNotional()).getCurrency();
     final ConventionBundle iborIndexConvention = _conventionSource.getConventionBundle(iborLeg.getFloatingReferenceRateId());
     if (iborIndexConvention == null) {
-      throw new OpenGammaRuntimeException("Could not get Ibor index convention for " + currency + " using " + iborLeg.getFloatingReferenceRateId() + " from swap " +
-          swapSecurity.getExternalIdBundle());
+      throw new OpenGammaRuntimeException(
+          "Could not get Ibor index convention for " + currency + " using " + iborLeg.getFloatingReferenceRateId() + " from swap " +
+              swapSecurity.getExternalIdBundle());
     }
     final Frequency freqIbor = iborLeg.getFrequency();
     final Period tenorIbor;
@@ -178,8 +190,10 @@ public class SwaptionSecurityConverterDeprecated extends FinancialSecurityVisito
     }
     final double fixedLegNotional = ((InterestRateNotional) fixedLeg.getNotional()).getAmount();
     final double iborLegNotional = ((InterestRateNotional) iborLeg.getNotional()).getAmount();
-    final SwapFixedIborDefinition swap = SwapFixedIborDefinition.from(effectiveDate, maturityDate, tenorFixed, fixedLeg.getDayCount(), fixedLeg.getBusinessDayConvention(), fixedLeg.isEom(),
-        fixedLegNotional, fixedLeg.getRate(), tenorIbor, iborLeg.getDayCount(), iborLeg.getBusinessDayConvention(), iborLeg.isEom(), iborLegNotional, indexIbor, payFixed, calendar);
+    final SwapFixedIborDefinition swap = SwapFixedIborDefinition.from(effectiveDate, maturityDate, tenorFixed, fixedLeg.getDayCount(),
+        fixedLeg.getBusinessDayConvention(), fixedLeg.isEom(),
+        fixedLegNotional, fixedLeg.getRate(), tenorIbor, iborLeg.getDayCount(), iborLeg.getBusinessDayConvention(), iborLeg.isEom(), iborLegNotional, indexIbor,
+        payFixed, calendar);
     return swap;
   }
 

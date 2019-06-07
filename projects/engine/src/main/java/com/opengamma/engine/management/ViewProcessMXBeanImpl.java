@@ -152,13 +152,21 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   }
 
   /**
-   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>"
+   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>".
+   *
+   * @param viewProcessorName
+   *          the view processor name
+   * @param viewProcessId
+   *          the underlying view process identifier
+   * @param splitByViewProcessor
+   *          should the MBean name differentiate beans by view processor
+   * @return the object name
    */
   static ObjectName createObjectName(final String viewProcessorName, final UniqueId viewProcessId, final boolean splitByViewProcessor) {
     try {
-      final String beanNamePrefix = splitByViewProcessor ?
-          "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName :
-            "com.opengamma:type=ViewProcessor";
+      final String beanNamePrefix = splitByViewProcessor
+          ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName
+          : "com.opengamma:type=ViewProcessor";
       return new ObjectName(beanNamePrefix + ",ViewProcesses=ViewProcesses,name=ViewProcess " + viewProcessId.getValue());
     } catch (final MalformedObjectNameException e) {
       throw new CacheException(e);
@@ -178,8 +186,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   @Override
   public String getViewName() {
     @SuppressWarnings("unchecked")
-    final
-    ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _viewProcessor.getConfigSource().get(_viewProcess.getDefinitionId());
+    final ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _viewProcessor.getConfigSource().get(_viewProcess.getDefinitionId());
     return configItem.getName();
   }
 
@@ -234,9 +241,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
   @Override
   public Long getTimeSinceLastSuccessfulCycle() {
-    return _lastSuccessfulCycleTimeStamp != null ?
-        _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) :
-          null;
+    return _lastSuccessfulCycleTimeStamp != null ? _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) : null;
   }
 
   @Override
@@ -285,4 +290,3 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
     return statsProcessor;
   }
 }
-

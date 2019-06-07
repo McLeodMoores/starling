@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -32,7 +32,8 @@ import com.opengamma.analytics.math.statistics.leastsquare.NonLinearLeastSquare;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * @param <T> The type of data (i.e. model parameters) used by the smile model
+ * @param <T>
+ *          The type of data (i.e. model parameters) used by the smile model
  */
 public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
 
@@ -41,7 +42,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
 
   private final InterpolatedCurveBuildingFunction _curveBuilder;
   private final double[] _expiries;
-  private final double[][] _strikes; //the strikes at each expiry
+  private final double[][] _strikes; // the strikes at each expiry
   private final DoubleMatrix1D _vols;
   private final DoubleMatrix1D _errors;
 
@@ -57,17 +58,26 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
   private final List<Function1D<T, double[][]>> _volAdjointFuncs;
 
   /**
-   * @param forwards Forward values of the underlying at the (increasing) expiry times
-   * @param strikes An array of arrays that gives a set of strikes at each maturity (the outer array corresponds to the expiries and the
-   *  inner arrays to the set of strikes at a particular expiry)
-   * @param expiries The set of (increasing) expiry times
-   * @param impliedVols An array of arrays that gives a set of implied volatilities at each maturity (with the same structure as strikes)
-   * @param errors An array of arrays that gives a set of 'measurement' errors at each maturity (with the same structure as strikes)
-   * @param model A smile model
-   * @param nodePoints The time position of the nodes on each model parameter curve
-   * @param interpolators The base interpolator used for each model parameter curve
+   * @param forwards
+   *          Forward values of the underlying at the (increasing) expiry times
+   * @param strikes
+   *          An array of arrays that gives a set of strikes at each maturity (the outer array corresponds to the expiries and the inner arrays to the set of
+   *          strikes at a particular expiry)
+   * @param expiries
+   *          The set of (increasing) expiry times
+   * @param impliedVols
+   *          An array of arrays that gives a set of implied volatilities at each maturity (with the same structure as strikes)
+   * @param errors
+   *          An array of arrays that gives a set of 'measurement' errors at each maturity (with the same structure as strikes)
+   * @param model
+   *          A smile model
+   * @param nodePoints
+   *          The time position of the nodes on each model parameter curve
+   * @param interpolators
+   *          The base interpolator used for each model parameter curve
    */
-  public VolatilitySurfaceFitter(final double[] forwards, final double[][] strikes, final double[] expiries, final double[][] impliedVols, final double[][] errors,
+  public VolatilitySurfaceFitter(final double[] forwards, final double[][] strikes, final double[] expiries, final double[][] impliedVols,
+      final double[][] errors,
       final VolatilityFunctionProvider<T> model, final LinkedHashMap<String, double[]> nodePoints, final LinkedHashMap<String, Interpolator1D> interpolators) {
 
     ArgumentChecker.notNull(forwards, "null forwards");
@@ -87,7 +97,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
     _volAdjointFuncs = new ArrayList<>(_nExpiries);
 
     _struture = new int[_nExpiries];
-    //check structure of common expiry strips
+    // check structure of common expiry strips
     int sum = 0;
     for (int i = 0; i < _nExpiries; i++) {
       final int n = strikes[i].length;
@@ -155,7 +165,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
         final LinkedHashMap<String, InterpolatedDoublesCurve> curves = _curveBuilder.evaluate(x);
 
         ArgumentChecker.isTrue(x.getNumberOfElements() == _nKnotPoints, "number of elements {} does not equal number of knot points {}",
-            x.getNumberOfElements(), _nKnotPoints); //TODO remove when working properly
+            x.getNumberOfElements(), _nKnotPoints); // TODO remove when working properly
 
         final double[] res = new double[_nOptions];
         int index = 0;
@@ -180,8 +190,8 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
   }
 
   /**
-   * @return Returns a function that takes the fitting parameters (node values in the transformed fitting space) and returned the
-   * model Jacobian (i.e. the sensitivity of the model vols to the fitting parameters).
+   * @return Returns a function that takes the fitting parameters (node values in the transformed fitting space) and returned the model Jacobian (i.e. the
+   *         sensitivity of the model vols to the fitting parameters).
    */
   protected Function1D<DoubleMatrix1D, DoubleMatrix2D> getModelJacobianFunction() {
 
@@ -198,8 +208,8 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
 
         for (int i = 0; i < _nExpiries; i++) {
           final double t = _expiries[i];
-          final double[] theta = new double[_nSmileModelParameters]; //the model parameters
-          final double[] thetaHat = new double[_nSmileModelParameters]; //the fitting parameters
+          final double[] theta = new double[_nSmileModelParameters]; // the model parameters
+          final double[] thetaHat = new double[_nSmileModelParameters]; // the fitting parameters
           final double[][] sense = new double[_nSmileModelParameters][];
           int p = 0;
           for (final String name : _parameterNames) {
@@ -210,10 +220,14 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
             p++;
           }
           final T data = toSmileModelData(theta);
-          //this thing will be (#strikes/vols) x (# model Params)
+          // this thing will be (#strikes/vols) x (# model Params)
           final double[][] temp = _volAdjointFuncs.get(i).evaluate(data);
           final int l = temp.length;
-          ArgumentChecker.isTrue(l == _strikes[i].length, "number of elements {} does not equal number of knot points {}", l, _strikes[i].length); //TODO remove when working properly
+          ArgumentChecker.isTrue(l == _strikes[i].length, "number of elements {} does not equal number of knot points {}", l, _strikes[i].length); // TODO
+                                                                                                                                                   // remove
+                                                                                                                                                   // when
+                                                                                                                                                   // working
+                                                                                                                                                   // properly
           for (int j = 0; j < l; j++) {
             int paramOffset = 0;
             for (p = 0; p < _nSmileModelParameters; p++) {
@@ -233,7 +247,7 @@ public abstract class VolatilitySurfaceFitter<T extends SmileModelData> {
     };
   }
 
-  protected abstract T toSmileModelData(final double[] modelParameters);
+  protected abstract T toSmileModelData(double[] modelParameters);
 
   protected abstract ParameterLimitsTransform[] getTransforms();
 

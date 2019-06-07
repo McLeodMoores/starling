@@ -153,11 +153,9 @@ public class PortfolioTreeModel implements TreeModel {
     } else if (node instanceof Trade) {
       final Trade trade = (Trade) node;
       return trade.getSecurity() == null;
-    } else if (node instanceof Security) {
-      return true;
-    } else {
-      return true;
     }
+    // Security or unrecognised type
+    return true;
   }
 
   @Override

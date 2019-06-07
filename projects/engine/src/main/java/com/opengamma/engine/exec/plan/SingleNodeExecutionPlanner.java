@@ -44,7 +44,7 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
     private final Map<ValueSpecification, FunctionParameters> _parameters;
     private final Set<DependencyNode> _executed;
 
-    public JobBuilder(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final Set<ValueSpecification> sharedValues,
+    JobBuilder(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final Set<ValueSpecification> sharedValues,
         final Map<ValueSpecification, FunctionParameters> parameters) {
       final int size = graph.getSize();
       _items = new ArrayList<>(size);
@@ -103,7 +103,7 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
       final Map<ValueSpecification, FunctionParameters> parameters) {
     final JobBuilder builder = new JobBuilder(graph, logModeSource, sharedValues, parameters);
     final int roots = graph.getRootCount();
-    iLoop: for (int i = 0; i < roots; i++) { //CSIGNORE
+    iLoop: for (int i = 0; i < roots; i++) { // CSIGNORE
       final DependencyNode root = graph.getRootNode(i);
       final int outputs = root.getOutputCount();
       for (int j = 0; j < outputs; j++) {

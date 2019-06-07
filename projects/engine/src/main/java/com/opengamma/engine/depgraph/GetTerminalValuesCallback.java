@@ -54,8 +54,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 
   private static final int MAX_DATA_PER_DIGEST = 4;
 
-  private static final Set<String> INTRINSICS =
-      ImmutableSet.of(MarketDataAliasingFunction.UNIQUE_ID, MarketDataSourcingFunction.UNIQUE_ID, StructureManipulationFunction.UNIQUE_ID);
+  private static final Set<String> INTRINSICS = ImmutableSet.of(MarketDataAliasingFunction.UNIQUE_ID, MarketDataSourcingFunction.UNIQUE_ID,
+      StructureManipulationFunction.UNIQUE_ID);
 
   private static class PerFunctionNodeInfo {
 
@@ -65,14 +65,14 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
     private final Map<ComputationTargetSpecification, Set<DependencyNode>> _target2nodes = new HashMap<>();
 
     /**
-     * All targets that a {@link ComputationTargetCollapser} can apply to, with its checking group. Any targets in the same group have already
-     * been mutually compared, and cannot be collapsed.
+     * All targets that a {@link ComputationTargetCollapser} can apply to, with its checking group. Any targets in the same group have already been mutually
+     * compared, and cannot be collapsed.
      */
     private Map<ComputationTargetSpecification, Object> _target2collapseGroup;
 
     /**
-     * All targets that a {@link ComputationTargetCollapser} can apply to, indexed by the checking group. Any targets in the same group have already
-     * been mutually compared, and cannot be collapsed.
+     * All targets that a {@link ComputationTargetCollapser} can apply to, indexed by the checking group. Any targets in the same group have already been
+     * mutually compared, and cannot be collapsed.
      */
     private Map<Object, Collection<ComputationTargetSpecification>> _collapseGroup2targets;
 
@@ -97,8 +97,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   }
 
   /**
-   * Buffer of resolved value specifications. For any entries in here, all input values have been previously resolved and are in this buffer or the
-   * partially constructed graph. Information here gets used to construct dependency graph fragments whenever a terminal item can be resolved.
+   * Buffer of resolved value specifications. For any entries in here, all input values have been previously resolved and are in this buffer or the partially
+   * constructed graph. Information here gets used to construct dependency graph fragments whenever a terminal item can be resolved.
    */
   private final ConcurrentMap<ValueSpecification, ResolvedValue> _resolvedBuffer = new ConcurrentHashMap<>();
 
@@ -108,14 +108,14 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   private final Map<ValueSpecification, DependencyNode> _spec2Node = new ConcurrentHashMap<>();
 
   /**
-   * Index into collapsed nodes. Target collapses may be chained so it might be necessary for follow a number of steps through this structure to get
-   * from a resolved value specification to the one that should be used in the resulting graph.
+   * Index into collapsed nodes. Target collapses may be chained so it might be necessary for follow a number of steps through this structure to get from a
+   * resolved value specification to the one that should be used in the resulting graph.
    */
   private final Map<ValueSpecification, ValueSpecification> _collapseChain = new HashMap<>();
 
   /**
-   * Value usage information, each value specification consumed by other nodes has an entry. Any value specifications not in this map or the terminal
-   * output set may be pruned prior to graph construction.
+   * Value usage information, each value specification consumed by other nodes has an entry. Any value specifications not in this map or the terminal output set
+   * may be pruned prior to graph construction.
    */
   private final Map<ValueSpecification, Set<DependencyNode>> _spec2Usage = new HashMap<>();
 
@@ -131,8 +131,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   private final Map<ValueSpecification, Collection<ValueRequirement>> _resolvedValues = new HashMap<>();
 
   /**
-   * Queue of completed resolutions that have not been processed into the partial graph. Graph construction is single threaded, with this queue
-   * holding work items if other thread produce results while one is busy building the graph.
+   * Queue of completed resolutions that have not been processed into the partial graph. Graph construction is single threaded, with this queue holding work
+   * items if other thread produce results while one is busy building the graph.
    */
   private final Queue<Pair<ValueRequirement, ResolvedValue>> _resolvedQueue = new LinkedTransferQueue<>();
 
@@ -142,8 +142,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   private final Set<DependencyNodeFunction> _collapsers = new HashSet<>();
 
   /**
-   * Mutex for working on the resolved queue. Any thread can add to the queue, only the one that has claimed this mutex can process the elements
-   * from it and be sure of exclusive access to the other data structures.
+   * Mutex for working on the resolved queue. Any thread can add to the queue, only the one that has claimed this mutex can process the elements from it and be
+   * sure of exclusive access to the other data structures.
    */
   private final AtomicReference<Thread> _singleton = new AtomicReference<>();
 
@@ -163,8 +163,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   private TargetDigests _targetDigests;
 
   /**
-   * The current graph building context (the callback holds the write lock for the duration of other calls, so can set it here instead of
-   * passing it on the stack).
+   * The current graph building context (the callback holds the write lock for the duration of other calls, so can set it here instead of passing it on the
+   * stack).
    */
   private GraphBuildingContext _context;
 
@@ -174,12 +174,12 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   /**
    * The target digest map which may be used to speed up selection choices instead of full back-tracking.
    * <p>
-   * The pair elements either contains the values, or arrays of the values. The first is either ValueProperties (or an array of them).
-   * The second is either DependencyNodeFunction (or an array of them).
+   * The pair elements either contains the values, or arrays of the values. The first is either ValueProperties (or an array of them). The second is either
+   * DependencyNodeFunction (or an array of them).
    */
   private final ConcurrentMap<Object, ConcurrentMap<String, Pair<?, ?>>> _targetDigestInfo = new ConcurrentHashMap<>();
 
-  public GetTerminalValuesCallback(final ResolutionFailureListener failureListener) {
+  GetTerminalValuesCallback(final ResolutionFailureListener failureListener) {
     _failureListener = failureListener;
     final ReadWriteLock rwl = new ReentrantReadWriteLock();
     _readLock = rwl.readLock();
@@ -203,7 +203,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
    * <p>
    * The {@code specification} parameter must be normalized.
    *
-   * @param specification the potential specification, not null
+   * @param specification
+   *          the potential specification, not null
+   * @return the resolved value for the specification
    */
   public ResolvedValue getProduction(final ValueSpecification specification) {
     final ResolvedValue value = _resolvedBuffer.get(specification);
@@ -375,8 +377,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   /**
    * Slave task for evaluating whether to collapse targets.
    * <p>
-   * Evaluating target collapses can be costly. Instances of this are posted to the worker threads to evaluate possible collapses outside
-   * of holding the main lock. The lock is then acquired in order to action the collapses found and possibly schedule any further ones.
+   * Evaluating target collapses can be costly. Instances of this are posted to the worker threads to evaluate possible collapses outside of holding the main
+   * lock. The lock is then acquired in order to action the collapses found and possibly schedule any further ones.
    */
   private class CollapseNodes implements ContextRunnable {
 
@@ -385,7 +387,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
     private final ComputationTargetSpecification[] _a;
     private final ComputationTargetSpecification[] _b;
 
-    public CollapseNodes(final DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo, final Collection<ComputationTargetSpecification> a,
+    CollapseNodes(final DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo, final Collection<ComputationTargetSpecification> a,
         final Collection<ComputationTargetSpecification> b) {
       _function = function;
       _nodeInfo = nodeInfo;
@@ -425,7 +427,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
               _nodeInfo._collapse.add(Pairs.of(a, collapsed));
               _nodeInfo._collapse.add(Pairs.of(b, collapsed));
               if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Merging {} and {} into new node {}", new Object[] {a, b, collapsed });
+                LOGGER.debug("Merging {} and {} into new node {}", new Object[] { a, b, collapsed });
               }
               break;
             }
@@ -517,8 +519,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
         for (int i = 0; i < count; i++) {
           final ValueSpecification originalOutput = originalNode.getOutputValue(i);
           _spec2Node.remove(originalOutput);
-          final ValueSpecification newOutput =
-              MemoryUtils.instance(new ValueSpecification(originalOutput.getValueName(), collapse.getSecond(), originalOutput.getProperties()));
+          final ValueSpecification newOutput = MemoryUtils
+              .instance(new ValueSpecification(originalOutput.getValueName(), collapse.getSecond(), originalOutput.getProperties()));
           _collapseChain.put(originalOutput, newOutput);
           newOutputs.add(newOutput);
           replacementOutputs.put(originalOutput, newOutput);
@@ -598,14 +600,16 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   }
 
   /**
-   * Determines nodes for each of the resolved value's inputs and producing the resulting node to be used. If there is an existing
-   * node (already updated with respect to its outputs) that can be used by appending to its input set then is used as a reference.
+   * Determines nodes for each of the resolved value's inputs and producing the resulting node to be used. If there is an existing node (already updated with
+   * respect to its outputs) that can be used by appending to its input set then is used as a reference.
    *
-   * @param resolvedValue the function application to create the node for, not null
-   * @param downstream the value specifications that will be generated by possible consumers of this node - used to detect loops
-   * in the resolved value structures. Null is treated as an empty set.
-   * @param existingNode an existing function application node that is correct with respect to its outputs - the result node
-   * should be this with additional inputs appended
+   * @param resolvedValue
+   *          the function application to create the node for, not null
+   * @param downstream
+   *          the value specifications that will be generated by possible consumers of this node - used to detect loops in the resolved value structures. Null
+   *          is treated as an empty set.
+   * @param existingNode
+   *          an existing function application node that is correct with respect to its outputs - the result node should be this with additional inputs appended
    * @return the node for the graph, or null if there is a problem such as an unresolved input or loop
    */
   private DependencyNode updateOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream, DependencyNode existingNode) {
@@ -626,8 +630,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
             inputValues[i] = input;
           } else {
             // The node we connected to is a substitute following a target collapse; the original input value is now incorrect
-            final ValueSpecification substituteInput =
-                MemoryUtils.instance(new ValueSpecification(input.getValueName(), inputNode.getTarget(), input.getProperties()));
+            final ValueSpecification substituteInput = MemoryUtils
+                .instance(new ValueSpecification(input.getValueName(), inputNode.getTarget(), input.getProperties()));
             assert inputNode.hasOutputValue(substituteInput);
             inputValues[i] = substituteInput;
           }
@@ -832,7 +836,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   }
 
   private DependencyNode findExistingNode(final Set<DependencyNode> nodes, final ResolvedValue resolvedValue) {
-    nextNode: for (final DependencyNode node : nodes) { //CSIGNORE
+    nextNode: for (final DependencyNode node : nodes) { // CSIGNORE
       // TODO: Measure, and if necessary improve, the efficiency of this operation
       if (INTRINSICS.contains(node.getFunction().getFunctionId())) {
         continue;
@@ -843,7 +847,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
       List<ValueSpecification> additionalOutputs = null;
       final ValueSpecification[] outputValues = DependencyNodeImpl.getOutputValueArray(node);
       int outputValuesLength = outputValues.length;
-      resolvedOutput: for (final ValueSpecification output : resolvedValue.getFunctionOutputs()) { //CSIGNORE
+      resolvedOutput: for (final ValueSpecification output : resolvedValue.getFunctionOutputs()) { // CSIGNORE
         final String outputName = output.getValueName();
         final ValueProperties outputProperties = output.getProperties();
         boolean mismatch = false;
@@ -854,8 +858,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
               // Found suitable match; check whether it needs rewriting
               final ValueProperties composedProperties = outputValue.getProperties().compose(outputProperties);
               if (!composedProperties.equals(outputValue.getProperties())) {
-                final ValueSpecification newOutputValue =
-                    MemoryUtils.instance(new ValueSpecification(outputValue.getValueName(), outputValue.getTargetSpecification(), composedProperties));
+                final ValueSpecification newOutputValue = MemoryUtils
+                    .instance(new ValueSpecification(outputValue.getValueName(), outputValue.getTargetSpecification(), composedProperties));
                 if (replacementOutputs == null) {
                   replacementOutputs = Maps.newHashMapWithExpectedSize(outputValues.length);
                 }
@@ -939,7 +943,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
       }
       return newNode;
     }
-  return null;
+    return null;
   }
 
   private DependencyNode getOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream) {
@@ -958,11 +962,10 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   }
 
   /**
-   * Reports a successful resolution of a top level requirement. The production of linked {@link DependencyNode} instances to form
-   * the final graph is single threaded. The resolution is added to a queue of successful resolutions. If this is the only (or first)
-   * thread to report resolutions then this will work to drain the queue and produce nodes for the graph based on the resolved value
-   * cache in the building context. If other threads report resolutions while this is happening they are added to the queue and those
-   * threads return immediately.
+   * Reports a successful resolution of a top level requirement. The production of linked {@link DependencyNode} instances to form the final graph is single
+   * threaded. The resolution is added to a queue of successful resolutions. If this is the only (or first) thread to report resolutions then this will work to
+   * drain the queue and produce nodes for the graph based on the resolved value cache in the building context. If other threads report resolutions while this
+   * is happening they are added to the queue and those threads return immediately.
    */
   @Override
   public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
@@ -978,7 +981,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
         _context = context;
         Pair<ValueRequirement, ResolvedValue> resolved = _resolvedQueue.poll();
         while (resolved != null) {
-          final DependencyNode node = getOrCreateNode(resolved.getSecond(), Collections.<ValueSpecification>emptySet());
+          final DependencyNode node = getOrCreateNode(resolved.getSecond(), Collections.<ValueSpecification> emptySet());
           if (node != null) {
             ValueSpecification outputValue = resolved.getSecond().getValueSpecification();
             if (!outputValue.getTargetSpecification().equals(node.getTarget())) {
@@ -1049,9 +1052,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   }
 
   /**
-   * Returns the root nodes that form the dependency graph build by calls to {@link #resolved}. It is only valid to call this when there are
-   * no pending resolutions - that is all calls to {@link #resolved} have returned. A copy of the internal structure is used so that it may
-   * be modified by the caller and this callback instance be used to process subsequent resolutions.
+   * Returns the root nodes that form the dependency graph build by calls to {@link #resolved}. It is only valid to call this when there are no pending
+   * resolutions - that is all calls to {@link #resolved} have returned. A copy of the internal structure is used so that it may be modified by the caller and
+   * this callback instance be used to process subsequent resolutions.
    *
    * @return the dependency graph root nodes and total number of nodes in the graph they imply, not null
    */
@@ -1085,10 +1088,10 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
   }
 
   /**
-   * Returns the map of top level requirements requested of the graph builder to the specifications it produced that are in the dependency graph.
-   * Failed resolutions are not reported here. It is only valid to call this when there are no pending resolutions - that is all calls to
-   * {@link #resolved} have returned. A copy of the internal structure is used so that it may be modified by the caller and this callback instance
-   * be used to process subsequent resolutions.
+   * Returns the map of top level requirements requested of the graph builder to the specifications it produced that are in the dependency graph. Failed
+   * resolutions are not reported here. It is only valid to call this when there are no pending resolutions - that is all calls to {@link #resolved} have
+   * returned. A copy of the internal structure is used so that it may be modified by the caller and this callback instance be used to process subsequent
+   * resolutions.
    *
    * @return the map of resolutions, not null
    */

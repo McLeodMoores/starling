@@ -11,10 +11,10 @@ import com.opengamma.id.UniqueIdentifiable;
 
 /**
  * Defines a blacklisting policy. A policy defines the type of rules that should be constructed and their recommended time-to-live. A policy is typically
- * returned from a {@link FunctionBlacklistPolicySource} and used to update a blacklist using a {@link FunctionBlacklistMaintainer}. A policy entry defines
- * the type of rule that should be constructed and the activation period of that rule (time to live). A typical policy will have the most specific entries
- * having a long activation period and the least specific having the shortest. For example, after a failure of function X applied to Y then all invocations
- * of X might be blacklisted for the next 10 minutes but X applied specifically to Y will remain blacklisted for the next hour.
+ * returned from a {@link FunctionBlacklistPolicySource} and used to update a blacklist using a {@link FunctionBlacklistMaintainer}. A policy entry defines the
+ * type of rule that should be constructed and the activation period of that rule (time to live). A typical policy will have the most specific entries having a
+ * long activation period and the least specific having the shortest. For example, after a failure of function X applied to Y then all invocations of X might be
+ * blacklisted for the next 10 minutes but X applied specifically to Y will remain blacklisted for the next hour.
  */
 public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
@@ -23,7 +23,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
   /**
    * An entry within a policy describing how to construct and use a blacklisting rule after a failure has been detected.
    */
-  public static final class Entry {
+  final class Entry {
 
     /**
      * An entry that produces rules which will match everything. This can be used, for example, to suppress all behaviors for a brief period.
@@ -37,14 +37,14 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
     public static final Entry FUNCTION = WILDCARD.matchFunctionIdentifier();
 
     /**
-     * An entry that produces rules which will match a function identifier when used in a given form. This can be used, for example, to suppress any
-     * execution of a function that is flawed under certain calculation configurations that include erroneous parameters.
+     * An entry that produces rules which will match a function identifier when used in a given form. This can be used, for example, to suppress any execution
+     * of a function that is flawed under certain calculation configurations that include erroneous parameters.
      */
     public static final Entry PARAMETERIZED_FUNCTION = FUNCTION.matchFunctionParameters();
 
     /**
-     * An entry that produces rules which match a node in a dependency graph based on the computation target and parameterized function. This can be used,
-     * for example, to suppress any execution of a function that is only flawed when operating on certain targets.
+     * An entry that produces rules which match a node in a dependency graph based on the computation target and parameterized function. This can be used, for
+     * example, to suppress any execution of a function that is only flawed when operating on certain targets.
      */
     public static final Entry PARTIAL_NODE = PARAMETERIZED_FUNCTION.matchTarget();
 
@@ -229,7 +229,8 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
     /**
      * Returns an entry that will produce rules which have a specific activation period.
      *
-     * @param timeToLive the activation period, null to use the policy default
+     * @param timeToLive
+     *          the activation period, null to use the policy default
      * @return the new entry
      */
     public Entry activationPeriod(final Integer timeToLive) {
@@ -257,7 +258,8 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
     /**
      * Returns the activation period.
      *
-     * @param policy the policy to use for the default activation period
+     * @param policy
+     *          the policy to use for the default activation period
      * @return the activation period, in seconds, when this entry is used as part of the given policy.
      */
     public int getActivationPeriod(final FunctionBlacklistPolicy policy) {
@@ -325,10 +327,11 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
   boolean isEmpty();
 
   /**
-   * Tests equality of two policies. Two policies are equal if they contain the same entries, have the same name, and same activation period.
-   * An implementation is available in AbstractFunctionBlacklistPolicy.
+   * Tests equality of two policies. Two policies are equal if they contain the same entries, have the same name, and same activation period. An implementation
+   * is available in AbstractFunctionBlacklistPolicy.
    *
-   * @param o other object to test
+   * @param o
+   *          other object to test
    * @return true if the policies are equal, false otherwise
    */
   @Override

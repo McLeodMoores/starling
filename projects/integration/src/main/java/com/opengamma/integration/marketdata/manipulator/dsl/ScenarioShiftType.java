@@ -14,8 +14,7 @@ import com.google.common.collect.ImmutableList;
 import com.opengamma.analytics.ShiftType;
 
 /**
- * The type of shift. Relative will scale the curve by a percentage value; Absolute
- * will add an absolute number of basis points.
+ * The type of shift. Relative will scale the curve by a percentage value; Absolute will add an absolute number of basis points.
  */
 public enum ScenarioShiftType implements GroovyAliasable {
 
@@ -54,12 +53,13 @@ public enum ScenarioShiftType implements GroovyAliasable {
 
   private final String _groovyAlias;
 
-  private ScenarioShiftType(final String groovyAlias) {
+  ScenarioShiftType(final String groovyAlias) {
     _groovyAlias = groovyAlias;
   }
 
   /**
-   * The alias to use in the groovy script
+   * The alias to use in the groovy script.
+   * 
    * @return the alias
    */
   @Override
@@ -69,6 +69,7 @@ public enum ScenarioShiftType implements GroovyAliasable {
 
   /**
    * The list of available groovy aliases, sorted.
+   * 
    * @return list of aliases.
    */
   public static ImmutableList<String> getAliasList() {
@@ -77,6 +78,7 @@ public enum ScenarioShiftType implements GroovyAliasable {
 
   /**
    * Converts this enum to the appropriate {@link ShiftType}
+   * 
    * @return The analytics equivalent shift type
    */
   public abstract ShiftType toAnalyticsType();

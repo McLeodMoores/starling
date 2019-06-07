@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -34,7 +34,9 @@ public class QuandlCodeClassifier {
 
   /**
    * Constructs an instance.
-   * @param cacheManager  the cache manager, not null
+   * 
+   * @param cacheManager
+   *          the cache manager, not null
    */
   public QuandlCodeClassifier(final CacheManager cacheManager) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
@@ -43,9 +45,10 @@ public class QuandlCodeClassifier {
   }
 
   /**
-   * Gets the normalization factor for a given security. The normalization factor is the multiple
-   * by which the market data is greater than the normalized value.
-   * @param quandlCode The Quandl code of the security, not null
+   * Gets the normalization factor for a given security. The normalization factor is the multiple by which the market data is greater than the normalized value.
+   * 
+   * @param quandlCode
+   *          The Quandl code of the security, not null
    * @return The normalization factor, or throws an exception if the normalization factor cannot be found
    */
   public Integer getNormalizationFactor(final String quandlCode) {
@@ -64,7 +67,9 @@ public class QuandlCodeClassifier {
 
   /**
    * Gets the normalization factor.
-   * @param quandlCode The code
+   * 
+   * @param quandlCode
+   *          The code
    * @return The normalization factor, or null if the security could not be classified.
    */
   private static Integer getNormalizationFactorCore(final String quandlCode) {

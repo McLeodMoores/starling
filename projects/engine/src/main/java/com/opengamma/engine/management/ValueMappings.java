@@ -20,8 +20,8 @@ import com.opengamma.engine.view.compilation.CompiledViewCalculationConfiguratio
 import com.opengamma.engine.view.compilation.CompiledViewDefinition;
 
 /**
- * Contains mappings between {@link ValueRequirement}s and {@link ValueSpecification}s for a compiled view definition. These mappings can be
- * large and are used by both the primitives and portfolio grids so it makes sense to share them.
+ * Contains mappings between {@link ValueRequirement}s and {@link ValueSpecification}s for a compiled view definition. These mappings can be large and are used
+ * by both the primitives and portfolio grids so it makes sense to share them.
  */
 public class ValueMappings {
 
@@ -31,13 +31,13 @@ public class ValueMappings {
 
     private final Map<ValueRequirement, ValueSpecification> _reqsToSpecs = Maps.newHashMap();
 
-    public ConfigurationData(final CompiledViewCalculationConfiguration compiledConfig) {
+    ConfigurationData(final CompiledViewCalculationConfiguration compiledConfig) {
       final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs = compiledConfig.getTerminalOutputSpecifications();
       for (final Map.Entry<ValueSpecification, Set<ValueRequirement>> entry : terminalOutputs.entrySet()) {
         final Set<ValueRequirement> requirements = entry.getValue();
         if (requirements == null) {
           LOGGER.error("Unexpected set of null requirements in terminal outputs map from " + entry.getKey()
-          + ". This is a bug in incremental dependency graph compilation.");
+              + ". This is a bug in incremental dependency graph compilation.");
           continue;
         }
         for (final ValueRequirement valueRequirement : requirements) {
@@ -52,10 +52,10 @@ public class ValueMappings {
   }
 
   /**
-   * Subclasses of ValueMappings need to alter the ValueRequirement, for example
-   * UnversionedValueMappings strips out version from the unique id.
+   * Subclasses of ValueMappings need to alter the ValueRequirement, for example UnversionedValueMappings strips out version from the unique id.
    *
-   * @param valueRequirement in this case it is returned unaltered
+   * @param valueRequirement
+   *          in this case it is returned unaltered
    * @return valueRequirement
    */
   protected ValueRequirement createRequirement(final ValueRequirement valueRequirement) {
@@ -87,8 +87,10 @@ public class ValueMappings {
   /**
    * Returns the {@link ValueSpecification} for a {@link ValueRequirement} in a particular calculation configuration.
    *
-   * @param calcConfigName The name of the calculation configuration
-   * @param valueReq The requirement
+   * @param calcConfigName
+   *          The name of the calculation configuration
+   * @param valueReq
+   *          The requirement
    * @return The specification or null if there isn't one for the specified requirement and config
    */
   public ValueSpecification getValueSpecification(final String calcConfigName, final ValueRequirement valueReq) {

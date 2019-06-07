@@ -37,12 +37,12 @@ import com.opengamma.util.time.DateUtils;
  * <p>
  * This loads missing historical time-series data from Quandl.
  */
-//TODO rename me
+// TODO rename me
 @Scriptable
 public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static Logger LOGGER = LoggerFactory.getLogger(QuandlHTSMasterUpdaterTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QuandlHTSMasterUpdaterTool.class);
 
   /** Command line option. */
   private static final String RELOAD_OPTION = "reload";
@@ -53,7 +53,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
   private final GUIFeedback _feedback;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
@@ -65,7 +65,8 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
    *  -s,--start (yyyymmdd)                          Start date
    * </pre>
    *
-   * @param args the command line arguments
+   * @param args
+   *          the command line arguments
    */
   public static void main(final String[] args) { // CSIGNORE
     LOGGER.info("Updating time-series data from Quandl");
@@ -97,10 +98,12 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
     System.exit(1);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructor when we have a GUIFeedback handler.
-   * @param feedback  the GUI feedback handler
+   * 
+   * @param feedback
+   *          the GUI feedback handler
    */
   public QuandlHTSMasterUpdaterTool(final GUIFeedback feedback) {
     _feedback = feedback;
@@ -229,7 +232,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
     dataLoader.setReload(line.hasOption(RELOAD_OPTION));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected Options createOptions(final boolean mandatoryConfigResource) {
     final Options options = super.createOptions(mandatoryConfigResource);

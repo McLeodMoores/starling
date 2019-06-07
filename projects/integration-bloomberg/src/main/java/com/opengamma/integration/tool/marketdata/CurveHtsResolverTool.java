@@ -51,7 +51,7 @@ import com.opengamma.util.money.Currency;
 public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static Logger LOGGER = LoggerFactory.getLogger(CurveHtsResolverTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveHtsResolverTool.class);
 
   /** Portfolio name option flag */
   private static final String CURVE_NAME_OPT = "n";
@@ -64,17 +64,18 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
   /** Time series data field option flag */
   private static final String TIME_SERIES_DATAFIELD_OPT = "d";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new CurveHtsResolverTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
   protected void doRun() {
@@ -107,9 +108,12 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
     curveNodesExternalIds = getCurveRequiredExternalIds(configSource, curveNames, dates);
 
     // Load the required time series
-    loadHistoricalData(getCommandLine().hasOption(WRITE_OPT), getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ? new String[] {"PX_LAST" } : getCommandLine()
-        .getOptionValues(TIME_SERIES_DATAFIELD_OPT),
-        getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT) == null ? "CMPL" : getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT), initialRateExternalIds,
+    loadHistoricalData(getCommandLine().hasOption(WRITE_OPT),
+        getCommandLine().getOptionValues(TIME_SERIES_DATAFIELD_OPT) == null ? new String[] { "PX_LAST" }
+            : getCommandLine()
+                .getOptionValues(TIME_SERIES_DATAFIELD_OPT),
+        getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT) == null ? "CMPL" : getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT),
+        initialRateExternalIds,
         curveNodesExternalIds);
   }
 
@@ -118,7 +122,7 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
     final DefaultConventionBundleSource cbs = new DefaultConventionBundleSource(cbm);
     final Set<ExternalId> externalInitialRateId = newHashSet();
     for (final Currency currency : currencies) {
-      for (final String swapType : new String[] {"SWAP", "3M_SWAP", "6M_SWAP" }) {
+      for (final String swapType : new String[] { "SWAP", "3M_SWAP", "6M_SWAP" }) {
         final String product = currency.getCode() + "_" + swapType;
         final ConventionBundle convention = cbs.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, product));
         if (convention != null) {
@@ -157,7 +161,8 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
    * Get all the curve definition config object names specified by glob expression.
    *
    * @param configMaster
-   * @param nameExpr glob type expression - e.g. blah*
+   * @param nameExpr
+   *          glob type expression - e.g. blah*
    * @return list of names of config objects matching glob expression
    */
   private List<YieldCurveDefinition> getCurveDefinitionNames(final ConfigMaster configMaster, final String nameExpr) {
@@ -205,9 +210,10 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
   }
 
   private void loadHistoricalData(final boolean write, final String[] dataFields, final String dataProvider, final Set<ExternalId>... externalIdSets) {
-    final BloombergHistoricalTimeSeriesLoader loader =
-        new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(), getToolContext()
-            .getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+    final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(),
+        getToolContext()
+            .getHistoricalTimeSeriesProvider(),
+        new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
 
     for (final Set<ExternalId> externalIds : externalIdSets) {
       if (externalIds.size() > 0) {
@@ -230,7 +236,8 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
     curveNameOption.setRequired(true);
     options.addOption(curveNameOption);
 
-    final Option writeOption = new Option(WRITE_OPT, "write", false, "Actually persists the time series to the database if specified, otherwise pretty-prints without persisting");
+    final Option writeOption = new Option(WRITE_OPT, "write", false,
+        "Actually persists the time series to the database if specified, otherwise pretty-prints without persisting");
     options.addOption(writeOption);
 
     final Option verboseOption = new Option(VERBOSE_OPT, "verbose", false, "Displays progress messages on the terminal");

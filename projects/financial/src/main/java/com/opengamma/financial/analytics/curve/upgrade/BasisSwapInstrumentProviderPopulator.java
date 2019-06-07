@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -17,20 +17,21 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Class that populates a curve node id mapper with the curve instrument providers for
- * {@link StripInstrumentType#BASIS_SWAP} and {@link StripInstrumentType#TENOR_SWAP}.
- * If a map for {@link com.opengamma.financial.analytics.ircurve.strips.SwapNode} is
- * already present, this class will overwrite that entry.
+ * Class that populates a curve node id mapper with the curve instrument providers for {@link StripInstrumentType#BASIS_SWAP} and
+ * {@link StripInstrumentType#TENOR_SWAP}. If a map for {@link com.opengamma.financial.analytics.ircurve.strips.SwapNode} is already present, this class will
+ * overwrite that entry.
  */
-//TODO rename function should include basis swap tenor information?
+// TODO rename function should include basis swap tenor information?
 public class BasisSwapInstrumentProviderPopulator extends InstrumentProviderPopulator {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(BasisSwapInstrumentProviderPopulator.class);
 
   /**
-   * Sets the renaming function to {@link DefaultCsbcRenamingFunction}. The strip instrument type must be either
-   * {@link StripInstrumentType#BASIS_SWAP} or {@link StripInstrumentType#TENOR_SWAP}.
-   * @param type  the strip instrument type, not null
+   * Sets the renaming function to {@link DefaultCsbcRenamingFunction}. The strip instrument type must be either {@link StripInstrumentType#BASIS_SWAP} or
+   * {@link StripInstrumentType#TENOR_SWAP}.
+   * 
+   * @param type
+   *          the strip instrument type, not null
    */
   public BasisSwapInstrumentProviderPopulator(final StripInstrumentType type) {
     this(type, new DefaultCsbcRenamingFunction());
@@ -38,8 +39,11 @@ public class BasisSwapInstrumentProviderPopulator extends InstrumentProviderPopu
 
   /**
    * The strip instrument type must be either {@link StripInstrumentType#BASIS_SWAP} or {@link StripInstrumentType#TENOR_SWAP}.
-   * @param renamingFunction  the renaming function, not null
-   * @param type  the strip instrument type, not null
+   * 
+   * @param renamingFunction
+   *          the renaming function, not null
+   * @param type
+   *          the strip instrument type, not null
    */
   public BasisSwapInstrumentProviderPopulator(final StripInstrumentType type, final Function2<String, String, String> renamingFunction) {
     super(type, renamingFunction);

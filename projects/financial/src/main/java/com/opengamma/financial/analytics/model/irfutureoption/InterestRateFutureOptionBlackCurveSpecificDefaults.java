@@ -24,16 +24,16 @@ import com.opengamma.util.tuple.Pairs;
 
 // CSOFF
 /**
- * Adds {@link ValuePropertyNames#CURVE} to the {@link ValueRequirement}'s produced by {@link InterestRateFutureOptionBlackFunction}
- * that require it, such as {@link ValueRequirementNames#POSITION_RHO}
+ * Adds {@link ValuePropertyNames#CURVE} to the {@link ValueRequirement}'s produced by {@link InterestRateFutureOptionBlackFunction} that require it, such as
+ * {@link ValueRequirementNames#POSITION_RHO}.
+ * 
  * @deprecated The functions for which these defaults apply are deprecated.
  */
 @Deprecated
 public class InterestRateFutureOptionBlackCurveSpecificDefaults extends InterestRateFutureOptionBlackDefaults {
 
-
-  private static final String[] s_curveRequirements = new String[] {
-    ValueRequirementNames.POSITION_RHO
+  private static final String[] CURVE_REQUIREMENTS = new String[] {
+      ValueRequirementNames.POSITION_RHO
   };
 
   private final HashMap<String, String> _currencyCurveNames;
@@ -58,13 +58,14 @@ public class InterestRateFutureOptionBlackCurveSpecificDefaults extends Interest
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
     super.getDefaults(defaults);
-    for (final String requirement : s_curveRequirements) {
+    for (final String requirement : CURVE_REQUIREMENTS) {
       defaults.addValuePropertyName(requirement, ValuePropertyNames.CURVE);
     }
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.CURVE.equals(propertyName)) {
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
       if (!_currencyCurveNames.containsKey(currencyName)) {

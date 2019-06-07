@@ -29,10 +29,9 @@ import com.opengamma.util.PoolExecutor;
 /**
  * Standard implementation of a {@link ComputationTargetSpecificationResolver}.
  * <p>
- * Note that this is a fairly cheap operation; looking up the resolver and calling that. It should not normally be necessary to provide any
- * caching on top of a specification resolver - if a requirement is being resolved regularly for the same version/correction then there is
- * probably something wrong elsewhere. If a resolver implementation is costly (for example querying an underlying data source) then that is
- * where the caching should lie.
+ * Note that this is a fairly cheap operation; looking up the resolver and calling that. It should not normally be necessary to provide any caching on top of a
+ * specification resolver - if a requirement is being resolved regularly for the same version/correction then there is probably something wrong elsewhere. If a
+ * resolver implementation is costly (for example querying an underlying data source) then that is where the caching should lie.
  */
 public class DefaultComputationTargetSpecificationResolver implements ComputationTargetSpecificationResolver {
 
@@ -55,7 +54,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     private final ComputationTargetType _type;
     private final IdentifierResolver _resolver;
 
-    public SingleSpecificationResolver(final ComputationTargetType type, final IdentifierResolver resolver) {
+    SingleSpecificationResolver(final ComputationTargetType type, final IdentifierResolver resolver) {
       _type = type;
       _resolver = resolver;
     }
@@ -125,7 +124,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     private final SpecificationResolver _a;
     private final SpecificationResolver _b;
 
-    public FoldedSpecificationResolver(final SpecificationResolver a, final SpecificationResolver b) {
+    FoldedSpecificationResolver(final SpecificationResolver a, final SpecificationResolver b) {
       _a = a;
       _b = b;
     }
@@ -185,8 +184,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
   }
 
-  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD =
-      new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
+  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
     @Override
     public SpecificationResolver execute(final SpecificationResolver a, final SpecificationResolver b) {
       return new FoldedSpecificationResolver(a, b);
@@ -222,32 +220,31 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
         return null;
       }
 
-      private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification =
-          new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
+      private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification = new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
 
-            @Override
-            public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
-              final SpecificationResolver resolver = _resolve.get(requirement.getType());
-              if (resolver != null) {
-                return resolver.resolveRequirement(requirement, versionCorrection);
-              }
-              return null;
+        @Override
+        public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
+          final SpecificationResolver resolver = _resolve.get(requirement.getType());
+          if (resolver != null) {
+            return resolver.resolveRequirement(requirement, versionCorrection);
+          }
+          return null;
+        }
+
+        @Override
+        public ComputationTargetSpecification visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
+          final UniqueId uid = specification.getUniqueId();
+          if (uid != null && uid.isLatest()) {
+            final SpecificationResolver resolver = _resolve.get(specification.getType());
+            if (resolver != null) {
+              return resolver.resolveObjectId(specification.getParent(), uid.getObjectId(), versionCorrection);
             }
+            return specification;
+          }
+          return specification;
+        }
 
-            @Override
-            public ComputationTargetSpecification visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
-              final UniqueId uid = specification.getUniqueId();
-              if (uid != null && uid.isLatest()) {
-                final SpecificationResolver resolver = _resolve.get(specification.getType());
-                if (resolver != null) {
-                  return resolver.resolveObjectId(specification.getParent(), uid.getObjectId(), versionCorrection);
-                }
-                return specification;
-              }
-              return specification;
-            }
-
-          };
+      };
 
       @Override
       public ComputationTargetSpecification getTargetSpecification(final ComputationTargetReference reference) {
@@ -272,7 +269,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                 requirements.add(requirement);
               } else {
                 // No resolver for this type
-                requirementByType.put(requirement.getType(), Collections.<ComputationTargetRequirement>emptySet());
+                requirementByType.put(requirement.getType(), Collections.<ComputationTargetRequirement> emptySet());
               }
             } else {
               if (!requirements.isEmpty()) {
@@ -295,7 +292,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                   specifications.add(specification);
                 } else {
                   // No resolver for this type
-                  specificationByType.put(specification.getType(), Collections.<ComputationTargetSpecification>emptySet());
+                  specificationByType.put(specification.getType(), Collections.<ComputationTargetSpecification> emptySet());
                   result.put(specification, specification);
                 }
               } else {
@@ -379,8 +376,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                   @Override
                   public void run() {
                     final ComputationTargetSpecification specification = entry.getValue().iterator().next();
-                    final ComputationTargetSpecification resolved =
-                        _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(),
+                    final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(),
+                        specification.getUniqueId().getObjectId(),
                         versionCorrection);
                     if (resolved != null) {
                       result.put(specification, resolved);
@@ -389,8 +386,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                 });
               } else {
                 final ComputationTargetSpecification specification = entry.getValue().iterator().next();
-                final ComputationTargetSpecification resolved =
-                    _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(), versionCorrection);
+                final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(),
+                    specification.getUniqueId().getObjectId(), versionCorrection);
                 if (resolved != null) {
                   result.put(specification, resolved);
                 }

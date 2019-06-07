@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.multicurve;
@@ -18,10 +18,15 @@ public abstract class ForwardSensitivity {
 
   /**
    * Constructor
-   * @param startTime The start time
-   * @param endTime The end time, must be after the start time
-   * @param accrualFactor The accrual factor
-   * @param value The sensitivity value.
+   *
+   * @param startTime
+   *          The start time
+   * @param endTime
+   *          The end time, must be after the start time
+   * @param accrualFactor
+   *          The accrual factor
+   * @param value
+   *          The sensitivity value.
    */
   public ForwardSensitivity(final double startTime, final double endTime, final double accrualFactor, final double value) {
     ArgumentChecker.isTrue(startTime < endTime, "Start time {} must be before the end time {}", startTime, endTime);
@@ -32,7 +37,8 @@ public abstract class ForwardSensitivity {
   }
 
   /**
-   * Gets the start time
+   * Gets the start time.
+   *
    * @return The start time
    */
   public double getStartTime() {
@@ -40,7 +46,8 @@ public abstract class ForwardSensitivity {
   }
 
   /**
-   * Gets the end time
+   * Gets the end time.
+   *
    * @return The end time
    */
   public double getEndTime() {
@@ -48,7 +55,8 @@ public abstract class ForwardSensitivity {
   }
 
   /**
-   * Gets the accrual factor
+   * Gets the accrual factor.
+   *
    * @return The accrual factor
    */
   public double getAccrualFactor() {
@@ -56,7 +64,8 @@ public abstract class ForwardSensitivity {
   }
 
   /**
-   * Gets the value
+   * Gets the value.
+   *
    * @return The value
    */
   public double getValue() {
@@ -64,20 +73,26 @@ public abstract class ForwardSensitivity {
   }
 
   /**
-   * Returns the derivative of the forward with respect to yield  of discount factor at the start time.
-   * @param dicountfactorStart The discount factor at the start time
-   * @param dicountfactorEnd he discount factor at the end time
-   * @return the derivative of the forward with respect to yield  of discount factor at the start time.
+   * Returns the derivative of the forward with respect to yield of discount factor at the start time.
+   *
+   * @param dicountfactorStart
+   *          The discount factor at the start time
+   * @param dicountfactorEnd
+   *          he discount factor at the end time
+   * @return the derivative of the forward with respect to yield of discount factor at the start time.
    */
-  public abstract double derivativeToYieldStart(final double dicountfactorStart, final double dicountfactorEnd);
+  public abstract double derivativeToYieldStart(double dicountfactorStart, double dicountfactorEnd);
 
   /**
-   * Returns the derivative of the forward with respect to yield  of discount factor at the end time.
-   * @param dicountfactorStart The discount factor at the start time
-   * @param dicountfactorEnd he discount factor at the end time
-   * @return the derivative of the forward with respect to yield  of discount factor at the end time.
+   * Returns the derivative of the forward with respect to yield of discount factor at the end time.
+   *
+   * @param dicountfactorStart
+   *          The discount factor at the start time
+   * @param dicountfactorEnd
+   *          he discount factor at the end time
+   * @return the derivative of the forward with respect to yield of discount factor at the end time.
    */
-  public abstract double derivativeToYieldEnd(final double dicountfactorStart, final double dicountfactorEnd);
+  public abstract double derivativeToYieldEnd(double dicountfactorStart, double dicountfactorEnd);
 
   @Override
   public String toString() {
@@ -90,13 +105,13 @@ public abstract class ForwardSensitivity {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_accrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_endTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_startTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_value);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

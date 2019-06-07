@@ -50,7 +50,7 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
 
     private final Database _id2LastAccessed;
 
-    public Generation(final Environment environment, final int generation) {
+    Generation(final Environment environment, final int generation) {
       final DatabaseConfig config = new DatabaseConfig();
       config.setAllowCreate(true);
       config.setTemporary(true);
@@ -68,7 +68,7 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
         LongBinding.longToEntry(System.nanoTime(), value);
         _id2LastAccessed.put(null, key, value);
         if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("Found record {} for {} in {}", new Object[] {target, uid, _id2Target.getDatabaseName() });
+          LOGGER.debug("Found record {} for {} in {}", new Object[] { target, uid, _id2Target.getDatabaseName() });
         }
         return target;
       }
@@ -152,7 +152,7 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
         }
       }
       cursor.close();
-      LOGGER.info("Copied {} objects from {} to {}", new Object[] {count, this, next });
+      LOGGER.info("Copied {} objects from {} to {}", new Object[] { count, this, next });
     }
 
     @Override
@@ -195,7 +195,8 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
   /**
    * Creates a new temporary target repository.
    *
-   * @param dbDir the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
+   * @param dbDir
+   *          the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
    */
   public BerkeleyDBTempTargetRepository(final File dbDir) {
     this(SCHEME, dbDir);
@@ -204,8 +205,10 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
   /**
    * Creates a new temporary target repository.
    *
-   * @param scheme the scheme to use for unique identifiers allocated by this repository
-   * @param dbDir the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
+   * @param scheme
+   *          the scheme to use for unique identifiers allocated by this repository
+   * @param dbDir
+   *          the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
    */
   public BerkeleyDBTempTargetRepository(final String scheme, final File dbDir) {
     super(scheme);

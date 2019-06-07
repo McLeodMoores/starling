@@ -6,15 +6,15 @@
 package com.opengamma.analytics.financial.model.finitedifference;
 
 /**
- * 
+ *
  */
 public interface BoundaryCondition2D {
 
-  double[] getLeftMatrixCondition(final double t, final double boundaryPosition);
+  double[] getLeftMatrixCondition(double t, double boundaryPosition);
 
-  double[] getRightMatrixCondition(final double t, final double boundaryPosition);
+  double[] getRightMatrixCondition(double t, double boundaryPosition);
 
-  double getConstant(final double t, final double boundaryPosition, final double gridSpacing);
+  double getConstant(double t, double boundaryPosition, double gridSpacing);
 
   double getLevel();
 

@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.cash.CashSecurity;
-
 /**
  * Utility for constructing a random cash portfolio.
  */

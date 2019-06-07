@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.function;
 
@@ -17,6 +17,7 @@ public class QuandlFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Creates an instance of this function configuration source.
+   * 
    * @return The function configuration source
    */
   public static FunctionConfigurationSource instance() {
@@ -25,6 +26,7 @@ public class QuandlFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Returns a function configuration source containing functions that produce curves.
+   * 
    * @return The function configuration source
    */
   protected FunctionConfigurationSource quandlCurveConfiguration() {

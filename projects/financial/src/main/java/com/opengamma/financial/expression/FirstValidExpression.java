@@ -15,7 +15,7 @@ import java.util.List;
 
   private final List<UserExpression> _exprs;
 
-  public FirstValidExpression(final List<UserExpression> exprs) {
+  FirstValidExpression(final List<UserExpression> exprs) {
     _exprs = new ArrayList<>(exprs);
   }
 

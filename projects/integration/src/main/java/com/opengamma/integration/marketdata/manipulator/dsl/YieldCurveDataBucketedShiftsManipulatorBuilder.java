@@ -29,19 +29,23 @@ import com.opengamma.util.ArgumentChecker;
 
   private final List<YieldCurveBucketedShift> _shiftList = Lists.newArrayList();
 
-  public YieldCurveDataBucketedShiftsManipulatorBuilder(final YieldCurveDataSelector selector,
-                                                        final Scenario scenario,
-                                                        final ScenarioShiftType shiftType) {
+  YieldCurveDataBucketedShiftsManipulatorBuilder(final YieldCurveDataSelector selector,
+      final Scenario scenario,
+      final ScenarioShiftType shiftType) {
     _selector = ArgumentChecker.notNull(selector, "selector");
     _scenario = ArgumentChecker.notNull(scenario, "scenario");
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
   }
 
   /**
-   * Apply a bucketed shift to a range
-   * @param start Period between the valuation date and the start of the shift
-   * @param end Period between the valuation date and the end of the shift
-   * @param shift shift amount
+   * Apply a bucketed shift to a range.
+   * 
+   * @param start
+   *          Period between the valuation date and the start of the shift
+   * @param end
+   *          Period between the valuation date and the end of the shift
+   * @param shift
+   *          shift amount
    * @return this
    */
   public YieldCurveDataBucketedShiftsManipulatorBuilder shift(final Period start, final Period end, final Number shift) {
@@ -54,8 +58,7 @@ import com.opengamma.util.ArgumentChecker;
    * Apply shifts to the scenario.
    */
   public void build() {
-    final YieldCurveDataBucketedShiftManipulator shifts =
-        new YieldCurveDataBucketedShiftManipulator(_shiftType, ImmutableList.copyOf(_shiftList));
+    final YieldCurveDataBucketedShiftManipulator shifts = new YieldCurveDataBucketedShiftManipulator(_shiftType, ImmutableList.copyOf(_shiftList));
     _scenario.add(_selector, shifts);
   }
 }

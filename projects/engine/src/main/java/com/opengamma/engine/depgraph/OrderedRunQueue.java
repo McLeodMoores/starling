@@ -19,10 +19,10 @@ import com.opengamma.engine.target.ComputationTargetTypeMap;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Run queue implementation based on sorting the runnable tasks. When the run queue is small, this is comparable to {@link ConcurrentLinkedQueueRunQueue}
- * or {@link StackRunQueue} implementations as the sorting operation is not performed. As the run queue length grows and exceeds the capacity of the
- * target resolution cache, the cost of ordering the operations may be offset by better use of the cache. Some function repositories and graph structures
- * may still benefit from the simpler {@link StackRunQueue} implementation which can give good cache performance without any ordering costs.
+ * Run queue implementation based on sorting the runnable tasks. When the run queue is small, this is comparable to {@link ConcurrentLinkedQueueRunQueue} or
+ * {@link StackRunQueue} implementations as the sorting operation is not performed. As the run queue length grows and exceeds the capacity of the target
+ * resolution cache, the cost of ordering the operations may be offset by better use of the cache. Some function repositories and graph structures may still
+ * benefit from the simpler {@link StackRunQueue} implementation which can give good cache performance without any ordering costs.
  */
 /* package */final class OrderedRunQueue implements RunQueue, Comparator<ContextRunnable> {
 
@@ -47,7 +47,7 @@ import com.opengamma.util.ArgumentChecker;
     PRIORITY.put(ComputationTargetType.POSITION, 6);
   }
 
-  public OrderedRunQueue(final int initialBuffer, final int maxUnsorted) {
+  OrderedRunQueue(final int initialBuffer, final int maxUnsorted) {
     ArgumentChecker.isTrue(initialBuffer > 0, "initialBuffer");
     ArgumentChecker.isTrue(maxUnsorted > 0, "maxUnsorted");
     _maxUnsorted = maxUnsorted;
@@ -184,11 +184,10 @@ import com.opengamma.util.ArgumentChecker;
    * <li>TRADE</li>
    * <li>POSITION</li>
    * </ul>
-   * Within a given computation target type, ordering is based on the unique identifier. The aim is to get tasks that will "complete" running sooner
-   * (i.e. the primitive and security level functions) to reduce the live memory footprint during a graph build. Portfolio node targets are performed
-   * at a high priority so that if individual positions are also requested then the graph build for both should run in parallel if the node function
-   * is a basic aggregation. Ordering the unique identifiers should group values on the same target to give better utilization of the computation target
-   * resolver cache.
+   * Within a given computation target type, ordering is based on the unique identifier. The aim is to get tasks that will "complete" running sooner (i.e. the
+   * primitive and security level functions) to reduce the live memory footprint during a graph build. Portfolio node targets are performed at a high priority
+   * so that if individual positions are also requested then the graph build for both should run in parallel if the node function is a basic aggregation.
+   * Ordering the unique identifiers should group values on the same target to give better utilization of the computation target resolver cache.
    * <p>
    * Note this sorts into reverse order so that the most preferable to run are at the end of the array.
    */

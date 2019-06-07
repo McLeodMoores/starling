@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -14,8 +14,8 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.CompareUtils;
 
 /**
- * This is the form given in Obloj, Fine-Tune Your Smile (2008), and supposedly corresponds to that given in Hagan, Managing Smile Risk (2002). However it differs from Hagan
- * {@link SABRBerestyckiVolatilityFunction}
+ * This is the form given in Obloj, Fine-Tune Your Smile (2008), and supposedly corresponds to that given in Hagan, Managing Smile Risk (2002). However it
+ * differs from Hagan {@link SABRBerestyckiVolatilityFunction}
  */
 public class SABRHaganAlternativeVolatilityFunction extends VolatilityFunctionProvider<SABRFormulaData> {
   private static final Logger LOGGER = LoggerFactory.getLogger(SABRHaganAlternativeVolatilityFunction.class);
@@ -33,7 +33,7 @@ public class SABRHaganAlternativeVolatilityFunction extends VolatilityFunctionPr
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public final Double evaluate(final SABRFormulaData data) {
+      public Double evaluate(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();

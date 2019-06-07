@@ -65,13 +65,20 @@ public class PortfolioLoaderResource {
   /**
    * Creates an instance.
    *
-   * @param portfolioMaster  the master, not null
-   * @param positionMaster  the master, not null
-   * @param securityMaster  the master, not null
-   * @param historicalTimeSeriesMaster  the master, not null
-   * @param securityProvider  the provider, not null
-   * @param historicalTimeSeriesProvider  the provider, not null
-   * @param bloombergReferenceDataProvider  the provider, not null
+   * @param portfolioMaster
+   *          the master, not null
+   * @param positionMaster
+   *          the master, not null
+   * @param securityMaster
+   *          the master, not null
+   * @param historicalTimeSeriesMaster
+   *          the master, not null
+   * @param securityProvider
+   *          the provider, not null
+   * @param historicalTimeSeriesProvider
+   *          the provider, not null
+   * @param bloombergReferenceDataProvider
+   *          the provider, not null
    */
   public PortfolioLoaderResource(final PortfolioMaster portfolioMaster,
       final PositionMaster positionMaster,
@@ -190,24 +197,24 @@ public class PortfolioLoaderResource {
       return SheetFormat.XLS;
     }
 
-    final Response response = Response.status(Response.Status.BAD_REQUEST).entity("Portfolio upload only supports CSV/XLS " +
-        "files and Excel worksheets").build();
+    final Response response = Response.status(Response.Status.BAD_REQUEST).entity("Portfolio upload only supports CSV/XLS "
+        + "files and Excel worksheets").build();
     throw new WebApplicationException(response);
   }
 
   /**
-   * This wraps the file upload input stream to work around a bug in {@code org.jvnet.mimepull} which is used by Jersey
-   * Multipart.  The bug causes the {@code read()} method of the file upload stream to throw an exception if it is
-   * called twice at the end of the stream which violates the contract of {@link InputStream}.  It ought to
-   * keep returning {@code -1} indefinitely.  This class restores that behaviour.
-   * TODO Check if this can be removed when we upgrade Jersey. It is a problem when the CSV file doesn't end with a new line
+   * This wraps the file upload input stream to work around a bug in {@code org.jvnet.mimepull} which is used by Jersey Multipart. The bug causes the
+   * {@code read()} method of the file upload stream to throw an exception if it is called twice at the end of the stream which violates the contract of
+   * {@link InputStream}. It ought to keep returning {@code -1} indefinitely. This class restores that behaviour. TODO Check if this can be removed when we
+   * upgrade Jersey. It is a problem when the CSV file doesn't end with a new line
+   * 
    * @see <a href="http://java.net/jira/browse/JAX_WS-965">The bug report</a>
    */
   private static class WorkaroundInputStream extends FilterInputStream {
 
     private boolean _ended;
 
-    public WorkaroundInputStream(final InputStream in) {
+    WorkaroundInputStream(final InputStream in) {
       super(in);
     }
 

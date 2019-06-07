@@ -23,7 +23,7 @@ import com.opengamma.id.VersionCorrection;
 
   private static final long serialVersionUID = 1L;
 
-  public NullComputationTargetType() {
+  NullComputationTargetType() {
     super(NullComputationTargetType.class.getName().hashCode());
   }
 
@@ -69,8 +69,7 @@ import com.opengamma.id.VersionCorrection;
     sb.append(getName());
   }
 
-  private static final ComputationTargetTypeVisitor<NullComputationTargetType, Boolean> EQUALS =
-      new ComputationTargetTypeVisitor<NullComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NullComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<NullComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NullComputationTargetType self) {

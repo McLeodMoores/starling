@@ -16,17 +16,15 @@ import javax.management.MXBean;
 public interface SubscriptionStateQuery {
 
   /**
-   * Return the number of failed subscriptions. These are the subscriptions
-   * which were unable to be fulfilled by the market data provider.
+   * Return the number of failed subscriptions. These are the subscriptions which were unable to be fulfilled by the market data provider.
    *
    * @return the number of failed subscriptions
    */
   int getFailedSubscriptionCount();
 
   /**
-   * Return the number of pending subscriptions. These are the subscriptions
-   * which have been requested from the market data provider but for which
-   * there has been no reply indicating success or failure.
+   * Return the number of pending subscriptions. These are the subscriptions which have been requested from the market data provider but for which there has
+   * been no reply indicating success or failure.
    *
    * @return the number of pending subscriptions
    */
@@ -34,8 +32,7 @@ public interface SubscriptionStateQuery {
   int getPendingSubscriptionCount();
 
   /**
-   * Return the number of removed subscriptions. These are the subscriptions
-   * which were requested but were subsequently no longer required.
+   * Return the number of removed subscriptions. These are the subscriptions which were requested but were subsequently no longer required.
    *
    * @return the number of removed subscriptions
    */
@@ -43,8 +40,7 @@ public interface SubscriptionStateQuery {
   int getRemovedSubscriptionCount();
 
   /**
-   * Return the number of active subscriptions. These are the subscriptions
-   * which have been successfully fulfilled by the market data provider.
+   * Return the number of active subscriptions. These are the subscriptions which have been successfully fulfilled by the market data provider.
    *
    * @return the number of active subscriptions
    */
@@ -104,10 +100,9 @@ public interface SubscriptionStateQuery {
   /**
    * Represents the current state of a market data subscription.
    */
-  public enum SubscriptionState {
+  enum SubscriptionState {
     /**
-     * Subscriptions which has been requested from the market data provider but for
-     * which there has been no reply indicating success or failure.
+     * Subscriptions which has been requested from the market data provider but for which there has been no reply indicating success or failure.
      */
     PENDING,
     /**

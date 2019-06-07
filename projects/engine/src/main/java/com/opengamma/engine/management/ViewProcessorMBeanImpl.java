@@ -31,7 +31,7 @@ public final class ViewProcessorMBeanImpl implements ViewProcessorMBean {
   private final ObjectName _objectName;
 
   /**
-   * Create a management ViewProcessor
+   * Create a management ViewProcessor.
    *
    * @param viewProcessor
    *          the underlying ViewProcessor
@@ -45,14 +45,20 @@ public final class ViewProcessorMBeanImpl implements ViewProcessorMBean {
   }
 
   /**
-   * Creates an object name using the scheme "com.opengamma:type=ViewProcessor,name=<viewProcessorName>"
+   * Creates an object name using the scheme "com.opengamma:type=ViewProcessor,name=<viewProcessorName>".
+   *
+   * @param viewProcessor
+   *          the view processor
+   * @param splitByViewProcessor
+   *          should the MBean name differentiate beans by view processor
+   * @return the object name
    */
   static ObjectName createObjectName(final ViewProcessor viewProcessor,
       final boolean splitByViewProcessor) {
     try {
-      return new ObjectName(splitByViewProcessor ?
-          "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessor.getName() + ",name=ViewProcessor " + viewProcessor.getName() :
-            "com.opengamma:type=ViewProcessor,name=ViewProcessor " + viewProcessor.getName());
+      return new ObjectName(splitByViewProcessor
+          ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessor.getName() + ",name=ViewProcessor " + viewProcessor.getName()
+          : "com.opengamma:type=ViewProcessor,name=ViewProcessor " + viewProcessor.getName());
     } catch (final MalformedObjectNameException e) {
       throw new OpenGammaRuntimeException("", e);
     }
@@ -66,7 +72,6 @@ public final class ViewProcessorMBeanImpl implements ViewProcessorMBean {
     }
     return result;
   }
-
 
   @Override
   public int getNumberOfViewProcesses() {

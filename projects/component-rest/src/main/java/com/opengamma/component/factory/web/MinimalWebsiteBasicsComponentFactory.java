@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 -present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.component.factory.web;
 
@@ -211,13 +211,12 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
   private ComputationTargetResolver _computationTargetResolver;
 
   /**
-   * The external Scheme configuration
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * The external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
    */
   @PropertyDefinition
   private String _externalSchemes;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final Set<Class<?>> publishedTypes = initMasters(repo, getExternalSchemesMap());
@@ -286,26 +285,26 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
     return publishedTypes;
   }
 
-  //builds a map of type -> constructor params
+  // builds a map of type -> constructor params
   private Map<Class<?>, List<Object>> extractResourceParams(final Map<ExternalScheme, String> externalSchemes, final MasterConfigSource configSource) {
     final Map<Class<?>, List<Object>> resourceParameters = Maps.newHashMap();
     resourceParameters.put(WebConfigsResource.class, params(getConfigMaster()));
     resourceParameters.put(WebUsersResource.class, params(getUserMaster(), getPasswordService()));
     resourceParameters.put(WebRolesResource.class, params(getUserMaster()));
     resourceParameters.put(WebExchangesResource.class, params(getExchangeMaster()));
-    resourceParameters.put(WebHolidaysResource.class,  params(getHolidayMaster()));
-    resourceParameters.put(WebRegionsResource.class,   params(getRegionMaster()));
+    resourceParameters.put(WebHolidaysResource.class, params(getHolidayMaster()));
+    resourceParameters.put(WebRegionsResource.class, params(getRegionMaster()));
     resourceParameters.put(WebConventionsResource.class, params(getConventionMaster()));
     resourceParameters.put(WebLegalEntitiesResource.class, params(getLegalEntityMaster(), getSecurityMaster()));
     if (getSecurityLoader() != null) {
       if (getHistoricalTimeSeriesMaster() != null) {
         // same behaviour as OpenGamma
-        resourceParameters.put(MinimalWebPositionsResource.class, params(getPositionMaster(), getSecurityLoader(),
-            getSecuritySource(), getHistoricalTimeSeriesSource(), externalSchemes));
+        resourceParameters.put(MinimalWebPositionsResource.class,
+            params(getPositionMaster(), getSecurityLoader(), getSecuritySource(), getHistoricalTimeSeriesSource(), externalSchemes));
         if (getLegalEntityMaster() != null) {
           // same behaviour as OpenGamma
-          resourceParameters.put(MinimalWebSecuritiesResource.class, params(getSecurityMaster(), getSecurityLoader(),
-              getHistoricalTimeSeriesMaster(), getLegalEntityMaster()));
+          resourceParameters.put(MinimalWebSecuritiesResource.class,
+              params(getSecurityMaster(), getSecurityLoader(), getHistoricalTimeSeriesMaster(), getLegalEntityMaster()));
         } else {
           resourceParameters.put(MinimalWebSecuritiesResource.class, params(getSecurityMaster(), getSecurityLoader()));
         }
@@ -317,10 +316,10 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
     resourceParameters.put(MinimalWebPortfoliosResource.class, params(getPortfolioMaster(), getPositionMaster(), getSecuritySource(), getScheduler()));
     resourceParameters.put(WebAllHistoricalTimeSeriesResource.class, params(getHistoricalTimeSeriesMaster(), getHistoricalTimeSeriesLoader(), configSource));
     resourceParameters.put(WebComputationTargetTypeResource.class, params(getTargetTypes()));
-    //TODO
-    //    resourceParameters.put(WebMarketDataSnapshotsResource.class, params(getMarketDataSnapshotMaster(), getConfigMaster(),
-    //        Optional.fromNullable(getLiveMarketDataProviderFactory()), configSource, getComputationTargetResolver(), getViewProcessor(),
-    //        getHistoricalTimeSeriesSource()));
+    // TODO
+    // resourceParameters.put(WebMarketDataSnapshotsResource.class, params(getMarketDataSnapshotMaster(), getConfigMaster(),
+    // Optional.fromNullable(getLiveMarketDataProviderFactory()), configSource, getComputationTargetResolver(), getViewProcessor(),
+    // getHistoricalTimeSeriesSource()));
     resourceParameters.put(WebFunctionsResource.class, params(getFunctionConfigurationSource()));
     if (getHolidayMaster() != null) {
       resourceParameters.put(HolidayLoaderResource.class, params(getHolidayMaster()));
@@ -356,10 +355,9 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
     if (valueRequirementNameClasses == null) {
       repo.getRestComponents().publishResource(new WebValueRequirementNamesResource());
     } else if (valueRequirementNameClasses.contains(",")) {
-      repo.getRestComponents().publishResource(
-          new WebValueRequirementNamesResource(valueRequirementNameClasses.split(",")));
+      repo.getRestComponents().publishResource(new WebValueRequirementNamesResource(valueRequirementNameClasses.split(",")));
     } else {
-      repo.getRestComponents().publishResource(new WebValueRequirementNamesResource(new String[] {valueRequirementNameClasses}));
+      repo.getRestComponents().publishResource(new WebValueRequirementNamesResource(new String[] { valueRequirementNameClasses }));
     }
   }
 
@@ -985,8 +983,7 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external Scheme configuration
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * Gets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
    * @return the value of the property
    */
   public String getExternalSchemes() {
@@ -994,8 +991,7 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the external Scheme configuration
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * Sets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
    * @param externalSchemes  the new value of the property
    */
   public void setExternalSchemes(String externalSchemes) {
@@ -1004,7 +1000,6 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code externalSchemes} property.
-   * e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
    * @return the property, not null
    */
   public final Property<String> externalSchemes() {

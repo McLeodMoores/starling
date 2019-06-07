@@ -56,6 +56,6 @@ public abstract class PerViewStatisticsGathererProvider<T extends GraphExecutorS
     }
   }
 
-  protected abstract boolean dropStatisticsBefore(final T gatherer, final Instant dropBefore);
+  protected abstract boolean dropStatisticsBefore(T gatherer, Instant dropBefore);
 
 }

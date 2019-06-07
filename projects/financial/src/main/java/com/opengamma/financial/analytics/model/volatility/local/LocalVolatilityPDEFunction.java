@@ -52,21 +52,23 @@ public abstract class LocalVolatilityPDEFunction extends AbstractFunction.NonCom
 
   protected abstract String getRequirementName();
 
-  protected abstract ComputationTargetReference getVolatilitySurfaceAndForwardCurveTarget(final ComputationTarget target);
+  protected abstract ComputationTargetReference getVolatilitySurfaceAndForwardCurveTarget(ComputationTarget target);
 
-  protected abstract ComputationTargetReference getDiscountingCurveTarget(final ComputationTarget target);
+  protected abstract ComputationTargetReference getDiscountingCurveTarget(ComputationTarget target);
 
   protected abstract String getInstrumentType();
 
-  protected abstract EuropeanVanillaOption getOption(final FinancialSecurity security, final ZonedDateTime date);
+  protected abstract EuropeanVanillaOption getOption(FinancialSecurity security, ZonedDateTime date);
 
   protected abstract ValueProperties getResultProperties();
 
-  protected abstract ValueProperties getResultProperties(final ValueRequirement desiredValue);
+  protected abstract ValueProperties getResultProperties(ValueRequirement desiredValue);
 
   protected ValueRequirement getVolatilitySurfaceRequirement(final ComputationTarget target, final ValueRequirement desiredValue) {
-    final ValueProperties properties = LocalVolatilitySurfaceUtils.addAllDupireLocalVolatilitySurfaceProperties(ValueProperties.builder().get(), getInstrumentType(), _blackSmileInterpolatorName,
-        LocalVolatilitySurfacePropertyNamesAndValues.MONEYNESS, desiredValue).get();
+    final ValueProperties properties = LocalVolatilitySurfaceUtils
+        .addAllDupireLocalVolatilitySurfaceProperties(ValueProperties.builder().get(), getInstrumentType(), _blackSmileInterpolatorName,
+            LocalVolatilitySurfacePropertyNamesAndValues.MONEYNESS, desiredValue)
+        .get();
     return new ValueRequirement(ValueRequirementNames.LOCAL_VOLATILITY_SURFACE, getVolatilitySurfaceAndForwardCurveTarget(target), properties);
   }
 
@@ -86,7 +88,8 @@ public abstract class LocalVolatilityPDEFunction extends AbstractFunction.NonCom
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, getDiscountingCurveTarget(target), properties);
   }
 
-  protected Object getResult(final PDELocalVolatilityCalculator<?> calculator, final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve,
+  protected Object getResult(final PDELocalVolatilityCalculator<?> calculator, final LocalVolatilitySurfaceMoneyness localVolatility,
+      final ForwardCurve forwardCurve,
       final EuropeanVanillaOption option, final YieldAndDiscountCurve discountingCurve) {
     return calculator.getResult(localVolatility, forwardCurve, option, discountingCurve);
   }

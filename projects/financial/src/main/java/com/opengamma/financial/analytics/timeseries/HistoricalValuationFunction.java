@@ -64,14 +64,14 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalValuationFunction.class);
 
   /**
-   * Property naming the value produced on the target to generate the time series. For example {@code Historical Series[Value=FairValue]} will produce a time series based on evaluating
-   * {@code FairValue[]}.
+   * Property naming the value produced on the target to generate the time series. For example {@code Historical Series[Value=FairValue]} will produce a time
+   * series based on evaluating {@code FairValue[]}.
    */
   public static final String VALUE_PROPERTY = "Value";
 
   /**
-   * Prefix on properties corresponding the the underlying production on the target. For example {@code Historical Series[Value=FairValue, Value_Foo=Bar]} will produce a time series based on
-   * evaluating {@code FairValue[Foo=Bar]}.
+   * Prefix on properties corresponding the the underlying production on the target. For example {@code Historical Series[Value=FairValue, Value_Foo=Bar]} will
+   * produce a time series based on evaluating {@code FairValue[Foo=Bar]}.
    */
   public static final String PASSTHROUGH_PREFIX = VALUE_PROPERTY + "_";
 
@@ -81,20 +81,20 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
   public static final String TARGET_SPECIFICATION_PROPERTY = "Target";
 
   /**
-   * Value of the {@link #TARGET_SPECIFICATION_PROPERTY} property indicating the target is specified by its unique identifier and is independent of the resolver version/correction time on the spawned
-   * view cycles.
+   * Value of the {@link #TARGET_SPECIFICATION_PROPERTY} property indicating the target is specified by its unique identifier and is independent of the resolver
+   * version/correction time on the spawned view cycles.
    */
   public static final String TARGET_SPECIFICATION_UNIQUE = "Unique";
 
   /**
-   * Value of the {@link #TARGET_SPECIFICATION_PROPERTY} property indicating the target is specified by its object identifier and is dependent of the resolver version/correction time on the spawned
-   * view cycles.
+   * Value of the {@link #TARGET_SPECIFICATION_PROPERTY} property indicating the target is specified by its object identifier and is dependent of the resolver
+   * version/correction time on the spawned view cycles.
    */
   public static final String TARGET_SPECIFICATION_OBJECT = "Object";
 
   /**
-   * Value of the {@link #TARGET_SPECIFICATION_PROPERTY} property indicating the target is specified by its external identifier bundle and is dependent of the resolver version/correction time on the
-   * spawned view cycles.
+   * Value of the {@link #TARGET_SPECIFICATION_PROPERTY} property indicating the target is specified by its external identifier bundle and is dependent of the
+   * resolver version/correction time on the spawned view cycles.
    */
   public static final String TARGET_SPECIFICATION_EXTERNAL = "External";
 
@@ -103,10 +103,13 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
    */
   public static final String MARKET_DATA_MODE_PROPERTY = "MarketDataMode";
 
-  private static final Set<String> IGNORE_CONSTRAINTS = ImmutableSet.of(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY,
-      HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, MARKET_DATA_MODE_PROPERTY, ValuePropertyNames.FUNCTION);
+  private static final Set<String> IGNORE_CONSTRAINTS = ImmutableSet.of(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY,
+      HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY,
+      HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, MARKET_DATA_MODE_PROPERTY,
+      ValuePropertyNames.FUNCTION);
 
-  protected ValueRequirement getNestedRequirement(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTarget target, final ValueProperties constraints) {
+  protected ValueRequirement getNestedRequirement(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTarget target,
+      final ValueProperties constraints) {
     String valueName = ValueRequirementNames.VALUE;
     ComputationTargetReference requirementTarget = null;
     final ValueProperties.Builder requirementConstraints = ValueProperties.builder();
@@ -238,28 +241,33 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
       }
     }
     final String marketDataModeConstraint = constraints.getSingleValue(MARKET_DATA_MODE_PROPERTY);
-    final HistoricalViewEvaluationMarketDataMode marketDataMode = marketDataModeConstraint != null ?
-        HistoricalViewEvaluationMarketDataMode.parse(marketDataModeConstraint) : HistoricalViewEvaluationMarketDataMode.HISTORICAL;
-        Security security = null;
-        if (ComputationTargetType.SECURITY.isCompatible(target.getType())) {
-          security = target.getSecurity();
-        } else if (ComputationTargetType.POSITION.isCompatible(target.getType())) {
-          security = target.getPosition().getSecurity();
-        }
-        final Set<Currency> targetCurrencies = security != null ? ImmutableSet.copyOf(FinancialSecurityUtils.getCurrencies(security, context.getSecuritySource())) : null;
-        final ViewDefinition viewDefinition = context.getViewCalculationConfiguration().getViewDefinition();
-        final HistoricalViewEvaluationTarget tempTarget = new HistoricalViewEvaluationTarget(viewDefinition.getMarketDataUser(), startDateConstraint, includeStartConstraint, endDateConstraint,
-            includeEndConstraint, targetCurrencies, marketDataMode);
-        final ValueRequirement requirement = getNestedRequirement(context.getComputationTargetResolver(), target, desiredValue.getConstraints());
-        if (requirement == null) {
-          return null;
-        }
-        final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(tempTarget.getViewDefinition(), context.getViewCalculationConfiguration().getName());
-        calcConfig.addSpecificRequirement(requirement);
-        tempTarget.getViewDefinition().addViewCalculationConfiguration(calcConfig);
-        final TempTargetRepository targets = OpenGammaCompilationContext.getTempTargets(context);
-        final UniqueId tempTargetId = targets.locateOrStore(tempTarget);
-        return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, new ComputationTargetSpecification(TempTarget.TYPE, tempTargetId), ValueProperties.withAny(
+    final HistoricalViewEvaluationMarketDataMode marketDataMode = marketDataModeConstraint != null
+        ? HistoricalViewEvaluationMarketDataMode.parse(marketDataModeConstraint)
+        : HistoricalViewEvaluationMarketDataMode.HISTORICAL;
+    Security security = null;
+    if (ComputationTargetType.SECURITY.isCompatible(target.getType())) {
+      security = target.getSecurity();
+    } else if (ComputationTargetType.POSITION.isCompatible(target.getType())) {
+      security = target.getPosition().getSecurity();
+    }
+    final Set<Currency> targetCurrencies = security != null ? ImmutableSet.copyOf(FinancialSecurityUtils.getCurrencies(security, context.getSecuritySource()))
+        : null;
+    final ViewDefinition viewDefinition = context.getViewCalculationConfiguration().getViewDefinition();
+    final HistoricalViewEvaluationTarget tempTarget = new HistoricalViewEvaluationTarget(viewDefinition.getMarketDataUser(), startDateConstraint,
+        includeStartConstraint, endDateConstraint,
+        includeEndConstraint, targetCurrencies, marketDataMode);
+    final ValueRequirement requirement = getNestedRequirement(context.getComputationTargetResolver(), target, desiredValue.getConstraints());
+    if (requirement == null) {
+      return null;
+    }
+    final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(tempTarget.getViewDefinition(),
+        context.getViewCalculationConfiguration().getName());
+    calcConfig.addSpecificRequirement(requirement);
+    tempTarget.getViewDefinition().addViewCalculationConfiguration(calcConfig);
+    final TempTargetRepository targets = OpenGammaCompilationContext.getTempTargets(context);
+    final UniqueId tempTargetId = targets.locateOrStore(tempTarget);
+    return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES,
+        new ComputationTargetSpecification(TempTarget.TYPE, tempTargetId), ValueProperties.withAny(
             ViewEvaluationFunction.PROPERTY_CALC_CONFIG).get()));
   }
 
@@ -278,11 +286,14 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
   // TODO: Our declared type of anything means there will never be a parent context, this will probably need fixing
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    final TempTarget tempTargetObject = OpenGammaCompilationContext.getTempTargets(context).get(inputs.keySet().iterator().next().getTargetSpecification().getUniqueId());
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final TempTarget tempTargetObject = OpenGammaCompilationContext.getTempTargets(context)
+        .get(inputs.keySet().iterator().next().getTargetSpecification().getUniqueId());
     if (tempTargetObject instanceof HistoricalViewEvaluationTarget) {
       final HistoricalViewEvaluationTarget historicalTarget = (HistoricalViewEvaluationTarget) tempTargetObject;
-      final ViewCalculationConfiguration calcConfig = historicalTarget.getViewDefinition().getCalculationConfiguration(context.getViewCalculationConfiguration().getName());
+      final ViewCalculationConfiguration calcConfig = historicalTarget.getViewDefinition()
+          .getCalculationConfiguration(context.getViewCalculationConfiguration().getName());
       final ExternalIdBundle targetEids;
       if (target.getValue() instanceof ExternalIdentifiable) {
         targetEids = ((ExternalIdentifiable) target.getValue()).getExternalId().toBundle();
@@ -393,7 +404,8 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
   // FunctionInvoker
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalViewEvaluationResult evaluationResult = (HistoricalViewEvaluationResult) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
     final Set<ComputedValue> results = Sets.newHashSetWithExpectedSize(desiredValues.size());
     final ComputationTargetSpecification targetSpec = target.toSpecification();

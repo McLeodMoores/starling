@@ -13,19 +13,18 @@ import com.opengamma.util.ArgumentChecker;
 public enum HistoricalViewEvaluationMarketDataMode {
 
   /**
-   * The market data inputs required to produce a calculation for a date, d, are the unaltered historical close prices
-   * for these inputs on date d.
+   * The market data inputs required to produce a calculation for a date, d, are the unaltered historical close prices for these inputs on date d.
    */
   HISTORICAL("Historical"),
   /**
-   * The market data inputs required to produce a calculation for a date, d, are derived by shocking each input value
-   * at the valuation date by the relative difference between its close value on dates d and d-1.
+   * The market data inputs required to produce a calculation for a date, d, are derived by shocking each input value at the valuation date by the relative
+   * difference between its close value on dates d and d-1.
    */
   RELATIVE_SHOCK("RelativeShock");
 
   private String _constraintName;
 
-  private HistoricalViewEvaluationMarketDataMode(final String constraintName) {
+  HistoricalViewEvaluationMarketDataMode(final String constraintName) {
     _constraintName = constraintName;
   }
 

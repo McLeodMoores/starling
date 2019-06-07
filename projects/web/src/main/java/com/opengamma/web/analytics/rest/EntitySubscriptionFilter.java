@@ -27,9 +27,8 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
 /**
- * Jersey filter that sets up subscriptions for entities returned from REST methods.  When the entity changes
- * a notification is sent to the client containing the REST URL used to request the entity.
- * An instance of the filter is associated with each REST method annotated with {@link Subscribe}.
+ * Jersey filter that sets up subscriptions for entities returned from REST methods. When the entity changes a notification is sent to the client containing the
+ * REST URL used to request the entity. An instance of the filter is associated with each REST method annotated with {@link Subscribe}.
  */
 public class EntitySubscriptionFilter implements ResourceFilter {
 
@@ -41,11 +40,14 @@ public class EntitySubscriptionFilter implements ResourceFilter {
   private final HttpServletRequest _servletRequest;
 
   /**
-   * @param uidParamNames Parameter names (specified by {@link PathParam}) that contain {@link UniqueId}s for which
-   * subscriptions should be created
-   * @param connectionManager For setting up the subscriptions
-   * @param httpContext The HTTP context of the request
-   * @param servletRequest The HTTP request
+   * @param uidParamNames
+   *          Parameter names (specified by {@link PathParam}) that contain {@link UniqueId}s for which subscriptions should be created
+   * @param connectionManager
+   *          For setting up the subscriptions
+   * @param httpContext
+   *          The HTTP context of the request
+   * @param servletRequest
+   *          The HTTP request
    */
   public EntitySubscriptionFilter(final List<String> uidParamNames,
       final ConnectionManager connectionManager,
@@ -74,28 +76,30 @@ public class EntitySubscriptionFilter implements ResourceFilter {
   }
 
   /**
-   * Filter that examines the response and sets up the subscription with
-   * {@link ConnectionManager#subscribe(String, String, UniqueId, String)}.
+   * Filter that examines the response and sets up the subscription with {@link ConnectionManager#subscribe(String, String, UniqueId, String)}.
    */
   private class ResponseFilter implements ContainerResponseFilter {
 
-    private final List<String> uidParamNames;  // CSIGNORE
+    private final List<String> uidParamNames; // CSIGNORE
 
     /**
-     * @param uidParamNames Names of the method parameters that contain {@link UniqueId}s.  These are the names
-     * specified in the {@link PathParam} annotations and they are also annotated with {@link Subscribe}.
+     * @param uidParamNames
+     *          Names of the method parameters that contain {@link UniqueId}s. These are the names specified in the {@link PathParam} annotations and they are
+     *          also annotated with {@link Subscribe}.
      */
-    public ResponseFilter(final List<String> uidParamNames) {
+    ResponseFilter(final List<String> uidParamNames) {
       this.uidParamNames = uidParamNames;
     }
 
     /**
-     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes
-     * for updates for {@link UniqueId}s in the parameters named {@link #uidParamNames}.
-     * @param request The request
-     * @param response The response
-     * @return The unmodified response
-     * TODO this is almost identical to MasterSubscriptionFilter, common superclass? helper method / class?
+     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes for updates for {@link UniqueId}s in the
+     * parameters named {@link #uidParamNames}.
+     * 
+     * @param request
+     *          The request
+     * @param response
+     *          The response
+     * @return The unmodified response TODO this is almost identical to MasterSubscriptionFilter, common superclass? helper method / class?
      */
     @Override
     public ContainerResponse filter(final ContainerRequest request, final ContainerResponse response) {

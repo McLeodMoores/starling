@@ -50,11 +50,10 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Provides the reference margin price,
- * for futures, options and other exchange traded securities that are margined
+ * Provides the reference margin price, for futures, options and other exchange traded securities that are margined.
  */
 public class MarginPriceFunction extends AbstractFunction {
-  //TODO move from this package
+  // TODO move from this package
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(MarginPriceFunction.class);
   /** The margin price calculator */
@@ -68,26 +67,28 @@ public class MarginPriceFunction extends AbstractFunction {
     final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context); // TODO [PLAT-5966] Remove
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final InterestRateFutureOptionSecurityConverter irFutureOptionConverter = new InterestRateFutureOptionSecurityConverter(holidaySource, conventionSource, regionSource, securitySource);
+    final InterestRateFutureOptionSecurityConverter irFutureOptionConverter = new InterestRateFutureOptionSecurityConverter(holidaySource, conventionSource,
+        regionSource, securitySource);
     final InterestRateFutureOptionTradeConverter optionTradeToTxnDefnConverter = new InterestRateFutureOptionTradeConverter(irFutureOptionConverter);
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
-    final FixedIncomeConverterDataProvider definitionConverter = new FixedIncomeConverterDataProvider(conventionBundleSource, securitySource, timeSeriesResolver);
+    final FixedIncomeConverterDataProvider definitionConverter = new FixedIncomeConverterDataProvider(conventionBundleSource, securitySource,
+        timeSeriesResolver);
 
     return new AbstractInvokingCompiledFunction() {
 
       @Override
-      public final Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
         final Clock snapshotClock = executionContext.getValuationClock();
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final Trade trade = target.getTrade();
         final Security security = trade.getSecurity();
-        final InstrumentDefinition<?> definition;
+        InstrumentDefinition<?> definition;
         if (security instanceof IRFutureOptionSecurity) {
-          definition = optionTradeToTxnDefnConverter.convert(trade);  
+          definition = optionTradeToTxnDefnConverter.convert(trade);
         } else {
-          definition = futureTradeConverter.convert(trade);  
+          definition = futureTradeConverter.convert(trade);
         }
         final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
         final InstrumentDerivative derivative = definitionConverter.convert(security, definition, now, timeSeries);
@@ -114,7 +115,8 @@ public class MarginPriceFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         try {
           final Trade trade = target.getTrade();
           final Security security = trade.getSecurity();

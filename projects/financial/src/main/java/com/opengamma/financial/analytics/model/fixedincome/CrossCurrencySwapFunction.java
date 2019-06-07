@@ -68,7 +68,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base class for cross-currency swap analytics
- * 
+ *
  * @deprecated Use functions descending from {@link DiscountingFunction}
  */
 @Deprecated
@@ -84,7 +84,8 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public CrossCurrencySwapFunction(final String... valueRequirements) {
     ArgumentChecker.notNull(valueRequirements, "value requirements");
@@ -102,23 +103,26 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
     final FRASecurityConverterDeprecated fraConverter = new FRASecurityConverterDeprecated(holidaySource, regionSource, conventionSource);
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource,
+        regionSource);
     final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
-    _visitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().cashSecurityVisitor(cashConverter).fraSecurityVisitor(fraConverter).swapSecurityVisitor(swapConverter)
+    _visitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder().cashSecurityVisitor(cashConverter).fraSecurityVisitor(fraConverter)
+        .swapSecurityVisitor(swapConverter)
         .interestRateFutureSecurityVisitor(irFutureConverter).bondSecurityVisitor(bondConverter).bondFutureSecurityVisitor(bondFutureConverter).create();
     _definitionConverter = new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver);
     _curveCalculationConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues)
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues)
       throws AsynchronousExecution {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    //TODO won't need to call into database again when calculation configurations are a requirement
+    // TODO won't need to call into database again when calculation configurations are a requirement
     final String payCurveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG);
     final MultiCurveCalculationConfig payCurveCalculationConfig = _curveCalculationConfigSource.getConfig(payCurveCalculationConfigName);
     if (payCurveCalculationConfig == null) {
@@ -133,7 +137,7 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
     if (definition == null) {
       throw new OpenGammaRuntimeException("Definition for security " + security + " was null");
     }
-    //    final InstrumentDerivative derivative = _definitionConverter.convert(security, definition, now, _valueRequirements, timeSeries);
+    // final InstrumentDerivative derivative = _definitionConverter.convert(security, definition, now, _valueRequirements, timeSeries);
     final String[] payCurveNames = payCurveCalculationConfig.getYieldCurveNames();
     final String[] receiveCurveNames = receiveCurveCalculationConfig.getYieldCurveNames();
     final String payCurveSuffix = payCurveCalculationConfig.getTarget().getUniqueId().getValue();
@@ -196,7 +200,7 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
     return results;
   }
 
-  //TODO add curve calculation configurations as requirements
+  // TODO add curve calculation configurations as requirements
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
@@ -238,7 +242,8 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
       return null;
     }
     if (!receiveCurrencyMatched) {
-      LOGGER.info("Receive currency calculation config target {} was not found in {}", receiveCurveCalculationConfig.getTarget().getUniqueId().getValue(), currencies);
+      LOGGER.info("Receive currency calculation config target {} was not found in {}", receiveCurveCalculationConfig.getTarget().getUniqueId().getValue(),
+          currencies);
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
@@ -257,16 +262,19 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
     }
   }
 
-  //TODO work out a sensible way to get calculation properties for all curves into result properties. Prefix each property name with PAY_ and RECEIVE_?
+  // TODO work out a sensible way to get calculation properties for all curves into result properties. Prefix each property name with PAY_ and RECEIVE_?
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<String> payLegCurveNames = new HashSet<>();
     final Set<String> receiveLegCurveNames = new HashSet<>();
     String payCurveCalculationConfig = null;
     String receiveCurveCalculationConfig = null;
     final SwapSecurity swap = (SwapSecurity) target.getSecurity();
-    final ComputationTargetSpecification payCurrencySpec = ComputationTargetSpecification.of(((InterestRateNotional) swap.getPayLeg().getNotional()).getCurrency());
-    final ComputationTargetSpecification receiveCurrencySpec = ComputationTargetSpecification.of(((InterestRateNotional) swap.getReceiveLeg().getNotional()).getCurrency());
+    final ComputationTargetSpecification payCurrencySpec = ComputationTargetSpecification
+        .of(((InterestRateNotional) swap.getPayLeg().getNotional()).getCurrency());
+    final ComputationTargetSpecification receiveCurrencySpec = ComputationTargetSpecification
+        .of(((InterestRateNotional) swap.getReceiveLeg().getNotional()).getCurrency());
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification valueSpec = entry.getKey();
       final String valueName = valueSpec.getValueName();
@@ -301,19 +309,23 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
 
   /**
    * Calculates the results.
-   * 
-   * @param derivative The derivative
-   * @param bundle The yield curves
-   * @param targetSpec The target specification of the results
-   * @param properties The result properties
+   *
+   * @param derivative
+   *          The derivative
+   * @param bundle
+   *          The yield curves
+   * @param targetSpec
+   *          The target specification of the results
+   * @param properties
+   *          The result properties
    * @return The results
    */
-  protected abstract Set<ComputedValue> getComputedValues(InstrumentDerivative derivative, final YieldCurveBundle bundle, final ComputationTargetSpecification targetSpec,
-      final ValueProperties properties);
+  protected abstract Set<ComputedValue> getComputedValues(InstrumentDerivative derivative, YieldCurveBundle bundle, ComputationTargetSpecification targetSpec,
+      ValueProperties properties);
 
   /**
    * Gets the value requirement names.
-   * 
+   *
    * @return The value requirement names
    */
   protected String[] getValueRequirementNames() {

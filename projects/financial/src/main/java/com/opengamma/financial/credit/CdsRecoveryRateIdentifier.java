@@ -49,8 +49,6 @@ public final class CdsRecoveryRateIdentifier {
    *          the currency of the CDS
    * @param seniority
    *          the seniority of the CDS
-   * @param restructuringClause
-   *          the restructuring clause of the CDS
    * @return a new identifier
    */
   public static CdsRecoveryRateIdentifier forSamedayCds(final String redCode, final Currency currency, final String seniority) {

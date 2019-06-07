@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.analytics.financial.interestrate.future.calculator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
@@ -18,6 +23,7 @@ public final class ThetaBlackBondFuturesCalculator extends InstrumentDerivativeV
 
   /**
    * Returns a singleton of the calculator.
+   * 
    * @return the calculator.
    */
   public static ThetaBlackBondFuturesCalculator getInstance() {
@@ -33,15 +39,18 @@ public final class ThetaBlackBondFuturesCalculator extends InstrumentDerivativeV
   /**
    * Pricing method for theta.
    */
-  private static final BondFuturesOptionMarginSecurityBlackBondFuturesMethod METHOD = BondFuturesOptionMarginSecurityBlackBondFuturesMethod.getInstance();
+  private static final BondFuturesOptionMarginSecurityBlackBondFuturesMethod METHOD = BondFuturesOptionMarginSecurityBlackBondFuturesMethod
+      .getInstance();
 
   @Override
-  public Double visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option, final BlackBondFuturesProviderInterface data) {
+  public Double visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option,
+      final BlackBondFuturesProviderInterface data) {
     return METHOD.theta(option, data);
   }
 
   @Override
-  public Double visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction option, final BlackBondFuturesProviderInterface data) {
+  public Double visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction option,
+      final BlackBondFuturesProviderInterface data) {
     return METHOD.theta(option.getUnderlyingSecurity(), data);
   }
 }

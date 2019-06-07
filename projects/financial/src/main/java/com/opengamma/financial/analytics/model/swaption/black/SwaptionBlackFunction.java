@@ -80,7 +80,8 @@ public abstract class SwaptionBlackFunction extends AbstractFunction.NonCompiled
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
+   * @param valueRequirementName
+   *          The value requirement name, not null
    */
   public SwaptionBlackFunction(final String valueRequirementName) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement name");
@@ -101,7 +102,8 @@ public abstract class SwaptionBlackFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
@@ -116,7 +118,7 @@ public abstract class SwaptionBlackFunction extends AbstractFunction.NonCompiled
     }
     String[] curveNames = curveCalculationConfig.getYieldCurveNames();
     if (curveNames.length == 1) {
-      curveNames = new String[] {curveNames[0], curveNames[0] };
+      curveNames = new String[] { curveNames[0], curveNames[0] };
     }
     final String[] fullCurveNames = new String[curveNames.length];
     for (int i = 0; i < curveNames.length; i++) {
@@ -136,7 +138,8 @@ public abstract class SwaptionBlackFunction extends AbstractFunction.NonCompiled
     final InstrumentDerivative swaption = _definitionConverter.convert(security, definition, now, fullCurveNames, timeSeries);
     final ValueProperties properties = getResultProperties(currency.getCode(), curveCalculationConfigName, surfaceName);
     final ValueSpecification spec = new ValueSpecification(_valueRequirementName, target.toSpecification(), properties);
-    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(), SwaptionUtils.getSwapGenerator(security, definition, securitySource));
+    final BlackFlatSwaptionParameters parameters = new BlackFlatSwaptionParameters(volatilitySurface.getSurface(),
+        SwaptionUtils.getSwapGenerator(security, definition, securitySource));
     final YieldCurveWithBlackSwaptionBundle data = new YieldCurveWithBlackSwaptionBundle(parameters, curves);
     return getResult(swaption, data, spec);
   }
@@ -195,17 +198,21 @@ public abstract class SwaptionBlackFunction extends AbstractFunction.NonCompiled
   /**
    * Calculates the desired results.
    *
-   * @param swaption The swaption
-   * @param data The yield curve and surface data
-   * @param spec The result specification
+   * @param swaption
+   *          The swaption
+   * @param data
+   *          The yield curve and surface data
+   * @param spec
+   *          The result specification
    * @return A set of the desired results
    */
-  protected abstract Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final ValueSpecification spec);
+  protected abstract Set<ComputedValue> getResult(InstrumentDerivative swaption, YieldCurveWithBlackSwaptionBundle data, ValueSpecification spec);
 
   /**
    * Gets the result properties.
    *
-   * @param currency The currency
+   * @param currency
+   *          The currency
    * @return The result properties
    */
   protected ValueProperties getResultProperties(final String currency) {
@@ -219,9 +226,12 @@ public abstract class SwaptionBlackFunction extends AbstractFunction.NonCompiled
   /**
    * Gets the result properties.
    *
-   * @param currency The currency
-   * @param curveCalculationConfigName The curve calculation configuration name
-   * @param surfaceName The surface name
+   * @param currency
+   *          The currency
+   * @param curveCalculationConfigName
+   *          The curve calculation configuration name
+   * @param surfaceName
+   *          The surface name
    * @return The result properties
    */
   protected ValueProperties getResultProperties(final String currency, final String curveCalculationConfigName, final String surfaceName) {
@@ -236,8 +246,10 @@ public abstract class SwaptionBlackFunction extends AbstractFunction.NonCompiled
   /**
    * Gets the volatility surface requirement.
    *
-   * @param surface The surface name
-   * @param currency The currency of the surface requirement target
+   * @param surface
+   *          The surface name
+   * @param currency
+   *          The currency of the surface requirement target
    * @return The volatility surface requirement
    */
   private static ValueRequirement getVolatilityRequirement(final String surface, final Currency currency) {

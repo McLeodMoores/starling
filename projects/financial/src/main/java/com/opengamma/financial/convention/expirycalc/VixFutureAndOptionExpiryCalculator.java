@@ -58,12 +58,15 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
   }
 
   /**
-   * Gets monthly expiries for the first N_SERIAL_MONTHS, then switches to quarterly along the FEBRUARY cycle
+   * Gets monthly expiries for the first N_SERIAL_MONTHS, then switches to quarterly along the FEBRUARY cycle.
    *
-   * @param nthFuture
+   * @param n
    *          nth future
-   * @param valDate
+   * @param today
    *          The date from which to start
+   * @param holidayCalendar
+   *          holiday information
+   * 
    * @return the expiry date of the nth option
    */
   @Deprecated
@@ -73,12 +76,14 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
   }
 
   /**
-   * Gets monthly expiries for the first N_SERIAL_MONTHS, then switches to quarterly along the FEBRUARY cycle
+   * Gets monthly expiries for the first N_SERIAL_MONTHS, then switches to quarterly along the FEBRUARY cycle.
    *
-   * @param nthFuture
+   * @param n
    *          nth future
-   * @param valDate
+   * @param today
    *          The date from which to start
+   * @param holidayCalendar
+   *          holiday information
    * @return the expiry date of the nth option
    */
   @Override

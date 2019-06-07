@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.calendar;
@@ -20,8 +20,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.opengamma.OpenGammaRuntimeException;
 
 /**
- * Populates an {@code ExceptionCalendar} with working and non-working days from
- * an XML data source.
+ * Populates an {@code ExceptionCalendar} with working and non-working days from an XML data source.
  */
 public class XMLCalendarLoader {
 
@@ -32,7 +31,7 @@ public class XMLCalendarLoader {
   /**
    * The state of the parser.
    */
-  private static enum ParserState {
+  private enum ParserState {
     WORKING_DAYS, NON_WORKING_DAYS, OTHER;
   }
 
@@ -43,7 +42,9 @@ public class XMLCalendarLoader {
 
   /**
    * Creates an instance using the URI of the XML file.
-   * @param sourceDataUri  the source URI, not null
+   * 
+   * @param sourceDataUri
+   *          the source URI, not null
    */
   public XMLCalendarLoader(final String sourceDataUri) {
     Validate.notNull(sourceDataUri, "URI");
@@ -53,6 +54,7 @@ public class XMLCalendarLoader {
   // -------------------------------------------------------------------------
   /**
    * Gets the source data URI.
+   * 
    * @return the URI, not null
    */
   protected String getSourceDataURI() {
@@ -61,7 +63,9 @@ public class XMLCalendarLoader {
 
   /**
    * Throws a suitable exception.
-   * @param th  the error, not null
+   * 
+   * @param th
+   *          the error, not null
    * @return the exception to throw, not null
    */
   private OpenGammaRuntimeException wrap(final Throwable th) {
@@ -70,7 +74,9 @@ public class XMLCalendarLoader {
 
   /**
    * Populate the specified working day calendar from the XML file.
-   * @param calendar  the calendar to populate, not null
+   * 
+   * @param calendar
+   *          the calendar to populate, not null
    */
   public void populateCalendar(final ExceptionCalendar calendar) {
     final SAXParserFactory factory = SAXParserFactory.newInstance();

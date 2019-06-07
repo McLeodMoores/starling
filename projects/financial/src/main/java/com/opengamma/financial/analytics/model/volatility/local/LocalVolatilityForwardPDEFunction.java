@@ -54,7 +54,8 @@ public abstract class LocalVolatilityForwardPDEFunction extends LocalVolatilityP
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -68,8 +69,9 @@ public abstract class LocalVolatilityForwardPDEFunction extends LocalVolatilityP
     final double centreMoneyness = Double.parseDouble(desiredValue.getConstraint(PROPERTY_CENTRE_MONEYNESS));
     final String interpolatorName = desiredValue.getConstraint(PROPERTY_SPACE_DIRECTION_INTERPOLATOR);
     final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName);
-    final PDELocalVolatilityCalculator<?> pdeCalculator =
-        getPDECalculator(new LocalVolatilityForwardPDECalculator(theta, nTimeSteps, nSpaceSteps, timeStepBunching, spaceStepBunching, maxProxyDelta, centreMoneyness), interpolator);
+    final PDELocalVolatilityCalculator<?> pdeCalculator = getPDECalculator(
+        new LocalVolatilityForwardPDECalculator(theta, nTimeSteps, nSpaceSteps, timeStepBunching, spaceStepBunching, maxProxyDelta, centreMoneyness),
+        interpolator);
     final Object localVolatilityObject = inputs.getValue(ValueRequirementNames.LOCAL_VOLATILITY_SURFACE);
     if (localVolatilityObject == null) {
       throw new OpenGammaRuntimeException("Could not get local volatility surface");
@@ -112,8 +114,8 @@ public abstract class LocalVolatilityForwardPDEFunction extends LocalVolatilityP
       } else if (values.size() != 1) {
         constraintsBuilder = constraints.copy();
         constraintsBuilder
-        .withoutAny(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR)
-        .with(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR, getBlackSmileInterpolatorName());
+            .withoutAny(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR)
+            .with(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR, getBlackSmileInterpolatorName());
       }
       values = constraints.getValues(PDEPropertyNamesAndValues.PROPERTY_PDE_DIRECTION);
       if (values == null) {
@@ -125,7 +127,8 @@ public abstract class LocalVolatilityForwardPDEFunction extends LocalVolatilityP
         if (constraintsBuilder == null) {
           constraintsBuilder = constraints.copy();
         }
-        constraintsBuilder.withoutAny(PDEPropertyNamesAndValues.PROPERTY_PDE_DIRECTION).with(PDEPropertyNamesAndValues.PROPERTY_PDE_DIRECTION, PDEPropertyNamesAndValues.FORWARDS);
+        constraintsBuilder.withoutAny(PDEPropertyNamesAndValues.PROPERTY_PDE_DIRECTION).with(PDEPropertyNamesAndValues.PROPERTY_PDE_DIRECTION,
+            PDEPropertyNamesAndValues.FORWARDS);
       }
       if (constraintsBuilder != null) {
         constraints = constraintsBuilder.get();
@@ -141,7 +144,7 @@ public abstract class LocalVolatilityForwardPDEFunction extends LocalVolatilityP
     return Sets.newHashSet(volatilitySurfaceRequirement, forwardCurveRequirement, discountingCurveRequirement);
   }
 
-  protected abstract PDELocalVolatilityCalculator<?> getPDECalculator(final LocalVolatilityForwardPDECalculator calculator, final Interpolator1D interpolator);
+  protected abstract PDELocalVolatilityCalculator<?> getPDECalculator(LocalVolatilityForwardPDECalculator calculator, Interpolator1D interpolator);
 
   @Override
   protected ValueProperties getResultProperties() {

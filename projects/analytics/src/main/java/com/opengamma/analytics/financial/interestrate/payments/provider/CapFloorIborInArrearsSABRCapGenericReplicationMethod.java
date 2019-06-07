@@ -17,10 +17,10 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- *  Class used to compute the price and sensitivity of a Ibor cap/floor in arrears.
- *  The cap/floor are supposed to be exactly in arrears. The payment date is ignored and the start fixing period date is used instead.
+ * Class used to compute the price and sensitivity of a Ibor cap/floor in arrears. The cap/floor are supposed to be exactly in arrears. The payment date is
+ * ignored and the start fixing period date is used instead.
  */
-//TODO: Add a reference to Libor-with-delay pricing method documentation  when available.
+// TODO: Add a reference to Libor-with-delay pricing method documentation when available.
 public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
 
   /**
@@ -28,8 +28,8 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
    */
   private final CapFloorIborSABRCapMethodInterface _baseMethod;
   /**
-   * Range of the integral. Used only for caps. Represent the approximation of infinity in the strike dimension.
-   * The range is [strike, strike+integrationInterval].
+   * Range of the integral. Used only for caps. Represent the approximation of infinity in the strike dimension. The range is [strike,
+   * strike+integrationInterval].
    */
   private final double _integrationInterval = 2.0;
   /**
@@ -39,7 +39,9 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
 
   /**
    * Constructor of the in-arrears pricing method.
-   * @param baseMethod The base method for the pricing of standard cap/floors.
+   * 
+   * @param baseMethod
+   *          The base method for the pricing of standard cap/floors.
    */
   public CapFloorIborInArrearsSABRCapGenericReplicationMethod(final CapFloorIborSABRCapMethodInterface baseMethod) {
     this._baseMethod = baseMethod;
@@ -47,8 +49,11 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
 
   /**
    * Computes the present value of an Ibor cap/floor in arrears by replication.
-   * @param cap The cap/floor.
-   * @param sabr The SABR cap and multi-curves provider.
+   * 
+   * @param cap
+   *          The cap/floor.
+   * @param sabr
+   *          The SABR cap and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
@@ -56,9 +61,11 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
     ArgumentChecker.notNull(sabr, "SABR cap provider");
     final Currency ccy = cap.getCurrency();
     final MulticurveProviderInterface multicurves = sabr.getMulticurveProvider();
-    final CapFloorIbor capStandard = new CapFloorIbor(cap.getCurrency(), cap.getFixingPeriodEndTime(), cap.getPaymentYearFraction(), cap.getNotional(), cap.getFixingTime(),
+    final CapFloorIbor capStandard = new CapFloorIbor(cap.getCurrency(), cap.getFixingPeriodEndTime(), cap.getPaymentYearFraction(), cap.getNotional(),
+        cap.getFixingTime(),
         cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor(), cap.getStrike(), cap.isCap());
-    final double forward = multicurves.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = multicurves.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(),
+        cap.getFixingAccrualFactor());
     final double beta = (1.0 + cap.getFixingAccrualFactor() * forward) * multicurves.getDiscountFactor(ccy, cap.getFixingPeriodEndTime())
         / multicurves.getDiscountFactor(ccy, cap.getFixingPeriodStartTime());
     final double strikePart = (1.0 + cap.getFixingAccrualFactor() * cap.getStrike()) * _baseMethod.presentValue(capStandard, sabr).getAmount(ccy);
@@ -101,11 +108,15 @@ public class CapFloorIborInArrearsSABRCapGenericReplicationMethod {
 
     /**
      * Constructor with the required data.
-     * @param baseMethod The base method for the pricing of standard cap/floors.
-     * @param capStandard The standard cap/floor used for replication.
-     * @param sabrData The SABR data bundle used in the standard cap/floor pricing.
+     * 
+     * @param baseMethod
+     *          The base method for the pricing of standard cap/floors.
+     * @param capStandard
+     *          The standard cap/floor used for replication.
+     * @param sabrData
+     *          The SABR data bundle used in the standard cap/floor pricing.
      */
-    public InArrearsIntegrant(final CapFloorIborSABRCapMethodInterface baseMethod, final CapFloorIbor capStandard, final SABRCapProviderInterface sabr) {
+    InArrearsIntegrant(final CapFloorIborSABRCapMethodInterface baseMethod, final CapFloorIbor capStandard, final SABRCapProviderInterface sabr) {
       _basePricingMethod = baseMethod;
       _capStandard = capStandard;
       _sabrData = sabr;

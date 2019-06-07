@@ -117,7 +117,7 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
 
   }
 
-  private static final InstrumentHandler s_cash = new InstrumentHandler() {
+  private static final InstrumentHandler CASH = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -143,13 +143,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_fra3m = new InstrumentHandler() {
+  private static final InstrumentHandler FRA_3M = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -172,13 +171,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_fra6m = new InstrumentHandler() {
+  private static final InstrumentHandler FRA_6M = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -201,13 +199,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_fra = new InstrumentHandler() {
+  private static final InstrumentHandler FRA = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -230,18 +227,16 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_future = new InstrumentHandler() {
+  private static final InstrumentHandler FUTURE = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
         final SnapshotDataBundle marketValues, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: jim 17-Aug-2010 -- we need to sort out the zoned date time related to the expiry.
       final FutureSecurity futureSecurity = self.getFuture(strip);
       if (futureSecurity == null) {
         throw new OpenGammaRuntimeException(
@@ -254,20 +249,18 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     public ZonedDateTime getMaturity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final LocalDate curveDate,
         final FixedIncomeStripWithIdentifier strip, final Security security) {
       final FutureSecurity futureSecurity = (FutureSecurity) security;
-      return futureSecurity.getExpiry().getExpiry().plusMonths(3); // TODO shouldn't hard-code to 3 - find out why comparator in FixedIncomeStrip isn't working
-                                                                   // properly
+      return futureSecurity.getExpiry().getExpiry().plusMonths(3);
     }
 
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_libor = new InstrumentHandler() {
+  private static final InstrumentHandler LIBOR = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -293,13 +286,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_euribor = new InstrumentHandler() {
+  private static final InstrumentHandler EURIBOR = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -325,13 +317,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_cdor = new InstrumentHandler() {
+  private static final InstrumentHandler CDOR = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -357,13 +348,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_cibor = new InstrumentHandler() {
+  private static final InstrumentHandler CIBOR = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -389,13 +379,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_stibor = new InstrumentHandler() {
+  private static final InstrumentHandler STIBOR = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -421,44 +410,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_swap = new InstrumentHandler() {
-
-    @Override
-    public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
-        final SnapshotDataBundle marketValues, final FixedIncomeStripWithIdentifier strip) {
-      // In case there's any old curve definitions hanging around - assume that all swaps are 3m
-      // TODO get defaults from convention? (e.g. USD = 3m, EUR = 6M)
-      final SwapSecurity swapSecurity = self.getSwap(curveSpecification, strip, marketValues, Tenor.THREE_MONTHS);
-      if (swapSecurity == null) {
-        throw new OpenGammaRuntimeException(
-            "Could not resolve swap curve instrument " + strip.getSecurity() + " from strip " + strip + " in " + curveSpecification);
-      }
-      return swapSecurity;
-    }
-
-    @Override
-    public ZonedDateTime getMaturity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final LocalDate curveDate,
-        final FixedIncomeStripWithIdentifier strip, final Security security) {
-      final SwapSecurity swapSecurity = (SwapSecurity) security;
-      return swapSecurity.getMaturityDate();
-    }
-
-    @Override
-    public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
-        final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
-      throw new UnsupportedOperationException("TODO");
-    }
-
-  };
-
-  private static final InstrumentHandler s_swap3m = new InstrumentHandler() {
+  private static final InstrumentHandler SWAP = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -481,13 +438,40 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_swap6m = new InstrumentHandler() {
+  private static final InstrumentHandler SWAP_3M = new InstrumentHandler() {
+
+    @Override
+    public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
+        final SnapshotDataBundle marketValues, final FixedIncomeStripWithIdentifier strip) {
+      final SwapSecurity swapSecurity = self.getSwap(curveSpecification, strip, marketValues, Tenor.THREE_MONTHS);
+      if (swapSecurity == null) {
+        throw new OpenGammaRuntimeException(
+            "Could not resolve swap curve instrument " + strip.getSecurity() + " from strip " + strip + " in " + curveSpecification);
+      }
+      return swapSecurity;
+    }
+
+    @Override
+    public ZonedDateTime getMaturity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final LocalDate curveDate,
+        final FixedIncomeStripWithIdentifier strip, final Security security) {
+      final SwapSecurity swapSecurity = (SwapSecurity) security;
+      return swapSecurity.getMaturityDate();
+    }
+
+    @Override
+    public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
+        final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
+      throw new UnsupportedOperationException("TODO");
+    }
+
+  };
+
+  private static final InstrumentHandler SWAP_6M = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -510,13 +494,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_swap12m = new InstrumentHandler() {
+  private static final InstrumentHandler SWAP_12M = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -539,13 +522,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_swap28d = new InstrumentHandler() {
+  private static final InstrumentHandler SWAP_28D = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -568,13 +550,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_tenorSwap = new InstrumentHandler() {
+  private static final InstrumentHandler TENOR_SWAP = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -597,13 +578,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_oisSwap = new InstrumentHandler() {
+  private static final InstrumentHandler OIS_SWAP = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -620,13 +600,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_periodicZeroDeposit = new InstrumentHandler() {
+  private static final InstrumentHandler PERIODIC_ZERO_DEPOSIT = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -645,13 +624,12 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
   };
 
-  private static final InstrumentHandler s_basisSwap = new InstrumentHandler() {
+  private static final InstrumentHandler BASIS_SWAP = new InstrumentHandler() {
 
     @Override
     public Security getSecurity(final FixedIncomeStripIdentifierAndMaturityBuilder self, final InterpolatedYieldCurveSpecification curveSpecification,
@@ -674,7 +652,6 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     @Override
     public Set<ValueRequirement> getRequirements(final FixedIncomeStripIdentifierAndMaturityBuilder self,
         final InterpolatedYieldCurveSpecification curveSpecification, final FixedIncomeStripWithIdentifier strip) {
-      // TODO: Implement this
       throw new UnsupportedOperationException("TODO");
     }
 
@@ -683,43 +660,43 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
   private static InstrumentHandler getInstrumentHandler(final FixedIncomeStripWithIdentifier strip) {
     switch (strip.getInstrumentType()) {
       case CASH:
-        return s_cash;
+        return CASH;
       case FRA_3M:
-        return s_fra3m;
+        return FRA_3M;
       case FRA_6M:
-        return s_fra6m;
+        return FRA_6M;
       case FRA:
-        return s_fra;
+        return FRA;
       case FUTURE:
-        return s_future;
+        return FUTURE;
       case LIBOR:
-        return s_libor;
+        return LIBOR;
       case EURIBOR:
-        return s_euribor;
+        return EURIBOR;
       case CDOR:
-        return s_cdor;
+        return CDOR;
       case CIBOR:
-        return s_cibor;
+        return CIBOR;
       case STIBOR:
-        return s_stibor;
+        return STIBOR;
       case SWAP:
-        return s_swap;
+        return SWAP;
       case SWAP_3M:
-        return s_swap3m;
+        return SWAP_3M;
       case SWAP_6M:
-        return s_swap6m;
+        return SWAP_6M;
       case SWAP_12M:
-        return s_swap12m;
+        return SWAP_12M;
       case SWAP_28D:
-        return s_swap28d;
+        return SWAP_28D;
       case TENOR_SWAP:
-        return s_tenorSwap;
+        return TENOR_SWAP;
       case OIS_SWAP:
-        return s_oisSwap;
+        return OIS_SWAP;
       case PERIODIC_ZERO_DEPOSIT:
-        return s_periodicZeroDeposit;
+        return PERIODIC_ZERO_DEPOSIT;
       case BASIS_SWAP:
-        return s_basisSwap;
+        return BASIS_SWAP;
       default:
         throw new OpenGammaRuntimeException("Unhandled type of instrument in curve definition " + strip.getInstrumentType());
     }
@@ -805,11 +782,11 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
         settlementDays = fraConvention.getSettlementDays();
       }
     }
-    final ZonedDateTime curveDate = spec.getCurveDate().atStartOfDay(ZoneOffset.UTC); // TODO: review?
+    final ZonedDateTime curveDate = spec.getCurveDate().atStartOfDay(ZoneOffset.UTC);
     final ZonedDateTime spotDate = ScheduleCalculator.getAdjustedDate(curveDate, settlementDays, calendar);
     final Period endPeriod = strip.getMaturity().getPeriod();
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(spotDate, endPeriod, businessDayConvention, calendar, eom);
-    final Period startPeriod = endPeriod.minus(fraPeriod).normalized(); // TODO: check period >0?
+    final Period startPeriod = endPeriod.minus(fraPeriod).normalized();
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDate, startPeriod, businessDayConvention, calendar, eom);
     final ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(startDate, -settlementDays, calendar);
     if (marketValues.getDataPoint(strip.getSecurity()) == null) {
@@ -1027,7 +1004,6 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
         payFloatingReferenceRateId, payFloatingRateType, spread);
     final FloatingInterestRateLeg receiveLeg = new FloatingInterestRateLeg(receiveDayCount, receiveFrequency, receiveRegionIdentifier,
         receiveBusinessDayConvention, notional, false, receiveFloatingReferenceRateId, receiveFloatingRateType);
-    // TODO don't use pay spot date and maturity date automatically
     final SwapSecurity swap = new SwapSecurity(curveDate, paySpotDate, payMaturityDate, counterparty, payLeg, receiveLeg);
     swap.setExternalIdBundle(ExternalIdBundle.of(swapIdentifier));
     return swap;

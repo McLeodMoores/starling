@@ -74,7 +74,7 @@ public class RegionExposureFunction implements ExposureFunction {
 
     private final SecuritySource _securitySource;
 
-    public RegionVisitor(final SecuritySource securitySource) {
+    RegionVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
@@ -131,7 +131,7 @@ public class RegionExposureFunction implements ExposureFunction {
 
     @Override
     public List<ExternalId> visitSwaptionSecurity(final SwaptionSecurity security) {
-      final SwapSecurity underlyingSwap = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); //TODO version
+      final SwapSecurity underlyingSwap = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); // TODO version
       final SwapLeg payLeg = underlyingSwap.getPayLeg();
       final SwapLeg receiveLeg = underlyingSwap.getReceiveLeg();
       if (payLeg.getRegionId().equals(receiveLeg.getRegionId())) {
@@ -172,7 +172,8 @@ public class RegionExposureFunction implements ExposureFunction {
 
     @Override
     public List<ExternalId> visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
-      final CreditDefaultSwapSecurity underlyingCDS = (CreditDefaultSwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); //TODO version
+      final CreditDefaultSwapSecurity underlyingCDS = (CreditDefaultSwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); // TODO
+                                                                                                                                                              // version
       return Arrays.asList(underlyingCDS.getRegionId());
     }
 

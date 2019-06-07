@@ -61,7 +61,7 @@ import com.opengamma.util.paging.PagingRequest;
 /**
  *
  */
-/*package*/class DbConfigWorker extends AbstractDocumentDbMaster<ConfigDocument> {
+/* package */class DbConfigWorker extends AbstractDocumentDbMaster<ConfigDocument> {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(DbConfigWorker.class);
@@ -96,10 +96,12 @@ import com.opengamma.util.paging.PagingRequest;
   /**
    * Creates an instance.
    *
-   * @param dbConnector the database connector, not null
-   * @param defaultScheme the default scheme, not null
+   * @param dbConnector
+   *          the database connector, not null
+   * @param defaultScheme
+   *          the default scheme, not null
    */
-  public DbConfigWorker(final DbConnector dbConnector, final String defaultScheme) {
+  DbConfigWorker(final DbConnector dbConnector, final String defaultScheme) {
     super(dbConnector, defaultScheme);
     setElSqlBundle(ElSqlBundle.of(dbConnector.getDialect().getElSqlConfig(), DbConfigMaster.class));
   }
@@ -112,7 +114,7 @@ import com.opengamma.util.paging.PagingRequest;
     _searchTimer = summaryRegistry.timer(namePrefix + ".search");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ConfigDocument get(final UniqueId uniqueId) {
     return doGet(uniqueId, new ConfigDocumentExtractor(), "Config");
@@ -177,7 +179,7 @@ import com.opengamma.util.paging.PagingRequest;
     return FUDGE_CONTEXT.toByteArray(objectToFudgeMsg);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public ConfigMetaDataResult metaData(final ConfigMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
 
@@ -201,7 +203,7 @@ import com.opengamma.util.paging.PagingRequest;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public <T> ConfigSearchResult<T> search(final ConfigSearchRequest<T> request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getType(), "request.type");
@@ -244,7 +246,7 @@ import com.opengamma.util.paging.PagingRequest;
       args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
       args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
 
-      final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
+      final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
 
       final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
       final ConfigDocumentExtractor configDocumentExtractor = new ConfigDocumentExtractor();
@@ -274,10 +276,10 @@ import com.opengamma.util.paging.PagingRequest;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public <T> ConfigHistoryResult<T> history(final ConfigHistoryRequest<T> request) {
     ArgumentChecker.notNull(request, "request");
-    //ArgumentChecker.notNull(request.getType(), "request.type");
+    // ArgumentChecker.notNull(request.getType(), "request.type");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
     checkScheme(request.getObjectId());
     LOGGER.debug("history {}", request);
@@ -285,7 +287,7 @@ import com.opengamma.util.paging.PagingRequest;
     final ConfigHistoryResult<T> result = new ConfigHistoryResult<>();
     final ConfigDocumentExtractor extractor = new ConfigDocumentExtractor();
     final DbMapSqlParameterSource args = argsHistory(request);
-    final String[] sql = {getElSqlBundle().getSql("History", args), getElSqlBundle().getSql("HistoryCount", args) };
+    final String[] sql = { getElSqlBundle().getSql("History", args), getElSqlBundle().getSql("HistoryCount", args) };
 
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
     if (request.getPagingRequest().equals(PagingRequest.ALL)) {
@@ -311,7 +313,7 @@ import com.opengamma.util.paging.PagingRequest;
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a ConfigDocument.
    */
@@ -376,7 +378,7 @@ import com.opengamma.util.paging.PagingRequest;
     }
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked" })
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   protected AbstractHistoryResult<ConfigDocument> historyByVersionsCorrections(final AbstractHistoryRequest request) {
     final ConfigHistoryRequest historyRequest = new ConfigHistoryRequest();

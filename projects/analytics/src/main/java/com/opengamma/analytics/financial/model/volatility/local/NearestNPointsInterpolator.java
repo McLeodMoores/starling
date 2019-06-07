@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 /* package */class NearestNPointsInterpolator extends Interpolator1D {
   private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
   private final boolean _oddN;
   private final int _pointsBelow;
 
-  public NearestNPointsInterpolator(final Interpolator1D interpolator, final int n) {
+  NearestNPointsInterpolator(final Interpolator1D interpolator, final int n) {
     ArgumentChecker.notNull(interpolator, "interpolator");
     ArgumentChecker.notNegativeOrZero(n, "number of points");
     _interpolator = interpolator;

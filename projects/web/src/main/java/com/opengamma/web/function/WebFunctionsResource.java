@@ -47,13 +47,15 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
 
   /**
    * Creates the resource.
-   * @param functionConfigurationSource  the function master, not null
+   * 
+   * @param functionConfigurationSource
+   *          the function master, not null
    */
   public WebFunctionsResource(final FunctionConfigurationSource functionConfigurationSource) {
     super(functionConfigurationSource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
@@ -65,7 +67,7 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
       @QueryParam("parameterized") final String parameterized,
       @Context final UriInfo uriInfo) {
     final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    //TODO sort: FunctionSearchSortOrder so = buildSortOrder(sort, FunctionSearchSortOrder.NAME_ASC);
+    // TODO sort: FunctionSearchSortOrder so = buildSortOrder(sort, FunctionSearchSortOrder.NAME_ASC);
     final FlexiBean out = createSearchResultData(pr, name, parameterized, uriInfo);
     return getFreemarker().build(HTML_DIR + "functions.ftl", out);
   }
@@ -120,11 +122,12 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
     return new WebParameterizedFunctionResource(this);
   }
 
-
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for functions.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebFunctionData data) {
@@ -132,11 +135,13 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
     return builder.build();
   }
 
-
   /**
    * Builds a URI for parameterized functions.
-   * @param data context data
-   * @param functionId the function name
+   * 
+   * @param data
+   *          context data
+   * @param functionId
+   *          the function name
    * @return the uri
    */
   public static URI parameterziedFunctionUri(final WebFunctionData data, final String functionId) {
@@ -144,9 +149,6 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
     builder.path(s_parameterizedFunctionUri).path(functionId).build();
     return builder.build();
   }
-
-
-
 
   private static class IsParameterized implements Predicate<WebFunctionTypeDetails> {
 
@@ -161,7 +163,7 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
 
     private final Pattern _pattern;
 
-    public NameContains(final String pattern) {
+    NameContains(final String pattern) {
       super();
       _pattern = Pattern.compile(pattern);
     }
@@ -173,6 +175,5 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
     }
 
   }
-
 
 }

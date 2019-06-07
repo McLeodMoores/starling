@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.financial.function.trade;
 
 import java.util.ArrayList;
@@ -131,7 +134,7 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
 
   /**
    * Constructs the cash-flow object.
-   * 
+   *
    * @param startAccrualDates
    *          the coupon start accrual dates, not null
    * @param endAccrualDates
@@ -177,7 +180,8 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
 
   /**
    * Gets the discounted payment amounts.
-   * @return  the discounted cashflows
+   * 
+   * @return the discounted cashflows
    */
   @DerivedProperty
   public List<CurrencyAmount> getDiscountedPaymentAmounts() {
@@ -196,7 +200,8 @@ public class FixedCouponBondCashFlows implements ImmutableBean {
 
   /**
    * Gets the total number of cash-flows.
-   * @return  the total number of cash-flows
+   * 
+   * @return the total number of cash-flows
    */
   @DerivedProperty
   public int getNumberOfCashFlows() {

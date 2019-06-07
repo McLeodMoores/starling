@@ -19,7 +19,7 @@ import com.opengamma.id.UniqueId;
 
   private final Set<UniqueId> _badNodes;
 
-  public InvalidPortfolioDependencyNodeFilter(final Set<UniqueId> badNodes) {
+  InvalidPortfolioDependencyNodeFilter(final Set<UniqueId> badNodes) {
     _badNodes = badNodes;
   }
 

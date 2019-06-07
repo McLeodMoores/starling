@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.model.discounting;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
@@ -13,8 +18,8 @@ import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueProperties.Builder;
 import com.opengamma.engine.value.ValuePropertyNames;
-import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
+import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.fixedincome.InterestRateInstrumentType;
 import com.opengamma.financial.analytics.model.InterpolatedDataProperties;
 import com.opengamma.financial.analytics.model.forex.ForexVisitors;
@@ -31,23 +36,28 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 public abstract class DiscountingInterpolatedFunction extends DiscountingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public DiscountingInterpolatedFunction(final String... valueRequirements) {
     super(valueRequirements);
   }
 
   /**
-   * 
+   *
    */
   protected abstract class DiscountingInterpolatedCompiledFunction extends DiscountingCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
      */
-    protected DiscountingInterpolatedCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
+    protected DiscountingInterpolatedCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
         final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter, withCurrency);
     }
@@ -55,11 +65,12 @@ public abstract class DiscountingInterpolatedFunction extends DiscountingFunctio
     @SuppressWarnings("synthetic-access")
     @Override
     protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext context, final ComputationTarget target) {
-      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME).withAny(CURVE_EXPOSURES);
+      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME)
+          .withAny(CURVE_EXPOSURES);
       if (isWithCurrency()) {
         final Security security = target.getTrade().getSecurity();
         if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security) &&
-            (InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY)) {
+            InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
           final SwapSecurity swapSecurity = (SwapSecurity) security;
           if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
             final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();
@@ -78,7 +89,7 @@ public abstract class DiscountingInterpolatedFunction extends DiscountingFunctio
 
     @Override
     protected Builder getCurveConstraints(final ComputationTarget target, final ValueProperties constraints) {
-      return ValueProperties.with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME); //DISCOUNTING);
+      return ValueProperties.with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME); // DISCOUNTING);
     }
   }
 }

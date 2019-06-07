@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.swap.ForwardSwapSecurity;
-
 /**
  * Utility for constructing a random forward swap portfolio.
  */

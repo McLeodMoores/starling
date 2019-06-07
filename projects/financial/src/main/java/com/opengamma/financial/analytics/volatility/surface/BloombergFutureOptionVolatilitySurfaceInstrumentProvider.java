@@ -33,26 +33,40 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
 
   /**
    * Uses the default ticker scheme (BLOOMBERG_TICKER_WEAK).
-   * @param futureOptionPrefix the prefix to the resulting code, not null
-   * @param postfix the postfix to the resulting code, not null
-   * @param dataFieldName the name of the data field, not null.
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the id of the exchange, not null
+   *
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code, not null
+   * @param postfix
+   *          the postfix to the resulting code, not null
+   * @param dataFieldName
+   *          the name of the data field, not null.
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the id of the exchange, not null
    */
-  public BloombergFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName) {
     this(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName, ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
   }
 
   /**
-   * @param futureOptionPrefix the prefix to the resulting code, not null
-   * @param postfix the postfix to the resulting code, not null
-   * @param dataFieldName the name of the data field, not null.
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the id of the exchange, not null
-   * @param schemeName the name of the scheme, not null
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code, not null
+   * @param postfix
+   *          the postfix to the resulting code, not null
+   * @param dataFieldName
+   *          the name of the data field, not null.
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the id of the exchange, not null
+   * @param schemeName
+   *          the name of the scheme, not null
    */
-  public BloombergFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName, final String schemeName) {
 
     ArgumentChecker.notNull(futureOptionPrefix, "future option prefix");
@@ -60,11 +74,11 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
     ArgumentChecker.notNull(dataFieldName, "data field name");
     ArgumentChecker.notNull(useCallAboveStrike, "use call above this strike");
     ArgumentChecker.notNull(schemeName, "scheme name");
-    final boolean schemeTest = schemeName.equals(ExternalSchemes.BLOOMBERG_BUID.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_BUID_WEAK.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TCM.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
+    final boolean schemeTest = schemeName.equals(ExternalSchemes.BLOOMBERG_BUID.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_BUID_WEAK.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TCM.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
     ArgumentChecker.isTrue(schemeTest, "scheme name {} was not appropriate for Bloomberg data");
     _futureOptionPrefix = futureOptionPrefix;
     _postfix = postfix;
@@ -74,19 +88,23 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
     _scheme = ExternalScheme.of(schemeName);
   }
 
-  @Override
   /**
-   * Primary method of class builds up a single Bloomberg ticker
+   * Primary method of class builds up a single Bloomberg ticker.
+   *
    * @return Ticker ID
-   * @param futureOptionNumber n'th future after surfaceDate
-   * @param strike absolute value of strike
-   * @param surfaceDate valuation date
+   * @param futureOptionNumber
+   *          n'th future after surfaceDate
+   * @param strike
+   *          absolute value of strike
+   * @param surfaceDate
+   *          valuation date
    */
-  public abstract ExternalId getInstrument(final Number futureOptionNumber, final Double strike, final LocalDate surfaceDate);
+  @Override
+  public abstract ExternalId getInstrument(Number futureOptionNumber, Double strike, LocalDate surfaceDate);
 
   /**
-   * Gets the expiryRule calculator providing dates from offsets
-   * 
+   * Gets the expiryRule calculator providing dates from offsets.
+   *
    * @return ExchangeTradedInstrumentExpiryCalculator
    */
   @Override
@@ -94,6 +112,7 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
 
   /**
    * Gets the exchange name.
+   *
    * @return The exchange name
    */
   public String getExchangeIdName() {
@@ -102,7 +121,9 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
 
   /**
    * An external id with the input as the scheme and the exchange as the value.
-   * @param scheme The external scheme
+   *
+   * @param scheme
+   *          The external scheme
    * @return An external id
    */
   public ExternalId getExchangeId(final ExternalScheme scheme) {
@@ -116,6 +137,7 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
 
   /**
    * Gets the future option prefix.
+   *
    * @return The future option prefix
    */
   public String getFutureOptionPrefix() {
@@ -123,7 +145,8 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
   }
 
   /**
-   * Gets the postfix for the Bloomberg ticker
+   * Gets the postfix for the Bloomberg ticker.
+   *
    * @return The postfix
    */
   public String getPostfix() {
@@ -142,6 +165,7 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
 
   /**
    * Gets the scheme.
+   *
    * @return The scheme
    */
   public ExternalScheme getScheme() {
@@ -150,6 +174,7 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
 
   /**
    * Gets the scheme name.
+   *
    * @return The scheme name
    */
   public String getSchemeName() {

@@ -45,7 +45,7 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
 
     private final FudgeSerializer _serializer;
 
-    public VisitorImpl(final FudgeSerializer serializer) {
+    VisitorImpl(final FudgeSerializer serializer) {
       _serializer = serializer;
     }
 

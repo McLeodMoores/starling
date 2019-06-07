@@ -50,7 +50,8 @@ public abstract class LocalVolatilityBackwardPDEFunction extends LocalVolatility
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -63,8 +64,8 @@ public abstract class LocalVolatilityBackwardPDEFunction extends LocalVolatility
     final double maxMoneyness = Double.parseDouble(desiredValue.getConstraint(PROPERTY_MAX_MONEYNESS));
     final String interpolatorName = desiredValue.getConstraint(PROPERTY_SPACE_DIRECTION_INTERPOLATOR);
     final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName);
-    final PDELocalVolatilityCalculator<?> pdeCalculator =
-        getPDECalculator(new LocalVolatilityBackwardPDECalculator(theta, nTimeSteps, nSpaceSteps, timeStepBunching, spaceStepBunching, maxMoneyness), interpolator);
+    final PDELocalVolatilityCalculator<?> pdeCalculator = getPDECalculator(
+        new LocalVolatilityBackwardPDECalculator(theta, nTimeSteps, nSpaceSteps, timeStepBunching, spaceStepBunching, maxMoneyness), interpolator);
     final Object localVolatilityObject = inputs.getValue(getVolatilitySurfaceRequirement(target, desiredValue));
     if (localVolatilityObject == null) {
       throw new OpenGammaRuntimeException("Could not get local volatility surface");
@@ -100,7 +101,7 @@ public abstract class LocalVolatilityBackwardPDEFunction extends LocalVolatility
     return Sets.newHashSet(volatilitySurfaceRequirement, forwardCurveRequirement, discountingCurveRequirement);
   }
 
-  protected abstract PDELocalVolatilityCalculator<?> getPDECalculator(final LocalVolatilityBackwardPDECalculator calculator, final Interpolator1D interpolator);
+  protected abstract PDELocalVolatilityCalculator<?> getPDECalculator(LocalVolatilityBackwardPDECalculator calculator, Interpolator1D interpolator);
 
   @Override
   protected ValueProperties getResultProperties() {

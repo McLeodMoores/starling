@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -16,11 +16,9 @@ import com.opengamma.financial.analytics.ircurve.StripInstrumentType;
 import com.opengamma.util.time.Tenor;
 
 /**
- * An instrument provider converter that does not perform conversions: to be used
- * in cases where a mapping is not possible or desirable for a particular strip
- * instrument type, e.g. {@link StripInstrumentType#FRA}, where there is no
- * information about the reset tenor, and so a {@link com.opengamma.financial.analytics.ircurve.strips.FRANode}
- * cannot be created.
+ * An instrument provider converter that does not perform conversions: to be used in cases where a mapping is not possible or desirable for a particular strip
+ * instrument type, e.g. {@link StripInstrumentType#FRA}, where there is no information about the reset tenor, and so a
+ * {@link com.opengamma.financial.analytics.ircurve.strips.FRANode} cannot be created.
  */
 public class NoOpInstrumentProviderPopulator extends InstrumentProviderPopulator {
   /** The logger */
@@ -28,7 +26,9 @@ public class NoOpInstrumentProviderPopulator extends InstrumentProviderPopulator
 
   /**
    * Sets the getter method name to null.
-   * @param type  the strip instrument type, not null
+   * 
+   * @param type
+   *          the strip instrument type, not null
    */
   public NoOpInstrumentProviderPopulator(final StripInstrumentType type) {
     super(type);
@@ -49,10 +49,13 @@ public class NoOpInstrumentProviderPopulator extends InstrumentProviderPopulator
     LOGGER.error("Cannot populate node ids");
     return idMapper;
   }
+
   /**
    * Returns an empty map.
-   * @param csbc  the curve specification builder configuration, not used
-   * @return  an empty map
+   * 
+   * @param csbc
+   *          the curve specification builder configuration, not used
+   * @return an empty map
    */
   @Override
   protected Map<Tenor, CurveInstrumentProvider> getInstrumentProviders(final CurveSpecificationBuilderConfiguration csbc) {

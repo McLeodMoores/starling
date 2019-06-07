@@ -44,7 +44,7 @@ public class SecurityProviderRequest extends DirectBean {
    * The set of security external identifiers to get.
    */
   @PropertyDefinition
-  private final Set<ExternalIdBundle> ExternalIdBundles = Sets.newHashSet();
+  private final Set<ExternalIdBundle> _externalIdBundles = Sets.newHashSet();
   /**
    * The data source to use, null to be smart.
    */
@@ -149,25 +149,25 @@ public class SecurityProviderRequest extends DirectBean {
    * @return the value of the property, not null
    */
   public Set<ExternalIdBundle> getExternalIdBundles() {
-    return ExternalIdBundles;
+    return _externalIdBundles;
   }
 
   /**
    * Sets the set of security external identifiers to get.
-   * @param ExternalIdBundles  the new value of the property, not null
+   * @param externalIdBundles  the new value of the property, not null
    */
-  public void setExternalIdBundles(Set<ExternalIdBundle> ExternalIdBundles) {
-    JodaBeanUtils.notNull(ExternalIdBundles, "ExternalIdBundles");
-    this.ExternalIdBundles.clear();
-    this.ExternalIdBundles.addAll(ExternalIdBundles);
+  public void setExternalIdBundles(Set<ExternalIdBundle> externalIdBundles) {
+    JodaBeanUtils.notNull(externalIdBundles, "externalIdBundles");
+    this._externalIdBundles.clear();
+    this._externalIdBundles.addAll(externalIdBundles);
   }
 
   /**
-   * Gets the the {@code ExternalIdBundles} property.
+   * Gets the the {@code externalIdBundles} property.
    * @return the property, not null
    */
-  public final Property<Set<ExternalIdBundle>> ExternalIdBundles() {
-    return metaBean().ExternalIdBundles().createProperty(this);
+  public final Property<Set<ExternalIdBundle>> externalIdBundles() {
+    return metaBean().externalIdBundles().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -236,7 +236,7 @@ public class SecurityProviderRequest extends DirectBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("ExternalIdBundles").append('=').append(JodaBeanUtils.toString(getExternalIdBundles())).append(',').append(' ');
+    buf.append("externalIdBundles").append('=').append(JodaBeanUtils.toString(getExternalIdBundles())).append(',').append(' ');
     buf.append("dataSource").append('=').append(JodaBeanUtils.toString(getDataSource())).append(',').append(' ');
   }
 
@@ -251,11 +251,11 @@ public class SecurityProviderRequest extends DirectBean {
     static final Meta INSTANCE = new Meta();
 
     /**
-     * The meta-property for the {@code ExternalIdBundles} property.
+     * The meta-property for the {@code externalIdBundles} property.
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
-    private final MetaProperty<Set<ExternalIdBundle>> _ExternalIdBundles = DirectMetaProperty.ofReadWrite(
-        this, "ExternalIdBundles", SecurityProviderRequest.class, (Class) Set.class);
+    private final MetaProperty<Set<ExternalIdBundle>> _externalIdBundles = DirectMetaProperty.ofReadWrite(
+        this, "externalIdBundles", SecurityProviderRequest.class, (Class) Set.class);
     /**
      * The meta-property for the {@code dataSource} property.
      */
@@ -266,7 +266,7 @@ public class SecurityProviderRequest extends DirectBean {
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
         this, null,
-        "ExternalIdBundles",
+        "externalIdBundles",
         "dataSource");
 
     /**
@@ -278,8 +278,8 @@ public class SecurityProviderRequest extends DirectBean {
     @Override
     protected MetaProperty<?> metaPropertyGet(String propertyName) {
       switch (propertyName.hashCode()) {
-        case -1725982997:  // ExternalIdBundles
-          return _ExternalIdBundles;
+        case -1369745653:  // externalIdBundles
+          return _externalIdBundles;
         case 1272470629:  // dataSource
           return _dataSource;
       }
@@ -303,11 +303,11 @@ public class SecurityProviderRequest extends DirectBean {
 
     //-----------------------------------------------------------------------
     /**
-     * The meta-property for the {@code ExternalIdBundles} property.
+     * The meta-property for the {@code externalIdBundles} property.
      * @return the meta-property, not null
      */
-    public final MetaProperty<Set<ExternalIdBundle>> ExternalIdBundles() {
-      return _ExternalIdBundles;
+    public final MetaProperty<Set<ExternalIdBundle>> externalIdBundles() {
+      return _externalIdBundles;
     }
 
     /**
@@ -322,7 +322,7 @@ public class SecurityProviderRequest extends DirectBean {
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
       switch (propertyName.hashCode()) {
-        case -1725982997:  // ExternalIdBundles
+        case -1369745653:  // externalIdBundles
           return ((SecurityProviderRequest) bean).getExternalIdBundles();
         case 1272470629:  // dataSource
           return ((SecurityProviderRequest) bean).getDataSource();
@@ -334,7 +334,7 @@ public class SecurityProviderRequest extends DirectBean {
     @Override
     protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
       switch (propertyName.hashCode()) {
-        case -1725982997:  // ExternalIdBundles
+        case -1369745653:  // externalIdBundles
           ((SecurityProviderRequest) bean).setExternalIdBundles((Set<ExternalIdBundle>) newValue);
           return;
         case 1272470629:  // dataSource
@@ -346,7 +346,7 @@ public class SecurityProviderRequest extends DirectBean {
 
     @Override
     protected void validate(Bean bean) {
-      JodaBeanUtils.notNull(((SecurityProviderRequest) bean).ExternalIdBundles, "ExternalIdBundles");
+      JodaBeanUtils.notNull(((SecurityProviderRequest) bean)._externalIdBundles, "externalIdBundles");
     }
 
   }

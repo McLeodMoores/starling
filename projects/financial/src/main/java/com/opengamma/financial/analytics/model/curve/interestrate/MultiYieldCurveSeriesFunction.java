@@ -58,8 +58,9 @@ import com.opengamma.financial.analytics.model.curve.MultiCurveFunction;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 
 /**
- * Base class for functions that construct yield curves and the Jacobian from {@link YieldCurveDefinition} and {@link MultiCurveCalculationConfig}s using root-finding.
- * 
+ * Base class for functions that construct yield curves and the Jacobian from {@link YieldCurveDefinition} and {@link MultiCurveCalculationConfig}s using
+ * root-finding.
+ *
  * @deprecated This function uses configuration objects that have been superseded. Use functions that descend from {@link MultiCurveFunction}
  */
 @Deprecated
@@ -91,13 +92,13 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
     ValueProperties.Builder seriesConstraints = null;
     final ValueProperties constraints = desiredValue.getConstraints();
     Set<String> values = desiredValue.getConstraints().getValues(DATA_FIELD_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       seriesConstraints = desiredValue.getConstraints().copy().with(DATA_FIELD_PROPERTY, MarketDataRequirementNames.MARKET_VALUE);
     } else if (values.size() > 1) {
       seriesConstraints = desiredValue.getConstraints().copy().withoutAny(DATA_FIELD_PROPERTY).with(DATA_FIELD_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(RESOLUTION_KEY_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
@@ -109,28 +110,28 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
       seriesConstraints.withoutAny(RESOLUTION_KEY_PROPERTY).with(RESOLUTION_KEY_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(START_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
       seriesConstraints.with(START_DATE_PROPERTY, "Null");
     }
     values = desiredValue.getConstraints().getValues(INCLUDE_START_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
       seriesConstraints.with(INCLUDE_START_PROPERTY, YES_VALUE);
     }
     values = desiredValue.getConstraints().getValues(END_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
       seriesConstraints.with(END_DATE_PROPERTY, "Now");
     }
     values = desiredValue.getConstraints().getValues(INCLUDE_END_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (seriesConstraints == null) {
         seriesConstraints = desiredValue.getConstraints().copy();
       }
@@ -210,9 +211,11 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
     final Set<ValueRequirement> requirements = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     for (final String curveName : curveNames) {
-      final ValueProperties properties = ValueProperties.builder().with(CURVE, curveName).with(CURVE_CALCULATION_CONFIG, curveCalculationConfigName).withOptional(CURVE_CALCULATION_CONFIG)
+      final ValueProperties properties = ValueProperties.builder().with(CURVE, curveName).with(CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
+          .withOptional(CURVE_CALCULATION_CONFIG)
           .get();
-      final ValueProperties curveTSProperties = ValueProperties.builder().with(CURVE, curveName).with(DATA_FIELD_PROPERTY, constraints.getValues(DATA_FIELD_PROPERTY))
+      final ValueProperties curveTSProperties = ValueProperties.builder().with(CURVE, curveName)
+          .with(DATA_FIELD_PROPERTY, constraints.getValues(DATA_FIELD_PROPERTY))
           .with(RESOLUTION_KEY_PROPERTY, constraints.getValues(RESOLUTION_KEY_PROPERTY)).with(START_DATE_PROPERTY, constraints.getValues(START_DATE_PROPERTY))
           .with(INCLUDE_START_PROPERTY, constraints.getValues(INCLUDE_START_PROPERTY)).with(END_DATE_PROPERTY, constraints.getValues(END_DATE_PROPERTY))
           .with(INCLUDE_END_PROPERTY, constraints.getValues(INCLUDE_END_PROPERTY)).get();
@@ -225,7 +228,8 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
       final LinkedHashMap<String, String[]> exogenousCurveConfigs = curveCalculationConfig.getExogenousConfigData();
       for (final Map.Entry<String, String[]> entry : exogenousCurveConfigs.entrySet()) {
         for (final String exogenousCurveName : entry.getValue()) {
-          final ValueProperties properties = constraints.copy().withoutAny(CURVE_CALCULATION_CONFIG).with(CURVE_CALCULATION_CONFIG, entry.getKey()).withoutAny(CURVE)
+          final ValueProperties properties = constraints.copy().withoutAny(CURVE_CALCULATION_CONFIG).with(CURVE_CALCULATION_CONFIG, entry.getKey())
+              .withoutAny(CURVE)
               .with(CURVE, exogenousCurveName).get();
           requirements.add(new ValueRequirement(YIELD_CURVE_SERIES, targetSpec, properties));
         }
@@ -235,7 +239,8 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = Iterables.getOnlyElement(inputs.entrySet()).getKey();
       if (YIELD_CURVE_SERIES.equals(input.getValueName())) {
@@ -270,38 +275,46 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
 
   /**
    * Gets the yield curve properties with no values set.
-   * 
+   *
    * @return The properties for the curve
    */
   protected abstract ValueProperties getCurveSeriesProperties();
 
   /**
    * Gets properties for a single yield curve with the curve calculation configuration name and curve. name set.
-   * 
-   * @param curveCalculationConfigName The curve calculation configuration name
-   * @param curveName The curve name
+   *
+   * @param curveCalculationConfigName
+   *          The curve calculation configuration name
+   * @param curveName
+   *          The curve name
    * @return The properties for the curve
    */
-  protected abstract ValueProperties getCurveSeriesProperties(final String curveCalculationConfigName, final String curveName);
+  protected abstract ValueProperties getCurveSeriesProperties(String curveCalculationConfigName, String curveName);
 
   /**
    * Gets the curve calculation method.
-   * 
+   *
    * @return The curve calculation method
    */
   protected abstract String getCalculationMethod();
 
   /**
    * Gets the snapshot containing the market data from the function inputs.
-   * 
-   * @param inputs The inputs
-   * @param targetSpec The specification of the market data
-   * @param curveName The curve name
+   *
+   * @param inputs
+   *          The inputs
+   * @param targetSpec
+   *          The specification of the market data
+   * @param curveName
+   *          The curve name
    * @return The market data snapshot
-   * @throws OpenGammaRuntimeException if the snapshot is not present in the inputs
+   * @throws OpenGammaRuntimeException
+   *           if the snapshot is not present in the inputs
    */
-  protected HistoricalTimeSeriesBundle getHistoricalMarketData(final FunctionInputs inputs, final ComputationTargetSpecification targetSpec, final String curveName) {
-    final ValueRequirement marketDataRequirement = new ValueRequirement(YIELD_CURVE_HISTORICAL_TIME_SERIES, targetSpec, ValueProperties.with(CURVE, curveName).get());
+  protected HistoricalTimeSeriesBundle getHistoricalMarketData(final FunctionInputs inputs, final ComputationTargetSpecification targetSpec,
+      final String curveName) {
+    final ValueRequirement marketDataRequirement = new ValueRequirement(YIELD_CURVE_HISTORICAL_TIME_SERIES, targetSpec,
+        ValueProperties.with(CURVE, curveName).get());
     final Object marketDataObject = inputs.getValue(marketDataRequirement);
     if (marketDataObject == null) {
       throw new OpenGammaRuntimeException("Could not get a value for requirement " + marketDataRequirement);
@@ -311,15 +324,21 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
 
   /**
    * Gets the bundle containing historical fixing from the function inputs.
-   * 
-   * @param inputs The inputs
-   * @param targetSpec The specification of the historical data
-   * @param curveName The curve name
+   *
+   * @param inputs
+   *          The inputs
+   * @param targetSpec
+   *          The specification of the historical data
+   * @param curveName
+   *          The curve name
    * @return The bundle
-   * @throws OpenGammaRuntimeException if the bundle is not present in the inputs
+   * @throws OpenGammaRuntimeException
+   *           if the bundle is not present in the inputs
    */
-  protected HistoricalTimeSeriesBundle getTimeSeriesBundle(final FunctionInputs inputs, final ComputationTargetSpecification targetSpec, final String curveName) {
-    final ValueRequirement timeSeriesRequirement = new ValueRequirement(YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, targetSpec, ValueProperties.with(CURVE, curveName).get());
+  protected HistoricalTimeSeriesBundle getTimeSeriesBundle(final FunctionInputs inputs, final ComputationTargetSpecification targetSpec,
+      final String curveName) {
+    final ValueRequirement timeSeriesRequirement = new ValueRequirement(YIELD_CURVE_CONVERSION_HISTORICAL_TIME_SERIES, targetSpec,
+        ValueProperties.with(CURVE, curveName).get());
     final Object timeSeriesObject = inputs.getValue(timeSeriesRequirement);
     if (timeSeriesObject == null) {
       throw new OpenGammaRuntimeException("Could not get conversion time series for requirement " + timeSeriesRequirement);
@@ -329,14 +348,19 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
 
   /**
    * Gets the interpolated yield curve specifications from the function inputs
-   * 
-   * @param inputs The inputs
-   * @param targetSpec The specification of the interpolated yield curve
-   * @param curveName The curve name
+   *
+   * @param inputs
+   *          The inputs
+   * @param targetSpec
+   *          The specification of the interpolated yield curve
+   * @param curveName
+   *          The curve name
    * @return The specification
-   * @throws OpenGammaRuntimeException if the specification is not present in the inputs
+   * @throws OpenGammaRuntimeException
+   *           if the specification is not present in the inputs
    */
-  protected InterpolatedYieldCurveSpecificationWithSecurities getYieldCurveSpecification(final FunctionInputs inputs, final ComputationTargetSpecification targetSpec, final String curveName) {
+  protected InterpolatedYieldCurveSpecificationWithSecurities getYieldCurveSpecification(final FunctionInputs inputs,
+      final ComputationTargetSpecification targetSpec, final String curveName) {
     final ValueRequirement specRequirement = new ValueRequirement(YIELD_CURVE_SPEC, targetSpec, ValueProperties.with(CURVE, curveName).get());
     final Object specObject = inputs.getValue(specRequirement);
     if (specObject == null) {
@@ -347,14 +371,19 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
 
   /**
    * Gets any known (i.e. exogenous) curves from the function inputs. These curves are held fixed during fitting.
-   * 
-   * @param curveCalculationConfig The curve calculation configuration
-   * @param targetSpec The specification of the known curves
-   * @param inputs The inputs
+   *
+   * @param curveCalculationConfig
+   *          The curve calculation configuration
+   * @param targetSpec
+   *          The specification of the known curves
+   * @param inputs
+   *          The inputs
    * @return A yield curve bundle containing the curves or null if none of the curves are known before fitting
-   * @throws OpenGammaRuntimeException If an exogenous curve is required but is not present in the inputs
+   * @throws OpenGammaRuntimeException
+   *           If an exogenous curve is required but is not present in the inputs
    */
-  protected YieldCurveBundle getKnownCurves(final MultiCurveCalculationConfig curveCalculationConfig, final ComputationTargetSpecification targetSpec, final FunctionInputs inputs) {
+  protected YieldCurveBundle getKnownCurves(final MultiCurveCalculationConfig curveCalculationConfig, final ComputationTargetSpecification targetSpec,
+      final FunctionInputs inputs) {
     YieldCurveBundle knownCurves = null;
     if (curveCalculationConfig.getExogenousConfigData() != null) {
       knownCurves = new YieldCurveBundle();

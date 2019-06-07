@@ -137,7 +137,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
   }
 
   /**
-   * Calculates the result
+   * Calculates the result.
    *
    * @param derivative
    *          The derivative
@@ -153,9 +153,9 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
    *          The result properties
    * @return The result of the calculation
    */
-  protected abstract Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market,
-      final FunctionInputs inputs, final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec,
-      final ValueProperties resultProperties);
+  protected abstract Set<ComputedValue> computeValues(InstrumentDerivative derivative, StaticReplicationDataBundle market,
+      FunctionInputs inputs, Set<ValueRequirement> desiredValues, ComputationTargetSpecification targetSpec,
+      ValueProperties resultProperties);
 
   /**
    * Constructs a market data bundle of type StaticReplicationDataBundle. In the {@link CalculationPropertyNamesAndValues#BLACK_BASIC_METHOD}, the volatility

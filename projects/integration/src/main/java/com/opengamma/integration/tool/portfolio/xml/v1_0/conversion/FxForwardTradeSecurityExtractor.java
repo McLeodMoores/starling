@@ -22,13 +22,14 @@ public class FxForwardTradeSecurityExtractor extends TradeSecurityExtractor<FxFo
   /**
    * Create a security extractor for the supplied trade.
    *
-   * @param trade the trade to perform extraction on
+   * @param trade
+   *          the trade to perform extraction on
    */
   public FxForwardTradeSecurityExtractor(final FxForwardTrade trade) {
     super(trade);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
     final FxForwardTrade trade = getTrade();
@@ -41,11 +42,11 @@ public class FxForwardTradeSecurityExtractor extends TradeSecurityExtractor<FxFo
     final double receiveAmount = trade.getReceiveAmount().doubleValue();
     final ZonedDateTime forwardDate = convertLocalDate(trade.getMaturityDate());
 
-    final ManageableSecurity security = nonDeliverable ?
+    final ManageableSecurity security = nonDeliverable
         // todo - expiry should be used in construction of NonDeliverableFXForwardSecurity
-        new NonDeliverableFXForwardSecurity(payCurrency, payAmount, receiveCurrency, receiveAmount, forwardDate,
-                                            region, trade.getSettlementCurrency().equals(trade.getReceiveCurrency())) :
-        new FXForwardSecurity(payCurrency, payAmount, receiveCurrency, receiveAmount, forwardDate, region);
+        ? new NonDeliverableFXForwardSecurity(payCurrency, payAmount, receiveCurrency, receiveAmount, forwardDate,
+            region, trade.getSettlementCurrency().equals(trade.getReceiveCurrency()))
+        : new FXForwardSecurity(payCurrency, payAmount, receiveCurrency, receiveAmount, forwardDate, region);
 
     return securityArray(addIdentifier(security));
   }

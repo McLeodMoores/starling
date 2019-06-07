@@ -23,7 +23,8 @@ import com.opengamma.util.rest.FudgeRestClient;
 /**
  * Remote implementation of {@link EngineResourceReference}.
  *
- * @param <T> the type of resource
+ * @param <T>
+ *          the type of resource
  */
 public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable> implements EngineResourceReference<T> {
 
@@ -90,7 +91,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
   }
 
   /**
-   * For testing
+   * For testing.
    */
   public void stopHeartbeating() {
     LOGGER.debug("Stopping heartbeating of {}", this);
@@ -102,7 +103,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
     private final FudgeRestClient _client;
     private final URI _baseUri;
 
-    public HeartbeaterTask(final FudgeRestClient client, final URI baseUri) {
+    HeartbeaterTask(final FudgeRestClient client, final URI baseUri) {
       _client = client;
       _baseUri = baseUri;
     }

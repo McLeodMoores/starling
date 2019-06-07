@@ -115,8 +115,8 @@ import com.opengamma.util.tuple.Pair;
 public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketDataChangeListener {
 
   /**
-   * Default to waiting 5 minutes when {link {@link ViewExecutionFlags#AWAIT_MARKET_DATA} is in use to avoid unintentionally causing the
-   * view process to hang indefinitely. Market data should normally be available in seconds.
+   * Default to waiting 5 minutes when {link {@link ViewExecutionFlags#AWAIT_MARKET_DATA} is in use to avoid unintentionally causing the view process to hang
+   * indefinitely. Market data should normally be available in seconds.
    */
   private static final long DEFAULT_MARKET_DATA_TIMEOUT_MILLIS = 300000;
 
@@ -127,7 +127,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   /**
    * Wrapper that allows a thread to be "borrowed" from an executor service.
    */
-  /* package*/static final class BorrowedThread implements Runnable {
+  /* package */static final class BorrowedThread implements Runnable {
 
     private final String _name;
 
@@ -136,7 +136,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     private Thread _thread;
     private String _originalName;
 
-    public BorrowedThread(final String name, final Runnable job) {
+    BorrowedThread(final String name, final Runnable job) {
       _name = name;
       _job = job;
     }
@@ -202,8 +202,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   /**
    * The changes to the master trigger that must be made during the next cycle.
    * <p>
-   * This has been added as an immediate fix for [PLAT-3291] but could be extended to represent an arbitrary change to add/remove triggers
-   * if we wish to support the execution options changing for a running worker.
+   * This has been added as an immediate fix for [PLAT-3291] but could be extended to represent an arbitrary change to add/remove triggers if we wish to support
+   * the execution options changing for a running worker.
    */
   private ViewCycleTrigger _masterCycleTriggerChanges;
 
@@ -221,8 +221,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   private CompiledViewDefinitionWithGraphs _latestCompiledViewDefinition;
 
   /**
-   * The key to use for storing the compiled view definition, or querying it, from the cache shared with other workers. Whenever the market data
-   * provider or view definition changes, this must be updated.
+   * The key to use for storing the compiled view definition, or querying it, from the cache shared with other workers. Whenever the market data provider or
+   * view definition changes, this must be updated.
    */
   private ViewExecutionCacheKey _executionCacheKey;
 
@@ -241,8 +241,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   private volatile Future<CompiledViewDefinitionWithGraphsImpl> _compilationTask;
 
   /**
-   * Total time the job has spent "working". This does not include time spent waiting for a trigger. It is a real time spent on all
-   * I/O involved in a cycle (e.g. database accesses), graph compilation, market data subscription, graph execution, result dispatch, etc.
+   * Total time the job has spent "working". This does not include time spent waiting for a trigger. It is a real time spent on all I/O involved in a cycle
+   * (e.g. database accesses), graph compilation, market data subscription, graph execution, result dispatch, etc.
    */
   private double _totalTimeNanos;
 
@@ -262,8 +262,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   private MarketDataSelectionGraphManipulator _marketDataSelectionGraphManipulator;
 
   /**
-   * The market data selectors and function parameters which have been passed in via the ViewDefinition, which are applicable to a specific
-   * dependency graph. There will be an entry for each graph in the view, even if the only contents are an empty map.
+   * The market data selectors and function parameters which have been passed in via the ViewDefinition, which are applicable to a specific dependency graph.
+   * There will be an entry for each graph in the view, even if the only contents are an empty map.
    */
   private Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> _specificMarketDataSelectors;
 
@@ -284,8 +284,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   private Timer _fullCycleTimer;
 
   /**
-   * An invalidation call is made by the market data layer to request that a full graph rebuild take place on the next cycle.
-   * This is to allow for resolutions that might differ because data availability has changed.
+   * An invalidation call is made by the market data layer to request that a full graph rebuild take place on the next cycle. This is to allow for resolutions
+   * that might differ because data availability has changed.
    */
   private final AtomicBoolean _forceGraphRebuild = new AtomicBoolean();
 
@@ -345,21 +345,24 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   }
 
   /**
-   * We can pickup market data manipulators from either the default execution context or from the view definition. Those from the execution context will
-   * have their function parameters specified within the execution options as well (either per cycle or default). Manipulators from the view def will
-   * have function params specified alongside them.
+   * We can pickup market data manipulators from either the default execution context or from the view definition. Those from the execution context will have
+   * their function parameters specified within the execution options as well (either per cycle or default). Manipulators from the view def will have function
+   * params specified alongside them.
    *
-   * @param executionOptions the execution options to get the selectors from
-   * @param specificSelectors the graph-specific selectors
+   * @param executionOptions
+   *          the execution options to get the selectors from
+   * @param specificSelectors
+   *          the graph-specific selectors
    * @return a market data manipulator combined those found in the execution context and the view definition
    */
   private MarketDataSelectionGraphManipulator createMarketDataManipulator(final ViewCycleExecutionOptions executionOptions,
       final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> specificSelectors) {
 
     final MarketDataSelector executionOptionsMarketDataSelector = executionOptions != null
-        ? executionOptions.getMarketDataSelector() : NoOpMarketDataSelector.getInstance();
+        ? executionOptions.getMarketDataSelector()
+        : NoOpMarketDataSelector.getInstance();
 
-        return new MarketDataSelectionGraphManipulator(executionOptionsMarketDataSelector, specificSelectors);
+    return new MarketDataSelectionGraphManipulator(executionOptionsMarketDataSelector, specificSelectors);
   }
 
   private Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> extractSpecificSelectors(final ViewDefinition viewDefinition) {
@@ -386,7 +389,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         specificSelectors.put(calcConfig.getName(), new HashMap<>(scenarioDefinition.getDefinitionMap()));
       } else {
         // Ensure we have an entry for each graph, even if selectors are empty
-        specificSelectors.put(calcConfig.getName(), ImmutableMap.<DistinctMarketDataSelector, FunctionParameters>of());
+        specificSelectors.put(calcConfig.getName(), ImmutableMap.<DistinctMarketDataSelector, FunctionParameters> of());
       }
     }
     return specificSelectors;
@@ -476,8 +479,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
       SnapshotManager snapshotManager;
 
       try {
-        snapshotManager =
-            _marketDataManager.createSnapshotManagerForCycle(getViewDefinition().getMarketDataUser(), executionOptions.getMarketDataSpecifications());
+        snapshotManager = _marketDataManager.createSnapshotManagerForCycle(getViewDefinition().getMarketDataUser(),
+            executionOptions.getMarketDataSpecifications());
         _executionCacheKey = ViewExecutionCacheKey.of(getViewDefinition(), _marketDataManager.getAvailabilityProvider(), _marketDataSelectionGraphManipulator);
       } catch (final Exception e) {
         LOGGER.error("Error with market data provider", e);
@@ -552,14 +555,15 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         // if there are multiple worker threads that initialise snapshots concurrently.
         getProcessContext().getLiveDataOverrideInjector().setComputationTargetResolver(
             getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-            .getRawComputationTargetResolver().atVersionCorrection(versionCorrection));
+                .getRawComputationTargetResolver().atVersionCorrection(versionCorrection));
 
         try {
           snapshotManager.addMarketDataRequirements(compiledViewDefinition.getMarketDataRequirements());
           if (getExecutionOptions().getFlags().contains(ViewExecutionFlags.AWAIT_MARKET_DATA)) {
             final long timeoutMillis = getExecutionOptions().getMarketDataTimeoutMillis() != null
-                ? getExecutionOptions().getMarketDataTimeoutMillis() : DEFAULT_MARKET_DATA_TIMEOUT_MILLIS;
-                snapshotManager.initialiseSnapshotWithSubscriptionResults(timeoutMillis);
+                ? getExecutionOptions().getMarketDataTimeoutMillis()
+                : DEFAULT_MARKET_DATA_TIMEOUT_MILLIS;
+            snapshotManager.initialiseSnapshotWithSubscriptionResults(timeoutMillis);
           } else {
             snapshotManager.initialiseSnapshot();
           }
@@ -795,8 +799,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         final Instant now = now();
         long t = -System.nanoTime();
         final PoolExecutor previousInstance = PoolExecutor.setInstance(getProcessContext().getFunctionCompilationService().getExecutorService());
-        final Map<ComputationTargetReference, ComputationTargetSpecification> resolved =
-            getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+        final Map<ComputationTargetReference, ComputationTargetSpecification> resolved = getProcessContext().getFunctionCompilationService()
+            .getFunctionCompilationContext()
             .getRawComputationTargetResolver().atVersionCorrection(VersionCorrection.of(now, now))
             .getSpecificationResolver().getTargetSpecifications(checks.keySet());
         PoolExecutor.setInstance(previousInstance);
@@ -897,9 +901,9 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         cycleFragmentCompleted(result);
       }
     };
-    final SingleComputationCycle cycle =
-        new SingleComputationCycle(cycleId, executionOptions.getName(), streamingResultListener, getProcessContext(), compiledViewDefinition,
-            executionOptions, versionCorrection);
+    final SingleComputationCycle cycle = new SingleComputationCycle(cycleId, executionOptions.getName(), streamingResultListener, getProcessContext(),
+        compiledViewDefinition,
+        executionOptions, versionCorrection);
     return getProcessContext().getCycleManager().manage(cycle);
   }
 
@@ -916,14 +920,14 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         }
       };
       getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-      .getRawComputationTargetResolver().changeManager().addChangeListener(_targetResolverChanges);
+          .getRawComputationTargetResolver().changeManager().addChangeListener(_targetResolverChanges);
     }
   }
 
   private void unsubscribeFromTargetResolverChanges() {
     if (_targetResolverChanges != null) {
       getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-      .getRawComputationTargetResolver().changeManager().removeChangeListener(_targetResolverChanges);
+          .getRawComputationTargetResolver().changeManager().removeChangeListener(_targetResolverChanges);
       _targetResolverChanges = null;
     }
   }
@@ -1133,17 +1137,20 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   }
 
   /**
-   * Modifies the set of previous graphs to update nodes that can be mapped by altering their unique identifiers and remove terminal outputs
-   * derived from the portfolio by anything that cannot be immediately mapped.
+   * Modifies the set of previous graphs to update nodes that can be mapped by altering their unique identifiers and remove terminal outputs derived from the
+   * portfolio by anything that cannot be immediately mapped.
    * <p>
-   * The main use of this logic is for handling portfolio structures that are the same shape but have different unique identifiers on the
-   * portfolio nodes (the map operation), and to remove terminal outputs from portfolio nodes, positions or trades that aren't known to be
-   * in the new structure.
+   * The main use of this logic is for handling portfolio structures that are the same shape but have different unique identifiers on the portfolio nodes (the
+   * map operation), and to remove terminal outputs from portfolio nodes, positions or trades that aren't known to be in the new structure.
    *
-   * @param previousGraphs the previous graphs to update, not null
-   * @param compiledViewDefinition the previously compiled view definition, not null
-   * @param map the mapping of old unique identifiers to new ones or null/empty if none
-   * @param unmap the set of old unique identifiers that might not have portfolio derived terminal outputs, not null
+   * @param previousGraphs
+   *          the previous graphs to update, not null
+   * @param compiledViewDefinition
+   *          the previously compiled view definition, not null
+   * @param map
+   *          the mapping of old unique identifiers to new ones or null/empty if none
+   * @param unmap
+   *          the set of old unique identifiers that might not have portfolio derived terminal outputs, not null
    */
   private void mapAndUnmapNodes(final Map<String, PartiallyCompiledGraph> previousGraphs, final CompiledViewDefinitionWithGraphs compiledViewDefinition,
       final Map<UniqueId, UniqueId> map, final Set<UniqueId> unmap) {
@@ -1197,11 +1204,13 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   }
 
   /**
-   * Returns the set of unique identifiers that were previously used as targets in the dependency graph for object identifiers
-   * (or external identifiers) that now resolve differently.
+   * Returns the set of unique identifiers that were previously used as targets in the dependency graph for object identifiers (or external identifiers) that
+   * now resolve differently.
    *
-   * @param previousResolutions the previous cycle's resolution of identifiers, not null
-   * @param versionCorrection the resolver version correction for this cycle, not null
+   * @param previousResolutions
+   *          the previous cycle's resolution of identifiers, not null
+   * @param versionCorrection
+   *          the resolver version correction for this cycle, not null
    * @return the invalid identifier set, or null if none are invalid, this is a map from the old unique identifier to the new resolution
    */
   private Map<UniqueId, ComputationTargetSpecification> getInvalidIdentifiers(final Map<ComputationTargetReference, UniqueId> previousResolutions,
@@ -1232,8 +1241,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
       LOGGER.debug("Checking {} of {} resolutions for changed objects", toCheck.size(), previousResolutions.size());
     }
     final PoolExecutor previousInstance = PoolExecutor.setInstance(getProcessContext().getFunctionCompilationService().getExecutorService());
-    final Map<ComputationTargetReference, ComputationTargetSpecification> specifications =
-        getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+    final Map<ComputationTargetReference, ComputationTargetSpecification> specifications = getProcessContext().getFunctionCompilationService()
+        .getFunctionCompilationContext()
         .getRawComputationTargetResolver().getSpecificationResolver().getTargetSpecifications(toCheck, versionCorrection);
     PoolExecutor.setInstance(previousInstance);
     t += System.nanoTime();
@@ -1259,15 +1268,17 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   /**
    * Creates a filter that removes nodes from the graph based on invalid market data resolutions.
    *
-   * @param previousGraphs the previous graphs that have already been part processed
+   * @param previousGraphs
+   *          the previous graphs that have already been part processed
    * @return the filter if one is needed, null if no invalidation is required
    */
   private RootDiscardingSubgrapher getInvalidMarketData(final Map<String, PartiallyCompiledGraph> previousGraphs,
       final CompiledViewDefinitionWithGraphs viewDefinition,
       final VersionCorrection versionCorrection) {
-    final InvalidMarketDataDependencyNodeFilter filter =
-        new InvalidMarketDataDependencyNodeFilter(getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
-            .getRawComputationTargetResolver().atVersionCorrection(versionCorrection), _marketDataManager.getAvailabilityProvider());
+    final InvalidMarketDataDependencyNodeFilter filter = new InvalidMarketDataDependencyNodeFilter(
+        getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+            .getRawComputationTargetResolver().atVersionCorrection(versionCorrection),
+        _marketDataManager.getAvailabilityProvider());
     final Set<DependencyNode> visited = new HashSet<>();
     if (previousGraphs != null) {
       for (final Map.Entry<String, PartiallyCompiledGraph> previous : previousGraphs.entrySet()) {
@@ -1305,12 +1316,15 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   }
 
   /**
-   * Maintain the previously used dependency graphs by applying a node filter that identifies invalid nodes that must be recalculated
-   * (implying everything dependent on them must also be rebuilt).
+   * Maintain the previously used dependency graphs by applying a node filter that identifies invalid nodes that must be recalculated (implying everything
+   * dependent on them must also be rebuilt).
    *
-   * @param previousGraphs the previously used graphs as a map from calculation configuration name to the data, not null
-   * @param filter the filter to identify invalid nodes, not null
-   * @param unchangedNodes optional identifiers of unchanged portfolio nodes; any nodes filtered out must be removed from this
+   * @param previousGraphs
+   *          the previously used graphs as a map from calculation configuration name to the data, not null
+   * @param filter
+   *          the filter to identify invalid nodes, not null
+   * @param unchangedNodes
+   *          optional identifiers of unchanged portfolio nodes; any nodes filtered out must be removed from this
    */
   private void filterPreviousGraphs(final Map<String, PartiallyCompiledGraph> previousGraphs, final RootDiscardingSubgrapher filter,
       final Set<UniqueId> unchangedNodes) {
@@ -1398,8 +1412,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
                       // The portfolio resolution is different, invalidate or rewrite PORTFOLIO and PORTFOLIO_NODE nodes in the graph. Note that incremental
                       // compilation under this circumstance can be flawed if the functions have made notable use of the overall portfolio structure such that
                       // a full re-compilation will yield a different dependency graph to just rewriting the previous one.
-                      final ComputationTargetResolver resolver =
-                          getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver();
+                      final ComputationTargetResolver resolver = getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+                          .getRawComputationTargetResolver();
                       final ComputationTarget newPortfolio = resolver.resolve(newPortfolioSpec, versionCorrection);
                       // Map any nodes from the old portfolio structure to the new one
                       if (newPortfolio != null) {
@@ -1504,8 +1518,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         try {
           if (!getJob().isTerminated()) {
             compiledViewDefinition = _compilationTask.get();
-            final ComputationTargetResolver.AtVersionCorrection resolver =
-                getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver()
+            final ComputationTargetResolver.AtVersionCorrection resolver = getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+                .getRawComputationTargetResolver()
                 .atVersionCorrection(versionCorrection);
             compiledViewDefinition = initialiseMarketDataManipulation(compiledViewDefinition, resolver);
             cacheCompiledViewDefinition(compiledViewDefinition);
@@ -1606,8 +1620,10 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
    * <p>
    * External visibility for tests.
    *
-   * @param valuationTime the indicative valuation time, not null
-   * @param resolverVersionCorrection the resolver version correction, not null
+   * @param valuationTime
+   *          the indicative valuation time, not null
+   * @param resolverVersionCorrection
+   *          the resolver version correction, not null
    * @return the cached compiled view definition, or null if nothing is currently cached
    */
   public CompiledViewDefinitionWithGraphs getCachedCompiledViewDefinition(final Instant valuationTime, final VersionCorrection resolverVersionCorrection) {
@@ -1648,7 +1664,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
                   } else {
                     // ... but it's no better than the one we used last time
                     cached = _latestCompiledViewDefinition;
-                    //_latestCompiledViewDefinition = cached;
+                    // _latestCompiledViewDefinition = cached;
                   }
                 } else {
                   // Cached form is outside of our change subscription window so verifying changes we've heard about won't help
@@ -1689,7 +1705,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
    * <p>
    * External visibility for tests.
    *
-   * @param latestCompiledViewDefinition the compiled view definition, may be null
+   * @param latestCompiledViewDefinition
+   *          the compiled view definition, may be null
    */
   public void cacheCompiledViewDefinition(final CompiledViewDefinitionWithGraphs latestCompiledViewDefinition) {
     if (latestCompiledViewDefinition != null) {

@@ -14,6 +14,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Method for the pricing of interest rate future options with premium. Abstract class with methods valid for all pricing methods.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -21,29 +22,41 @@ public abstract class InterestRateFutureOptionPremiumSecurityMethod implements P
 
   /**
    * Computes the option security price from future price.
-   * @param security The future option security.
-   * @param curves The yield curve bundle.
-   * @param priceFuture The price of the underlying future.
+   * 
+   * @param security
+   *          The future option security.
+   * @param curves
+   *          The yield curve bundle.
+   * @param priceFuture
+   *          The price of the underlying future.
    * @return The security price.
    */
-  public abstract double optionPriceFromFuturePrice(final InterestRateFutureOptionPremiumSecurity security, final YieldCurveBundle curves, final double priceFuture);
+  public abstract double optionPriceFromFuturePrice(InterestRateFutureOptionPremiumSecurity security, YieldCurveBundle curves,
+      double priceFuture);
 
   /**
    * Computes the option security price. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param curves The yield curve bundle.
+   * 
+   * @param security
+   *          The future option security.
+   * @param curves
+   *          The yield curve bundle.
    * @return The security price.
    */
-  public abstract double optionPrice(final InterestRateFutureOptionPremiumSecurity security, final YieldCurveBundle curves);
+  public abstract double optionPrice(InterestRateFutureOptionPremiumSecurity security, YieldCurveBundle curves);
 
   /**
-   * Computes the option security price curve sensitivity. The future price is computed without convexity adjustment.
-   * It is supposed that for a given strike the volatility does not change with the curves.
-   * @param security The future option security.
-   * @param curves The yield curve bundle.
+   * Computes the option security price curve sensitivity. The future price is computed without convexity adjustment. It is supposed that
+   * for a given strike the volatility does not change with the curves.
+   * 
+   * @param security
+   *          The future option security.
+   * @param curves
+   *          The yield curve bundle.
    * @return The security price curve sensitivity.
    */
-  public abstract InterestRateCurveSensitivity priceCurveSensitivity(final InterestRateFutureOptionPremiumSecurity security, final YieldCurveBundle curves);
+  public abstract InterestRateCurveSensitivity priceCurveSensitivity(InterestRateFutureOptionPremiumSecurity security,
+      YieldCurveBundle curves);
 
   @Override
   public CurrencyAmount presentValue(final InstrumentDerivative instrument, final YieldCurveBundle curves) {

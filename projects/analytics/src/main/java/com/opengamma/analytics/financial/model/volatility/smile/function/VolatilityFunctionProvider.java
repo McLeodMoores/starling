@@ -39,10 +39,10 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
    *          The forward value of the underlying
    * @return Returns a function that, given data of type T, calculates the volatility
    */
-  public abstract Function1D<T, Double> getVolatilityFunction(final EuropeanVanillaOption option, final double forward);
+  public abstract Function1D<T, Double> getVolatilityFunction(EuropeanVanillaOption option, double forward);
 
   /**
-   * Returns a function that, given data of type T, calculates the volatilities for the given strikes
+   * Returns a function that, given data of type T, calculates the volatilities for the given strikes.
    *
    * @param forward
    *          the forward
@@ -76,7 +76,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
 
   /**
    * Returns a function that calculates volatility and the ajoint (volatility sensitivity to forward, strike and model parameters) by means of central finite
-   * difference - this should be overridden where possible
+   * difference - this should be overridden where possible.
    *
    * @param option
    *          The option, not null
@@ -92,7 +92,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     return new Function1D<T, double[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public final double[] evaluate(final T data) {
+      public double[] evaluate(final T data) {
         Validate.notNull(data, "data");
         final double[] x = new double[3 + data.getNumberOfParameters()]; // vol, fwd, strike, the model parameters
         x[0] = func.evaluate(data);
@@ -106,7 +106,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
 
   /**
    * Returns a function that calculates the volatility sensitivity to model parameters by means of central finite difference - this should be overridden where
-   * possible
+   * possible.
    *
    * @param option
    *          The option, not null
@@ -122,7 +122,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
     return new Function1D<T, double[]>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public final double[] evaluate(final T data) {
+      public double[] evaluate(final T data) {
         Validate.notNull(data, "data");
         return paramBar(func, data);
       }
@@ -130,7 +130,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
   }
 
   /**
-   * The volatility adjoint set by finite difference, unless this is overloaded
+   * The volatility adjoint set by finite difference, unless this is overloaded.
    *
    * @param forward
    *          Forward value of underlying
@@ -192,7 +192,7 @@ public abstract class VolatilityFunctionProvider<T extends SmileModelData> {
 
   /**
    * Returns a function that calculates the volatility sensitivity to model parameters for a range of strikes by means of central finite difference - this
-   * should be overridden where possible
+   * should be overridden where possible.
    *
    * @param forward
    *          Forward value of underlying

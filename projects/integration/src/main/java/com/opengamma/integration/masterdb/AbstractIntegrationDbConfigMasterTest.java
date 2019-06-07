@@ -40,13 +40,13 @@ public abstract class AbstractIntegrationDbConfigMasterTest extends AbstractLoca
     return _cfgMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(enabled = false, description = "Queries the entire database")
-  public void test_queryAll() throws Exception {
-    final ConfigSearchRequest<?> request = new ConfigSearchRequest<Object>(Object.class);
+  public void testQueryAll() throws Exception {
+    final ConfigSearchRequest<?> request = new ConfigSearchRequest<>(Object.class);
     request.setPagingRequest(PagingRequest.NONE);
     final int total = getConfigMaster().search(request).getPaging().getTotalItems();
-    final int pages = (total / PAGE_SIZE) + 1;
+    final int pages = total / PAGE_SIZE + 1;
     for (int page = 1; page <= pages; page++) {
       request.setPagingRequest(PagingRequest.ofPage(page, PAGE_SIZE));
       System.out.println("Checking config master, page " + request.getPagingRequest());

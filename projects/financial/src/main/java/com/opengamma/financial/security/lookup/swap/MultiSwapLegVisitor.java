@@ -26,41 +26,54 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Visits the fixed leg of a fixed/float swap. For float/float swaps {@link #visitFloatingPayLeg} will be called.
-   * @param leg The leg
+   * 
+   * @param leg
+   *          The leg
    * @return A value
    */
   /* package */ abstract T visitFixedLeg(FixedInterestRateLeg leg);
 
   /**
-   * Visits the fixed leg of an inflation swap. For index / index inflation swaps {@link #visitFloatingInflationPayLeg}
-   * will be called.
-   * @param leg The leg
+   * Visits the fixed leg of an inflation swap. For index / index inflation swaps {@link #visitFloatingInflationPayLeg} will be called.
+   * 
+   * @param leg
+   *          The leg
    * @return A value
    */
   /* package */ abstract T visitFixedInflationLeg(FixedInflationSwapLeg leg);
 
   /**
    * Visits the pay leg of a float/float swap. For fixed/float swaps {@link #visitFixedLeg} will be called.
-   * @param leg The leg
+   * 
+   * @param leg
+   *          The leg
    * @return A value
    */
   /* package */ abstract T visitFloatingPayLeg(FloatingInterestRateLeg leg);
 
   /**
    * Visits the pay leg of a index/index inflation swap. For fixed / index inflation swaps {@link #visitFixedInflationLeg} will be called.
+   * 
+   * @param leg
+   *          the leg
+   * @return a value
    */
-  /* package  */ abstract T visitInflationIndexPayLeg(InflationIndexSwapLeg leg);
+  /* package */ abstract T visitInflationIndexPayLeg(InflationIndexSwapLeg leg);
 
   /**
    * Visits the floating leg of a fixed/float swap or the receive leg of a float/float swap.
-   * @param leg The leg
+   * 
+   * @param leg
+   *          The leg
    * @return A value
    */
   /* package */ abstract T visitOtherLeg(FloatingInterestRateLeg leg);
 
   /**
    * Visits the index leg of a fixed/float inflation swap or the receive leg of a float/float swap.
-   * @param leg The leg
+   * 
+   * @param leg
+   *          The leg
    * @return A value
    */
   /* package */ abstract T visitOtherIndexLeg(InflationIndexSwapLeg leg);
@@ -136,6 +149,7 @@ import com.opengamma.util.tuple.Pairs;
     }
 
   }
+
   private class FloatingPayVisitor implements SwapLegVisitor<T> {
 
     @Override

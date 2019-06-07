@@ -58,16 +58,18 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
   private final ComputationTargetResolver _targetResolver;
 
-  private final ConcurrentMap<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitionsFrontCache =
-      new MapMaker().weakValues().makeMap();
+  private final ConcurrentMap<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitionsFrontCache = new MapMaker().weakValues()
+      .makeMap();
 
   private final Cache _compiledViewDefinitions;
 
   /**
    * Creates a new instance.
    *
-   * @param cacheManager the cache manager, not null
-   * @param targetResolver the target resolver for portfolio and view definition objects, not null
+   * @param cacheManager
+   *          the cache manager, not null
+   * @param targetResolver
+   *          the target resolver for portfolio and view definition objects, not null
    */
   public EHCacheViewExecutionCache(final CacheManager cacheManager, final ComputationTargetResolver targetResolver) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
@@ -83,8 +85,10 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   /**
    * Creates a new instance.
    *
-   * @param cacheManager the cache manager, not null
-   * @param cfs the compiled function service, holding a computation target resolver, not null
+   * @param cacheManager
+   *          the cache manager, not null
+   * @param cfs
+   *          the compiled function service, holding a computation target resolver, not null
    */
   public EHCacheViewExecutionCache(final CacheManager cacheManager, final CompiledFunctionService cfs) {
     this(cacheManager, cfs.getFunctionCompilationContext().getRawComputationTargetResolver());
@@ -93,9 +97,12 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   /**
    * Creates a new instance
    *
-   * @param cacheManager the cache manager, not null
-   * @param configSource not used
-   * @param cfs the compiled function service, holding a computation target resolver, not null
+   * @param cacheManager
+   *          the cache manager, not null
+   * @param configSource
+   *          not used
+   * @param cfs
+   *          the compiled function service, holding a computation target resolver, not null
    * @deprecated Kept for compatibility with existing Spring config files only
    */
   @Deprecated
@@ -138,7 +145,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
     private final Instant _validFrom;
     private final Instant _validTo;
 
-    public CompiledViewDefinitionWithGraphsReader(final EHCacheViewExecutionCache parent, final CompiledViewDefinitionWithGraphs viewDef) {
+    CompiledViewDefinitionWithGraphsReader(final EHCacheViewExecutionCache parent, final CompiledViewDefinitionWithGraphs viewDef) {
       _parent = parent.instance();
       _versionCorrection = viewDef.getResolverVersionCorrection();
       _compilationId = viewDef.getCompilationIdentifier();
@@ -162,9 +169,9 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
           .resolve(new ComputationTargetSpecification(ComputationTargetType.of(ViewDefinition.class), _viewDefinition), VersionCorrection.LATEST).getValue();
       final Portfolio portfolio = (Portfolio) parent.getTargetResolver().resolve(
           new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, _portfolio), _versionCorrection).getValue();
-      final CompiledViewDefinitionWithGraphsImpl compiledViewDef =
-          new CompiledViewDefinitionWithGraphsImpl(_versionCorrection, _compilationId, viewDefinition, _graphs, _resolutions, portfolio, _functionInitId,
-              _calcConfigs, _validFrom, _validTo);
+      final CompiledViewDefinitionWithGraphsImpl compiledViewDef = new CompiledViewDefinitionWithGraphsImpl(_versionCorrection, _compilationId, viewDefinition,
+          _graphs, _resolutions, portfolio, _functionInitId,
+          _calcConfigs, _validFrom, _validTo);
       return parent.new CompiledViewDefinitionWithGraphsHolder(compiledViewDef);
     }
 
@@ -176,7 +183,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
     private final CompiledViewDefinitionWithGraphs _viewDefinition;
 
-    public CompiledViewDefinitionWithGraphsHolder(final CompiledViewDefinitionWithGraphs viewDefinition) {
+    CompiledViewDefinitionWithGraphsHolder(final CompiledViewDefinitionWithGraphs viewDefinition) {
       _viewDefinition = viewDefinition;
     }
 

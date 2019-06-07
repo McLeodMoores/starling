@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.exposure;
 
@@ -36,9 +36,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Implementation of an exposure function that returns ids containing information about the security type,
- * the currency and the region. For example, for a German swap, the identifier would be
- * <code>SecurityType~SWAP_EUR_DE</code>.
+ * Implementation of an exposure function that returns ids containing information about the security type, the currency and the region. For example, for a
+ * German swap, the identifier would be <code>SecurityType~SWAP_EUR_DE</code>.
  */
 public class SecurityCurrencyAndRegionExposureFunction implements NamedExposureFunction {
 
@@ -85,18 +84,24 @@ public class SecurityCurrencyAndRegionExposureFunction implements NamedExposureF
 
     /**
      * Creates an instance.
-     * @param securitySource The security source, not null
+     *
+     * @param securitySource
+     *          The security source, not null
      */
-    public SecurityCurrencyAndRegionVisitor(final SecuritySource securitySource) {
+    SecurityCurrencyAndRegionVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
 
     /**
      * Creates ids for a collection of currencies.
-     * @param securityType The security type string
-     * @param region The region string
-     * @param currencies The currencies
+     *
+     * @param securityType
+     *          The security type string
+     * @param region
+     *          The region string
+     * @param currencies
+     *          The currencies
      * @return The ids
      */
     private static List<ExternalId> createIds(final String securityType, final String region, final Collection<Currency> currencies) {
@@ -109,9 +114,13 @@ public class SecurityCurrencyAndRegionExposureFunction implements NamedExposureF
 
     /**
      * Creates an id.
-     * @param securityType The security type string
-     * @param region The region string
-     * @param currency The currency string
+     *
+     * @param securityType
+     *          The security type string
+     * @param region
+     *          The region string
+     * @param currency
+     *          The currency string
      * @return The id
      */
     private static List<ExternalId> createIds(final String securityType, final String region, final String currency) {
@@ -176,8 +185,8 @@ public class SecurityCurrencyAndRegionExposureFunction implements NamedExposureF
       }
       final List<ExternalId> result = new ArrayList<>();
       // both legs are InterestRateNotional, as otherwise getCurrencies() would have returned null
-      result.addAll(createIds(SwapSecurity.SECURITY_TYPE, payLeg.getRegionId().getValue(),
-          ((InterestRateNotional) payLeg.getNotional()).getCurrency().getCode()));
+      result.addAll(
+          createIds(SwapSecurity.SECURITY_TYPE, payLeg.getRegionId().getValue(), ((InterestRateNotional) payLeg.getNotional()).getCurrency().getCode()));
       result.addAll(createIds(SwapSecurity.SECURITY_TYPE, receiveLeg.getRegionId().getValue(),
           ((InterestRateNotional) receiveLeg.getNotional()).getCurrency().getCode()));
       return result;
@@ -197,8 +206,8 @@ public class SecurityCurrencyAndRegionExposureFunction implements NamedExposureF
       }
       final List<ExternalId> result = new ArrayList<>();
       // both legs are InterestRateNotional, as otherwise getCurrencies() would have returned null
-      result.addAll(createIds(SwaptionSecurity.SECURITY_TYPE, payLeg.getRegionId().getValue(),
-          ((InterestRateNotional) payLeg.getNotional()).getCurrency().getCode()));
+      result.addAll(
+          createIds(SwaptionSecurity.SECURITY_TYPE, payLeg.getRegionId().getValue(), ((InterestRateNotional) payLeg.getNotional()).getCurrency().getCode()));
       result.addAll(createIds(SwaptionSecurity.SECURITY_TYPE, receiveLeg.getRegionId().getValue(),
           ((InterestRateNotional) receiveLeg.getNotional()).getCurrency().getCode()));
       return result;

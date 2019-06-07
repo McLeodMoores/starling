@@ -20,8 +20,8 @@ import com.opengamma.engine.target.digest.TargetDigests;
 import com.opengamma.util.MdcAwareThreadPoolExecutor;
 
 /**
- * Constructs {@link DependencyGraphBuilder} instances with common parameters. All dependency graph builders created by a single factory will
- * share the same additional thread allowance.
+ * Constructs {@link DependencyGraphBuilder} instances with common parameters. All dependency graph builders created by a single factory will share the same
+ * additional thread allowance.
  */
 public class DependencyGraphBuilderFactory {
 
@@ -77,12 +77,12 @@ public class DependencyGraphBuilderFactory {
   }
 
   /**
-   * Set whether the graph building algorithm should retain information about failed productions and backtracking options to produce more
-   * thorough details of why requirements could not be specified. Enabling this will increase the memory footprint of the graph building
-   * algorithm. The default setting is taken from system property {@code DependencyGraphBuilderFactory.enableFailureReporting} if
-   * set, otherwise it is off.
+   * Set whether the graph building algorithm should retain information about failed productions and backtracking options to produce more thorough details of
+   * why requirements could not be specified. Enabling this will increase the memory footprint of the graph building algorithm. The default setting is taken
+   * from system property {@code DependencyGraphBuilderFactory.enableFailureReporting} if set, otherwise it is off.
    *
-   * @param enableFailureReporting true to enable, false to disable
+   * @param enableFailureReporting
+   *          true to enable, false to disable
    */
   public void setEnableFailureReporting(final boolean enableFailureReporting) {
     _enableFailureReporting = enableFailureReporting;
@@ -149,7 +149,7 @@ public class DependencyGraphBuilderFactory {
 
         private Runnable _command;
 
-        public WrappedRunnable(final Runnable command) {
+        WrappedRunnable(final Runnable command) {
           _command = command;
         }
 

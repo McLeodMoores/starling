@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -15,7 +15,7 @@ import com.opengamma.engine.ComputationTargetSpecification;
 
 /* package */abstract class LazyTargetResolverPositionOrTrade extends LazyTargetResolverObject implements PositionOrTrade {
 
-  public LazyTargetResolverPositionOrTrade(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTargetSpecification specification) {
+  LazyTargetResolverPositionOrTrade(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTargetSpecification specification) {
     super(resolver, specification);
   }
 

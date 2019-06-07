@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -15,8 +15,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Class that populates a curve node id mapper with the curve instrument providers for a
  * {@link com.opengamma.financial.analytics.ircurve.StripInstrumentType#PERIODIC_ZERO_DEPOSIT} strip. If a map for
- * {@link com.opengamma.financial.analytics.ircurve.strips.PeriodicallyCompoundedRateNode} is already present,
- * this class will overwrite that entry.
+ * {@link com.opengamma.financial.analytics.ircurve.strips.PeriodicallyCompoundedRateNode} is already present, this class will overwrite that entry.
  *
  */
 public class PeriodicZeroDepositInstrumentProviderPopulator extends InstrumentProviderPopulator {
@@ -30,7 +29,9 @@ public class PeriodicZeroDepositInstrumentProviderPopulator extends InstrumentPr
 
   /**
    * Sets the method name to null, as the getter name for periodic zero strips is known.
-   * @param renamingFunction  the renaming function, not null
+   * 
+   * @param renamingFunction
+   *          the renaming function, not null
    */
   public PeriodicZeroDepositInstrumentProviderPopulator(final Function2<String, String, String> renamingFunction) {
     super(StripInstrumentType.PERIODIC_ZERO_DEPOSIT, renamingFunction);

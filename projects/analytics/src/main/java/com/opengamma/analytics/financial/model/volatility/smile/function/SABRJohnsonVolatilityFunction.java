@@ -34,7 +34,7 @@ public class SABRJohnsonVolatilityFunction extends VolatilityFunctionProvider<SA
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public final Double evaluate(final SABRFormulaData data) {
+      public Double evaluate(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();

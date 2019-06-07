@@ -71,7 +71,8 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -106,17 +107,19 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
       throw new OpenGammaRuntimeException("Can only use forward PDE; should never ask for this direction: " + pdeDirection);
     }
     final DupireLocalVolatilityCalculator localVolatilityCalculator = new DupireLocalVolatilityCalculator(h);
-    //TODO R White testing using spline rather than SABR - this should be an option
+    // TODO R White testing using spline rather than SABR - this should be an option
     final GeneralSmileInterpolator smileInterpolator = new SmileInterpolatorSpline();
     final VolatilitySurfaceInterpolator surfaceFitter = new VolatilitySurfaceInterpolator(smileInterpolator, useLogTime, useIntegratedVariance, useLogValue);
-    //final PiecewiseSABRSurfaceFitter1<?> surfaceFitter = new MoneynessPiecewiseSABRSurfaceFitter(useLogTime, useIntegratedVariance, useLogValue);
-    //TODO get rid of hardcoded maxProxydelta = 1.5
-    final LocalVolatilityForwardPDEGreekCalculator1<?> calculator = new LocalVolatilityForwardPDEGreekCalculator1<Moneyness>(theta, timeSteps, spaceSteps, timeGridBunching, spaceGridBunching,
-        /*(MoneynessPiecewiseSABRSurfaceFitter)*/surfaceFitter, localVolatilityCalculator, 1.5);
+    // final PiecewiseSABRSurfaceFitter1<?> surfaceFitter = new MoneynessPiecewiseSABRSurfaceFitter(useLogTime, useIntegratedVariance, useLogValue);
+    // TODO get rid of hardcoded maxProxydelta = 1.5
+    final LocalVolatilityForwardPDEGreekCalculator1<?> calculator = new LocalVolatilityForwardPDEGreekCalculator1<Moneyness>(theta, timeSteps, spaceSteps,
+        timeGridBunching, spaceGridBunching,
+        /* (MoneynessPiecewiseSABRSurfaceFitter) */surfaceFitter, localVolatilityCalculator, 1.5);
     final ValueSpecification spec = new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints());
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final ComputationTargetReference id = getTargetForUnderlyings(target);
-    final ValueRequirement surfaceRequirement = getVolatilitySurfaceRequirement(surfaceName, surfaceType, xAxis, yAxis, yAxisType, hName, forwardCurveCalculationMethod, forwardCurveName, id);
+    final ValueRequirement surfaceRequirement = getVolatilitySurfaceRequirement(surfaceName, surfaceType, xAxis, yAxis, yAxisType, hName,
+        forwardCurveCalculationMethod, forwardCurveName, id);
     final Object localVolatilitySurfaceObject = inputs.getValue(surfaceRequirement);
     if (localVolatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Local volatility surface was null");
@@ -131,7 +134,8 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
     final ValueRequirement volDataRequirement = getUnderlyingVolatilityDataRequirement(surfaceName, id);
     final SmileSurfaceDataBundle data = getData(inputs, volDataRequirement, forwardCurveRequirement);
     final FXOptionSecurity fxOption = (FXOptionSecurity) security;
-    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext)
+        .getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(fxOption.getPutCurrency(), fxOption.getCallCurrency());
     final EuropeanVanillaOption option = getOption(security, now, currencyPair);
     return Collections.singleton(new ComputedValue(spec, getResult(calculator, localVolatilitySurface, forwardCurve, data, option)));
@@ -226,8 +230,8 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
       final ValueProperties constraints = input.getValue().getConstraints();
       if (input.getValue().getValueName().equals(ValueRequirementNames.FORWARD_CURVE)) {
         if (constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD) != null) {
-          final Set<String> forwardCurveCalculationMethodNames =
-              constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
+          final Set<String> forwardCurveCalculationMethodNames = constraints
+              .getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
           if (forwardCurveCalculationMethodNames == null || forwardCurveCalculationMethodNames.size() != 1) {
             throw new OpenGammaRuntimeException("Missing or non-unique forward curve calculation method name");
           }
@@ -296,21 +300,22 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
     return Collections.singleton(getResultSpec(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h, forwardCurveName));
   }
 
-  protected abstract ComputationTargetReference getTargetForUnderlyings(final ComputationTarget target);
+  protected abstract ComputationTargetReference getTargetForUnderlyings(ComputationTarget target);
 
-  protected abstract EuropeanVanillaOption getOption(final FinancialSecurity security, final ZonedDateTime date, final CurrencyPair currencyPair);
+  protected abstract EuropeanVanillaOption getOption(FinancialSecurity security, ZonedDateTime date, CurrencyPair currencyPair);
 
-  //TODO shouldn't need to do this - write a fudge builder for the data bundle and have it as an input
-  protected abstract SmileSurfaceDataBundle getData(final FunctionInputs inputs, final ValueRequirement volDataRequirement, final ValueRequirement forwardCurveRequirement);
+  // TODO shouldn't need to do this - write a fudge builder for the data bundle and have it as an input
+  protected abstract SmileSurfaceDataBundle getData(FunctionInputs inputs, ValueRequirement volDataRequirement, ValueRequirement forwardCurveRequirement);
 
-  protected abstract Object getResult(final LocalVolatilityForwardPDEGreekCalculator1<?> calculator, final LocalVolatilitySurface<?> localVolatilitySurface,
-      final ForwardCurve forwardCurve, final SmileSurfaceDataBundle data, final EuropeanVanillaOption option);
+  protected abstract Object getResult(LocalVolatilityForwardPDEGreekCalculator1<?> calculator, LocalVolatilitySurface<?> localVolatilitySurface,
+      ForwardCurve forwardCurve, SmileSurfaceDataBundle data, EuropeanVanillaOption option);
 
   protected abstract String getResultName();
 
-  protected abstract ValueRequirement getUnderlyingVolatilityDataRequirement(final String surfaceName, final ComputationTargetReference id);
+  protected abstract ValueRequirement getUnderlyingVolatilityDataRequirement(String surfaceName, ComputationTargetReference id);
 
-  private ValueRequirement getVolatilitySurfaceRequirement(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
+  private ValueRequirement getVolatilitySurfaceRequirement(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
       final String h, final String forwardCurveCalculationMethod, final String forwardCurveName, final ComputationTargetReference target) {
     final ValueProperties properties = ValueProperties.builder()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
@@ -354,9 +359,11 @@ public abstract class LocalVolatilityPDEGridFunction extends AbstractFunction.No
         .withAny(PROPERTY_PDE_DIRECTION).get();
   }
 
-  private ValueSpecification getResultSpec(final ComputationTarget target, final String definitionName, final String surfaceType, final String xAxis, final String yAxis,
+  private ValueSpecification getResultSpec(final ComputationTarget target, final String definitionName, final String surfaceType, final String xAxis,
+      final String yAxis,
       final String yAxisType, final String forwardCurveCalculationMethod, final String h, final String forwardCurveName) {
-    final ValueProperties properties = getResultProperties(definitionName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h, forwardCurveName);
+    final ValueProperties properties = getResultProperties(definitionName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h,
+        forwardCurveName);
     return new ValueSpecification(getResultName(), target.toSpecification(), properties);
   }
 

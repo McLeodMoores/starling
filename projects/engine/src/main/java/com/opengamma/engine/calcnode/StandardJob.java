@@ -56,9 +56,12 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   /**
    * Creates a new job for submission to the invokers.
    *
-   * @param dispatcher the parent dispatcher that manages the invokers
-   * @param job the root job to send
-   * @param resultReceiver the callback for when the job and it's tail completes
+   * @param dispatcher
+   *          the parent dispatcher that manages the invokers
+   * @param job
+   *          the root job to send
+   * @param resultReceiver
+   *          the callback for when the job and it's tail completes
    */
   StandardJob(final JobDispatcher dispatcher, final CalculationJob job, final JobResultReceiver resultReceiver) {
     super(dispatcher, job);
@@ -80,12 +83,14 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   }
 
   /**
-   * Change the cache hints on a job. Tail jobs run on the same node as their parent but if we split them into discreet
-   * jobs any values previously produced by their parents into the private cache must
-   * now go into the shared cache.
+   * Change the cache hints on a job. Tail jobs run on the same node as their parent but if we split them into discreet jobs any values previously produced by
+   * their parents into the private cache must now go into the shared cache.
    *
-   * @param job the job to process, not null
-   * @param outputs the adjusted job, not null
+   * @param job
+   *          the job to process, not null
+   * @param outputs
+   *          the adjusted job, not null
+   * @return the calcuation job with new cache hints
    */
   /* package */static CalculationJob adjustCacheHints(final CalculationJob job,
       final Map<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>> outputs) {
@@ -151,8 +156,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
   }
 
   /**
-   * A watched job instance that corresponds to one of the original jobs. The job may have a tail. When it completes,
-   * new watched job instances will be submitted for each tail job.
+   * A watched job instance that corresponds to one of the original jobs. The job may have a tail. When it completes, new watched job instances will be
+   * submitted for each tail job.
    */
   /* package */static final class WholeWatchedJob extends WatchedJob implements JobResultReceiver {
 

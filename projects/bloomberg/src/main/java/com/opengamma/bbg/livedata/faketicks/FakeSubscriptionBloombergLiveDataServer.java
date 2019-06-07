@@ -44,8 +44,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 /**
- * A live data server which fakes out Bloomberg subscriptions for some tickers.
- * Other tickers will be subscribed as normal.
+ * A live data server which fakes out Bloomberg subscriptions for some tickers. Other tickers will be subscribed as normal.
  */
 public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataServer {
 
@@ -74,22 +73,24 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
    */
   private final BloombergLiveDataServer _underlying;
   /**
-   * The external identifier scheme that this live data server handles. This must match the scheme that the underlying
-   * live data server handles.
+   * The external identifier scheme that this live data server handles. This must match the scheme that the underlying live data server handles.
    */
   private final ExternalScheme _uniqueIdDomain;
 
   /**
    * Creates an instance.
    * <p>
-   * The distribution specification resolver, entitlement checker and market data sender factory
-   * are set by the constructor based on the underlying server.
+   * The distribution specification resolver, entitlement checker and market data sender factory are set by the constructor based on the underlying server.
    *
-   * @param underlying  the underlying server, not null
-   * @param uniqueIdDomain  the external identifier scheme that this live data server handles, not null
-   * @param cacheManager  the cache manager, not null
+   * @param underlying
+   *          the underlying server, not null
+   * @param uniqueIdDomain
+   *          the external identifier scheme that this live data server handles, not null
+   * @param cacheManager
+   *          the cache manager, not null
    */
-  public FakeSubscriptionBloombergLiveDataServer(final BloombergLiveDataServer underlying, final ExternalScheme uniqueIdDomain, final CacheManager cacheManager) {
+  public FakeSubscriptionBloombergLiveDataServer(final BloombergLiveDataServer underlying, final ExternalScheme uniqueIdDomain,
+      final CacheManager cacheManager) {
     super(cacheManager);
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(uniqueIdDomain, "uniqueIdDomain");
@@ -109,7 +110,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     return new FakeDistributionSpecificationResolver(underlying);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doConnect() {
     _timer = new Timer(FakeSubscriptionBloombergLiveDataServer.class.getSimpleName(), true);
@@ -163,7 +164,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     final Map<String, FudgeMsg> result = _underlying.doSnapshot(uidsToQuery);
 
     for (final Entry<String, FudgeMsg> entry : result.entrySet()) {
-      //In the case of a race there may already be an entry here, but it's consistent
+      // In the case of a race there may already be an entry here, but it's consistent
       final String uid = entry.getKey();
       _snapshotValues.put(new Element(uid, new CachedPerSecuritySnapshotResult(entry.getValue())));
     }
@@ -172,7 +173,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Cached value.
    */
@@ -186,7 +187,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
       private byte[] _data;
     }
 
-    public CachedPerSecuritySnapshotResult(final FudgeMsg value) {
+    CachedPerSecuritySnapshotResult(final FudgeMsg value) {
       _fieldData = value;
     }
 
@@ -215,7 +216,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doDisconnect() {
     final CountDownLatch timerCancelledLatch = new CountDownLatch(1);
@@ -224,7 +225,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
       @Override
       public void run() {
         LOGGER.info("Cancelling fake subscriptions");
-        _timer.cancel(); // NOTE doing this here  "absolutely guarantees that the ongoing task execution is the last task execution"
+        _timer.cancel(); // NOTE doing this here "absolutely guarantees that the ongoing task execution is the last task execution"
         timerCancelledLatch.countDown();
       }
     }, 0);

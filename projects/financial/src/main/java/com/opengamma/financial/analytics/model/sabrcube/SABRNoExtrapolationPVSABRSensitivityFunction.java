@@ -15,6 +15,7 @@ import com.opengamma.financial.analytics.DoubleLabelledMatrix2D;
 
 /**
  * Calculates sensitivities with respect to the SABR parameters.
+ * 
  * @deprecated The parent of this class is deprecated
  */
 @Deprecated
@@ -26,10 +27,10 @@ public abstract class SABRNoExtrapolationPVSABRSensitivityFunction extends SABRN
     return getResultAsMatrix(derivative.accept(CALCULATOR, data));
   }
 
-  protected abstract DoubleLabelledMatrix2D getResultAsMatrix(final PresentValueSABRSensitivityDataBundle sensitivities);
+  protected abstract DoubleLabelledMatrix2D getResultAsMatrix(PresentValueSABRSensitivityDataBundle sensitivities);
 
   /**
-   * Function to get the sensitivity to the alpha parameter
+   * Function to get the sensitivity to the alpha parameter.
    */
   public static class Alpha extends SABRNoExtrapolationPVSABRSensitivityFunction {
 
@@ -46,7 +47,7 @@ public abstract class SABRNoExtrapolationPVSABRSensitivityFunction extends SABRN
   }
 
   /**
-   * Function to get the sensitivity to the rho parameter
+   * Function to get the sensitivity to the rho parameter.
    */
   public static class Rho extends SABRNoExtrapolationPVSABRSensitivityFunction {
 
@@ -63,7 +64,7 @@ public abstract class SABRNoExtrapolationPVSABRSensitivityFunction extends SABRN
   }
 
   /**
-   * Function to get the sensitivity to the nu parameter
+   * Function to get the sensitivity to the nu parameter.
    */
   public static class Nu extends SABRNoExtrapolationPVSABRSensitivityFunction {
 

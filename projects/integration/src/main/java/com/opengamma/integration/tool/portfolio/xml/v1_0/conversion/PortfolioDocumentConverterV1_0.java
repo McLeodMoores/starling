@@ -23,10 +23,9 @@ import com.opengamma.integration.tool.portfolio.xml.v1_0.jaxb.PortfolioDocumentV
 import com.opengamma.integration.tool.portfolio.xml.v1_0.jaxb.Position;
 
 /**
- * Converts version 1.0 portfolio data to a generic form that can be used
- * to load data into the rest of the system.
+ * Converts version 1.0 portfolio data to a generic form that can be used to load data into the rest of the system.
  */
-public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class name
+public class PortfolioDocumentConverterV1_0 // CSIGNORE underscore in class name
     implements PortfolioDocumentConverter<PortfolioDocumentV1_0> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioDocumentConverterV1_0.class);
@@ -36,8 +35,7 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
 
     final Iterable<Portfolio> portfolios = extractPortfolios(portfolioDocument);
 
-    final Iterable<VersionedPortfolioHandler> transformed =
-        Iterables.transform(portfolios, new PortfolioExtractor());
+    final Iterable<VersionedPortfolioHandler> transformed = Iterables.transform(portfolios, new PortfolioExtractor());
 
     // Portfolios with errors will leave nulls in the iterable which we need to remove
     return Iterables.filter(transformed, new Predicate<VersionedPortfolioHandler>() {
@@ -52,16 +50,17 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
 
     final Set<Portfolio> portfolios = portfolioDocument.getPortfolios();
 
-    return portfolios == null || portfolios.isEmpty() ?
+    return portfolios == null || portfolios.isEmpty()
         // File didn't have a portfolio, so create one
-        ImmutableList.of(createDummyPortfolio(portfolioDocument)) :
-        portfolios;
+        ? ImmutableList.of(createDummyPortfolio(portfolioDocument))
+        : portfolios;
   }
 
   /**
    * Create a dummy portfolio for the case where no portfolio was specified in the file.
    *
-   * @param portfolioDocument the portfolio document to create a dummy portfolio for
+   * @param portfolioDocument
+   *          the portfolio document to create a dummy portfolio for
    * @return the dummy portfolio
    */
   private Portfolio createDummyPortfolio(final PortfolioDocumentV1_0 portfolioDocument) {
@@ -82,8 +81,7 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
   }
 
   /**
-   * Extracts the details from a portfolio in an XML document. If the portfolio
-   * fails validation then null is returned.
+   * Extracts the details from a portfolio in an XML document. If the portfolio fails validation then null is returned.
    */
   private static class PortfolioExtractor implements Function<Portfolio, VersionedPortfolioHandler> {
 
@@ -92,7 +90,8 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
     /**
      * Extracts the details from the supplied portfolio.
      *
-     * @param portfolio the portfolio to extract details (positions, trades, securities etc)
+     * @param portfolio
+     *          the portfolio to extract details (positions, trades, securities etc)
      * @return the extracted VersionedPortfolioHandler if extraction is possible, null otherwise
      */
     @Override

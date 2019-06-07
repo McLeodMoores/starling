@@ -59,7 +59,7 @@ public abstract class DateConstraint {
    */
   public static final DateConstraint VALUATION_TIME = new ValuationTime();
 
-  /* package */DateConstraint() {
+  /* package */ DateConstraint() {
   }
 
   public static DateConstraint of(final LocalDate date) {
@@ -88,7 +88,8 @@ public abstract class DateConstraint {
   /**
    * Returns a date constraint that corresponds to this one plus the given period.
    *
-   * @param period the period to add, not null
+   * @param period
+   *          the period to add, not null
    * @return the new date constraint
    */
   public DateConstraint plus(final Period period) {
@@ -98,7 +99,8 @@ public abstract class DateConstraint {
   /**
    * Returns a date constraint that corresponds to this one minus the given period.
    *
-   * @param period the period to subtract, not null
+   * @param period
+   *          the period to subtract, not null
    * @return the new date constraint
    */
   public DateConstraint minus(final Period period) {
@@ -108,7 +110,8 @@ public abstract class DateConstraint {
   /**
    * Returns a date constraint that corresponds to this one minus the given period.
    *
-   * @param period the period to subtract, not null
+   * @param period
+   *          the period to subtract, not null
    * @return the new date constraint
    */
   public DateConstraint minus(final String period) {
@@ -116,12 +119,14 @@ public abstract class DateConstraint {
   }
 
   /**
-   * Approximates the period difference between two constraints, that is the period that must be added to this constraint to get the
-   * same value as the other one.
+   * Approximates the period difference between two constraints, that is the period that must be added to this constraint to get the same value as the other
+   * one.
    *
-   * @param other the other constraint, not null
+   * @param other
+   *          the other constraint, not null
    * @return the difference as a period, not null
-   * @throws IllegalArgumentException if the constraints are not sufficiently compatible
+   * @throws IllegalArgumentException
+   *           if the constraints are not sufficiently compatible
    */
   public Period periodUntil(final DateConstraint other) {
     if (equals(other)) {
@@ -179,7 +184,7 @@ public abstract class DateConstraint {
 
     private final LocalDate _value;
 
-    public LiteralDateConstraint(final LocalDate value) {
+    LiteralDateConstraint(final LocalDate value) {
       _value = value;
     }
 
@@ -238,7 +243,7 @@ public abstract class DateConstraint {
     private final boolean _plus;
     private final Period _period;
 
-    public PlusMinusPeriodDateConstraint(final DateConstraint underlying, final boolean plus, final Period period) {
+    PlusMinusPeriodDateConstraint(final DateConstraint underlying, final boolean plus, final Period period) {
       _underlying = underlying;
       _plus = plus;
       _period = period;
@@ -330,7 +335,7 @@ public abstract class DateConstraint {
     private final DateConstraint _underlying;
     private final int _adjust;
 
-    public WeekDayDateConstraint(final DateConstraint underlying, final int adjust) {
+    WeekDayDateConstraint(final DateConstraint underlying, final int adjust) {
       _underlying = underlying;
       _adjust = adjust;
     }
@@ -480,10 +485,11 @@ public abstract class DateConstraint {
   /**
    * Basic parsing of a date constraint string to a {@link DateConstraint} object.
    * <p>
-   * This is not a full parser for the syntax described above. For example, expressions such as <code>-P7D-P7D</code> will not be recognized. Such expressions will not however be constructed using the
-   * classes above (it would produce <code>-P14D</code>).
+   * This is not a full parser for the syntax described above. For example, expressions such as <code>-P7D-P7D</code> will not be recognized. Such expressions
+   * will not however be constructed using the classes above (it would produce <code>-P14D</code>).
    *
-   * @param str the string to parse, not null
+   * @param str
+   *          the string to parse, not null
    * @return the parsed constraint or null if the empty string is given
    */
   public static DateConstraint parse(final String str) {
@@ -539,8 +545,10 @@ public abstract class DateConstraint {
    * <p>
    * This is more efficient than parsing and evaluating the {@link DateConstraint} object structures as two separate steps.
    *
-   * @param context the execution context, not null
-   * @param str the string to parse and evaluate
+   * @param context
+   *          the execution context, not null
+   * @param str
+   *          the string to parse and evaluate
    * @return the evaluated local date, possibly null
    */
   public static LocalDate evaluate(final FunctionExecutionContext context, final String str) {

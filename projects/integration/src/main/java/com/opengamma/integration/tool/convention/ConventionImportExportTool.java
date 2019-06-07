@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.opengamma.integration.tool.convention;
 
 import java.io.File;
@@ -25,8 +28,7 @@ import com.opengamma.master.convention.ConventionSearchSortOrder;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Tool to read conventions from a text file and store them in the convention master.
- * Adapted from the OpenGamma <code>ConfigImportExportTool</code>
+ * Tool to read conventions from a text file and store them in the convention master. Adapted from the OpenGamma <code>ConfigImportExportTool</code>
  */
 @Scriptable
 public class ConventionImportExportTool extends AbstractTool<ToolContext> {
@@ -36,20 +38,20 @@ public class ConventionImportExportTool extends AbstractTool<ToolContext> {
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) {
     new ConventionImportExportTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    try (final ToolContext toolContext = getToolContext()) {
+    try (ToolContext toolContext = getToolContext()) {
       final ConventionMaster conventionMaster = toolContext.getConventionMaster();
       final CommandLine commandLine = getCommandLine();
-      final
-      List<String> fileList = commandLine.getArgList();
+      final List<String> fileList = commandLine.getArgList();
       for (final String file : fileList) {
         System.err.println(file);
       }
@@ -82,7 +84,7 @@ public class ConventionImportExportTool extends AbstractTool<ToolContext> {
             if (verbose) {
               LOGGER.info("Processing " + fileName);
             }
-            try (final FileInputStream inputStream = new FileInputStream(fileName)) {
+            try (FileInputStream inputStream = new FileInputStream(fileName)) {
               conventionLoader.loadConvention(inputStream);
             } catch (final IOException ioe) {
               if (verbose) {
@@ -168,12 +170,14 @@ public class ConventionImportExportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createTypeOption() {
-    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type").create("t");
+    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type")
+        .create("t");
   }
 
   @SuppressWarnings("static-access")
   private Option createSearchOption() {
-    return OptionBuilder.isRequired(false).hasArgs().withArgName("name search string").withDescription("The name(s) you want to search for (globbing available)").withLongOpt("name")
+    return OptionBuilder.isRequired(false).hasArgs().withArgName("name search string")
+        .withDescription("The name(s) you want to search for (globbing available)").withLongOpt("name")
         .create("n");
   }
 
@@ -189,7 +193,8 @@ public class ConventionImportExportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createDoNotPersistOption() {
-    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Simulate writing rather than actually writing to DB").withLongOpt("do-not-persist").create("d");
+    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Simulate writing rather than actually writing to DB").withLongOpt("do-not-persist")
+        .create("d");
   }
 
   @SuppressWarnings("static-access")
@@ -199,7 +204,8 @@ public class ConventionImportExportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createSortOption() {
-    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Sort output by config name (default=most recent first)").withLongOpt("sort-by-name").create("s");
+    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Sort output by config name (default=most recent first)").withLongOpt("sort-by-name")
+        .create("s");
   }
 
   @Override

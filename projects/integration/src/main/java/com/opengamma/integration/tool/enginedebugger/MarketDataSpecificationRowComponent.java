@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.integration.tool.enginedebugger;
 
 import java.awt.Color;
@@ -40,6 +45,7 @@ public class MarketDataSpecificationRowComponent extends JPanel {
     /** Remove this row */
     REMOVE
   }
+
   private final Set<ActionListener> _listeners = new LinkedHashSet<>();
   private MarketDataSpecificationComponent _marketDataSpecificationComponent;
   private final List<LiveDataMetaDataProvider> _liveDataMetaDataProviders;
@@ -50,7 +56,8 @@ public class MarketDataSpecificationRowComponent extends JPanel {
   private JButton _addButton;
   private JButton _removeButton;
 
-  public MarketDataSpecificationRowComponent(final List<LiveDataMetaDataProvider> liveDataMetaDataProviders, final ConfigMaster configMaster, final MarketDataSnapshotMaster snapshotMaster) {
+  public MarketDataSpecificationRowComponent(final List<LiveDataMetaDataProvider> liveDataMetaDataProviders, final ConfigMaster configMaster,
+      final MarketDataSnapshotMaster snapshotMaster) {
     super(new MigLayout("insets 0"));
     _liveDataMetaDataProviders = liveDataMetaDataProviders;
     _configMaster = configMaster;

@@ -126,8 +126,8 @@ public interface CurveInstrumentProvider {
    * @deprecated This method should only be used for strips of type {@link StripInstrumentType#BASIS_SWAP} or {@link StripInstrumentType#TENOR_SWAP}
    */
   @Deprecated
-  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType,
-      final IndexType receiveIndexType);
+  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, Tenor payTenor, Tenor receiveTenor, IndexType payIndexType,
+      IndexType receiveIndexType);
 
   /**
    * Gets the external id of the market data for a fixed / float swap strip given a curve construction date, tenor and information about the floating rate reset
@@ -145,5 +145,5 @@ public interface CurveInstrumentProvider {
    * @deprecated This method should only be used for strips of type {@link StripInstrumentType#SWAP}
    */
   @Deprecated
-  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, final Tenor resetTenor, final IndexType indexType);
+  ExternalId getInstrument(LocalDate curveDate, Tenor tenor, Tenor resetTenor, IndexType indexType);
 }

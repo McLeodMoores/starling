@@ -62,7 +62,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
 
     private final int _level;
 
-    private PriorityClass(final int level) {
+    PriorityClass(final int level) {
       assert level >= MIN_ADJUST && level <= MAX_ADJUST;
       _level = level;
     }
@@ -149,7 +149,8 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     /**
      * Queries all available outputs on the target and adds those values to the default set if property name is defined on their finite outputs.
      *
-     * @param propertyName the property name a default is available for, not null
+     * @param propertyName
+     *          the property name a default is available for, not null
      */
     public void addAllValuesPropertyName(final String propertyName) {
       final ComputationTargetResults resultsProvider = getContext().getComputationTargetResults();
@@ -178,7 +179,8 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   /**
    * Returns the defaults that are available
    *
-   * @param defaults the callback object to return the property and value names on, not null
+   * @param defaults
+   *          the callback object to return the property and value names on, not null
    */
   protected abstract void getDefaults(PropertyDefaults defaults);
 
@@ -206,7 +208,8 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
    * Returns the maximal set of value requirement names that are defined (if the defaults are not dependent on compilation context information or a target)
    *
    * @return the set of value requirement names, shouldn't be null
-   * @throws NullPointerException if the implementation of getDefaults expected a compilation context or target
+   * @throws NullPointerException
+   *           if the implementation of getDefaults expected a compilation context or target
    * @deprecated this is for debugging only - it is likely to be removed or unavailable in future versions
    */
   @Deprecated
@@ -219,16 +222,22 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   /**
    * Returns the default value(s) to set for the property. If a default value is not available, must return null.
    *
-   * @param context the function compilation context, not null
-   * @param target the computation target, not null
-   * @param desiredValue the initial requirement, lacking the property to be injected, not null
-   * @param propertyName the property name to be injected
+   * @param context
+   *          the function compilation context, not null
+   * @param target
+   *          the computation target, not null
+   * @param desiredValue
+   *          the initial requirement, lacking the property to be injected, not null
+   * @param propertyName
+   *          the property name to be injected
    * @return the default values or null if there is no default to inject
    */
-  protected abstract Set<String> getDefaultValue(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue, String propertyName);
+  protected abstract Set<String> getDefaultValue(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue,
+      String propertyName);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     throw new IllegalStateException("This function should never be executed");
   }
 
@@ -250,7 +259,8 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   /**
    * Offers sub-classes a chance to modify the constraints that will be ejected, or to abort the application.
    *
-   * @param constraints the constraint set that will be used to form the input requirement, not null
+   * @param constraints
+   *          the constraint set that will be used to form the input requirement, not null
    * @return true to proceed, false to abort the application
    */
   protected boolean verifyConstraints(final ValueProperties.Builder constraints) {
@@ -288,7 +298,8 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
                 constraints.withoutAny(propertyName).with(propertyName, defaultValues);
                 matched = true;
               } else {
-                // REVIEW 2013-11-06 Andrew -- This can be quite inefficient; the isEmpty will create iterators on the underlyings, as will then the with operation if the intersection is non-empty
+                // REVIEW 2013-11-06 Andrew -- This can be quite inefficient; the isEmpty will create iterators on the underlyings, as will then the with
+                // operation if the intersection is non-empty
                 final Set<String> intersect = Sets.intersection(existingValues, defaultValues);
                 if (intersect.isEmpty()) {
                   LOGGER.debug("Default {} incompatible with {}", defaultValues, existingValues);
@@ -344,14 +355,15 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     // Pass the inputs through unchanged - will cause suppression of this node from the graph
     return inputs.keySet();
   }
 
   /**
-   * Returns a priority adjustment. {@link FunctionPriority} implementations may recognize {@link DefaultPropertyFunction} instances and use this to adjust the priority they would otherwise assign to
-   * the function.
+   * Returns a priority adjustment. {@link FunctionPriority} implementations may recognize {@link DefaultPropertyFunction} instances and use this to adjust the
+   * priority they would otherwise assign to the function.
    *
    * @return the priority adjustment, defaults to {@link PriorityClass#NORMAL}
    */
@@ -360,10 +372,11 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   }
 
   /**
-   * Returns a mutual function exclusion group name. A {@link FunctionExclusionGroups} implementation may recognize {@link DefaultPropertyFunction} instances and use this to declare application
-   * exclusions.
+   * Returns a mutual function exclusion group name. A {@link FunctionExclusionGroups} implementation may recognize {@link DefaultPropertyFunction} instances
+   * and use this to declare application exclusions.
    *
-   * @return the mutual exclusion group, defaults to the function instance's class name so that any given default function is only applied once in the resolution chain
+   * @return the mutual exclusion group, defaults to the function instance's class name so that any given default function is only applied once in the
+   *         resolution chain
    */
   @Override
   public String getMutualExclusionGroup() {

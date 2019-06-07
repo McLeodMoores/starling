@@ -99,7 +99,7 @@ import com.opengamma.util.tuple.ObjectsPair;
 public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceCreator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceCreator.class);
 
   /** bbg surface prefix */
   private static final String BBG_SURFACE_PREFIX = "BBG_";
@@ -114,23 +114,24 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
   /** regexp to get strike from option ticker */
   private static final String STRIKE_REGEXP = "[CP][ ]*((\\d)+(.\\d+)*)\\b";
 
-  //Track surfaces we create so we dont recreate them when multiple securities need them
+  // Track surfaces we create so we dont recreate them when multiple securities need them
   /** vol definitions we have created */
   private final Set<String> _volDefinitionNames = new HashSet<>();
   /** vol specifications we have created */
   private final Set<String> _volSpecificationNames = new HashSet<>();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new VolatilitySurfaceCreator().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final ToolContext toolContext = getToolContext();
@@ -166,8 +167,10 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
   /**
    * Create surfaces for all (non-expired) securities
    *
-   * @param name the pattern to match securities
-   * @param dryRun set to true to not write to the database
+   * @param name
+   *          the pattern to match securities
+   * @param dryRun
+   *          set to true to not write to the database
    */
   private void createSurfaces(final String name, final boolean dryRun) {
     final ConfigMaster configMaster = getToolContext().getConfigMaster();
@@ -206,13 +209,19 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
     private final boolean _dryRun;
 
     /**
-     * @param configMaster the config master
-     * @param referenceDataProvider the reference data provider
-     * @param knownVolSpecNames surface specifications to skip
-     * @param knownVolDefNames surface definitions to skip
-     * @param dryRun if true skip write to the database
+     * @param configMaster
+     *          the config master
+     * @param referenceDataProvider
+     *          the reference data provider
+     * @param knownVolSpecNames
+     *          surface specifications to skip
+     * @param knownVolDefNames
+     *          surface definitions to skip
+     * @param dryRun
+     *          if true skip write to the database
      */
-    VolSurfaceCreatorVisitor(final ConfigMaster configMaster, final ReferenceDataProvider referenceDataProvider, final Set<String> knownVolSpecNames, final Set<String> knownVolDefNames,
+    VolSurfaceCreatorVisitor(final ConfigMaster configMaster, final ReferenceDataProvider referenceDataProvider, final Set<String> knownVolSpecNames,
+        final Set<String> knownVolDefNames,
         final boolean dryRun) {
       _configMaster = configMaster;
       _referenceDataProvider = referenceDataProvider;
@@ -228,14 +237,15 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       }
       final String ticker = security.getExternalIdBundle().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       final BloombergTickerParserFutureOption tickerParser = new BloombergTickerParserBondFutureOption(ticker);
-      //final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
+      // final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       final String underlyingOptChainTicker = getUnderlyingTicker(ticker, security.getUnderlyingId(), tickerParser.getTypeName());
-      final String name = BBG_SURFACE_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_" + InstrumentTypeProperties.BOND_FUTURE_OPTION;
+      final String name = BBG_SURFACE_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_"
+          + InstrumentTypeProperties.BOND_FUTURE_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
-            new BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
-                security.getTradingExchange());
+        final BloombergFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(
+            tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
+            security.getTradingExchange());
         createVolatilitySpecification(security.getCurrency().getUniqueId(), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingOptChainTicker, name, security.getCurrency().getUniqueId());
@@ -249,14 +259,15 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       }
       final String ticker = security.getExternalIdBundle().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       final BloombergTickerParserFutureOption tickerParser = new BloombergTickerParserCommodityFutureOption(ticker);
-      //      final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
+      // final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       final String underlyingOptChainTicker = getUnderlyingTicker(ticker, security.getUnderlyingId(), tickerParser.getTypeName());
-      final String name = BBG_SURFACE_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_" + InstrumentTypeProperties.COMMODITY_FUTURE_OPTION;
+      final String name = BBG_SURFACE_PREFIX + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_"
+          + InstrumentTypeProperties.COMMODITY_FUTURE_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
-            new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
-                security.getTradingExchange());
+        final BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(
+            tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
+            security.getTradingExchange());
         createVolatilitySpecification(security.getCurrency().getUniqueId(), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingOptChainTicker, name, security.getCurrency().getUniqueId());
@@ -275,8 +286,8 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       final String name = BBG_SURFACE_PREFIX + underlyingTicker + "_" + InstrumentTypeProperties.EQUITY_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
-            new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(tickerParser.getSymbol(), postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
+        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(
+            tickerParser.getSymbol(), postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
         createVolatilitySpecification(UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingTicker, name, UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker));
@@ -295,8 +306,8 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       final String name = BBG_SURFACE_PREFIX + prefix + "_" + InstrumentTypeProperties.EQUITY_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
-            new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(prefix, postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
+        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(
+            prefix, postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
         createVolatilitySpecification(UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingTicker, name, UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker));
@@ -310,13 +321,14 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       }
       final String ticker = security.getExternalIdBundle().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       final BloombergTickerParserFutureOption tickerParser = new BloombergTickerParserIRFutureOption(ticker);
-      //      final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
+      // final String postfix = BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       final String underlyingTicker = getUnderlyingTicker(ticker, security.getUnderlyingId(), tickerParser.getTypeName());
-      final String name = BBG_SURFACE_PREFIX + PRICE + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_" + InstrumentTypeProperties.IR_FUTURE_OPTION;
+      final String name = BBG_SURFACE_PREFIX + PRICE + tickerParser.getSymbol() + "_" + security.getCurrency().getCode() + "_"
+          + InstrumentTypeProperties.IR_FUTURE_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
-            new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_PRICE, getSpot(underlyingTicker), security.getExchange());
+        final BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(
+            tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_PRICE, getSpot(underlyingTicker), security.getExchange());
         createVolatilitySpecification(security.getCurrency().getUniqueId(), name, surfaceInstrumentProvider, SurfaceAndCubePropertyNames.PRICE_QUOTE);
       }
       createvolatilityDefinition(underlyingTicker, name, security.getCurrency().getUniqueId());
@@ -407,10 +419,10 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
         LOGGER.info("Creating VolatilitySurfaceDefinition \"{}\"", name);
         final Set<ExternalId> options = BloombergDataUtils.getOptionChain(_referenceDataProvider, underlyingTicker);
         final ObjectsPair<ImmutableList<Double>, ImmutableList<Double>> axes = determineAxes(options);
-        final VolatilitySurfaceDefinition<Double, Double> volSurfaceDefinition =
-            new VolatilitySurfaceDefinition<>(name, target,
-                axes.getFirst().toArray(new Double[0]), axes.getSecond().toArray(new Double[0]));
-        final ConfigItem<VolatilitySurfaceDefinition<Double, Double>> volDefinition = ConfigItem.of(volSurfaceDefinition, volSurfaceDefinition.getName(), VolatilitySurfaceDefinition.class);
+        final VolatilitySurfaceDefinition<Double, Double> volSurfaceDefinition = new VolatilitySurfaceDefinition<>(name, target,
+            axes.getFirst().toArray(new Double[0]), axes.getSecond().toArray(new Double[0]));
+        final ConfigItem<VolatilitySurfaceDefinition<Double, Double>> volDefinition = ConfigItem.of(volSurfaceDefinition, volSurfaceDefinition.getName(),
+            VolatilitySurfaceDefinition.class);
         if (!_dryRun) {
           ConfigMasterUtils.storeByName(_configMaster, volDefinition);
         }
@@ -418,24 +430,29 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       }
     }
 
-    private void createVolatilitySpecification(final UniqueIdentifiable target, final String name, final SurfaceInstrumentProvider<?, ?> surfaceInstrumentProvider, final String quoteUnits) {
+    private void createVolatilitySpecification(final UniqueIdentifiable target, final String name,
+        final SurfaceInstrumentProvider<?, ?> surfaceInstrumentProvider, final String quoteUnits) {
       final VolatilitySurfaceSpecification volSurfaceSpec = new VolatilitySurfaceSpecification(name, target,
           SurfaceAndCubeQuoteType.CALL_AND_PUT_STRIKE, quoteUnits,
           surfaceInstrumentProvider);
-      final ConfigItem<VolatilitySurfaceSpecification> volSpecConfig = ConfigItem.of(volSurfaceSpec, volSurfaceSpec.getName(), VolatilitySurfaceSpecification.class);
+      final ConfigItem<VolatilitySurfaceSpecification> volSpecConfig = ConfigItem.of(volSurfaceSpec, volSurfaceSpec.getName(),
+          VolatilitySurfaceSpecification.class);
       if (!_dryRun) {
         ConfigMasterUtils.storeByName(_configMaster, volSpecConfig);
       }
       _knownVolSpecNames.add(name);
     }
 
-    private void createVolatilitySpecification(final UniqueIdentifiable target, final String name, final SurfaceInstrumentProvider<?, ?> surfaceInstrumentProvider) {
+    private void createVolatilitySpecification(final UniqueIdentifiable target, final String name,
+        final SurfaceInstrumentProvider<?, ?> surfaceInstrumentProvider) {
       createVolatilitySpecification(target, name, surfaceInstrumentProvider, SurfaceAndCubePropertyNames.VOLATILITY_QUOTE);
     }
 
     /**
      * From the available options determine axes for a volatility surface.
-     * @param options the available options as given by OPT_CHAIN (must be tickers)
+     * 
+     * @param options
+     *          the available options as given by OPT_CHAIN (must be tickers)
      * @return x and y axes
      */
     private ObjectsPair<ImmutableList<Double>, ImmutableList<Double>> determineAxes(final Collection<ExternalId> options) {
@@ -471,8 +488,9 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
         return underlyingId.getValue();
       }
       // underlying id is not a ticker - have to lookup
-      //TODO: check if there is a better buid -> ticker lookup function
-      String underlyingTicker = _referenceDataProvider.getReferenceData(Collections.singleton(ticker), Collections.singleton(BloombergConstants.FIELD_OPT_UNDL_TICKER))
+      // TODO: check if there is a better buid -> ticker lookup function
+      String underlyingTicker = _referenceDataProvider
+          .getReferenceData(Collections.singleton(ticker), Collections.singleton(BloombergConstants.FIELD_OPT_UNDL_TICKER))
           .get(ticker)
           .getString(BloombergConstants.FIELD_OPT_UNDL_TICKER) + " " + BloombergDataUtils.splitTickerAtMarketSector(ticker).getSecond();
       if (!underlyingTicker.endsWith(postfix)) {
@@ -482,7 +500,7 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
     }
 
     private double getSpot(final String ticker) {
-      //TODO: check if this is the correct field
+      // TODO: check if this is the correct field
       return _referenceDataProvider.getReferenceData(Collections.singleton(ticker), Collections.singleton(BloombergConstants.BBG_FIELD_LAST_PRICE))
           .get(ticker)
           .getDouble(BloombergConstants.BBG_FIELD_LAST_PRICE).doubleValue();

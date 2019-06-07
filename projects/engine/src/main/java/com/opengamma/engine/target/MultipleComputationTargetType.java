@@ -22,8 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 
   private final Set<ComputationTargetType> _target;
 
-  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> CONSTRUCT =
-      new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
+  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> CONSTRUCT = new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Set<ComputationTargetType> data) {
@@ -76,10 +75,12 @@ import com.opengamma.util.ArgumentChecker;
   /**
    * Creates a new instance.
    *
-   * @param a the first alternative for the construction, not null
-   * @param b the second alternative for the construction, not null
+   * @param a
+   *          the first alternative for the construction, not null
+   * @param b
+   *          the second alternative for the construction, not null
    */
-  public MultipleComputationTargetType(final ComputationTargetType a, final ComputationTargetType b) {
+  MultipleComputationTargetType(final ComputationTargetType a, final ComputationTargetType b) {
     this(copy(a, b));
   }
 
@@ -97,9 +98,10 @@ import com.opengamma.util.ArgumentChecker;
   /**
    * Creates a new instance.
    *
-   * @param types the alternative types for the construction, not null and not containing null
+   * @param types
+   *          the alternative types for the construction, not null and not containing null
    */
-  public MultipleComputationTargetType(final ComputationTargetType[] types) {
+  MultipleComputationTargetType(final ComputationTargetType[] types) {
     this(copy(types));
   }
 
@@ -214,8 +216,7 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> EQUALS =
-      new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final MultipleComputationTargetType self) {

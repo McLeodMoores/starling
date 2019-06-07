@@ -28,10 +28,10 @@ public abstract class SABRCMSSpreadRightExtrapolationPVSABRSensitivityFunction e
     return getResultAsMatrix(derivative.accept(calculator, data));
   }
 
-  protected abstract DoubleLabelledMatrix2D getResultAsMatrix(final PresentValueSABRSensitivityDataBundle sensitivities);
+  protected abstract DoubleLabelledMatrix2D getResultAsMatrix(PresentValueSABRSensitivityDataBundle sensitivities);
 
   /**
-   * Function to get the sensitivity to the alpha parameter
+   * Function to get the sensitivity to the alpha parameter.
    */
   public static class Alpha extends SABRCMSSpreadRightExtrapolationPVSABRSensitivityFunction {
 
@@ -48,7 +48,7 @@ public abstract class SABRCMSSpreadRightExtrapolationPVSABRSensitivityFunction e
   }
 
   /**
-   * Function to get the sensitivity to the rho parameter
+   * Function to get the sensitivity to the rho parameter.
    */
   public static class Rho extends SABRCMSSpreadRightExtrapolationPVSABRSensitivityFunction {
 
@@ -65,7 +65,7 @@ public abstract class SABRCMSSpreadRightExtrapolationPVSABRSensitivityFunction e
   }
 
   /**
-   * Function to get the sensitivity to the nu parameter
+   * Function to get the sensitivity to the nu parameter.
    */
   public static class Nu extends SABRCMSSpreadRightExtrapolationPVSABRSensitivityFunction {
 

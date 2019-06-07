@@ -52,13 +52,13 @@ public abstract class CapletStrippingAbsoluteStrike {
     _nCaplets = _pricer.getTotalNumberOfCaplets();
   }
 
-  public abstract CapletStrippingSingleStrikeResult solveForPrices(final double[] capPrices);
+  public abstract CapletStrippingSingleStrikeResult solveForPrices(double[] capPrices);
 
-  public abstract CapletStrippingSingleStrikeResult solveForPrices(final double[] capPrices, final double[] errors, final boolean scaleByVega);
+  public abstract CapletStrippingSingleStrikeResult solveForPrices(double[] capPrices, double[] errors, boolean scaleByVega);
 
-  public abstract CapletStrippingSingleStrikeResult solveForVol(final double[] capVols);
+  public abstract CapletStrippingSingleStrikeResult solveForVol(double[] capVols);
 
-  public abstract CapletStrippingSingleStrikeResult solveForVol(final double[] capVols, final double[] errors, final boolean solveViaPrice);
+  public abstract CapletStrippingSingleStrikeResult solveForVol(double[] capVols, double[] errors, boolean solveViaPrice);
 
   protected void checkPrices(final double[] capPrices) {
     ArgumentChecker.notEmpty(capPrices, "null cap prices");
@@ -90,6 +90,7 @@ public abstract class CapletStrippingAbsoluteStrike {
 
   /**
    * Gets the pricer.
+   * 
    * @return the pricer
    */
   public MultiCapFloorPricer getPricer() {
@@ -98,6 +99,7 @@ public abstract class CapletStrippingAbsoluteStrike {
 
   /**
    * Gets the nCaps.
+   * 
    * @return the nCaps
    */
   public int getnCaps() {
@@ -106,6 +108,7 @@ public abstract class CapletStrippingAbsoluteStrike {
 
   /**
    * Gets the nCaplets.
+   * 
    * @return the nCaplets
    */
   public int getnCaplets() {

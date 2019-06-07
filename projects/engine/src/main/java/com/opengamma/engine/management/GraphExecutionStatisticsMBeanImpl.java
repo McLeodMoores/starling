@@ -36,10 +36,14 @@ public class GraphExecutionStatisticsMBeanImpl implements GraphExecutionStatisti
   /**
    * Create a management GraphExecutionStatistics.
    *
-   * @param viewProcess  the view process
-   * @param statisticsProvider  the statistics provider
-   * @param viewProcessorName  the view processor name
-   * @param calcConfigName  the calculation configuration name
+   * @param viewProcess
+   *          the view process
+   * @param statisticsProvider
+   *          the statistics provider
+   * @param viewProcessorName
+   *          the view processor name
+   * @param calcConfigName
+   *          the calculation configuration name
    */
   public GraphExecutionStatisticsMBeanImpl(final ViewProcess viewProcess, final TotallingGraphStatisticsGathererProvider statisticsProvider,
       final String viewProcessorName, final String calcConfigName) {
@@ -57,6 +61,14 @@ public class GraphExecutionStatisticsMBeanImpl implements GraphExecutionStatisti
   /**
    * Creates an object name using the scheme
    * "com.opengamma:type=GraphExecutionStatistics,ViewProcessor=<viewProcessorName>,View=<viewName>,name=<calcConfigName>".
+   *
+   * @param viewProcessorName
+   *          the name of the view processor
+   * @param viewProcessId
+   *          the view process id
+   * @param calcConfigName
+   *          the calculation configuration name
+   * @return the object name
    */
   static ObjectName createObjectName(final String viewProcessorName, final UniqueId viewProcessId, final String calcConfigName) {
     ObjectName objectName;

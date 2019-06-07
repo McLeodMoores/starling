@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.future;
 
@@ -43,11 +43,15 @@ public final class QuandlFutureUtils {
   }
 
   /**
-   * Gets the expiry code for the n<sup>th</sup> future from a given date e.g. the 4th quarterly future code.
-   * This method will throw an exception if the tenor is not one or three months.
-   * @param futureTenor The future tenor, not null
-   * @param nthFuture The future number, greater than zero
-   * @param date The date, not null
+   * Gets the expiry code for the n<sup>th</sup> future from a given date e.g. the 4th quarterly future code. This method will throw an exception if the tenor
+   * is not one or three months.
+   * 
+   * @param futureTenor
+   *          The future tenor, not null
+   * @param nthFuture
+   *          The future number, greater than zero
+   * @param date
+   *          The date, not null
    * @return The expiry code
    */
   public static String getCodeForFuture(final Tenor futureTenor, final int nthFuture, final LocalDate date) {
@@ -69,11 +73,15 @@ public final class QuandlFutureUtils {
   }
 
   /**
-   * Gets the expiry year for the n<sup>th</sup> future from a given date e.g. the year when the 4th quarterly
-   * future expires. This method will throw an exception if the tenor is not one or three months.
-   * @param futureTenor The future tenor, not null
-   * @param nthFuture The future number, greater than zero
-   * @param date The date, not null
+   * Gets the expiry year for the n<sup>th</sup> future from a given date e.g. the year when the 4th quarterly future expires. This method will throw an
+   * exception if the tenor is not one or three months.
+   * 
+   * @param futureTenor
+   *          The future tenor, not null
+   * @param nthFuture
+   *          The future number, greater than zero
+   * @param date
+   *          The date, not null
    * @return The expiry year
    */
   public static int getExpiryYear(final Tenor futureTenor, final int nthFuture, final LocalDate date) {
@@ -92,11 +100,15 @@ public final class QuandlFutureUtils {
   }
 
   /**
-   * Gets the month code for the n<sup>th</sup> future from a given date e.g. the code for the 4th quarterly
-   * future on 2015-01-01 will be "Z". This method will throw an exception if the tenor is not one or three months.
-   * @param futureTenor The future tenor, not null
-   * @param nthFuture The future number, greater than zero
-   * @param date The date, not null
+   * Gets the month code for the n<sup>th</sup> future from a given date e.g. the code for the 4th quarterly future on 2015-01-01 will be "Z". This method will
+   * throw an exception if the tenor is not one or three months.
+   * 
+   * @param futureTenor
+   *          The future tenor, not null
+   * @param nthFuture
+   *          The future number, greater than zero
+   * @param date
+   *          The date, not null
    * @return The month code
    */
   public static Character getMonthCode(final Tenor futureTenor, final int nthFuture, final LocalDate date) {

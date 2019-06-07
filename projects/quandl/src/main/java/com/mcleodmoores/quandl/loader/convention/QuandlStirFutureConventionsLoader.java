@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -25,8 +25,8 @@ import com.opengamma.util.time.Tenor;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * Creates {@link QuandlStirFutureConvention}s from a csv file called "stir-future-conventions.csv". These
- * conventions contain information that is required to construct interest rate futures.
+ * Creates {@link QuandlStirFutureConvention}s from a csv file called "stir-future-conventions.csv". These conventions contain information that is required to
+ * construct interest rate futures.
  */
 public final class QuandlStirFutureConventionsLoader implements ConventionsLoader<QuandlStirFutureConvention> {
   /** An instance of this loader. */
@@ -44,8 +44,10 @@ public final class QuandlStirFutureConventionsLoader implements ConventionsLoade
 
   /**
    * Generates {@link QuandlStirFutureConvention}s from a csv file.
-   * @return  a set of conventions, or an empty set if the file was not available or no conventions could be created
-   * @throws Exception  if there is a problem reading the file
+   * 
+   * @return a set of conventions, or an empty set if the file was not available or no conventions could be created
+   * @throws Exception
+   *           if there is a problem reading the file
    */
   @Override
   public Set<QuandlStirFutureConvention> loadConventionsFromFile() throws Exception {

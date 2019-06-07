@@ -62,7 +62,7 @@ public class ForexVisitors {
 
   private static class PayCurrencyVisitor extends FinancialSecurityVisitorAdapter<Currency> {
 
-    public PayCurrencyVisitor() {
+    PayCurrencyVisitor() {
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ForexVisitors {
 
   private static class ReceiveCurrencyVisitor extends FinancialSecurityVisitorAdapter<Currency> {
 
-    public ReceiveCurrencyVisitor() {
+    ReceiveCurrencyVisitor() {
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ForexVisitors {
 
   private static class PayAmountVisitor extends FinancialSecurityVisitorAdapter<Double> {
 
-    public PayAmountVisitor() {
+    PayAmountVisitor() {
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ForexVisitors {
 
   private static class ReceiveAmountVisitor extends FinancialSecurityVisitorAdapter<Double> {
 
-    public ReceiveAmountVisitor() {
+    ReceiveAmountVisitor() {
     }
 
     @Override
@@ -138,7 +138,7 @@ public class ForexVisitors {
 
   private static class CallCurrencyVisitor extends FinancialSecurityVisitorAdapter<Currency> {
 
-    public CallCurrencyVisitor() {
+    CallCurrencyVisitor() {
     }
 
     @Override
@@ -169,7 +169,7 @@ public class ForexVisitors {
 
   private static class PutCurrencyVisitor extends FinancialSecurityVisitorAdapter<Currency> {
 
-    public PutCurrencyVisitor() {
+    PutCurrencyVisitor() {
     }
 
     @Override
@@ -200,7 +200,7 @@ public class ForexVisitors {
 
   private static class ExpiryVisitor extends FinancialSecurityVisitorAdapter<ZonedDateTime> {
 
-    public ExpiryVisitor() {
+    ExpiryVisitor() {
     }
 
     @Override

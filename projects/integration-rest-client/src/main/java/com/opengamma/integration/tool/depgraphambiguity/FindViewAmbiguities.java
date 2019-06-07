@@ -83,23 +83,24 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
   private final AtomicInteger _resolutions = new AtomicInteger();
   private final AtomicInteger _ambiguities = new AtomicInteger();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new FindViewAmbiguities().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private final class ViewDefinitionAmbiguityTestImpl extends ViewDefinitionAmbiguityTest {
 
     private final PrintStream _out;
     private FunctionResolver _functionResolver;
 
-    public ViewDefinitionAmbiguityTestImpl(final PrintStream out) {
+    ViewDefinitionAmbiguityTestImpl(final PrintStream out) {
       _out = out;
     }
 

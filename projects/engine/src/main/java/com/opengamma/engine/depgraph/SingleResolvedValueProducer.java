@@ -16,7 +16,7 @@ import com.opengamma.engine.value.ValueRequirement;
   private final ResolvedValue _resolvedValue;
   private int _refCount = 1;
 
-  public SingleResolvedValueProducer(final ValueRequirement valueRequirement, final ResolvedValue resolvedValue) {
+  SingleResolvedValueProducer(final ValueRequirement valueRequirement, final ResolvedValue resolvedValue) {
     _valueRequirement = valueRequirement;
     _resolvedValue = resolvedValue;
   }

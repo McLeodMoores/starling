@@ -24,7 +24,6 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Base class for steps that are based on iterating through a collection of candidate functions.
  *
- * @param <T> the root iteration type
  */
 /* package */abstract class FunctionIterationStep extends ResolveTask.State {
 
@@ -32,7 +31,7 @@ import com.opengamma.util.tuple.Triple;
 
   public abstract static class IterationBaseStep extends ResolveTask.State {
 
-    public IterationBaseStep(final ResolveTask task) {
+    IterationBaseStep(final ResolveTask task) {
       super(task);
     }
 
@@ -41,9 +40,12 @@ import com.opengamma.util.tuple.Triple;
      * <p>
      * The {@code resolvedOutput} value must be normalized.
      *
-     * @param context the graph building context, not null
-     * @param resolvedOutput the provisional resolved value specification, not null
-     * @param resolvedFunction the function to apply, containing the definition, satisfying maximal specification, and all maximal output specifications
+     * @param context
+     *          the graph building context, not null
+     * @param resolvedOutput
+     *          the provisional resolved value specification, not null
+     * @param resolvedFunction
+     *          the function to apply, containing the definition, satisfying maximal specification, and all maximal output specifications
      */
     protected void functionApplication(final GraphBuildingContext context, final ValueSpecification resolvedOutput,
         final Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> resolvedFunction) {
@@ -119,14 +121,17 @@ import com.opengamma.util.tuple.Triple;
     protected abstract ValueRequirement getDesiredValue();
 
     /**
-     * Resolves the output values declared by a function at late resolution against the current requirement. The one that satisfies the requirement is
-     * composed, added to the set, and returned. All other output specifications are added to the output set unchanged.
+     * Resolves the output values declared by a function at late resolution against the current requirement. The one that satisfies the requirement is composed,
+     * added to the set, and returned. All other output specifications are added to the output set unchanged.
      * <p>
      * The returned specification must be normalized.
      *
-     * @param context the graph building context, not null
-     * @param newOutputValues the output values returned by the function, not null
-     * @param resolvedOutputValues the composed output values, not null
+     * @param context
+     *          the graph building context, not null
+     * @param newOutputValues
+     *          the output values returned by the function, not null
+     * @param resolvedOutputValues
+     *          the composed output values, not null
      * @return the satisfying resolved output, or null if none satisfy
      */
     protected abstract ValueSpecification getResolvedOutputs(GraphBuildingContext context, Set<ValueSpecification> newOutputValues,
@@ -147,7 +152,7 @@ import com.opengamma.util.tuple.Triple;
 
   private final IterationBaseStep _base;
 
-  public FunctionIterationStep(final ResolveTask task, final IterationBaseStep base) {
+  FunctionIterationStep(final ResolveTask task, final IterationBaseStep base) {
     super(task);
     _base = base;
   }

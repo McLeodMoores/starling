@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
@@ -19,7 +19,8 @@ public final class HolidayTypesProvider {
 
   /**
    * Gets an instance.
-   * @return  the instance
+   * 
+   * @return the instance
    */
   public static HolidayTypesProvider getInstance() {
     return INSTANCE;

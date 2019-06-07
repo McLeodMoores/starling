@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 @Deprecated
 public class ForexLocalVolatilityPDEPriceDefaultPropertiesFunction extends DefaultPropertyFunction {
-  private static final String[] s_valueRequirements = new String[] {
+  private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.FX_PRESENT_VALUE
   };
@@ -88,7 +88,7 @@ public class ForexLocalVolatilityPDEPriceDefaultPropertiesFunction extends Defau
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueRequirement : s_valueRequirements) {
+    for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE_CALCULATION_METHOD);
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE);
       defaults.addValuePropertyName(valueRequirement, LocalVolatilityPDEValuePropertyNames.PROPERTY_H);

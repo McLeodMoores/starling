@@ -10,23 +10,28 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Abstract class for interpolations based on piecewise polynomial functions
+ * Abstract class for interpolations based on piecewise polynomial functions.
  */
 public abstract class PiecewisePolynomialInterpolator {
 
   /**
-   * @param xValues X values of data
-   * @param yValues Y values of data
-   * @return {@link PiecewisePolynomialResult} containing knots, coefficients of piecewise polynomials, number of intervals, degree of polynomials, dimension of spline
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
+   * @return {@link PiecewisePolynomialResult} containing knots, coefficients of piecewise polynomials, number of intervals, degree of polynomials, dimension of
+   *         spline
    */
-  public abstract PiecewisePolynomialResult interpolate(final double[] xValues, final double[] yValues);
+  public abstract PiecewisePolynomialResult interpolate(double[] xValues, double[] yValues);
 
   /**
-   * @param xValues X values of data
-   * @param yValuesMatrix Y values of data
+   * @param xValues
+   *          X values of data
+   * @param yValuesMatrix
+   *          Y values of data
    * @return Coefficient matrix whose i-th row vector is {a_n, a_{n-1}, ... } of f(x) = a_n * (x-x_i)^n + a_{n-1} * (x-x_i)^{n-1} +... for the i-th interval
    */
-  public abstract PiecewisePolynomialResult interpolate(final double[] xValues, final double[][] yValuesMatrix);
+  public abstract PiecewisePolynomialResult interpolate(double[] xValues, double[][] yValuesMatrix);
 
   /**
    * @param xValues
@@ -218,18 +223,18 @@ public abstract class PiecewisePolynomialInterpolator {
 
   /**
    * Derive interpolant on {xValues_i, yValues_i} and (yValues) node sensitivity.
-   * 
+   *
    * @param xValues
    *          X values of data
    * @param yValues
    *          Y values of data
    * @return {@link PiecewisePolynomialResultsWithSensitivity}
    */
-  public abstract PiecewisePolynomialResultsWithSensitivity interpolateWithSensitivity(final double[] xValues, final double[] yValues);
+  public abstract PiecewisePolynomialResultsWithSensitivity interpolateWithSensitivity(double[] xValues, double[] yValues);
 
   /**
    * Hyman filter modifies derivative values at knot points which are initially computed by a "primary" interpolator.
-   * 
+   *
    * @return The primary interpolator for Hyman filter, interpolation method itself for other interpolators
    */
   public PiecewisePolynomialInterpolator getPrimaryMethod() {

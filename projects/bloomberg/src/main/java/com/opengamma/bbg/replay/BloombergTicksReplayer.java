@@ -26,7 +26,7 @@ import com.opengamma.util.TerminatableJob;
 public class BloombergTicksReplayer implements Lifecycle {
 
   /** Logger. */
-  private static Logger LOGGER = LoggerFactory.getLogger(BloombergTicksReplayer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTicksReplayer.class);
 
   private static final int DEFAULT_QUEUE_SIZE = 1000;
   private final BloombergTickReceiver _bloombergTickReceiver;
@@ -43,22 +43,26 @@ public class BloombergTicksReplayer implements Lifecycle {
   private Thread _ticksLoaderThread;
   private TerminatableJob _ticksLoaderJob;
 
-  //exception thrown during replay
+  // exception thrown during replay
   private Throwable _exception;
 
-  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime, final ZonedDateTime endTime) {
-    this(mode, rootDir, bloombergTickReceiver, startTime, endTime, false, Collections.<String>emptySet());
+  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime,
+      final ZonedDateTime endTime) {
+    this(mode, rootDir, bloombergTickReceiver, startTime, endTime, false, Collections.<String> emptySet());
   }
 
-  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime, final ZonedDateTime endTime, final boolean infiniteLoop) {
-    this(mode, rootDir, bloombergTickReceiver, startTime, endTime, infiniteLoop, Collections.<String>emptySet());
+  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime,
+      final ZonedDateTime endTime, final boolean infiniteLoop) {
+    this(mode, rootDir, bloombergTickReceiver, startTime, endTime, infiniteLoop, Collections.<String> emptySet());
   }
 
-  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime, final ZonedDateTime endTime, final Set<String> securities) {
+  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime,
+      final ZonedDateTime endTime, final Set<String> securities) {
     this(mode, rootDir, bloombergTickReceiver, startTime, endTime, false, securities);
   }
 
-  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime, final ZonedDateTime endTime, final boolean infiniteLoop, final Set<String> securities) {
+  public BloombergTicksReplayer(final Mode mode, final String rootDir, final BloombergTickReceiver bloombergTickReceiver, final ZonedDateTime startTime,
+      final ZonedDateTime endTime, final boolean infiniteLoop, final Set<String> securities) {
     ArgumentChecker.notNull(rootDir, "rootDir");
     ArgumentChecker.notNull(bloombergTickReceiver, "tickHandler");
     ArgumentChecker.notNull(mode, "mode");
@@ -98,7 +102,7 @@ public class BloombergTicksReplayer implements Lifecycle {
   @Override
   public synchronized void start() {
     startLoader();
-    //Wait for some ticks to process
+    // Wait for some ticks to process
     try {
       Thread.sleep(5000);
     } catch (final InterruptedException e) {
@@ -116,7 +120,7 @@ public class BloombergTicksReplayer implements Lifecycle {
     final TicksLoaderJob ticksLoaderJob = new TicksLoaderJob(_rootDir, _securities, _ticksQueue, _startTime, _endTime, _infiniteLoop);
     _ticksLoaderJob = ticksLoaderJob;
     final Thread thread = new Thread(_ticksLoaderJob, "TicksLoader");
-//    thread.setDaemon(true);
+    // thread.setDaemon(true);
     thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       @Override
       public void uncaughtException(final Thread t, final Throwable e) {
@@ -136,7 +140,7 @@ public class BloombergTicksReplayer implements Lifecycle {
     final TicksPlayerJob ticksPlayer = new TicksPlayerJob(_ticksQueue, _bloombergTickReceiver, _mode, _ticksLoaderThread);
     _ticksPlayerJob = ticksPlayer;
     final Thread thread = new Thread(_ticksPlayerJob, "TicksPlayer");
-//    thread.setDaemon(true);
+    // thread.setDaemon(true);
     thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
       @Override
       public void uncaughtException(final Thread t, final Throwable e) {
@@ -167,7 +171,7 @@ public class BloombergTicksReplayer implements Lifecycle {
         terminatableJob.terminate();
       }
       try {
-        thread.join(1000); //wait for 1sec
+        thread.join(1000); // wait for 1sec
       } catch (final InterruptedException e) {
         Thread.interrupted();
         LOGGER.warn("Interrupted waiting for {} thread to finish", thread);

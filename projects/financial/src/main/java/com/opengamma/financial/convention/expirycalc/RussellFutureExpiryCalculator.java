@@ -51,12 +51,14 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
   }
 
   /**
-   * Quarterly expiries along March cycle
+   * Quarterly expiries along March cycle.
    *
-   * @param nthFuture
+   * @param n
    *          nth future
-   * @param valDate
+   * @param today
    *          The date from which to start
+   * @param holidayCalendar
+   *          holiday information
    * @return the expiry date of the nth option
    */
   @Deprecated
@@ -66,12 +68,14 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
   }
 
   /**
-   * Quarterly expiries along March cycle
+   * Quarterly expiries along March cycle.
    *
-   * @param nthFuture
+   * @param n
    *          nth future
-   * @param valDate
+   * @param today
    *          The date from which to start
+   * @param holidayCalendar
+   *          holiday information
    * @return the expiry date of the nth option
    */
   @Override

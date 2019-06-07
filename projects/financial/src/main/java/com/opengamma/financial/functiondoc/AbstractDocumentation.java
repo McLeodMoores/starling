@@ -76,14 +76,14 @@ public abstract class AbstractDocumentation implements Runnable {
 
     private final Map<Pair<String, Class<?>>, AtomicInteger> _visited = new HashMap<>();
 
-    public SecurityTypePortfolioFilter() {
+    SecurityTypePortfolioFilter() {
       super("UniqueSecurityType");
     }
 
     @Override
     public boolean acceptPosition(final Position position) {
       final Security security = position.getSecurity();
-      return incrementAndGet(Pairs.<String, Class<?>>of(security.getSecurityType(), security.getClass()), _visited) < MAX_SECURITIES_PER_TYPE;
+      return incrementAndGet(Pairs.<String, Class<?>> of(security.getSecurityType(), security.getClass()), _visited) < MAX_SECURITIES_PER_TYPE;
     }
 
   }
@@ -94,7 +94,7 @@ public abstract class AbstractDocumentation implements Runnable {
     private final String _name;
     private final String _javadoc;
 
-    public ValueRequirementInfo(final String symbol, final String name, final String javadoc) {
+    ValueRequirementInfo(final String symbol, final String name, final String javadoc) {
       _symbol = symbol;
       _name = name;
       _javadoc = javadoc;
@@ -185,10 +185,12 @@ public abstract class AbstractDocumentation implements Runnable {
   }
 
   /**
-   * Processes the portfolio against the function repository to determine typical properties and applicability of value requirement names to each asset class discovered. The portfolio is filtered so
-   * that only a small sample of each unique asset class is considered - this is to save time when there are many portfolios to consider.
+   * Processes the portfolio against the function repository to determine typical properties and applicability of value requirement names to each asset class
+   * discovered. The portfolio is filtered so that only a small sample of each unique asset class is considered - this is to save time when there are many
+   * portfolios to consider.
    *
-   * @param portfolio a portfolio containing a sample of asset class instances
+   * @param portfolio
+   *          a portfolio containing a sample of asset class instances
    */
   public void processAvailablePortfolioOutputs(final Portfolio portfolio) {
     final Portfolio filtered;
@@ -199,7 +201,8 @@ public abstract class AbstractDocumentation implements Runnable {
       LOGGER.debug("Ignoring {} ({})", portfolio.getName(), portfolio.getUniqueId());
     } else {
       LOGGER.info("Calculating available outputs from {} ({})", portfolio.getName(), portfolio.getUniqueId());
-      final AvailableOutputs outputs = new AvailablePortfolioOutputs(filtered, getFunctionRepository(), getFunctionExclusionGroups(), getMarketDataAvailability(), null);
+      final AvailableOutputs outputs = new AvailablePortfolioOutputs(filtered, getFunctionRepository(), getFunctionExclusionGroups(),
+          getMarketDataAvailability(), null);
       synchronized (_availableOutputsBySecurityType) {
         for (final AvailableOutput output : outputs.getOutputs()) {
           for (final String securityType : output.getSecurityTypes()) {
@@ -219,10 +222,11 @@ public abstract class AbstractDocumentation implements Runnable {
   }
 
   /**
-   * Parse a source file that describes value requirement names complete with Javadoc. Note the parse is crude at best, so may not be able to handle arbitrary source inputs despite them being legal
-   * Java and Javadoc.
+   * Parse a source file that describes value requirement names complete with Javadoc. Note the parse is crude at best, so may not be able to handle arbitrary
+   * source inputs despite them being legal Java and Javadoc.
    *
-   * @param sourceCodePath path to the Java source (e.g. ValueRequirementNames.java)
+   * @param sourceCodePath
+   *          path to the Java source (e.g. ValueRequirementNames.java)
    */
   public void processValueRequirementNames(final String sourceCodePath) {
     try {
@@ -507,7 +511,8 @@ public abstract class AbstractDocumentation implements Runnable {
       if (securityType.length() == 0) {
         sb.append("[Aggregate|Aggregate Value Requirements]");
       } else {
-        sb.append('[').append(prettySecurityType(securityType)).append('|').append(prettySecurityType(securityType).replace("/", "-")).append(" Value Requirements]");
+        sb.append('[').append(prettySecurityType(securityType)).append('|').append(prettySecurityType(securityType).replace("/", "-"))
+            .append(" Value Requirements]");
       }
     }
     sb.append(" ||\n");
@@ -589,7 +594,8 @@ public abstract class AbstractDocumentation implements Runnable {
         if (count == 0) {
           sbDetail.append("|| Property || Description ||\n");
         }
-        sbDetail.append("| {anchor:").append(valueName.replace(" ", "")).append('.').append(propertyName.replace(" ", "")).append("} ").append(propertyName).append(" | ");
+        sbDetail.append("| {anchor:").append(valueName.replace(" ", "")).append('.').append(propertyName.replace(" ", "")).append("} ").append(propertyName)
+            .append(" | ");
         // TODO: fetch the description of the property name in the context of this value requirement name & construct any links etc ...
         String s = valueName + "." + propertyName;
         int i = -1;
@@ -644,7 +650,8 @@ public abstract class AbstractDocumentation implements Runnable {
   /**
    * Creates an asset class page detailing the value requirements available and properties.
    *
-   * @param securityType the security type
+   * @param securityType
+   *          the security type
    */
   protected void emitSecurityTypePage(final String securityType) {
     final StringBuilder sb = new StringBuilder();

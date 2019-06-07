@@ -38,7 +38,7 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackDefaults.class);
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueRequirements = new String[] {
+  private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PNL,
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.DELTA,
@@ -100,7 +100,7 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueRequirement : s_valueRequirements) {
+    for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.SURFACE);
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     }
@@ -158,7 +158,7 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
    * @return The value requirements
    */
   public static String[] getsValuerequirements() {
-    return s_valueRequirements;
+    return VALUE_REQUIREMENTS;
   }
 
 }

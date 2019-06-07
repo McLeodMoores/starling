@@ -24,7 +24,7 @@ import com.opengamma.engine.function.resolver.CompiledFunctionResolver;
   private final Instant _valuationTime;
   private final Map<String, Boolean> _expired = new HashMap<>();
 
-  public InvalidFunctionDependencyNodeFilter(final CompiledFunctionResolver functions, final Instant valuationTime) {
+  InvalidFunctionDependencyNodeFilter(final CompiledFunctionResolver functions, final Instant valuationTime) {
     _functions = functions;
     _valuationTime = valuationTime;
   }

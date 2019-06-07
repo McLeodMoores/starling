@@ -22,12 +22,13 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Definition of a Legacy CDS i.e. with the features of CDS contracts prior to the Big Bang in 2009
- *@deprecated this will be deleted
+ * 
+ * @deprecated this will be deleted
  */
 @Deprecated
 public abstract class LegacyCreditDefaultSwapDefinition extends CreditDefaultSwapDefinition {
 
-  //----------------------------------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // TODO :
 
@@ -42,18 +43,24 @@ public abstract class LegacyCreditDefaultSwapDefinition extends CreditDefaultSwa
 
   // Ctor for the Legacy CDS
 
-  public LegacyCreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller, final LegalEntity referenceEntity,
-      final Currency currency, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate,
-      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final PeriodFrequency couponFrequency, final DayCount daycountFractionConvention,
-      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate, final boolean adjustMaturityDate, final double notional,
+  public LegacyCreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer,
+      final LegalEntity protectionSeller, final LegalEntity referenceEntity,
+      final Currency currency, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar,
+      final ZonedDateTime startDate,
+      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final PeriodFrequency couponFrequency,
+      final DayCount daycountFractionConvention,
+      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
+      final boolean adjustMaturityDate, final double notional,
       final double recoveryRate, final boolean includeAccruedPremium, final boolean protectionStart, final double parSpread) {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 
     // Call the ctor for the CreditDefaultSwapDefinition superclass (corresponding to the CDS characteristics common to all types of CDS)
 
-    super(buySellProtection, protectionBuyer, protectionSeller, referenceEntity, currency, debtSeniority, restructuringClause, calendar, startDate, effectiveDate, maturityDate, stubType,
-        couponFrequency, daycountFractionConvention, businessdayAdjustmentConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional, recoveryRate, includeAccruedPremium,
+    super(buySellProtection, protectionBuyer, protectionSeller, referenceEntity, currency, debtSeniority, restructuringClause, calendar,
+        startDate, effectiveDate, maturityDate, stubType,
+        couponFrequency, daycountFractionConvention, businessdayAdjustmentConvention, immAdjustMaturityDate, adjustEffectiveDate,
+        adjustMaturityDate, notional, recoveryRate, includeAccruedPremium,
         protectionStart);
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -75,14 +82,14 @@ public abstract class LegacyCreditDefaultSwapDefinition extends CreditDefaultSwa
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
-  //TODO there's a nasty ordering effect here - the effective date needs to be changed before the start dates is, otherwise
+  // TODO there's a nasty ordering effect here - the effective date needs to be changed before the start dates is, otherwise
   // an exception is thrown in the start date is changed to be after the old effective date
   @Override
   public abstract LegacyCreditDefaultSwapDefinition withStartDate(ZonedDateTime startDate);
 
   public abstract LegacyCreditDefaultSwapDefinition withSpread(double parSpread);
 
-  public abstract LegacyCreditDefaultSwapDefinition withCouponFrequency(final PeriodFrequency couponFrequency);
+  public abstract LegacyCreditDefaultSwapDefinition withCouponFrequency(PeriodFrequency couponFrequency);
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 

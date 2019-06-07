@@ -43,9 +43,9 @@ public final class ViewStatusOption {
   private static final String DEFAULT_FORMAT = "html";
 
   private static final List<String> SUPPORTED_FORMAT = Lists.newArrayList("html", "csv");
-  /**  Portfolio name option flag */
+  /** Portfolio name option flag */
   private static final String PORTFOLIO_NAME_OPT = "n";
-  /**  User option flag */
+  /** User option flag */
   private static final String USER_OPT = "u";
   /** Result format type flag */
   private static final String FORMAT_TYPE_OPT = "fm";
@@ -157,8 +157,10 @@ public final class ViewStatusOption {
   /**
    * Creates a View status option instance from the options supplied from the command line
    *
-   * @param commandLine the command line, not-null
-   * @param toolContext the toolcontext to use for resolving userSnapshot name to UniqueId
+   * @param commandLine
+   *          the command line, not-null
+   * @param toolContext
+   *          the toolcontext to use for resolving userSnapshot name to UniqueId
    * @return the view status option, not-null
    */
   public static ViewStatusOption getViewStatusReporterOption(final CommandLine commandLine, final ToolContext toolContext) {
@@ -242,6 +244,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the portfolioName.
+   * 
    * @return the portfolioName
    */
   public String getPortfolioName() {
@@ -250,6 +253,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the user.
+   * 
    * @return the user
    */
   public UserPrincipal getUser() {
@@ -258,6 +262,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the format.
+   * 
    * @return the format
    */
   public ResultFormat getFormat() {
@@ -266,6 +271,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the outputFile.
+   * 
    * @return the outputFile
    */
   public File getOutputFile() {
@@ -274,6 +280,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the aggregate type.
+   * 
    * @return the aggregation type
    */
   public AggregateType getAggregateType() {
@@ -282,6 +289,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the marketDataSpecification.
+   * 
    * @return the marketDataSpecification
    */
   public MarketDataSpecification getMarketDataSpecification() {
@@ -289,19 +297,19 @@ public final class ViewStatusOption {
   }
 
   /**
-   * View result format
+   * View result format.
    */
   public enum ResultFormat {
     /**
-     * CSV
+     * CSV.
      */
     CSV("csv"),
     /**
-     * XML
+     * XML.
      */
     XML("xml"),
     /**
-     * HTML
+     * HTML.
      */
     HTML("html");
 
@@ -310,14 +318,15 @@ public final class ViewStatusOption {
     /**
      * Creates an instance.
      *
-     * @param extension  the file suffix, not null
+     * @param extension
+     *          the file suffix, not null
      */
-    private ResultFormat(final String extension) {
+    ResultFormat(final String extension) {
       _extension = extension;
     }
 
     /**
-     * Gets the file extension for a format
+     * Gets the file extension for a format.
      *
      * @return the file extension, not null
      */

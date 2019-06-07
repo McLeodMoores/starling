@@ -39,7 +39,7 @@ public interface LazyResolver {
   /**
    * Base class of {@link ObjectResolver} instances that are owned by a parent {@link LazyResolver}.
    */
-  public abstract static class ObjectResolverImpl<T extends UniqueIdentifiable> implements ObjectResolver<T>, DeepResolver {
+  abstract class ObjectResolverImpl<T extends UniqueIdentifiable> implements ObjectResolver<T>, DeepResolver {
 
     private final LazyResolver _parent;
     private final ObjectResolver<T> _underlying;
@@ -79,7 +79,7 @@ public interface LazyResolver {
   /**
    * Base class of {@link Resolver} instances that are owned by a parent {@link LazyResolver}.
    */
-  public abstract static class ResolverImpl<T extends UniqueIdentifiable> extends ObjectResolverImpl<T> implements Resolver<T> {
+  abstract class ResolverImpl<T extends UniqueIdentifiable> extends ObjectResolverImpl<T> implements Resolver<T> {
 
     public ResolverImpl(final LazyResolver parent, final Resolver<T> underlying) {
       super(parent, underlying);
@@ -115,7 +115,7 @@ public interface LazyResolver {
   /**
    * Lazy resolution of portfolios.
    */
-  public static class LazyPortfolioResolver extends ResolverImpl<Portfolio> {
+  class LazyPortfolioResolver extends ResolverImpl<Portfolio> {
 
     public LazyPortfolioResolver(final LazyResolver parent, final Resolver<Portfolio> underlying) {
       super(parent, underlying);
@@ -143,7 +143,7 @@ public interface LazyResolver {
   /**
    * Lazy resolution of portfolio nodes.
    */
-  public static class LazyPortfolioNodeResolver extends ResolverImpl<PortfolioNode> {
+  class LazyPortfolioNodeResolver extends ResolverImpl<PortfolioNode> {
 
     public LazyPortfolioNodeResolver(final LazyResolver parent, final Resolver<PortfolioNode> underlying) {
       super(parent, underlying);
@@ -171,7 +171,7 @@ public interface LazyResolver {
   /**
    * Lazy resolution of positions.
    */
-  public static class LazyPositionResolver extends ResolverImpl<Position> {
+  class LazyPositionResolver extends ResolverImpl<Position> {
 
     public LazyPositionResolver(final LazyResolver parent, final Resolver<Position> underlying) {
       super(parent, underlying);
@@ -199,7 +199,7 @@ public interface LazyResolver {
   /**
    * Lazy resolution of trades.
    */
-  public static class LazyTradeResolver extends ResolverImpl<Trade> {
+  class LazyTradeResolver extends ResolverImpl<Trade> {
 
     public LazyTradeResolver(final LazyResolver parent, final Resolver<Trade> underlying) {
       super(parent, underlying);

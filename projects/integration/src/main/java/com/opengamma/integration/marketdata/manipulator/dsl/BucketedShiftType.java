@@ -25,7 +25,6 @@ public enum BucketedShiftType implements GroovyAliasable {
    */
   FORWARD("Forward");
 
-
   private static final ImmutableList<String> ALIASES;
   static {
     final List<String> result = newArrayList();
@@ -39,12 +38,13 @@ public enum BucketedShiftType implements GroovyAliasable {
 
   private String _groovyAlias;
 
-  private BucketedShiftType(final String groovyAlias) {
+  BucketedShiftType(final String groovyAlias) {
     _groovyAlias = groovyAlias;
   }
 
   /**
-   * The alias to use in the groovy script
+   * The alias to use in the groovy script.
+   * 
    * @return the alias
    */
   @Override
@@ -54,6 +54,7 @@ public enum BucketedShiftType implements GroovyAliasable {
 
   /**
    * The list of available groovy aliases, sorted.
+   * 
    * @return list of aliases.
    */
   public static ImmutableList<String> getAliasList() {

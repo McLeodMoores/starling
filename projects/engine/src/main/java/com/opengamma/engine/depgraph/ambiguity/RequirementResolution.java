@@ -13,8 +13,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Representation of a single resolution to a requirement. If ambiguities exist in a view definition or the resolution rules then there may
- * be multiple resolutions possible. These can be held in a {@link FullRequirementResolution} instance.
+ * Representation of a single resolution to a requirement. If ambiguities exist in a view definition or the resolution rules then there may be multiple
+ * resolutions possible. These can be held in a {@link FullRequirementResolution} instance.
  */
 public final class RequirementResolution {
 
@@ -31,9 +31,8 @@ public final class RequirementResolution {
   private final DependencyNodeFunction _function;
 
   /**
-   * The resolution(s) of any inputs to the function. If there is ambiguity such that alternative resolutions are possible, then additional
-   * instances of {@link RequirementResolution} will be created that refer to these same inputs and referenced from the containing
-   * {@link FullRequirementResolution}.
+   * The resolution(s) of any inputs to the function. If there is ambiguity such that alternative resolutions are possible, then additional instances of
+   * {@link RequirementResolution} will be created that refer to these same inputs and referenced from the containing {@link FullRequirementResolution}.
    */
   private final Collection<FullRequirementResolution> _inputs;
 
@@ -71,6 +70,10 @@ public final class RequirementResolution {
 
   /**
    * Tests whether the given resolution is present in any of the inputs to this resolution. This prevents recursive structures from being constructed.
+   *
+   * @param parent
+   *          the parent resolution
+   * @return true if the resolution is present in the inputs
    */
   /* package */boolean contains(final FullRequirementResolution parent) {
     for (final FullRequirementResolution input : _inputs) {
@@ -83,6 +86,8 @@ public final class RequirementResolution {
 
   /**
    * Tests whether any of the inputs to this resolution contain any ambiguity.
+   * 
+   * @return true if the inputs contain ambiguity
    */
   /* package */boolean isAmbiguous() {
     for (final FullRequirementResolution input : _inputs) {

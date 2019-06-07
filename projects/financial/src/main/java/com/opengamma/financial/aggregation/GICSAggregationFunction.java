@@ -39,7 +39,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * Abstract aggregation function for bucketing equities and equity options by GICS code of the underlying
+ * Abstract aggregation function for bucketing equities and equity options by GICS code of the underlying.
  */
 public class GICSAggregationFunction implements AggregationFunction<String> {
 
@@ -58,28 +58,28 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
   public enum Level {
 
     /**
-     * Sector
+     * Sector.
      */
     SECTOR("Sector"),
 
     /**
-     * Industry Group
+     * Industry Group.
      */
     INDUSTRY_GROUP("Industry Group"),
 
     /**
-     * Industry
+     * Industry.
      */
     INDUSTRY("Industry"),
 
     /**
-     * Sub-industry
+     * Sub-industry.
      */
     SUB_INDUSTRY("Sub-industry");
 
     private final String _displayName;
 
-    private Level(final String displayName) {
+    Level(final String displayName) {
       _displayName = displayName;
     }
 
@@ -233,7 +233,6 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     }
   };
 
-
   private boolean sectorExtractionIsValid() {
     return _level == Level.SECTOR && _obligorSectorExtractor != null;
   }
@@ -314,7 +313,7 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
 
     private final CdsRedCodeExtractor<LegalEntity> _obligorExtractor;
 
-    public CdsObligorSectorExtractor(final LegalEntitySource legalEntitySource) {
+    CdsObligorSectorExtractor(final LegalEntitySource legalEntitySource) {
       _obligorExtractor = new CdsRedCodeExtractor<>(new CdsObligorExtractor(legalEntitySource));
     }
 
@@ -332,7 +331,7 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
 
     private final CdsOptionValueExtractor<LegalEntity> _obligorExtractor;
 
-    public CdsOptionObligorSectorExtractor(final SecuritySource securitySource, final LegalEntitySource legalEntitySource) {
+    CdsOptionObligorSectorExtractor(final SecuritySource securitySource, final LegalEntitySource legalEntitySource) {
       _obligorExtractor = new CdsOptionValueExtractor<LegalEntity>() {
         @Override
         public LegalEntity extract(final CreditDefaultSwapOptionSecurity cdsOption) {
@@ -361,12 +360,13 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
 
     private final SecuritySource _securitySource;
 
-    public CdsIndexFamilyExtractor(final SecuritySource securitySource) {
+    CdsIndexFamilyExtractor(final SecuritySource securitySource) {
       _securitySource = securitySource;
     }
 
     public String extractOrElse(final CreditDefaultSwapIndexSecurity cdsIndex, final String alternative) {
-      final CreditDefaultSwapIndexDefinitionSecurity underlyingDefinition = (CreditDefaultSwapIndexDefinitionSecurity) _securitySource.getSingle(ExternalIdBundle.of(cdsIndex.getReferenceEntity()));
+      final CreditDefaultSwapIndexDefinitionSecurity underlyingDefinition = (CreditDefaultSwapIndexDefinitionSecurity) _securitySource
+          .getSingle(ExternalIdBundle.of(cdsIndex.getReferenceEntity()));
       final String family = underlyingDefinition.getFamily();
       return family != null ? family : alternative;
     }

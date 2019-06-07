@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.exposure.factory;
 
@@ -15,8 +15,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * A dummy implementation of a {@link SecuritySource} that does not implement any methods. Calling any of the methods
- * will result in an {@link UnsupportedOperationException}.
+ * A dummy implementation of a {@link SecuritySource} that does not implement any methods. Calling any of the methods will result in an
+ * {@link UnsupportedOperationException}.
  */
 /* package */ final class DummySecuritySource implements SecuritySource {
   /** An instance */
@@ -26,6 +26,7 @@ import com.opengamma.id.VersionCorrection;
 
   /**
    * Returns an instance.
+   * 
    * @return The instance
    */
   public static SecuritySource getInstance() {

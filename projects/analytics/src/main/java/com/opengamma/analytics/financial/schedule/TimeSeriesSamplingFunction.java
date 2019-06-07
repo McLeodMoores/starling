@@ -11,10 +11,10 @@ import com.opengamma.timeseries.date.DateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public interface TimeSeriesSamplingFunction {
 
-  LocalDateDoubleTimeSeries getSampledTimeSeries(final DateDoubleTimeSeries<?> ts, final LocalDate[] schedule);
+  LocalDateDoubleTimeSeries getSampledTimeSeries(DateDoubleTimeSeries<?> ts, LocalDate[] schedule);
 
 }

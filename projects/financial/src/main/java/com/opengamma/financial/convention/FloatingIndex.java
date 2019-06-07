@@ -118,7 +118,7 @@ public enum FloatingIndex implements NamedInstance {
   /**
    * The MXN-TIIE-Banxico ISDA index.
    */
-  MXN_TIIE_Banxico (Currency.of("MXN"), "TIIE", "MXN-TIIE-Banxico"),
+  MXN_TIIE_Banxico(Currency.of("MXN"), "TIIE", "MXN-TIIE-Banxico"),
   /**
    * The NZD-BBR-FRA ISDA index.
    */
@@ -158,15 +158,14 @@ public enum FloatingIndex implements NamedInstance {
   /**
    * The ZAR-JIBAR-SAFEX ISDA index.
    */
-  ZAR_JIBAR_SAFEX(Currency.of("ZAR"), "JIBAR", "ZAR-JIBAR-SAFEX"),
-  ;
+  ZAR_JIBAR_SAFEX(Currency.of("ZAR"), "JIBAR", "ZAR-JIBAR-SAFEX");
 
   private final Currency _currency;
   private final String _indexName;
   private final String _isdaName;
   private final ExternalId _externalId;
 
-  private FloatingIndex(final Currency currency, final String indexName, final String isdaName) {
+  FloatingIndex(final Currency currency, final String indexName, final String isdaName) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(indexName, "indexName");
     ArgumentChecker.notNull(isdaName, "isdaName");
@@ -178,6 +177,7 @@ public enum FloatingIndex implements NamedInstance {
 
   /**
    * Gets the currency.
+   *
    * @return the currency
    */
   public Currency getCurrency() {
@@ -186,6 +186,7 @@ public enum FloatingIndex implements NamedInstance {
 
   /**
    * Gets the indexName.
+   *
    * @return the indexName
    */
   public String getIndexName() {
@@ -194,6 +195,7 @@ public enum FloatingIndex implements NamedInstance {
 
   /**
    * Gets the isdaName.
+   *
    * @return the isdaName
    */
   public String getIsdaName() {
@@ -210,10 +212,10 @@ public enum FloatingIndex implements NamedInstance {
   }
 
   /**
-   * Obtain the ID that should be provided as the index on a {@link FloatingInterestRateLeg}
-   * for a floating leg with the specified frequency.
+   * Obtain the ID that should be provided as the index on a {@link FloatingInterestRateLeg} for a floating leg with the specified frequency.
    *
-   * @param frequency the floating interest rate leg frequency
+   * @param frequency
+   *          the floating interest rate leg frequency
    * @return the identifier that should be used on the leg
    */
   public ExternalId toFrequencySpecificExternalId(final Frequency frequency) {

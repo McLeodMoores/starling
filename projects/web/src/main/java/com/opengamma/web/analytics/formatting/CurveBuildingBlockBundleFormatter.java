@@ -1,5 +1,7 @@
 /**
+ * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
+ * Please see distribution for license.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -21,7 +23,8 @@ public class CurveBuildingBlockBundleFormatter extends AbstractFormatter<CurveBu
   private static final String MATRIX = "matrix";
 
   /**
-   * @param doubleFormatter  formats the discount factors
+   * @param doubleFormatter
+   *          formats the discount factors
    */
   /* package */ CurveBuildingBlockBundleFormatter(final DoubleFormatter doubleFormatter) {
     super(CurveBuildingBlockBundle.class);
@@ -40,9 +43,12 @@ public class CurveBuildingBlockBundleFormatter extends AbstractFormatter<CurveBu
 
   /**
    * Transforms the details object to an amount that can be displayed.
-   * @param value  the FX forward details
-   * @param valueSpec  the value specification
-   * @return  the data
+   * 
+   * @param value
+   *          the FX forward details
+   * @param valueSpec
+   *          the value specification
+   * @return the data
    */
   /* package */ Map<String, Object> formatExpanded(final CurveBuildingBlockBundle value, final ValueSpecification valueSpec) {
     final Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> data = value.getData();

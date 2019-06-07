@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -21,7 +21,7 @@ import com.opengamma.id.UniqueIdentifiable;
   private final ComputationTargetSpecification _spec;
   private volatile ComputationTarget _target;
 
-  public LazyTargetResolverObject(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTargetSpecification spec) {
+  LazyTargetResolverObject(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTargetSpecification spec) {
     _resolver = resolver;
     _spec = spec;
   }
@@ -31,7 +31,7 @@ import com.opengamma.id.UniqueIdentifiable;
   }
 
   protected ComputationTargetSpecification getTargetSpecification() {
-    ComputationTarget target = _target;
+    final ComputationTarget target = _target;
     if (target != null) {
       return target.toSpecification();
     }
@@ -54,11 +54,11 @@ import com.opengamma.id.UniqueIdentifiable;
 
   @Override
   public UniqueId getUniqueId() {
-    ComputationTarget target = _target;
+    final ComputationTarget target = _target;
     if (target != null) {
       return target.getUniqueId();
     }
-    UniqueId uid = _spec.getUniqueId();
+    final UniqueId uid = _spec.getUniqueId();
     if (uid.isVersioned()) {
       return uid;
     }

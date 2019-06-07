@@ -11,7 +11,8 @@ package com.opengamma.analytics.financial.provider.description.interestrate;
 public interface BlackBondFuturesSmileProviderInterface extends ParameterIssuerProviderInterface {
 
   /**
-   * Create a new copy of the provider
+   * Create a new copy of the provider.
+   * 
    * @return The bundle
    */
   @Override
@@ -19,11 +20,14 @@ public interface BlackBondFuturesSmileProviderInterface extends ParameterIssuerP
 
   /**
    * Gets the Black volatility at a given expiry-strike-delay point.
-   * @param expiry The time to expiration.
-   * @param strike The strike.
+   * 
+   * @param expiry
+   *          The time to expiration.
+   * @param strike
+   *          The strike.
    * @return The volatility.
    */
-  double getVolatility(final double expiry, final double strike);
+  double getVolatility(double expiry, double strike);
 
   // TODO: Add reference to issuer
 

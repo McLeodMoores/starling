@@ -37,13 +37,13 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
 
     private static final long serialVersionUID = 1L;
 
-    public TargetData(final ValueSpecification initialValue) {
+    TargetData(final ValueSpecification initialValue) {
       final Set<ValueSpecification> values = new CopyOnWriteArraySet<>();
       values.add(initialValue);
       put(initialValue.getValueName(), values);
     }
 
-    public TargetData() {
+    TargetData() {
     }
 
     public ValueSpecification getAvailability(final ValueRequirement desiredValue) {
@@ -86,8 +86,7 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   private final AtomicInteger _nextSyntheticIdentifier = new AtomicInteger();
   private final ConcurrentMap<ExternalId, ComputationTargetSpecification> _weakIndex;
   private final ConcurrentMap<ComputationTargetSpecification, TargetData> _strictIndex;
-  private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification =
-      new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
+  private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification = new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
 
     @Override
     public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -255,7 +254,6 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     ArgumentChecker.notNull(valueSpecification, "valueSpecification");
     removeAvailableData(valueSpecification.getTargetSpecification(), valueSpecification);
   }
-
 
   @Override
   public Serializable getAvailabilityHintKey() {

@@ -21,8 +21,11 @@ public abstract class DividendFunctionProvider {
 
   /**
    * Constructor. Dividend data must be sorted in chronological order
-   * @param dividendTimes The dividend times
-   * @param dividends The dividend payment amount/ratio
+   *
+   * @param dividendTimes
+   *          The dividend times
+   * @param dividends
+   *          The dividend payment amount/ratio
    */
   public DividendFunctionProvider(final double[] dividendTimes, final double[] dividends) {
     ArgumentChecker.notNull(dividendTimes, "dividendTimes");
@@ -47,11 +50,14 @@ public abstract class DividendFunctionProvider {
 
   /**
    * Compute the asset price modified due to dividend payments
-   * @param spot The spot price of asset
-   * @param interestRate The interest rate
-   * @return  The modified spot price
+   *
+   * @param spot
+   *          The spot price of asset
+   * @param interestRate
+   *          The interest rate
+   * @return The modified spot price
    */
-  public abstract double spotModifier(final double spot, final double interestRate);
+  public abstract double spotModifier(double spot, double interestRate);
 
   /**
    * Compute correction to asset price due to dividends up to the k-th payment
@@ -66,62 +72,93 @@ public abstract class DividendFunctionProvider {
    *          the k-th payment
    * @return The correction
    */
-  public abstract double dividendCorrections(final double assetPrice, final double interestRate, final double offset, final int k);
+  public abstract double dividendCorrections(double assetPrice, double interestRate, double offset, int k);
 
   /**
    * Asset prices in the 1st layer, i.e., S_{10} and S_{11}
-   * @param spot The spot
-   * @param interestRate The interest rate
-   * @param divSteps The position of layers where dividends are paid
-   * @param upFactor Up factor
-   * @param downFactor Down factor
-   * @param sumDiscountDiv Sum of discounted (cash) dividends
+   *
+   * @param spot
+   *          The spot
+   * @param interestRate
+   *          The interest rate
+   * @param divSteps
+   *          The position of layers where dividends are paid
+   * @param upFactor
+   *          Up factor
+   * @param downFactor
+   *          Down factor
+   * @param sumDiscountDiv
+   *          Sum of discounted (cash) dividends
    * @return { S_{10}, S_{11} }
    */
-  public abstract double[] getAssetPricesForDelta(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor, final double sumDiscountDiv);
+  public abstract double[] getAssetPricesForDelta(double spot, double interestRate, int[] divSteps, double upFactor, double downFactor, double sumDiscountDiv);
 
   /**
    * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}
-   * @param spot The spot
-   * @param interestRate The interest rate
-   * @param divSteps The positions of layers where dividends are paid
-   * @param upFactor Up factor
-   * @param downFactor Down factor
-   * @param sumDiscountDiv Sum of discounted (cash) dividends
+   *
+   * @param spot
+   *          The spot
+   * @param interestRate
+   *          The interest rate
+   * @param divSteps
+   *          The positions of layers where dividends are paid
+   * @param upFactor
+   *          Up factor
+   * @param downFactor
+   *          Down factor
+   * @param sumDiscountDiv
+   *          Sum of discounted (cash) dividends
    * @return { S_{20}, S_{21}, S_{22} }
    */
-  public abstract double[] getAssetPricesForGamma(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double downFactor, final double sumDiscountDiv);
+  public abstract double[] getAssetPricesForGamma(double spot, double interestRate, int[] divSteps, double upFactor, double downFactor, double sumDiscountDiv);
 
   /**
    * Asset prices in the 1st layer, i.e., S_{10} and S_{11}
-   * @param spot The spot
-   * @param interestRate The interest rate
-   * @param divSteps The position of layers where dividends are paid
-   * @param upFactor Up factor
-   * @param middleFactor Middle factor
-   * @param downFactor Down factor
-   * @param sumDiscountDiv Sum of discounted (cash) dividends
+   *
+   * @param spot
+   *          The spot
+   * @param interestRate
+   *          The interest rate
+   * @param divSteps
+   *          The position of layers where dividends are paid
+   * @param upFactor
+   *          Up factor
+   * @param middleFactor
+   *          Middle factor
+   * @param downFactor
+   *          Down factor
+   * @param sumDiscountDiv
+   *          Sum of discounted (cash) dividends
    * @return { S_{10}, S_{11}, S_{12} }
    */
-  public abstract double[] getAssetPricesForDelta(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor, final double downFactor,
-      final double sumDiscountDiv);
+  public abstract double[] getAssetPricesForDelta(double spot, double interestRate, int[] divSteps, double upFactor, double middleFactor, double downFactor,
+      double sumDiscountDiv);
 
   /**
    * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}
-   * @param spot The spot
-   * @param interestRate The interest rate
-   * @param divSteps The positions of layers where dividends are paid
-   * @param upFactor Up factor
-   * @param middleFactor Middle factor
-   * @param downFactor Down factor
-   * @param sumDiscountDiv Sum of discounted (cash) dividends
+   *
+   * @param spot
+   *          The spot
+   * @param interestRate
+   *          The interest rate
+   * @param divSteps
+   *          The positions of layers where dividends are paid
+   * @param upFactor
+   *          Up factor
+   * @param middleFactor
+   *          Middle factor
+   * @param downFactor
+   *          Down factor
+   * @param sumDiscountDiv
+   *          Sum of discounted (cash) dividends
    * @return { S_{20}, S_{21}, S_{22}, S_{23}, S_{24} }
    */
-  public abstract double[] getAssetPricesForGamma(final double spot, final double interestRate, final int[] divSteps, final double upFactor, final double middleFactor, final double downFactor,
-      final double sumDiscountDiv);
+  public abstract double[] getAssetPricesForGamma(double spot, double interestRate, int[] divSteps, double upFactor, double middleFactor, double downFactor,
+      double sumDiscountDiv);
 
   /**
-   * @param dt Time step
+   * @param dt
+   *          Time step
    * @return The positions of layers where dividends are paid
    */
   public int[] getDividendSteps(final double dt) {
@@ -136,7 +173,7 @@ public abstract class DividendFunctionProvider {
 
   /**
    * Compare time step width with payment time width
-   * 
+   *
    * @param dt
    *          Time step width
    * @return True if (time step width) &lt; (payment time width) for all dividends
@@ -152,7 +189,8 @@ public abstract class DividendFunctionProvider {
   }
 
   /**
-   * @param timeToExpiry Time to expiry
+   * @param timeToExpiry
+   *          Time to expiry
    * @return True if all of the dividend times are before expiry, false otherwise
    */
   public boolean checkDividendBeforeExpiry(final double timeToExpiry) {
@@ -166,7 +204,8 @@ public abstract class DividendFunctionProvider {
   }
 
   /**
-   * Access dividend times
+   * Access dividend times.
+   *
    * @return _dividendTimes
    */
   public double[] getDividendTimes() {
@@ -174,7 +213,8 @@ public abstract class DividendFunctionProvider {
   }
 
   /**
-   * Access dividend amount/ratio
+   * Access dividend amount/ratio.
+   *
    * @return _dividends
    */
   public double[] getDividends() {
@@ -182,7 +222,8 @@ public abstract class DividendFunctionProvider {
   }
 
   /**
-   * Access number of dividend payments
+   * Access number of dividend payments.
+   *
    * @return _nDividends
    */
   public int getNumberOfDividends() {

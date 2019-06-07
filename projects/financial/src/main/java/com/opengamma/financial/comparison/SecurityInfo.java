@@ -28,7 +28,7 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
 
   private final Map<Object, Object> _info = new HashMap<>();
 
-  public SecurityInfo(final ComparisonContext context, final Security security) {
+  SecurityInfo(final ComparisonContext context, final Security security) {
     super(security);
     LOGGER.debug("Extracting core information from {}", security);
     final FudgeSerializer serializer = context.getFudgeSerializer();
@@ -38,7 +38,8 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     final Iterator<FudgeField> itr = rawMsg.iterator();
     while (itr.hasNext()) {
       final FudgeField field = itr.next();
-      if (ManageableSecurityFudgeBuilder.UNIQUE_ID_FIELD_NAME.equals(field.getName()) || ManageableSecurityFudgeBuilder.IDENTIFIERS_FIELD_NAME.equals(field.getName())) {
+      if (ManageableSecurityFudgeBuilder.UNIQUE_ID_FIELD_NAME.equals(field.getName())
+          || ManageableSecurityFudgeBuilder.IDENTIFIERS_FIELD_NAME.equals(field.getName())) {
         continue;
       }
       addFieldToMap(field, _info);
@@ -46,7 +47,7 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
     LOGGER.debug("Info = {}", _info);
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   private static void addValueToMap(final Object key, final Object value, final Map<Object, Object> info) {
     final Object existing = info.get(key);
     if (existing != null) {
@@ -134,7 +135,7 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
       return _hashCode;
     }
 
-    protected abstract boolean equalsImpl(final ComparableArray<?> o);
+    protected abstract boolean equalsImpl(ComparableArray<?> o);
 
     @Override
     public final boolean equals(final Object o) {
@@ -151,7 +152,7 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
       return equalsImpl(other);
     }
 
-    protected abstract String toString(final T data);
+    protected abstract String toString(T data);
 
     @Override
     public String toString() {

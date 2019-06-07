@@ -40,7 +40,7 @@ public class PlanExecutor implements JobResultReceiver, DependencyGraphExecution
     private final CalculationJob _job;
     private volatile Cancelable _cancel;
 
-    public ExecutingJob(final CalculationJob job) {
+    ExecutingJob(final CalculationJob job) {
       _job = job;
     }
 

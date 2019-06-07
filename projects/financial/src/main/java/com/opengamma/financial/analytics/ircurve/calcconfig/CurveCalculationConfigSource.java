@@ -13,8 +13,8 @@ import com.opengamma.id.VersionCorrection;
 @Deprecated
 public interface CurveCalculationConfigSource {
 
-  MultiCurveCalculationConfig getConfig(final String name);
+  MultiCurveCalculationConfig getConfig(String name);
 
-  MultiCurveCalculationConfig getConfig(final String name, final VersionCorrection versionCorrection);
+  MultiCurveCalculationConfig getConfig(String name, VersionCorrection versionCorrection);
 
 }

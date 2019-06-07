@@ -52,7 +52,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Creates a new instance, backed by the property array.
      *
-     * @param properties the property hash, never null. This will be owned by the object and must not be modified after calling.
+     * @param properties
+     *          the property hash, never null. This will be owned by the object and must not be modified after calling.
      * @return the new instance
      */
     protected static ValueProperties createAdditive(final AbstractValueProperty[] properties) {
@@ -62,7 +63,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Creates a new instance, backed by the given set.
      *
-     * @param properties the set of missing properties. This will be owned by the object and must not be modified after calling.
+     * @param properties
+     *          the set of missing properties. This will be owned by the object and must not be modified after calling.
      * @return the new instance
      */
     protected static ValueProperties createSubtractive(final Set<String> properties) {
@@ -74,8 +76,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
      * <p>
      * If the property is already a wild-card, the builder is left unchanged.
      *
-     * @param propertyName the name of the property, not null
-     * @param propertyValue the value to add, not null
+     * @param propertyName
+     *          the name of the property, not null
+     * @param propertyValue
+     *          the value to add, not null
      * @return {@code this} for chaining in the builder pattern, not null
      */
     public abstract Builder with(String propertyName, String propertyValue);
@@ -85,8 +89,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
      * <p>
      * If the property is already a wild-card, the builder is left unchanged.
      *
-     * @param propertyName the name of the property, not null
-     * @param propertyValues the values to add, not null and not containing nulls
+     * @param propertyName
+     *          the name of the property, not null
+     * @param propertyValues
+     *          the values to add, not null and not containing nulls
      * @return {@code this} for chaining in the builder pattern, not null
      */
     public abstract Builder with(String propertyName, String... propertyValues);
@@ -96,8 +102,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
      * <p>
      * If the property is already a wild-card, the builder is left unchanged.
      *
-     * @param propertyName the name of the property, not null
-     * @param propertyValues the values to add, not null or empty, and not containing nulls
+     * @param propertyName
+     *          the name of the property, not null
+     * @param propertyValues
+     *          the values to add, not null or empty, and not containing nulls
      * @return the builder instance
      */
     public abstract Builder with(String propertyName, Collection<String> propertyValues);
@@ -107,7 +115,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
      * <p>
      * If explicit values were previously set for the property, they are removed to leave the wild-card definition.
      *
-     * @param propertyName the name of the property, not null
+     * @param propertyName
+     *          the name of the property, not null
      * @return {@code this} for chaining in the builder pattern, not null
      */
     public abstract Builder withAny(String propertyName);
@@ -115,11 +124,12 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Declares a property as optional when used as a constraint.
      * <p>
-     * By default constraints are required, and can only be satisfied if the other property set defines a matching value. If a constraint is
-     * optional the other set may define a matching value, or have no definition for the property. If no explicit values for the property are
-     * set with one of the other calls, the property will have a wild-card value (i.e. as if {@link #withAny (String)} had been called.
+     * By default constraints are required, and can only be satisfied if the other property set defines a matching value. If a constraint is optional the other
+     * set may define a matching value, or have no definition for the property. If no explicit values for the property are set with one of the other calls, the
+     * property will have a wild-card value (i.e. as if {@link #withAny (String)} had been called.
      *
-     * @param propertyName the name of the property, not null
+     * @param propertyName
+     *          the name of the property, not null
      * @return {@code this} for chaining in the builder pattern, not null
      */
     public abstract Builder withOptional(String propertyName);
@@ -127,7 +137,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Clears the optional flag of a property.
      *
-     * @param propertyName the name of the property, not null
+     * @param propertyName
+     *          the name of the property, not null
      * @return {@code this} for chaining in the builder pattern, not null
      */
     public abstract Builder notOptional(String propertyName);
@@ -135,7 +146,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Removes a property from the builder definition.
      *
-     * @param propertyName the name of the property, not null
+     * @param propertyName
+     *          the name of the property, not null
      * @return {@code this} for chaining in the builder pattern, not null
      */
     public abstract Builder withoutAny(String propertyName);
@@ -163,8 +175,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Compares two sets.
    *
-   * @param s1 the first set, may be null
-   * @param s2 the second set, may be null
+   * @param s1
+   *          the first set, may be null
+   * @param s2
+   *          the second set, may be null
    * @return negative if the first is less, zero if equal, positive if greater
    */
   private static int compareSet(final Set<String> s1, final Set<String> s2) {
@@ -214,7 +228,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Creates a new instance, backed by the property array.
      *
-     * @param properties the property hash, never null. This will be owned by the object and must not be modified after calling.
+     * @param properties
+     *          the property hash, never null. This will be owned by the object and must not be modified after calling.
      */
     private SimpleValueProperties(final AbstractValueProperty[] properties) {
       _properties = properties;
@@ -247,7 +262,7 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     @Override
     /* package */boolean isSatisfySimple(final SimpleValueProperties other) {
       for (AbstractValueProperty property : other._properties) {
-        propertyLoop: for (; property != null; property = property.getNext()) { //CSIGNORE
+        propertyLoop: for (; property != null; property = property.getNext()) { // CSIGNORE
           final int hc = property.getKey().hashCode() & 0x7FFFFFFF;
           final int index = hc % _properties.length;
           AbstractValueProperty bucket = _properties[index];
@@ -281,7 +296,7 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /* package */Set<String> getUnsatisfiedFromSimple(final SimpleValueProperties other) {
       Set<String> unsatisfied = null;
       for (AbstractValueProperty property : other._properties) {
-        propertyLoop: for (; property != null; property = property.getNext()) { //CSIGNORE
+        propertyLoop: for (; property != null; property = property.getNext()) { // CSIGNORE
           final int hc = property.getKey().hashCode() & 0x7FFFFFFF;
           final int index = hc % _properties.length;
           AbstractValueProperty bucket = _properties[index];
@@ -340,7 +355,7 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
       final AdditivePropertiesBuilder builder = new AdditivePropertiesBuilder();
       boolean equalsThis = true;
       for (AbstractValueProperty property : _properties) {
-        propertyLoop: for (; property != null; property = property.getNext()) { //CSIGNORE
+        propertyLoop: for (; property != null; property = property.getNext()) { // CSIGNORE
           final int hc = property.getKey().hashCode() & 0x7FFFFFFF;
           final int index = hc % other._properties.length;
           AbstractValueProperty bucket = other._properties[index];
@@ -1056,7 +1071,7 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
 
     @Override
     public Builder copy() {
-      return new SubtractivePropertiesBuilder(Collections.<String>emptySet());
+      return new SubtractivePropertiesBuilder(Collections.<String> emptySet());
     }
 
     @Override
@@ -1178,9 +1193,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
     /**
      * Creates a new instance, backed by the property array.
      *
-     * @param properties the property hash, never null. This will be owned by the object and must not be modified after calling.
+     * @param properties
+     *          the property hash, never null. This will be owned by the object and must not be modified after calling.
      */
-    public NearInfiniteValueProperties(final Set<String> properties) {
+    NearInfiniteValueProperties(final Set<String> properties) {
       _properties = properties;
     }
 
@@ -1505,12 +1521,12 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Tests if a property instance corresponds to a near-infinite set.
    * <p>
-   * This method was introduced to assist in migrating code that was explicitly handling the previously publicly classes. The empty and
-   * infinite tests can be identified by comparison with the values returned by {@link #all} or {@code #none}. For any thing else, a normal
-   * property set (previously publicly visible as ValuePropertiesImpl) will return false from this and a near-infinite set
-   * (previously publicly visible as NearlyInfinitePropertiesImpl) will return true.
+   * This method was introduced to assist in migrating code that was explicitly handling the previously publicly classes. The empty and infinite tests can be
+   * identified by comparison with the values returned by {@link #all} or {@code #none}. For any thing else, a normal property set (previously publicly visible
+   * as ValuePropertiesImpl) will return false from this and a near-infinite set (previously publicly visible as NearlyInfinitePropertiesImpl) will return true.
    *
-   * @param properties the properties to test
+   * @param properties
+   *          the properties to test
    * @return true if the properties are near-infinite, false otherwise
    * @deprecated Testing for, and handling this as a special case is not recommended - it is better to write in terms of the set operation available
    */
@@ -1531,7 +1547,7 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
 
   // internal implementation
 
-  /* package */ValueProperties() {
+  /* package */ ValueProperties() {
   }
 
   /* package */abstract boolean isSatisfySimple(SimpleValueProperties other);
@@ -1596,8 +1612,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Creates a builder for constructing value properties with the given property defined.
    *
-   * @param propertyName the name of the property to define, not null
-   * @param propertyValue the property value, not null
+   * @param propertyName
+   *          the name of the property to define, not null
+   * @param propertyValue
+   *          the property value, not null
    * @return the builder, not null
    */
   public static Builder with(final String propertyName, final String propertyValue) {
@@ -1607,8 +1625,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Creates a builder for constructing value properties with the given property defined.
    *
-   * @param propertyName the name of the property to define, not null
-   * @param propertyValues the property values, not null and not containing null
+   * @param propertyName
+   *          the name of the property to define, not null
+   * @param propertyValues
+   *          the property values, not null and not containing null
    * @return the builder instance
    */
   public static Builder with(final String propertyName, final String... propertyValues) {
@@ -1618,8 +1638,10 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Creates a builder for constructing value properties with the given property defined.
    *
-   * @param propertyName the name of the property to define, not null
-   * @param propertyValues the property values, not null and not containing null
+   * @param propertyName
+   *          the name of the property to define, not null
+   * @param propertyValues
+   *          the property values, not null and not containing null
    * @return the builder instance
    */
   public static Builder with(final String propertyName, final Collection<String> propertyValues) {
@@ -1629,7 +1651,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Creates a builder for constructing value properties with the given property defined as a wild-card.
    *
-   * @param propertyName the name of the property to define, not null
+   * @param propertyName
+   *          the name of the property to define, not null
    * @return the builder instance
    */
   public static Builder withAny(final String propertyName) {
@@ -1639,7 +1662,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Creates a builder for constructing value properties with the given property defined as optional.
    *
-   * @param propertyName the name of the property to define, not null
+   * @param propertyName
+   *          the name of the property to define, not null
    * @return the builder instance
    */
   public static Builder withOptional(final String propertyName) {
@@ -1665,7 +1689,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * <p>
    * If the name is defined, {@link #getValues} will not return null. This may be a cheaper test however.
    *
-   * @param propertyName the name required, not null
+   * @param propertyName
+   *          the name required, not null
    * @return true if the property is defined, false otherwise
    */
   public abstract boolean isDefined(String propertyName);
@@ -1675,7 +1700,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * <p>
    * If the name is not defined null is returned. If the name has a wild-card value, the empty set is returned.
    *
-   * @param propertyName the name required, not null
+   * @param propertyName
+   *          the name required, not null
    * @return the set of values, empty if wild-card, null if not defined
    */
   public abstract Set<String> getValues(String propertyName);
@@ -1683,10 +1709,11 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Returns a single value for a property that is part of a strict set.
    * <p>
-   * If defined, the property must have a single value only. This is provided as a more efficient form than using the
-   * {@link Set} returned by {@link #getValues}.
+   * If defined, the property must have a single value only. This is provided as a more efficient form than using the {@link Set} returned by
+   * {@link #getValues}.
    *
-   * @param propertyName the name required, not null
+   * @param propertyName
+   *          the name required, not null
    * @return the strict value or null if the property is absent or not strict
    */
   public abstract String getStrictValue(String propertyName);
@@ -1694,11 +1721,11 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Returns a single value for any property that is not a wild-card.
    * <p>
-   * If defined, the property must have at least one value. If there are multiple values then an arbitrary one is returned.
-   * This is provides as a more efficient form than using the {@link Set} returned by {@link #getValues} to obtain an arbitrary
-   * single element.
+   * If defined, the property must have at least one value. If there are multiple values then an arbitrary one is returned. This is provides as a more efficient
+   * form than using the {@link Set} returned by {@link #getValues} to obtain an arbitrary single element.
    *
-   * @param propertyName the name required, not null
+   * @param propertyName
+   *          the name required, not null
    * @return a value if the property is defined and not a wild-card, null otherwise
    */
   public abstract String getSingleValue(String propertyName);
@@ -1706,7 +1733,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Checks if a property may be omitted.
    *
-   * @param propertyName the name required, not null
+   * @param propertyName
+   *          the name required, not null
    * @return true if the property is optional, false if it is not defined or required
    */
   public abstract boolean isOptional(String propertyName);
@@ -1722,7 +1750,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * </ul>
    * The property set is satisfied if each of the individual properties can be satisfied.
    *
-   * @param properties the other property set to check against, not null
+   * @param properties
+   *          the other property set to check against, not null
    * @return true if this set of properties can be satisfied by the other set
    */
   public abstract boolean isSatisfiedBy(ValueProperties properties);
@@ -1730,7 +1759,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Returns the properties in this instance that aren't satisfied by the other, as defined by {@link #isSatisfiedBy}.
    *
-   * @param properties the other property set to check against, not null
+   * @param properties
+   *          the other property set to check against, not null
    * @return The set of unmatched property names, empty if wild-card, null if there are none
    */
   public abstract Set<String> getUnsatisfied(ValueProperties properties);
@@ -1738,10 +1768,11 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Composes two value properties by taking a "left" intersection.
    * <p>
-   * This produces a set of properties such that for any properties defined by the other, the intersection of the property values is taken.
-   * Any properties defined in this set but not in the other remain untouched.
+   * This produces a set of properties such that for any properties defined by the other, the intersection of the property values is taken. Any properties
+   * defined in this set but not in the other remain untouched.
    *
-   * @param properties the other property set to compose against, not null
+   * @param properties
+   *          the other property set to compose against, not null
    * @return the new set of properties, or this object if the composition result is equal, not null
    */
   public abstract ValueProperties compose(ValueProperties properties);
@@ -1749,11 +1780,11 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Produces the strict intersection of two property sets.
    * <p>
-   * This produces a set of properties such that only properties defined in both this and the other are present in the output. For these,
-   * the intersection of common values is available for each property. If there are no common property values, the property is omitted
-   * from the result.
+   * This produces a set of properties such that only properties defined in both this and the other are present in the output. For these, the intersection of
+   * common values is available for each property. If there are no common property values, the property is omitted from the result.
    *
-   * @param properties the other property set to compose against, not null
+   * @param properties
+   *          the other property set to compose against, not null
    * @return the new set of properties, or this (or the other) object if the intersection result is equal, not null
    */
   public abstract ValueProperties intersect(ValueProperties properties);
@@ -1761,10 +1792,11 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Produces the union of two property sets.
    * <p>
-   * This produces a set of properties such that any properties defined in either this or the other are present in the output.
-   * For these, the union of values from each property set is taken.
+   * This produces a set of properties such that any properties defined in either this or the other are present in the output. For these, the union of values
+   * from each property set is taken.
    *
-   * @param properties the other property set to compose against, not null
+   * @param properties
+   *          the other property set to compose against, not null
    * @return the new set of properties, or this (or the other) object if the union result is equal, not null
    */
   public abstract ValueProperties union(ValueProperties properties);
@@ -1788,14 +1820,15 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Equivalent to calling {@code copy().withoutAny(propertyName).get()}.
    *
-   * @param propertyName the property name to remove, not null
+   * @param propertyName
+   *          the property name to remove, not null
    * @return a value properties with the given property removed, not null
    */
   public abstract ValueProperties withoutAny(String propertyName);
 
   /**
-   * Returns a simple string representation of the {@link ValueProperties} instance. This simple representation omits unnecessary brackets
-   * for better readability. The output remains valid as the input to {@link #parse(String)}.
+   * Returns a simple string representation of the {@link ValueProperties} instance. This simple representation omits unnecessary brackets for better
+   * readability. The output remains valid as the input to {@link #parse(String)}.
    *
    * @return a simple string representation
    */
@@ -1806,7 +1839,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * <p>
    * See {@link ValuePropertiesFudgeBuilder} for a description of the message format.
    *
-   * @param message the message to add the fields to, not null
+   * @param message
+   *          the message to add the fields to, not null
    */
   public abstract void toFudgeMsg(MutableFudgeMsg message);
 
@@ -1818,8 +1852,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * <li>INFINITE-{name1,name2}
    * <li>{name1=[value1,value2],name2=[value3]}
    * </ul>
-   * These are intentionally the same as the forms generated by {@link #toString()}. For maximum flexibility, and especially for user input,
-   * more abbreviated forms are also valid. In particular:
+   * These are intentionally the same as the forms generated by {@link #toString()}. For maximum flexibility, and especially for user input, more abbreviated
+   * forms are also valid. In particular:
    * <ul>
    * <li>Curly braces may be omitted
    * <li>Square brackets around single values may be omitted
@@ -1830,7 +1864,8 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
    * <p>
    * A null or empty input string is treated as the empty set of value properties.
    *
-   * @param s the string to parse
+   * @param s
+   *          the string to parse
    * @return the value properties, not null
    */
   public static ValueProperties parse(String s) {
@@ -1977,13 +2012,16 @@ public abstract class ValueProperties implements Serializable, Comparable<ValueP
   /**
    * Produces a string representation of the content of a {@link ValueProperties} object.
    *
-   * @param properties the property names and values, not null
-   * @param optional any properties that are optional, not null
-   * @param strict whether to include delimiting '{' and '}' characters in the string
+   * @param properties
+   *          the property names and values, not null
+   * @param optional
+   *          any properties that are optional, not null
+   * @param strict
+   *          whether to include delimiting '{' and '}' characters in the string
    * @return the string form
-   * @deprecated This is based on the internal representation of {@code ValueProperties} from an older version and used mainly to
-   * implement the {@link #toString()} and {@link #toSimpleString()} methods. New code should not be calling it as it may be
-   * removed in future versions of the platform.
+   * @deprecated This is based on the internal representation of {@code ValueProperties} from an older version and used mainly to implement the
+   *             {@link #toString()} and {@link #toSimpleString()} methods. New code should not be calling it as it may be removed in future versions of the
+   *             platform.
    */
   @Deprecated
   public static String toString(final Map<String, Set<String>> properties, final Set<String> optional, final boolean strict) {

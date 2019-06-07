@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.swaption.provider;
@@ -30,6 +30,7 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod getInstance() {
@@ -57,8 +58,11 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Computes the present value of the Physical delivery swaption.
-   * @param swaption The swaption.
-   * @param hullWhite The Hull-White parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param hullWhite
+   *          The Hull-White parameters and the curves.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionCashFixedIbor swaption, final HullWhiteOneFactorProviderInterface hullWhite) {
@@ -73,7 +77,8 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
     final double[] dfFixed = new double[nbFixed];
     final double[] discountedCashFlowFixed = new double[nbFixed];
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
-      alphaFixed[loopcf] = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime, swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentTime());
+      alphaFixed[loopcf] = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime,
+          swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentTime());
       dfFixed[loopcf] = multicurves.getDiscountFactor(ccy, swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentTime());
       discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
           * swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getNotional();
@@ -91,7 +96,8 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
     final int nbFixedPaymentYear = (int) Math.round(1.0 / swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(0).getPaymentYearFraction());
     final double notional = Math.abs(swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(0).getNotional());
     // Integration
-    final SwaptionIntegrant integrant = new SwaptionIntegrant(discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor, nbFixedPaymentYear, swaption.getStrike(), swaption.isCall());
+    final SwaptionIntegrant integrant = new SwaptionIntegrant(discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor, nbFixedPaymentYear,
+        swaption.getStrike(), swaption.isCall());
     final double limit = 10.0;
     final double absoluteTolerance = 1.0E-8;
     final double relativeTolerance = 1.0E-9;
@@ -121,15 +127,24 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlowFixed The discounted cash flows.
-     * @param alphaFixed The bond volatilities.
-     * @param discountedCashFlowIbor The discounted cash flows.
-     * @param alphaIbor The bond volatilities.
-     * @param nbFixedPaymentYear Number of Fixed payment per year.
-     * @param notional The notional.
-     * @param strike The strike.
+     * 
+     * @param discountedCashFlowFixed
+     *          The discounted cash flows.
+     * @param alphaFixed
+     *          The bond volatilities.
+     * @param discountedCashFlowIbor
+     *          The discounted cash flows.
+     * @param alphaIbor
+     *          The bond volatilities.
+     * @param nbFixedPaymentYear
+     *          Number of Fixed payment per year.
+     * @param notional
+     *          The notional.
+     * @param strike
+     *          The strike.
      */
-    public SwaptionIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor, final int nbFixedPaymentYear,
+    SwaptionIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor,
+        final int nbFixedPaymentYear,
         final double strike, final boolean isPayer) {
       _discountedCashFlowFixed = discountedCashFlowFixed;
       _alphaFixed = alphaFixed;

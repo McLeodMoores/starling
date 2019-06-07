@@ -31,7 +31,7 @@ import com.opengamma.engine.ComputationTargetResolver;
     return _underlying;
   }
 
-  protected abstract TargetResolverObject targetResolverObject(final ComputationTargetResolver.AtVersionCorrection resolver);
+  protected abstract TargetResolverObject targetResolverObject(ComputationTargetResolver.AtVersionCorrection resolver);
 
   protected abstract Serializable simpleObject();
 

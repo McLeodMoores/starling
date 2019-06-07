@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.index;
 
@@ -24,9 +24,8 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Index security loader that uses codes and information from Quandl. If any errors occur, this loader
- * will return null, as it is likely to be used by other classes that will try to load multiple
- * securities.
+ * Index security loader that uses codes and information from Quandl. If any errors occur, this loader will return null, as it is likely to be used by other
+ * classes that will try to load multiple securities.
  */
 @Scriptable
 public class QuandlIndexGenerator extends QuandlSecurityLoader {
@@ -48,7 +47,9 @@ public class QuandlIndexGenerator extends QuandlSecurityLoader {
 
   /**
    * Main method to run this tool.
-   * @param args The program arguments
+   * 
+   * @param args
+   *          The program arguments
    */
   public static void main(final String[] args) {
     new QuandlIndexGenerator().invokeAndTerminate(args);
@@ -124,10 +125,12 @@ public class QuandlIndexGenerator extends QuandlSecurityLoader {
   }
 
   /**
-   * Creates a convention id from an identifier string, falling back to using a Quandl code if
-   * the identifier string is null or empty.
-   * @param identifierString The identifier string
-   * @param quandlCode The Quandl code
+   * Creates a convention id from an identifier string, falling back to using a Quandl code if the identifier string is null or empty.
+   * 
+   * @param identifierString
+   *          The identifier string
+   * @param quandlCode
+   *          The Quandl code
    * @return The convention id
    */
   private static ExternalId createConventionId(final String identifierString, final String quandlCode) {
@@ -142,11 +145,13 @@ public class QuandlIndexGenerator extends QuandlSecurityLoader {
   }
 
   /**
-   * Creates an external id bundle from the quandl code and any additional identifiers supplied. The
-   * additional identifiers must be parseable in the form "SCHEME~VALUE" and multiple identifiers separated
-   * by ";".
-   * @param quandlCode The Quandl code.
-   * @param additionalIdentifiers The additional identifiers, can be null or empty
+   * Creates an external id bundle from the quandl code and any additional identifiers supplied. The additional identifiers must be parseable in the form
+   * "SCHEME~VALUE" and multiple identifiers separated by ";".
+   * 
+   * @param quandlCode
+   *          The Quandl code.
+   * @param additionalIdentifiers
+   *          The additional identifiers, can be null or empty
    * @return The external id bundle of an index.
    */
   private static ExternalIdBundle createIdentifiers(final String quandlCode, final String additionalIdentifiers) {

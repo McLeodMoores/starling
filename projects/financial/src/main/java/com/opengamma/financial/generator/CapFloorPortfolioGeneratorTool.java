@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.capfloor.CapFloorSecurity;
-
 /**
  * Utility for constructing a random Cap/Floor portfolio.
  */

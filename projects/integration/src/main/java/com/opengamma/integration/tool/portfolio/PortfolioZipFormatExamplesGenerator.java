@@ -139,7 +139,7 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
     private final List<ManageablePosition> _positions;
     private final Iterator<ManageablePosition> _iterator;
 
-    public MyPositionReader(final List<ManageablePosition> positions) {
+    MyPositionReader(final List<ManageablePosition> positions) {
       _positions = positions;
       _iterator = _positions.iterator();
     }
@@ -167,7 +167,7 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
             underlying = getToolContext().getSecuritySource().getSingle(id.toBundle());
             if (underlying != null) {
               return ObjectsPair.of(position,
-                  new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying });
+                  new ManageableSecurity[] { (ManageableSecurity) security, (ManageableSecurity) underlying });
             }
             LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
           } catch (final Throwable e) {
@@ -176,7 +176,7 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
           }
         }
         return ObjectsPair.of(position,
-            new ManageableSecurity[] {(ManageableSecurity) security });
+            new ManageableSecurity[] { (ManageableSecurity) security });
 
       }
       LOGGER.warn("Could not resolve security relating to position " + position.getName());
@@ -201,7 +201,8 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
   private ManageablePosition createPosition(final ManageableSecurity security, final boolean includeTrade) {
     final ManageablePosition position = new ManageablePosition(BigDecimal.ONE, security.getExternalIdBundle());
     if (includeTrade) {
-      final ManageableTrade trade = new ManageableTrade(BigDecimal.ONE, security.getExternalIdBundle(), LocalDate.now().minusDays(3), OffsetTime.now(), ExternalId.of("Cpty", "GOLDMAN"));
+      final ManageableTrade trade = new ManageableTrade(BigDecimal.ONE, security.getExternalIdBundle(), LocalDate.now().minusDays(3), OffsetTime.now(),
+          ExternalId.of("Cpty", "GOLDMAN"));
       position.addTrade(trade);
     }
     return position;
@@ -253,13 +254,14 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
     return options;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioZipFormatExamplesGenerator().invokeAndTerminate(args);
   }
 

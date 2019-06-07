@@ -36,8 +36,8 @@ import com.opengamma.financial.security.option.FxFutureOptionSecurity;
 import com.opengamma.id.ExternalId;
 
 /**
- * Exposure function that returns the security type and settlement exchange for a given trade. If the trade does not have
- * a settlement exchange, then null is returned.
+ * Exposure function that returns the security type and settlement exchange for a given trade. If the trade does not have a settlement exchange, then null is
+ * returned.
  */
 public class SecurityAndSettlementExchangeExposureFunction implements ExposureFunction {
 
@@ -72,6 +72,7 @@ public class SecurityAndSettlementExchangeExposureFunction implements ExposureFu
 
     /**
      * Returns the singleton.
+     * 
      * @return the singleton.
      */
     public static SecurityAndSettlementExchangeVisitor getInstance() {
@@ -81,7 +82,7 @@ public class SecurityAndSettlementExchangeExposureFunction implements ExposureFu
     /**
      * Constructor that sets the default returned value to null.
      */
-    public SecurityAndSettlementExchangeVisitor() {
+    SecurityAndSettlementExchangeVisitor() {
       super(null);
     }
 

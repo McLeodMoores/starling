@@ -31,7 +31,7 @@ import de.odysseus.el.util.SimpleResolver;
   private final ELExpressionParser _parser;
   private final ValueExpression _expr;
 
-  public ELExpression(final ELExpressionParser parser, final ValueExpression expr) {
+  ELExpression(final ELExpressionParser parser, final ValueExpression expr) {
     _parser = parser;
     _expr = expr;
   }
@@ -55,7 +55,7 @@ import de.odysseus.el.util.SimpleResolver;
     private final FunctionMapper _functionMapper;
     private final VariableMapper _variableMapper;
 
-    public Context(final ELResolver resolver, final FunctionMapper functionMapper, final VariableMapper variableMapper) {
+    Context(final ELResolver resolver, final FunctionMapper functionMapper, final VariableMapper variableMapper) {
       _resolver = resolver;
       _functionMapper = functionMapper;
       _variableMapper = variableMapper;

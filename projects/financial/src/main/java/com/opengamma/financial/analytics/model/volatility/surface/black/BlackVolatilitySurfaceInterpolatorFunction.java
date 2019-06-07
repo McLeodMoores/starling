@@ -37,7 +37,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public abstract class BlackVolatilitySurfaceInterpolatorFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String timeAxis = desiredValue.getConstraint(PROPERTY_TIME_AXIS);
     final boolean useLogTime = BlackVolatilitySurfacePropertyUtils.useLogTime(timeAxis);
@@ -50,7 +51,8 @@ public abstract class BlackVolatilitySurfaceInterpolatorFunction extends Abstrac
     final String leftExtrapolator = desiredValue.getConstraint(PROPERTY_TIME_LEFT_EXTRAPOLATOR);
     final String rightExtrapolator = desiredValue.getConstraint(PROPERTY_TIME_RIGHT_EXTRAPOLATOR);
     final Interpolator1D timeInterpolator = NamedInterpolator1dFactory.of(interpolator, leftExtrapolator, rightExtrapolator);
-    final VolatilitySurfaceInterpolator surfaceInterpolator = new VolatilitySurfaceInterpolator(smileInterpolator, timeInterpolator, useLogTime, useIntegratedVariance, useLogValue);
+    final VolatilitySurfaceInterpolator surfaceInterpolator = new VolatilitySurfaceInterpolator(smileInterpolator, timeInterpolator, useLogTime,
+        useIntegratedVariance, useLogValue);
     final ValueProperties properties = getResultProperties(desiredValue);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE_INTERPOLATOR, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, surfaceInterpolator));
@@ -77,12 +79,12 @@ public abstract class BlackVolatilitySurfaceInterpolatorFunction extends Abstrac
     return getSpecificRequirements(constraints);
   }
 
-  protected abstract Set<ValueRequirement> getSpecificRequirements(final ValueProperties constraints);
+  protected abstract Set<ValueRequirement> getSpecificRequirements(ValueProperties constraints);
 
-  protected abstract GeneralSmileInterpolator getSmileInterpolator(final ValueRequirement desiredValue);
+  protected abstract GeneralSmileInterpolator getSmileInterpolator(ValueRequirement desiredValue);
 
   protected abstract ValueProperties getResultProperties();
 
-  protected abstract ValueProperties getResultProperties(final ValueRequirement desiredValue);
+  protected abstract ValueProperties getResultProperties(ValueRequirement desiredValue);
 
 }

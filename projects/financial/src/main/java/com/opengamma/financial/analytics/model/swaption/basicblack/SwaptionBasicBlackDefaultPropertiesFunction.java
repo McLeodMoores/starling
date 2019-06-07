@@ -33,7 +33,7 @@ public class SwaptionBasicBlackDefaultPropertiesFunction extends DefaultProperty
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBasicBlackDefaultPropertiesFunction.class);
   /** The requirements for which these defaults apply */
-  private static final String[] s_valueRequirements = new String[] {
+  private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.VALUE_VEGA,
     ValueRequirementNames.PV01,
@@ -66,7 +66,7 @@ public class SwaptionBasicBlackDefaultPropertiesFunction extends DefaultProperty
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueRequirement : s_valueRequirements) {
+    for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     }
   }

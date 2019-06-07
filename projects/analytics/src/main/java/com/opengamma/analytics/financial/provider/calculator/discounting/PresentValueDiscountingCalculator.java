@@ -91,6 +91,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueDiscountingCalculator getInstance() {
@@ -117,27 +118,34 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   private static final CouponIborGearingDiscountingMethod METHOD_CPN_IBOR_GEARING = CouponIborGearingDiscountingMethod.getInstance();
   private static final CouponIborCompoundingDiscountingMethod METHOD_CPN_IBOR_COMP = CouponIborCompoundingDiscountingMethod.getInstance();
   private static final CouponIborCompoundingSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SPREAD = CouponIborCompoundingSpreadDiscountingMethod.getInstance();
-  private static final CouponIborCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_FLAT_SPREAD = CouponIborCompoundingFlatSpreadDiscountingMethod.getInstance();
-  private static final CouponIborCompoundingSimpleSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SIMPLE_SPREAD = CouponIborCompoundingSimpleSpreadDiscountingMethod.getInstance();
+  private static final CouponIborCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_FLAT_SPREAD = CouponIborCompoundingFlatSpreadDiscountingMethod
+      .getInstance();
+  private static final CouponIborCompoundingSimpleSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SIMPLE_SPREAD = CouponIborCompoundingSimpleSpreadDiscountingMethod
+      .getInstance();
   private static final CouponONDiscountingMethod METHOD_CPN_ON = CouponONDiscountingMethod.getInstance();
   private static final CouponONSpreadDiscountingMethod METHOD_CPN_ON_SPREAD = CouponONSpreadDiscountingMethod.getInstance();
   private static final CouponONArithmeticAverageDiscountingApproxMethod METHOD_CPN_AAON_APPROX = CouponONArithmeticAverageDiscountingApproxMethod.getInstance();
   private static final CouponONArithmeticAverageSpreadDiscountingMethod METHOD_CPN_AAON_SPREAD = CouponONArithmeticAverageSpreadDiscountingMethod.getInstance();
-  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_CPN_ONAA_SPREADSIMPL_APPROX =
-      CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod.getInstance();
+  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_CPN_ONAA_SPREADSIMPL_APPROX = CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod
+      .getInstance();
   private static final ForwardRateAgreementDiscountingProviderMethod METHOD_FRA = ForwardRateAgreementDiscountingProviderMethod.getInstance();
   private static final ForexDiscountingMethod METHOD_FOREX = ForexDiscountingMethod.getInstance();
   private static final ForexSwapDiscountingMethod METHOD_FOREX_SWAP = ForexSwapDiscountingMethod.getInstance();
   private static final ForexNonDeliverableForwardDiscountingMethod METHOD_FOREX_NDF = ForexNonDeliverableForwardDiscountingMethod.getInstance();
   private static final FuturesTransactionMulticurveMethod METHOD_FUT = new FuturesTransactionMulticurveMethod();
-  private static final CouponFixedAccruedCompoundingDiscountingMethod METHOD_CPN_FIXED_ACCRUED_COMPOUNDING = CouponFixedAccruedCompoundingDiscountingMethod.getInstance();
+  private static final CouponFixedAccruedCompoundingDiscountingMethod METHOD_CPN_FIXED_ACCRUED_COMPOUNDING = CouponFixedAccruedCompoundingDiscountingMethod
+      .getInstance();
   private static final CouponONCompoundedDiscountingMethod METHOD_CPN_ON_COMPOUNDING = CouponONCompoundedDiscountingMethod.getInstance();
-  private static final InterpolatedStubPresentValueDiscountingCalculator METHOD_CPN_INTERP_STUB = InterpolatedStubPresentValueDiscountingCalculator.getInstance();
-  private static final CouponIborAverageFixingDatesDiscountingMethod METHOD_CPN_IBOR_AVERAGE_FIXING_DATES = CouponIborAverageFixingDatesDiscountingMethod.getInstance();
-  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD_CPN_IBOR_AVERAGE_CMP = CouponIborAverageFixingDatesCompoundingDiscountingMethod.getInstance();
-  private static final CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_FLAT_CMP_SPREAD = CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod.getInstance();
+  private static final InterpolatedStubPresentValueDiscountingCalculator METHOD_CPN_INTERP_STUB = InterpolatedStubPresentValueDiscountingCalculator
+      .getInstance();
+  private static final CouponIborAverageFixingDatesDiscountingMethod METHOD_CPN_IBOR_AVERAGE_FIXING_DATES = CouponIborAverageFixingDatesDiscountingMethod
+      .getInstance();
+  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD_CPN_IBOR_AVERAGE_CMP = CouponIborAverageFixingDatesCompoundingDiscountingMethod
+      .getInstance();
+  private static final CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_FLAT_CMP_SPREAD = CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod
+      .getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public MultipleCurrencyAmount visitCash(final Cash deposit, final MulticurveProviderInterface multicurve) {
@@ -149,7 +157,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
     return METHOD_DEPOSIT_IBOR.presentValue(deposit, multicurve);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MultipleCurrencyAmount visitFixedPayment(final PaymentFixed payment, final MulticurveProviderInterface multicurve) {
@@ -204,12 +212,14 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponIborCompoundingFlatSpread(final CouponIborCompoundingFlatSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyAmount visitCouponIborCompoundingFlatSpread(final CouponIborCompoundingFlatSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_COMP_FLAT_SPREAD.presentValue(coupon, multicurve);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponIborCompoundingSimpleSpread(final CouponIborCompoundingSimpleSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyAmount visitCouponIborCompoundingSimpleSpread(final CouponIborCompoundingSimpleSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_COMP_SIMPLE_SPREAD.presentValue(coupon, multicurve);
   }
 
@@ -229,12 +239,14 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponONArithmeticAverageSpread(final CouponONArithmeticAverageSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyAmount visitCouponONArithmeticAverageSpread(final CouponONArithmeticAverageSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_AAON_SPREAD.presentValue(coupon, multicurve);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponONArithmeticAverageSpreadSimplified(final CouponONArithmeticAverageSpreadSimplified coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyAmount visitCouponONArithmeticAverageSpreadSimplified(final CouponONArithmeticAverageSpreadSimplified coupon,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_ONAA_SPREADSIMPL_APPROX.presentValue(coupon, multicurve);
   }
 
@@ -259,16 +271,18 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponIborAverageCompounding(final CouponIborAverageFixingDatesCompounding coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyAmount visitCouponIborAverageCompounding(final CouponIborAverageFixingDatesCompounding coupon,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_AVERAGE_CMP.presentValue(coupon, multicurve);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponIborAverageFlatCompoundingSpread(final CouponIborAverageFixingDatesCompoundingFlatSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyAmount visitCouponIborAverageFlatCompoundingSpread(final CouponIborAverageFixingDatesCompoundingFlatSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     return METHOD_CPN_IBOR_FLAT_CMP_SPREAD.presentValue(coupon, multicurve);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyAmount visitGenericAnnuity(final Annuity<? extends Payment> annuity, final MulticurveProviderInterface multicurve) {
@@ -287,7 +301,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
     return visitGenericAnnuity(annuity, multicurve);
   }
 
-  // -----     Swap     ------
+  // ----- Swap ------
 
   @Override
   public MultipleCurrencyAmount visitSwap(final Swap<?, ?> swap, final MulticurveProviderInterface multicurve) {
@@ -311,7 +325,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
     return pv;
   }
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
   public MultipleCurrencyAmount visitFederalFundsFutureTransaction(final FederalFundsFutureTransaction futures, final MulticurveProviderInterface multicurves) {
@@ -324,11 +338,12 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   }
 
   @Override
-  public MultipleCurrencyAmount visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction future, final MulticurveProviderInterface multicurves) {
+  public MultipleCurrencyAmount visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction future,
+      final MulticurveProviderInterface multicurves) {
     return METHOD_FUT.presentValue(future, multicurves);
   }
 
-  // -----     Forex     ------
+  // ----- Forex ------
 
   @Override
   public MultipleCurrencyAmount visitForex(final Forex derivative, final MulticurveProviderInterface multicurves) {
@@ -346,8 +361,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   }
 
   /**
-   * Pricer that keeps a running sum. It is optimised for the most common case of a series of multi currency amounts in
-   * the same currency.
+   * Pricer that keeps a running sum. It is optimised for the most common case of a series of multi currency amounts in the same currency.
    */
   private class Pricer {
     // we pull out a single currency value and keep a running sum for it. This saves creating multiple transient
@@ -363,9 +377,11 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
     /**
      * Create a pricing object
-     * @param amount the initial amount in the series of payments
+     * 
+     * @param amount
+     *          the initial amount in the series of payments
      */
-    public Pricer(final MultipleCurrencyAmount amount) {
+    Pricer(final MultipleCurrencyAmount amount) {
       ArgumentChecker.notNull(amount, "amount");
       if (amount.size() > 0) {
         // optimise the pricing of this currency by skipping intermediate MCA objects
@@ -378,7 +394,9 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
     /**
      * Add the amount to the existing sum
-     * @param amountToAdd the amount to add
+     * 
+     * @param amountToAdd
+     *          the amount to add
      */
     public void plus(final MultipleCurrencyAmount amountToAdd) {
       ArgumentChecker.notNull(amountToAdd, "amountToAdd");
@@ -397,6 +415,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
     /**
      * Get the sum of all the payments
+     * 
      * @return the sum
      */
     public MultipleCurrencyAmount getSum() {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.future;
 
@@ -10,9 +10,8 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An instrument provider for curves that generates Quandl codes for Federal funds futures. This provider contains
- * additional information about the underlying ticker and data field, which is used to get the Federal funds overnight
- * rate, which is required for pricing.
+ * An instrument provider for curves that generates Quandl codes for Federal funds futures. This provider contains additional information about the underlying
+ * ticker and data field, which is used to get the Federal funds overnight rate, which is required for pricing.
  */
 public class QuandlFedFundsFutureCurveInstrumentProvider extends QuandlFutureCurveInstrumentProvider {
   /** The identifier of the underlying rate */
@@ -22,11 +21,17 @@ public class QuandlFedFundsFutureCurveInstrumentProvider extends QuandlFutureCur
 
   /**
    * Creates an instance.
-   * @param futurePrefix  the future prefix, not null
-   * @param dataField  the data field for the future, not null
-   * @param fieldType  the field type for the future, not null
-   * @param underlyingId  the underlying id, not null
-   * @param underlyingDataField  the underlying data field, not null
+   * 
+   * @param futurePrefix
+   *          the future prefix, not null
+   * @param dataField
+   *          the data field for the future, not null
+   * @param fieldType
+   *          the field type for the future, not null
+   * @param underlyingId
+   *          the underlying id, not null
+   * @param underlyingDataField
+   *          the underlying data field, not null
    */
   public QuandlFedFundsFutureCurveInstrumentProvider(final String futurePrefix, final String dataField, final DataFieldType fieldType,
       final ExternalId underlyingId, final String underlyingDataField) {
@@ -39,7 +44,8 @@ public class QuandlFedFundsFutureCurveInstrumentProvider extends QuandlFutureCur
 
   /**
    * Gets the underlying id.
-   * @return  the underlying id
+   * 
+   * @return the underlying id
    */
   public ExternalId getUnderlyingId() {
     return _underlyingId;
@@ -47,7 +53,8 @@ public class QuandlFedFundsFutureCurveInstrumentProvider extends QuandlFutureCur
 
   /**
    * Gets the underlying data field.
-   * @return  the underlying data field
+   * 
+   * @return the underlying data field
    */
   public String getUnderlyingDataField() {
     return _underlyingDataField;

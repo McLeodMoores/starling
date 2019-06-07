@@ -70,13 +70,20 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
   /**
    * Creates a new target.
    *
-   * @param user  the user the view is created for, not null.
-   * @param startDate  the start date as a {@link DateConstraint} encoded string, not null
-   * @param includeStart  whether to include the start date in the evaluation.
-   * @param endDate  the end date as a {@link DateConstraint} encoded string, not null
-   * @param includeEnd  whether to include the end date in the evaluation.
-   * @param currencyCalendars  the currencies for which to obtain a compound holiday calendar in order to obtain a valid sequence of dates, may be null
-   * @param marketDataMode  the mode in which market data should be obtained, not null
+   * @param user
+   *          the user the view is created for, not null.
+   * @param startDate
+   *          the start date as a {@link DateConstraint} encoded string, not null
+   * @param includeStart
+   *          whether to include the start date in the evaluation.
+   * @param endDate
+   *          the end date as a {@link DateConstraint} encoded string, not null
+   * @param includeEnd
+   *          whether to include the end date in the evaluation.
+   * @param currencyCalendars
+   *          the currencies for which to obtain a compound holiday calendar in order to obtain a valid sequence of dates, may be null
+   * @param marketDataMode
+   *          the mode in which market data should be obtained, not null
    */
   public HistoricalViewEvaluationTarget(final UserPrincipal user, final String startDate, final boolean includeStart, final String endDate,
       final boolean includeEnd, final Set<Currency> currencyCalendars, final HistoricalViewEvaluationMarketDataMode marketDataMode) {
@@ -98,7 +105,8 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
   }
 
   private HistoricalViewEvaluationTarget(final FudgeDeserializer deserializer, final FudgeMsg message, final String startDate,
-      final boolean includeStart, final String endDate, final boolean includeEnd, final Set<Currency> currencyCalendars, final HistoricalViewEvaluationMarketDataMode marketDataMode) {
+      final boolean includeStart, final String endDate, final boolean includeEnd, final Set<Currency> currencyCalendars,
+      final HistoricalViewEvaluationMarketDataMode marketDataMode) {
     super(deserializer, message, new HistoricalSequence(startDate, includeStart, endDate, includeEnd, currencyCalendars, marketDataMode));
   }
 
@@ -147,7 +155,7 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
      */
     private final HistoricalViewEvaluationMarketDataMode _marketDataMode;
 
-    public HistoricalSequence(final String startDateDescriptor, final boolean includeStart, final String endDateDescriptor,
+    HistoricalSequence(final String startDateDescriptor, final boolean includeStart, final String endDateDescriptor,
         final boolean includeEnd, final Set<Currency> currencyCalendars, final HistoricalViewEvaluationMarketDataMode marketDataMode) {
       ArgumentChecker.notNull(startDateDescriptor, "startDate");
       ArgumentChecker.notNull(endDateDescriptor, "endDate");
@@ -185,7 +193,8 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
       LocalDate currentDate = startDate;
       while (!currentDate.isAfter(endDate)) {
         if (calendar == null || calendar.isWorkingDay(currentDate)) {
-          final MarketDataSpecification marketDataSpec = createMarketDataSpec(previousWorkingDate, currentDate, LocalDate.now(executionContext.getValuationClock()));
+          final MarketDataSpecification marketDataSpec = createMarketDataSpec(previousWorkingDate, currentDate,
+              LocalDate.now(executionContext.getValuationClock()));
           if (marketDataSpec != null) {
             final ViewCycleExecutionOptions executionOptions = ViewCycleExecutionOptions.builder()
                 .setMarketDataSpecification(marketDataSpec)

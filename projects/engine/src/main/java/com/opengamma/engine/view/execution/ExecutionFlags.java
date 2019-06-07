@@ -22,10 +22,10 @@ public final class ExecutionFlags {
   }
 
   private ExecutionFlags(final ViewExecutionFlags flag) {
-    _flags = EnumSet.<ViewExecutionFlags>of(flag);
+    _flags = EnumSet.<ViewExecutionFlags> of(flag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Adds {@link ViewExecutionFlags#AWAIT_MARKET_DATA}.
@@ -130,7 +130,7 @@ public final class ExecutionFlags {
   /**
    * Modes of operation for the {@link #parallelCompilation} flag.
    */
-  public static enum ParallelRecompilationMode {
+  public enum ParallelRecompilationMode {
 
     /**
      * The {@link ViewExecutionFlags#PARALLEL_RECOMPILATION_AND_EXECUTION} flag.
@@ -149,7 +149,7 @@ public final class ExecutionFlags {
 
     private final ViewExecutionFlags _flag;
 
-    private ParallelRecompilationMode(final ViewExecutionFlags flag) {
+    ParallelRecompilationMode(final ViewExecutionFlags flag) {
       _flag = flag;
     }
 
@@ -173,7 +173,7 @@ public final class ExecutionFlags {
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets an {@link EnumSet} corresponding to the flags that have been added.

@@ -13,10 +13,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Curve instrument provider for tickers that represent a spread over a base value.
- *
- * @deprecated {@link FixedIncomeStrip}s are deprecated.
  */
-@Deprecated
 public class StaticCurvePointsInstrumentProvider extends StaticCurveInstrumentProvider {
   /** The underlying market data identifier */
   private final ExternalId _underlyingIdentifier;
@@ -44,10 +41,20 @@ public class StaticCurvePointsInstrumentProvider extends StaticCurveInstrumentPr
     _underlyingDataField = underlyingDataField;
   }
 
+  /**
+   * Gets the identifier of the underlying market data.
+   * 
+   * @return the identifier
+   */
   public ExternalId getUnderlyingInstrument() {
     return _underlyingIdentifier;
   }
 
+  /**
+   * Gets the underlying market data field.
+   * 
+   * @return the market data field
+   */
   public String getUnderlyingMarketDataField() {
     return _underlyingDataField;
   }

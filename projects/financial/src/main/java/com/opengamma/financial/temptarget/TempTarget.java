@@ -54,12 +54,13 @@ public abstract class TempTarget implements UniqueIdentifiable {
     return _uid;
   }
 
-  public abstract TempTarget withUniqueId(final UniqueId uid);
+  public abstract TempTarget withUniqueId(UniqueId uid);
 
   /**
    * Tests the target for equality against another, ignoring the unique identifier.
    *
-   * @param o the other object, not null, not this instance, and of the same class as this instance
+   * @param o
+   *          the other object, not null, not this instance, and of the same class as this instance
    * @return true if the objects are equal (ignoring the unique identifier), false otherwise
    */
   protected abstract boolean equalsImpl(Object o);
@@ -74,7 +75,8 @@ public abstract class TempTarget implements UniqueIdentifiable {
   /**
    * Tests the target for equality against another, ignoring the unique identifier.
    *
-   * @param o the object to test against, possibly null
+   * @param o
+   *          the object to test against, possibly null
    * @return true if the objects are equal (ignoring the unique identifier), false otherwise
    */
   @Override

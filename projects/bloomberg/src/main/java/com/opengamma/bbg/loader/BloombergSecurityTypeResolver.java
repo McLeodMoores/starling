@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.loader;
@@ -42,7 +42,7 @@ public class BloombergSecurityTypeResolver implements SecurityTypeResolver {
     addValidTypes(FUTURE_TYPES, IndexFutureLoader.VALID_FUTURE_CATEGORIES, SecurityType.INDEX_FUTURE);
     addValidTypes(FUTURE_TYPES, InterestRateFutureLoader.VALID_FUTURE_CATEGORIES, SecurityType.INTEREST_RATE_FUTURE);
     addValidTypes(FUTURE_TYPES, MetalFutureLoader.VALID_FUTURE_CATEGORIES, SecurityType.METAL_FUTURE);
-    //types for EquityFutureSecurity
+    // types for EquityFutureSecurity
     addValidTypes(FUTURE_TYPES, EquityFutureLoader.VALID_SECURITY_TYPES, SecurityType.EQUITY_FUTURE);
 
   }
@@ -84,20 +84,22 @@ public class BloombergSecurityTypeResolver implements SecurityTypeResolver {
     addValidTypes(TYPE_TO_TYPES, BillLoader.VALID_SECURITY_TYPES2, SecurityType.BILL);
   }
 
-  //private static final Map<String, SecurityType> s_cdsTypes = Maps.newConcurrentMap();
+  // private static final Map<String, SecurityType> s_cdsTypes = Maps.newConcurrentMap();
   static {
     addValidTypes(SWAP_TYPES, NonLoadedSecurityTypes.VALID_CDS_TYPES, SecurityType.CREDIT_DEFAULT_SWAP);
   }
 
-  private static final Set<String> BBG_FIELDS = Sets.newHashSet(BloombergConstants.FIELD_SECURITY_TYPE, BloombergConstants.FIELD_FUTURES_CATEGORY, BloombergConstants.FIELD_NAME,
+  private static final Set<String> BBG_FIELDS = Sets.newHashSet(BloombergConstants.FIELD_SECURITY_TYPE, BloombergConstants.FIELD_FUTURES_CATEGORY,
+      BloombergConstants.FIELD_NAME,
       BloombergConstants.FIELD_SECURITY_TYPE2);
 
   private final ReferenceDataProvider _referenceDataProvider;
 
   /**
    * Creates a BloombergSecurityTypeResolver
-   * 
-   * @param referenceDataProvider the reference data provider, not null
+   *
+   * @param referenceDataProvider
+   *          the reference data provider, not null
    */
   public BloombergSecurityTypeResolver(final ReferenceDataProvider referenceDataProvider) {
     ArgumentChecker.notNull(referenceDataProvider, "referenceDataProvider");
@@ -133,9 +135,9 @@ public class BloombergSecurityTypeResolver implements SecurityTypeResolver {
               // Special case handling for EQUITY_INDEX_DIVIDEND_FUTURE_OPTION which we
               // are otherwise unable to distinguish from EQUITY_INDEX_FUTURE_OPTION
               final String name = fudgeMsg.getString(BloombergConstants.FIELD_NAME);
-              securityType = isEquityIndexFutureDividendOption(futureCategory, name) ?
-                  SecurityType.EQUITY_INDEX_DIVIDEND_FUTURE_OPTION :
-                    OPTION_TYPES.get(futureCategory);
+              securityType = isEquityIndexFutureDividendOption(futureCategory, name)
+                  ? SecurityType.EQUITY_INDEX_DIVIDEND_FUTURE_OPTION
+                  : OPTION_TYPES.get(futureCategory);
             } else if (bbgSecurityType.toUpperCase().endsWith("SWAP")) {
               securityType = SWAP_TYPES.get(bbgSecurityType);
             } else if (bbgSecurityType2 != null && bbgSecurityType2.toUpperCase().contains("BILL")) {

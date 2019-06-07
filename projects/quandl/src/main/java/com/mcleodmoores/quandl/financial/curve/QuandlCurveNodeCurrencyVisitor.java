@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -25,8 +25,11 @@ public class QuandlCurveNodeCurrencyVisitor extends CurveNodeCurrencyVisitor imp
 
   /**
    * Creates an instance, setting the config source to null.
-   * @param conventionSource The convention source, not null
-   * @param securitySource The security source, not null
+   * 
+   * @param conventionSource
+   *          The convention source, not null
+   * @param securitySource
+   *          The security source, not null
    */
   public QuandlCurveNodeCurrencyVisitor(final ConventionSource conventionSource, final SecuritySource securitySource) {
     super(conventionSource, securitySource);
@@ -34,18 +37,21 @@ public class QuandlCurveNodeCurrencyVisitor extends CurveNodeCurrencyVisitor imp
 
   /**
    * Creates an instance.
-   * @param conventionSource The convention source, not null
-   * @param securitySource The security source, not null
-   * @param configSource The config source, not null
+   * 
+   * @param conventionSource
+   *          The convention source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param configSource
+   *          The config source, not null
    */
   public QuandlCurveNodeCurrencyVisitor(final ConventionSource conventionSource, final SecuritySource securitySource, final ConfigSource configSource) {
     super(conventionSource, securitySource, configSource);
   }
 
   /**
-   * If the convention is a {@link QuandlStirFutureConvention} or {@link QuandlFedFundsFutureConvention}, returns the currency. Otherwise,
-   * delegates to the superclass.
-   * {@inheritDoc}.
+   * If the convention is a {@link QuandlStirFutureConvention} or {@link QuandlFedFundsFutureConvention}, returns the currency. Otherwise, delegates to the
+   * superclass. {@inheritDoc}.
    */
   @Override
   public Set<Currency> visitRateFutureNode(final RateFutureNode node) {

@@ -93,12 +93,15 @@ public abstract class PureBlackVolatilitySurfaceFunction extends AbstractFunctio
     final double[][] strikes = strikesAndValues.getSecond();
     final double[][] prices = strikesAndValues.getThird();
     final VolatilitySurfaceInterpolator surfaceInterpolator = (VolatilitySurfaceInterpolator) interpolatorObject;
-    final PureImpliedVolatilitySurface pureSurface = EquityVolatilityToPureVolatilitySurfaceConverter.getConvertedSurface(spot, curve, dividends, expiries, strikes, prices,
+    final PureImpliedVolatilitySurface pureSurface = EquityVolatilityToPureVolatilitySurfaceConverter.getConvertedSurface(spot, curve, dividends, expiries,
+        strikes, prices,
         surfaceInterpolator);
-    final FunctionalVolatilitySurfaceData surfaceData = new FunctionalVolatilitySurfaceData(pureSurface, X_LABEL, expiries[0], expiries[expiries.length - 1], 25, Y_LABEL,
+    final FunctionalVolatilitySurfaceData surfaceData = new FunctionalVolatilitySurfaceData(pureSurface, X_LABEL, expiries[0], expiries[expiries.length - 1],
+        25, Y_LABEL,
         0.25, 1.75, 50, 0, 0.6);
     final ValueProperties properties = getResultProperties(desiredValue);
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.PURE_VOLATILITY_SURFACE, target.toSpecification(), properties), surfaceData));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.PURE_VOLATILITY_SURFACE, target.toSpecification(), properties), surfaceData));
   }
 
   @Override
@@ -143,7 +146,7 @@ public abstract class PureBlackVolatilitySurfaceFunction extends AbstractFunctio
 
   protected abstract ValueProperties getResultProperties();
 
-  protected abstract ValueProperties getResultProperties(final ValueRequirement desiredValue);
+  protected abstract ValueProperties getResultProperties(ValueRequirement desiredValue);
 
   protected abstract AffineDividends getDividends(FunctionInputs inputs);
 
@@ -166,10 +169,10 @@ public abstract class PureBlackVolatilitySurfaceFunction extends AbstractFunctio
   }
 
   private ValueRequirement getInterpolatorRequirement(final ComputationTargetSpecification target, final ValueRequirement desiredValue) {
-    final ValueProperties properties = BlackVolatilitySurfacePropertyUtils.addVolatilityInterpolatorProperties(ValueProperties.builder().get(), desiredValue).get();
+    final ValueProperties properties = BlackVolatilitySurfacePropertyUtils.addVolatilityInterpolatorProperties(ValueProperties.builder().get(), desiredValue)
+        .get();
     return new ValueRequirement(ValueRequirementNames.BLACK_VOLATILITY_SURFACE_INTERPOLATOR, target, properties);
   }
-
 
   private double[] getExpiries(final double[] expiryNumber, final LocalDate date) {
     final int n = expiryNumber.length;

@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.opengamma.integration.tool.convention;
 
 import java.io.BufferedInputStream;
@@ -39,7 +42,8 @@ public class ConventionLoader {
   }
 
   public void loadConvention(final InputStream inputStream) {
-    try (final FudgeXMLStreamReader xmlStreamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(), new InputStreamReader(new BufferedInputStream(inputStream)))) {
+    try (FudgeXMLStreamReader xmlStreamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(),
+        new InputStreamReader(new BufferedInputStream(inputStream)))) {
       final FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(xmlStreamReader);
       final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
       final FudgeMsg conventionsMessage = fudgeMsgReader.nextMessage();
@@ -58,9 +62,8 @@ public class ConventionLoader {
         return;
       }
       @SuppressWarnings("unchecked")
-      final
-      List<ConventionEntry> conventions = (List<ConventionEntry>) wrapper.get("conventions");
-      loadConventions(conventions, Collections.<UniqueId, String>emptyMap());
+      final List<ConventionEntry> conventions = (List<ConventionEntry>) wrapper.get("conventions");
+      loadConventions(conventions, Collections.<UniqueId, String> emptyMap());
     } catch (final Exception e) {
       LOGGER.error(e.getMessage());
     }

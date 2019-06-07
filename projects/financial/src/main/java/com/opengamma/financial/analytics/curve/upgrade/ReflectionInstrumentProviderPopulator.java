@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.upgrade;
 
@@ -20,8 +20,9 @@ import com.opengamma.util.time.Tenor;
  *
  */
 public class ReflectionInstrumentProviderPopulator extends InstrumentProviderPopulator {
-  /** The name of the method in the curve specification builder configuration that supplies the appropriate ids for
-   * the strip instrument type. */
+  /**
+   * The name of the method in the curve specification builder configuration that supplies the appropriate ids for the strip instrument type.
+   */
   private final String _instrumentProviderMethodName;
   /** The name of the method in the curve node id mapper builder that adds ids to the appropriate curve node type */
   private final String _builderMethodName;
@@ -30,30 +31,41 @@ public class ReflectionInstrumentProviderPopulator extends InstrumentProviderPop
 
   /**
    * Sets the renaming function to {@link DefaultCsbcRenamingFunction}.
-   * @param type  the strip instrument type, not null
-   * @param instrumentProviderName  the instrument provider method name, not null
-   * @param builderGetterName  the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder}
-   * that gets the ids for the curve node type, not null
-   * @param builderMethodName  the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder}
-   * that adds the ids for the curve not type, not null
+   * 
+   * @param type
+   *          the strip instrument type, not null
+   * @param instrumentProviderName
+   *          the instrument provider method name, not null
+   * @param builderGetterName
+   *          the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder} that gets the ids for the curve node type,
+   *          not null
+   * @param builderMethodName
+   *          the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder} that adds the ids for the curve not type,
+   *          not null
    */
-  public ReflectionInstrumentProviderPopulator(final StripInstrumentType type, final String instrumentProviderName,
-      final String builderGetterName, final String builderMethodName) {
+  public ReflectionInstrumentProviderPopulator(final StripInstrumentType type, final String instrumentProviderName, final String builderGetterName,
+      final String builderMethodName) {
     this(type, instrumentProviderName, builderGetterName, builderMethodName, new DefaultCsbcRenamingFunction());
   }
 
   /**
    * Sets the renaming function to {@link DefaultCsbcRenamingFunction}.
-   * @param type  the strip instrument type, not null
-   * @param instrumentProviderName  the instrument provider method name, not null
-   * @param builderGetterName  the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder}
-   * that gets the ids for the curve node type, not null
-   * @param builderMethodName  the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder}
-   * that adds the ids for the curve not type, not null
-   * @param renamingFunction  the name of the renaming function, not null
+   * 
+   * @param type
+   *          the strip instrument type, not null
+   * @param instrumentProviderName
+   *          the instrument provider method name, not null
+   * @param builderGetterName
+   *          the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder} that gets the ids for the curve node type,
+   *          not null
+   * @param builderMethodName
+   *          the name of the method in the {@link com.opengamma.financial.analytics.curve.CurveNodeIdMapper.Builder} that adds the ids for the curve not type,
+   *          not null
+   * @param renamingFunction
+   *          the name of the renaming function, not null
    */
-  public ReflectionInstrumentProviderPopulator(final StripInstrumentType type, final String instrumentProviderName,
-      final String builderGetterName, final String builderMethodName, final Function2<String, String, String> renamingFunction) {
+  public ReflectionInstrumentProviderPopulator(final StripInstrumentType type, final String instrumentProviderName, final String builderGetterName,
+      final String builderMethodName, final Function2<String, String, String> renamingFunction) {
     super(type, renamingFunction);
     _instrumentProviderMethodName = instrumentProviderName;
     _builderGetterName = builderGetterName;
@@ -86,12 +98,13 @@ public class ReflectionInstrumentProviderPopulator extends InstrumentProviderPop
   }
 
   /**
-   * Gets the map of instrument providers from the curve specification builder configuration.
-   * This method uses reflection to call the correct getter and can be overridden in implementing
-   * classes that only handle one strip instrument type to improve performance. If the getter
-   * cannot be found or there is a problem calling the getter a runtime exception will be thrown.
-   * @param csbc  the curve specification builder configuration, not null
-   * @return  a map from tenor to curve instrument provider.
+   * Gets the map of instrument providers from the curve specification builder configuration. This method uses reflection to call the correct getter and can be
+   * overridden in implementing classes that only handle one strip instrument type to improve performance. If the getter cannot be found or there is a problem
+   * calling the getter a runtime exception will be thrown.
+   * 
+   * @param csbc
+   *          the curve specification builder configuration, not null
+   * @return a map from tenor to curve instrument provider.
    */
   @Override
   @SuppressWarnings("unchecked")

@@ -20,8 +20,8 @@ import com.opengamma.engine.value.ValueRequirement;
 /**
  * Dummy function to inject default properties from a position or trade's attributes into the dependency graph.
  * <p>
- * Any attributes of the form <code><em>ValueName</em>.DEFAULT_<em>PropertyName</em></code> will be
- * processed to introduce a default value for any omitted <em>PropertyName</em> on <em>ValueName</em> for the target.
+ * Any attributes of the form <code><em>ValueName</em>.DEFAULT_<em>PropertyName</em></code> will be processed to introduce a default value for any omitted
+ * <em>PropertyName</em> on <em>ValueName</em> for the target.
  */
 /* package */abstract class PositionOrAttributableDefaultPropertyFunction extends DefaultPropertyFunction {
 
@@ -30,7 +30,7 @@ import com.opengamma.engine.value.ValueRequirement;
   private static final String WILDCARD = "*";
   private static final String SEP = ".DEFAULT_";
 
-  public PositionOrAttributableDefaultPropertyFunction(final ComputationTargetType type) {
+  PositionOrAttributableDefaultPropertyFunction(final ComputationTargetType type) {
     super(type, false);
   }
 
@@ -56,7 +56,7 @@ import com.opengamma.engine.value.ValueRequirement;
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Map<String, String> attributes = getAttributes(target);
-    if ((attributes == null) || attributes.isEmpty()) {
+    if (attributes == null || attributes.isEmpty()) {
       LOGGER.debug("No attributes for target {}", target);
       return false;
     }
@@ -72,7 +72,8 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final Map<String, String> attributes = getAttributes(target);
     String defaultValue = attributes.get(desiredValue.getValueName() + SEP + propertyName);
     if (defaultValue != null) {
@@ -84,8 +85,8 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   /**
-   * Position and trade default functions are declared a lower priority so that the normal functions that work
-   * from the calculation configuration can override their behavior.
+   * Position and trade default functions are declared a lower priority so that the normal functions that work from the calculation configuration can override
+   * their behavior.
    *
    * @return {@link com.opengamma.financial.property.DefaultPropertyFunction.PriorityClass#BELOW_NORMAL}
    */

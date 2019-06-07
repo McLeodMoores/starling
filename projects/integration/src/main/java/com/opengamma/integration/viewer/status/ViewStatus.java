@@ -10,21 +10,21 @@ package com.opengamma.integration.viewer.status;
  */
 public enum ViewStatus {
   /**
-   * Value
+   * Value.
    */
   VALUE("V"),
   /**
-   * No Value
+   * No Value.
    */
   NO_VALUE("N"),
   /**
-   * Graph Fail
+   * Graph Fail.
    */
   GRAPH_FAIL("F");
 
   private final String _value;
 
-  private ViewStatus(final String value) {
+  ViewStatus(final String value) {
     _value = value;
   }
 

@@ -30,6 +30,8 @@ import com.opengamma.engine.value.ValueRequirement;
 
   /**
    * Returns the number of pending tasks. The caller must hold the monitor.
+   *
+   * @return the number of pending tasks
    */
   protected int getPendingTasks() {
     return _pendingTasks;
@@ -64,9 +66,9 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   /**
-   * Tests if the result about to be pushed from {@link #resolved} can be considered the "last result". The result has come from the
-   * last pending task. The default behavior is to return true but a sub-class that hooks the {@link #finished} call to introduce
-   * more productions must return false to avoid an intermediate last result being passed to the consumer of this aggregate.
+   * Tests if the result about to be pushed from {@link #resolved} can be considered the "last result". The result has come from the last pending task. The
+   * default behavior is to return true but a sub-class that hooks the {@link #finished} call to introduce more productions must return false to avoid an
+   * intermediate last result being passed to the consumer of this aggregate.
    * <p>
    * This is called holding the monitor.
    *

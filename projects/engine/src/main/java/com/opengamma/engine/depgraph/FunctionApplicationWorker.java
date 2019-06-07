@@ -31,7 +31,7 @@ import com.opengamma.engine.value.ValueSpecification;
   private boolean _deferredPump;
   private FunctionApplicationStep.PumpingState _taskState;
 
-  public FunctionApplicationWorker(final ValueRequirement valueRequirement) {
+  FunctionApplicationWorker(final ValueRequirement valueRequirement) {
     super(valueRequirement);
   }
 
@@ -116,7 +116,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   // Caller must hold the monitor
   private Map<ValueSpecification, ValueRequirement> createResolvedValuesMap() {
-    final Map<ValueSpecification, ValueRequirement> resolvedValues = Maps.<ValueSpecification, ValueRequirement>newHashMapWithExpectedSize(_inputs.size());
+    final Map<ValueSpecification, ValueRequirement> resolvedValues = Maps.<ValueSpecification, ValueRequirement> newHashMapWithExpectedSize(_inputs.size());
     for (final Map.Entry<ValueRequirement, ValueSpecification> input : _inputs.entrySet()) {
       assert input.getValue() != null;
       resolvedValues.put(input.getValue(), input.getKey());

@@ -20,8 +20,8 @@ import com.mcleodmoores.date.WorkingDayCalendar;
 /**
  * Convention for handling business days.
  * <p>
- * This convention is a replacement for {@link com.opengamma.financial.convention.businessday.BusinessDayConvention}, which uses the deprecated
- * {@link com.opengamma.financial.convention.calendar.Calendar} class.
+ * This convention is a replacement for {@link com.opengamma.financial.convention.businessday.BusinessDayConvention}, which uses the
+ * deprecated {@link com.opengamma.financial.convention.calendar.Calendar} class.
  */
 public interface BusinessDayConvention extends com.opengamma.financial.convention.businessday.BusinessDayConvention {
 
@@ -56,7 +56,7 @@ public interface BusinessDayConvention extends com.opengamma.financial.conventio
    *          the date-time to adjust, not null
    * @return the adjusted date-time, not null
    */
-  ZonedDateTime adjustDate(final WorkingDayCalendar workingDayCalendar, final ZonedDateTime dateTime);
+  ZonedDateTime adjustDate(WorkingDayCalendar workingDayCalendar, ZonedDateTime dateTime);
 
   /**
    * Converts this convention to a {@code TemporalAdjuster} using the specified working day calendar.
@@ -65,7 +65,7 @@ public interface BusinessDayConvention extends com.opengamma.financial.conventio
    *          the working days, not null
    * @return the date adjuster, not null
    */
-  TemporalAdjuster getTemporalAdjuster(final WorkingDayCalendar workingDayCalendar);
+  TemporalAdjuster getTemporalAdjuster(WorkingDayCalendar workingDayCalendar);
 
   /**
    * Gets the name of the convention.

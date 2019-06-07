@@ -53,11 +53,9 @@ import com.opengamma.util.ArgumentChecker;
 import au.com.bytecode.opencsv.CSVParser;
 
 /**
- * Will subscribe to a set of live data elements and periodically write those
- * values out to the Historical Time Series system.
+ * Will subscribe to a set of live data elements and periodically write those values out to the Historical Time Series system.
  * <p>
- * The current implementation writes everything subscribed hourly to an
- * observation time with the name of the hour on which it fires <b>IN UTC</b>.
+ * The current implementation writes everything subscribed hourly to an observation time with the name of the hour on which it fires <b>IN UTC</b>.
  */
 public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
   private static final Logger LOGGER = LoggerFactory.getLogger(PeriodicLiveDataTimeSeriesStorageServer.class);
@@ -121,6 +119,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   /**
    * Gets the liveDataClient.
+   * 
    * @return the liveDataClient
    */
   public LiveDataClient getLiveDataClient() {
@@ -129,6 +128,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   /**
    * Gets the historicalTimeSeriesMaster.
+   * 
    * @return the historicalTimeSeriesMaster
    */
   public HistoricalTimeSeriesMaster getHistoricalTimeSeriesMaster() {
@@ -137,6 +137,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   /**
    * Gets the liveDataUser.
+   * 
    * @return the liveDataUser
    */
   public UserPrincipal getLiveDataUser() {
@@ -145,6 +146,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   /**
    * Gets the dataSource.
+   * 
    * @return the dataSource
    */
   public String getDataSource() {
@@ -153,6 +155,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   /**
    * Gets the dataProvider.
+   * 
    * @return the dataProvider
    */
   public String getDataProvider() {
@@ -161,6 +164,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   /**
    * Gets the initializationFileName.
+   * 
    * @return the initializationFileName
    */
   public String getInitializationFileName() {
@@ -168,10 +172,10 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
   }
 
   /**
-   * Sets the initializationFileName.
-   * If specified, this file (in CSV format with no header row) will be used
-   * to setup subscriptions on initialization.
-   * @param initializationFileName  the initializationFileName
+   * Sets the initializationFileName. If specified, this file (in CSV format with no header row) will be used to setup subscriptions on initialization.
+   * 
+   * @param initializationFileName
+   *          the initializationFileName
    */
   public void setInitializationFileName(final String initializationFileName) {
     _initializationFileName = initializationFileName;
@@ -179,6 +183,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   /**
    * Gets the writeToDatabase.
+   * 
    * @return the writeToDatabase
    */
   public boolean isWriteToDatabase() {
@@ -214,10 +219,8 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   }
 
-
   /**
-   * The task that will snapshot the state of the market and create the storage
-   * tasks.
+   * The task that will snapshot the state of the market and create the storage tasks.
    */
   private class SnapshotTask implements Runnable {
 
@@ -251,7 +254,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
     private final LocalDate _date;
     private final String _observationTimeName;
 
-    public StorageTask(final LiveDataSpecification ldSpec, final FudgeMsg values, final LocalDate date, final String observationTimeName) {
+    StorageTask(final LiveDataSpecification ldSpec, final FudgeMsg values, final LocalDate date, final String observationTimeName) {
       _liveDataSpecification = ldSpec;
       _values = values;
       _date = date;
@@ -277,8 +280,8 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
               (Double) field.getValue());
         } else {
           LOGGER.error("Would write {} {} {} {} {} {} {} {}",
-              new Object[] {description, getDataSource(), getDataProvider(), field.getName(), _observationTimeName,
-                  _liveDataSpecification.getIdentifiers().toString(), _date, field.getValue()});
+              new Object[] { description, getDataSource(), getDataProvider(), field.getName(), _observationTimeName,
+                  _liveDataSpecification.getIdentifiers().toString(), _date, field.getValue() });
         }
       }
     }
@@ -291,7 +294,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
     final LocalDateTime nextHour = now.truncatedTo(HOURS).plusHours(1);
     final Duration delay = Duration.between(now.atOffset(ZoneOffset.UTC), nextHour.atOffset(ZoneOffset.UTC));
     final Duration oneHour = Duration.ofHours(1);
-    LOGGER.warn("Now {} Next {} Delay {} {}", new Object[] {now, nextHour, delay, delay.toMillis() });
+    LOGGER.warn("Now {} Next {} Delay {} {}", new Object[] { now, nextHour, delay, delay.toMillis() });
     _timerExecutor.scheduleAtFixedRate(new SnapshotTask(), delay.toMillis(), oneHour.toMillis(), TimeUnit.MILLISECONDS);
     if (getInitializationFileName() != null) {
       initializeFromFile(getInitializationFileName());
@@ -299,7 +302,8 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
   }
 
   /**
-   * @param initializationFileName The name of the file to load in CSV format.
+   * @param initializationFileName
+   *          The name of the file to load in CSV format.
    */
   public void initializeFromFile(final String initializationFileName) {
     final File f = new File(initializationFileName);

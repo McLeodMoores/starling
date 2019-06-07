@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -33,8 +33,10 @@ public abstract class QuandlFinancialConvention extends FinancialConvention {
   }
 
   /**
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The external ids associated with this convention, not null
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The external ids associated with this convention, not null
    */
   public QuandlFinancialConvention(final String name, final ExternalIdBundle externalIdBundle) {
     super(name, externalIdBundle);
@@ -52,8 +54,11 @@ public abstract class QuandlFinancialConvention extends FinancialConvention {
 
   /**
    * Visitor for project-specific {@link FinancialConvention}s.
-   * @param visitor The visitor, not null
-   * @param <T> The type of the result
+   * 
+   * @param visitor
+   *          The visitor, not null
+   * @param <T>
+   *          The type of the result
    * @return The result
    */
   public abstract <T> T accept(QuandlFinancialConventionVisitor<T> visitor);

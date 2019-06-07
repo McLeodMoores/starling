@@ -38,8 +38,11 @@ import org.apache.commons.lang.ObjectUtils;
   /**
    * Create a new wrapper instance and add it to the canonical map.
    *
-   * @param exception exception to wrap
-   * @param canon the canonical map to add to
+   * @param exception
+   *          exception to wrap
+   * @param canon
+   *          the canonical map to add to
+   * @return a wrapper instance
    */
   public static ExceptionWrapper createAndPut(final Throwable exception, final Map<ExceptionWrapper, ExceptionWrapper> canon) {
     final ExceptionWrapper instance;

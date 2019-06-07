@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Please see distribution for license.
  */
@@ -29,7 +29,9 @@ public class QuandlNormalizer implements HistoricalTimeSeriesAdjuster {
 
   /**
    * Creates an instance.
-   * @param classifier The classifier, not null
+   * 
+   * @param classifier
+   *          The classifier, not null
    */
   public QuandlNormalizer(final QuandlCodeClassifier classifier) {
     ArgumentChecker.notNull(classifier, "classifier");
@@ -60,7 +62,9 @@ public class QuandlNormalizer implements HistoricalTimeSeriesAdjuster {
 
   /**
    * Gets the normalization factor.
-   * @param idBundle The id bundle
+   * 
+   * @param idBundle
+   *          The id bundle
    * @return The normalization factor, null if not found
    */
   private Integer getNormalizationFactor(final ExternalIdBundle idBundle) {

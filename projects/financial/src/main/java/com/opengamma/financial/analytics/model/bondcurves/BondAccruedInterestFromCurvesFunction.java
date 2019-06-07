@@ -16,9 +16,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Issue
 public class BondAccruedInterestFromCurvesFunction extends BondAndBondFutureFromCurvesFunction<IssuerProviderInterface, Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#ACCRUED_INTEREST}
-   * and sets the calculator to {@link AccruedInterestFromCurvesCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#ACCRUED_INTEREST} and sets the calculator to
+   * {@link AccruedInterestFromCurvesCalculator}.
    */
   public BondAccruedInterestFromCurvesFunction() {
     super(ACCRUED_INTEREST, AccruedInterestFromCurvesCalculator.getInstance());

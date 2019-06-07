@@ -63,7 +63,8 @@ public abstract class SABRVegaFunction extends SABRFunction {
 
   @SuppressWarnings("unchecked")
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getSecurity());
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
@@ -120,7 +121,8 @@ public abstract class SABRVegaFunction extends SABRFunction {
     final Interpolator1D xInterpolator = NamedInterpolator1dFactory.of(xInterpolatorName, xLeftExtrapolatorName, xRightExtrapolatorName);
     final Interpolator1D yInterpolator = NamedInterpolator1dFactory.of(yInterpolatorName, yLeftExtrapolatorName, yRightExtrapolatorName);
     final GridInterpolator2D nodeSensitivityCalculator = new GridInterpolator2D(xInterpolator, yInterpolator);
-    final Map<Double, DoubleMatrix2D> result = SABRVegaCalculationUtils.getVegaCube(alpha, rho, nu, alphaDataBundle, rhoDataBundle, nuDataBundle, inverseJacobians, expiryMaturity,
+    final Map<Double, DoubleMatrix2D> result = SABRVegaCalculationUtils.getVegaCube(alpha, rho, nu, alphaDataBundle, rhoDataBundle, nuDataBundle,
+        inverseJacobians, expiryMaturity,
         nodeSensitivityCalculator);
     final DoubleLabelledMatrix3D labelledMatrix = VegaMatrixUtils.getVegaSwaptionCubeQuoteMatrix(fittedDataPoints.getFittedPoints(), result);
     final ValueProperties properties = getResultProperties(createValueProperties().get(), currency.getCode(), desiredValue);
@@ -182,20 +184,30 @@ public abstract class SABRVegaFunction extends SABRFunction {
 
   /**
    * Gets the value properties for the SABR parameter sensitivities.
-   * @param target The target
-   * @param currency The currency of the security
-   * @param desiredValue The desired value
+   * 
+   * @param target
+   *          The target
+   * @param currency
+   *          The currency of the security
+   * @param desiredValue
+   *          The desired value
    * @return The value properties
    */
-  protected abstract ValueProperties getSensitivityProperties(final ComputationTarget target, final String currency, final ValueRequirement desiredValue);
+  protected abstract ValueProperties getSensitivityProperties(ComputationTarget target, String currency, ValueRequirement desiredValue);
 
   /**
-   * Gets the value properties for the fitted points of the cube
-   * @param cubeDefinitionName The cube definition name
-   * @param cubeSpecificationName The cube specification name
-   * @param surfaceDefinitionName The surface definition name
-   * @param surfaceSpecificationName The surface specification name
-   * @param fittingMethod The SABR fitting method
+   * Gets the value properties for the fitted points of the cube.
+   * 
+   * @param cubeDefinitionName
+   *          The cube definition name
+   * @param cubeSpecificationName
+   *          The cube specification name
+   * @param surfaceDefinitionName
+   *          The surface definition name
+   * @param surfaceSpecificationName
+   *          The surface specification name
+   * @param fittingMethod
+   *          The SABR fitting method
    * @return The value properties
    */
   protected ValueProperties getFittedPointsProperties(final String cubeDefinitionName, final String cubeSpecificationName,

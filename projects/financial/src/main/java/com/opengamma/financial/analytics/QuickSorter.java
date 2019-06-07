@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 
     private final T[] _arr;
 
-    public ArrayQuickSorter(final T[] arr) {
+    ArrayQuickSorter(final T[] arr) {
       ArgumentChecker.notNull(arr, "arr");
       _arr = arr;
     }
@@ -40,14 +40,14 @@ import com.opengamma.util.ArgumentChecker;
 
   }
 
-  protected final void sort(final int left, final int right) {
+  protected void sort(final int left, final int right) {
     if (right > left) {
-      final int pivot = partition(left, right, (left + right) >> 1);
+      final int pivot = partition(left, right, left + right >> 1);
       sort(left, pivot - 1);
       sort(pivot + 1, right);
     }
   }
-  
+
   protected static <T> void swap(final T[] arr, final int first, final int second) {
     final T tmp = arr[first];
     arr[first] = arr[second];
@@ -60,13 +60,13 @@ import com.opengamma.util.ArgumentChecker;
     arr[second] = tmp;
   }
 
-  protected abstract T getValue(final int index);
+  protected abstract T getValue(int index);
 
-  protected abstract void swap(final int first, final int second);
+  protected abstract void swap(int first, int second);
 
-  protected abstract int compare(final T first, final T second);
+  protected abstract int compare(T first, T second);
 
-  protected final int partition(final int left, final int right, final int pivot) {
+  protected int partition(final int left, final int right, final int pivot) {
     final T pivotValue = getValue(pivot);
     swap(pivot, right);
     int storeIndex = left;

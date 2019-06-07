@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -68,7 +68,9 @@ public class QuandlConventionsLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
-   * @param args  the arguments
+   *
+   * @param args
+   *          the arguments
    */
   public static void main(final String[] args) {
     new QuandlConventionsLoader().invokeAndTerminate(args);
@@ -84,7 +86,8 @@ public class QuandlConventionsLoader extends AbstractTool<ToolContext> {
 
   /**
    * Create the option to save the configurations to file.
-   * @return  the option
+   *
+   * @return the option
    */
   private static Option createFileOption() {
     OptionBuilder.hasArg(false);
@@ -96,7 +99,8 @@ public class QuandlConventionsLoader extends AbstractTool<ToolContext> {
 
   /**
    * Creates the option to persist the configurations to the config master.
-   * @return  the option
+   *
+   * @return the option
    */
   private static Option createPersistOption() {
     OptionBuilder.hasArg(false);
@@ -139,7 +143,7 @@ public class QuandlConventionsLoader extends AbstractTool<ToolContext> {
           }
           final Path path = Paths.get(quandlCode);
           final byte[] xmlString = JodaBeanSer.PRETTY.xmlWriter().write(security).getBytes();
-          try (final OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
+          try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
             out.write(xmlString);
           } catch (final IOException e) {
             LOGGER.warn(e.getMessage());
@@ -157,7 +161,7 @@ public class QuandlConventionsLoader extends AbstractTool<ToolContext> {
           }
           final Path path = Paths.get(code);
           final byte[] xmlString = JodaBeanSer.PRETTY.xmlWriter().write(convention).getBytes();
-          try (final OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
+          try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
             out.write(xmlString);
           } catch (final IOException e) {
             LOGGER.warn(e.getMessage());

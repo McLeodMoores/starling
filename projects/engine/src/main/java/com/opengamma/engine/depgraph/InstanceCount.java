@@ -39,7 +39,7 @@ import com.opengamma.OpenGammaRuntimeException;
     }).start();
   }
 
-  public InstanceCount(final Object owner) {
+  InstanceCount(final Object owner) {
     AtomicInteger count = INSTANCE_COUNT.get(owner.getClass());
     if (count == null) {
       count = new AtomicInteger(1);

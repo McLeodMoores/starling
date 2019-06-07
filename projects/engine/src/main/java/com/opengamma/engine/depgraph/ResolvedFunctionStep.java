@@ -26,7 +26,7 @@ import com.opengamma.util.tuple.Triple;
 
   private final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> _functions;
 
-  public ResolvedFunctionStep(final ResolveTask task,
+  ResolvedFunctionStep(final ResolveTask task,
       final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> functions) {
     super(task);
     assert functions != null;

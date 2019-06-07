@@ -21,10 +21,12 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * For an instrument, calculates the sensitivity of a value (often either the present value (PV) or par rate) to the yield at the knot points of the interpolated yield curves.
- * The return format is a DoubleMatrix1D (i.e. a vector) with length equal to the total number of nodes in all the curves, and ordered as sensitivity to nodes of first curve, second curve etc.
- * The change of a curve due to the movement of a single knot is interpolator-dependent, and can affect the entire curve, so an instrument can have sensitivity to nodes at times (way)
- * beyond its maturity.
+ * For an instrument, calculates the sensitivity of a value (often either the present value (PV) or par rate) to the yield at the knot
+ * points of the interpolated yield curves. The return format is a DoubleMatrix1D (i.e. a vector) with length equal to the total number of
+ * nodes in all the curves, and ordered as sensitivity to nodes of first curve, second curve etc. The change of a curve due to the movement
+ * of a single knot is interpolator-dependent, and can affect the entire curve, so an instrument can have sensitivity to nodes at times
+ * (way) beyond its maturity.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -34,17 +36,24 @@ public abstract class NodeYieldSensitivityCalculator {
   NodeYieldSensitivityCalculator() {
   }
 
-  public abstract DoubleMatrix1D calculateSensitivities(final InstrumentDerivative ird, final YieldCurveBundle fixedCurves, final YieldCurveBundle interpolatedCurves);
+  public abstract DoubleMatrix1D calculateSensitivities(InstrumentDerivative ird, YieldCurveBundle fixedCurves,
+      YieldCurveBundle interpolatedCurves);
 
   /**
    * Computes the sensitivities to the yield at the node points for an instrument from a yield sensitivity calculator.
-   * @param derivative The instrument.
-   * @param calculator The yield sensitivity calculator.
-   * @param fixedCurves The fixed curves.
-   * @param interpolatedCurves The curves with respect to which the sensitivities should be computed. The curves should be based on InterpolatedDoublesCurve.
+   * 
+   * @param derivative
+   *          The instrument.
+   * @param calculator
+   *          The yield sensitivity calculator.
+   * @param fixedCurves
+   *          The fixed curves.
+   * @param interpolatedCurves
+   *          The curves with respect to which the sensitivities should be computed. The curves should be based on InterpolatedDoublesCurve.
    * @return The yield sensitivities to the node points.
    */
-  public DoubleMatrix1D calculateSensitivities(final InstrumentDerivative derivative, final InstrumentDerivativeVisitor<YieldCurveBundle, Map<String, List<DoublesPair>>> calculator,
+  public DoubleMatrix1D calculateSensitivities(final InstrumentDerivative derivative,
+      final InstrumentDerivativeVisitor<YieldCurveBundle, Map<String, List<DoublesPair>>> calculator,
       final YieldCurveBundle fixedCurves, final YieldCurveBundle interpolatedCurves) {
     Validate.notNull(derivative, "null InterestRateDerivative");
     Validate.notNull(calculator, "null calculator");
@@ -62,11 +71,15 @@ public abstract class NodeYieldSensitivityCalculator {
 
   /**
    * Computes the sensitivity to the yield at the node points from the sensitivities to the yield at arbitrary points.
-   * @param curveSensitivities The sensitivity to the yield at arbitrary points on the different curves.
-   * @param interpolatedCurves The curve bundle. The curves should be YieldCurve based on InterpolatedDoublesCurve.
+   * 
+   * @param curveSensitivities
+   *          The sensitivity to the yield at arbitrary points on the different curves.
+   * @param interpolatedCurves
+   *          The curve bundle. The curves should be YieldCurve based on InterpolatedDoublesCurve.
    * @return The yield sensitivities to the node points.
    */
-  public DoubleMatrix1D curveToNodeSensitivities(final Map<String, List<DoublesPair>> curveSensitivities, final YieldCurveBundle interpolatedCurves) {
+  public DoubleMatrix1D curveToNodeSensitivities(final Map<String, List<DoublesPair>> curveSensitivities,
+      final YieldCurveBundle interpolatedCurves) {
     final List<Double> result = new ArrayList<>();
     for (final String name : interpolatedCurves.getAllNames()) { // loop over all curves (by name)
       final YieldAndDiscountCurve curve = interpolatedCurves.getCurve(name);
@@ -84,8 +97,11 @@ public abstract class NodeYieldSensitivityCalculator {
 
   /**
    * Computes the node yield sensitivity for one YieldCurve.
-   * @param sensitivityList The sensitivity to the yield at arbitrary points on the curve.
-   * @param curve The YieldCurve.
+   * 
+   * @param sensitivityList
+   *          The sensitivity to the yield at arbitrary points on the curve.
+   * @param curve
+   *          The YieldCurve.
    * @return The node sensitivity.
    */
   public List<Double> curveToNodeSensitivity(final List<DoublesPair> sensitivityList, final YieldCurve curve) {
@@ -121,8 +137,11 @@ public abstract class NodeYieldSensitivityCalculator {
 
   /**
    * Computes the node yield sensitivity for one YieldCurve.
-   * @param sensitivityList The sensitivity to the yield at arbitrary points on the curve.
-   * @param curve The YieldCurve.
+   * 
+   * @param sensitivityList
+   *          The sensitivity to the yield at arbitrary points on the curve.
+   * @param curve
+   *          The YieldCurve.
    * @return The node sensitivity.
    */
   public List<Double> curveToNodeSensitivity(final List<DoublesPair> sensitivityList, final DiscountCurve curve) {
@@ -160,18 +179,25 @@ public abstract class NodeYieldSensitivityCalculator {
 
   /**
    * Computes the node sensitivity from an InterestRateCurveSensitivity object and the corresponding yield curve bundle.
-   * @param curveSensitivities The sensitivities.
-   * @param interpolatedCurves The curve bundle.
+   * 
+   * @param curveSensitivities
+   *          The sensitivities.
+   * @param interpolatedCurves
+   *          The curve bundle.
    * @return The node sensitivities.
    */
-  public DoubleMatrix1D curveToNodeSensitivities(final InterestRateCurveSensitivity curveSensitivities, final YieldCurveBundle interpolatedCurves) {
+  public DoubleMatrix1D curveToNodeSensitivities(final InterestRateCurveSensitivity curveSensitivities,
+      final YieldCurveBundle interpolatedCurves) {
     return curveToNodeSensitivities(curveSensitivities.getSensitivities(), interpolatedCurves);
   }
 
   /**
    * Computes the node yield sensitivity for one YieldCurve.
-   * @param curveSensitivities The sensitivity to the yield at arbitrary points on the curve.
-   * @param curve The YieldCurve.
+   * 
+   * @param curveSensitivities
+   *          The sensitivity to the yield at arbitrary points on the curve.
+   * @param curve
+   *          The YieldCurve.
    * @return The node sensitivity.
    */
   public DoubleMatrix1D curveToNodeSensitivities(final List<DoublesPair> curveSensitivities, final YieldAndDiscountCurve curve) {

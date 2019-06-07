@@ -23,8 +23,7 @@ import com.opengamma.id.UniqueIdentifiable;
  */
 /* package */final class ComputationTargetIdentifierRemapVisitor implements ComputationTargetReferenceVisitor<ComputationTargetReference> {
 
-  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> GET_LEAF_TYPE =
-      new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> GET_LEAF_TYPE = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -50,7 +49,7 @@ import com.opengamma.id.UniqueIdentifiable;
 
   private final Map<UniqueId, UniqueId> _map;
 
-  public ComputationTargetIdentifierRemapVisitor(final Map<UniqueId, UniqueId> map) {
+  ComputationTargetIdentifierRemapVisitor(final Map<UniqueId, UniqueId> map) {
     _map = map;
   }
 

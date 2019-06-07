@@ -45,8 +45,8 @@ public class ISDACompliantYieldCurveBuild {
   // ************************************************************************************************************************
 
   /**
-   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if cdsTradeDate (today) is
-   * different from spotDate, the curve is adjusted accordingly.
+   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if
+   * cdsTradeDate (today) is different from spotDate, the curve is adjusted accordingly.
    *
    * @param cdsTradeDate
    *          The 'observation' date
@@ -70,17 +70,20 @@ public class ISDACompliantYieldCurveBuild {
    *          Specification for the handling of non-business days
    * @return A yield curve observed from today
    */
-  public static ISDACompliantYieldCurve build(final LocalDate cdsTradeDate, final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes,
-      final Period[] tenors, final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval, final DayCount curveDCC,
+  public static ISDACompliantYieldCurve build(final LocalDate cdsTradeDate, final LocalDate spotDate,
+      final ISDAInstrumentTypes[] instrumentTypes,
+      final Period[] tenors, final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval,
+      final DayCount curveDCC,
       final BusinessDayConvention convention) {
-    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(cdsTradeDate, spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC,
+    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(cdsTradeDate, spotDate, instrumentTypes, tenors,
+        moneyMarketDCC, swapDCC,
         swapInterval, curveDCC, convention);
     return builder.build(rates);
   }
 
   /**
-   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if cdsTradeDate (today) is
-   * different from spotDate, the curve is adjusted accordingly.
+   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if
+   * cdsTradeDate (today) is different from spotDate, the curve is adjusted accordingly.
    *
    * @param cdsTradeDate
    *          The 'observation' date
@@ -106,17 +109,20 @@ public class ISDACompliantYieldCurveBuild {
    *          A calendar containing information about business days
    * @return A yield curve observed from today
    */
-  public static ISDACompliantYieldCurve build(final LocalDate cdsTradeDate, final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes,
-      final Period[] tenors, final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval, final DayCount curveDCC,
+  public static ISDACompliantYieldCurve build(final LocalDate cdsTradeDate, final LocalDate spotDate,
+      final ISDAInstrumentTypes[] instrumentTypes,
+      final Period[] tenors, final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval,
+      final DayCount curveDCC,
       final BusinessDayConvention convention, final WorkingDayCalendar calendar) {
-    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(cdsTradeDate, spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC,
+    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(cdsTradeDate, spotDate, instrumentTypes, tenors,
+        moneyMarketDCC, swapDCC,
         swapInterval, curveDCC, convention, calendar);
     return builder.build(rates);
   }
 
   /**
-   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if cdsTradeDate (today) is
-   * different from spotDate, the curve is adjusted accordingly.
+   * Build a ISDA-Compliant yield curve (i.e. one with piecewise flat forward rate) from money market rates and par swap rates. Note if
+   * cdsTradeDate (today) is different from spotDate, the curve is adjusted accordingly.
    *
    * @param cdsTradeDate
    *          The 'observation' date
@@ -144,10 +150,13 @@ public class ISDACompliantYieldCurveBuild {
    *          The curve name
    * @return A yield curve observed from today
    */
-  public static ISDACompliantYieldCurve build(final LocalDate cdsTradeDate, final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes,
-      final Period[] tenors, final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval, final DayCount curveDCC,
+  public static ISDACompliantYieldCurve build(final LocalDate cdsTradeDate, final LocalDate spotDate,
+      final ISDAInstrumentTypes[] instrumentTypes,
+      final Period[] tenors, final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval,
+      final DayCount curveDCC,
       final BusinessDayConvention convention, final WorkingDayCalendar calendar, final String name) {
-    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(cdsTradeDate, spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC,
+    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(cdsTradeDate, spotDate, instrumentTypes, tenors,
+        moneyMarketDCC, swapDCC,
         swapInterval, curveDCC, convention, calendar);
     return builder.build(rates, name);
   }
@@ -174,8 +183,10 @@ public class ISDACompliantYieldCurveBuild {
    * @return A yield curve
    */
   public static ISDACompliantYieldCurve build(final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes, final Period[] tenors,
-      final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval, final BusinessDayConvention convention) {
-    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC, swapInterval,
+      final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval,
+      final BusinessDayConvention convention) {
+    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(spotDate, instrumentTypes, tenors, moneyMarketDCC,
+        swapDCC, swapInterval,
         convention);
     return builder.build(rates);
   }
@@ -204,9 +215,11 @@ public class ISDACompliantYieldCurveBuild {
    * @return A yield curve
    */
   public static ISDACompliantYieldCurve build(final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes, final Period[] tenors,
-      final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval, final BusinessDayConvention convention,
+      final double[] rates, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval,
+      final BusinessDayConvention convention,
       final WorkingDayCalendar calendar) {
-    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC, swapInterval,
+    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(spotDate, instrumentTypes, tenors, moneyMarketDCC,
+        swapDCC, swapInterval,
         convention, calendar);
     return builder.build(rates);
   }
@@ -216,8 +229,8 @@ public class ISDACompliantYieldCurveBuild {
   // ************************************************************************************************************************
 
   /**
-   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend only calendar is
-   * used.
+   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend
+   * only calendar is used.
    *
    * @param spotDate
    *          The spot date for the instruments used to build the yield curve
@@ -240,8 +253,8 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
-   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend only calendar is
-   * used.
+   * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date; a weekend
+   * only calendar is used.
    *
    * @param spotDate
    *          The spot date for the instruments used to build the yield curve
@@ -323,7 +336,8 @@ public class ISDACompliantYieldCurveBuild {
   public ISDACompliantYieldCurveBuild(final LocalDate cdsTradeDate, final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes,
       final Period[] tenors, final DayCount moneyMarketDCC, final DayCount swapDCC, final Period swapInterval, final DayCount curveDCC,
       final BusinessDayConvention convention, final Calendar calendar) {
-    this(cdsTradeDate, spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC, swapInterval, curveDCC, convention, WorkingDayCalendarAdapter.of(calendar));
+    this(cdsTradeDate, spotDate, instrumentTypes, tenors, moneyMarketDCC, swapDCC, swapInterval, curveDCC, convention,
+        WorkingDayCalendarAdapter.of(calendar));
   }
 
   /**
@@ -398,7 +412,8 @@ public class ISDACompliantYieldCurveBuild {
         _swaps[swapCount++] = new BasicFixedLeg(spotDate, matDates[i], swapInterval, swapDCC, curveDCC, convention, temp);
       }
     }
-    _offset = cdsTradeDate.isAfter(spotDate) ? curveDCC.getDayCountFraction(spotDate, cdsTradeDate) : -curveDCC.getDayCountFraction(cdsTradeDate, spotDate);
+    _offset = cdsTradeDate.isAfter(spotDate) ? curveDCC.getDayCountFraction(spotDate, cdsTradeDate)
+        : -curveDCC.getDayCountFraction(cdsTradeDate, spotDate);
   }
 
   /**
@@ -471,7 +486,8 @@ public class ISDACompliantYieldCurveBuild {
     return baseCurve.withOffset(_offset);
   }
 
-  private ISDACompliantCurve fitSwap(final int curveIndex, final BasicFixedLeg swap, final ISDACompliantCurve curve, final double swapRate) {
+  private ISDACompliantCurve fitSwap(final int curveIndex, final BasicFixedLeg swap, final ISDACompliantCurve curve,
+      final double swapRate) {
 
     final int nPayments = swap.getNumPayments();
     final int nNodes = curve.getNumberOfKnots();
@@ -553,15 +569,15 @@ public class ISDACompliantYieldCurveBuild {
   /**
    * very crude swap fixed leg description. TODO modify to match ISDA
    * <p>
-   * So that the floating leg can be taken as having a value of 1.0, rather than the text book 1 - P(T) for LIBOR discounting, we add 1.0 to the final payment,
-   * which is financially equivalent
+   * So that the floating leg can be taken as having a value of 1.0, rather than the text book 1 - P(T) for LIBOR discounting, we add 1.0 to
+   * the final payment, which is financially equivalent
    */
   private class BasicFixedLeg {
     private final int _nPayments;
     private final double[] _swapPaymentTimes;
     private final double[] _yearFraction;
 
-    public BasicFixedLeg(final LocalDate spotDate, final LocalDate mat, final Period swapInterval, final DayCount swapDCC, final DayCount curveDCC,
+    BasicFixedLeg(final LocalDate spotDate, final LocalDate mat, final Period swapInterval, final DayCount swapDCC, final DayCount curveDCC,
         final BusinessDayConvention convention, final Calendar calendar) {
       ArgumentChecker.isFalse(swapInterval.getDays() > 0, "swap interval must be in months or years");
 

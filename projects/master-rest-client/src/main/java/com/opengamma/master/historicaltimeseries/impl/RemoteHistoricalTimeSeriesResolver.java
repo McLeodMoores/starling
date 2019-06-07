@@ -33,7 +33,6 @@ import com.opengamma.util.rest.UniformInterfaceException404NotFound;
  */
 public class RemoteHistoricalTimeSeriesResolver extends AbstractRemoteClient implements HistoricalTimeSeriesResolver {
 
-
   private final ChangeManager _changeManager;
 
   public RemoteHistoricalTimeSeriesResolver(final URI baseUri) {
@@ -57,7 +56,7 @@ public class RemoteHistoricalTimeSeriesResolver extends AbstractRemoteClient imp
     private final ExternalIdBundle _bundle;
     private final String _adjustment;
 
-    public Adjuster(final URI base, final ExternalIdBundle bundle, final String adjustment) {
+    Adjuster(final URI base, final ExternalIdBundle bundle, final String adjustment) {
       _base = base;
       _bundle = bundle;
       _adjustment = adjustment;

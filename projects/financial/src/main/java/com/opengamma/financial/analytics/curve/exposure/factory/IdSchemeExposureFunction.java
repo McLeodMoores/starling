@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.exposure.factory;
 
@@ -17,7 +17,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  *
  */
-//TODO get rid of repeated code
+// TODO get rid of repeated code
 public class IdSchemeExposureFunction implements NamedExposureFunction {
 
   /**
@@ -27,9 +27,12 @@ public class IdSchemeExposureFunction implements NamedExposureFunction {
   /** The scheme */
   private final ExternalScheme _scheme;
 
+  /**
+   * @param schemeName
+   *          the name of the scheme, not null
+   */
   public IdSchemeExposureFunction(final String schemeName) {
-    ArgumentChecker.notNull(schemeName, "schemeName");
-    _scheme = ExternalScheme.of(schemeName);
+    _scheme = ExternalScheme.of(ArgumentChecker.notNull(schemeName, "schemeName"));
   }
 
   @Override

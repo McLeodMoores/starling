@@ -19,32 +19,31 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class NamedUsersPortfolioPermissionProvider implements ViewPortfolioPermissionProvider {
 
+  /**
+   * A portfolio filter that does nothing.
+   */
   public static final NoOpPortfolioFilter NOOP_PORTFOLIO_FILTER = new NoOpPortfolioFilter();
 
   /**
-   * The set of users to whom restrictions should be applied. Users not in this set will
-   * have unfettered access, not null.
+   * The set of users to whom restrictions should be applied. Users not in this set will have unfettered access, not null.
    */
   private final Set<String> _restrictedUsers;
 
   /**
-   * Mapping of portfolio to the user who is allowed to see it. Portfolios not listed
-   * have no restrictions on who can view them, not null.
+   * Mapping of portfolio to the user who is allowed to see it. Portfolios not listed have no restrictions on who can view them, not null.
    */
   private final Map<String, String> _portfolioUserMapping;
 
   /**
    * Create the permission provider for the users and portfolios.
    *
-   * @param restrictedUsers the set of users to whom restrictions
-   * should be applied. Users not in this set will have unfettered
-   * access. Not null.
-   * @param portfolioUserMapping mapping of portfolio to the user
-   * who is allowed to see it. Portfolios not listed have no
-   * restrictions on who can view them. Not null.
+   * @param restrictedUsers
+   *          the set of users to whom restrictions should be applied. Users not in this set will have unfettered access. Not null.
+   * @param portfolioUserMapping
+   *          mapping of portfolio to the user who is allowed to see it. Portfolios not listed have no restrictions on who can view them. Not null.
    */
   public NamedUsersPortfolioPermissionProvider(final Set<String> restrictedUsers,
-                                               final Map<String, String> portfolioUserMapping) {
+      final Map<String, String> portfolioUserMapping) {
     ArgumentChecker.notNull(restrictedUsers, "restrictedUsers");
     ArgumentChecker.notNull(portfolioUserMapping, "portfolioUserMapping");
     _restrictedUsers = restrictedUsers;
@@ -54,8 +53,8 @@ public class NamedUsersPortfolioPermissionProvider implements ViewPortfolioPermi
   @Override
   public PortfolioFilter createPortfolioFilter(final UserPrincipal user) {
 
-    return _restrictedUsers.contains(user.getUserName()) ?
-        new NodeCheckingPortfolioFilter(new UserPermissionNodeChecker(_portfolioUserMapping, user)) :
-        NOOP_PORTFOLIO_FILTER;
+    return _restrictedUsers.contains(user.getUserName())
+        ? new NodeCheckingPortfolioFilter(new UserPermissionNodeChecker(_portfolioUserMapping, user))
+        : NOOP_PORTFOLIO_FILTER;
   }
 }

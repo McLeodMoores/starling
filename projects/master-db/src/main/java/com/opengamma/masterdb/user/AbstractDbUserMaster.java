@@ -52,7 +52,8 @@ import com.opengamma.util.tuple.Pair;
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  *
- * @param <T>  the object type
+ * @param <T>
+ *          the object type
  */
 public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     extends AbstractDbMaster
@@ -80,8 +81,10 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
-   * @param defaultScheme  the default unique identifier scheme, not null
+   * @param dbConnector
+   *          the database connector, not null
+   * @param defaultScheme
+   *          the default unique identifier scheme, not null
    */
   public AbstractDbUserMaster(final DbConnector dbConnector, final String defaultScheme) {
     super(dbConnector, defaultScheme);
@@ -97,7 +100,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     _eventHistoryTimer = summaryRegistry.timer(namePrefix + ".history");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the change manager.
    *
@@ -111,7 +114,8 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Sets the change manager.
    *
-   * @param changeManager  the change manager, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   @Override
   public void setChangeManager(final ChangeManager changeManager) {
@@ -123,22 +127,23 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     return _changeManager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Convert a name to an object identifier.
    * <p>
-   * If an object is renamed, the old name remains as an alias.
-   * The separate name resolution handles that case.
+   * If an object is renamed, the old name remains as an alias. The separate name resolution handles that case.
    *
-   * @param name  the name, not null
-   * @param onDeleted  how to handle deletion
+   * @param name
+   *          the name, not null
+   * @param onDeleted
+   *          how to handle deletion
    * @return the object identifier, null if not found
    */
   ObjectId lookupName(final String name, final OnDeleted onDeleted) {
     ArgumentChecker.notNull(name, "name");
     try (Timer.Context context = _lookupNameTimer.time()) {
       final DbMapSqlParameterSource args = createParameterSource()
-        .addValue("name_ci", caseInsensitive(name));
+          .addValue("name_ci", caseInsensitive(name));
       final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
       final String sql = getElSqlBundle().getSql("GetIdByName", args);
       final SqlRowSet rowSet = namedJdbc.queryForRowSet(sql, args);
@@ -160,14 +165,15 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Checks if a name exists already.
    *
-   * @param name  the name, not null
+   * @param name
+   *          the name, not null
    * @return true if exists
    */
   boolean doNameExists(final String name) {
     ArgumentChecker.notNull(name, "name");
     try (Timer.Context context = _lookupNameTimer.time()) {
       final DbMapSqlParameterSource args = createParameterSource()
-        .addValue("name_ci", caseInsensitive(name));
+          .addValue("name_ci", caseInsensitive(name));
       final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
       final String sql = getElSqlBundle().getSql("GetIdByName", args);
       final SqlRowSet rowSet = namedJdbc.queryForRowSet(sql, args);
@@ -179,7 +185,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     try (Timer.Context context = _getByIdTimer.time()) {
       final long oid = extractOid(objectId);
       final DbMapSqlParameterSource args = createParameterSource()
-        .addValue("doc_id", oid);
+          .addValue("doc_id", oid);
       final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
       final String sql = getElSqlBundle().getSql("GetById", args);
       final List<T> users = namedJdbc.query(sql, args, extractor);
@@ -193,20 +199,21 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Checks if a user exists already.
    *
-   * @param objectId  the user identifier, not null
+   * @param objectId
+   *          the user identifier, not null
    * @return true if exists
    */
   boolean idExists(final ObjectId objectId) {
     final long oid = extractOid(objectId);
     final DbMapSqlParameterSource args = createParameterSource()
-      .addValue("doc_id", oid);
+        .addValue("doc_id", oid);
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
     final String sql = getElSqlBundle().getSql("GetById", args);
     final SqlRowSet rowSet = namedJdbc.queryForRowSet(sql, args);
     return rowSet.next();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   UniqueId doAdd(final T user) {
     ArgumentChecker.notNull(user, "user");
     LOGGER.debug("add {}", user);
@@ -226,12 +233,13 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Processes the user add, within a retrying transaction.
    *
-   * @param user  the user to add, not null
+   * @param user
+   *          the user to add, not null
    * @return the information, not null
    */
   abstract Pair<UniqueId, Instant> doAddInTransaction(T user);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   UniqueId doUpdate(final T user) {
     ArgumentChecker.notNull(user, "user");
     ArgumentChecker.notNull(user.getUniqueId(), "user.uniqueId");
@@ -256,7 +264,8 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Processes the update, within a retrying transaction.
    *
-   * @param user  the updated user, not null
+   * @param user
+   *          the updated user, not null
    * @return the updated document, not null
    */
   abstract Pair<UniqueId, Instant> doUpdateInTransaction(T user);
@@ -270,13 +279,13 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   void doRemoveByName(final String name) {
     ArgumentChecker.notNull(name, "name");
     LOGGER.debug("removeByName {}", name);
     final ObjectId oid = lookupName(name, OnDeleted.RETURN_NULL);
     if (oid == null) {
-      return;  // already deleted
+      return; // already deleted
     }
     doRemoveById(oid);
   }
@@ -302,23 +311,24 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Processes the document update, within a retrying transaction.
    *
-   * @param objectId  the object identifier to remove, not null
+   * @param objectId
+   *          the object identifier to remove, not null
    * @return the updated document, not null
    */
-  abstract Instant doRemoveInTransaction(final ObjectId objectId);
+  abstract Instant doRemoveInTransaction(ObjectId objectId);
 
   List<HistoryEvent> doEventHistory(final ObjectId objectId) {
     try (Timer.Context context = _eventHistoryTimer.time()) {
       final long oid = extractOid(objectId);
       final DbMapSqlParameterSource args = createParameterSource()
-        .addValue("doc_id", oid);
+          .addValue("doc_id", oid);
       final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
       final String sql = getElSqlBundle().getSql("GetEventHistory", args);
       return namedJdbc.query(sql, args, new EventExtractor());
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   String caseInsensitive(final String name) {
     return name != null ? name.toLowerCase(Locale.ROOT) : name;
   }
@@ -367,8 +377,10 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   /**
    * Converts a single character to an enum value.
    *
-   * @param typeStr  the type character, not null
-   * @param values  the enum values, not null
+   * @param typeStr
+   *          the type character, not null
+   * @param values
+   *          the enum values, not null
    * @return the enum, not null
    */
   <E extends Enum<E>> E extractEnum(final String typeStr, final E[] values) {
@@ -380,17 +392,15 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     throw new IllegalStateException("Invalid enum value: " + typeStr);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * How to handle deletion.
    */
   enum OnDeleted {
-    RETURN_NULL,
-    RETURN_ID,
-    EXCEPTION,
+    RETURN_NULL, RETURN_ID, EXCEPTION,
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a HistoryEvent.
    */
@@ -431,7 +441,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
       final HistoryEventType type = extractEnum(typeStr, HistoryEventType.values());
       final String activeUser = rs.getString("ACTIVE_USER");
       final Instant instant = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("EVENT_INSTANT"));
-      return HistoryEvent.of(type, uniqueId, activeUser, instant, ImmutableList.<String>of());
+      return HistoryEvent.of(type, uniqueId, activeUser, instant, ImmutableList.<String> of());
     }
   }
 

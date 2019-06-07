@@ -16,7 +16,7 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
 /**
  * State shared among fragments of a dependency graph as part of the multiple node partitioning algorithm.
  */
-/*package*/class GraphFragmentContext {
+/* package */class GraphFragmentContext {
 
   private final String _calculationConfig;
   private final ExecutionLogModeSource _logModeSource;
@@ -24,7 +24,7 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
   private final Map<ValueSpecification, Boolean> _sharedCacheValues = new HashMap<>();
   private final Map<ValueSpecification, FunctionParameters> _parameters;
 
-  public GraphFragmentContext(final String calculationConfig, final ExecutionLogModeSource logModeSource, final long functionInitializationId,
+  GraphFragmentContext(final String calculationConfig, final ExecutionLogModeSource logModeSource, final long functionInitializationId,
       final Collection<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
     _calculationConfig = calculationConfig;
     _logModeSource = logModeSource;

@@ -95,15 +95,17 @@ public abstract class SABRFunction extends AbstractFunction.NonCompiledInvoker {
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
     final SwaptionSecurityConverterDeprecated swaptionConverter = new SwaptionSecurityConverterDeprecated(_securitySource, swapConverter);
     final CapFloorSecurityConverterDeprecated capFloorVisitor = new CapFloorSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
-    final CapFloorCMSSpreadSecurityConverter capFloorCMSSpreadSecurityVisitor = new CapFloorCMSSpreadSecurityConverter(holidaySource, conventionSource, regionSource);
-    _securityVisitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().swapSecurityVisitor(swapConverter).swaptionVisitor(swaptionConverter)
+    final CapFloorCMSSpreadSecurityConverter capFloorCMSSpreadSecurityVisitor = new CapFloorCMSSpreadSecurityConverter(holidaySource, conventionSource,
+        regionSource);
+    _securityVisitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder().swapSecurityVisitor(swapConverter).swaptionVisitor(swaptionConverter)
         .capFloorVisitor(capFloorVisitor).capFloorCMSSpreadVisitor(capFloorCMSSpreadSecurityVisitor).create();
     _definitionConverter = new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver);
     _curveCalculationConfigSource = ConfigDBCurveCalculationConfigSource.init(context, this);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -208,20 +210,29 @@ public abstract class SABRFunction extends AbstractFunction.NonCompiledInvoker {
   /**
    * Gets the result.
    *
-   * @param derivative The derivative
-   * @param data The market data
-   * @param desiredValue The desired value
+   * @param derivative
+   *          The derivative
+   * @param data
+   *          The market data
+   * @param desiredValue
+   *          The desired value
    * @return The result
    */
-  protected abstract Object getResult(final InstrumentDerivative derivative, final SABRInterestRateDataBundle data, final ValueRequirement desiredValue);
+  protected abstract Object getResult(InstrumentDerivative derivative, SABRInterestRateDataBundle data, ValueRequirement desiredValue);
 
   /**
    * Gets the value requirement for the fitted SABR surfaces.
-   * @param cubeDefinitionName The cube definition name
-   * @param cubeSpecificationName The cube specification name
-   * @param surfaceDefinitionName The surface definition name
-   * @param surfaceSpecificationName The surface specification name
-   * @param fittingMethod The fitting method
+   *
+   * @param cubeDefinitionName
+   *          The cube definition name
+   * @param cubeSpecificationName
+   *          The cube specification name
+   * @param surfaceDefinitionName
+   *          The surface definition name
+   * @param surfaceSpecificationName
+   *          The surface specification name
+   * @param fittingMethod
+   *          The fitting method
    * @return The value requirement
    */
   protected ValueRequirement getCubeRequirement(final String cubeDefinitionName, final String cubeSpecificationName,
@@ -252,10 +263,10 @@ public abstract class SABRFunction extends AbstractFunction.NonCompiledInvoker {
     return _curveCalculationConfigSource;
   }
 
-  protected abstract SABRInterestRateDataBundle getModelParameters(final ComputationTarget target, final FunctionInputs inputs, final Currency currency,
-      final YieldCurveBundle curves, final ValueRequirement desiredValue);
+  protected abstract SABRInterestRateDataBundle getModelParameters(ComputationTarget target, FunctionInputs inputs, Currency currency,
+      YieldCurveBundle curves, ValueRequirement desiredValue);
 
-  protected abstract ValueProperties getResultProperties(final ValueProperties properties, final String currency);
+  protected abstract ValueProperties getResultProperties(ValueProperties properties, String currency);
 
-  protected abstract ValueProperties getResultProperties(final ValueProperties properties, final String currency, final ValueRequirement desiredValue);
+  protected abstract ValueProperties getResultProperties(ValueProperties properties, String currency, ValueRequirement desiredValue);
 }

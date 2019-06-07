@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.function;
 
@@ -23,6 +23,7 @@ public class QuandlFunctionConfiguration extends AbstractFunctionConfigurationBe
 
   /**
    * Gets an instance of this function configuration source.
+   * 
    * @return The function configuration source
    */
   public static FunctionConfigurationSource instance() {
@@ -31,6 +32,7 @@ public class QuandlFunctionConfiguration extends AbstractFunctionConfigurationBe
 
   /**
    * Adds defaults for curve functions to the repository.
+   * 
    * @return The function configuration source populated with curve default functions.
    */
   protected FunctionConfigurationSource curveFunctions() {
@@ -41,7 +43,9 @@ public class QuandlFunctionConfiguration extends AbstractFunctionConfigurationBe
 
   /**
    * Sets the defaults for curves.
-   * @param defaults The function configuration for curve defaults
+   * 
+   * @param defaults
+   *          The function configuration for curve defaults
    */
   protected void setCurveDefaults(final QuandlCurveFunctions.Defaults defaults) {
     defaults.setAbsoluteTolerance(1e-9);
@@ -51,7 +55,9 @@ public class QuandlFunctionConfiguration extends AbstractFunctionConfigurationBe
 
   /**
    * Performs any validation required after the properties have been set and returns a fully-populated source.
-   * @param functions The functions
+   * 
+   * @param functions
+   *          The functions
    * @return The function configuration source
    */
   protected FunctionConfigurationSource getRepository(final SingletonFactoryBean<FunctionConfigurationSource> functions) {

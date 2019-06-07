@@ -47,7 +47,8 @@ public class SecurityMasterRequestMessage implements Serializable {
   }
 
   /**
-   * @param messageType the messageType to set
+   * @param messageType
+   *          the messageType to set
    */
   public void setMessageType(final MessageType messageType) {
     _messageType = messageType;
@@ -61,7 +62,8 @@ public class SecurityMasterRequestMessage implements Serializable {
   }
 
   /**
-   * @param secKey the secKey to set
+   * @param secKey
+   *          the secKey to set
    */
   public void setSecKey(final ExternalIdBundle secKey) {
     _secKey = secKey;
@@ -69,6 +71,7 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Gets the unique identifier.
+   * 
    * @return the unique identifier
    */
   public UniqueId getUniqueId() {
@@ -77,7 +80,9 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Sets the unique identifier.
-   * @param uid  the unique identifier
+   * 
+   * @param uid
+   *          the unique identifier
    */
   public void setUniqueId(final UniqueId uid) {
     _uid = uid;
@@ -85,6 +90,7 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Gets the bond issuer type
+   * 
    * @return the bond issuer type
    */
   public String getBondIssuerType() {
@@ -93,7 +99,9 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Sets the bond issuer type
-   * @param bondIssuerType the bond issuer type
+   * 
+   * @param bondIssuerType
+   *          the bond issuer type
    */
   public void setBondIssuerType(final String bondIssuerType) {
     _bondIssuerType = bondIssuerType;
@@ -164,7 +172,8 @@ public class SecurityMasterRequestMessage implements Serializable {
   /**
    * Decodes an identifier bundle from the message.
    *
-   * @param msg  the message to decode, not null
+   * @param msg
+   *          the message to decode, not null
    * @return the bundle, not null
    */
   private static ExternalIdBundle decodeSecurityKeyFromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
@@ -178,11 +187,11 @@ public class SecurityMasterRequestMessage implements Serializable {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Type of message.
    */
-  public static enum MessageType {
+  public enum MessageType {
     /** Option chain message. */
     GET_OPTION_CHAIN,
     /** Get securities by key. */

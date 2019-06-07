@@ -36,9 +36,10 @@ import com.opengamma.util.ArgumentChecker;
   /**
    * Constructs a new instance.
    *
-   * @param normalizationRules the normalization rules to use
+   * @param normalizationRules
+   *          the normalization rules to use
    */
-  public LiveMarketDataAvailabilityProvider(final String normalizationRules) {
+  LiveMarketDataAvailabilityProvider(final String normalizationRules) {
     ArgumentChecker.notNull(normalizationRules, "normalizationRules");
     _normalizationRules = normalizationRules;
   }
@@ -52,10 +53,11 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   /**
-   * Creates a live data specification based on a {@link ValueSpecification} created by this availability provider. The normalization
-   * ruleset is used as the target. The external identifiers are marked with properties.
+   * Creates a live data specification based on a {@link ValueSpecification} created by this availability provider. The normalization ruleset is used as the
+   * target. The external identifiers are marked with properties.
    *
-   * @param valueSpec the value specification containing the normalization property, not null
+   * @param valueSpec
+   *          the value specification containing the normalization property, not null
    * @return the original live data specification, not null
    */
   public static LiveDataSpecification getLiveDataSpecification(final ValueSpecification valueSpec) {

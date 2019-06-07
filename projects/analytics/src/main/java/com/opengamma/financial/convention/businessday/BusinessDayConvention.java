@@ -42,7 +42,7 @@ public interface BusinessDayConvention extends NamedInstance {
    *          the date-time to adjust, not null
    * @return the adjusted date-time, not null
    */
-  ZonedDateTime adjustDate(final Calendar workingDayCalendar, final ZonedDateTime dateTime);
+  ZonedDateTime adjustDate(Calendar workingDayCalendar, ZonedDateTime dateTime);
 
   /**
    * Converts this convention to a {@code TemporalAdjuster} using the specified working day calendar.
@@ -51,7 +51,7 @@ public interface BusinessDayConvention extends NamedInstance {
    *          the working days, not null
    * @return the date adjuster, not null
    */
-  TemporalAdjuster getTemporalAdjuster(final Calendar workingDayCalendar);
+  TemporalAdjuster getTemporalAdjuster(Calendar workingDayCalendar);
 
   /**
    * Gets the name of the convention.

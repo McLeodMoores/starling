@@ -6,22 +6,24 @@
 package com.opengamma.engine.depgraph;
 
 /**
- * Interface to request the next resolution be "pumped" into the chain of those requesting notification. This allows lazy production of alternative values
- * deep into the resolution chain.
+ * Interface to request the next resolution be "pumped" into the chain of those requesting notification. This allows lazy production of alternative values deep
+ * into the resolution chain.
  */
 /* package */interface ResolutionPump {
 
   /**
    * Pass the next result to the associated callback object, or call the {@link ResolvedValueCallback#failed} method if no more results are available.
    *
-   * @param context the graph building context
+   * @param context
+   *          the graph building context
    */
   void pump(GraphBuildingContext context);
 
   /**
    * Discard the pump; it must not call any further methods on the {@link ResolvedValueCallback}.
    *
-   * @param context the graph building context
+   * @param context
+   *          the graph building context
    */
   void close(GraphBuildingContext context);
 
@@ -32,7 +34,7 @@ package com.opengamma.engine.depgraph;
 
     private final ResolutionPump _instance;
 
-    public Pump(final ResolutionPump instance) {
+    Pump(final ResolutionPump instance) {
       _instance = instance;
     }
 
@@ -51,7 +53,7 @@ package com.opengamma.engine.depgraph;
 
     private final ResolutionPump _instance;
 
-    public Close(final ResolutionPump instance) {
+    Close(final ResolutionPump instance) {
       _instance = instance;
     }
 
