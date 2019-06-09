@@ -19,15 +19,15 @@ import com.opengamma.util.money.Currency;
 public class VolatilityCubeSelector extends Selector {
 
   /* package */ VolatilityCubeSelector(final Set<String> calcConfigNames,
-                                       final Set<String> names,
-                                       final Set<Currency> currencies,
-                                       final Pattern nameMatchPattern,
-                                       final Pattern nameLikePattern) {
+      final Set<String> names,
+      final Set<Currency> currencies,
+      final Pattern nameMatchPattern,
+      final Pattern nameLikePattern) {
     super(calcConfigNames,
-          names,
-          currencies,
-          nameMatchPattern,
-          nameLikePattern);
+        names,
+        currencies,
+        nameMatchPattern,
+        nameLikePattern);
   }
 
   @Override
@@ -75,15 +75,16 @@ public class VolatilityCubeSelector extends Selector {
     }
 
     /**
-     * This is package scoped for testing
+     * This is package scoped for testing.
+     * 
      * @return A selector built from this builder's data
      */
     /* package */ VolatilityCubeSelector selector() {
       return new VolatilityCubeSelector(getScenario().getCalcConfigNames(),
-                                        getNames(),
-                                        getCurrencies(),
-                                        getNameMatchPattern(),
-                                        getNameLikePattern());
+          getNames(),
+          getCurrencies(),
+          getNameMatchPattern(),
+          getNameLikePattern());
     }
   }
 }

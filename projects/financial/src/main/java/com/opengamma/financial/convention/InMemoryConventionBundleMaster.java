@@ -31,7 +31,7 @@ public class InMemoryConventionBundleMaster implements ConventionBundleMaster {
    */
   public static final ExternalScheme SIMPLE_NAME_SCHEME = ExternalScheme.of("Reference Rate Simple Name");
   /**
-   * Scheme to use when specifying rates using the OpenGamma Synthetic Ticker system
+   * Scheme to use when specifying rates using the OpenGamma Synthetic Ticker system.
    */
   public static final ExternalScheme OG_SYNTHETIC_TICKER = ExternalSchemes.OG_SYNTHETIC_TICKER;
   /**

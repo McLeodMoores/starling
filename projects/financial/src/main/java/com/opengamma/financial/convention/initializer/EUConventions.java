@@ -73,13 +73,13 @@ public class EUConventions extends ConventionMasterInitializer {
 
   /** Singleton. */
   public static final ConventionMasterInitializer INSTANCE = new EUConventions();
-  /** OIS X-Ccy USD/EUR ON leg convention string **/
+  /** OIS X-Ccy USD/EUR ON leg convention string. **/
   public static final String OIS_USD_EUR_ON_LEG = "EUR Overnight USD/EUR XCcy Leg";
-  /** The Euribor string **/
+  /** The Euribor string. **/
   public static final String EURIBOR = "Euribor";
-  /** The Euribor string **/
+  /** The Euribor string. **/
   public static final String EURIBOR_CONV = "EURIBOR Convention";
-  /** The IRS Euribor leg string **/
+  /** The IRS Euribor leg string. **/
   public static final String EURIBOR_LEG = EURIBOR + " Leg";
 
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;

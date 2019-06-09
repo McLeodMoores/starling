@@ -17,7 +17,7 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A Fudge builder for {@link YearOnYearInflationSwapSecurity}
+ * A Fudge builder for {@link YearOnYearInflationSwapSecurity}.
  */
 @FudgeBuilderFor(YearOnYearInflationSwapSecurity.class)
 public class YearOnYearInflationSwapSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<YearOnYearInflationSwapSecurity> {

@@ -110,7 +110,8 @@ public class ExampleUSConventions extends ConventionMasterInitializer {
 
     // Bond conventions
     final BondConvention bondConvention = new BondConvention("USD Government Bond",
-        ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.USD), ExternalSchemes.financialRegionId("US")), 0, 2, BusinessDayConventions.FOLLOWING, true, true);
+        ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.USD), ExternalSchemes.financialRegionId("US")), 0, 2, BusinessDayConventions.FOLLOWING,
+        true, true);
 
     addConvention(master, depositConvention);
     addConvention(master, depositONConvention);

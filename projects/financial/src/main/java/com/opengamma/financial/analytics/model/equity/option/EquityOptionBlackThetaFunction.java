@@ -31,7 +31,7 @@ public class EquityOptionBlackThetaFunction extends EquityOptionBlackFunction {
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackThetaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackThetaFunction() {
     super(ValueRequirementNames.THETA);

@@ -42,12 +42,16 @@ public class ViewStatusKeyBean extends DirectBean implements ViewStatusKey {
   private String _targetType;
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param securityType the security type, not-null.
-   * @param valueRequirementName the value name, not-null.
-   * @param currency the currency, not-null.
-   * @param targetType the target type, not-null.
+   * @param securityType
+   *          the security type, not-null.
+   * @param valueRequirementName
+   *          the value name, not-null.
+   * @param currency
+   *          the currency, not-null.
+   * @param targetType
+   *          the target type, not-null.
    */
   public ViewStatusKeyBean(final String securityType, final String valueRequirementName, final String currency, final String targetType) {
     ArgumentChecker.notNull(securityType, "securityType");
@@ -62,7 +66,7 @@ public class ViewStatusKeyBean extends DirectBean implements ViewStatusKey {
   }
 
   /**
-   * Constructor for builder
+   * Constructor for builder.
    */
   ViewStatusKeyBean() {
   }

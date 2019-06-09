@@ -20,6 +20,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Calculates value gamma of swaptions using the Black method.
+ * 
  * @deprecated The parent class of this function is deprecated
  */
 @Deprecated
@@ -28,7 +29,7 @@ public class SwaptionBlackValueGammaFunction extends SwaptionBlackFunction {
   private static final SwaptionBlackValueGammaCalculator CALCULATOR = SwaptionBlackValueGammaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA}.
    */
   public SwaptionBlackValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

@@ -19,6 +19,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /**
  * Calculates forward delta of swaptions using the Black method.
+ * 
  * @deprecated The parent class of this function is deprecated
  */
 @Deprecated
@@ -27,7 +28,7 @@ public class SwaptionBlackTheoreticaForwardDeltaFunction extends SwaptionBlackFu
   private static final SwaptionBlackForwardDeltaCalculator CALCULATOR = SwaptionBlackForwardDeltaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#FORWARD_DELTA}
+   * Sets the value requirement name to {@link ValueRequirementNames#FORWARD_DELTA}.
    */
   public SwaptionBlackTheoreticaForwardDeltaFunction() {
     super(ValueRequirementNames.FORWARD_DELTA);

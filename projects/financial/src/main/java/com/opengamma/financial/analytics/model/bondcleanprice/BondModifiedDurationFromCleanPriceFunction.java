@@ -15,9 +15,8 @@ import com.opengamma.analytics.financial.interestrate.bond.calculator.ModifiedDu
 public class BondModifiedDurationFromCleanPriceFunction extends BondFromCleanPriceFunction<Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#MODIFIED_DURATION}
-   * and the calculator to {@link ModifiedDurationFromCleanPriceCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#MODIFIED_DURATION} and the calculator to
+   * {@link ModifiedDurationFromCleanPriceCalculator}.
    */
   public BondModifiedDurationFromCleanPriceFunction() {
     super(MODIFIED_DURATION, ModifiedDurationFromCleanPriceCalculator.getInstance());

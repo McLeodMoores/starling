@@ -642,7 +642,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
    * <li>Discounting curve = model/equityoption
    * <li>Discounting curve configuration = model/equityoption
    * <li>Discounting curve currency = model/equityoption
-   * <li>Dividend type = model/equityoption
+   * <li>Dividend type = model/equityoption.
    * </ul>
    *
    * @param i
@@ -672,7 +672,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
    * <li>Volatility surface name = model/equityoption
    * <li>Surface interpolation method = model/equityoption
    * <li>Forward curve name = model/equityoption
-   * <li>Forward curve calculation method = model/equityoption
+   * <li>Forward curve calculation method = model/equityoption.
    * </ul>
    *
    * @param i

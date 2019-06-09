@@ -82,9 +82,10 @@ public class DependencyGraphBuildTrace {
     return hash;
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * Gets the dependency graph that was constructed itself.
+   * 
    * @return the value of the property
    */
   public DependencyGraph getDependencyGraph() {
@@ -93,7 +94,9 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Sets the dependency graph that was constructed itself.
-   * @param depGraph  the new value of the property
+   * 
+   * @param depGraph
+   *          the new value of the property
    */
   public void setDepGraph(final DependencyGraph depGraph) {
     this._depGraph = depGraph;
@@ -101,6 +104,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Gets a list of exceptions along with counts for them.
+   * 
    * @return the value of the property
    */
   public Map<Throwable, Integer> getExceptionsWithCounts() {
@@ -109,7 +113,9 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Sets a list of exceptions along with counts for them.
-   * @param exceptionCounts  the new value of the property
+   * 
+   * @param exceptionCounts
+   *          the new value of the property
    */
   public void setExceptionsWithCounts(final Map<Throwable, Integer> exceptionCounts) {
     this._exceptionsWithCounts = exceptionCounts;
@@ -117,6 +123,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Gets a list of resolution failures that occurred.
+   * 
    * @return the value of the property
    */
   public List<ResolutionFailure> getFailures() {
@@ -125,14 +132,17 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Sets a list of resolution failures that occurred.
-   * @param failures  the new value of the property
+   * 
+   * @param failures
+   *          the new value of the property
    */
   public void setFailures(final List<ResolutionFailure> failures) {
     this._failures = failures;
   }
 
   /**
-   * Gets a map showing how value requirements were resolved to specifications
+   * Gets a map showing how value requirements were resolved to specifications.
+   * 
    * @return the value of the property
    */
   public Map<ValueRequirement, ValueSpecification> getMappings() {
@@ -140,8 +150,10 @@ public class DependencyGraphBuildTrace {
   }
 
   /**
-   * Sets a map showing how value requirements were resolved to specifications
-   * @param mappings  the new value of the property
+   * Sets a map showing how value requirements were resolved to specifications.
+   * 
+   * @param mappings
+   *          the new value of the property
    */
   public void setMappings(final Map<ValueRequirement, ValueSpecification> mappings) {
     this._mappings = mappings;

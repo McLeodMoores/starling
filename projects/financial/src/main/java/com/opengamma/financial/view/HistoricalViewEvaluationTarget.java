@@ -43,7 +43,7 @@ import com.opengamma.util.money.Currency;
 public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
 
   /**
-   * Fudge field containing the start date
+   * Fudge field containing the start date.
    */
   protected static final String START_DATE_FIELD = "startDate";
   /**

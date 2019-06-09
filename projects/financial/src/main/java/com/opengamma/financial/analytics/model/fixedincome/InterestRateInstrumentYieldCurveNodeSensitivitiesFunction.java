@@ -57,7 +57,7 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.Currency;
 
 /**
- * Calculates the yield curve node sensitivities of an interest rate instrument
+ * Calculates the yield curve node sensitivities of an interest rate instrument.
  *
  * @deprecated Use {@link DiscountingYCNSFunction}
  */

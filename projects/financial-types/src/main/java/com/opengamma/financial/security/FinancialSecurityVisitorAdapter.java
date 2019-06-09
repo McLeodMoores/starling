@@ -92,7 +92,7 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
 
   /**
    * Creates builder for a {@link FinancialSecurityVisitor}. The underlying visitor has no implemented methods.
-   * 
+   *
    * @param <T>
    *          The return type of the visitor
    * @return A builder
@@ -103,7 +103,7 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
 
   /**
    * Creates a builder for a {@link FinancialSecurityVisitor} that uses the supplied visitor as the initial underlying.
-   * 
+   *
    * @param <T>
    *          The return type of the visitor
    * @param visitor
@@ -430,7 +430,7 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
   }
 
   /**
-   * Generic message for unsupported methods in FinancialSecurityVisitor implementations
+   * Generic message for unsupported methods in FinancialSecurityVisitor implementations.
    *
    * @param clazz
    *          the implementation class, not null
@@ -461,7 +461,7 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
 
     /**
      * Creates a builder with this underlying visitor.
-     * 
+     *
      * @param visitor
      *          The visitor, not null
      */
@@ -1780,8 +1780,8 @@ public class FinancialSecurityVisitorAdapter<T> extends FutureSecurityVisitorAda
     }
 
     /**
-     * Creates the {@link FinancialSecurityVisitor}
-     * 
+     * Creates the {@link FinancialSecurityVisitor}.
+     *
      * @return The visitor
      */
     public FinancialSecurityVisitor<T> create() {

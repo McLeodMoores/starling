@@ -22,13 +22,13 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * NonDeliverableFXOptionSecurityBeanOperation
+ * NonDeliverableFXOptionSecurityBeanOperation.
  */
 public final class NonDeliverableFxOptionSecurityBeanOperation
     extends AbstractSecurityBeanOperation<NonDeliverableFXOptionSecurity, NonDeliverableFXOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final NonDeliverableFxOptionSecurityBeanOperation INSTANCE = new NonDeliverableFxOptionSecurityBeanOperation();
 

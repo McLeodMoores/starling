@@ -18,7 +18,8 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the par rate of the underlying of a swaption using {@link SwaptionBlackForwardCalculator}
+ * Calculates the par rate of the underlying of a swaption using {@link SwaptionBlackForwardCalculator}.
+ * 
  * @deprecated The parent of this function is deprecated
  */
 @Deprecated
@@ -27,7 +28,7 @@ public class SwaptionBlackForwardFunction extends SwaptionBlackFunction {
   private static final SwaptionBlackForwardCalculator CALCULATOR = SwaptionBlackForwardCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FORWARD}
+   * Sets the value requirement to {@link ValueRequirementNames#FORWARD}.
    */
   public SwaptionBlackForwardFunction() {
     super(ValueRequirementNames.FORWARD);

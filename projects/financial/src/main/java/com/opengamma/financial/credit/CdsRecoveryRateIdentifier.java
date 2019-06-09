@@ -128,7 +128,7 @@ public final class CdsRecoveryRateIdentifier {
   }
 
   /**
-   * Returns a suitable hash code for the identifier,
+   * Returns a suitable hash code for the identifier.
    *
    * @return the hash code
    */
@@ -155,7 +155,7 @@ public final class CdsRecoveryRateIdentifier {
   }
 
   /**
-   * Gets the credit curve identifier as a string
+   * Gets the credit curve identifier as a string.
    *
    * @return the string representing this identifier, not null
    */

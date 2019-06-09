@@ -28,7 +28,7 @@ public class ListedEquityOptionBlackPresentValueFunction extends ListedEquityOpt
   private static final EquityOptionBlackPresentValueCalculator CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);

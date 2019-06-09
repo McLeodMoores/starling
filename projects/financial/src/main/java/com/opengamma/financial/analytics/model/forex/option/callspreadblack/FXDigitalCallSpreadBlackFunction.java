@@ -56,9 +56,9 @@ import com.opengamma.util.tuple.Pairs;
  */
 @Deprecated
 public abstract class FXDigitalCallSpreadBlackFunction extends AbstractFunction.NonCompiledInvoker {
-  /** The name of the calculation method */
+  /** The name of the calculation method. */
   public static final String CALL_SPREAD_BLACK_METHOD = "CallSpreadBlackMethod";
-  /** The name of the property that sets the value of the call spread */
+  /** The name of the property that sets the value of the call spread. */
   public static final String PROPERTY_CALL_SPREAD_VALUE = "CallSpreadValue";
   private final String _valueRequirementName;
 

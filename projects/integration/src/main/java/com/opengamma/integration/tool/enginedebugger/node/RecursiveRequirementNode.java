@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node representing a recursive requirement
+ * Node representing a recursive requirement.
  */
 public class RecursiveRequirementNode extends ValueRequirementNode {
 

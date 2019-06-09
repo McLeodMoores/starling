@@ -15,9 +15,8 @@ import com.opengamma.analytics.financial.interestrate.bond.calculator.ModifiedDu
 public class BondModifiedDurationFromYieldFunction extends BondFromYieldFunction<Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#MODIFIED_DURATION}
-   * and the calculator to {@link ModifiedDurationFromYieldCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#MODIFIED_DURATION} and the calculator to
+   * {@link ModifiedDurationFromYieldCalculator}.
    */
   public BondModifiedDurationFromYieldFunction() {
     super(MODIFIED_DURATION, ModifiedDurationFromYieldCalculator.getInstance());

@@ -387,7 +387,7 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
 
     /**
      * Gets the FX matrix required for the curve provider.
-     * 
+     *
      * @param inputs
      *          The function inputs
      * @param target
@@ -413,7 +413,7 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
     }
 
     /**
-     * Gets the value requirement names that this function can produce
+     * Gets the value requirement names that this function can produce.
      *
      * @return The value requirement names
      */

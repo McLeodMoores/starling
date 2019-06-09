@@ -26,8 +26,8 @@ public class UnversionedValueMappings extends ValueMappings {
 
   /**
    * As a subclasses of ValueMappings if the ComputationTargetReference is an instance of ComputationTargetSpecification and the unique id is versioned then a
-   * new ValueRequirement is created with a unversioned ComputationTargetSpecification
-   * 
+   * new ValueRequirement is created with a unversioned ComputationTargetSpecification.
+   *
    * @param valueRequirement
    *          to check for versioning
    * @return either 'unversioned' or returned unaltered

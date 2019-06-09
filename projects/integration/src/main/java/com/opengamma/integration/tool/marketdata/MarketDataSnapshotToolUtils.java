@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Utility methods for the MarketDataSnapshot Import/Export tools
+ * Utility methods for the MarketDataSnapshot Import/Export tools.
  */
 public class MarketDataSnapshotToolUtils {
   private static final String VERSION_FROM = "Version From";
@@ -115,7 +115,6 @@ public class MarketDataSnapshotToolUtils {
         .appendOffsetId()
         .toFormatter();
 
-
     final List<VersionInfo> snapshotVersions = snapshotUtils.snapshotVersionsByName(optionValue);
     System.out.println(OffsetDateTime.now().format(dateTimeFormatter));
 
@@ -187,7 +186,6 @@ public class MarketDataSnapshotToolUtils {
     System.out.print(repeat);
   }
 
-
   public static ValueSnapshot createValueSnapshot(final String market, final String override) {
     Object marketValue = null;
     Object overrideValue = null;
@@ -199,20 +197,20 @@ public class MarketDataSnapshotToolUtils {
       } else {
         try {
           marketValue = LocalDate.parse(market);
-        } catch (final IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e) {
           LOGGER.error("Market value {} should be a Double, LocalDate or empty.", market);
         }
       }
     }
 
-    //overrideValue can only be Double, LocalDate or empty
+    // overrideValue can only be Double, LocalDate or empty
     if (override != null && !override.isEmpty()) {
       if (NumberUtils.isNumber(override)) {
         overrideValue = NumberUtils.createDouble(override);
       } else {
         try {
           overrideValue = LocalDate.parse(override);
-        } catch (final IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e) {
           LOGGER.error("Override value {} should be a Double, LocalDate or empty.", override);
         }
       }
@@ -225,7 +223,7 @@ public class MarketDataSnapshotToolUtils {
     try {
       Tenor.parse(tenor);
       return true;
-    } catch (final IllegalArgumentException e)  {
+    } catch (final IllegalArgumentException e) {
       return false;
     }
   }
@@ -249,7 +247,7 @@ public class MarketDataSnapshotToolUtils {
       if (yValues.length > 1) {
         try {
           surfaceY = createYOrdinatePair(yValues);
-        } catch (final IllegalArgumentException e)  {
+        } catch (final IllegalArgumentException e) {
           LOGGER.error("Volatility surface Y ordinate {} should be a Double, Pair<Number, FXVolQuoteType> or empty.", xValue);
         }
       } else if (yValues.length == 1) {
@@ -304,6 +302,5 @@ public class MarketDataSnapshotToolUtils {
 
     return ObjectsPair.of(surfaceX, surfaceY);
   }
-
 
 }

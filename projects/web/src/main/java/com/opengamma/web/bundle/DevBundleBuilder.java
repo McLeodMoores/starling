@@ -15,12 +15,12 @@ import java.util.TreeMap;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Utility to build a decorated bundle manager for development bundles
+ * Utility to build a decorated bundle manager for development bundles.
  */
 public class DevBundleBuilder {
 
   /**
-   * Maximum number of {@code @imports}  allowed in IE.
+   * Maximum number of {@code @imports} allowed in IE.
    */
   public static final int MAX_IMPORTS = 31;
   /** The maximum level 1 size for IE. */
@@ -36,14 +36,15 @@ public class DevBundleBuilder {
   /**
    * Creates an instance.
    *
-   * @param bundleManager  the bundle manger not null
+   * @param bundleManager
+   *          the bundle manger not null
    */
   public DevBundleBuilder(final BundleManager bundleManager) {
     ArgumentChecker.notNull(bundleManager, "bundleManager");
     _bundleManager = bundleManager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Decorates the original bundle manager with a version for development.
    *

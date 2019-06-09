@@ -46,7 +46,7 @@ public abstract class AbstractPortfolioGeneratorTool {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPortfolioGeneratorTool.class);
   /**
-   * Default counter party name
+   * Default counter party name.
    */
   public static final String DEFAULT_COUNTER_PARTY = "COUNTERPARTY";
 

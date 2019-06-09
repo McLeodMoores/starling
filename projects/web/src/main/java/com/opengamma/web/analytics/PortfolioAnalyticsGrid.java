@@ -30,7 +30,7 @@ import com.opengamma.id.ObjectId;
   }
 
   /**
-   * Creates a new grid when the structure is updated using an existing grid as the basis
+   * Creates a new grid when the structure is updated using an existing grid as the basis.
    *
    * @param gridStructure
    *          The updated grid structure
@@ -51,7 +51,7 @@ import com.opengamma.id.ObjectId;
   }
 
   /**
-   * Updates with changed structure when the view recompiles
+   * Updates with changed structure when the view recompiles.
    *
    * @param portfolio
    *          the portfolio of positions
@@ -68,7 +68,7 @@ import com.opengamma.id.ObjectId;
   }
 
   /**
-   * Updates on for each tick, returns this if structure remains the same
+   * Updates on for each tick, returns this if structure remains the same.
    *
    * @param cache
    *          the result cache

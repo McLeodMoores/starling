@@ -57,7 +57,7 @@ public class BondZSpreadFromCleanPriceFunction extends BondFromCleanPriceAndCurv
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}.
    */
   public BondZSpreadFromCleanPriceFunction() {
     super(Z_SPREAD);

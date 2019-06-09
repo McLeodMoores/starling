@@ -26,7 +26,7 @@ import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- * Provides all supported security/index types to their descriptions
+ * Provides all supported security/index types to their descriptions.
  */
 public final class SecurityTypesDescriptionProvider {
 

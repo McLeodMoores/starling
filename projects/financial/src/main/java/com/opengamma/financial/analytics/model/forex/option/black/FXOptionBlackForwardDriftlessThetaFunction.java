@@ -32,7 +32,7 @@ import com.opengamma.financial.currency.CurrencyPair;
 
 /**
  * The function to compute the forward driftless theta of Forex options in the Black model.
- * 
+ *
  * @deprecated Use {@link BlackDiscountingForwardDriftlessThetaFXOptionFunction}
  */
 @Deprecated
@@ -41,7 +41,7 @@ public class FXOptionBlackForwardDriftlessThetaFunction extends FXOptionBlackMul
   private static final double DEFAULT_DAYS_PER_YEAR = 365.25;
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FORWARD_DRIFTLESS_THETA}
+   * Sets the value requirement to {@link ValueRequirementNames#FORWARD_DRIFTLESS_THETA}.
    */
   public FXOptionBlackForwardDriftlessThetaFunction() {
     super(ValueRequirementNames.FORWARD_DRIFTLESS_THETA);

@@ -177,7 +177,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   }
 
   /**
-   * Returns the defaults that are available
+   * Returns the defaults that are available.
    *
    * @param defaults
    *          the callback object to return the property and value names on, not null
@@ -205,7 +205,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
   }
 
   /**
-   * Returns the maximal set of value requirement names that are defined (if the defaults are not dependent on compilation context information or a target)
+   * Returns the maximal set of value requirement names that are defined (if the defaults are not dependent on compilation context information or a target).
    *
    * @return the set of value requirement names, shouldn't be null
    * @throws NullPointerException

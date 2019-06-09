@@ -30,17 +30,15 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the implied volatility of swaptions using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the implied volatility of swaptions using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingImpliedVolatilitySwaptionFunction extends BlackDiscountingSwaptionFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, Double> CALCULATOR =
-      SwaptionBlackImpliedVolatilityCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, Double> CALCULATOR = SwaptionBlackImpliedVolatilityCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}.
    */
   public BlackDiscountingImpliedVolatilitySwaptionFunction() {
     super(SECURITY_IMPLIED_VOLATILITY);

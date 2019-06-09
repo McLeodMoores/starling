@@ -81,10 +81,11 @@ import com.opengamma.util.time.Tenor;
 public class ISDACompliantCDSFunction extends NonCompiledInvoker {
 
   private final String[] _valueRequirements = new String[] { ValueRequirementNames.ACCRUED_DAYS, ValueRequirementNames.ACCRUED_PREMIUM,
-      ValueRequirementNames.POINTS_UPFRONT, ValueRequirementNames.CLEAN_PRESENT_VALUE, ValueRequirementNames.DIRTY_PRESENT_VALUE,
-      ValueRequirementNames.CLEAN_PRICE,
-      ValueRequirementNames.QUOTED_SPREAD, ValueRequirementNames.UPFRONT_AMOUNT, ValueRequirementNames.BUCKETED_CS01, ValueRequirementNames.PARALLEL_CS01,
-      ValueRequirementNames.PRINCIPAL };
+                ValueRequirementNames.POINTS_UPFRONT, ValueRequirementNames.CLEAN_PRESENT_VALUE, ValueRequirementNames.DIRTY_PRESENT_VALUE,
+                ValueRequirementNames.CLEAN_PRICE,
+                ValueRequirementNames.QUOTED_SPREAD, ValueRequirementNames.UPFRONT_AMOUNT, ValueRequirementNames.BUCKETED_CS01,
+                ValueRequirementNames.PARALLEL_CS01,
+                ValueRequirementNames.PRINCIPAL };
   public static final double ONE_BPS = 1e-4; // fractional 1 BPS
   private HolidaySource _holidaySource; // OpenGammaCompilationContext.getHolidaySource(context);
   private RegionSource _regionSource;
@@ -432,7 +433,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
     return region;
   }
 
-  /** test region */
+  /** test region. */
   public final class TestRegionSource extends AbstractSourceWithExternalBundle<Region> implements RegionSource {
 
     private final AtomicLong _count = new AtomicLong(0);

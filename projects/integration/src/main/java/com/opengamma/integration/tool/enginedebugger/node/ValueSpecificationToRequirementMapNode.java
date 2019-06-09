@@ -16,8 +16,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * A wrapper for a map of value specification to value requirement that makes it easier to write
- * a tree table model
+ * A wrapper for a map of value specification to value requirement that makes it easier to write a tree table model.
  */
 public class ValueSpecificationToRequirementMapNode implements TreeTableNode {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValueSpecificationToRequirementMapNode.class);

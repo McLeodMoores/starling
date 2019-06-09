@@ -19,15 +19,17 @@ public abstract class AbstractWebUserResource
     extends AbstractPerRequestWebResource<WebUserData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "users/html/";
 
   /**
    * Creates the resource.
-   * 
-   * @param userMaster  the user master, not null
-   * @param passwordService  the password service, not null
+   *
+   * @param userMaster
+   *          the user master, not null
+   * @param passwordService
+   *          the password service, not null
    */
   protected AbstractWebUserResource(final UserMaster userMaster, final PasswordService passwordService) {
     super(new WebUserData());
@@ -39,22 +41,23 @@ public abstract class AbstractWebUserResource
 
   /**
    * Creates the resource.
-   * 
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebUserResource(final AbstractWebUserResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebUserUris(data()));
     return out;
   }

@@ -33,7 +33,7 @@ public class InterestRateFutureOptionBlackForwardFunction extends InterestRateFu
   private static final UnderlyingMarketPriceCalculator CALCULATOR = UnderlyingMarketPriceCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#FORWARD}
+   * Sets the value requirement name to {@link ValueRequirementNames#FORWARD}.
    */
   public InterestRateFutureOptionBlackForwardFunction() {
     super(ValueRequirementNames.FORWARD, false);

@@ -25,7 +25,7 @@ import com.opengamma.master.position.impl.PositionSearchIterator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Deletes positions that are not currently in a portfolio
+ * Deletes positions that are not currently in a portfolio.
  */
 public class OrphanedPositionRemover {
 

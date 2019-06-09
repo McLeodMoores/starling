@@ -42,7 +42,7 @@ public class StandardRecoveryLockCDSSecurity extends StandardCDSSecurity {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "STANDARD_RECOVERY_LOCK_CDS";
 

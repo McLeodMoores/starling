@@ -22,7 +22,8 @@ import com.opengamma.financial.analytics.model.discounting.DiscountingCurrencyEx
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the currency exposure for a FX forward
+ * Calculates the currency exposure for a FX forward.
+ * 
  * @deprecated Use {@link DiscountingCurrencyExposureFunction}
  */
 @Deprecated

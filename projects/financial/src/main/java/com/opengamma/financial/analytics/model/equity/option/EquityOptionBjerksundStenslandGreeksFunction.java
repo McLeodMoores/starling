@@ -53,7 +53,7 @@ public class EquityOptionBjerksundStenslandGreeksFunction extends EquityOptionBj
   };
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBjerksundStenslandGreeksFunction() {
     super(GREEK_NAMES);

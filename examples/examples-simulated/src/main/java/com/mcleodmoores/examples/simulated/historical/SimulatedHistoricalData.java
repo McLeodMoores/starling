@@ -28,7 +28,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * An ultra-simple historical data simulator, we load the initial values from a CSV file (with a header row) and the format:
  *
  * <pre>
- *   <identification-scheme>, <identifier-value>, <datafield>, <value>
+ *   <identification-scheme>, <identifier-value>, <datafield>, <value>.
  * </pre>
  */
 public class SimulatedHistoricalData {
@@ -36,12 +36,12 @@ public class SimulatedHistoricalData {
   private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedHistoricalData.class);
 
   /**
-   * OG Simulated data provider name
+   * OG Simulated data provider name.
    */
   public static final String OG_DATA_PROVIDER = "OG_DATA_PROVIDER";
 
   /**
-   * OG Simulated data source name
+   * OG Simulated data source name.
    */
   public static final String OG_DATA_SOURCE = "OG_DATA_SOURCE";
 

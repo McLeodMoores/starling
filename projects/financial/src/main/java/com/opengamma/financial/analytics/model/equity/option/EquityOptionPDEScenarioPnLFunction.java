@@ -38,7 +38,7 @@ public class EquityOptionPDEScenarioPnLFunction extends EquityOptionPDEFunction 
 
   private static final EqyOptPDEPresentValueCalculator PV_CALCULATOR = EqyOptPDEPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionPDEScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }

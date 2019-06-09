@@ -29,7 +29,7 @@ public final class StdFixedRecoveryCDSSecurityBeanOperation
     extends AbstractSecurityBeanOperation<StandardFixedRecoveryCDSSecurity, StandardFixedRecoveryCDSSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final StdFixedRecoveryCDSSecurityBeanOperation INSTANCE = new StdFixedRecoveryCDSSecurityBeanOperation();
 

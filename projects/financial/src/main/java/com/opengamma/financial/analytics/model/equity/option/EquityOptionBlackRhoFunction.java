@@ -31,7 +31,7 @@ public class EquityOptionBlackRhoFunction extends EquityOptionBlackFunction {
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackRhoCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackRhoFunction() {
     super(ValueRequirementNames.RHO);

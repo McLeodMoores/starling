@@ -333,7 +333,7 @@ public interface AnalyticsView {
   UniqueId getViewDefinitionId();
 
   /**
-   * Returns information about an error that occurred in the server
+   * Returns information about an error that occurred in the server.
    *
    * @return The error, not null
    * @throws com.opengamma.DataNotFoundException
@@ -342,7 +342,7 @@ public interface AnalyticsView {
   List<ErrorInfo> getErrors();
 
   /**
-   * Deletes an error that a client is no longer interested in
+   * Deletes an error that a client is no longer interested in.
    *
    * @param id
    *          The error ID. This is pushed to the client as a notification

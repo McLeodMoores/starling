@@ -10,19 +10,19 @@ package com.opengamma.financial.sensitivities;
  */
 public final class FactorType {
   /**
-   * A constant representing yield curve risk factors
+   * A constant representing yield curve risk factors.
    */
   public static final FactorType YIELD = new FactorType("yieldRiskFactor");
   /**
-   * A constant representing volatility risk factors
+   * A constant representing volatility risk factors.
    */
   public static final FactorType VOLATILITY = new FactorType("volatilityRiskFactor");
   /**
-   * A constant representing CDS spread risk factors
+   * A constant representing CDS spread risk factors.
    */
   public static final FactorType CDS_SPREAD = new FactorType("CDSSpreadRiskFactor");
   /**
-   * A constant representing equity risk factors
+   * A constant representing equity risk factors.
    */
   public static final FactorType EQUITY = new FactorType("equityRiskFactor");
 

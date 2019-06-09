@@ -57,7 +57,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Base class for futures option pricing and analytics
+ * Base class for futures option pricing and analytics.
  */
 public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledInvoker {
   /** The values that the function can calculate */
@@ -314,7 +314,7 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Constructs the discounting curve requirement
+   * Constructs the discounting curve requirement.
    *
    * @param discountingCurveName
    *          The discounting curve name
@@ -361,7 +361,7 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   protected abstract String getSurfaceName(FinancialSecurity security, String surfaceName);
 
   /**
-   * Constructs the underlying future price requirement,
+   * Constructs the underlying future price requirement.
    *
    * @param underlyingId
    *          The id of the underlying future
@@ -372,7 +372,7 @@ public abstract class FutureOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Gets the value requirement names,
+   * Gets the value requirement names.
    *
    * @return The value requirement names
    */

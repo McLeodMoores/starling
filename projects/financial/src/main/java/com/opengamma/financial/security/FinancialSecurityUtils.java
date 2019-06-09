@@ -21,7 +21,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * General utility method applying to Financial Securities
+ * General utility method applying to Financial Securities.
  */
 public class FinancialSecurityUtils {
 
@@ -73,7 +73,8 @@ public class FinancialSecurityUtils {
   }
 
   /**
-   * @param target the computation target being examined.
+   * @param target
+   *          the computation target being examined.
    * @return ValueProperties containing a constraint of the CurrencyUnit or empty if not possible
    */
   public static ValueProperties getCurrencyConstraint(final ComputationTarget target) {
@@ -85,7 +86,8 @@ public class FinancialSecurityUtils {
   }
 
   /**
-   * @param security the security to be examined.
+   * @param security
+   *          the security to be examined.
    * @return an ExternalId for a Region, where it is possible to determine, null otherwise.
    */
   public static ExternalId getRegion(final Security security) {
@@ -97,7 +99,8 @@ public class FinancialSecurityUtils {
   }
 
   /**
-   * @param security the security to be examined.
+   * @param security
+   *          the security to be examined.
    * @return an ExternalId for an Exchange, where it is possible to determine, null otherwise.
    */
   public static ExternalId getExchange(final Security security) {
@@ -109,7 +112,8 @@ public class FinancialSecurityUtils {
   }
 
   /**
-   * @param security the security to be examined.
+   * @param security
+   *          the security to be examined.
    * @return a Currency, where it is possible to determine a single Currency association, null otherwise.
    */
   public static Currency getCurrency(final Security security) {
@@ -117,8 +121,10 @@ public class FinancialSecurityUtils {
   }
 
   /**
-   * @param security the security to be examined.
-   * @param securitySource a security source
+   * @param security
+   *          the security to be examined.
+   * @param securitySource
+   *          a security source
    * @return a Currency, where it is possible to determine a Currency association, null otherwise.
    */
   public static Collection<Currency> getCurrencies(final Security security, final SecuritySource securitySource) {
@@ -126,9 +132,10 @@ public class FinancialSecurityUtils {
   }
 
   /**
-   * Check if a security is exchange traded
+   * Check if a security is exchange traded.
    *
-   * @param security the security to be examined.
+   * @param security
+   *          the security to be examined.
    * @return true if exchange traded or false otherwise.
    */
   public static boolean isExchangeTraded(final Security security) {
@@ -144,7 +151,8 @@ public class FinancialSecurityUtils {
   /**
    * Returns the underlying id of a security (e.g. the id of the equity underlying an equity future).
    *
-   * @param security The security, not null
+   * @param security
+   *          The security, not null
    * @return The id of the underlying of a security, where it is possible to identify this, or null
    */
   public static ExternalId getUnderlyingId(final Security security) {
@@ -154,9 +162,12 @@ public class FinancialSecurityUtils {
   /**
    * Returns the notional for a security.
    *
-   * @param security the security
-   * @param currencyPairs the available currency pairs, FX instruments will return the amount in the base currency
-   * @param securitySource the security source
+   * @param security
+   *          the security
+   * @param currencyPairs
+   *          the available currency pairs, FX instruments will return the amount in the base currency
+   * @param securitySource
+   *          the security source
    * @return the amount in the base currency (FX), null if not applicable
    */
   public static CurrencyAmount getNotional(final Security security, final CurrencyPairs currencyPairs, final SecuritySource securitySource) {

@@ -24,8 +24,9 @@ import com.opengamma.financial.property.DefaultPropertyFunction.PriorityClass;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A configuration bean that adds equity option pricing functions to a repository and sets up default
- * properties for volatility surfaces, forward curves and discount curves.
+ * A configuration bean that adds equity option pricing functions to a repository and sets up default properties for volatility surfaces, forward curves and
+ * discount curves.
+ * 
  * @deprecated Use the configurations in {@link EquityOptionFunctions}.
  */
 @Deprecated
@@ -71,6 +72,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve name.
+     * 
      * @return The discounting curve name
      */
     public String getDiscountingCurve() {
@@ -79,7 +81,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve name.
-     * @param discountingCurve The discounting curve name
+     * 
+     * @param discountingCurve
+     *          The discounting curve name
      */
     public void setDiscountingCurve(final String discountingCurve) {
       _discountingCurve = discountingCurve;
@@ -87,6 +91,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve configuration name.
+     * 
      * @return The discounting curve configuration name
      */
     public String getDiscountingCurveConfig() {
@@ -95,7 +100,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve configuration name.
-     * @param discountingCurveConfig The discounting curve configuration name
+     * 
+     * @param discountingCurveConfig
+     *          The discounting curve configuration name
      */
     public void setDiscountingCurveConfig(final String discountingCurveConfig) {
       _discountingCurveConfig = discountingCurveConfig;
@@ -103,6 +110,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve currency.
+     * 
      * @return The discounting curve configuration name
      */
     public String getDiscountingCurveCurrency() {
@@ -111,7 +119,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve currency.
-     * @param discountingCurveCurrency The discounting curve currency
+     * 
+     * @param discountingCurveCurrency
+     *          The discounting curve currency
      */
     public void setDiscountingCurveCurrency(final String discountingCurveCurrency) {
       _discountingCurveCurrency = discountingCurveCurrency;
@@ -119,6 +129,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the volatility surface name.
+     * 
      * @return The volatility surface name
      */
     public String getVolatilitySurface() {
@@ -127,7 +138,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the volatility surface name.
-     * @param volatilitySurface The volatility surface name
+     * 
+     * @param volatilitySurface
+     *          The volatility surface name
      */
     public void setVolatilitySurface(final String volatilitySurface) {
       ArgumentChecker.notNull(volatilitySurface, "volatilitySurface");
@@ -136,6 +149,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the volatility surface calculation method name.
+     * 
      * @return The volatility surface calculation method name
      */
     public String getSurfaceCalculationMethod() {
@@ -144,7 +158,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the volatility surface calculation method name.
-     * @param surfaceCalculationMethod The volatility surface calculation method name
+     * 
+     * @param surfaceCalculationMethod
+     *          The volatility surface calculation method name
      */
     public void setSurfaceCalculationMethod(final String surfaceCalculationMethod) {
       ArgumentChecker.notNull(surfaceCalculationMethod, "surfaceCalculationMethod");
@@ -153,6 +169,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the volatility surface interpolation method name.
+     * 
      * @return The volatility surface interpolation method name
      */
     public String getSurfaceInterpolationMethod() {
@@ -161,7 +178,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the volatility surface interpolation method name.
-     * @param surfaceInterpolationMethod The volatility surface interpolation method name
+     * 
+     * @param surfaceInterpolationMethod
+     *          The volatility surface interpolation method name
      */
     public void setSurfaceInterpolationMethod(final String surfaceInterpolationMethod) {
       ArgumentChecker.notNull(surfaceInterpolationMethod, "surfaceInterpolationMethod");
@@ -170,6 +189,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the forward curve name.
+     * 
      * @return The forward curve name
      */
     public String getForwardCurve() {
@@ -178,7 +198,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the forward curve name.
-     * @param forwardCurve The forward curve name
+     * 
+     * @param forwardCurve
+     *          The forward curve name
      */
     public void setForwardCurve(final String forwardCurve) {
       _forwardCurve = forwardCurve;
@@ -186,6 +208,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the forward curve interpolator name.
+     * 
      * @return The forward curve interpolator name
      */
     public String getForwardCurveInterpolator() {
@@ -194,7 +217,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the forward curve interpolator name.
-     * @param forwardCurveInterpolator The forward curve interpolator name
+     * 
+     * @param forwardCurveInterpolator
+     *          The forward curve interpolator name
      */
     public void setForwardCurveInterpolator(final String forwardCurveInterpolator) {
       ArgumentChecker.notNull(forwardCurveInterpolator, "forwardCurveInterpolator");
@@ -203,6 +228,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the forward curve left extrapolator name.
+     * 
      * @return The forward curve left extrapolator name
      */
     public String getForwardCurveLeftExtrapolator() {
@@ -211,7 +237,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the forward curve left extrapolator name.
-     * @param forwardCurveLeftExtrapolator The forward curve left extrapolator name
+     * 
+     * @param forwardCurveLeftExtrapolator
+     *          The forward curve left extrapolator name
      */
     public void setForwardCurveLeftExtrapolator(final String forwardCurveLeftExtrapolator) {
       ArgumentChecker.notNull(forwardCurveLeftExtrapolator, "forwardCurveLeftExtrapolator");
@@ -220,6 +248,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the forward curve right extrapolator name.
+     * 
      * @return The forward curve right extrapolator name
      */
     public String getForwardCurveRightExtrapolator() {
@@ -228,7 +257,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the forward curve right extrapolator name.
-     * @param forwardCurveRightExtrapolator The forward curve right extrapolator name
+     * 
+     * @param forwardCurveRightExtrapolator
+     *          The forward curve right extrapolator name
      */
     public void setForwardCurveRightExtrapolator(final String forwardCurveRightExtrapolator) {
       ArgumentChecker.notNull(forwardCurveRightExtrapolator, "forwardCurveRightExtrapolator");
@@ -237,6 +268,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the forward curve calculation method name.
+     * 
      * @return The forward curve calculation method name
      */
     public String getForwardCurveCalculationMethod() {
@@ -245,7 +277,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the forward curve calculation method name.
-     * @param forwardCurveCalculationMethod The forward curve calculation method name.
+     * 
+     * @param forwardCurveCalculationMethod
+     *          The forward curve calculation method name.
      */
     public void setForwardCurveCalculationMethod(final String forwardCurveCalculationMethod) {
       _forwardCurveCalculationMethod = forwardCurveCalculationMethod;
@@ -253,6 +287,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the dividend type.
+     * 
      * @return The dividend type
      */
     public String getDividendType() {
@@ -261,7 +296,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the dividend type.
-     * @param dividendType The dividend type
+     * 
+     * @param dividendType
+     *          The dividend type
      */
     public void setDividendType(final String dividendType) {
       ArgumentChecker.notNull(dividendType, "dividendType");
@@ -306,7 +343,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the forward curve defaults for a set of equity tickers.
-     * @param perEquityInfo The per-equity defaults
+     * 
+     * @param perEquityInfo
+     *          The per-equity defaults
      */
     public void setPerEquityInfo(final Map<String, EquityInfo> perEquityInfo) {
       _perEquityInfo.clear();
@@ -315,6 +354,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the forward curve defaults for a set of equity tickers.
+     * 
      * @return The per-equity defaults
      */
     public Map<String, EquityInfo> getPerEquityInfo() {
@@ -323,6 +363,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the interpolator name.
+     * 
      * @return The interpolator name
      */
     public String getInterpolator() {
@@ -331,7 +372,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the interpolator name.
-     * @param interpolator The interpolator name
+     * 
+     * @param interpolator
+     *          The interpolator name
      */
     public void setInterpolator(final String interpolator) {
       _interpolator = interpolator;
@@ -339,6 +382,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the left extrapolator name.
+     * 
      * @return The left extrapolator name
      */
     public String getLeftExtrapolator() {
@@ -347,7 +391,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the left extrapolator name.
-     * @param leftExtrapolator The left extrapolator name
+     * 
+     * @param leftExtrapolator
+     *          The left extrapolator name
      */
     public void setLeftExtrapolator(final String leftExtrapolator) {
       _leftExtrapolator = leftExtrapolator;
@@ -355,6 +401,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the right extrapolator name.
+     * 
      * @return The right extrapolator name
      */
     public String getRightExtrapolator() {
@@ -363,7 +410,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the right extrapolator name.
-     * @param rightExtrapolator The right extrapolator name
+     * 
+     * @param rightExtrapolator
+     *          The right extrapolator name
      */
     public void setRightExtrapolator(final String rightExtrapolator) {
       _rightExtrapolator = rightExtrapolator;
@@ -371,6 +420,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve name.
+     * 
      * @return The discounting curve name
      */
     public String getDiscountingCurve() {
@@ -379,7 +429,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve name.
-     * @param discountingCurve The discounting curve name
+     * 
+     * @param discountingCurve
+     *          The discounting curve name
      */
     public void setDiscountingCurve(final String discountingCurve) {
       _discountingCurve = discountingCurve;
@@ -387,6 +439,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve configuration name.
+     * 
      * @return The discounting curve configuration name
      */
     public String getDiscountingCurveConfig() {
@@ -395,7 +448,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve configuration name.
-     * @param discountingCurveConfig The discounting curve configuration name
+     * 
+     * @param discountingCurveConfig
+     *          The discounting curve configuration name
      */
     public void setDiscountingCurveConfig(final String discountingCurveConfig) {
       _discountingCurveConfig = discountingCurveConfig;
@@ -403,6 +458,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve currency.
+     * 
      * @return The discounting curve currency
      */
     public String getDiscountingCurveCurrency() {
@@ -411,7 +467,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve currency.
-     * @param discountingCurveCurrency The discounting curve currency
+     * 
+     * @param discountingCurveCurrency
+     *          The discounting curve currency
      */
     public void setDiscountingCurveCurrency(final String discountingCurveCurrency) {
       _discountingCurveCurrency = discountingCurveCurrency;
@@ -419,6 +477,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the dividend type.
+     * 
      * @return The dividend type
      */
     public String getDividendType() {
@@ -427,7 +486,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the dividend type.
-     * @param dividendType The dividend type
+     * 
+     * @param dividendType
+     *          The dividend type
      */
     public void setDividendType(final String dividendType) {
       _dividendType = dividendType;
@@ -485,7 +546,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the volatility surface defaults for a set of equity tickers.
-     * @param perEquityInfo The per-equity defaults
+     * 
+     * @param perEquityInfo
+     *          The per-equity defaults
      */
     public void setPerEquityInfo(final Map<String, EquityInfo> perEquityInfo) {
       _perEquityInfo.clear();
@@ -494,6 +557,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the volatility surface defaults for a set of equity tickers.
+     * 
      * @return The per-equity defaults
      */
     public Map<String, EquityInfo> getPerEquityInfo() {
@@ -502,6 +566,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the interpolator name.
+     * 
      * @return The interpolator name
      */
     public String getInterpolator() {
@@ -510,7 +575,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the interpolator name.
-     * @param interpolator The interpolator name
+     * 
+     * @param interpolator
+     *          The interpolator name
      */
     public void setInterpolator(final String interpolator) {
       _interpolator = interpolator;
@@ -518,6 +585,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the left extrapolator name.
+     * 
      * @return The left extrapolator name
      */
     public String getLeftExtrapolator() {
@@ -526,7 +594,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the left extrapolator name.
-     * @param leftExtrapolator The left extrapolator name
+     * 
+     * @param leftExtrapolator
+     *          The left extrapolator name
      */
     public void setLeftExtrapolator(final String leftExtrapolator) {
       _leftExtrapolator = leftExtrapolator;
@@ -534,6 +604,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the right extrapolator name.
+     * 
      * @return The right extrapolator name
      */
     public String getRightExtrapolator() {
@@ -542,7 +613,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the right extrapolator name.
-     * @param rightExtrapolator The right extrapolator name
+     * 
+     * @param rightExtrapolator
+     *          The right extrapolator name
      */
     public void setRightExtrapolator(final String rightExtrapolator) {
       _rightExtrapolator = rightExtrapolator;
@@ -550,6 +623,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve name.
+     * 
      * @return The discounting curve name
      */
     public String getDiscountingCurve() {
@@ -558,7 +632,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve name.
-     * @param discountingCurve The discounting curve name
+     * 
+     * @param discountingCurve
+     *          The discounting curve name
      */
     public void setDiscountingCurve(final String discountingCurve) {
       _discountingCurve = discountingCurve;
@@ -566,6 +642,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve configuration name.
+     * 
      * @return The discounting curve configuration name
      */
     public String getDiscountingCurveConfig() {
@@ -574,7 +651,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve configuration name.
-     * @param discountingCurveConfig The discounting curve configuration name
+     * 
+     * @param discountingCurveConfig
+     *          The discounting curve configuration name
      */
     public void setDiscountingCurveConfig(final String discountingCurveConfig) {
       _discountingCurveConfig = discountingCurveConfig;
@@ -582,6 +661,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the discounting curve currency.
+     * 
      * @return The discounting curve currency
      */
     public String getDiscountingCurveCurrency() {
@@ -590,7 +670,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the discounting curve currency.
-     * @param discountingCurveCurrency The discounting curve currency
+     * 
+     * @param discountingCurveCurrency
+     *          The discounting curve currency
      */
     public void setDiscountingCurveCurrency(final String discountingCurveCurrency) {
       _discountingCurveCurrency = discountingCurveCurrency;
@@ -598,6 +680,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the dividend type.
+     * 
      * @return The dividend type
      */
     public String getDividendType() {
@@ -606,7 +689,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the dividend type.
-     * @param dividendType The dividend type
+     * 
+     * @param dividendType
+     *          The dividend type
      */
     public void setDividendType(final String dividendType) {
       _dividendType = dividendType;
@@ -614,6 +699,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the surface calculation method.
+     * 
      * @return The surface calculation method
      */
     public String getSurfaceCalculationMethod() {
@@ -622,7 +708,9 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the surface calculation method.
-     * @param surfaceCalculationMethod The surface calculation method
+     * 
+     * @param surfaceCalculationMethod
+     *          The surface calculation method
      */
     public void setSurfaceCalculationMethod(final String surfaceCalculationMethod) {
       _surfaceCalculationMethod = surfaceCalculationMethod;
@@ -657,7 +745,8 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Gets the default values for calculations
+   * Gets the default values for calculations.
+   * 
    * @return The repository with equity option defaults set
    */
   public static FunctionConfigurationSource defaults() {
@@ -667,9 +756,12 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * @param overhedge The overhedge to use for equity barrier options
-   * @param callSpreadFullWidth The width of the call spread to use for barrier options
-   * @param barrierFormat the barrier output display format
+   * @param overhedge
+   *          The overhedge to use for equity barrier options
+   * @param callSpreadFullWidth
+   *          The width of the call spread to use for barrier options
+   * @param barrierFormat
+   *          the barrier output display format
    * @return The repository with equity barrier option defaults set
    */
   public static FunctionConfigurationSource defaults(final double overhedge, final double callSpreadFullWidth, final String barrierFormat) {

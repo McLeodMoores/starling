@@ -10,8 +10,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A row in the grid. TODO subclass(es) for trades with trade & position ID?
- * also security only belongs in position and trade rows, not nodes. do we really care?
+ * A row in the grid. TODO subclass(es) for trades with trade & position ID? also security only belongs in position and trade rows, not nodes. do we really
+ * care?
  */
 /* package */ class PortfolioGridRow extends MainGridStructure.Row {
 
@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
   private final UniqueId _tradeId;
 
   /**
-   * For rows representing portfolio nodes which have no security or quantity
+   * For rows representing portfolio nodes which have no security or quantity.
    *
    * @param target
    *          The row's target
@@ -78,7 +78,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   /**
-   * For rows representing position nodes which have a security and quantity
+   * For rows representing position nodes which have a security and quantity.
    *
    * @param target
    *          The row's target

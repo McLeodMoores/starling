@@ -90,7 +90,7 @@ public class USConventions extends ConventionMasterInitializer {
 
   /** Singleton. */
   public static final ConventionMasterInitializer INSTANCE = new USConventions();
-  /** OIS X-Ccy USD/JPY ON leg convention string **/
+  /** OIS X-Ccy USD/JPY ON leg convention string. **/
   public static final String OIS_USD_JPY_ON_LEG = "USD Overnight USD/JPY XCcy Leg";
 
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
@@ -107,7 +107,7 @@ public class USConventions extends ConventionMasterInitializer {
   protected USConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
     final String depositConventionName = getConventionName(Currency.USD, DEPOSIT);
@@ -262,7 +262,8 @@ public class USConventions extends ConventionMasterInitializer {
     final DeliverablePriceQuotedSwapFutureConvention cmsDeliverableSwapFutureConvention = new DeliverablePriceQuotedSwapFutureConvention(
         cmeDeliverableSwapFutureConventionName,
         ExternalIdBundle.of(SCHEME_NAME, CME_DELIVERABLE_SWAP_FUTURE), ExternalId.of(ExchangeTradedInstrumentExpiryCalculator.SCHEME,
-            IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME), US, liborConventionId, 100000);
+            IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME),
+        US, liborConventionId, 100000);
 
     // Inflation
     final PriceIndexConvention priceIndexConvention = new PriceIndexConvention(

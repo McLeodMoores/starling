@@ -137,8 +137,8 @@ public abstract class AbstractWebResource {
   }
 
   /**
-   * Utility method to convert XML to configuration object
-   * 
+   * Utility method to convert XML to configuration object.
+   *
    * @param xml
    *          the configuration xml
    * @return the configuration object
@@ -197,7 +197,7 @@ public abstract class AbstractWebResource {
   }
 
   /**
-   * Converts JSON to configuration object
+   * Converts JSON to configuration object.
    *
    * @param json
    *          the config document in JSON
@@ -216,7 +216,7 @@ public abstract class AbstractWebResource {
 
   /**
    * Gets the fudgeContext.
-   * 
+   *
    * @return the fudgeContext
    */
   public FudgeContext getFudgeContext() {

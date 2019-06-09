@@ -44,7 +44,7 @@ public class DiscountingInterpolatedPVFunction extends DiscountingInterpolatedFu
       .getInstance();
 
   /**
-   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public DiscountingInterpolatedPVFunction() {
     super(PRESENT_VALUE);

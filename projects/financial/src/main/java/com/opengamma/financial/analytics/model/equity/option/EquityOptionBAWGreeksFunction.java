@@ -53,7 +53,7 @@ public class EquityOptionBAWGreeksFunction extends EquityOptionBAWFunction {
   };
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBAWGreeksFunction() {
     super(GREEK_NAMES);

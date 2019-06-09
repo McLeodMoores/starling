@@ -123,7 +123,7 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
  */
 @Deprecated
 public class FXImpliedYieldCurveSeriesFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property name for the calculation method */
+  /** Property name for the calculation method. */
   public static final String FX_IMPLIED = "FXImplied";
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(FXImpliedYieldCurveSeriesFunction.class);

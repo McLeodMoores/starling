@@ -32,7 +32,7 @@ public class EquityOptionBlackSpotGammaFunction extends EquityOptionBlackFunctio
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackSpotGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackSpotGammaFunction() {
     super(ValueRequirementNames.GAMMA);

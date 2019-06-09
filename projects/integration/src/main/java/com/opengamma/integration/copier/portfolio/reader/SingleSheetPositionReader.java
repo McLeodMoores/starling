@@ -10,11 +10,11 @@ import com.opengamma.integration.copier.sheet.reader.SheetReader;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Abstract class for importing data from various 3rd party file formats
+ * Abstract class for importing data from various 3rd party file formats.
  */
 public abstract class SingleSheetPositionReader implements PositionReader {
 
-  private SheetReader _sheet;         // The spreadsheet from which to import
+  private SheetReader _sheet; // The spreadsheet from which to import
 
   public SingleSheetPositionReader(final SheetReader sheet) {
     ArgumentChecker.notNull(sheet, "sheet");

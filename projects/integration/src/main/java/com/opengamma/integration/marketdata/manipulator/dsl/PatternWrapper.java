@@ -12,17 +12,17 @@ import java.util.regex.Pattern;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Wraps a {@link Pattern} and defines meaningful {@code equals()} and {@code hashCode()} methods. {@code Pattern}
- * inherits the default implementations from {@code Object} which aren't helpful for comparing logical equality.
- * This class removes the need to hand-code the {@code equals()} and {@code hashCode()} methods of any class that
- * holds a {@code Pattern}.
+ * Wraps a {@link Pattern} and defines meaningful {@code equals()} and {@code hashCode()} methods. {@code Pattern} inherits the default implementations from
+ * {@code Object} which aren't helpful for comparing logical equality. This class removes the need to hand-code the {@code equals()} and {@code hashCode()}
+ * methods of any class that holds a {@code Pattern}.
  */
 public final class PatternWrapper implements Serializable {
 
   private final Pattern _pattern;
 
   /**
-   * @param pattern The pattern to wrap, not null
+   * @param pattern
+   *          The pattern to wrap, not null
    */
   private PatternWrapper(final Pattern pattern) {
     ArgumentChecker.notNull(pattern, "p");
@@ -55,8 +55,10 @@ public final class PatternWrapper implements Serializable {
   }
 
   /**
-   * Wraps a {@link Pattern}
-   * @param pattern The pattern to wrap, may be null
+   * Wraps a {@link Pattern}.
+   * 
+   * @param pattern
+   *          The pattern to wrap, may be null
    * @return A wrapped pattern or null if the argument is null
    */
   public static PatternWrapper wrap(final Pattern pattern) {

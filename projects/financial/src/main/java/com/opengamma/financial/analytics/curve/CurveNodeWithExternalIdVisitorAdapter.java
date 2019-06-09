@@ -23,15 +23,16 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Adapter for visiting all concrete curve node types.
  *
- * @param <T> The return type for this visitor.
+ * @param <T>
+ *          The return type for this visitor.
  */
 public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithExternalIdVisitor<T> {
 
   /**
-   * Creates builder for a {@link CurveNodeWithExternalIdVisitor}. The underlying visitor
-   * has no implemented methods.
+   * Creates builder for a {@link CurveNodeWithExternalIdVisitor}. The underlying visitor has no implemented methods.
    *
-   * @param <T> The return type of the visitor
+   * @param <T>
+   *          The return type of the visitor
    * @return A builder
    */
   public static <T> Builder<T> builder() {
@@ -39,11 +40,12 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
   }
 
   /**
-   * Creates builder for a {@link CurveNodeWithExternalIdVisitor} that uses the supplied
-   * visitor as the initial underlying
+   * Creates builder for a {@link CurveNodeWithExternalIdVisitor} that uses the supplied visitor as the initial underlying.
    *
-   * @param <T> The return type of the visitor
-   * @param visitor The underlying visitor, not null
+   * @param <T>
+   *          The return type of the visitor
+   * @param visitor
+   *          The underlying visitor, not null
    * @return A builder
    */
   public static <T> Builder<T> builder(final CurveNodeWithExternalIdVisitor<T> visitor) {
@@ -101,10 +103,12 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
   }
 
   /**
-   * Generic message for unsupported methods in {@link CurveNodeWithExternalIdVisitor} implementations
+   * Generic message for unsupported methods in {@link CurveNodeWithExternalIdVisitor} implementations.
    *
-   * @param clazz the implementation class, not null
-   * @param node the curve node, not null
+   * @param clazz
+   *          the implementation class, not null
+   * @param node
+   *          the curve node, not null
    * @return the message, not null;
    */
   public static String getUnsupportedOperationMessage(final Class<?> clazz, final CurveNode node) {
@@ -116,7 +120,8 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
   /**
    * Builder class for this visitor adapter.
    *
-   * @param <T> The return type of the visitor.
+   * @param <T>
+   *          The return type of the visitor.
    */
   public static class Builder<T> {
 
@@ -131,7 +136,8 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
     /**
      * Accepts a visitor.
      *
-     * @param visitor The visitor, not null
+     * @param visitor
+     *          The visitor, not null
      */
     protected Builder(final CurveNodeWithExternalIdVisitor<T> visitor) {
       ArgumentChecker.notNull(visitor, "visitor");
@@ -150,12 +156,12 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
     }
 
     public Builder<T> continuouslyCompoundedRateNode(final CurveNodeWithExternalIdVisitor<T> visitor,
-                                                     final ExternalId externalId) {
+        final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
         public T visitContinuouslyCompoundedRateNode(final ContinuouslyCompoundedRateNode node,
-                                                     final ExternalId externalId) {
+            final ExternalId externalId) {
           return visitor.visitContinuouslyCompoundedRateNode(node, externalId);
         }
       };
@@ -174,7 +180,7 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
     }
 
     public Builder<T> deliverableSwapFutureNode(final CurveNodeWithExternalIdVisitor<T> visitor,
-                                                final ExternalId externalId) {
+        final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override

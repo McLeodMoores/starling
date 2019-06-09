@@ -20,13 +20,12 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the vega (first order sensitivity of the price to the implied volatility) for a vanilla equity barrier option
- * using the Black formula.
+ * Calculates the vega (first order sensitivity of the price to the implied volatility) for a vanilla equity barrier option using the Black formula.
  */
 public class EquityVanillaBarrierOptionVegaFunction extends EquityVanillaBarrierOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionVegaFunction() {
     super(ValueRequirementNames.VALUE_VEGA);

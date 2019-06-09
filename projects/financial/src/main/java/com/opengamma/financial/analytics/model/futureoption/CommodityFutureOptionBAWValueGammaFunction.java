@@ -31,7 +31,7 @@ public class CommodityFutureOptionBAWValueGammaFunction extends CommodityFutureO
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBAWValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

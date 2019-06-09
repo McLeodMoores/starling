@@ -18,8 +18,8 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /**
  * Provides the reference margin price for interest rate futures options.
- * @deprecated Use {@link com.opengamma.financial.analytics.model.MarginPriceFunction}, which
- * handles instruments other than interest rate future options.
+ * 
+ * @deprecated Use {@link com.opengamma.financial.analytics.model.MarginPriceFunction}, which handles instruments other than interest rate future options.
  */
 @Deprecated
 public class MarginPriceFunction extends InterestRateFutureOptionBlackFunction {
@@ -27,7 +27,7 @@ public class MarginPriceFunction extends InterestRateFutureOptionBlackFunction {
   private static MarginPriceVisitor s_priceVisitor = MarginPriceVisitor.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#DAILY_PRICE}
+   * Sets the value requirement name to {@link ValueRequirementNames#DAILY_PRICE}.
    */
   public MarginPriceFunction() {
     super(ValueRequirementNames.DAILY_PRICE, true);

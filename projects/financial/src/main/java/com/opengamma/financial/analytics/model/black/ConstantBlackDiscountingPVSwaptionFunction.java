@@ -33,17 +33,16 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of a swaption using the Black formula with no volatility modeling
- * assumptions. The implied volatility is read directly from the market data system.
+ * Calculates the present value of a swaption using the Black formula with no volatility modeling assumptions. The implied volatility is read directly from the
+ * market data system.
  */
 public class ConstantBlackDiscountingPVSwaptionFunction extends ConstantBlackDiscountingSwaptionFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      PresentValueBlackSwaptionCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueBlackSwaptionCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public ConstantBlackDiscountingPVSwaptionFunction() {
     super(PRESENT_VALUE);

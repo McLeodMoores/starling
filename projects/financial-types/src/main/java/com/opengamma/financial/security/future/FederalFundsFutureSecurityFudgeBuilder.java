@@ -16,7 +16,7 @@ import com.opengamma.id.ExternalIdFudgeBuilder;
 import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 
 /**
- * A Fudge builder for {@code FederalFundsFutureSecurity}
+ * A Fudge builder for {@code FederalFundsFutureSecurity}.
  */
 @FudgeBuilderFor(FederalFundsFutureSecurity.class)
 public class FederalFundsFutureSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<FederalFundsFutureSecurity> {

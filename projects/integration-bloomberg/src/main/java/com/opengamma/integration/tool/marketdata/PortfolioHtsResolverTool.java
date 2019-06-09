@@ -21,7 +21,7 @@ import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
 @Scriptable
 public class PortfolioHtsResolverTool extends AbstractTool<IntegrationToolContext> {

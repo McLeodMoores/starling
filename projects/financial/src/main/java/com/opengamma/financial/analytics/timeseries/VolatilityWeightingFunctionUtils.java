@@ -17,7 +17,7 @@ import com.opengamma.engine.value.ValueRequirement;
 public final class VolatilityWeightingFunctionUtils {
 
   /**
-   * Transformation method
+   * Transformation method.
    */
   public static final String TRANSFORMATION_METHOD_VALUE = "VolatilityWeighting";
   /**

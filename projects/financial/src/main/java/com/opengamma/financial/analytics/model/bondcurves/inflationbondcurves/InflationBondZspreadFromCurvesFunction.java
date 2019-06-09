@@ -58,7 +58,7 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}.
    */
   public InflationBondZspreadFromCurvesFunction() {
     super(Z_SPREAD);

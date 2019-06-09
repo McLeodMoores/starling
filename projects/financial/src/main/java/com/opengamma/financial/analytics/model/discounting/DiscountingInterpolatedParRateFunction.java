@@ -29,16 +29,14 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- *  Calculates the par rate of instruments using curves constructed using
- * the interpolated method.
+ * Calculates the par rate of instruments using curves constructed using the interpolated method.
  */
 public class DiscountingInterpolatedParRateFunction extends DiscountingInterpolatedFunction {
   /** The par rate calculator */
   private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> CALCULATOR = ParRateDiscountingCalculator.getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PAR_RATE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PAR_RATE}.
    */
   public DiscountingInterpolatedParRateFunction() {
     super(PAR_RATE);

@@ -9,7 +9,7 @@ import com.opengamma.master.position.ManageablePosition;
 import com.opengamma.master.security.ManageableSecurity;
 
 /**
- * Portfolio copier visitor that gathers statistics
+ * Portfolio copier visitor that gathers statistics.
  */
 public class PortfolioCopierStats implements PortfolioCopierVisitor {
 

@@ -55,7 +55,7 @@ public class DiscountingInflationYCNSFunction extends DiscountingInflationFuncti
   private static final Logger LOGGER = LoggerFactory.getLogger(DiscountingInflationYCNSFunction.class);
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public DiscountingInflationYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);

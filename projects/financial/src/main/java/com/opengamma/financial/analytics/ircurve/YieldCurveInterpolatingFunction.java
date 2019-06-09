@@ -34,8 +34,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 
 /**
- * Allows dumb clients to get interpolated {@link YieldCurve}s
- * 
+ * Allows dumb clients to get interpolated {@link YieldCurve}s.
+ *
  * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
 @Deprecated

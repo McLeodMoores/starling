@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Immutable set of tenors that represents the CreditDefaultSwapIndex security terms
+ * Immutable set of tenors that represents the CreditDefaultSwapIndex security terms.
  */
 @BeanDefinition(builderScope = "private")
 public final class CDSIndexTerms
@@ -42,7 +42,7 @@ public final class CDSIndexTerms
   /**
    * Singleton empty cdsIndex terms.
    */
-  public static final CDSIndexTerms EMPTY = new CDSIndexTerms(ImmutableSortedSet.<Tenor>of());
+  public static final CDSIndexTerms EMPTY = new CDSIndexTerms(ImmutableSortedSet.<Tenor> of());
 
   /**
    * The set of tenors.
@@ -50,11 +50,12 @@ public final class CDSIndexTerms
   @PropertyDefinition(validate = "notNull")
   private final ImmutableSortedSet<Tenor> _tenors;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains a {@link CDSIndexTerms} from a tenor.
    *
-   * @param tenor  the tenor to warp in the terms, not null
+   * @param tenor
+   *          the tenor to warp in the terms, not null
    * @return the terms, not null
    */
   public static CDSIndexTerms of(final Tenor tenor) {
@@ -65,7 +66,8 @@ public final class CDSIndexTerms
   /**
    * Obtains an {@link CDSIndexTerms} from an array of tenors.
    *
-   * @param tenors  an array of tenors, no nulls, not null
+   * @param tenors
+   *          an array of tenors, no nulls, not null
    * @return the terms, not null
    */
   public static CDSIndexTerms of(final Tenor... tenors) {
@@ -76,7 +78,8 @@ public final class CDSIndexTerms
   /**
    * Obtains an {@link CDSIndexTerms} from a collection of tenors.
    *
-   * @param tenors  the collection of tenors, no nulls, not null
+   * @param tenors
+   *          the collection of tenors, no nulls, not null
    * @return the terms, not null
    */
   public static CDSIndexTerms of(final Iterable<Tenor> tenors) {
@@ -84,7 +87,7 @@ public final class CDSIndexTerms
     return new CDSIndexTerms(ImmutableSortedSet.copyOf(tenors));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns an iterator over the tenors in the terms.
    *

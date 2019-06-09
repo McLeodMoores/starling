@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.generator;
 
@@ -28,9 +28,9 @@ public class ExampleIndexSecuritiesGeneratorTool extends AbstractSecuritiesGener
   private static final List<ManageableSecurity> INDICES = new ArrayList<>();
 
   static {
-    final String[] currencies = new String[] {"USD", "EUR", "JPY", "CHF", "GBP" };
-    final String[] overnightTickers = new String[] {"USDFF", "EONIA", "TONAR", "TOISTOIS", "SONIO" };
-    Tenor[] tenors = new Tenor[] {Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS };
+    final String[] currencies = new String[] { "USD", "EUR", "JPY", "CHF", "GBP" };
+    final String[] overnightTickers = new String[] { "USDFF", "EONIA", "TONAR", "TOISTOIS", "SONIO" };
+    Tenor[] tenors = new Tenor[] { Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS };
     for (final Tenor tenor : tenors) {
       final String iborTicker = "EUREURIBOR" + tenor.toFormattedString();
       final String referenceRateTicker = " EURIBOR " + tenor.toFormattedString().substring(1).toLowerCase();
@@ -60,7 +60,7 @@ public class ExampleIndexSecuritiesGeneratorTool extends AbstractSecuritiesGener
       overnightIndex.setName(overnightTicker);
       INDICES.add(overnightIndex);
     }
-    tenors = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS };
+    tenors = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS };
     for (final Tenor tenor : tenors) {
       final String swapIndexTicker = "USDISDA" + 10 + tenor.toFormattedString().toUpperCase();
       final SwapIndex swapIndex = new SwapIndex(swapIndexTicker, tenor, ExternalSchemes.syntheticSecurityId("USD ISDA Fixing"));

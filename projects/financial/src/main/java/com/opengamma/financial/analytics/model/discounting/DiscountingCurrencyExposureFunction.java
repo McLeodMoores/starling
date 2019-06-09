@@ -35,17 +35,15 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the FX currency exposure of instruments using curves constructed using
- * the discounting method.
+ * Calculates the FX currency exposure of instruments using curves constructed using the discounting method.
  */
 public class DiscountingCurrencyExposureFunction extends DiscountingFunction {
   /** The FX currency exposure calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      CurrencyExposureDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> CALCULATOR = CurrencyExposureDiscountingCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#FX_CURRENCY_EXPOSURE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#FX_CURRENCY_EXPOSURE}.
    */
   public DiscountingCurrencyExposureFunction() {
     super(FX_CURRENCY_EXPOSURE);

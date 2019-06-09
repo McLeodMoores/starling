@@ -59,7 +59,7 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   /** A Fudge serializer */
   private static final FudgeSerializer FUDGE_SERIALIZER = new FudgeSerializer(FUDGE_CONTEXT);
-  /** An external id with blank fields */
+  /** An external id with blank fields. */
   static final ExternalId EMPTY_EID = ExternalId.of(" ", " ");
 
   /**

@@ -18,19 +18,19 @@ import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
  */
 public enum SwapType {
   /**
-   * A vanilla swap type
+   * A vanilla swap type.
    */
   SWAP,
   /**
-   * Forward starting swap type
+   * Forward starting swap type.
    */
   FORWARD,
   /**
-   * Zero coupon inflation swap type
+   * Zero coupon inflation swap type.
    */
   ZERO_COUPON_INFLATION,
   /**
-   * Year on Year inflation swap type
+   * Year on Year inflation swap type.
    */
   YEAR_ON_YEAR_INFLATION;
 

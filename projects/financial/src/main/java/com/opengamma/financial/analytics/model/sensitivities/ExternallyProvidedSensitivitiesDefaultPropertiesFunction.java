@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Provides defaults for externally provided sensitivities values
+ * Provides defaults for externally provided sensitivities values.
  */
 public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesDefaultPropertiesFunction.class);
@@ -34,7 +34,7 @@ public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends De
                 "Present Value",
                 "PV01",
                 "CS01",
-  "Yield Curve Node Sensitivities" };
+                "Yield Curve Node Sensitivities" };
   private final Map<String, String> _currencyAndCurveConfigNames;
 
   public ExternallyProvidedSensitivitiesDefaultPropertiesFunction(final String[] currencyAndCurveConfigNames) {

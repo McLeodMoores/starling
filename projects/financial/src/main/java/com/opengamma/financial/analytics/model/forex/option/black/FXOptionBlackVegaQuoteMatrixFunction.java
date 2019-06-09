@@ -28,8 +28,8 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingVegaQuoteMa
 import com.opengamma.financial.currency.CurrencyPair;
 
 /**
- * Calculates the vega quote matrix for FX options
- * 
+ * Calculates the vega quote matrix for FX options.
+ *
  * @deprecated Use {@link BlackDiscountingVegaQuoteMatrixFXOptionFunction}
  */
 @Deprecated

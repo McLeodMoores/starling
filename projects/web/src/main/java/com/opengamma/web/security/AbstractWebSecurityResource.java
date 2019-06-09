@@ -47,15 +47,15 @@ public abstract class AbstractWebSecurityResource
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebSecurityResource.class);
   /**
-   * Security XML parameter name
+   * Security XML parameter name.
    */
   protected static final String SECURITY_XML = "securityXml";
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "securities/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "securities/json/";
   /**
@@ -102,7 +102,7 @@ public abstract class AbstractWebSecurityResource
   // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override

@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for a {@link EngineResourceManager}
+ * RESTful resource for a {@link EngineResourceManager}.
  *
  * @param <T>
  *          the type of resource
@@ -126,7 +126,7 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
 
     /**
      * Sets the scheduler.
-     * 
+     *
      * @param scheduler
      *          the scheduler, not null
      */

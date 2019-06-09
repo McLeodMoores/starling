@@ -40,8 +40,8 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Equity requires an additional three properties.
-   * This is to specify the Funding curve used to build the Equity Forwards.
+   * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
+   * 
    * @return ValueProperties specifying any currency, curve name and curve calculation config
    */
   protected ValueProperties getCurrencyProperties() {
@@ -54,9 +54,10 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Equity requires an additional three properties.
-   * This is to specify the Funding curve used to build the Equity Forwards.
-   * @param desiredValue ValueRequirement containing "CurveCurrency" and "FundingCurve"
+   * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
+   * 
+   * @param desiredValue
+   *          ValueRequirement containing "CurveCurrency" and "FundingCurve"
    * @return ValueProperties containing specified values
    */
   protected ValueProperties getCurrencyProperties(final ValueRequirement desiredValue) {
@@ -72,9 +73,10 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Equity requires an additional three properties.
-   * This is to specify the Funding curve used to build the Equity Forwards.
-   * @param desiredValue ValueRequirement containing "CurveCurrency" and "FundingCurve"
+   * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
+   * 
+   * @param desiredValue
+   *          ValueRequirement containing "CurveCurrency" and "FundingCurve"
    * @return ValueProperties containing specified values
    */
   protected ValueProperties getCurrencyPropertiesForVolatilitySurface(final ValueRequirement desiredValue) {
@@ -96,7 +98,6 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
         getInstrumentType(), getBlackSmileInterpolatorName(), parameterizationType).get();
   }
 
-
   @Override
   protected ValueProperties getResultProperties(final ValueRequirement desiredValue, final String parameterizationType) {
     final ValueProperties equityProperties = getCurrencyProperties(desiredValue);
@@ -113,7 +114,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with spline interpolation
+   * Function producing a local volatility surface using a Black volatility surface with spline interpolation.
    */
   public static class Spline extends EquityDupireLocalVolatilitySurfaceFunction {
 
@@ -125,7 +126,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation
+   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation.
    */
   public static class SABR extends EquityDupireLocalVolatilitySurfaceFunction {
 
@@ -137,7 +138,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation
+   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation.
    */
   public static class MixedLogNormal extends EquityDupireLocalVolatilitySurfaceFunction {
 

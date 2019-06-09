@@ -13,6 +13,7 @@ import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.analytics.ircurve.IndexType;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -25,8 +26,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class SyntheticAUConventions {
@@ -40,7 +40,7 @@ public class SyntheticAUConventions {
     final Frequency quarterly = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.QUARTERLY_NAME);
     final Frequency annual = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.ANNUAL_NAME);
 
-    //TODO holiday associated with AUD swaps is Sydney
+    // TODO holiday associated with AUD swaps is Sydney
     final ExternalId au = ExternalSchemes.financialRegionId("AU");
     final Integer overnightPublicationLag = 0;
 
@@ -60,9 +60,12 @@ public class SyntheticAUConventions {
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDCASHP11M")), "AUDCASHP11M", act365, modified, Period.ofMonths(1), 2, false, au);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDCASHP12M")), "AUDCASHP12M", act365, modified, Period.ofMonths(12), 2, false, au);
 
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDLIBORP3M"), simpleNameSecurityId("AUD LIBOR 3m")), "AUD LIBOR 3m", act365, following, Period.ofMonths(3), 2, false, au);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDLIBORP6M"), simpleNameSecurityId("AUD LIBOR 6m")), "AUD LIBOR 6m", act365, following, Period.ofMonths(6), 2, false, au);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDLIBORP12M"), simpleNameSecurityId("AUD LIBOR 12m")), "AUD LIBOR 12m", act365, following, Period.ofMonths(12), 2, false, au);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDLIBORP3M"), simpleNameSecurityId("AUD LIBOR 3m")), "AUD LIBOR 3m", act365, following,
+        Period.ofMonths(3), 2, false, au);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDLIBORP6M"), simpleNameSecurityId("AUD LIBOR 6m")), "AUD LIBOR 6m", act365, following,
+        Period.ofMonths(6), 2, false, au);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDLIBORP12M"), simpleNameSecurityId("AUD LIBOR 12m")), "AUD LIBOR 12m", act365,
+        following, Period.ofMonths(12), 2, false, au);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDON"), simpleNameSecurityId("RBA OVERNIGHT CASH RATE")),
         "RBA OVERNIGHT CASH RATE", act365, following, Period.ofDays(1), 0, false, au, overnightPublicationLag);
 
@@ -77,7 +80,7 @@ public class SyntheticAUConventions {
         semiAnnual, 0, au, act365, modified, semiAnnual, 0, simpleNameSecurityId(IndexType.BBSW + "_AUD_P6M"), au, true);
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("AUD_OIS_SWAP")), "AUD_OIS_SWAP", act365, modified, annual, 0, au, act365,
         modified, annual, 0, simpleNameSecurityId("RBA OVERNIGHT CASH RATE"), au, true, overnightPublicationLag);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDBBP3M"), simpleNameSecurityId(IndexType.BBSW  + "_AUD_P3M")),
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDBBP3M"), simpleNameSecurityId(IndexType.BBSW + "_AUD_P3M")),
         "AUD Bank Bill 3m", act365, modified, Period.ofMonths(3), 0, true, au); // "AUD Bank Bill 3m"
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("AUDBBP6M"), simpleNameSecurityId(IndexType.BBSW + "_AUD_P6M")),
         "AUD Bank Bill 6m", act365, modified, Period.ofMonths(6), 0, true, au); // "AUD Bank Bill 6m"

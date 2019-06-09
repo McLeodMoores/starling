@@ -28,7 +28,7 @@ import com.opengamma.transport.jaxrs.FudgeRest;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for accessing available outputs from a portfolio
+ * RESTful resource for accessing available outputs from a portfolio.
  */
 public class DataAvailablePortfolioOutputsResource extends AbstractDataResource {
 
@@ -43,7 +43,7 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
 
   // -------------------------------------------------------------------------
   /**
-   * Builder-style RESTful resource for accessing available outputs from a portfolio
+   * Builder-style RESTful resource for accessing available outputs from a portfolio.
    */
   public static final class Instance extends AbstractDataResource {
 

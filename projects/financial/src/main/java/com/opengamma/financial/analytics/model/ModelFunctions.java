@@ -236,7 +236,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds pricing functions that use curves constructed using the G2++ discounting method
+   * Adds pricing functions that use curves constructed using the G2++ discounting method.
    *
    * @return A configuration source containing these functions
    */
@@ -313,7 +313,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds SABR pricing functions for swaptions, cap/floors, CMS and cap/floor CMS spreads
+   * Adds SABR pricing functions for swaptions, cap/floors, CMS and cap/floor CMS spreads.
    *
    * @return A configuration source containing the deprecated functions
    * @deprecated The current versions of these functions are added in {@link ModelFunctions#sabrDiscountingFunctionConfiguration()}

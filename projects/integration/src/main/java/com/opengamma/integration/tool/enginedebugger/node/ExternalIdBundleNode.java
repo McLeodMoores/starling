@@ -12,7 +12,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * Node containing an ExternalIdBundle
+ * Node containing an ExternalIdBundle.
  */
 public class ExternalIdBundleNode implements TreeTableNode {
   private static final String NAME = "ExternalIdBundle";

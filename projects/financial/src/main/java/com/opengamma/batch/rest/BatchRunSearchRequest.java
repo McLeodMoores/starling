@@ -27,8 +27,7 @@ import com.opengamma.util.paging.PagingRequest;
 /**
  * Request for searching for batches.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results.
  * <p>
  * This class is mutable and not thread-safe.
  */
@@ -36,32 +35,31 @@ import com.opengamma.util.paging.PagingRequest;
 public class BatchRunSearchRequest extends DirectBean {
 
   /**
-   * The request for paging.
-   * By default all matching items will be returned.
+   * The request for paging. By default all matching items will be returned.
    */
   @PropertyDefinition
   private PagingRequest _pagingRequest = PagingRequest.FIRST_PAGE;
 
   /**
-   * The unique id of the market data snapshot used by the batch
+   * The unique id of the market data snapshot used by the batch.
    */
   @PropertyDefinition
   private UniqueId _marketDataUid;
 
   /**
-   * The unique id of the view definition used by the batch
+   * The unique id of the view definition used by the batch.
    */
   @PropertyDefinition
   private UniqueId _viewDefinitionUid;
 
   /**
-   * The version correction used by the batch
+   * The version correction used by the batch.
    */
   @PropertyDefinition
   private com.opengamma.id.VersionCorrection _versionCorrection;
 
   /**
-   * The valuation time used by the batch
+   * The valuation time used by the batch.
    */
   @PropertyDefinition
   private Instant _valuationTime;
@@ -93,8 +91,7 @@ public class BatchRunSearchRequest extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the request for paging.
-   * By default all matching items will be returned.
+   * Gets the request for paging. By default all matching items will be returned.
    * @return the value of the property
    */
   public PagingRequest getPagingRequest() {
@@ -102,8 +99,7 @@ public class BatchRunSearchRequest extends DirectBean {
   }
 
   /**
-   * Sets the request for paging.
-   * By default all matching items will be returned.
+   * Sets the request for paging. By default all matching items will be returned.
    * @param pagingRequest  the new value of the property
    */
   public void setPagingRequest(PagingRequest pagingRequest) {
@@ -112,7 +108,6 @@ public class BatchRunSearchRequest extends DirectBean {
 
   /**
    * Gets the the {@code pagingRequest} property.
-   * By default all matching items will be returned.
    * @return the property, not null
    */
   public final Property<PagingRequest> pagingRequest() {
@@ -121,7 +116,7 @@ public class BatchRunSearchRequest extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique id of the market data snapshot used by the batch
+   * Gets the unique id of the market data snapshot used by the batch.
    * @return the value of the property
    */
   public UniqueId getMarketDataUid() {
@@ -129,7 +124,7 @@ public class BatchRunSearchRequest extends DirectBean {
   }
 
   /**
-   * Sets the unique id of the market data snapshot used by the batch
+   * Sets the unique id of the market data snapshot used by the batch.
    * @param marketDataUid  the new value of the property
    */
   public void setMarketDataUid(UniqueId marketDataUid) {
@@ -146,7 +141,7 @@ public class BatchRunSearchRequest extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique id of the view definition used by the batch
+   * Gets the unique id of the view definition used by the batch.
    * @return the value of the property
    */
   public UniqueId getViewDefinitionUid() {
@@ -154,7 +149,7 @@ public class BatchRunSearchRequest extends DirectBean {
   }
 
   /**
-   * Sets the unique id of the view definition used by the batch
+   * Sets the unique id of the view definition used by the batch.
    * @param viewDefinitionUid  the new value of the property
    */
   public void setViewDefinitionUid(UniqueId viewDefinitionUid) {
@@ -171,7 +166,7 @@ public class BatchRunSearchRequest extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the version correction used by the batch
+   * Gets the version correction used by the batch.
    * @return the value of the property
    */
   public com.opengamma.id.VersionCorrection getVersionCorrection() {
@@ -179,7 +174,7 @@ public class BatchRunSearchRequest extends DirectBean {
   }
 
   /**
-   * Sets the version correction used by the batch
+   * Sets the version correction used by the batch.
    * @param versionCorrection  the new value of the property
    */
   public void setVersionCorrection(com.opengamma.id.VersionCorrection versionCorrection) {
@@ -196,7 +191,7 @@ public class BatchRunSearchRequest extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the valuation time used by the batch
+   * Gets the valuation time used by the batch.
    * @return the value of the property
    */
   public Instant getValuationTime() {
@@ -204,7 +199,7 @@ public class BatchRunSearchRequest extends DirectBean {
   }
 
   /**
-   * Sets the valuation time used by the batch
+   * Sets the valuation time used by the batch.
    * @param valuationTime  the new value of the property
    */
   public void setValuationTime(Instant valuationTime) {

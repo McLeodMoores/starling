@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class containing default values for local volatility surface construction.
- * At the moment, these defaults are the same for all underlyings and security types,
+ * Class containing default values for local volatility surface construction. At the moment, these defaults are the same for all underlyings and security types,
  * but could be changed to be more flexible.
  */
 public class GeneralLocalVolatilitySurfaceDefaults {
@@ -22,7 +21,8 @@ public class GeneralLocalVolatilitySurfaceDefaults {
   }
 
   /**
-   * Gets the default values for local volatility surface construction
+   * Gets the default values for local volatility surface construction.
+   * 
    * @return A list containing the default values
    */
   public static List<String> getLocalVolatilitySurfaceDefaults() {

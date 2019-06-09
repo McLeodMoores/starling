@@ -38,8 +38,8 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Gets the default values for calculations
-   * 
+   * Gets the default values for calculations.
+   *
    * @return The repository with equity option defaults set
    */
   public static FunctionConfigurationSource defaults() {
@@ -93,7 +93,7 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds Black functions for FX options to the repository.
-   * 
+   *
    * @return A function configuration source populated with FX option Black functions
    * @deprecated The functions that are added are deprecated
    */

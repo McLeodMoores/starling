@@ -40,7 +40,7 @@ public class GridColumnGroups {
    * @return A instance containing no column groups
    */
   /* package */ static GridColumnGroups empty() {
-    return new GridColumnGroups(Collections.<GridColumnGroup>emptyList());
+    return new GridColumnGroups(Collections.<GridColumnGroup> emptyList());
   }
 
   /**
@@ -51,8 +51,10 @@ public class GridColumnGroups {
   }
 
   /**
-   * Returns the column at an index
-   * @param index The column index, zero based
+   * Returns the column at an index.
+   * 
+   * @param index
+   *          The column index, zero based
    * @return The column at the specified index
    */
   public GridColumn getColumn(final int index) {

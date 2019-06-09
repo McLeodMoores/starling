@@ -40,7 +40,7 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Produces the jump to default for single-name CDS.
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -49,7 +49,7 @@ public class StandardVanillaJumpToDefaultCDSFunction extends StandardVanillaCDSF
   private static final CDSRiskFactors CALCULATOR = new CDSRiskFactors();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#JUMP_TO_DEFAULT}
+   * Sets the value requirement name to {@link ValueRequirementNames#JUMP_TO_DEFAULT}.
    */
   public StandardVanillaJumpToDefaultCDSFunction() {
     super(ValueRequirementNames.JUMP_TO_DEFAULT);

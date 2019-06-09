@@ -71,9 +71,9 @@ import com.opengamma.util.money.Currency;
 public abstract class SABRFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(SABRFunction.class);
-  /** String labelling the type of SABR calculation (with right extrapolation) */
+  /** String labelling the type of SABR calculation (with right extrapolation). */
   public static final String SABR_RIGHT_EXTRAPOLATION = "SABRRightExtrapolation";
-  /** String labelling the type of SABR extrapolation (none) */
+  /** String labelling the type of SABR extrapolation (none). */
   public static final String SABR_NO_EXTRAPOLATION = "SABRNoExtrapolation";
   /** Converts securities to definitions */
   private FinancialSecurityVisitor<InstrumentDefinition<?>> _securityVisitor;

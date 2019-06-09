@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * A class for importing portfolio data from XLS worksheets
+ * A class for importing portfolio data from XLS worksheets.
  */
 public class XlsSheetReader extends SheetReader {
   private static final Logger LOGGER = LoggerFactory.getLogger(XlsSheetReader.class);
@@ -41,8 +41,10 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Creates an Excel sheet reader.
    *
-   * @param filename  the .xls file name, not null or empty
-   * @param sheetIndex  the index of the sheet to read
+   * @param filename
+   *          the .xls file name, not null or empty
+   * @param sheetIndex
+   *          the index of the sheet to read
    */
   public XlsSheetReader(final String filename, final int sheetIndex) {
     ArgumentChecker.notEmpty(filename, "filename");
@@ -62,8 +64,10 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Creates an Excel sheet reader.
    *
-   * @param filename  the .xls file name, not null or empty
-   * @param sheetName  the name of the sheet to read, not null or empty
+   * @param filename
+   *          the .xls file name, not null or empty
+   * @param sheetName
+   *          the name of the sheet to read, not null or empty
    */
   public XlsSheetReader(final String filename, final String sheetName) {
 
@@ -85,8 +89,10 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Creates an Excel sheet reader.
    *
-   * @param inputStream  a file stream, not null
-   * @param sheetIndex  the index of the sheet to read
+   * @param inputStream
+   *          a file stream, not null
+   * @param sheetIndex
+   *          the index of the sheet to read
    */
   public XlsSheetReader(final InputStream inputStream, final int sheetIndex) {
     ArgumentChecker.notNull(inputStream, "inputStream");
@@ -105,8 +111,10 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Creates an Excel sheet reader.
    *
-   * @param inputStream  a file stream, not null
-   * @param sheetName  the name of the sheet to read
+   * @param inputStream
+   *          a file stream, not null
+   * @param sheetName
+   *          the name of the sheet to read
    */
   public XlsSheetReader(final InputStream inputStream, final String sheetName) {
 
@@ -127,8 +135,10 @@ public class XlsSheetReader extends SheetReader {
   /**
    * Creates an Excel sheet reader.
    *
-   * @param workbook  a .xls workbook, not null
-   * @param sheetName  the name of the sheet to read, not null or empty
+   * @param workbook
+   *          a .xls workbook, not null
+   * @param sheetName
+   *          the name of the sheet to read, not null or empty
    */
   public XlsSheetReader(final Workbook workbook, final String sheetName) {
     ArgumentChecker.notNull(workbook, "workbook");
@@ -220,7 +230,7 @@ public class XlsSheetReader extends SheetReader {
   @Override
   public void close() {
     try {
-      if (_inputStream != null) { //if sheet is multi sheeted, the first call with close input stream
+      if (_inputStream != null) { // if sheet is multi sheeted, the first call with close input stream
         _inputStream.close();
       }
     } catch (final IOException ex) {
@@ -257,7 +267,7 @@ public class XlsSheetReader extends SheetReader {
       _currentRowIndex++;
       row = _sheet.getRow(_currentRowIndex);
     }
-    _currentRowIndex++; //increment to prepare for next read method
+    _currentRowIndex++; // increment to prepare for next read method
     return keyValueMap;
   }
 
@@ -290,7 +300,7 @@ public class XlsSheetReader extends SheetReader {
       _currentRowIndex++;
       row = _sheet.getRow(_currentRowIndex);
     }
-    _currentRowIndex++; //increment to prepare for next read method
+    _currentRowIndex++; // increment to prepare for next read method
     return keyPairMap;
   }
 
@@ -307,7 +317,7 @@ public class XlsSheetReader extends SheetReader {
     final Map<Pair<String, String>, String> valueMap = new HashMap<>();
     _currentRowIndex = startRow;
     int tempRowIndex = _currentRowIndex + 1; // Ignore top left cell
-    //Maps used to store the index of each x and y axis
+    // Maps used to store the index of each x and y axis
     final Map<Integer, String> colIndexToXAxis = new HashMap<>();
     final Map<Integer, String> rowIndexToYAxis = new HashMap<>();
 
@@ -329,7 +339,7 @@ public class XlsSheetReader extends SheetReader {
       tempRowIndex++;
     }
 
-    _currentRowIndex++; //move to first row after x-axis
+    _currentRowIndex++; // move to first row after x-axis
 
     while (true) {
       final Row valueRow = _sheet.getRow(_currentRowIndex);
@@ -346,7 +356,7 @@ public class XlsSheetReader extends SheetReader {
       }
       _currentRowIndex++;
     }
-    _currentRowIndex++; //increment to prepare for next read method
+    _currentRowIndex++; // increment to prepare for next read method
 
     return valueMap;
   }

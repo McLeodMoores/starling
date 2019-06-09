@@ -63,7 +63,7 @@ public class ExampleAnalyticServiceUsage extends AbstractTool<ToolContext> {
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleAnalyticServiceUsage.class);
   private static final Counterparty COUNTERPARTY = new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "TEST"));
-  private static final String PROVIDER_ID_NAME  = "providerId";
+  private static final String PROVIDER_ID_NAME = "providerId";
   private static final String RANDOM_ID_SCHEME = "Rnd";
   private static final String PREFIX = "OGAnalytics";
   private static final String SEPARATOR = ".";
@@ -72,17 +72,18 @@ public class ExampleAnalyticServiceUsage extends AbstractTool<ToolContext> {
 
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ExampleAnalyticServiceUsage().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
 
@@ -125,7 +126,8 @@ public class ExampleAnalyticServiceUsage extends AbstractTool<ToolContext> {
 
   }
 
-  private void pushTrade(final String securityId, final Connection connection, final String destinationName, final JmsConnector jmsConnector, final JmsByteArrayMessageDispatcher jmsDispatcher) {
+  private void pushTrade(final String securityId, final Connection connection, final String destinationName, final JmsConnector jmsConnector,
+      final JmsByteArrayMessageDispatcher jmsDispatcher) {
     final String providerId = generateTrade(securityId, destinationName, jmsConnector);
     final String topicStr = PREFIX + SEPARATOR + providerId + SEPARATOR + "Default" + SEPARATOR + ValueRequirementNames.FAIR_VALUE;
     try {
@@ -166,7 +168,7 @@ public class ExampleAnalyticServiceUsage extends AbstractTool<ToolContext> {
     return providerId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected Options createOptions(final boolean mandatoryConfig) {
     final Options options = super.createOptions(mandatoryConfig);
@@ -178,21 +180,21 @@ public class ExampleAnalyticServiceUsage extends AbstractTool<ToolContext> {
   @SuppressWarnings("static-access")
   private Option createActiveMQOption() {
     return OptionBuilder.isRequired(true)
-                        .hasArgs()
-                        .withArgName("ActiveMQ URL")
-                        .withDescription("the ActiveMQ broker URL")
-                        .withLongOpt(ACTIVE_MQ_OPTION)
-                        .create("a");
+        .hasArgs()
+        .withArgName("ActiveMQ URL")
+        .withDescription("the ActiveMQ broker URL")
+        .withLongOpt(ACTIVE_MQ_OPTION)
+        .create("a");
   }
 
   @SuppressWarnings("static-access")
   private Option createDestinationOption() {
     return OptionBuilder.isRequired(true)
-                        .hasArgs()
-                        .withArgName("queue name")
-                        .withDescription("JMS queue name")
-                        .withLongOpt(QUEUE_OPTION)
-                        .create("q");
+        .hasArgs()
+        .withArgName("queue name")
+        .withDescription("JMS queue name")
+        .withLongOpt(QUEUE_OPTION)
+        .create("q");
   }
 
 }

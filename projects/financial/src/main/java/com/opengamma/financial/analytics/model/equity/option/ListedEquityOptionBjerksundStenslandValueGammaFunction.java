@@ -24,7 +24,8 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the value gamma of an equity index or equity option using the Bjerksund Stensland gamma.<p>
+ * Calculates the value gamma of an equity index or equity option using the Bjerksund Stensland gamma.
+ * <p>
  * See {@link ListedEquityOptionBjerksundStenslandFunction}
  */
 public class ListedEquityOptionBjerksundStenslandValueGammaFunction extends ListedEquityOptionBjerksundStenslandFunction {
@@ -32,11 +33,11 @@ public class ListedEquityOptionBjerksundStenslandValueGammaFunction extends List
   /** Value gamma calculator */
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionBjerksundStenslandValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);
   }
-  
+
   @Override
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {

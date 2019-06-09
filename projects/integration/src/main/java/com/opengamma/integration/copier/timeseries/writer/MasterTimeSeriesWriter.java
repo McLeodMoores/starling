@@ -25,7 +25,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A time series writer that writes to an OpenGamma time series master
+ * A time series writer that writes to an OpenGamma time series master.
  */
 public class MasterTimeSeriesWriter implements TimeSeriesWriter {
 

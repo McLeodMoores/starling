@@ -20,6 +20,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Calculates value delta of swaptions using the Black method.
+ * 
  * @deprecated The parent class of this function is deprecated
  */
 @Deprecated
@@ -28,7 +29,7 @@ public class SwaptionBlackValueDeltaFunction extends SwaptionBlackFunction {
   private static final SwaptionBlackValueDeltaCalculator CALCULATOR = SwaptionBlackValueDeltaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}.
    */
   public SwaptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

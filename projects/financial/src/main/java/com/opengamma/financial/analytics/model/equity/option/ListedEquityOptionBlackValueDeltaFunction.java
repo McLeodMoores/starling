@@ -31,7 +31,7 @@ public class ListedEquityOptionBlackValueDeltaFunction extends ListedEquityOptio
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

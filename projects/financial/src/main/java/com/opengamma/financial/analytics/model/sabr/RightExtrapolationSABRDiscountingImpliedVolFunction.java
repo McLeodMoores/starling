@@ -41,7 +41,7 @@ public class RightExtrapolationSABRDiscountingImpliedVolFunction extends SABRDis
   private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, Double> CALCULATOR = ImpliedVolatilitySABRSwaptionCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}.
    */
   public RightExtrapolationSABRDiscountingImpliedVolFunction() {
     super(SECURITY_IMPLIED_VOLATILITY);

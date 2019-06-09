@@ -29,8 +29,7 @@ import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.web.spring.StandardFunctionConfiguration;
 
 /**
- * A function configuration that extends the standard OpenGamma configuration by adding default
- * values for
+ * A function configuration that extends the standard OpenGamma configuration by adding default values for.
  */
 public class ExampleStandardFunctionConfiguration extends StandardFunctionConfiguration {
   /** The logger */
@@ -40,8 +39,7 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
   private final Map<String, EquityInfo> _perEquityInfo = new HashMap<>();
 
   /**
-   * Default constructor. Sets default values for the mark to market, cost of carry field, tolerances
-   * for yield curve construction and equity option defaults.
+   * Default constructor. Sets default values for the mark to market, cost of carry field, tolerances for yield curve construction and equity option defaults.
    */
   public ExampleStandardFunctionConfiguration() {
     setMark2MarketField("CLOSE");
@@ -54,6 +52,7 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Gets an instance of this function configuration.
+   * 
    * @return The instance
    */
   public static FunctionConfigurationSource instance() {
@@ -74,9 +73,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Creates empty default per-equity information objects for equity options.
-   * @param ticker The equity ticker
-   * @param curveCurrency The currency target of the discounting curve (usually, but not necessarily,
-   * the currency of the equity).
+   * 
+   * @param ticker
+   *          The equity ticker
+   * @param curveCurrency
+   *          The currency target of the discounting curve (usually, but not necessarily, the currency of the equity).
    */
   protected void setEquityOptionInfo(final String ticker, final String curveCurrency) {
     final EquityInfo i = defaultEquityInfo(ticker);
@@ -109,7 +110,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Sets the per-equity forward curve defaults for equity option functions.
-   * @param defaults The object containing the default values
+   * 
+   * @param defaults
+   *          The object containing the default values
    */
   protected void setEquityOptionForwardCurveDefaults(final EquityOptionFunctions.EquityForwardDefaults defaults) {
     defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
@@ -123,21 +126,23 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
   }
 
   /**
-   * Sets the paths for the per-equity ticker default values for the forward curve used
-   * in pricing equity options. The keys are:
+   * Sets the paths for the per-equity ticker default values for the forward curve used in pricing equity options. The keys are:
    * <ul>
-   * <li> Forward curve interpolator = model/equityoption
-   * <li> Forward curve left extrapolator = model/equityoption
-   * <li> Forward curve right extrapolator = model/equityoption
-   * <li> Forward curve = model/equityoption
-   * <li> Forward curve calculation method = model/equityoption
-   * <li> Discounting curve = model/equityoption
-   * <li> Discounting curve configuration = model/equityoption
-   * <li> Discounting curve currency = model/equityoption
-   * <li> Dividend type = model/equityoption
+   * <li>Forward curve interpolator = model/equityoption
+   * <li>Forward curve left extrapolator = model/equityoption
+   * <li>Forward curve right extrapolator = model/equityoption
+   * <li>Forward curve = model/equityoption
+   * <li>Forward curve calculation method = model/equityoption
+   * <li>Discounting curve = model/equityoption
+   * <li>Discounting curve configuration = model/equityoption
+   * <li>Discounting curve currency = model/equityoption
+   * <li>Dividend type = model/equityoption
    * </ul>
-   * @param i The per-equity info
-   * @param defaults The object containing the default values
+   * 
+   * @param i
+   *          The per-equity info
+   * @param defaults
+   *          The object containing the default values
    */
   protected void setEquityOptionForwardCurveDefaults(final EquityInfo i, final EquityOptionFunctions.EquityInfo defaults) {
     defaults.setForwardCurveInterpolator(i.getForwardCurveInterpolator("model/equityoption"));
@@ -153,7 +158,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Sets the per-equity surface defaults for equity option functions.
-   * @param defaults The object containing the default values
+   * 
+   * @param defaults
+   *          The object containing the default values
    */
   protected void setEquityOptionSurfaceDefaults(final EquityOptionFunctions.EquityOptionDefaults defaults) {
     defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
@@ -167,19 +174,21 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
   }
 
   /**
-   * Sets the paths for the per-equity ticker default values for the surface used
-   * in pricing equity options. The keys are:
+   * Sets the paths for the per-equity ticker default values for the surface used in pricing equity options. The keys are:
    * <ul>
-   * <li> Surface calculation method = model/equityoption
-   * <li> Discounting curve name = model/equityoption
-   * <li> Discounting curve calculation config = model/equityoption
-   * <li> Volatility surface name = model/equityoption
-   * <li> Surface interpolation method = model/equityoption
-   * <li> Forward curve name = model/equityoption
-   * <li> Forward curve calculation method = model/equityoption
+   * <li>Surface calculation method = model/equityoption
+   * <li>Discounting curve name = model/equityoption
+   * <li>Discounting curve calculation config = model/equityoption
+   * <li>Volatility surface name = model/equityoption
+   * <li>Surface interpolation method = model/equityoption
+   * <li>Forward curve name = model/equityoption
+   * <li>Forward curve calculation method = model/equityoption
    * </ul>
-   * @param i The per-equity info
-   * @param defaults The object containing the default values
+   * 
+   * @param i
+   *          The per-equity info
+   * @param defaults
+   *          The object containing the default values
    */
   protected void setEquityOptionSurfaceDefaults(final EquityInfo i, final EquityOptionFunctions.EquityInfo defaults) {
     defaults.setSurfaceCalculationMethod(i.getSurfaceCalculationMethod("model/equityoption"));
@@ -193,7 +202,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Sets the map of equity tickers to per-equity ticker default values.
-   * @param perEquityInfo A map of equity tickers to per-equity default values.
+   * 
+   * @param perEquityInfo
+   *          A map of equity tickers to per-equity default values.
    */
   public void setPerEquityInfo(final Map<String, EquityInfo> perEquityInfo) {
     _perEquityInfo.clear();
@@ -202,6 +213,7 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Gets the map of equity tickers to per-equity ticker default values.
+   * 
    * @return The map of equity tickers to per-equity ticker default values
    */
   public Map<String, EquityInfo> getPerEquityInfo() {
@@ -210,8 +222,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Sets per-equity default values for an equity ticker.
-   * @param equity The equity ticker
-   * @param info The per-equity ticker default values
+   * 
+   * @param equity
+   *          The equity ticker
+   * @param info
+   *          The per-equity ticker default values
    */
   public void setEquityInfo(final String equity, final EquityInfo info) {
     _perEquityInfo.put(equity, info);
@@ -219,7 +234,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Gets the per-equity default values for an equity ticker.
-   * @param equity The equity ticker
+   * 
+   * @param equity
+   *          The equity ticker
    * @return The per-equity default values
    */
   public EquityInfo getEquityInfo(final String equity) {
@@ -228,7 +245,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Creates a per-equity default information object for an equity string.
-   * @param equity The equity string
+   * 
+   * @param equity
+   *          The equity string
    * @return An empty per-equity info object
    */
   protected EquityInfo defaultEquityInfo(final String equity) {
@@ -237,8 +256,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   /**
    * Gets the equity ticker information for a given filter.
-   * @param <T> The type of the object that contains default values for an equity ticker
-   * @param filter The filter
+   * 
+   * @param <T>
+   *          The type of the object that contains default values for an equity ticker
+   * @param filter
+   *          The filter
    * @return T The object that contains default values for an equity ticker
    */
   protected <T> Map<String, T> getEquityInfo(final Function1<EquityInfo, T> filter) {
@@ -261,32 +283,41 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
     return result;
   }
 
-
   /**
    * Constants for a particular equity ticker.
    */
   public static class EquityInfo {
     /** The equity ticker */
     private final String _equity;
-    /** The discounting curve name. Usually the default value of the
-     * {@link com.opengamma.financial.analytics.model.equity.option.EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} property */
+    /**
+     * The discounting curve name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.equity.option.EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} property
+     */
     private final Value _discountingCurve = new Value();
-    /** The discounting curve calculation configuration name. Usually the default value of the
-     * {@link com.opengamma.financial.analytics.model.equity.option.EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG} property */
+    /**
+     * The discounting curve calculation configuration name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.equity.option.EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG} property
+     */
     private final Value _discountingCurveConfig = new Value();
     /** The discounting curve currency. Usually the default value of the {@link com.opengamma.engine.value.ValuePropertyNames#CURVE_CURRENCY} property */
     private final Value _discountingCurveCurrency = new Value();
     /** The volatility surface name. Usually the default value of the {@link com.opengamma.engine.value.ValuePropertyNames#SURFACE} property */
     private final Value _volatilitySurface = new Value();
-    /** The volatility surface calculation method. Usually the default value of the
-     * {@link com.opengamma.engine.value.ValuePropertyNames#SURFACE_CALCULATION_METHOD} property */
+    /**
+     * The volatility surface calculation method. Usually the default value of the
+     * {@link com.opengamma.engine.value.ValuePropertyNames#SURFACE_CALCULATION_METHOD} property
+     */
     private final Value _surfaceCalculationMethod = new Value();
-    /** The volatility surface interpolation method name. Usually the default value of the
+    /**
+     * The volatility surface interpolation method name. Usually the default value of the
      * {@link com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues#PROPERTY_SMILE_INTERPOLATOR}
-     * property */
+     * property
+     */
     private final Value _surfaceInterpolationMethod = new Value();
-    /** The forward curve name. Usually the default value of the
-     * {@link com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME} property */
+    /**
+     * The forward curve name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME} property
+     */
     private final Value _forwardCurve = new Value();
     /** The forward curve interpolator */
     private final Value _forwardCurveInterpolator = new Value();
@@ -294,14 +325,17 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
     private final Value _forwardCurveLeftExtrapolator = new Value();
     /** The forward curve right extrapolator */
     private final Value _forwardCurveRightExtrapolator = new Value();
-    /** The forward curve calculation method name. Usually the default value of the
-     * {@link com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_CALCULATION_METHOD} property */
+    /**
+     * The forward curve calculation method name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_CALCULATION_METHOD} property
+     */
     private final Value _forwardCurveCalculationMethod = new Value();
     /** The dividend type. Usually the default value of the {@link com.opengamma.engine.value.ValuePropertyNames#DIVIDEND_TYPE} property */
     private final Value _dividendType = new Value();
 
     /**
-     * @param equity The equity ticker.
+     * @param equity
+     *          The equity ticker.
      */
     public EquityInfo(final String equity) {
       _equity = equity;
@@ -309,6 +343,7 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the equity id.
+     * 
      * @return The equity id
      */
     public String getEquity() {
@@ -317,8 +352,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the discounting curve name for a key.
-     * @param key The key
-     * @param discountingCurve The discounting curve name
+     * 
+     * @param key
+     *          The key
+     * @param discountingCurve
+     *          The discounting curve name
      */
     public void setDiscountingCurve(final String key, final String discountingCurve) {
       _discountingCurve.set(key, discountingCurve);
@@ -326,7 +364,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the discounting curve name for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The discounting curve name
      */
     public String getDiscountingCurve(final String key) {
@@ -335,8 +375,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the discounting curve configuration name.
-     * @param key The key
-     * @param discountingCurveConfig The discounting curve configuration name
+     * 
+     * @param key
+     *          The key
+     * @param discountingCurveConfig
+     *          The discounting curve configuration name
      */
     public void setDiscountingCurveConfig(final String key, final String discountingCurveConfig) {
       _discountingCurveConfig.set(key, discountingCurveConfig);
@@ -344,7 +387,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the discounting curve configuration name for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The discounting curve configuration name
      */
     public String getDiscountingCurveConfig(final String key) {
@@ -353,8 +398,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the discounting curve currency.
-     * @param key The key
-     * @param discountingCurveCurrency The discounting curve currency
+     * 
+     * @param key
+     *          The key
+     * @param discountingCurveCurrency
+     *          The discounting curve currency
      */
     public void setDiscountingCurveCurrency(final String key, final String discountingCurveCurrency) {
       _discountingCurveCurrency.set(key, discountingCurveCurrency);
@@ -362,7 +410,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the discounting curve currency for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The discounting curve currency
      */
     public String getDiscountingCurveCurrency(final String key) {
@@ -371,8 +421,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the volatility surface name for a key.
-     * @param key The key
-     * @param volatilitySurface The volatility surface name
+     * 
+     * @param key
+     *          The key
+     * @param volatilitySurface
+     *          The volatility surface name
      */
     public void setVolatilitySurface(final String key, final String volatilitySurface) {
       _volatilitySurface.set(key, volatilitySurface);
@@ -380,7 +433,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the volatility surface name for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The volatility surface name
      */
     public String getVolatilitySurface(final String key) {
@@ -389,8 +444,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the volatility surface calculation method for a key.
-     * @param key The key
-     * @param surfaceCalculationMethod The volatility surface calculation method
+     * 
+     * @param key
+     *          The key
+     * @param surfaceCalculationMethod
+     *          The volatility surface calculation method
      */
     public void setSurfaceCalculationMethod(final String key, final String surfaceCalculationMethod) {
       _surfaceCalculationMethod.set(key, surfaceCalculationMethod);
@@ -398,7 +456,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the volatility surface calculation method for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The volatility surface calculation method
      */
     public String getSurfaceCalculationMethod(final String key) {
@@ -407,8 +467,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the volatility surface interpolation method for a key.
-     * @param key The key
-     * @param surfaceInterpolationMethod The volatility surface interpolation method
+     * 
+     * @param key
+     *          The key
+     * @param surfaceInterpolationMethod
+     *          The volatility surface interpolation method
      */
     public void setSurfaceInterpolationMethod(final String key, final String surfaceInterpolationMethod) {
       _surfaceInterpolationMethod.set(key, surfaceInterpolationMethod);
@@ -416,7 +479,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the volatility surface interpolation method for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The volatility surface interpolation method
      */
     public String getSurfaceInterpolationMethod(final String key) {
@@ -425,8 +490,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the forward curve name for a key.
-     * @param key The key
-     * @param forwardCurve The forward curve name
+     * 
+     * @param key
+     *          The key
+     * @param forwardCurve
+     *          The forward curve name
      */
     public void setForwardCurve(final String key, final String forwardCurve) {
       _forwardCurve.set(key, forwardCurve);
@@ -434,7 +502,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the forward curve name for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The forward curve name
      */
     public String getForwardCurve(final String key) {
@@ -443,8 +513,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the forward curve interpolator name for a key.
-     * @param key The key
-     * @param forwardCurveInterpolator The forward curve interpolator name
+     * 
+     * @param key
+     *          The key
+     * @param forwardCurveInterpolator
+     *          The forward curve interpolator name
      */
     public void setForwardCurveInterpolator(final String key, final String forwardCurveInterpolator) {
       _forwardCurveInterpolator.set(key, forwardCurveInterpolator);
@@ -452,7 +525,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the forward curve interpolator name for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The forward curve interpolator name
      */
     public String getForwardCurveInterpolator(final String key) {
@@ -461,8 +536,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the forward curve left extrapolator name for a key.
-     * @param key The key
-     * @param forwardCurveLeftExtrapolator The forward curve left extrapolator name
+     * 
+     * @param key
+     *          The key
+     * @param forwardCurveLeftExtrapolator
+     *          The forward curve left extrapolator name
      */
     public void setForwardCurveLeftExtrapolator(final String key, final String forwardCurveLeftExtrapolator) {
       _forwardCurveLeftExtrapolator.set(key, forwardCurveLeftExtrapolator);
@@ -470,7 +548,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the forward curve name for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The forward curve name
      */
     public String getForwardCurveLeftExtrapolator(final String key) {
@@ -479,8 +559,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the forward curve right extrapolator name for a key.
-     * @param key The key
-     * @param forwardCurveRightExtrapolator The forward curve right extrapolator name
+     * 
+     * @param key
+     *          The key
+     * @param forwardCurveRightExtrapolator
+     *          The forward curve right extrapolator name
      */
     public void setForwardCurveRightExtrapolator(final String key, final String forwardCurveRightExtrapolator) {
       _forwardCurveRightExtrapolator.set(key, forwardCurveRightExtrapolator);
@@ -488,7 +571,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the forward curve right extrapolator name for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The forward curve right extrapolator name
      */
     public String getForwardCurveRightExtrapolator(final String key) {
@@ -497,8 +582,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the forward curve calculation method for a key.
-     * @param key The key
-     * @param forwardCurveCalculationMethod The forward curve calculation method
+     * 
+     * @param key
+     *          The key
+     * @param forwardCurveCalculationMethod
+     *          The forward curve calculation method
      */
     public void setForwardCurveCalculationMethod(final String key, final String forwardCurveCalculationMethod) {
       _forwardCurveCalculationMethod.set(key, forwardCurveCalculationMethod);
@@ -506,7 +594,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the forward curve calculation method for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The forward curve calculation method
      */
     public String getForwardCurveCalculationMethod(final String key) {
@@ -515,8 +605,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Sets the dividend type for a key.
-     * @param key The key
-     * @param dividendType The dividend type
+     * 
+     * @param key
+     *          The key
+     * @param dividendType
+     *          The dividend type
      */
     public void setDividendType(final String key, final String dividendType) {
       _dividendType.set(key, dividendType);
@@ -524,7 +617,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
     /**
      * Gets the dividend type for a key.
-     * @param key The key
+     * 
+     * @param key
+     *          The key
      * @return The dividend type
      */
     public String getDividendType(final String key) {

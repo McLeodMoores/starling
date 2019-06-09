@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
 @ExpiryCalculator
 public final class FedFundFutureAndFutureOptionMonthlyExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  /** Name of the calculator */
+  /** Name of the calculator. */
   public static final String NAME = "FedFundFutureAndFutureOptionMonthlyExpiryCalculator";
   /** Singleton. */
   private static final FedFundFutureAndFutureOptionMonthlyExpiryCalculator INSTANCE = new FedFundFutureAndFutureOptionMonthlyExpiryCalculator();

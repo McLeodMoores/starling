@@ -31,7 +31,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * If attached to security's ExternalIdBundle, displays its {@link ExternalSchemes#BLOOMBERG_TICKER}
+ * If attached to security's ExternalIdBundle, displays its {@link ExternalSchemes#BLOOMBERG_TICKER}.
  */
 public class BloombergTickerFunction extends BaseNonCompiledInvoker {
 
@@ -41,9 +41,8 @@ public class BloombergTickerFunction extends BaseNonCompiledInvoker {
     return function(this.getClass().getName(), ComputationTargetType.POSITION_OR_TRADE)
         .outputs(
             output(BLOOMBERG_TICKER)
-            .targetSpec(originalTarget())
-            .properties(ValueProperties.all())
-            )
+                .targetSpec(originalTarget())
+                .properties(ValueProperties.all()))
         .inputs();
   }
 

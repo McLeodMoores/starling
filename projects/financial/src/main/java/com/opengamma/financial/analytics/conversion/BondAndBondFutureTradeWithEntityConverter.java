@@ -306,7 +306,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
   }
 
   /**
-   * Constructs a legal entity for a {@link BondSecurity}
+   * Constructs a legal entity for a {@link BondSecurity}.
    *
    * @param tradeAttributes
    *          The trade attributes
@@ -358,7 +358,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
   }
 
   /**
-   * Constructs a legal entity for a {@link BillSecurity}
+   * Constructs a legal entity for a {@link BillSecurity}.
    *
    * @param tradeAttributes
    *          The trade attributes
@@ -690,7 +690,7 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
   }
 
   /**
-   * Constructs a {@link BondFuturesSecurityDefinition} from a {@link BondFutureSecurity}
+   * Constructs a {@link BondFuturesSecurityDefinition} from a {@link BondFutureSecurity}.
    *
    * @param bondFuture
    *          The bond future security

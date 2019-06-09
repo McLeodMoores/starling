@@ -57,9 +57,9 @@ import com.opengamma.util.money.Currency;
  *
  */
 public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
-  /** Name of the property type */
+  /** Name of the property type. */
   public static final String PROPERTY_CURVE_CALCULATION_TYPE = "Nelson_Siegel_Svennson_Bond_Curve";
-  /** Name of the property */
+  /** Name of the property. */
   public static final String PROPERTY_PREFIX = "Nelson-Siegel-Svennson";
   private static final Logger LOGGER = LoggerFactory.getLogger(NelsonSiegelSvenssonBondCurveFunction.class);
   private static final NonLinearLeastSquare MINIMISER = new NonLinearLeastSquare();

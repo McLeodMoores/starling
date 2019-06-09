@@ -10,7 +10,7 @@ import com.opengamma.engine.target.ComputationTargetReference;
 import com.opengamma.engine.target.ComputationTargetRequirement;
 
 /**
- * Node representing a ComputationTargetReference
+ * Node representing a ComputationTargetReference.
  */
 public class ComputationTargetReferenceNode implements TreeTableNode {
 

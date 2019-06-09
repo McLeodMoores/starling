@@ -28,8 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A fragment of a bundle, representing a single CSS/Javascript file.
  * <p>
- * Fragments are not referred to directly, instead they are grouped into
- * {@link Bundle bundles}.
+ * Fragments are not referred to directly, instead they are grouped into {@link Bundle bundles}.
  * <p>
  * This class is mutable and not thread-safe.
  */
@@ -37,12 +36,12 @@ import com.opengamma.util.ArgumentChecker;
 public class Fragment extends DirectBean implements BundleNode {
 
   /**
-   * The internal URI of the fragment
+   * The internal URI of the fragment.
    */
   @PropertyDefinition
   private URI _uri;
   /**
-   * The path to the fragment
+   * The path to the fragment.
    */
   @PropertyDefinition
   private String _path;
@@ -56,8 +55,10 @@ public class Fragment extends DirectBean implements BundleNode {
   /**
    * Creates a populated instance.
    *
-   * @param uri  the internal URI of the fragment, not null
-   * @param path  the path to the fragment, not null
+   * @param uri
+   *          the internal URI of the fragment, not null
+   * @param path
+   *          the path to the fragment, not null
    */
   public Fragment(final URI uri, final String path) {
     ArgumentChecker.notNull(uri, "uri");
@@ -66,7 +67,7 @@ public class Fragment extends DirectBean implements BundleNode {
     _path = path;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public List<Bundle> getAllBundles() {
     return Collections.emptyList();
@@ -98,7 +99,7 @@ public class Fragment extends DirectBean implements BundleNode {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the internal URI of the fragment
+   * Gets the internal URI of the fragment.
    * @return the value of the property
    */
   public URI getUri() {
@@ -106,7 +107,7 @@ public class Fragment extends DirectBean implements BundleNode {
   }
 
   /**
-   * Sets the internal URI of the fragment
+   * Sets the internal URI of the fragment.
    * @param uri  the new value of the property
    */
   public void setUri(URI uri) {
@@ -123,7 +124,7 @@ public class Fragment extends DirectBean implements BundleNode {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the path to the fragment
+   * Gets the path to the fragment.
    * @return the value of the property
    */
   public String getPath() {
@@ -131,7 +132,7 @@ public class Fragment extends DirectBean implements BundleNode {
   }
 
   /**
-   * Sets the path to the fragment
+   * Sets the path to the fragment.
    * @param path  the new value of the property
    */
   public void setPath(String path) {

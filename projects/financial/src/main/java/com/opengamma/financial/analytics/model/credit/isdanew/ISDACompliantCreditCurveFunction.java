@@ -71,10 +71,10 @@ import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
-/** Function to return spreads modified for a given security */
+/** Function to return spreads modified for a given security. */
 public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompiledInvoker {
 
-  /** String representation of fixed pillars used for non IMM */
+  /** String representation of fixed pillars used for non IMM. */
   public static final String NON_IMM_PILLAR_TENORS = "P6M,P1Y,P2Y,P3Y,P4Y,P5Y,P7Y,P10Y";
   private static final FastCreditCurveBuilder CREDIT_CURVE_BUILDER = new FastCreditCurveBuilder();
   private static final MarketQuoteConverter POINTS_UP_FRONT_CONVERTER = new MarketQuoteConverter();

@@ -15,13 +15,11 @@ import com.opengamma.analytics.financial.interestrate.bond.calculator.MacaulayDu
 public class BondMacaulayDurationFromCleanPriceFunction extends BondFromCleanPriceFunction<Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#MACAULAY_DURATION}
-   * and the calculator to {@link MacaulayDurationFromCleanPriceCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#MACAULAY_DURATION} and the calculator to
+   * {@link MacaulayDurationFromCleanPriceCalculator}.
    */
   public BondMacaulayDurationFromCleanPriceFunction() {
     super(MACAULAY_DURATION, MacaulayDurationFromCleanPriceCalculator.getInstance());
   }
-
 
 }

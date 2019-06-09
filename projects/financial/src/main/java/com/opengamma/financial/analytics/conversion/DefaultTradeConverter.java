@@ -23,7 +23,7 @@ import com.opengamma.financial.security.future.MetalFutureSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converts {@link Trade} to the appropriate {@link InstrumentDefinition}
+ * Converts {@link Trade} to the appropriate {@link InstrumentDefinition}.
  */
 public class DefaultTradeConverter implements TradeConverter {
   /** Converter for futures excluding Federal funds futures */
@@ -38,8 +38,8 @@ public class DefaultTradeConverter implements TradeConverter {
   private final FinancialSecurityVisitor<InstrumentDefinition<?>> _securityConverter;
 
   /**
-   * Note that this constructor explicitly sets the future trade converter and Federal funds future converter to null
-   * 
+   * Note that this constructor explicitly sets the future trade converter and Federal funds future converter to null.
+   *
    * @param securityConverter
    *          The security converter, not null
    */
@@ -54,7 +54,7 @@ public class DefaultTradeConverter implements TradeConverter {
 
   /**
    * Note that this constructor explicitly sets the Federal funds future converter to null.
-   * 
+   *
    * @param futureTradeConverter
    *          The futures trade converter, not null
    * @param securityConverter
@@ -99,7 +99,7 @@ public class DefaultTradeConverter implements TradeConverter {
 
   /**
    * Converts a {@link Trade} to a {@link InstrumentDefinition}.
-   * 
+   *
    * @param trade
    *          The trade, not null
    * @return The instrument definition

@@ -49,11 +49,11 @@ import com.opengamma.util.money.Currency;
  *
  */
 public abstract class EquityVarianceSwapFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property for the type of volatility surface to use */
+  /** Property for the type of volatility surface to use. */
   public static final String PROPERTY_VOLATILITY_SURFACE_TYPE = "VolatilitySurfaceType";
-  /** Pure implied volatility calculation method */
+  /** Pure implied volatility calculation method. */
   public static final String PURE_IMPLIED_VOLATILITY = "PureImpliedVolatility";
-  /** Pure local volatility calculation method */
+  /** Pure local volatility calculation method. */
   public static final String PURE_LOCAL_VOLATILITY = "PureLocalVolatility";
   private EquityVarianceSwapConverter _converter;
 

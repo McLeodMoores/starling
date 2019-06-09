@@ -29,17 +29,14 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the gamma of interest rate future options using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the gamma of interest rate future options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingGammaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The gamma calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR =
-      GammaSTIRFutureOptionCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR = GammaSTIRFutureOptionCalculator.getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#GAMMA}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#GAMMA}.
    */
   public BlackDiscountingGammaIRFutureOptionFunction() {
     super(GAMMA);

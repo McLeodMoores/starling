@@ -242,7 +242,7 @@ import com.opengamma.util.time.Expiry;
 /**
  * For converting between enum instances and strings. The enum value names are made more readable by downcasing and capitalizing them and replacing underscores
  * with spaces.
- * 
+ *
  * @param <T>
  *          Type of the enum
  */
@@ -370,7 +370,7 @@ import com.opengamma.util.time.Expiry;
 
   /**
    * Converts a string to an {@link ExternalId} with a scheme of {@link ExternalSchemes#FINANCIAL}.
-   * 
+   *
    * @param region
    *          The region name, not empty
    * @return An {@link ExternalId} with a scheme of {@link ExternalSchemes#FINANCIAL} and a value of {@code region}.
@@ -390,8 +390,8 @@ import com.opengamma.util.time.Expiry;
 /* package */ class RegionIdToStringConverter implements Converter<ExternalId, String> {
 
   /**
-   * Converts an {@link ExternalId} to a string
-   * 
+   * Converts an {@link ExternalId} to a string.
+   *
    * @param regionId
    *          The region ID, not null
    * @return {@code regionId}'s value

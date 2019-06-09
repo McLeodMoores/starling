@@ -33,7 +33,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Swing TreeModel for browsing a resolved portfolio
+ * Swing TreeModel for browsing a resolved portfolio.
  */
 public class PortfolioTreeModel implements TreeModel {
 

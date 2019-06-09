@@ -41,7 +41,7 @@ public class ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction extends Listed
   private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
   // private static final EqyOptRollGeskeWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptRollGeskeWhaleyPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionRollGeskeWhaleyScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }

@@ -22,8 +22,8 @@ import com.opengamma.util.money.Currency;
 /**
  * Example code to load some basic holiday data.
  * <p>
- * This code is kept deliberately as simple as possible to demonstrate pushing data into the holiday master, and to allow basic operations on it by other parts of the system. We have loaders for data
- * available from third party data providers. Please contact us for more information.
+ * This code is kept deliberately as simple as possible to demonstrate pushing data into the holiday master, and to allow basic operations on it by other parts
+ * of the system. We have loaders for data available from third party data providers. Please contact us for more information.
  */
 @Scriptable
 public class ExampleHolidayLoader extends AbstractTool<ToolContext> {
@@ -31,13 +31,14 @@ public class ExampleHolidayLoader extends AbstractTool<ToolContext> {
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new ExampleHolidayLoader().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a simple holiday calendar directly and stores it into the master.
    * <p>
@@ -62,7 +63,8 @@ public class ExampleHolidayLoader extends AbstractTool<ToolContext> {
   /**
    * Stores the holiday calendar in the holiday master. If there is already a calendar with that name it is updated.
    *
-   * @param calendar the calendar to add
+   * @param calendar
+   *          the calendar to add
    */
   private void storeHolidays(final ManageableHoliday calendar) {
     final HolidayMaster master = getToolContext().getHolidayMaster();
@@ -77,12 +79,12 @@ public class ExampleHolidayLoader extends AbstractTool<ToolContext> {
     }
     final HolidaySearchResult result = master.search(request);
     if (result.getFirstDocument() != null) {
-      //System.out.println("Updating " + calendar.getType());
+      // System.out.println("Updating " + calendar.getType());
       final HolidayDocument document = result.getFirstDocument();
       document.setHoliday(calendar);
       master.update(document);
     } else {
-      //System.out.println("Adding " + calendar.getType());
+      // System.out.println("Adding " + calendar.getType());
       master.add(new HolidayDocument(calendar));
     }
   }

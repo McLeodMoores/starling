@@ -24,7 +24,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information used to construct standard versions of BRL instruments
+ * Contains information used to construct standard versions of BRL instruments.
  *
  * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */

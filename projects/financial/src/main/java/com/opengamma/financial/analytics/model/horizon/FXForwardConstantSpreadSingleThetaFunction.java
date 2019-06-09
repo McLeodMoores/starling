@@ -35,12 +35,12 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Converts a the multi-valued value theta for FX Forward instruments into a single result.
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
 public class FXForwardConstantSpreadSingleThetaFunction extends FXForwardConstantSpreadThetaFunction {
-  /** The calculation method property value */
+  /** The calculation method property value. */
   public static final String CONSTANT_SPREAD_COLLAPSED = "ConstantSpreadCollapsed";
 
   @Override

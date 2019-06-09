@@ -33,7 +33,7 @@ import com.opengamma.util.time.ExpiryAccuracy;
 /**
  * Function computes {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}, taking as input {@link ValueRequirementNames#POSITION_VEGA}, for interest rate future
  * options in the Black world.
- * 
+ *
  * @deprecated Use {@link BlackDiscountingWeightedVegaIRFutureOptionFunction}
  */
 @Deprecated
@@ -44,7 +44,7 @@ public class InterestRateFutureOptionBlackPositionWeightedVegaFunction extends I
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionWeightedVegaFunction.class);
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}.
    */
   public InterestRateFutureOptionBlackPositionWeightedVegaFunction() {
     super(ValueRequirementNames.POSITION_WEIGHTED_VEGA, true);

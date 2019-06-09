@@ -132,7 +132,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   /**
-   * Creates defaults for vanilla FX options,
+   * Creates defaults for vanilla FX options.
    *
    * @param ccy1
    *          the first currency

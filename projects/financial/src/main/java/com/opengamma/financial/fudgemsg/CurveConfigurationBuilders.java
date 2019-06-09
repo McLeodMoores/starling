@@ -57,7 +57,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link DiscountingCurveTypeConfiguration}
+   * Fudge builder for {@link DiscountingCurveTypeConfiguration}.
    */
   @FudgeBuilderFor(DiscountingCurveTypeConfiguration.class)
   public static class DiscountingCurveTypeConfigurationBuilder implements FudgeBuilder<DiscountingCurveTypeConfiguration> {
@@ -82,7 +82,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link IborCurveTypeConfiguration}
+   * Fudge builder for {@link IborCurveTypeConfiguration}.
    */
   @FudgeBuilderFor(IborCurveTypeConfiguration.class)
   public static class IborCurveTypeConfigurationBuilder implements FudgeBuilder<IborCurveTypeConfiguration> {
@@ -110,7 +110,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link OvernightCurveTypeConfiguration}
+   * Fudge builder for {@link OvernightCurveTypeConfiguration}.
    */
   @FudgeBuilderFor(OvernightCurveTypeConfiguration.class)
   public static class OvernightCurveTypeConfigurationBuilder implements FudgeBuilder<OvernightCurveTypeConfiguration> {
@@ -135,18 +135,20 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link IssuerCurveTypeConfiguration}
+   * Fudge builder for {@link IssuerCurveTypeConfiguration}.
    */
   @FudgeBuilderFor(IssuerCurveTypeConfiguration.class)
   public static class IssuerCurveTypeConfigurationBuilder implements FudgeBuilder<IssuerCurveTypeConfiguration> {
     /**
      * The issuer type field
+     *
      * @deprecated This field is kept for backwards compatibility
      */
     @Deprecated
     private static final String ISSUER_NAME_FIELD = "issuerName";
     /**
      * The underlying reference field
+     *
      * @deprecated This field is kept for backwards compatibility
      */
     @Deprecated
@@ -210,7 +212,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link InflationCurveTypeConfiguration}
+   * Fudge builder for {@link InflationCurveTypeConfiguration}.
    */
   @FudgeBuilderFor(InflationCurveTypeConfiguration.class)
   public static class InflationCurveTypeConfigurationBuilder implements FudgeBuilder<InflationCurveTypeConfiguration> {
@@ -239,7 +241,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link InflationIssuerCurveTypeConfiguration}
+   * Fudge builder for {@link InflationIssuerCurveTypeConfiguration}.
    */
   @FudgeBuilderFor(InflationIssuerCurveTypeConfiguration.class)
   public static class InflationIssuerCurveTypeConfigurationBuilder implements FudgeBuilder<InflationIssuerCurveTypeConfiguration> {
@@ -268,7 +270,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link CurveGroupConfiguration}
+   * Fudge builder for {@link CurveGroupConfiguration}.
    */
   @FudgeBuilderFor(CurveGroupConfiguration.class)
   public static class CurveGroupConfigurationBuilder implements FudgeBuilder<CurveGroupConfiguration> {
@@ -324,7 +326,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link CurveConstructionConfiguration}
+   * Fudge builder for {@link CurveConstructionConfiguration}.
    */
   @FudgeBuilderFor(CurveConstructionConfiguration.class)
   public static class CurveConstructionConfigurationBuilder implements FudgeBuilder<CurveConstructionConfiguration> {

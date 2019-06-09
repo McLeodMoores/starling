@@ -35,11 +35,11 @@ public abstract class AbstractWebPortfolioResource
     extends AbstractPerRequestWebResource<WebPortfoliosData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "portfolios/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "portfolios/json/";
 

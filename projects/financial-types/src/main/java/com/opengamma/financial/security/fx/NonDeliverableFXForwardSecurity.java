@@ -41,25 +41,25 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   public static final String SECURITY_TYPE = "NONDELIVERABLE_FX_FORWARD";
 
   /**
-   * The payer currency
+   * The payer currency.
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _payCurrency;
 
   /**
-   * The pay amount
+   * The pay amount.
    */
   @PropertyDefinition
   private double _payAmount;
 
   /**
-   * The receiver currency
+   * The receiver currency.
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _receiveCurrency;
 
   /**
-   * The receive amount
+   * The receive amount.
    */
   @PropertyDefinition
   private double _receiveAmount;
@@ -75,7 +75,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _regionId;
   /**
-   * Whether to deliver in the receive currency
+   * Whether to deliver in the receive currency.
    */
   @PropertyDefinition
   private boolean _deliverInReceiveCurrency;
@@ -115,7 +115,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
     setDeliverInReceiveCurrency(deliverInReceiveCurrency);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitNonDeliverableFXForwardSecurity(this);
@@ -142,7 +142,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the payer currency
+   * Gets the payer currency.
    * @return the value of the property, not null
    */
   public Currency getPayCurrency() {
@@ -150,7 +150,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the payer currency
+   * Sets the payer currency.
    * @param payCurrency  the new value of the property, not null
    */
   public void setPayCurrency(Currency payCurrency) {
@@ -168,7 +168,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the pay amount
+   * Gets the pay amount.
    * @return the value of the property
    */
   public double getPayAmount() {
@@ -176,7 +176,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the pay amount
+   * Sets the pay amount.
    * @param payAmount  the new value of the property
    */
   public void setPayAmount(double payAmount) {
@@ -193,7 +193,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the receiver currency
+   * Gets the receiver currency.
    * @return the value of the property, not null
    */
   public Currency getReceiveCurrency() {
@@ -201,7 +201,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the receiver currency
+   * Sets the receiver currency.
    * @param receiveCurrency  the new value of the property, not null
    */
   public void setReceiveCurrency(Currency receiveCurrency) {
@@ -219,7 +219,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the receive amount
+   * Gets the receive amount.
    * @return the value of the property
    */
   public double getReceiveAmount() {
@@ -227,7 +227,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the receive amount
+   * Sets the receive amount.
    * @param receiveAmount  the new value of the property
    */
   public void setReceiveAmount(double receiveAmount) {
@@ -296,7 +296,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether to deliver in the receive currency
+   * Gets whether to deliver in the receive currency.
    * @return the value of the property
    */
   public boolean isDeliverInReceiveCurrency() {
@@ -304,7 +304,7 @@ public class NonDeliverableFXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets whether to deliver in the receive currency
+   * Sets whether to deliver in the receive currency.
    * @param deliverInReceiveCurrency  the new value of the property
    */
   public void setDeliverInReceiveCurrency(boolean deliverInReceiveCurrency) {

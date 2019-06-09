@@ -17,7 +17,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides standard time series loader functionality
+ * Provides standard time series loader functionality.
  */
 public class TimeSeriesLoader {
 

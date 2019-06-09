@@ -35,8 +35,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Defaults for SABR functions with right extrapolation
- * 
+ * Defaults for SABR functions with right extrapolation.
+ *
  * @deprecated The functions to which these defaults apply are deprecated.
  */
 @Deprecated

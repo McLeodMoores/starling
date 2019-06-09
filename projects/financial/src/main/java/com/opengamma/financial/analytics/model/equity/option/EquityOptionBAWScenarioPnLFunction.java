@@ -32,14 +32,14 @@ import com.opengamma.financial.analytics.model.equity.ScenarioPnLPropertyNamesAn
 
 /**
  * Simple scenario Function returns the difference in PresentValue between defined Scenario and current market conditions.
- * 
+ *
  * @author casey
  */
 public class EquityOptionBAWScenarioPnLFunction extends EquityOptionBAWFunction {
 
   private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBAWScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }

@@ -36,7 +36,7 @@ import com.opengamma.provider.security.SecurityProvider;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
 @Scriptable
 public class ResolvingPortfolioLoaderTool extends AbstractTool<IntegrationToolContext> {

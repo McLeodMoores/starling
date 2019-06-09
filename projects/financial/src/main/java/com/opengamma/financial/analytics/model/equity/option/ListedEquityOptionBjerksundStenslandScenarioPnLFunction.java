@@ -37,7 +37,7 @@ public class ListedEquityOptionBjerksundStenslandScenarioPnLFunction extends Lis
   /** The Bjerksund-Stensland present value calculator */
   private static final EqyOptBjerksundStenslandPresentValueCalculator PV_CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionBjerksundStenslandScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }

@@ -53,7 +53,7 @@ public class CAConventions extends ConventionMasterInitializer {
 
   /** Singleton. */
   public static final ConventionMasterInitializer INSTANCE = new CAConventions();
-  /** The CDOR string **/
+  /** The CDOR string. **/
   public static final String CDOR = "CDOR";
   /** The CDOR leg string **/
   private static final String CDOR_CMP_LEG = CDOR + " Comp Leg";

@@ -23,6 +23,7 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 
 /**
  * Function that calculated the present value of the pay leg of a swap.
+ * 
  * @deprecated The parent class is deprecated.
  */
 @Deprecated
@@ -31,7 +32,7 @@ public class SwapReceiveLegPresentValueFunction extends InterestRateInstrumentFu
   private static final PresentValueCalculator CALCULATOR = PresentValueCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#RECEIVE_LEG_PRESENT_VALUE}
+   * Sets the value requirement name to {@link ValueRequirementNames#RECEIVE_LEG_PRESENT_VALUE}.
    */
   public SwapReceiveLegPresentValueFunction() {
     super(ValueRequirementNames.RECEIVE_LEG_PRESENT_VALUE);

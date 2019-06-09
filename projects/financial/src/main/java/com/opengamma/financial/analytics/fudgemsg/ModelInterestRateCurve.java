@@ -35,7 +35,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link YieldCurve}
+   * Fudge builder for {@link YieldCurve}.
    */
   @FudgeBuilderFor(YieldCurve.class)
   public static final class YieldCurveBuilder extends AbstractFudgeBuilder<YieldCurve> {
@@ -65,7 +65,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link DiscountCurve}
+   * Fudge builder for {@link DiscountCurve}.
    */
   @FudgeBuilderFor(DiscountCurve.class)
   public static final class DiscountCurveBuilder extends AbstractFudgeBuilder<DiscountCurve> {
@@ -94,7 +94,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link DayPeriodPreCalculatedDiscountCurve}
+   * Fudge builder for {@link DayPeriodPreCalculatedDiscountCurve}.
    */
   @FudgeBuilderFor(DayPeriodPreCalculatedDiscountCurve.class)
   public static final class DayPeriodPreCalculatedDiscountCurveBuilder extends AbstractFudgeBuilder<DayPeriodPreCalculatedDiscountCurve> {
@@ -123,7 +123,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link PriceIndexCurve}
+   * Fudge builder for {@link PriceIndexCurve}.
    */
   @FudgeBuilderFor(PriceIndexCurve.class)
   public static final class PriceIndexCurveBuilder extends AbstractFudgeBuilder<PriceIndexCurve> {
@@ -144,8 +144,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link YieldAndDiscountAddZeroSpreadCurve}. This will work as long as there are Fudge builders
-   * available for the delegate curve types.
+   * Fudge builder for {@link YieldAndDiscountAddZeroSpreadCurve}. This will work as long as there are Fudge builders available for the delegate curve types.
    */
   @FudgeBuilderFor(YieldAndDiscountAddZeroSpreadCurve.class)
   public static final class YieldAndDiscountAddZeroSpreadCurveFudgeBuilder extends AbstractFudgeBuilder<YieldAndDiscountAddZeroSpreadCurve> {
@@ -159,8 +158,8 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer,
-                                final MutableFudgeMsg message,
-                                final YieldAndDiscountAddZeroSpreadCurve curve) {
+        final MutableFudgeMsg message,
+        final YieldAndDiscountAddZeroSpreadCurve curve) {
       serializer.addToMessage(message, NAME_FIELD, null, curve.getName());
       serializer.addToMessage(message, SUBTRACT_FIELD, null, curve.getSign() < 0);
       final MutableFudgeMsg curvesMessage = serializer.newMessage();

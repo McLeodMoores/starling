@@ -15,13 +15,11 @@ import com.opengamma.analytics.financial.interestrate.bond.calculator.ConvexityF
 public class BondConvexityFromCleanPriceFunction extends BondFromCleanPriceFunction<Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#CONVEXITY} and the
-   * calculator to {@link ConvexityFromCleanPriceCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#CONVEXITY} and the calculator to
+   * {@link ConvexityFromCleanPriceCalculator}.
    */
   public BondConvexityFromCleanPriceFunction() {
     super(CONVEXITY, ConvexityFromCleanPriceCalculator.getInstance());
   }
-
 
 }

@@ -63,7 +63,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public abstract class BondTradeCurveSpecificFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(BondTradeCurveSpecificFunction.class);
-  /** The requested curve property */
+  /** The requested curve property. */
   protected static final String PROPERTY_REQUESTED_CURVE = ValuePropertyNames.OUTPUT_RESERVED_PREFIX + "RequestedCurve";
 
   private final String _valueRequirement;

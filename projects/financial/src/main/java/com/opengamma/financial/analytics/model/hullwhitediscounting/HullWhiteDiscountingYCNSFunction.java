@@ -56,7 +56,7 @@ public class HullWhiteDiscountingYCNSFunction extends HullWhiteDiscountingFuncti
   private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteDiscountingYCNSFunction.class);
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public HullWhiteDiscountingYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);

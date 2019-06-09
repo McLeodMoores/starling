@@ -161,7 +161,7 @@ public class InterestRateFutureOptionConstantSpreadThetaFunction extends Abstrac
   }
 
   /**
-   * This aids child classes to return value in different format, eg Double
+   * This aids child classes to return value in different format, eg Double.
    *
    * @param theta
    *          ConstantSpreadHorizonThetaCalculator produced MultipleCurrencyAmount

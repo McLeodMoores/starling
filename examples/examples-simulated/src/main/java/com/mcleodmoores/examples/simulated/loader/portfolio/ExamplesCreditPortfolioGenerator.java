@@ -200,7 +200,7 @@ public class ExamplesCreditPortfolioGenerator extends AbstractPortfolioGenerator
      * @param securitySource
      *          the security source, not null
      */
-    public CreditSecurityGenerator(final SecuritySource securitySource) {
+    CreditSecurityGenerator(final SecuritySource securitySource) {
       _idGenerator = new CreditSecurityToIdentifierVisitor(securitySource);
     }
 

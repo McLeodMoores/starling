@@ -31,15 +31,15 @@ import com.opengamma.scripts.Scriptable;
 @Scriptable
 public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesLoaderTool.class);
-  /** File name option flag */
+  /** File name option flag. */
   public static final String FILE_NAME_OPT = "f";
-  /** Time series data source option flag */
+  /** Time series data source option flag. */
   public static final String TIME_SERIES_DATASOURCE_OPT = "s";
-  /** Time series data provider option flag */
+  /** Time series data provider option flag. */
   public static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
-  /** Time series data field option flag */
+  /** Time series data field option flag. */
   public static final String TIME_SERIES_DATAFIELD_OPT = "d";
-  /** Time series ID scheme option flag */
+  /** Time series ID scheme option flag. */
   public static final String TIME_SERIES_IDSCHEME_OPT = "i";
   /** Default value for the data provider */
   private static final String DEFAULT_DATA_PROVIDER = "DEFAULT";

@@ -24,7 +24,7 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProviderRequest;
 import com.opengamma.provider.livedata.LiveDataMetaDataProviderResult;
 
 /**
- * List/ComboBox model for live market data specifications
+ * List/ComboBox model for live market data specifications.
  */
 public class LiveMarketDataSpecificationListModel extends AbstractListModel<String> implements ComboBoxModel<String> {
   private static final long serialVersionUID = 1L;

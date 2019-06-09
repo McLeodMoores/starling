@@ -56,7 +56,7 @@ public class RollDateSwapNode extends CurveNode {
   private ExternalId _rollDateSwapConvention;
 
   /**
-   * Whether to use fixings when constructing the swap
+   * Whether to use fixings when constructing the swap.
    */
   @PropertyDefinition(validate = "notNull")
   private boolean _useFixings;
@@ -69,12 +69,18 @@ public class RollDateSwapNode extends CurveNode {
   }
 
   /**
-   * Sets the useFixings field to true and the node name to null
-   * @param startTenor The start tenor, not null
-   * @param rollDateStartNumber The roll date start number, not negative or zero
-   * @param rollDateEndNumber The roll date end number, not negative or zero
-   * @param swapConvention The swap convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
+   * Sets the useFixings field to true and the node name to null.
+   *
+   * @param startTenor
+   *          The start tenor, not null
+   * @param rollDateStartNumber
+   *          The roll date start number, not negative or zero
+   * @param rollDateEndNumber
+   *          The roll date end number, not negative or zero
+   * @param swapConvention
+   *          The swap convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
    */
   public RollDateSwapNode(final Tenor startTenor, final int rollDateStartNumber, final int rollDateEndNumber, final ExternalId swapConvention,
       final String curveNodeIdMapperName) {
@@ -89,13 +95,20 @@ public class RollDateSwapNode extends CurveNode {
   }
 
   /**
-   * Sets the node name to null
-   * @param startTenor The start tenor, not null
-   * @param rollDateStartNumber The IMM date start number, not negative or zero
-   * @param rollDateEndNumber The IMM date end number, not negative or zero
-   * @param swapConvention The swap convention, not null
-   * @param useFixings Use fixings
-   * @param curveNodeIdMapperName The curve node id mapper name
+   * Sets the node name to null.
+   *
+   * @param startTenor
+   *          The start tenor, not null
+   * @param rollDateStartNumber
+   *          The IMM date start number, not negative or zero
+   * @param rollDateEndNumber
+   *          The IMM date end number, not negative or zero
+   * @param swapConvention
+   *          The swap convention, not null
+   * @param useFixings
+   *          Use fixings
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name
    */
   public RollDateSwapNode(final Tenor startTenor, final int rollDateStartNumber, final int rollDateEndNumber, final ExternalId swapConvention,
       final boolean useFixings, final String curveNodeIdMapperName) {
@@ -110,13 +123,20 @@ public class RollDateSwapNode extends CurveNode {
   }
 
   /**
-   * Sets the useFixings field to true and the node name to null
-   * @param startTenor The start tenor, not null
-   * @param rollDateStartNumber The IMM date start number, not negative or zero
-   * @param rollDateEndNumber The IMM date end number, not negative or zero
-   * @param swapConvention The swap convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
-   * @param name The curve node name
+   * Sets the useFixings field to true and the node name to null.
+   *
+   * @param startTenor
+   *          The start tenor, not null
+   * @param rollDateStartNumber
+   *          The IMM date start number, not negative or zero
+   * @param rollDateEndNumber
+   *          The IMM date end number, not negative or zero
+   * @param swapConvention
+   *          The swap convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
+   * @param name
+   *          The curve node name
    */
   public RollDateSwapNode(final Tenor startTenor, final int rollDateStartNumber, final int rollDateEndNumber, final ExternalId swapConvention,
       final String curveNodeIdMapperName, final String name) {
@@ -131,14 +151,22 @@ public class RollDateSwapNode extends CurveNode {
   }
 
   /**
-   * Sets the node name to null
-   * @param startTenor The start tenor, not null
-   * @param rollDateStartNumber The IMM date start number, not negative or zero
-   * @param rollDateEndNumber The IMM date end number, not negative or zero
-   * @param swapConvention The swap convention, not null
-   * @param useFixings Use fixings
-   * @param curveNodeIdMapperName The curve node id mapper name
-   * @param name The curve node name
+   * Sets the node name to null.
+   *
+   * @param startTenor
+   *          The start tenor, not null
+   * @param rollDateStartNumber
+   *          The IMM date start number, not negative or zero
+   * @param rollDateEndNumber
+   *          The IMM date end number, not negative or zero
+   * @param swapConvention
+   *          The swap convention, not null
+   * @param useFixings
+   *          Use fixings
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name
+   * @param name
+   *          The curve node name
    */
   public RollDateSwapNode(final Tenor startTenor, final int rollDateStartNumber, final int rollDateEndNumber, final ExternalId swapConvention,
       final boolean useFixings, final String curveNodeIdMapperName, final String name) {
@@ -289,7 +317,7 @@ public class RollDateSwapNode extends CurveNode {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether to use fixings when constructing the swap
+   * Gets whether to use fixings when constructing the swap.
    * @return the value of the property, not null
    */
   public boolean isUseFixings() {
@@ -297,7 +325,7 @@ public class RollDateSwapNode extends CurveNode {
   }
 
   /**
-   * Sets whether to use fixings when constructing the swap
+   * Sets whether to use fixings when constructing the swap.
    * @param useFixings  the new value of the property, not null
    */
   public void setUseFixings(boolean useFixings) {

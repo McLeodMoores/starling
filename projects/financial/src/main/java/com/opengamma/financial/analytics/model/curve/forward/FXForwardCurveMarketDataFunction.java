@@ -49,7 +49,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class FXForwardCurveMarketDataFunction extends AbstractFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardCurveMarketDataFunction.class);
-  /** Name of the calculation method */
+  /** Name of the calculation method. */
   public static final String FX_FORWARD_QUOTES = "FXForwardQuotes";
   /** The FX forward curve specification source */
   private ConfigDBFXForwardCurveSpecificationSource _fxForwardCurveSpecificationSource;

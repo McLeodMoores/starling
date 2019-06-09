@@ -17,7 +17,7 @@ import com.opengamma.financial.analytics.TenorLabelledLocalDateDoubleTimeSeriesM
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * TODO make this non-static
+ * TODO make this non-static.
  */
 /* package */ class Inliner {
 

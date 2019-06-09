@@ -26,7 +26,7 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The view status tool
+ * The view status tool.
  */
 @Scriptable
 public class ViewStatusTool extends AbstractTool<ToolContext> {

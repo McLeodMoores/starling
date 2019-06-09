@@ -22,7 +22,7 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Provides ExternalIds for equity future options used to build a volatility surface
+ * Provides ExternalIds for equity future options used to build a volatility surface.
  */
 public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider implements SurfaceInstrumentProvider<Pair<Integer, Tenor>, Double> {
   /** The logger */
@@ -73,7 +73,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
    * <p>
    * e.g. SPH3C 1000.0 Index
    * <p>
-   * 
+   *
    * @param nthOfPeriod
    *          n'th future following curve date, not null
    * @param strike
@@ -111,7 +111,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the expiryRules.
-   * 
+   *
    * @return the expiryRules
    */
   public static HashMap<String, FutureOptionExpiries> getExpiryRules() {
@@ -134,7 +134,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the future option prefix.
-   * 
+   *
    * @return The future option prefix
    */
   public String getFutureOptionPrefix() {
@@ -143,7 +143,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the postfix.
-   * 
+   *
    * @return The postfix
    */
   public String getPostfix() {
@@ -152,7 +152,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the exchange id.
-   * 
+   *
    * @return The exchange id
    */
   public String getExchangeIdName() {
@@ -161,7 +161,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the ticker scheme name.
-   * 
+   *
    * @return The ticker scheme name
    */
   public String getTickerSchemeName() {

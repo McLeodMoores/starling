@@ -23,7 +23,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information used to construct standard versions of KRW instruments
+ * Contains information used to construct standard versions of KRW instruments.
  *
  * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
@@ -34,7 +34,7 @@ public class KRConventions {
 
   /**
    * Adds conventions for deposits, implied deposits and cash.
-   * 
+   *
    * @param conventionMaster
    *          The convention master, not null
    */

@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Represents a property name spanning a value property in both a requirement and spec in a map so they can be seen side-by-side
+ * Represents a property name spanning a value property in both a requirement and spec in a map so they can be seen side-by-side.
  */
 public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
   private static final Object NAME = null;
@@ -19,8 +19,8 @@ public class SpanningValuePropertyEntryNode extends AbstractTreeTableLeafNode {
   private final boolean _specificationOptional;
 
   public SpanningValuePropertyEntryNode(final String commonConstraintName,
-                                    final String requirementConstraint, final boolean requirementOptional,
-                                    final String specificationConstraint, final boolean specificationOptional) {
+      final String requirementConstraint, final boolean requirementOptional,
+      final String specificationConstraint, final boolean specificationOptional) {
     ArgumentChecker.notNull(commonConstraintName, "commonConstraintName");
     _commonConstraintName = commonConstraintName;
     _requirementConstraint = requirementConstraint;

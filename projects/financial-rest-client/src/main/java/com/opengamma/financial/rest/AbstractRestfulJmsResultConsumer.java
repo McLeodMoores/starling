@@ -159,7 +159,7 @@ public abstract class AbstractRestfulJmsResultConsumer<L> {
   }
 
   /**
-   * Externally visible for testing
+   * Externally visible for testing.
    */
   public void stopHeartbeating() {
     if (!_scheduledHeartbeat.isCancelled()) {

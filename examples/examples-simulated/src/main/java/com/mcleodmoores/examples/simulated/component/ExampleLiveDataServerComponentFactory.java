@@ -66,12 +66,12 @@ public class ExampleLiveDataServerComponentFactory extends AbstractStandardLiveD
   @PropertyDefinition(validate = "notNull")
   private CacheManager _cacheManager;
   /**
-   * Maximum millis between ticks
+   * Maximum millis between ticks.
    */
   @PropertyDefinition
   private Integer _maxMillisBetweenTicks = ExampleLiveDataServer.MAX_MILLIS_BETWEEN_TICKS;
   /**
-   * Scaling factor
+   * Scaling factor.
    */
   @PropertyDefinition
   private Double _scalingFactor = ExampleLiveDataServer.SCALING_FACTOR;
@@ -206,7 +206,7 @@ public class ExampleLiveDataServerComponentFactory extends AbstractStandardLiveD
 
   //-----------------------------------------------------------------------
   /**
-   * Gets maximum millis between ticks
+   * Gets maximum millis between ticks.
    * @return the value of the property
    */
   public Integer getMaxMillisBetweenTicks() {
@@ -214,7 +214,7 @@ public class ExampleLiveDataServerComponentFactory extends AbstractStandardLiveD
   }
 
   /**
-   * Sets maximum millis between ticks
+   * Sets maximum millis between ticks.
    * @param maxMillisBetweenTicks  the new value of the property
    */
   public void setMaxMillisBetweenTicks(Integer maxMillisBetweenTicks) {
@@ -231,7 +231,7 @@ public class ExampleLiveDataServerComponentFactory extends AbstractStandardLiveD
 
   //-----------------------------------------------------------------------
   /**
-   * Gets scaling factor
+   * Gets scaling factor.
    * @return the value of the property
    */
   public Double getScalingFactor() {
@@ -239,7 +239,7 @@ public class ExampleLiveDataServerComponentFactory extends AbstractStandardLiveD
   }
 
   /**
-   * Sets scaling factor
+   * Sets scaling factor.
    * @param scalingFactor  the new value of the property
    */
   public void setScalingFactor(Double scalingFactor) {

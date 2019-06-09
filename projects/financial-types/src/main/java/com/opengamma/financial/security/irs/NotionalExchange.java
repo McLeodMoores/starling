@@ -27,18 +27,18 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 @BeanDefinition
 public final class NotionalExchange implements ImmutableBean {
 
-  /** Exchange the final notional */
+  /** Exchange the final notional. */
   @PropertyDefinition(validate = "notNull")
   private final boolean _exchangeFinalNotional;
 
   /**
-   * Exchange the initial notional
+   * Exchange the initial notional.
    */
   @PropertyDefinition(validate = "notNull")
   private final boolean _exchangeInitialNotional;
 
   /**
-   * Exchange the interim notional
+   * Exchange the interim notional.
    */
   @PropertyDefinition(validate = "notNull")
   private final boolean _exchangeInterimNotional;
@@ -99,7 +99,7 @@ public final class NotionalExchange implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets exchange the final notional
+   * Gets exchange the final notional.
    * @return the value of the property, not null
    */
   public boolean isExchangeFinalNotional() {
@@ -108,7 +108,7 @@ public final class NotionalExchange implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets exchange the initial notional
+   * Gets exchange the initial notional.
    * @return the value of the property, not null
    */
   public boolean isExchangeInitialNotional() {
@@ -117,7 +117,7 @@ public final class NotionalExchange implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets exchange the interim notional
+   * Gets exchange the interim notional.
    * @return the value of the property, not null
    */
   public boolean isExchangeInterimNotional() {
@@ -390,7 +390,7 @@ public final class NotionalExchange implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets exchange the final notional
+     * Sets exchange the final notional.
      * @param exchangeFinalNotional  the new value, not null
      * @return this, for chaining, not null
      */
@@ -401,7 +401,7 @@ public final class NotionalExchange implements ImmutableBean {
     }
 
     /**
-     * Sets exchange the initial notional
+     * Sets exchange the initial notional.
      * @param exchangeInitialNotional  the new value, not null
      * @return this, for chaining, not null
      */
@@ -412,7 +412,7 @@ public final class NotionalExchange implements ImmutableBean {
     }
 
     /**
-     * Sets exchange the interim notional
+     * Sets exchange the interim notional.
      * @param exchangeInterimNotional  the new value, not null
      * @return this, for chaining, not null
      */

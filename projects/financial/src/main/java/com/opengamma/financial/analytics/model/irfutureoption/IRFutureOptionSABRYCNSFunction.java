@@ -48,11 +48,11 @@ import com.opengamma.util.money.Currency;
 public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRYCNSFunction.class);
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
-  private static final PresentValueNodeSensitivityCalculator NSC =
-      PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivitySABRCalculator.getInstance());
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public IRFutureOptionSABRYCNSFunction() {
     super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
@@ -111,7 +111,7 @@ public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    //TODO repeated access of database - don't use super
+    // TODO repeated access of database - don't use super
     final Set<ValueRequirement> requirements = super.getRequirements(context, target, desiredValue);
     if (requirements == null) {
       return null;

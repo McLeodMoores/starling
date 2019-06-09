@@ -29,7 +29,7 @@ public final class CreditDefaultSwapIndexSecurityBeanOperation
     extends AbstractSecurityBeanOperation<CreditDefaultSwapIndexSecurity, CreditDefaultSwapIndexSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final CreditDefaultSwapIndexSecurityBeanOperation INSTANCE = new CreditDefaultSwapIndexSecurityBeanOperation();
 

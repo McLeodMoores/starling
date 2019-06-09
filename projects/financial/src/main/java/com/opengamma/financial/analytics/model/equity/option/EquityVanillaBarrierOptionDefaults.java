@@ -21,7 +21,7 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Default properties to define the choices of overhedge (shift of strike) and smoothing (width of ramp created by pricing binary as call or put spread)
+ * Default properties to define the choices of overhedge (shift of strike) and smoothing (width of ramp created by pricing binary as call or put spread).
  */
 public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction {
   /** The logger */

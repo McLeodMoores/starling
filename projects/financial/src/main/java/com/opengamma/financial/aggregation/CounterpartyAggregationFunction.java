@@ -14,7 +14,7 @@ import com.opengamma.core.position.Trade;
 import com.opengamma.core.position.impl.SimplePositionComparator;
 
 /**
- * Abstract aggregation function for bucketing equities and equity options by GICS code of the underlying
+ * Abstract aggregation function for bucketing equities and equity options by GICS code of the underlying.
  */
 public class CounterpartyAggregationFunction implements AggregationFunction<String> {
 
@@ -23,7 +23,6 @@ public class CounterpartyAggregationFunction implements AggregationFunction<Stri
 
   public CounterpartyAggregationFunction() {
   }
-
 
   @Override
   public String classifyPosition(final Position position) {

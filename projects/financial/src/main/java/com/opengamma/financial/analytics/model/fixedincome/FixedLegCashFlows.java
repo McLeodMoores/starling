@@ -50,7 +50,7 @@ import com.opengamma.util.money.CurrencyAmount;
 @BeanDefinition
 public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
-  //TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
+  // TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
   /**
    * The payment year fraction label.
    */
@@ -68,7 +68,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   public static final String FIXED_RATE = "Fixed Rate";
   /**
-   * The discounted payment amount
+   * The discounted payment amount.
    */
   public static final String DISCOUNTED_PAYMENT_AMOUNT = "Discounted Payment Amount";
   /**
@@ -130,14 +130,23 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * All arrays must be the same length.
-   * @param startAccrualDates The start accrual dates, not null
-   * @param endAccrualDates The end accrual dates, not null
-   * @param discountFactors The discount factors, not null
-   * @param paymentTimes The payment times, not null
-   * @param paymentFractions The payment year fractions, not null
-   * @param paymentAmounts The payment amounts, not null
-   * @param notionals The notionals, not null
-   * @param fixedRates The fixed rates, not null
+   * 
+   * @param startAccrualDates
+   *          The start accrual dates, not null
+   * @param endAccrualDates
+   *          The end accrual dates, not null
+   * @param discountFactors
+   *          The discount factors, not null
+   * @param paymentTimes
+   *          The payment times, not null
+   * @param paymentFractions
+   *          The payment year fractions, not null
+   * @param paymentAmounts
+   *          The payment amounts, not null
+   * @param notionals
+   *          The notionals, not null
+   * @param fixedRates
+   *          The fixed rates, not null
    */
   @ImmutableConstructor
   public FixedLegCashFlows(final List<LocalDate> startAccrualDates,
@@ -179,6 +188,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the discounted payment amounts.
+   * 
    * @return the discounted cashflows
    */
   @DerivedProperty
@@ -198,6 +208,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the total number of cash-flows.
+   * 
    * @return The total number of cash-flows
    */
   @DerivedProperty

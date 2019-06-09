@@ -42,9 +42,12 @@ public class YieldCurveManipulatorBuilder {
 
   /**
    * Adds an action to perform a parallel shift to the scenario.
-   * @param shiftType Specifies how to apply the shift. A relative shift is expressed as an amount
-   * to add or subtract, e.g. 10% shift = rate * 1.1, -20% shift = rate * 0.8
-   * @param shift The size of the shift
+   * 
+   * @param shiftType
+   *          Specifies how to apply the shift. A relative shift is expressed as an amount to add or subtract, e.g. 10% shift = rate * 1.1, -20% shift = rate *
+   *          0.8
+   * @param shift
+   *          The size of the shift
    * @return This builder
    */
   public YieldCurveManipulatorBuilder parallelShift(final ScenarioShiftType shiftType, final Number shift) {
@@ -54,7 +57,9 @@ public class YieldCurveManipulatorBuilder {
 
   /**
    * Adds an action to perform a parallel shift to the scenario.
-   * @param shift The size of the shift
+   * 
+   * @param shift
+   *          The size of the shift
    * @return This builder
    * @deprecated Use {@link #parallelShift(ScenarioShiftType, Number)}
    */
@@ -65,8 +70,7 @@ public class YieldCurveManipulatorBuilder {
   }
 
   /**
-   * Shifts the curve using
-   * {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve#withSingleShift}
+   * Shifts the curve using {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve#withSingleShift}.
    *
    * @param t
    *          The time.
@@ -79,13 +83,13 @@ public class YieldCurveManipulatorBuilder {
     return this;
   }
 
-
   /**
-   * Creates a bucketed shift builder with the given type.
-   * This is only for the benefit of the Java API, not the DSL
+   * Creates a bucketed shift builder with the given type. This is only for the benefit of the Java API, not the DSL
    *
-   * @param shiftType The type of shift
-   * @param shifts  the shifts
+   * @param shiftType
+   *          The type of shift
+   * @param shifts
+   *          the shifts
    * @return the bucketed shift builder
    */
   public final YieldCurveManipulatorBuilder bucketedShifts(final ScenarioShiftType shiftType, final YieldCurveBucketedShift... shifts) {
@@ -96,10 +100,9 @@ public class YieldCurveManipulatorBuilder {
     return this;
   }
 
-
   /**
    * Creates a point shift builder. This is only for the benefit of the Java API, not the DSL.
-   * 
+   *
    * @param shiftType
    *          The type of shift
    * @param shifts

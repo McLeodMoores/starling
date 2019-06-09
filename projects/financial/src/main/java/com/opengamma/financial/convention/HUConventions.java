@@ -17,15 +17,14 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information use to construct standard versions of HUF instruments
- * 
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ * Contains information use to construct standard versions of HUF instruments.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class HUConventions {
   /** Bloomberg month codes */
-  private static final char[] MONTH_CODES = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'};
+  private static final char[] MONTH_CODES = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
   /** Bubur name prefix */
   private static final String HUF_BUBOR = "HUF BUBOR ";
   /** Deposit prefix */
@@ -39,7 +38,9 @@ public class HUConventions {
 
   /**
    * Adds conventions for deposit and Bubor rates.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");

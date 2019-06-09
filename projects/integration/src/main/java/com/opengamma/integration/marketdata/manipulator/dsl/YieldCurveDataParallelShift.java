@@ -40,11 +40,11 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
 
   private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveDataParallelShift.class);
 
-  /** How the shift should be applied */
+  /** How the shift should be applied. */
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
 
-  /** The shift to apply  */
+  /** The shift to apply. */
   @PropertyDefinition
   private final double _shift;
 
@@ -56,8 +56,8 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
 
   @Override
   public YieldCurveData execute(final YieldCurveData curveData,
-                                final ValueSpecification valueSpec,
-                                final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpec,
+      final FunctionExecutionContext executionContext) {
     LOGGER.debug("Shifting curve data {} by {}", curveData.getCurveSpecification().getName(), _shift);
     final Map<ExternalIdBundle, Double> dataPoints = curveData.getDataPoints();
     final Map<ExternalIdBundle, Double> shiftedPoints = Maps.newHashMapWithExpectedSize(dataPoints.size());
@@ -68,8 +68,8 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
           break;
         case RELATIVE:
           // A relative shift is expressed as an amount to add or subtract, e.g.
-          //    10% shift = rate * 1.1
-          //   -20% shift = rate * 0.8
+          // 10% shift = rate * 1.1
+          // -20% shift = rate * 0.8
           shiftedPoints.put(entry.getKey(), entry.getValue() * (1 + _shift));
           break;
         default:
@@ -123,7 +123,7 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
 
   //-----------------------------------------------------------------------
   /**
-   * Gets how the shift should be applied
+   * Gets how the shift should be applied.
    * @return the value of the property, not null
    */
   public ScenarioShiftType getShiftType() {
@@ -132,7 +132,7 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the shift to apply
+   * Gets the shift to apply.
    * @return the value of the property
    */
   public double getShift() {
@@ -376,7 +376,7 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
 
     //-----------------------------------------------------------------------
     /**
-     * Sets how the shift should be applied
+     * Sets how the shift should be applied.
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -387,7 +387,7 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
     }
 
     /**
-     * Sets the shift to apply
+     * Sets the shift to apply.
      * @param shift  the new value
      * @return this, for chaining, not null
      */

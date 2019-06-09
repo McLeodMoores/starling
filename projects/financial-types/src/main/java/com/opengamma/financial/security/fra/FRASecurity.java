@@ -89,16 +89,24 @@ public class FRASecurity extends FinancialSecurity {
   }
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param currency the currency, not null.
-   * @param region the region identifier, not null
-   * @param startDate the start date, not null
-   * @param endDate the end date, not null
-   * @param rate the rate
-   * @param amount the amount
-   * @param underlyingIdentifier the underlying identifier, not null
-   * @param fixingDate the fixing date, not null
+   * @param currency
+   *          the currency, not null.
+   * @param region
+   *          the region identifier, not null
+   * @param startDate
+   *          the start date, not null
+   * @param endDate
+   *          the end date, not null
+   * @param rate
+   *          the rate
+   * @param amount
+   *          the amount
+   * @param underlyingIdentifier
+   *          the underlying identifier, not null
+   * @param fixingDate
+   *          the fixing date, not null
    */
   public FRASecurity(final Currency currency, final ExternalId region, final ZonedDateTime startDate, final ZonedDateTime endDate, final double rate,
       final double amount, final ExternalId underlyingIdentifier, final ZonedDateTime fixingDate) {
@@ -113,7 +121,7 @@ public class FRASecurity extends FinancialSecurity {
     setFixingDate(fixingDate);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFRASecurity(this);

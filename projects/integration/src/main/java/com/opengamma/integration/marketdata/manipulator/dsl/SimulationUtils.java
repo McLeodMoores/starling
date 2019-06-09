@@ -66,7 +66,7 @@ public final class SimulationUtils {
 
   /**
    * Returns the ID of the latest version of a view definition.
-   * 
+   *
    * @param viewDefName
    *          The view definition name
    * @param configSource
@@ -85,7 +85,7 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Simulation} using the DSL.
-   * 
+   *
    * @param groovyScript
    *          the script location in the filesystem
    * @param parameters
@@ -102,7 +102,7 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Simulation} using the DSL.
-   * 
+   *
    * @param groovyScript
    *          for reading the DSL script
    * @param parameters
@@ -115,7 +115,7 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Scenario} using the DSL.
-   * 
+   *
    * @param groovyScript
    *          the script location in the filesystem
    * @param parameters
@@ -132,7 +132,7 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy script that defines a {@link Scenario} using the DSL.
-   * 
+   *
    * @param groovyScript
    *          for reading the DSL script
    * @param parameters
@@ -145,7 +145,7 @@ public final class SimulationUtils {
 
   /**
    * Runs a Groovy DSL script and returns the value returned by the script.
-   * 
+   *
    * @param scriptReader
    *          For reading the script text
    * @param expectedType
@@ -181,7 +181,7 @@ public final class SimulationUtils {
 
   /**
    * Registers aliases in a script's bindings to allow Java enum values to be referred to without being imported and qualified with the type name.
-   * 
+   *
    * @param binding
    *          The script binding in which to register the aliases
    */
@@ -204,7 +204,7 @@ public final class SimulationUtils {
    * Creates a regular expression pattern from a simple glob string. The special characters recognized in the glob string are ? (match any character), * (match
    * any number of characters) and % (same as *). The other characters in the glob string are escaped before the pattern is created so it can safely contain
    * regular expression characters. Escaping is not supported in the glob string, i.e. there's no way to match any of the special characters themselves.
-   * 
+   *
    * @param glob
    *          The glob string
    * @return A pattern for matching the glob
@@ -245,8 +245,8 @@ public final class SimulationUtils {
   }
 
   /**
-   * Helper method for creating {@link VolatilitySurfaceShift} instances in the Java API with less code
-   * 
+   * Helper method for creating {@link VolatilitySurfaceShift} instances in the Java API with less code.
+   *
    * @param x
    *          The x location of the point to shift
    * @param y

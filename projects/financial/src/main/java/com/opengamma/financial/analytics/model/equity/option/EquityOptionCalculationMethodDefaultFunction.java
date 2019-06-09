@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  * <ul>
  * <li>FinancialSecurityTypes.EQUITY_OPTION_SECURITY
  * <li>FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY
- * <li>FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY
+ * <li>FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY.
  * </ul>
  */
 public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultPropertyFunction {
@@ -116,7 +116,7 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
   }
 
   /**
-   * All Equity Option types to be priced with the same CalculationMethod
+   * All Equity Option types to be priced with the same CalculationMethod.
    *
    * @param priority
    *          Default priority

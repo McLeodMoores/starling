@@ -17,15 +17,18 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 /**
- * View status result producer
+ * View status result producer.
  */
 public class ViewStatusResultProducer {
   /**
-   * Produce view result with the given aggregation parameters
+   * Produce view result with the given aggregation parameters.
    *
-   * @param aggregator the view status aggregator, not null
-   * @param format the result format type, not null
-   * @param aggregateType the list of aggregation type in the desired order, not null
+   * @param aggregator
+   *          the view status aggregator, not null
+   * @param format
+   *          the result format type, not null
+   * @param aggregateType
+   *          the list of aggregation type in the desired order, not null
    * @return the string representation of the result
    */
   public String statusResult(final ViewStatusResultAggregator aggregator, final ResultFormat format, final AggregateType aggregateType) {

@@ -24,24 +24,23 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Period;
 
 /**
- * Applies a bucketed shift to a
- * {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve}
+ * Applies a bucketed shift to a {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve}.
  */
 @BeanDefinition
 public final class YieldCurveBucketedShift implements ImmutableBean {
 
   /**
-   * Period between the valuation date and the start of the shift
+   * Period between the valuation date and the start of the shift.
    */
   @PropertyDefinition(validate = "notNull")
   private final Period _start;
   /**
-   * Period between the valuation date and the end of the shift
+   * Period between the valuation date and the end of the shift.
    */
   @PropertyDefinition(validate = "notNull")
   private final Period _end;
   /**
-   * Shift magnitude
+   * Shift magnitude.
    */
   @PropertyDefinition
   private final double _shift;
@@ -94,7 +93,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets period between the valuation date and the start of the shift
+   * Gets period between the valuation date and the start of the shift.
    * @return the value of the property, not null
    */
   public Period getStart() {
@@ -103,7 +102,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets period between the valuation date and the end of the shift
+   * Gets period between the valuation date and the end of the shift.
    * @return the value of the property, not null
    */
   public Period getEnd() {
@@ -112,7 +111,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets shift magnitude
+   * Gets shift magnitude.
    * @return the value of the property
    */
   public double getShift() {
@@ -385,7 +384,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets period between the valuation date and the start of the shift
+     * Sets period between the valuation date and the start of the shift.
      * @param start  the new value, not null
      * @return this, for chaining, not null
      */
@@ -396,7 +395,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
     }
 
     /**
-     * Sets period between the valuation date and the end of the shift
+     * Sets period between the valuation date and the end of the shift.
      * @param end  the new value, not null
      * @return this, for chaining, not null
      */
@@ -407,7 +406,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
     }
 
     /**
-     * Sets shift magnitude
+     * Sets shift magnitude.
      * @param shift  the new value
      * @return this, for chaining, not null
      */

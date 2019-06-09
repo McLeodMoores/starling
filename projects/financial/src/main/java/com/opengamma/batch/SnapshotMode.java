@@ -6,7 +6,7 @@
 package com.opengamma.batch;
 
 /**
- * Enumerates the snapshot data modes
+ * Enumerates the snapshot data modes.
  */
 public enum SnapshotMode {
 

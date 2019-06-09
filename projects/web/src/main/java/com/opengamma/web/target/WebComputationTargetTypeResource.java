@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.AbstractWebResource;
 
 /**
- * RESTful resource for the Web GUI to work with computation target types and specifications
+ * RESTful resource for the Web GUI to work with computation target types and specifications.
  */
 @Path("/computationTarget")
 public class WebComputationTargetTypeResource extends AbstractWebResource {

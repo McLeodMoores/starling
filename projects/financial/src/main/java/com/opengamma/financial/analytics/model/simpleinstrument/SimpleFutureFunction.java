@@ -53,7 +53,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 public abstract class SimpleFutureFunction extends NonCompiledInvoker {
-  /** Calculation method name */
+  /** Calculation method name. */
   public static final String MARKET_METHOD = "Market";
   private static final Logger LOGGER = LoggerFactory.getLogger(SimpleFutureFunction.class);
   private static final FutureSecurityConverter CONVERTER = new FutureSecurityConverter();

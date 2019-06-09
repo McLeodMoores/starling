@@ -30,39 +30,40 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleEntryIterator;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * The timeseries loader tool
+ * The timeseries loader tool.
  */
 @Scriptable
 public class RedisSimulationSeriesLoaderTool extends AbstractTool<ToolContext> {
 
-  /** File name option flag */
+  /** File name option flag. */
   public static final String FILE_NAME_OPT = "f";
-  /** Time series data source option flag*/
+  /** Time series data source option flag. */
   public static final String TIME_SERIES_DATASOURCE_OPT = "s";
-  /** Time series data provider option flag*/
+  /** Time series data provider option flag. */
   public static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
-  /** Time series data field option flag*/
+  /** Time series data field option flag. */
   public static final String TIME_SERIES_DATAFIELD_OPT = "d";
-  /** Time series observation time option flag*/
+  /** Time series observation time option flag. */
   public static final String TIME_SERIES_OBSERVATIONTIME_OPT = "o";
-  /** Time series ID scheme option flag*/
+  /** Time series ID scheme option flag. */
   public static final String TIME_SERIES_IDSCHEME_OPT = "i";
-  /** Time series date format option flag*/
+  /** Time series date format option flag. */
   public static final String TIME_SERIES_DATEFORMAT_OPT = "t";
-  /** Write option flag */
+  /** Write option flag. */
   public static final String WRITE_OPT = "w";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new RedisSimulationSeriesLoaderTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the test portfolio into the position master.
    */
@@ -90,22 +91,22 @@ public class RedisSimulationSeriesLoaderTool extends AbstractTool<ToolContext> {
       final InputStream portfolioFileStream = new BufferedInputStream(new FileInputStream(fileName));
 
       final TimeSeriesReader timeSeriesReader = new SingleSheetMultiTimeSeriesReader(sheetFormat,
-                                                                               portfolioFileStream,
-                                                                               dataSource,
-                                                                               dataProvider,
-                                                                               dataField,
-                                                                               observationTime,
-                                                                               idScheme,
-                                                                               dateFormat);
+          portfolioFileStream,
+          dataSource,
+          dataProvider,
+          dataField,
+          observationTime,
+          idScheme,
+          dateFormat);
 
       timeSeriesReader.writeTo(new TimeSeriesWriter() {
         @Override
         public LocalDateDoubleTimeSeries writeDataPoints(final ExternalId htsId,
-                                                         final String dataSource,
-                                                         final String dataProvider,
-                                                         final String dataField,
-                                                         final String observationTime,
-                                                         final LocalDateDoubleTimeSeries series) {
+            final String dataSource,
+            final String dataProvider,
+            final String dataField,
+            final String observationTime,
+            final LocalDateDoubleTimeSeries series) {
           final LocalDateDoubleEntryIterator iterator = series.iterator();
           while (iterator.hasNext()) {
             final Map.Entry<LocalDate, Double> entry = iterator.next();
@@ -126,7 +127,7 @@ public class RedisSimulationSeriesLoaderTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected  Options createOptions(final boolean contextProvided) {
+  protected Options createOptions(final boolean contextProvided) {
 
     final Options options = super.createOptions(contextProvided);
 

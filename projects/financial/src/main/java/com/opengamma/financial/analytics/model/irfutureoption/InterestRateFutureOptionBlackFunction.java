@@ -59,7 +59,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for a range of functions computing values on an IRFuturesOption using the Black Model
+ * Base class for a range of functions computing values on an IRFuturesOption using the Black Model.
  *
  * @deprecated Use classes that descend from {@link BlackDiscountingIRFutureOptionFunction}
  */

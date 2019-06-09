@@ -17,7 +17,7 @@ import com.opengamma.id.VersionCorrection;
 public class RawIRFutureOptionVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public RawIRFutureOptionVolatilitySurfaceDataFunction() {
     super(InstrumentTypeProperties.IR_FUTURE_OPTION);

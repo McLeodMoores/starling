@@ -42,7 +42,7 @@ public class DiscountingInflationPVFunction extends DiscountingInflationFunction
       .getInstance();
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public DiscountingInflationPVFunction() {
     super(PRESENT_VALUE);

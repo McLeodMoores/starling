@@ -40,7 +40,7 @@ public class InterestRateFutureOptionBlackValueDeltaFunction extends InterestRat
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackValueDeltaFunction.class);
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}.
    */
   public InterestRateFutureOptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA, true);

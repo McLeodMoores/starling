@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.generator;
 
@@ -86,7 +86,9 @@ public class ExampleEquityOptionPortfolioGeneratorTool extends AbstractPortfolio
 
   /**
    * Creates a portfolio node for an array of government bond securities.
-   * @param <T> The type of the security
+   *
+   * @param <T>
+   *          The type of the security
    */
   private class EquityOptionSecurityGenerator<T extends ManageableSecurity> extends SecurityGenerator<T> implements PortfolioNodeGenerator {
     /** The securities */
@@ -95,10 +97,12 @@ public class ExampleEquityOptionPortfolioGeneratorTool extends AbstractPortfolio
     private final String _name;
 
     /**
-     * @param securities The government bond securities
-     * @param name The name of the portfolio
+     * @param securities
+     *          The government bond securities
+     * @param name
+     *          The name of the portfolio
      */
-    public EquityOptionSecurityGenerator(final List<EquityOptionSecurity> securities, final String name) {
+    EquityOptionSecurityGenerator(final List<EquityOptionSecurity> securities, final String name) {
       _securities = securities;
       _name = name;
     }
@@ -108,7 +112,7 @@ public class ExampleEquityOptionPortfolioGeneratorTool extends AbstractPortfolio
       final SimplePortfolioNode node = new SimplePortfolioNode(_name);
       for (int i = 0; i < _securities.size(); i++) {
         final EquityOptionSecurity option = _securities.get(i);
-        final BigDecimal amount = BigDecimal.valueOf(100); //TODO
+        final BigDecimal amount = BigDecimal.valueOf(100); // TODO
         final LocalDate tradeDate = LocalDate.now().minusDays(7);
         final ManageableTrade trade = new ManageableTrade(amount, getSecurityPersister().storeSecurity(option), tradeDate,
             OffsetTime.of(LocalTime.of(11, 0), ZoneOffset.UTC), ExternalId.of(Counterparty.DEFAULT_SCHEME, COUNTERPARTY));

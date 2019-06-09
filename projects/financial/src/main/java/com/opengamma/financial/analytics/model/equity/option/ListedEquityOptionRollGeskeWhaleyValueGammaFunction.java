@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity.option;
@@ -24,18 +24,18 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class ListedEquityOptionRollGeskeWhaleyValueGammaFunction extends ListedEquityOptionRollGeskeWhaleyFunction {
 
   /** Value gamma calculator */
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionRollGeskeWhaleyValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);
   }
-  
+
   @Override
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {

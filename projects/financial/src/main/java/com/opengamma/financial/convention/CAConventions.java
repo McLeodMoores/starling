@@ -25,16 +25,17 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Contains information used to construct standard versions of CAD instruments.
- * 
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class CAConventions {
 
   /**
    * Adds conventions for deposit, Libor, BA fixings, swaps, FRAs and BA futures.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -187,14 +188,16 @@ public class CAConventions {
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("CAD_FRA")), "CAD_FRA", act365, following, quarterly, 2, ca, act365, following,
         quarterly, 2, simpleNameSecurityId("CDOR 3m"), ca, false);
 
-    //TODO
-    //"Floating leg compounded quarterly at CDOR Flat paid semi-annually or annually for 1y"
-    //Don't know how we're going to put that in
+    // TODO
+    // "Floating leg compounded quarterly at CDOR Flat paid semi-annually or annually for 1y"
+    // Don't know how we're going to put that in
   }
 
   /**
-   * Adds conventions for CAD government bonds
-   * @param conventionMaster The convention master, not null
+   * Adds conventions for CAD government bonds.
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addTreasuryBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -203,12 +206,13 @@ public class CAConventions {
         true, Tenor.TWO_YEARS);
   }
 
-
   /**
-   * Adds conventions for CAD-denominated corporate bonds
-   * @param conventionMaster The convention master, not null
+   * Adds conventions for CAD-denominated corporate bonds.
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
-  //TODO need to get the correct convention
+  // TODO need to get the correct convention
   public static void addCorporateBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);

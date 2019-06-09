@@ -52,7 +52,7 @@ import com.opengamma.util.tuple.Pair;
 public class DiscountingInterpolatedPV01Function extends DiscountingInterpolatedFunction {
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public DiscountingInterpolatedPV01Function() {
     super(PV01);

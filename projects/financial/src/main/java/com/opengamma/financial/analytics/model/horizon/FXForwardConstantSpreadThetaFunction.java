@@ -60,7 +60,7 @@ public class FXForwardConstantSpreadThetaFunction extends FXForwardMultiValuedFu
   private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardConstantSpreadThetaFunction.class);
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}.
    */
   public FXForwardConstantSpreadThetaFunction() {
     super(ValueRequirementNames.VALUE_THETA);

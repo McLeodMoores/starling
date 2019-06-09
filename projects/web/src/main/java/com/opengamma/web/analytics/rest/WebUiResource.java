@@ -62,8 +62,8 @@ import com.opengamma.web.analytics.push.ClientConnection;
 import com.opengamma.web.analytics.push.ConnectionManager;
 
 /**
- * REST resource for the analytics grid. This resource class specifies the endpoints of every object in the
- * hierarchy of grids, dependency graphs and viewports in the analytics viewer.
+ * REST resource for the analytics grid. This resource class specifies the endpoints of every object in the hierarchy of grids, dependency graphs and viewports
+ * in the analytics viewer.
  */
 @Path("views")
 public class WebUiResource {
@@ -106,8 +106,7 @@ public class WebUiResource {
     ArgumentChecker.notEmpty(marketDataProviders, "marketDataProviders");
     ArgumentChecker.notEmpty(clientId, "clientId");
     final boolean blotterColumns = blotter == null ? false : blotter;
-    final List<MarketDataSpecification> marketDataSpecs =
-        MarketDataSpecificationJsonReader.buildSpecifications(marketDataProviders);
+    final List<MarketDataSpecification> marketDataSpecs = MarketDataSpecificationJsonReader.buildSpecifications(marketDataProviders);
     final VersionCorrection versionCorrection = VersionCorrection.of(parseInstant(portfolioVersionTime),
         parseInstant(portfolioCorrectionTime));
     final ViewRequest viewRequest = _viewManager.createViewRequest(UniqueId.parse(viewDefinitionId), aggregators, marketDataSpecs,
@@ -125,8 +124,7 @@ public class WebUiResource {
     final String userName = AuthUtils.isPermissive() ? null : AuthUtils.getUserName();
     final ClientConnection connection = _connectionManager.getConnectionByClientId(userName, clientId);
     final URI uri = uriInfo.getAbsolutePathBuilder().path(viewId).build();
-    final ImmutableMap<String, Object> callbackMap =
-        ImmutableMap.<String, Object>of("id", requestId, "message", uri.getPath());
+    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object> of("id", requestId, "message", uri.getPath());
     final URI errorUri = uriInfo.getAbsolutePathBuilder()
         .path(viewId)
         .path("errors")
@@ -195,7 +193,7 @@ public class WebUiResource {
       @PathParam("col") final int col,
       @PathParam("viewportId") final int viewportId) {
 
-    final GridStructure gridStructure =  _viewManager.getView(viewId).getGridStructure(gridType(gridType), viewportId);
+    final GridStructure gridStructure = _viewManager.getView(viewId).getGridStructure(gridType(gridType), viewportId);
 
     final Pair<String, ValueRequirement> pair = gridStructure.getValueRequirementForCell(row, col);
     return new ValueRequirementTargetForCell(pair.getFirst(), pair.getSecond());
@@ -391,7 +389,6 @@ public class WebUiResource {
     return _viewManager.getView(viewId).getErrors();
   }
 
-
   @Path("{viewId}/errors/{errorId}")
   @DELETE
   public void deleteError(@PathParam("viewId") final String viewId, @PathParam("errorId") final long errorId) {
@@ -399,11 +396,14 @@ public class WebUiResource {
   }
 
   /**
-   * Produces view port results as CSV
+   * Produces view port results as CSV.
    *
-   * @param response the injected servlet response, not null.
-   * @param viewId ID of the view
-   * @param gridTypeStr the grid type, 'portfolio' or 'primitives'
+   * @param response
+   *          the injected servlet response, not null.
+   * @param viewId
+   *          ID of the view
+   * @param gridTypeStr
+   *          the grid type, 'portfolio' or 'primitives'
    * @return The view port result as csv
    */
   @GET
@@ -432,7 +432,8 @@ public class WebUiResource {
   }
 
   /**
-   * @param instantString An ISO-8601 string representing an instant or null
+   * @param instantString
+   *          An ISO-8601 string representing an instant or null
    * @return The parsed string or null if the input is null
    */
   private static Instant parseInstant(final String instantString) {

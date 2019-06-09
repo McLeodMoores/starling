@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.user;
@@ -11,7 +11,7 @@ package com.opengamma.financial.user;
 public enum FinancialUserDataType {
 
   /**
-   * Value from an InterpolatedYieldCurveDefinitionMaster
+   * Value from an InterpolatedYieldCurveDefinitionMaster.
    */
   INTERPOLATED_YIELD_CURVE_DEFINITION,
 
@@ -34,7 +34,7 @@ public enum FinancialUserDataType {
    * Value from a ConfigSource.
    */
   VIEW_DEFINITION,
-  
+
   /**
    * Value from a MarketDataSnapshotMaster.
    */

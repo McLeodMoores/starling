@@ -13,19 +13,21 @@ import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.security.FinancialSecurity;
 
 /**
- * Provides a set of names of {@link CurveConstructionConfiguration}s that are required to price
- * a security for a given {@link ExposureFunction}.
+ * Provides a set of names of {@link CurveConstructionConfiguration}s that are required to price a security for a given {@link ExposureFunction}.
  */
 public interface InstrumentExposuresProvider {
 
   /**
-   * Gets a list of relevant curve construction configurations for a given {@link ExposureFunction} and
-   * {@link FinancialSecurity}
-   * @param instrumentExposureConfigurationName The instrument exposure configuration name
-   * @param trade The trade to look up curve construction configurations against.
+   * Gets a list of relevant curve construction configurations for a given {@link ExposureFunction} and {@link FinancialSecurity}.
+   * 
+   * @param instrumentExposureConfigurationName
+   *          The instrument exposure configuration name
+   * @param trade
+   *          The trade to look up curve construction configurations against.
    * @return A set of {@link CurveConstructionConfiguration} names
-   * @throws OpenGammaRuntimeException If no matching configuration(s) are found for the security
+   * @throws OpenGammaRuntimeException
+   *           If no matching configuration(s) are found for the security
    */
   Set<String> getCurveConstructionConfigurationsForConfig(String instrumentExposureConfigurationName,
-                                                          Trade trade);
+      Trade trade);
 }

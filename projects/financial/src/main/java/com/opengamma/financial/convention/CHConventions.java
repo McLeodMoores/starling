@@ -24,17 +24,18 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information used to construct standard version of CHF instruments
- * 
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ * Contains information used to construct standard version of CHF instruments.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class CHConventions {
 
   /**
-   * Adds conventions for deposit, Libor, swaps and FRAs
-   * @param conventionMaster The convention master, not null
+   * Adds conventions for deposit, Libor, swaps and FRAs.
+   *
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -48,7 +49,7 @@ public class CHConventions {
     final ExternalId ch = ExternalSchemes.financialRegionId("CH");
 
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
-    //TODO check that it's actually libor that we need
+    // TODO check that it's actually libor that we need
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SF00O/N Index"), simpleNameSecurityId("CHF LIBOR O/N")), "CHF LIBOR O/N", act360,
         following, Period.ofDays(1), 0, false, ch);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SF00S/N Index"), simpleNameSecurityId("CHF LIBOR S/N"),
@@ -99,7 +100,7 @@ public class CHConventions {
         tullettPrebonSecurityId("ASLIBCHF12L")), "CHF LIBOR 12m", act360,
         following, Period.ofMonths(12), 2, false, ch);
 
-    //TODO need to check that these are right for deposit rates
+    // TODO need to check that these are right for deposit rates
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SFDR1T Curncy"), simpleNameSecurityId("CHF DEPOSIT 1d")), "CHF DEPOSIT 1d", act360,
         following, Period.ofDays(1), 0, false, ch);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SFDR2T Curncy"), simpleNameSecurityId("CHF DEPOSIT 2d")), "CHF DEPOSIT 2d", act360,
@@ -160,7 +161,7 @@ public class CHConventions {
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("SFDR5 Curncy"), simpleNameSecurityId("CHF DEPOSIT 5y")), "CHF DEPOSIT 5y", act360,
         following, Period.ofYears(5), 2, false, ch);
 
-    //TODO check reference rate
+    // TODO check reference rate
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("CHF_SWAP")), "CHF_SWAP", thirty360, modified, annual, 2, ch, act360,
         modified, semiAnnual, 2, simpleNameSecurityId("CHF LIBOR 6m"), ch, true);
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("CHF_3M_SWAP")), "CHF_3M_SWAP", thirty360, modified, annual, 2, ch,
@@ -197,10 +198,12 @@ public class CHConventions {
   }
 
   /**
-   * Adds conventions for CHF government bonds
-   * @param conventionMaster The convention master, not null
+   * Adds conventions for CHF government bonds.
+   *
+   * @param conventionMaster
+   *          The convention master, not null
    */
-  //TODO all of the conventions named treasury need to be changed
+  // TODO all of the conventions named treasury need to be changed
   public static void addTreasuryBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
@@ -209,8 +212,10 @@ public class CHConventions {
   }
 
   /**
-   * Adds conventions for CHF-denominated corporate bonds
-   * @param conventionMaster The convention master, not null
+   * Adds conventions for CHF-denominated corporate bonds.
+   *
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addCorporateBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "conventionMaster");

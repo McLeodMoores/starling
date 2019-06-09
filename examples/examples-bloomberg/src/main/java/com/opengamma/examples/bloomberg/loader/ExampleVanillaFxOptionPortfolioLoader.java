@@ -56,10 +56,8 @@ import com.opengamma.util.time.Tenor;
 /**
  * Example code to load a very simple vanilla FX option portfolio.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 public class ExampleVanillaFxOptionPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
@@ -67,36 +65,36 @@ public class ExampleVanillaFxOptionPortfolioLoader extends AbstractTool<Integrat
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleFxForwardPortfolioLoader.class);
   /** The number of securities in this portfolio */
   private static final int SIZE = 200;
-  /** The name of the portfolio */
+  /** The name of the portfolio. */
   public static final String PORTFOLIO_NAME = "FX Vanilla Option Portfolio";
-  /** The currency pairs */
-  public static final UnorderedCurrencyPair[] CCYS = new UnorderedCurrencyPair[] {UnorderedCurrencyPair.of(Currency.USD, Currency.EUR)};
+  /** The currency pairs. */
+  public static final UnorderedCurrencyPair[] CCYS = new UnorderedCurrencyPair[] { UnorderedCurrencyPair.of(Currency.USD, Currency.EUR) };
   /** The scheme used for an identifier */
   private static final String ID_SCHEME = "FX_VANILLA_OPTION_GENERATOR";
   /** The tenors */
-  private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS};
+  private static final Tenor[] TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS };
   /** Formats the rates in the security name */
   private static final DecimalFormat FORMATTER = new DecimalFormat("##.###");
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     try {
-      boolean success =
-        new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-        new ExampleVanillaFxOptionPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
+          new ExampleVanillaFxOptionPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final Collection<FXOptionSecurity> fxOptions = createRandomFXOptions();
@@ -140,9 +138,9 @@ public class ExampleVanillaFxOptionPortfolioLoader extends AbstractTool<Integrat
       externalIds.addAll(tickers);
     }
     final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(
-      getToolContext().getHistoricalTimeSeriesMaster(),
-      getToolContext().getHistoricalTimeSeriesProvider(),
-      new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+        getToolContext().getHistoricalTimeSeriesMaster(),
+        getToolContext().getHistoricalTimeSeriesProvider(),
+        new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
     loader.loadTimeSeries(externalIds, "UNKNOWN", "PX_LAST", LocalDate.now().minusYears(1), LocalDate.now());
   }
 

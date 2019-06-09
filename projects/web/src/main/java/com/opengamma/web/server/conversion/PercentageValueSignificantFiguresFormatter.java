@@ -14,7 +14,7 @@ import java.text.DecimalFormatSymbols;
  *
  */
 public class PercentageValueSignificantFiguresFormatter extends DoubleValueFormatter {
-  /** Formats numbers to five significant figures */
+  /** Formats numbers to five significant figures. */
   public static final PercentageValueSignificantFiguresFormatter NON_CCY_5SF = PercentageValueSignificantFiguresFormatter.of(5, false);
 
   private final BigDecimal _maxValueForSigFig;

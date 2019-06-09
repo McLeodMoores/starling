@@ -32,18 +32,16 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Calculates all relevant PV01s of instruments using curves constructed using
- * the interpolated method.
+ * Calculates all relevant PV01s of instruments using curves constructed using the interpolated method.
  */
 public class DiscountingInterpolatedAllPV01Function extends DiscountingInterpolatedFunction {
 
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
-      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityDiscountingCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
+      PresentValueCurveSensitivityDiscountingCalculator.getInstance());
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#ALL_PV01S}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#ALL_PV01S}.
    */
   public DiscountingInterpolatedAllPV01Function() {
     super(ALL_PV01S);

@@ -37,7 +37,7 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
   /** The Black present value calculator */
   private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBlackScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }
@@ -60,7 +60,6 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
 
     // Compute present value under current market
     final double pvBase = derivative.accept(PV_CALCULATOR, market);
-
 
     // Form market scenario
     final ValueProperties constraints = desiredValues.iterator().next().getConstraints();

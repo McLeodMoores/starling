@@ -31,7 +31,7 @@ import com.opengamma.financial.analytics.model.equity.ScenarioPnLPropertyNamesAn
 
 /**
  * Simple scenario Function returns the difference in PresentValue between defined Scenario and current market conditions.
- * 
+ *
  * @author casey
  */
 public class ListedEquityOptionBlackScenarioPnLFunction extends ListedEquityOptionBlackFunction {
@@ -39,7 +39,7 @@ public class ListedEquityOptionBlackScenarioPnLFunction extends ListedEquityOpti
   /** The Black present value calculator */
   private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionBlackScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }

@@ -347,7 +347,7 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
   }
 
   /**
-   * Gets the interpolated yield curve specifications from the function inputs
+   * Gets the interpolated yield curve specifications from the function inputs.
    *
    * @param inputs
    *          The inputs

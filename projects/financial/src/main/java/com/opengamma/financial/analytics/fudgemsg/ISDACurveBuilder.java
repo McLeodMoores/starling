@@ -15,7 +15,7 @@ import com.opengamma.analytics.financial.credit.cds.ISDACurve;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 
 /**
- * Fudge builder for ISDA curve
+ * Fudge builder for ISDA curve.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see ISDACurve

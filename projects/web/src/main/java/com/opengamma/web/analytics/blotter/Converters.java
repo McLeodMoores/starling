@@ -14,14 +14,14 @@ import org.joda.convert.StringConverter;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO docs clarifying why this exists on top of the standard Joda converters - property-specific behaviour
- * TODO also clarify that you want one instance of this class for converting in each direction
+ * TODO docs clarifying why this exists on top of the standard Joda converters - property-specific behaviour TODO also clarify that you want one instance of
+ * this class for converting in each direction.
  */
 /* package */ class Converters {
 
   /**
-   * Sentinal value signalling a value cannot be converted. null can't be used to signal conversion failure because
-   * null is a valid return value for the conversion operation.
+   * Sentinal value signalling a value cannot be converted. null can't be used to signal conversion failure because null is a valid return value for the
+   * conversion operation.
    */
   public static final Object CONVERSION_FAILED = new Object();
 
@@ -40,10 +40,13 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    *
-   * @param value The value to convert, possibly null
-   * @param property The property associated with the value (the converter might be converting from a value of the
-   * property type or to a value that will be used to set the property).
-   * @param type The type to convert from or to
+   * @param value
+   *          The value to convert, possibly null
+   * @param property
+   *          The property associated with the value (the converter might be converting from a value of the property type or to a value that will be used to set
+   *          the property).
+   * @param type
+   *          The type to convert from or to
    * @return The converted value, possibly null, {@link #CONVERSION_FAILED} if the value couldn't be converted
    */
   @SuppressWarnings("unchecked")
@@ -73,14 +76,18 @@ import com.opengamma.util.ArgumentChecker;
 }
 
 /**
- * @param <F> The type to convert from
- * @param <T> The type to convert to
+ * @param <F>
+ *          The type to convert from
+ * @param <T>
+ *          The type to convert to
  */
 /* package */ interface Converter<F, T> {
 
   /**
-   * Converts an object from one type to another
-   * @param f The unconverted object, possibly null
+   * Converts an object from one type to another.
+   *
+   * @param f
+   *          The unconverted object, possibly null
    * @return The converted object, possibly null
    */
   T convert(F f);

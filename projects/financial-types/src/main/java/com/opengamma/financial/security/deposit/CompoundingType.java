@@ -9,10 +9,10 @@ package com.opengamma.financial.security.deposit;
  * An enum representing the types of compounding that can be done on a deposit.
  */
 public enum CompoundingType {
-  /** Simple */
+  /** Simple. */
   SIMPLE,
-  /** Periodic */
+  /** Periodic. */
   PERIODIC,
-  /** Continuous */
+  /** Continuous. */
   CONTINUOUS
 }

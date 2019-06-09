@@ -14,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 @Deprecated
 public class MultiCurveCalculationConfigJSONBuilder extends AbstractJSONBuilder<MultiCurveCalculationConfig> {
-  /** Singleton */
+  /** Singleton. */
   public static final MultiCurveCalculationConfigJSONBuilder INSTANCE = new MultiCurveCalculationConfigJSONBuilder();
   /** JSON template */
   private static final String TEMPLATE = createTemplate();

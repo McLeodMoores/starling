@@ -25,7 +25,7 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Defines static helpers for yield curve functions.
- * 
+ *
  * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
 @Deprecated
@@ -36,7 +36,7 @@ public final class YieldCurveFunction {
   /**
    * Identifies the name of the forward curve used for a value. A value dependent on just one curve should use the default "CURVE" name and not this prefixed
    * name.
-   * 
+   *
    * @deprecated This is used in old yield curve code - do not use
    */
   @Deprecated
@@ -45,24 +45,24 @@ public final class YieldCurveFunction {
   /**
    * Identifies the name of the funding curve used for a value. A value dependent on just one curve should use the default "CURVE" name and not this prefixed
    * name.
-   * 
+   *
    * @deprecated This is used in old yield curve code - do not use
    */
   @Deprecated
   public static final String PROPERTY_FUNDING_CURVE = "Funding" + ValuePropertyNames.CURVE;
 
   /**
-   * Identifies the interpolator to be used
+   * Identifies the interpolator to be used.
    */
   public static final String PROPERTY_INTERPOLATOR = "Interpolator";
 
   /**
-   * Identifies the left extrapolator to be used
+   * Identifies the left extrapolator to be used.
    */
   public static final String PROPERTY_LEFT_EXTRAPOLATOR = "LeftExtrapolator";
 
   /**
-   * Identifies the right extrapolator to be used
+   * Identifies the right extrapolator to be used.
    */
   public static final String PROPERTY_RIGHT_EXTRAPOLATOR = "RightExtrapolator";
 

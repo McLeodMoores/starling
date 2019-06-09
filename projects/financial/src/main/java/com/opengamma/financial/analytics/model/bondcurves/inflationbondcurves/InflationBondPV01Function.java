@@ -41,18 +41,18 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *  Calculates the PV01 of a linked bond  for all curves to which the instruments are sensitive.
+ * Calculates the PV01 of a linked bond for all curves to which the instruments are sensitive.
  */
 public class InflationBondPV01Function extends InflationBondFromCurvesFunction<InflationIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondPV01Function.class);
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
-      new PV01CurveParametersInflationCalculator<>(PresentValueCurveSensitivityIssuerDiscountingInflationCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersInflationCalculator<>(
+      PresentValueCurveSensitivityIssuerDiscountingInflationCalculator.getInstance());
 
   /**
    * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PV01} and sets the calculator to
-   * {@link PV01CurveParametersInflationCalculator}
+   * {@link PV01CurveParametersInflationCalculator}.
    */
   public InflationBondPV01Function() {
     super(PV01, CALCULATOR);

@@ -108,7 +108,7 @@ import com.opengamma.util.time.Tenor;
  */
 @Deprecated
 public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
-  /** The calculation method property value */
+  /** The calculation method property value. */
   public static final String IMPLIED_DEPOSIT = "ImpliedDeposit";
   /** The Cash instrument method */
   private static final CashDiscountingMethod METHOD_CASH = CashDiscountingMethod.getInstance();

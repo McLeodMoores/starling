@@ -10,7 +10,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * As {@link InterestRateFutureOptionConstantSpreadThetaFunction}, except produces {@link ValueRequirementNames#POSITION_THETA} as a Double
+ * As {@link InterestRateFutureOptionConstantSpreadThetaFunction}, except produces {@link ValueRequirementNames#POSITION_THETA} as a Double.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated

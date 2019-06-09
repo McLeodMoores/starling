@@ -75,7 +75,7 @@ public class SwaptionBlackYieldCurveNodeSensitivitiesFunction extends SwaptionBl
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public SwaptionBlackYieldCurveNodeSensitivitiesFunction() {
     super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);

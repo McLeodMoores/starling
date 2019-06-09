@@ -30,15 +30,15 @@ import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePr
 public abstract class CommodityBlackVolatilitySurfaceFunction extends BlackVolatilitySurfaceFunction {
 
   /**
-   * Spline interpolator function for Black volatility surfaces
+   * Spline interpolator function for Black volatility surfaces.
    */
   public static class Spline extends CommodityBlackVolatilitySurfaceFunction {
 
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -76,8 +76,8 @@ public abstract class CommodityBlackVolatilitySurfaceFunction extends BlackVolat
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -125,8 +125,7 @@ public abstract class CommodityBlackVolatilitySurfaceFunction extends BlackVolat
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
 
     @SuppressWarnings("unchecked")
-    final
-    VolatilitySurfaceData<Object, Object> volatilitySurface = (VolatilitySurfaceData<Object, Object>) volatilitySurfaceObject;
+    final VolatilitySurfaceData<Object, Object> volatilitySurface = (VolatilitySurfaceData<Object, Object>) volatilitySurfaceObject;
     return BlackVolatilitySurfaceUtils.getDataFromStandardQuotes(forwardCurve, volatilitySurface);
   }
 
@@ -156,8 +155,8 @@ public abstract class CommodityBlackVolatilitySurfaceFunction extends BlackVolat
     final ValueProperties properties = ValueProperties.builder()
         .with(SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType()).get();
-    final ValueRequirement volDataRequirement =
-        new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), properties);
+    final ValueRequirement volDataRequirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        properties);
     return volDataRequirement;
   }
 

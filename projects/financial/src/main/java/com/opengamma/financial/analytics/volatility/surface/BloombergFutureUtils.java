@@ -25,13 +25,13 @@ import com.opengamma.financial.convention.expirycalc.SoybeanFutureOptionExpiryCa
 import com.opengamma.util.OpenGammaClock;
 
 /**
- * Utility methods for building Bloomberg Tickers on IR Futures and IR Future Options (Refer to Bloomberg page: WIR)
+ * Utility methods for building Bloomberg Tickers on IR Futures and IR Future Options (Refer to Bloomberg page: WIR).
  */
 public class BloombergFutureUtils {
 
-  /** Set of prefixes for Standard IR Future Options */
+  /** Set of prefixes for Standard IR Future Options. */
   public static final HashSet<String> STANDARD_PREFIX_SET = Sets.newHashSet("ER", "ED", "EF", "IR", "L ");
-  /** Set of prefixes for MidCurve IR Future Options */
+  /** Set of prefixes for MidCurve IR Future Options. */
   public static final HashSet<String> MIDCURVE_PREFIX_SET = Sets.newHashSet("0R");
 
   /** Set of prefixes for which the logic of expiries has been tested */
@@ -45,15 +45,15 @@ public class BloombergFutureUtils {
    * string values of this enum as in this case, the trailing string will not be present Instead, use toString, which can be, and has, been overridden.
    */
   public enum IRFuturePrefix {
-    /** USD, Eurodollar, 3-month, CME */
+    /** USD, Eurodollar, 3-month, CME. */
     ED,
-    /** EUR, Euro Euribor, 3-month, LIF */
+    /** EUR, Euro Euribor, 3-month, LIF. */
     ER,
-    /** JPY, Euroyen, 3-month, SGX */
+    /** JPY, Euroyen, 3-month, SGX. */
     EF,
-    /** AUD, 90 day Bankers' Acceptance, 3-month, SFE */
+    /** AUD, 90 day Bankers' Acceptance, 3-month, SFE. */
     IR,
-    /** GBP, Short Sterling, 3-month, LIF */
+    /** GBP, Short Sterling, 3-month, LIF. */
     L {
       @Override
       public String toString() {
@@ -62,7 +62,7 @@ public class BloombergFutureUtils {
     }
   }
 
-  /** Map of Month to Bloomberg Month Codes */
+  /** Map of Month to Bloomberg Month Codes. */
   public static final BiMap<Month, Character> MONTH_CODE;
   static {
     MONTH_CODE = HashBiMap.create();
@@ -84,7 +84,7 @@ public class BloombergFutureUtils {
 
   /**
    * Produces the month-year string required to build the Bloomberg ticker for a <b>quarterly</b> future.
-   * 
+   *
    * @param futurePrefix
    *          2 character String of Future (eg ED, ER, IR)
    * @param nthFuture
@@ -107,7 +107,7 @@ public class BloombergFutureUtils {
 
   /**
    * Produces the month-year string required to build the Bloomberg ticker for a <b>monthly</b> future.
-   * 
+   *
    * @param futurePrefix
    *          2 character String of Future (eg ED, ER, IR)
    * @param nthFuture
@@ -132,8 +132,8 @@ public class BloombergFutureUtils {
   }
 
   /**
-   * Produces the month-year string required to build ExternalId for Bloomberg ticker of BondFutureSecurity
-   * 
+   * Produces the month-year string required to build ExternalId for Bloomberg ticker of BondFutureSecurity.
+   *
    * @param futurePrefix
    *          2 character string of future (eg US, FV)
    * @param nthFuture
@@ -154,7 +154,7 @@ public class BloombergFutureUtils {
   /**
    * Produces the month-year string required to build ExternalId for Bloomberg ticker of IRFutureSecurity NOTE: Eurodollar FutureOptions do not share the same
    * naming convention for past expiries as their underlying futures! It appears that Bloomberg doesn't switch to a two-digit convention...
-   * 
+   *
    * @param futurePrefix
    *          2 character String of Future (eg ED, ER, IR)
    * @param nthFuture
@@ -173,8 +173,8 @@ public class BloombergFutureUtils {
   }
 
   /**
-   * Produces the month-year string required to build ExternalId for Bloomberg ticker of Soybean Future Options, which have a different set of expiry months
-   * 
+   * Produces the month-year string required to build ExternalId for Bloomberg ticker of Soybean Future Options, which have a different set of expiry months.
+   *
    * @param futurePrefix
    *          2 character string of future (eg "S ", "GC")
    * @param nthFuture
@@ -193,8 +193,8 @@ public class BloombergFutureUtils {
   }
 
   /**
-   * Produces the month-year string required to build ExternalId for Bloomberg ticker of Soybean Futures, which have a different set of expiry months
-   * 
+   * Produces the month-year string required to build ExternalId for Bloomberg ticker of Soybean Futures, which have a different set of expiry months.
+   *
    * @param futurePrefix
    *          2 character string of future (eg "S ", "GC")
    * @param nthFuture
@@ -213,8 +213,8 @@ public class BloombergFutureUtils {
   }
 
   /**
-   * Given an expiry date, produces the month-year string required to build ExternalId for Bloomberg tickers
-   * 
+   * Given an expiry date, produces the month-year string required to build ExternalId for Bloomberg tickers.
+   *
    * @param expiry
    *          Date of expiry for which a code is required. Really only a date in the right month is required.
    * @return e.g. M2 (for June 2012) or Z3 (for December 2013)
@@ -229,7 +229,7 @@ public class BloombergFutureUtils {
 
   /**
    * Produces the month-year string required to build ExternalId for Bloomberg tickers of IRFutureSecurity and IRFutureOptionSecurity.
-   * 
+   *
    * @param nthQuarter
    *          The n'th quarter following valuation date
    * @param valuationDate
@@ -246,7 +246,7 @@ public class BloombergFutureUtils {
 
   /**
    * Produces the month-year string required to build ExternalId for Bloomberg tickers of IRFutureSecurity and IRFutureOptionSecurity.
-   * 
+   *
    * @param nthMonth
    *          The n'th month following valuation date
    * @param valuationDate
@@ -269,7 +269,7 @@ public class BloombergFutureUtils {
 
   /**
    * Produces Bloomberg's code for month and year.
-   * 
+   *
    * @param expiry
    *          Expiry date of instrument
    * @param twoDigitSwitch

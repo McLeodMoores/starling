@@ -29,7 +29,7 @@ public class InterestRateFutureOptionBlackVegaFunction extends InterestRateFutur
   private static final PresentValueBlackTheoreticalVegaCalculator CALCULATOR = PresentValueBlackTheoreticalVegaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VEGA}.
    */
   public InterestRateFutureOptionBlackVegaFunction() {
     super(ValueRequirementNames.VEGA, false);

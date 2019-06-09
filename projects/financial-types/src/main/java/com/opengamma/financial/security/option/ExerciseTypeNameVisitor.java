@@ -6,7 +6,7 @@
 package com.opengamma.financial.security.option;
 
 /**
- * Visitor that gives the name of an Exercise type
+ * Visitor that gives the name of an Exercise type.
  */
 public class ExerciseTypeNameVisitor implements ExerciseTypeVisitor<String> {
   /** American type. */

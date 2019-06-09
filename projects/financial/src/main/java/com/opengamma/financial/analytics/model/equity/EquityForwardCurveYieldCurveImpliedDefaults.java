@@ -28,7 +28,7 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Populates {@link EquityForwardCurveFunction} with default properties
+ * Populates {@link EquityForwardCurveFunction} with default properties.
  */
 public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultPropertyFunction {
   /** The logger */

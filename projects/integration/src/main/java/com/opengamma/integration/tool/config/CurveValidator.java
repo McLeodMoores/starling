@@ -53,7 +53,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Class to validate third generation curve configurations
+ * Class to validate third generation curve configurations.
  */
 public class CurveValidator {
   private static final Logger LOGGER = LoggerFactory.getLogger(CurveValidator.class);
@@ -67,8 +67,8 @@ public class CurveValidator {
   private final SecuritySource _securitySource;
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param configMaster
    *          the config master
    * @param configSource
@@ -523,7 +523,7 @@ public class CurveValidator {
 
   /**
    * Check the string region ISO code (2-character) for validity against the RegionSource. Records error in node object if dryRun is not set.
-   * 
+   *
    * @param regionStr
    *          the potential region code. Will add a warning but return true if region is not a country (e.g. EU).
    * @param node
@@ -549,7 +549,7 @@ public class CurveValidator {
   /**
    * Check the string currency valid and record error if not dryRun. Also adds warning if valid lexigraphically but not contained in Currency class as a
    * constant.
-   * 
+   *
    * @param currencyStr
    *          the currency in string format (3-character ISO), not null
    * @param node
@@ -579,7 +579,7 @@ public class CurveValidator {
 
   /**
    * Check the Currency class for a constant matching this currency instance
-   * 
+   *
    * @param currency
    *          a currency instance, not null
    * @return true if there is a constant matching the supplied currency

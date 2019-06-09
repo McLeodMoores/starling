@@ -34,15 +34,15 @@ public class MarketDataSpecificationRowComponent extends JPanel {
   private static final String UP_ARROW = "\u2191";
   private static final Dimension BUTTON_SIZE = new Dimension(28, 28);
 
-  /** enum representing button action events */
+  /** enum representing button action events. */
   public enum Action {
-    /** Move row up */
+    /** Move row up. */
     MOVE_UP,
-    /** Move row down */
+    /** Move row down. */
     MOVE_DOWN,
-    /** Add new row below */
+    /** Add new row below. */
     ADD,
-    /** Remove this row */
+    /** Remove this row. */
     REMOVE
   }
 

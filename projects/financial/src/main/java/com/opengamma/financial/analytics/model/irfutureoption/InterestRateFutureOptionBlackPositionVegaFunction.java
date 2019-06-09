@@ -22,7 +22,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingPositionVeg
  * Function computes the {@link ValueRequirementNames#POSITION_VEGA}, first order derivative of {@link Position} price with respect to the Black Lognormal
  * Implied Volatility, for interest rate future options in the Black world.
  * <p>
- * 
+ *
  * @deprecated Use {@link BlackDiscountingPositionVegaIRFutureOptionFunction}
  */
 @Deprecated
@@ -32,7 +32,7 @@ public class InterestRateFutureOptionBlackPositionVegaFunction extends InterestR
   private static final PresentValueBlackVegaCalculator CALCULATOR = PresentValueBlackVegaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#POSITION_VEGA}.
    */
   public InterestRateFutureOptionBlackPositionVegaFunction() {
     super(ValueRequirementNames.POSITION_VEGA, true);

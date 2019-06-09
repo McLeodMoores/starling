@@ -37,30 +37,30 @@ import com.opengamma.integration.viewer.status.impl.ViewStatusKeyBean.Meta;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implementation of {@link ViewStatusResultAggregator}
+ * Implementation of {@link ViewStatusResultAggregator}.
  */
 public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusResultAggregatorImpl.class);
 
   /**
-   * Header for Security Type
+   * Header for Security Type.
    */
   public static final String SECURITY_HEADER = "SecurityType";
   /**
-   * Header for Value Requirement Name
+   * Header for Value Requirement Name.
    */
   public static final String VALUE_REQUIREMENT_NAME_HEADER = "ValueRequirementName";
   /**
-   * Header for Currency
+   * Header for Currency.
    */
   public static final String CURRENCY_HEADER = "Currency";
   /**
-   * Header for Target type
+   * Header for Target type.
    */
   public static final String TARGET_TYPE_HEADER = "Target Type";
   /**
-   * Header for status
+   * Header for status.
    */
   public static final String STATUS = "Status";
 

@@ -24,8 +24,8 @@ public class BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider extends 
   }
 
   /**
-   * Uses the default scheme (BLOOMBERG_TICKER_WEAK)
-   * 
+   * Uses the default scheme (BLOOMBERG_TICKER_WEAK).
+   *
    * @param futureOptionPrefix
    *          the prefix to the resulting code, not null
    * @param postfix

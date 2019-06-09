@@ -46,9 +46,9 @@ import com.opengamma.util.time.Tenor;
  *
  */
 public class ForwardSwapCurveMarketDataFunction extends AbstractFunction {
-  /** Name of the calculation method */
+  /** Name of the calculation method. */
   public static final String FORWARD_SWAP_QUOTES = "ForwardSwapQuotes";
-  /** Name of the forward tenor property */
+  /** Name of the forward tenor property. */
   public static final String PROPERTY_FORWARD_TENOR = "ForwardTenor";
 
   private ConfigDBForwardSwapCurveDefinitionSource _forwardSwapCurveDefinitionSource;

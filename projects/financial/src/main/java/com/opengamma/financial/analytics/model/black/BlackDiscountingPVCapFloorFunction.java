@@ -32,17 +32,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of cap/floors using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the present value of cap/floors using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingPVCapFloorFunction extends BlackDiscountingCapFloorFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<BlackSmileCapProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      PresentValueBlackSmileCapCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSmileCapProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueBlackSmileCapCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public BlackDiscountingPVCapFloorFunction() {
     super(PRESENT_VALUE);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.tool;
 
@@ -27,14 +27,17 @@ public class SyntheticSecuritiesGeneratorTool extends AbstractSecuritiesGenerato
 
   /**
    * Main method.
-   * @param args Uses the command line args<p>
-   * <ul>
-   * <li> h - help
-   * <li> c - config
-   * <li> l - logback
-   * <li> s - sets the name of the security generator (required)
-   * <li> w - writes the portfolio and securities to the database
-   * </ul>
+   * 
+   * @param args
+   *          Uses the command line args
+   *          <p>
+   *          <ul>
+   *          <li>h - help
+   *          <li>c - config
+   *          <li>l - logback
+   *          <li>s - sets the name of the security generator (required)
+   *          <li>w - writes the portfolio and securities to the database
+   *          </ul>
    */
   public static void main(final String[] args) { // CSIGNORE
     final AbstractTool<ToolContext> tool = new AbstractTool<ToolContext>() {

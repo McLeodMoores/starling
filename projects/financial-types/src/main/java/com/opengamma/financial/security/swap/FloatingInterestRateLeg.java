@@ -48,7 +48,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
   @PropertyDefinition(validate = "notNull")
   private FloatingRateType _floatingRateType;
   /**
-   * The settlement days
+   * The settlement days.
    */
   @PropertyDefinition
   private Integer _settlementDays;
@@ -197,7 +197,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the settlement days
+   * Gets the settlement days.
    * @return the value of the property
    */
   public Integer getSettlementDays() {
@@ -205,7 +205,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
   }
 
   /**
-   * Sets the settlement days
+   * Sets the settlement days.
    * @param settlementDays  the new value of the property
    */
   public void setSettlementDays(Integer settlementDays) {

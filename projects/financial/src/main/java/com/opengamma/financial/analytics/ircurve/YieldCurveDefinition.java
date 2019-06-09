@@ -40,7 +40,7 @@ import com.opengamma.util.money.Currency;
  * This definition uses a set of {@code FixedIncomeStrip} instances.
  * <p>
  * This class is mutable.
- * 
+ *
  * @deprecated Use classes that implement {@link AbstractCurveDefinition}.
  */
 @Deprecated
@@ -87,7 +87,7 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
   @PropertyDefinition(validate = "notNull")
   private String _rightExtrapolatorName;
   /**
-   * Whether to interpolate between yields (true) or discount factors (false)
+   * Whether to interpolate between yields (true) or discount factors (false).
    */
   @PropertyDefinition
   private boolean _interpolateYields;
@@ -377,7 +377,7 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether to interpolate between yields (true) or discount factors (false)
+   * Gets whether to interpolate between yields (true) or discount factors (false).
    * @return the value of the property
    */
   public boolean isInterpolateYields() {
@@ -385,7 +385,7 @@ public class YieldCurveDefinition extends DirectBean implements Serializable, Un
   }
 
   /**
-   * Sets whether to interpolate between yields (true) or discount factors (false)
+   * Sets whether to interpolate between yields (true) or discount factors (false).
    * @param interpolateYields  the new value of the property
    */
   public void setInterpolateYields(boolean interpolateYields) {

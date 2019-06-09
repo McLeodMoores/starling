@@ -15,13 +15,11 @@ import com.opengamma.analytics.financial.interestrate.bond.calculator.AccruedInt
 public class BondAccruedInterestFromYieldFunction extends BondFromYieldFunction<Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#ACCRUED_INTEREST}
-   * and the calculator to {@link AccruedInterestFromYieldCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#ACCRUED_INTEREST} and the calculator to
+   * {@link AccruedInterestFromYieldCalculator}.
    */
   public BondAccruedInterestFromYieldFunction() {
     super(ACCRUED_INTEREST, AccruedInterestFromYieldCalculator.getInstance());
   }
-
 
 }

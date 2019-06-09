@@ -33,7 +33,7 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Class to load configurations from an input stream
+ * Class to load configurations from an input stream.
  */
 public class ConfigLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoader.class);

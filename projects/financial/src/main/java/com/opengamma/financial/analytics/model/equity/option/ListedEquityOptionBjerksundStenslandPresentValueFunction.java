@@ -20,15 +20,15 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the present value of an equity index or equity option using the Bjerksund-Stensland (2002) formula.
- * See {@link ListedEquityOptionBjerksundStenslandFunction}
+ * Calculates the present value of an equity index or equity option using the Bjerksund-Stensland (2002) formula. See
+ * {@link ListedEquityOptionBjerksundStenslandFunction}
  */
 public class ListedEquityOptionBjerksundStenslandPresentValueFunction extends ListedEquityOptionBjerksundStenslandFunction {
 
   /** The Bjerksund-Stensland present value calculator */
   private static final EqyOptBjerksundStenslandPresentValueCalculator CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionBjerksundStenslandPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);
   }

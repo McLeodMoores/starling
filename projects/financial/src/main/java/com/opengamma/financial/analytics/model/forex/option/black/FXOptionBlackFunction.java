@@ -56,20 +56,20 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base class for FX option calculations that use the Black model.
- * 
+ *
  * @deprecated Use classes that extends from {@link BlackDiscountingFXOptionFunction}
  */
 @Deprecated
 public abstract class FXOptionBlackFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackFunction.class);
-  /** Property name for the put curve */
+  /** Property name for the put curve. */
   public static final String PUT_CURVE = "PutCurve";
-  /** Property name for the call curve */
+  /** Property name for the call curve. */
   public static final String CALL_CURVE = "CallCurve";
-  /** Property name for the put curve calculation configuration */
+  /** Property name for the put curve calculation configuration. */
   public static final String PUT_CURVE_CALC_CONFIG = "PutCurveCalculationConfig";
-  /** Property name for the receive curve calculation configuration */
+  /** Property name for the receive curve calculation configuration. */
   public static final String CALL_CURVE_CALC_CONFIG = "CallCurveCalculationConfig";
   /** The value requirement produced by the function */
   private final String _valueRequirementName;

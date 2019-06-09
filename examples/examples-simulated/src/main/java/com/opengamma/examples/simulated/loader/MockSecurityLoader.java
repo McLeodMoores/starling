@@ -12,7 +12,7 @@ import com.opengamma.master.security.SecurityLoaderResult;
 import com.opengamma.master.security.impl.AbstractSecurityLoader;
 
 /**
- * Mock security loader to get the example engine server up and running
+ * Mock security loader to get the example engine server up and running.
  *
  * For fully supported implementations supporting major data vendors like Bloomberg and Thomson-Reuters, please contact sales@opengamma.com
  */
@@ -26,7 +26,7 @@ public class MockSecurityLoader extends AbstractSecurityLoader {
   protected SecurityLoaderResult doBulkLoad(final SecurityLoaderRequest request) {
     System.out.println(MESSAGE);
     return new SecurityLoaderResult();
-//    throw new OpenGammaRuntimeException(MESSAGE);
+    // throw new OpenGammaRuntimeException(MESSAGE);
   }
 
   @Override

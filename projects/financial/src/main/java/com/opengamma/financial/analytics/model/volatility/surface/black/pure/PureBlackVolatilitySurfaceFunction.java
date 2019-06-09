@@ -56,7 +56,7 @@ import com.opengamma.util.tuple.Triple;
  *
  */
 public abstract class PureBlackVolatilitySurfaceFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property describing the treatment of dividends */
+  /** Property describing the treatment of dividends. */
   public static final String PROPERTY_DIVIDEND_TREATMENT = "DividendTreatment";
   private static final String X_LABEL = "Expiry (years)";
   private static final String Y_LABEL = "Moneyness";

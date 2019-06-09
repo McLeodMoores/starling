@@ -9,7 +9,7 @@ import com.opengamma.financial.security.option.ExerciseTypeNameVisitor;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the OptionExerciseType enum
+ * Custom Hibernate usertype for the OptionExerciseType enum.
  */
 public class OptionExerciseTypeUserType extends EnumUserType<OptionExerciseType> {
 

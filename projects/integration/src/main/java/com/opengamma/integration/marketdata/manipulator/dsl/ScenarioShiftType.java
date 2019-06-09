@@ -59,7 +59,7 @@ public enum ScenarioShiftType implements GroovyAliasable {
 
   /**
    * The alias to use in the groovy script.
-   * 
+   *
    * @return the alias
    */
   @Override
@@ -69,7 +69,7 @@ public enum ScenarioShiftType implements GroovyAliasable {
 
   /**
    * The list of available groovy aliases, sorted.
-   * 
+   *
    * @return list of aliases.
    */
   public static ImmutableList<String> getAliasList() {
@@ -77,8 +77,8 @@ public enum ScenarioShiftType implements GroovyAliasable {
   }
 
   /**
-   * Converts this enum to the appropriate {@link ShiftType}
-   * 
+   * Converts this enum to the appropriate {@link ShiftType}.
+   *
    * @return The analytics equivalent shift type
    */
   public abstract ShiftType toAnalyticsType();

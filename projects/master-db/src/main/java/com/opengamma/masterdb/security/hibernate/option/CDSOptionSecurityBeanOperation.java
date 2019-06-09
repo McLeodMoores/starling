@@ -23,12 +23,12 @@ import com.opengamma.masterdb.security.hibernate.OperationContext;
 import com.opengamma.util.money.Currency;
 
 /**
- * Bean operation for {@link CreditDefaultSwapOptionSecurity}
+ * Bean operation for {@link CreditDefaultSwapOptionSecurity}.
  */
 public final class CDSOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<CreditDefaultSwapOptionSecurity, CreditDefaultSwapOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final CDSOptionSecurityBeanOperation INSTANCE = new CDSOptionSecurityBeanOperation();
 

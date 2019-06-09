@@ -58,7 +58,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Produces an ISDA compatible yield curve
+ * Produces an ISDA compatible yield curve.
  */
 // non compiled for now to allow dynamic config db lookup
 public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvoker {
@@ -71,7 +71,7 @@ public class ISDACompliantCurveFunction extends AbstractFunction.NonCompiledInvo
 
   /**
    * The name of the curve produced by this function.
-   * 
+   *
    * @param curveName
    *          The curve name, not null
    */

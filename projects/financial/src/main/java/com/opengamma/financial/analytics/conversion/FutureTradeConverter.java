@@ -19,7 +19,7 @@ import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Visits a Trade containing a {@link FutureSecurity} (OG-Financial) Converts it to an {@link InstrumentDefinitionWithData} (OG-Analytics)
+ * Visits a Trade containing a {@link FutureSecurity} (OG-Financial) Converts it to an {@link InstrumentDefinitionWithData} (OG-Analytics).
  */
 public class FutureTradeConverter implements TradeConverter {
   /**
@@ -34,7 +34,7 @@ public class FutureTradeConverter implements TradeConverter {
   }
 
   /**
-   * Converts a futures Trade to a Definition
+   * Converts a futures Trade to a Definition.
    *
    * @param trade
    *          The trade
@@ -70,8 +70,7 @@ public class FutureTradeConverter implements TradeConverter {
   private static InstrumentDefinitionWithData<?, Double> securityToTrade(final InstrumentDefinitionWithData<?, Double> securityDefinition,
       final Double tradePrice) {
 
-    final InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>> visitor =
-        new InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>>() {
+    final InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>> visitor = new InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>>() {
 
       @Override
       public InstrumentDefinitionWithData<?, Double> visitAgricultureFutureDefinition(final AgricultureFutureDefinition futures) {

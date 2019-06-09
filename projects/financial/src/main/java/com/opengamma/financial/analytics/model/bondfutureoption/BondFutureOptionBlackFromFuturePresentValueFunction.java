@@ -33,7 +33,7 @@ import com.opengamma.id.ExternalId;
  */
 @Deprecated
 public class BondFutureOptionBlackFromFuturePresentValueFunction extends BondFutureOptionBlackFunction {
-  /** String indicating the calculation method */
+  /** String indicating the calculation method. */
   public static final String FUTURES_PRICE = "FromFuturePrice";
   private static final PresentValueBlackCalculator CALCULATOR = PresentValueBlackCalculator.getInstance();
 

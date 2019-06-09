@@ -61,18 +61,19 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
   private final Set<ExternalIdBundle> _futuresToLoad = new HashSet<>();
   private final Set<ExternalId> _historicalDataToLoad = new HashSet<>();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     LOGGER.info("Populating example database");
     new ExampleConfigDatabasePopulator().invokeAndTerminate(args, TOOLCONTEXT_EXAMPLE_PROPERTIES, null);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     loadConventions();
@@ -84,8 +85,8 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
 
     loadTimeSeriesRating();
     // Note: historical time series need to be loaded before swap, swaption and FX portfolios can be created.
-    //loadHistoricalData();
-    //loadVolSurfaceData();
+    // loadHistoricalData();
+    // loadVolSurfaceData();
 
     loadFunctionConfigurations();
   }
@@ -102,8 +103,8 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
   }
 
   /**
-   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages formatted in this fashion and route them towards the
-   * progress indicators.
+   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages formatted in this
+   * fashion and route them towards the progress indicators.
    */
   private static final class Log {
 
@@ -125,11 +126,10 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
 
   }
 
-
   private void loadConventions() {
     final Log log = new Log("Creating convention data");
     try {
-      ConventionMaster master = getToolContext().getConventionMaster();
+      final ConventionMaster master = getToolContext().getConventionMaster();
       DefaultConventionMasterInitializer.INSTANCE.init(master);
       log.done();
     } catch (final RuntimeException t) {
@@ -170,7 +170,6 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
       log.fail(t);
     }
   }
-
 
   @SuppressWarnings("synthetic-access")
   private void loadCurveNodeHistoricalData() {
@@ -234,7 +233,8 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
           new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
       for (final SecurityDocument doc : readEquitySecurities()) {
         final Security security = doc.getSecurity();
-        loader.loadTimeSeries(ImmutableSet.of(security.getExternalIdBundle().getExternalId(ExternalSchemes.BLOOMBERG_TICKER)), "UNKNOWN", "PX_LAST", LocalDate.now().minusYears(1), LocalDate.now());
+        loader.loadTimeSeries(ImmutableSet.of(security.getExternalIdBundle().getExternalId(ExternalSchemes.BLOOMBERG_TICKER)), "UNKNOWN", "PX_LAST",
+            LocalDate.now().minusYears(1), LocalDate.now());
       }
       loader.loadTimeSeries(_historicalDataToLoad, "UNKNOWN", "PX_LAST", LocalDate.now().minusYears(1), LocalDate.now());
       _historicalDataToLoad.clear();

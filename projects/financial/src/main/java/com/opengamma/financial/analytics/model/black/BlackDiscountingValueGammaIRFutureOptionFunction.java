@@ -29,14 +29,12 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the value delta of interest rate future options using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the value delta of interest rate future options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingValueGammaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_DELTA}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_DELTA}.
    */
   public BlackDiscountingValueGammaIRFutureOptionFunction() {
     super(VALUE_DELTA);

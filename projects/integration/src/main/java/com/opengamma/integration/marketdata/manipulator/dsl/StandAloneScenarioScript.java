@@ -27,7 +27,7 @@ import groovy.lang.GroovyObjectSupport;
 import groovy.lang.Script;
 
 /**
- * TODO enforce ordering ordering: view, shocks, scenarios
+ * TODO enforce ordering ordering: view, shocks, scenarios.
  */
 @SuppressWarnings("unused") // it is used reflectively by Groovy
 public abstract class StandAloneScenarioScript extends Script {
@@ -149,7 +149,7 @@ public abstract class StandAloneScenarioScript extends Script {
 
   /**
    * Visible for testing.
-   * 
+   *
    * @return the market data delegate
    */
   /* package */ MarketDataDelegate getMarketDataDelegate() {

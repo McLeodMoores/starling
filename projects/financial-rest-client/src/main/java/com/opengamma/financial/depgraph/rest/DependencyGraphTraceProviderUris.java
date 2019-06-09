@@ -32,7 +32,7 @@ public final class DependencyGraphTraceProviderUris {
 
   /**
    * Builds URI for remote access to getTraceWithCalculationConfigurationName.
-   * 
+   *
    * @param baseUri
    *          the base uri
    * @param calculationConfigurationName
@@ -46,7 +46,7 @@ public final class DependencyGraphTraceProviderUris {
 
   /**
    * Builds URI for remote access to getTraceWithValuationTime.
-   * 
+   *
    * @param baseUri
    *          the base uri
    * @param valuationInstant
@@ -61,7 +61,7 @@ public final class DependencyGraphTraceProviderUris {
 
   /**
    * Builds URI for remote access to getTraceWithResolutionTime.
-   * 
+   *
    * @param baseUri
    *          the base uri
    * @param resolutionTime
@@ -76,7 +76,7 @@ public final class DependencyGraphTraceProviderUris {
 
   /**
    * Builds URI for remote access to getTraceWithDefaultProperties.
-   * 
+   *
    * @param baseUri
    *          the base uri
    * @param defaultProperties
@@ -91,7 +91,7 @@ public final class DependencyGraphTraceProviderUris {
 
   /**
    * Builds URI for remote access to getTraceWithMarketData.
-   * 
+   *
    * @param baseUri
    *          the base uri
    * @param marketData
@@ -125,8 +125,8 @@ public final class DependencyGraphTraceProviderUris {
   }
 
   /**
-   * Builds URI for remote access to getTraceWithValueRequirementByUniqueId
-   * 
+   * Builds URI for remote access to getTraceWithValueRequirementByUniqueId.
+   *
    * @param baseUri
    *          the base uri
    * @param valueName
@@ -144,8 +144,8 @@ public final class DependencyGraphTraceProviderUris {
   }
 
   /**
-   * Builds URI for remote access to getTraceWithValueRequirementByExternalId
-   * 
+   * Builds URI for remote access to getTraceWithValueRequirementByExternalId.
+   *
    * @param baseUri
    *          the base uri
    * @param valueName
@@ -164,7 +164,7 @@ public final class DependencyGraphTraceProviderUris {
 
   /**
    * The build call. This must be called after all of the other parameters have been added.
-   * 
+   *
    * @param baseUri
    *          the uri with all params added
    * @return the uri complete with build call

@@ -31,7 +31,7 @@ public class InterestRateFutureOptionBlackDeltaFunction extends InterestRateFutu
   private static final PresentValueBlackDeltaForSecurityCalculator CALCULATOR = PresentValueBlackDeltaForSecurityCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#DELTA}
+   * Sets the value requirement name to {@link ValueRequirementNames#DELTA}.
    */
   public InterestRateFutureOptionBlackDeltaFunction() {
     super(ValueRequirementNames.DELTA, false);

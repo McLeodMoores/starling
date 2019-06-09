@@ -8,13 +8,13 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node representing a ValueRequirement
+ * Node representing a ValueRequirement.
  */
 public class ValueRequirementNode implements TreeTableNode {
 
   private static final String NAME = "ValueRequirement";
   /**
-   * Value requirement itself
+   * Value requirement itself.
    */
   protected ValueRequirement _valueRequirement;
   @SuppressWarnings("unused")

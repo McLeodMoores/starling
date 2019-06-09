@@ -10,7 +10,7 @@ import org.threeten.bp.temporal.Temporal;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
-/** Returns last weekday in current month */
+/** Returns last weekday in current month. */
 public class LastWeekdayAdjuster implements TemporalAdjuster {
 
   @Override

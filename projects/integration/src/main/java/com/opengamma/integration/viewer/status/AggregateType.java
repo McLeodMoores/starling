@@ -21,8 +21,7 @@ import com.opengamma.util.ArgumentChecker;
  * Description of how the view columns should be displayed
  *
  * <p>
- * Create a type from any combination of valid chars.
- * ValidChars are 'T', 'S', 'V', 'C'
+ * Create a type from any combination of valid chars. ValidChars are 'T', 'S', 'V', 'C'
  *
  * <pre>
  * e.g AggregateType [TSVC]  will be interpreted as
@@ -31,16 +30,16 @@ import com.opengamma.util.ArgumentChecker;
  *  2nd column = Security Type
  *  3rd column = ValueRequirement
  *  4th column = Currency
- *  </pre>
+ * </pre>
  */
 public final class AggregateType {
 
   private static final List<Character> VALID_AGGRAGATION_CHARS = ImmutableList.of('T', 'S', 'V', 'C');
 
   /**
-   * Represents NO_AGGREGATION
+   * Represents NO_AGGREGATION.
    */
-  public static final AggregateType NO_AGGREGATION = new AggregateType(Collections.<ViewColumnType>emptyList());
+  public static final AggregateType NO_AGGREGATION = new AggregateType(Collections.<ViewColumnType> emptyList());
 
   private final List<ViewColumnType> _columnTypes;
 
@@ -94,7 +93,7 @@ public final class AggregateType {
   }
 
   /**
-   * Gets the list of view column types
+   * Gets the list of view column types.
    *
    * @return the aggregationTypeList
    */

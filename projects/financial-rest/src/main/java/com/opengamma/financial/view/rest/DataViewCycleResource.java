@@ -17,11 +17,11 @@ import com.opengamma.engine.view.cycle.ViewCycle;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for a {@link ViewCycle}
+ * RESTful resource for a {@link ViewCycle}.
  */
 public class DataViewCycleResource extends AbstractDataResource {
 
-  //CSOFF: just constants
+  // CSOFF: just constants
   public static final String PATH_NAME = "name";
   public static final String PATH_UNIQUE_ID = "id";
   public static final String PATH_VIEW_PROCESS_ID = "viewProcessId";
@@ -32,7 +32,7 @@ public class DataViewCycleResource extends AbstractDataResource {
   public static final String PATH_RESULT = "result";
   public static final String PATH_QUERY_CACHES = "queryCaches";
   public static final String PATH_QUERY_RESULTS = "queryResults";
-  //CSON: just constants
+  // CSON: just constants
 
   private final ViewCycle _cycle;
 

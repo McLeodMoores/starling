@@ -29,7 +29,8 @@ public class GridColumnsJsonWriter {
   private final ResultsFormatter _formatter;
 
   /**
-   * @param formatter For looking up the {@link DataType} for a column
+   * @param formatter
+   *          For looking up the {@link DataType} for a column
    */
   public GridColumnsJsonWriter(final ResultsFormatter formatter) {
     ArgumentChecker.notNull(formatter, "converters");
@@ -37,8 +38,10 @@ public class GridColumnsJsonWriter {
   }
 
   /**
-   * [{name: groupName, columns: [header: colHeader, description: colDescription]}, ...]
-   * @param groups Column groups to render to JSON.
+   * [{name: groupName, columns: [header: colHeader, description: colDescription]}, ...].
+   * 
+   * @param groups
+   *          Column groups to render to JSON.
    * @return groups as JSON
    */
   public String getJson(final List<GridColumnGroup> groups) {
@@ -48,9 +51,10 @@ public class GridColumnsJsonWriter {
   }
 
   /**
-   * Returns the underlying data structure used to create the JSON in {@link #getJson}. This allows the JSON to be
-   * embedded in another JSON object without
-   * @param groups Column groups to render to JSON.
+   * Returns the underlying data structure used to create the JSON in {@link #getJson}. This allows the JSON to be embedded in another JSON object without
+   * 
+   * @param groups
+   *          Column groups to render to JSON.
    * @return The groups as a data structure that can easily be converted to JSON
    */
   public List<Map<String, Object>> getJsonStructure(final List<GridColumnGroup> groups) {

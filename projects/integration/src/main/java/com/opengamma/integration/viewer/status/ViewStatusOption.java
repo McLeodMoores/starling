@@ -36,7 +36,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.EnumUtils;
 
 /**
- * View status command line options
+ * View status command line options.
  */
 public final class ViewStatusOption {
 
@@ -60,7 +60,7 @@ public final class ViewStatusOption {
   /** Historical market data flag */
   private static final String HISTORICAL_MARKET_DATA_OPT = "hd";
   /**
-   * Default output name
+   * Default output name.
    */
   public static final String DEFAULT_OUTPUT_NAME = "view-status";
   /**
@@ -155,7 +155,7 @@ public final class ViewStatusOption {
   }
 
   /**
-   * Creates a View status option instance from the options supplied from the command line
+   * Creates a View status option instance from the options supplied from the command line.
    *
    * @param commandLine
    *          the command line, not-null
@@ -244,7 +244,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the portfolioName.
-   * 
+   *
    * @return the portfolioName
    */
   public String getPortfolioName() {
@@ -253,7 +253,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the user.
-   * 
+   *
    * @return the user
    */
   public UserPrincipal getUser() {
@@ -262,7 +262,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the format.
-   * 
+   *
    * @return the format
    */
   public ResultFormat getFormat() {
@@ -271,7 +271,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the outputFile.
-   * 
+   *
    * @return the outputFile
    */
   public File getOutputFile() {
@@ -280,7 +280,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the aggregate type.
-   * 
+   *
    * @return the aggregation type
    */
   public AggregateType getAggregateType() {
@@ -289,7 +289,7 @@ public final class ViewStatusOption {
 
   /**
    * Gets the marketDataSpecification.
-   * 
+   *
    * @return the marketDataSpecification
    */
   public MarketDataSpecification getMarketDataSpecification() {

@@ -43,7 +43,7 @@ import com.opengamma.master.position.PositionMaster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Analytic service server
+ * Analytic service server.
  */
 public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
@@ -84,7 +84,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the user.
-   * 
+   *
    * @return the user
    */
   public UserPrincipal getUser() {
@@ -93,7 +93,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Sets the user.
-   * 
+   *
    * @param user
    *          the user
    */
@@ -103,7 +103,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the viewProcessor.
-   * 
+   *
    * @return the viewProcessor
    */
   public ViewProcessor getViewProcessor() {
@@ -112,7 +112,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the positionMaster.
-   * 
+   *
    * @return the positionMaster
    */
   public PositionMaster getPositionMaster() {
@@ -121,7 +121,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the portfolioMaster.
-   * 
+   *
    * @return the portfolioMaster
    */
   public PortfolioMaster getPortfolioMaster() {
@@ -130,7 +130,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the configSource.
-   * 
+   *
    * @return the configSource
    */
   public ConfigSource getConfigSource() {
@@ -155,7 +155,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the tradeProducer.
-   * 
+   *
    * @return the tradeProducer
    */
   public TradeProducer getTradeProducer() {
@@ -164,7 +164,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Sets the tradeProducer.
-   * 
+   *
    * @param tradeProducer
    *          the tradeProducer
    */
@@ -244,7 +244,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the analyticResultReceiver.
-   * 
+   *
    * @return the analyticResultReceiver
    */
   public AnalyticResultReceiver getAnalyticResultReceiver() {
@@ -253,7 +253,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Sets the analyticResultReceiver.
-   * 
+   *
    * @param analyticResultReceiver
    *          the analyticResultReceiver
    */
@@ -263,7 +263,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Gets the viewName.
-   * 
+   *
    * @return the viewName
    */
   public String getViewName() {
@@ -272,7 +272,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   /**
    * Sets the viewName.
-   * 
+   *
    * @param viewName
    *          the viewName
    */

@@ -156,11 +156,11 @@ import com.opengamma.util.tuple.Pair;
 
   @FudgeBuilderFor(FittedSmileDataPoints.class)
   public static final class FittedSmileDataPointsBuilder extends AbstractFudgeBuilder<FittedSmileDataPoints> {
-    /** Field name */
+    /** Field name. */
     public static final String TENOR_PAIR_FIELD_NAME = "Tenor pairs";
-    /** Field name */
+    /** Field name. */
     public static final String EXTERNAL_IDS_ARRAY_FIELD_NAME = "External ids";
-    /** Field name */
+    /** Field name. */
     public static final String RELATIVE_STRIKES_ARRAY_FIELD_NAME = "Relative strikes";
 
     @Override

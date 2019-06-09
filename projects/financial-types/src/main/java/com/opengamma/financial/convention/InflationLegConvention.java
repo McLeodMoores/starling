@@ -53,7 +53,7 @@ public class InflationLegConvention extends FinancialConvention {
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCount;
   /**
-   * Whether dates follow the end-of-month convention
+   * Whether dates follow the end-of-month convention.
    */
   @PropertyDefinition
   private boolean _isEOM;
@@ -210,7 +210,7 @@ public class InflationLegConvention extends FinancialConvention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether dates follow the end-of-month convention
+   * Gets whether dates follow the end-of-month convention.
    * @return the value of the property
    */
   public boolean isIsEOM() {
@@ -218,7 +218,7 @@ public class InflationLegConvention extends FinancialConvention {
   }
 
   /**
-   * Sets whether dates follow the end-of-month convention
+   * Sets whether dates follow the end-of-month convention.
    * @param isEOM  the new value of the property
    */
   public void setIsEOM(boolean isEOM) {

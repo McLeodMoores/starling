@@ -31,7 +31,7 @@ public class CommodityFutureOptionBjerksundStenslandValueGammaFunction extends C
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBjerksundStenslandValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

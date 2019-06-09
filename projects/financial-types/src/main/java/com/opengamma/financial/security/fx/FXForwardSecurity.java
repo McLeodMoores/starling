@@ -41,25 +41,25 @@ public class FXForwardSecurity extends FinancialSecurity {
   public static final String SECURITY_TYPE = "FX_FORWARD";
 
   /**
-   * The payer currency
+   * The payer currency.
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _payCurrency;
 
   /**
-   * The pay amount
+   * The pay amount.
    */
   @PropertyDefinition
   private double _payAmount;
 
   /**
-   * The receiver currency
+   * The receiver currency.
    */
   @PropertyDefinition(validate = "notNull")
   private Currency _receiveCurrency;
 
   /**
-   * The receive amount
+   * The receive amount.
    */
   @PropertyDefinition
   private double _receiveAmount;
@@ -75,7 +75,7 @@ public class FXForwardSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _regionId;
 
-  FXForwardSecurity() { //For builder
+  FXForwardSecurity() { // For builder
     super(SECURITY_TYPE);
   }
 
@@ -90,7 +90,7 @@ public class FXForwardSecurity extends FinancialSecurity {
     setRegionId(region);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFXForwardSecurity(this);
@@ -117,7 +117,7 @@ public class FXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the payer currency
+   * Gets the payer currency.
    * @return the value of the property, not null
    */
   public Currency getPayCurrency() {
@@ -125,7 +125,7 @@ public class FXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the payer currency
+   * Sets the payer currency.
    * @param payCurrency  the new value of the property, not null
    */
   public void setPayCurrency(Currency payCurrency) {
@@ -143,7 +143,7 @@ public class FXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the pay amount
+   * Gets the pay amount.
    * @return the value of the property
    */
   public double getPayAmount() {
@@ -151,7 +151,7 @@ public class FXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the pay amount
+   * Sets the pay amount.
    * @param payAmount  the new value of the property
    */
   public void setPayAmount(double payAmount) {
@@ -168,7 +168,7 @@ public class FXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the receiver currency
+   * Gets the receiver currency.
    * @return the value of the property, not null
    */
   public Currency getReceiveCurrency() {
@@ -176,7 +176,7 @@ public class FXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the receiver currency
+   * Sets the receiver currency.
    * @param receiveCurrency  the new value of the property, not null
    */
   public void setReceiveCurrency(Currency receiveCurrency) {
@@ -194,7 +194,7 @@ public class FXForwardSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the receive amount
+   * Gets the receive amount.
    * @return the value of the property
    */
   public double getReceiveAmount() {
@@ -202,7 +202,7 @@ public class FXForwardSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the receive amount
+   * Sets the receive amount.
    * @param receiveAmount  the new value of the property
    */
   public void setReceiveAmount(double receiveAmount) {

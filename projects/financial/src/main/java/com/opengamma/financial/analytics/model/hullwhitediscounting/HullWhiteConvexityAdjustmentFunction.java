@@ -32,17 +32,15 @@ import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 
 /**
- * Calculates the convexity adjustment of instruments that have been priced using
- * the Hull-White one factor method.
+ * Calculates the convexity adjustment of instruments that have been priced using the Hull-White one factor method.
  */
 public class HullWhiteConvexityAdjustmentFunction extends HullWhiteDiscountingFunction {
   /** The convexity adjustment calculator */
-  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR =
-      ConvexityAdjustmentHullWhiteCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR = ConvexityAdjustmentHullWhiteCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#CONVEXITY_ADJUSTMENT}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#CONVEXITY_ADJUSTMENT}.
    */
   public HullWhiteConvexityAdjustmentFunction() {
     super(CONVEXITY_ADJUSTMENT);

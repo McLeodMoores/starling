@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -24,8 +25,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class SyntheticCAConventions {
@@ -43,7 +43,8 @@ public class SyntheticCAConventions {
 
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
 
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("CADLIBORP3M"), simpleNameSecurityId("CDOR 3m")), "CAD LIBOR 3m", act360, following, Period.ofMonths(3), 2, false, ca);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("CADLIBORP3M"), simpleNameSecurityId("CDOR 3m")), "CAD LIBOR 3m", act360, following,
+        Period.ofMonths(3), 2, false, ca);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("CADLIBORP6M")), "CAD LIBOR 6m", act360, following, Period.ofMonths(6), 2, false, ca);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("CADLIBORP12M")), "CAD LIBOR 12m", act360, following, Period.ofMonths(12), 2, false, ca);
 

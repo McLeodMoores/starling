@@ -19,7 +19,7 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.money.Currency;
 
 /**
- * Fudge builder for SyntheticIdentifierCurveInstrumentProvider
+ * Fudge builder for SyntheticIdentifierCurveInstrumentProvider.
  */
 @FudgeBuilderFor(SyntheticIdentifierCurveInstrumentProvider.class)
 public class SyntheticIdentifierCurveInstrumentProviderFudgeBuilder implements FudgeBuilder<SyntheticIdentifierCurveInstrumentProvider> {

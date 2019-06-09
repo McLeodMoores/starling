@@ -73,9 +73,9 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(ListedEquityOptionFunction.class);
 
-  /** Property name for the discounting curve */
+  /** Property name for the discounting curve. */
   public static final String PROPERTY_DISCOUNTING_CURVE_NAME = "DiscountingCurveName";
-  /** Property name for the discounting curve configuration */
+  /** Property name for the discounting curve configuration. */
   public static final String PROPERTY_DISCOUNTING_CURVE_CONFIG = "DiscountingCurveConfig";
 
   private static final ComputationTargetType TARGET_TYPE = FinancialSecurityTypes.EQUITY_OPTION_SECURITY
@@ -405,7 +405,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
   }
 
   /**
-   * Instead of a volatility surface, we're just asking for the market_value of the option
+   * Instead of a volatility surface, we're just asking for the market_value of the option.
    *
    * @param target
    *          {@link FinancialSecurityTypes#EQUITY_OPTION_SECURITY} or {@link FinancialSecurityTypes#EQUITY_INDEX_FUTURE_OPTION_SECURITY} or
@@ -417,7 +417,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
   }
 
   /**
-   * Gets the value requirement names
+   * Gets the value requirement names.
    *
    * @return The value requirement names
    */

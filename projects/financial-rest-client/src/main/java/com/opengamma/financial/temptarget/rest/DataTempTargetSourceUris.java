@@ -13,12 +13,12 @@ import com.opengamma.financial.temptarget.TempTargetSource;
 import com.opengamma.id.UniqueId;
 
 /**
- * RESTful URIs for a {@link TempTargetSource}
+ * RESTful URIs for a {@link TempTargetSource}.
  */
 public class DataTempTargetSourceUris {
 
   public static URI uriGet(final URI baseUri, final UniqueId uid) {
     return UriBuilder.fromUri(baseUri).path("/target/{uid}").build(uid);
   }
-  
+
 }

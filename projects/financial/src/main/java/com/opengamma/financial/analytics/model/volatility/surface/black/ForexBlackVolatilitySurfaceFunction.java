@@ -40,15 +40,15 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
   }
 
   /**
-   * Spline interpolator function for Black volatility surfaces
+   * Spline interpolator function for Black volatility surfaces.
    */
   public static class Spline extends ForexBlackVolatilitySurfaceFunction {
 
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -72,7 +72,7 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
       final ValueProperties properties = createValueProperties().get();
       return BlackVolatilitySurfacePropertyUtils.addBlackSurfaceProperties(
           BlackVolatilitySurfacePropertyUtils.addSplineVolatilityInterpolatorProperties(properties, desiredValue).get(),
-            getInstrumentType(), desiredValue).get();
+          getInstrumentType(), desiredValue).get();
     }
 
   }
@@ -85,8 +85,8 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -122,8 +122,8 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
     @Override
     public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
         final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements =
-          BlackVolatilitySurfacePropertyUtils.ensureMixedLogNormalVolatilityInterpolatorProperties(desiredValue.getConstraints());
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureMixedLogNormalVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -164,8 +164,7 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
     }
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
     @SuppressWarnings("unchecked")
-    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface =
-        (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
+    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface = (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
     return BlackVolatilitySurfaceUtils.getDataFromStrangleRiskReversalQuote(forwardCurve, fxVolatilitySurface);
   }
 
@@ -183,10 +182,10 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
   protected ValueRequirement getVolatilityDataRequirement(final ComputationTarget target, final String surfaceName) {
     final ValueRequirement volDataRequirement = new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(),
         ValueProperties.builder()
-        .with(SURFACE, surfaceName)
-        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, getSurfaceQuoteType())
-        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, getSurfaceQuoteUnits()).get());
+            .with(SURFACE, surfaceName)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
+            .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, getSurfaceQuoteType())
+            .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, getSurfaceQuoteUnits()).get());
     return volDataRequirement;
   }
 

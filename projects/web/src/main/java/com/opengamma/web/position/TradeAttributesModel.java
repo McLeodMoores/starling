@@ -28,9 +28,10 @@ public class TradeAttributesModel {
   private final Map<UniqueId, Map<String, Map<String, String>>> _attrMap = Maps.newHashMap();
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param position the position, not null
+   * @param position
+   *          the position, not null
    */
   public TradeAttributesModel(final ManageablePosition position) {
     ArgumentChecker.notNull(position, "position");
@@ -63,7 +64,8 @@ public class TradeAttributesModel {
   /**
    * Gets the Deal attributes for a given trade uniqueId.
    *
-   * @param tradeId the tradeId
+   * @param tradeId
+   *          the tradeId
    * @return the deal attributes, not null
    */
   public Map<String, String> getDealAttributes(final UniqueId tradeId) {
@@ -78,7 +80,8 @@ public class TradeAttributesModel {
   /**
    * Gets the User attributes for a given trade uniqueId.
    *
-   * @param tradeId the trade uniqueId
+   * @param tradeId
+   *          the trade uniqueId
    * @return the user attributes, not null
    */
   public Map<String, String> getUserAttributes(final UniqueId tradeId) {

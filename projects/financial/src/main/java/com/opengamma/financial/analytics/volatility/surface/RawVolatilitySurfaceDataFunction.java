@@ -77,14 +77,14 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
   }
 
   /**
-   * Gets the target type for the surface
+   * Gets the target type for the surface.
    *
    * @return The target type
    */
   protected abstract ComputationTargetType getTargetType();
 
   /**
-   * Determines whether this function applies to the target
+   * Determines whether this function applies to the target.
    *
    * @param context
    *          The compilation context

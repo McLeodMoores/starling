@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.spring.defaults;
@@ -14,7 +14,7 @@ import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePr
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
 
 /**
- * 
+ *
  */
 public abstract class EquityInstrumentDefaultValues {
   private static final String SURFACE_INTERPOLATOR = "Spline";
@@ -101,7 +101,6 @@ public abstract class EquityInstrumentDefaultValues {
     FORWARD_CURVE_NAMES.put("JPM", DISCOUNTING_CURVE_NAME);
     FORWARD_CURVE_NAMES.put("SPY", DISCOUNTING_CURVE_NAME);
 
-
     VOLATILITY_SURFACE_NAMES.put("DJX", SURFACE_NAME);
     VOLATILITY_SURFACE_NAMES.put("SPX", SURFACE_NAME);
     VOLATILITY_SURFACE_NAMES.put("SPXQ", SURFACE_NAME);
@@ -172,7 +171,7 @@ public abstract class EquityInstrumentDefaultValues {
   }
 
   /**
-   * Builder interface
+   * Builder interface.
    */
   public interface Builder {
 

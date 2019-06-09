@@ -40,7 +40,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BondPerCountryDefaults extends DefaultPropertyFunction {
 
   /**
-   * Represents the type of bonds
+   * Represents the type of bonds.
    */
   public enum BondType {
     /**
@@ -58,7 +58,7 @@ public class BondPerCountryDefaults extends DefaultPropertyFunction {
   }
 
   private static final String[] VALUE_REQUIREMENTS = new String[] { PRESENT_VALUE, PV01, BUCKETED_PV01, YIELD_CURVE_NODE_SENSITIVITIES, BOND_DETAILS,
-      MODIFIED_DURATION, MACAULAY_DURATION, CONVEXITY, YTM };
+                MODIFIED_DURATION, MACAULAY_DURATION, CONVEXITY, YTM };
   private final String _countryCode;
   private final String _curveExposuresName;
   private final BondType _bondType;

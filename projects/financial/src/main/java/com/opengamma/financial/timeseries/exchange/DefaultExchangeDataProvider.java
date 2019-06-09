@@ -36,8 +36,8 @@ public final class DefaultExchangeDataProvider implements ExchangeDataProvider {
   }
 
   /**
-   * Get the exchange data provider
-   * 
+   * Get the exchange data provider.
+   *
    * @return the exchange data provider
    */
   public static ExchangeDataProvider getInstance() {

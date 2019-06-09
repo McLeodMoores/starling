@@ -65,9 +65,11 @@ public class Simulation {
   private String _baseScenarioName;
 
   /**
-   * Creates a new simulation with a calculation configuration name of "Default", valuation time of {@code Instant.now()}
-   * and resolver version correction of {@link VersionCorrection#LATEST}.
-   * @param name The simulation name
+   * Creates a new simulation with a calculation configuration name of "Default", valuation time of {@code Instant.now()} and resolver version correction of
+   * {@link VersionCorrection#LATEST}.
+   *
+   * @param name
+   *          The simulation name
    */
   public Simulation(final String name) {
     ArgumentChecker.notEmpty(name, "name");
@@ -75,11 +77,16 @@ public class Simulation {
   }
 
   /**
-   * Creates a new simulation, specifying the default values to use for its scenarios
-   * @param name The simulation name
-   * @param calcConfigNames The default calculation configuration name for scenarios
-   * @param valuationTime The default valuation time for scenarios
-   * @param resolverVersionCorrection The default resolver version correction for scenarios
+   * Creates a new simulation, specifying the default values to use for its scenarios.
+   *
+   * @param name
+   *          The simulation name
+   * @param calcConfigNames
+   *          The default calculation configuration name for scenarios
+   * @param valuationTime
+   *          The default valuation time for scenarios
+   * @param resolverVersionCorrection
+   *          The default resolver version correction for scenarios
    */
   public Simulation(final String name, final Instant valuationTime, final VersionCorrection resolverVersionCorrection, final String... calcConfigNames) {
     ArgumentChecker.notEmpty(name, "name");
@@ -106,8 +113,11 @@ public class Simulation {
 
   /**
    * Builds cycle execution options for each scenario in this simulation.
-   * @param baseOptions Base set of options
-   * @param allSelectors This simulation's selectors
+   *
+   * @param baseOptions
+   *          Base set of options
+   * @param allSelectors
+   *          This simulation's selectors
    * @return Execution options for each scenario in this simulation
    */
   /* package */ List<ViewCycleExecutionOptions> cycleExecutionOptions(final ViewCycleExecutionOptions baseOptions,
@@ -136,12 +146,12 @@ public class Simulation {
   }
 
   /**
-   * Returns the scenario with the given name. If no scenario exists with the specified name it is created and
-   * initialized with default the simulation's default values for calculation configuration, valuation time and
-   * resolver version correction.
-   * @param name The scenario name
-   * @return The scenario.
-   * TODO check the name isn't the base scenario name and throw IAE
+   * Returns the scenario with the given name. If no scenario exists with the specified name it is created and initialized with default the simulation's default
+   * values for calculation configuration, valuation time and resolver version correction.
+   *
+   * @param name
+   *          The scenario name
+   * @return The scenario. TODO check the name isn't the base scenario name and throw IAE
    */
   public Scenario scenario(final String name) {
     ArgumentChecker.notEmpty(name, "name");
@@ -159,10 +169,14 @@ public class Simulation {
 
   /**
    * Creates a base scenario with the given name. A base scenario has no transformations defined.
-   * @param name The name of the base scenario
+   *
+   * @param name
+   *          The name of the base scenario
    * @return This simulation
-   * @throws IllegalStateException If the base scenario name has already been set
-   * @throws IllegalArgumentException If there is already a non-base scenario with the specified name
+   * @throws IllegalStateException
+   *           If the base scenario name has already been set
+   * @throws IllegalArgumentException
+   *           If there is already a non-base scenario with the specified name
    */
   public Simulation baseScenarioName(final String name) {
     ArgumentChecker.notEmpty(name, "name");
@@ -181,9 +195,12 @@ public class Simulation {
 
   /**
    * Sets the calculation configuration name to which the scenarios will apply.
-   * @param calcConfigNames The calculation configuration name to which the scenarios will apply
+   *
+   * @param calcConfigNames
+   *          The calculation configuration name to which the scenarios will apply
    * @return This simulation
-   * @throws IllegalStateException If the calculation configuration names have already been set
+   * @throws IllegalStateException
+   *           If the calculation configuration names have already been set
    */
   public Simulation calculationConfigurations(final String... calcConfigNames) {
     ArgumentChecker.notEmpty(calcConfigNames, "calcConfigNames");
@@ -195,8 +212,10 @@ public class Simulation {
   }
 
   /**
-   * Sets the {@link VersionCorrection} used when resolving positions and portfolios
-   * @param versionCorrection The version/correction used when resolving positions and portfolios
+   * Sets the {@link VersionCorrection} used when resolving positions and portfolios.
+   *
+   * @param versionCorrection
+   *          The version/correction used when resolving positions and portfolios
    * @return This simulation
    */
   public Simulation resolverVersionCorrection(final VersionCorrection versionCorrection) {
@@ -209,10 +228,13 @@ public class Simulation {
   }
 
   /**
-   * Sets the valuation time used in the calculations
-   * @param valuationTime The valuation time used in the calculations
+   * Sets the valuation time used in the calculations.
+   *
+   * @param valuationTime
+   *          The valuation time used in the calculations
    * @return This simulation
-   * @throws IllegalStateException If the valuation time has already been set
+   * @throws IllegalStateException
+   *           If the valuation time has already been set
    */
   public Simulation valuationTime(final Instant valuationTime) {
     ArgumentChecker.notNull(valuationTime, "valuationTime");
@@ -224,10 +246,13 @@ public class Simulation {
   }
 
   /**
-   * Sets the valuation time used in the calculations
-   * @param valuationTime The valuation time used in the calculations
+   * Sets the valuation time used in the calculations.
+   *
+   * @param valuationTime
+   *          The valuation time used in the calculations
    * @return This simulation
-   * @throws IllegalStateException If the valuation time has already been set
+   * @throws IllegalStateException
+   *           If the valuation time has already been set
    */
   public Simulation valuationTime(final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(valuationTime, "valuationTime");
@@ -236,11 +261,17 @@ public class Simulation {
 
   /**
    * Executes this simulation on a running server.
-   * @param viewDefId The ID of the view definition to use
-   * @param marketDataSpecs The market data to use when running the view
-   * @param batchMode Whether to run the simulation using batch mode
-   * @param listener Listener that is notified as the simulation runs
-   * @param viewProcessor View process that will be used to execute the simulation
+   *
+   * @param viewDefId
+   *          The ID of the view definition to use
+   * @param marketDataSpecs
+   *          The market data to use when running the view
+   * @param batchMode
+   *          Whether to run the simulation using batch mode
+   * @param listener
+   *          Listener that is notified as the simulation runs
+   * @param viewProcessor
+   *          View process that will be used to execute the simulation
    */
   public void run(final UniqueId viewDefId,
       final List<MarketDataSpecification> marketDataSpecs,
@@ -250,8 +281,7 @@ public class Simulation {
     final ViewClient viewClient = viewProcessor.createViewClient(UserPrincipal.getTestUser());
     try {
       final Set<DistinctMarketDataSelector> allSelectors = allSelectors();
-      final ViewCycleExecutionOptions baseOptions =
-          ViewCycleExecutionOptions
+      final ViewCycleExecutionOptions baseOptions = ViewCycleExecutionOptions
           .builder()
           .setMarketDataSpecifications(marketDataSpecs)
           .setMarketDataSelector(CompositeMarketDataSelector.of(allSelectors))

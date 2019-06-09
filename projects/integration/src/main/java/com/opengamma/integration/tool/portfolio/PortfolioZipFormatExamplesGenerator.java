@@ -48,7 +48,7 @@ import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Tool to generate a template for doing field mapping tasks
+ * Tool to generate a template for doing field mapping tasks.
  */
 @Scriptable
 public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContext> {

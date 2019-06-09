@@ -158,7 +158,7 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     }
 
     /**
-     * Sets the maximum number of iterations
+     * Sets the maximum number of iterations.
      *
      * @param maxIterations
      *          The maximum number of iterations
@@ -181,7 +181,7 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     }
 
     /**
-     * Adds default values for absolute tolerance, relative tolerance and the maximum number of iterations for all curve building functions
+     * Adds default values for absolute tolerance, relative tolerance and the maximum number of iterations for all curve building functions.
      *
      * @param functions
      *          The list of function configurations.
@@ -320,14 +320,14 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Function repository configuration source for curve parameter functions based on the items in a {@link ConfigMaster}
+   * Function repository configuration source for curve parameter functions based on the items in a {@link ConfigMaster}.
    */
   public static class ParameterProviders extends VersionedFunctionConfigurationBean {
     /** The configuration master */
     private ConfigMaster _configMaster;
 
     /**
-     * Sets the config master
+     * Sets the config master.
      *
      * @param configMaster
      *          The config master, not null

@@ -11,7 +11,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
 /**
- * Renderer for ViewEntry
+ * Renderer for ViewEntry.
  */
 public class ViewListCellRenderer extends DefaultListCellRenderer {
   private static final long serialVersionUID = 1L;

@@ -28,7 +28,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Utility methods for handling FX
+ * Utility methods for handling FX.
  */
 public class FXUtils {
   private static final DecimalFormat STRIKE_FORMATTER = new DecimalFormat("###.#####");
@@ -81,7 +81,7 @@ public class FXUtils {
 
   /**
    * Indicator that the currencies are in the standard base/quote order.
-   * 
+   *
    * @param currency1
    *          The first currency.
    * @param currency2
@@ -100,7 +100,7 @@ public class FXUtils {
 
   /**
    * Return in the standard base/quote currency from two currencies.
-   * 
+   *
    * @param currency1
    *          The first currency.
    * @param currency2
@@ -116,7 +116,7 @@ public class FXUtils {
 
   /**
    * Return in the currency which is not the base currency from two currencies.
-   * 
+   *
    * @param currency1
    *          The first currency.
    * @param currency2

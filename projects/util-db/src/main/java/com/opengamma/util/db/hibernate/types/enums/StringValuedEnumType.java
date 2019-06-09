@@ -23,10 +23,11 @@ import org.hibernate.usertype.ParameterizedType;
 /**
  * An enum type for Hibernate.
  *
- * @param <T> the enum type
+ * @param <T>
+ *          the enum type
  */
-public class StringValuedEnumType<T extends Enum<T> & StringValuedEnum>  // CSIGNORE
-implements EnhancedUserType, ParameterizedType {
+public class StringValuedEnumType<T extends Enum<T> & StringValuedEnum> // CSIGNORE
+    implements EnhancedUserType, ParameterizedType {
 
   /**
    * Enum class for this particular user type.
@@ -38,7 +39,7 @@ implements EnhancedUserType, ParameterizedType {
    */
   private String _defaultValue;
 
-  /** Creates a new instance of ActiveStateEnumType */
+  /** Creates a new instance of ActiveStateEnumType. */
   public StringValuedEnumType() {
   }
 
@@ -47,8 +48,8 @@ implements EnhancedUserType, ParameterizedType {
   public void setParameterValues(final Properties parameters) {
     final String enumClassName = parameters.getProperty("enum");
     try {
-      _enumClass = (Class<T>) Class.forName(enumClassName).asSubclass(Enum.class).
-          asSubclass(StringValuedEnum.class); //Validates the class but does not eliminate the cast
+      _enumClass = (Class<T>) Class.forName(enumClassName).asSubclass(Enum.class).asSubclass(StringValuedEnum.class); // Validates the class but does not
+                                                                                                                      // eliminate the cast
     } catch (final ClassNotFoundException cnfe) {
       throw new HibernateException("Enum class not found", cnfe);
     }
@@ -65,6 +66,7 @@ implements EnhancedUserType, ParameterizedType {
 
   /**
    * The class returned by <tt>nullSafeGet()</tt>.
+   * 
    * @return Class
    */
   @Override
@@ -74,7 +76,7 @@ implements EnhancedUserType, ParameterizedType {
 
   @Override
   public int[] sqlTypes() {
-    return new int[] {Types.VARCHAR };
+    return new int[] { Types.VARCHAR };
   }
 
   @Override
@@ -103,7 +105,7 @@ implements EnhancedUserType, ParameterizedType {
     String value = rs.getString(names[0]);
     if (value == null) {
       value = getDefaultValue();
-      if (value == null) { //no default value
+      if (value == null) { // no default value
         return null;
       }
     }

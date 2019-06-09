@@ -293,7 +293,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   abstract T createViewport(ViewportDefinition viewportDefinition, String callbackId, String structureCallbackId, ResultsCache cache);
 
   /**
-   * Updates an existing viewport on a dependency graph grid
+   * Updates an existing viewport on a dependency graph grid.
    *
    * @param graphId
    *          the ID of the dependency graph

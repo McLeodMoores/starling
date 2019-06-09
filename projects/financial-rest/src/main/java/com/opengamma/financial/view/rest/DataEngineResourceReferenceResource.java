@@ -18,7 +18,7 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for a {@link EngineResourceReference}
+ * RESTful resource for a {@link EngineResourceReference}.
  *
  * @param <T>
  *          the type of resource

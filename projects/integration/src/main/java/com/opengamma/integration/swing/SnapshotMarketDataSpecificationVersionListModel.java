@@ -30,7 +30,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * List/ComboBox model for historical market data specifications
+ * List/ComboBox model for historical market data specifications.
  */
 public class SnapshotMarketDataSpecificationVersionListModel extends AbstractListModel<String> implements ComboBoxModel<String> {
   private static final long serialVersionUID = 1L;

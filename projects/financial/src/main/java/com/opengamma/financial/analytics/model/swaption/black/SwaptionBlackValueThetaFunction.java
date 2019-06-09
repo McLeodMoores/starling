@@ -20,6 +20,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Calculates value theta of swaptions using the Black method.
+ * 
  * @deprecated The parent class of this function is deprecated
  */
 @Deprecated
@@ -28,7 +29,7 @@ public class SwaptionBlackValueThetaFunction extends SwaptionBlackFunction {
   private static final SwaptionBlackValueThetaCalculator CALCULATOR = SwaptionBlackValueThetaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}.
    */
   public SwaptionBlackValueThetaFunction() {
     super(ValueRequirementNames.VALUE_THETA);

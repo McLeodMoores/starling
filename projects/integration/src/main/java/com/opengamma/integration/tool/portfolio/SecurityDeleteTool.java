@@ -23,7 +23,7 @@ import com.opengamma.master.security.impl.SecuritySearchIterator;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
 @Scriptable
 public class SecurityDeleteTool extends AbstractTool<ToolContext> {
@@ -44,17 +44,18 @@ public class SecurityDeleteTool extends AbstractTool<ToolContext> {
   /** Verbose option flag */
   private static final String VERBOSE_OPT = "v";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new SecurityDeleteTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Deletes securities from the specified sec master.
    */
@@ -109,11 +110,11 @@ public class SecurityDeleteTool extends AbstractTool<ToolContext> {
         SECURITY_IDS_OPT, "securityid", true, "Security IDs to match");
     options.addOption(securityIdsOption);
 
-//    OptionGroup group = new OptionGroup();
-//    group.addOption(securityIdsOption);
-//    group.addOption(securityNamesOption);
-//    group.setRequired(true);
-//    options.addOptionGroup(group);
+    // OptionGroup group = new OptionGroup();
+    // group.addOption(securityIdsOption);
+    // group.addOption(securityNamesOption);
+    // group.setRequired(true);
+    // options.addOptionGroup(group);
 
     final Option externalIdSchemesOption = new Option(
         EXTERNAL_ID_SCHEMES_OPT, "extscheme", true,

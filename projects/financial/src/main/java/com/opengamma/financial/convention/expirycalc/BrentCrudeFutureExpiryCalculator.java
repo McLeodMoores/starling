@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 @ExpiryCalculator
 public final class BrentCrudeFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  /** Name of the calculator */
+  /** Name of the calculator. */
   public static final String NAME = "BrentCrudeFutureExpiryCalculator";
   /** Singleton. */
   private static final BrentCrudeFutureExpiryCalculator INSTANCE = new BrentCrudeFutureExpiryCalculator();

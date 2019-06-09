@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Joda bean containing the ValueRequirement and Column Set/Calc Config for a specific cell
+ * Joda bean containing the ValueRequirement and Column Set/Calc Config for a specific cell.
  */
 @BeanDefinition
 public final class ValueRequirementTargetForCell implements ImmutableBean {
@@ -46,8 +46,10 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
   /**
    * Constructor for the definition.
    *
-   * @param columnSet the name of the Column Set/Calc Config
-   * @param valueRequirement ValueRequirement for cell
+   * @param columnSet
+   *          the name of the Column Set/Calc Config
+   * @param valueRequirement
+   *          ValueRequirement for cell
    */
   @ImmutableConstructor
   public ValueRequirementTargetForCell(

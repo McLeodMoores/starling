@@ -32,7 +32,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.util.redis.RedisConnector;
 
 /**
- * Component factory to setup a Redis Hts snapshotter job detail for quartz scheduler
+ * Component factory to setup a Redis Hts snapshotter job detail for quartz scheduler.
  */
 @BeanDefinition
 public class RedisHtsSnapshotJobDetailComponentFactory extends AbstractComponentFactory {

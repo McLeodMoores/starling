@@ -16,7 +16,7 @@ import org.apache.commons.cli.PosixParser;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Server copier command line options
+ * Server copier command line options.
  */
 public class CommandLineOption {
 

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Type conversions and generic type manipulations
+ * Type conversions and generic type manipulations.
  *
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
@@ -22,7 +22,7 @@ import java.util.Map;
 public class Types {
   /**
    * Is the genericType of a certain class?
-   * 
+   *
    * @param clazz
    *          the class
    * @param pType
@@ -35,7 +35,7 @@ public class Types {
 
   /**
    * Gets the index-th type argument.
-   * 
+   *
    * @param pType
    *          the parameterized type
    * @param index
@@ -114,7 +114,7 @@ public class Types {
   }
 
   /**
-   * See if the two methods are compatible, that is they have the same relative signature
+   * See if the two methods are compatible, that is they have the same relative signature.
    *
    * @param method
    *          the method
@@ -242,7 +242,7 @@ public class Types {
   }
 
   /**
-   * Returns the type argument from a parameterized type
+   * Returns the type argument from a parameterized type.
    *
    * @param genericType
    *          the type

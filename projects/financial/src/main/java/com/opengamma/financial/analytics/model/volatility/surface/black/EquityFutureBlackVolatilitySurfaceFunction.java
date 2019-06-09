@@ -38,7 +38,7 @@ public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVo
       ExternalSchemes.ACTIVFEED_TICKER);
 
   /**
-   * Spline interpolator function for Black volatility surfaces
+   * Spline interpolator function for Black volatility surfaces.
    */
   public static class Spline extends EquityFutureBlackVolatilitySurfaceFunction {
 

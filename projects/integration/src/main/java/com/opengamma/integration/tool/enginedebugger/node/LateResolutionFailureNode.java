@@ -11,7 +11,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Node representing a late failure in resolution during graph building
+ * Node representing a late failure in resolution during graph building.
  */
 public class LateResolutionFailureNode extends AbstractFailureWithRequirementsNode {
 

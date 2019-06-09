@@ -67,7 +67,7 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for cross-currency swap analytics
+ * Base class for cross-currency swap analytics.
  *
  * @deprecated Use functions descending from {@link DiscountingFunction}
  */

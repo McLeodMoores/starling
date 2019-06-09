@@ -17,7 +17,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * A dummy portfolio writer, which pretty-prints information instead of persisting
+ * A dummy portfolio writer, which pretty-prints information instead of persisting.
  */
 public class PrettyPrintingPositionWriter implements PositionWriter {
 

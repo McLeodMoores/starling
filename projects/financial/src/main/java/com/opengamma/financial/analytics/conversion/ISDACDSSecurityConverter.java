@@ -16,7 +16,7 @@ import com.opengamma.financial.security.cds.CDSSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Build the ISDA definition for a CDS security object
+ * Build the ISDA definition for a CDS security object.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see CDSSecurity

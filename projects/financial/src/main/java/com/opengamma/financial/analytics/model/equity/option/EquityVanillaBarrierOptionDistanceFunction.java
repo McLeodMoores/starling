@@ -16,9 +16,8 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.option.EquityBarrierOptionSecurity;
 
-
 /**
- * Function to compute barrier distance for equity options
+ * Function to compute barrier distance for equity options.
  *
  * Defined as absolute difference (optionally expressed as a percentage) between barrier level and market price
  *

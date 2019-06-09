@@ -39,23 +39,20 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Block Curve Sensitivity for Equity Total Return Swap
+ * Block Curve Sensitivity for Equity Total Return Swap.
  */
 public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunction {
 
   /** The curve sensitivity calculator */
-  private static final InstrumentDerivativeVisitor<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> PVCSEDC =
-      PresentValueCurveSensitivityEquityDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> PVCSEDC = PresentValueCurveSensitivityEquityDiscountingCalculator
+      .getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<EquityTrsDataBundle> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSEDC);
+  private static final ParameterSensitivityParameterCalculator<EquityTrsDataBundle> PSC = new ParameterSensitivityParameterCalculator<>(PVCSEDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<EquityTrsDataBundle> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<EquityTrsDataBundle> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public EquityTotalReturnSwapBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);

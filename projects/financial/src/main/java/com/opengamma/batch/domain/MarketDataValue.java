@@ -38,7 +38,7 @@ public class MarketDataValue extends DirectBean implements ObjectIdentifiable {
   private long _marketDataId;
 
   /**
-   * This value is not stored in db, but it is rather paired with _computationTargetId
+   * This value is not stored in db, but it is rather paired with _computationTargetId.
    */
   @PropertyDefinition
   private ComputationTargetSpecification _computationTargetSpecification;
@@ -137,7 +137,7 @@ public class MarketDataValue extends DirectBean implements ObjectIdentifiable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets this value is not stored in db, but it is rather paired with _computationTargetId
+   * Gets this value is not stored in db, but it is rather paired with _computationTargetId.
    * @return the value of the property
    */
   public ComputationTargetSpecification getComputationTargetSpecification() {
@@ -145,7 +145,7 @@ public class MarketDataValue extends DirectBean implements ObjectIdentifiable {
   }
 
   /**
-   * Sets this value is not stored in db, but it is rather paired with _computationTargetId
+   * Sets this value is not stored in db, but it is rather paired with _computationTargetId.
    * @param computationTargetSpecification  the new value of the property
    */
   public void setComputationTargetSpecification(ComputationTargetSpecification computationTargetSpecification) {

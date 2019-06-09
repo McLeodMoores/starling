@@ -38,8 +38,8 @@ public final class CurveUtils {
   }
 
   /**
-   * Extracts the currency from a discounting curve type configuration or throws an exception if the reference cannot be parsed as a currency
-   * 
+   * Extracts the currency from a discounting curve type configuration or throws an exception if the reference cannot be parsed as a currency.
+   *
    * @param configuration
    *          the configuration, not null
    * @return the currency
@@ -58,7 +58,7 @@ public final class CurveUtils {
    * Creates the {@link IborIndex} from an ibor curve type configuration by trying first to use a {@link com.opengamma.financial.security.index.IborIndex} from
    * the security source (to preserve the base OpenGamma behaviour). If the security is not found, a search for an {@link IborIndexConvention} in the convention
    * source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an exception.
-   * 
+   *
    * @param configuration
    *          the configuration, not null
    * @param securitySource
@@ -99,7 +99,7 @@ public final class CurveUtils {
    * {@link com.opengamma.financial.security.index.OvernightIndex} from the security source (to preserve the base OpenGamma behaviour). If the security is not
    * found, a search for an {@link OvernightIndexConvention} in the convention source is made using the convention id from the configuration. If neither a
    * security nor convention can be found, throws an exception.
-   * 
+   *
    * @param configuration
    *          the configuration, not null
    * @param securitySource

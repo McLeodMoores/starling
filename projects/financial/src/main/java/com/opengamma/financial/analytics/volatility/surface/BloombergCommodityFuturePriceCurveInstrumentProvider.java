@@ -27,7 +27,7 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
 
   /**
    * Gets the expiryRules.
-   * 
+   *
    * @return the expiryRules
    */
   public static Map<String, ExchangeTradedInstrumentExpiryCalculator> getExpiryRules() {
@@ -73,8 +73,8 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
   }
 
   /**
-   * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme
-   * 
+   * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme.
+   *
    * @param futurePrefix
    *          Two character string representing future type. e.g. S , AA etc.
    * @param postfix
@@ -105,7 +105,7 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
    * <p>
    * e.g. S U3 Comdty
    * <p>
-   * 
+   *
    * @param futureOptionNumber
    *          n'th future following curve date, not null
    * @param curveDate

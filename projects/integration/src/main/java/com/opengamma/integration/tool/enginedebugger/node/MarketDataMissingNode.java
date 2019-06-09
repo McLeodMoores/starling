@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node representing missing market data during graph building
+ * Node representing missing market data during graph building.
  */
 public class MarketDataMissingNode extends ValueRequirementNode {
 

@@ -29,7 +29,7 @@ import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 public final class StdVanillaCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<StandardVanillaCDSSecurity, StandardVanillaCDSSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final StdVanillaCDSSecurityBeanOperation INSTANCE = new StdVanillaCDSSecurityBeanOperation();
 

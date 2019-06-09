@@ -11,14 +11,14 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Node representing a failure of getAdditionalRequirements() during graph-building
+ * Node representing a failure of getAdditionalRequirements() during graph-building.
  */
 public class GetAdditionalRequirementsFailedNode extends AbstractFailureWithRequirementsNode {
 
   private static final String NAME = "GetAdditionalRequirementsFailed";
 
   public GetAdditionalRequirementsFailedNode(final Object parent, final ValueRequirement valueRequirement, final String function,
-                                             final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> requirements) {
+      final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> requirements) {
     super(parent, valueRequirement, function, desiredOutput, requirements, "Requirements");
   }
 

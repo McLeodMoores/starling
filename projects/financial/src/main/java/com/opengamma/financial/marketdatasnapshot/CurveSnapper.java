@@ -16,7 +16,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.engine.view.ViewComputationResultModel;
 
 /**
- * Snapshotter that captures {@code ValueRequirementNames.CURVE_MARKET_DATA}
+ * Snapshotter that captures {@code ValueRequirementNames.CURVE_MARKET_DATA}.
  */
 public class CurveSnapper extends
     StructuredSnapper<CurveKey, SnapshotDataBundle, CurveSnapshot> {

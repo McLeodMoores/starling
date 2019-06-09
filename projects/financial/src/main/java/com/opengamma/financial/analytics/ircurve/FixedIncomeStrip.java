@@ -21,7 +21,7 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * A fixed income strip. <b>Note that the futures are assumed to be quarterly.</b>
- * 
+ *
  * @deprecated This method of defining yield curve nodes should not be used. Use {@link CurveNodes} instead.
  */
 @Deprecated
@@ -112,8 +112,8 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   }
 
   /**
-   * Creates a zero deposit strip
-   * 
+   * Creates a zero deposit strip.
+   *
    * @param instrumentType
    *          The instrument type
    * @param curveNodePointTime
@@ -150,7 +150,7 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
 
   /**
    * Creates a basis swap strip where the two legs are on the same type of index (e.g. a USD 3M Fed Funds / 6M Libor swap)
-   * 
+   *
    * @param instrumentType
    *          The instrument type
    * @param curveNodePointTime
@@ -191,7 +191,7 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
 
   /**
    * Creates a basis swap strip where the two legs are on the same type of index (e.g. a USD 3M Fed Funds / 6M Libor swap)
-   * 
+   *
    * @param instrumentType
    *          The instrument type
    * @param curveNodePointTime
@@ -284,7 +284,7 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   }
 
   /**
-   * Get the periods per year of a periodic zero deposit security
+   * Get the periods per year of a periodic zero deposit security.
    *
    * @return the number of periods per year
    * @throws IllegalStateException
@@ -309,7 +309,7 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   /**
    * Calculates the tenor of a strip. For all instruments except futures, this is the same as that entered on construction. For futures, this is the start tenor
    * + (3 * future number)
-   * 
+   *
    * @return The effective tenor of the strip
    */
   public Tenor getEffectiveTenor() {
@@ -318,8 +318,8 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   }
 
   /**
-   * Gets the pay tenor for a basis swap
-   * 
+   * Gets the pay tenor for a basis swap.
+   *
    * @return The pay tenor
    */
   public Tenor getPayTenor() {
@@ -330,8 +330,8 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   }
 
   /**
-   * Gets the receive tenor for a basis swap
-   * 
+   * Gets the receive tenor for a basis swap.
+   *
    * @return The receive tenor
    */
   public Tenor getReceiveTenor() {
@@ -343,7 +343,7 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
 
   /**
    * Gets the reset tenor.
-   * 
+   *
    * @return The reset tenor
    */
   public Tenor getResetTenor() {
@@ -351,8 +351,8 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   }
 
   /**
-   * Gets the pay index type for a basis swap
-   * 
+   * Gets the pay index type for a basis swap.
+   *
    * @return The pay index type
    */
   public IndexType getPayIndexType() {
@@ -363,8 +363,8 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
   }
 
   /**
-   * Gets the receive tenor for a basis swap
-   * 
+   * Gets the receive tenor for a basis swap.
+   *
    * @return The receive tenor
    */
   public IndexType getReceiveIndexType() {
@@ -376,7 +376,7 @@ public class FixedIncomeStrip implements Serializable, Comparable<FixedIncomeStr
 
   /**
    * Gets the index type.
-   * 
+   *
    * @return The receive tenor
    */
   public IndexType getIndexType() {

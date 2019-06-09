@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2019 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.loader.config;
 

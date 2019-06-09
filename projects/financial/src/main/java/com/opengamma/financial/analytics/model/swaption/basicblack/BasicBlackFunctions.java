@@ -18,6 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Function repository configuration source for the functions contained in this package.
+ * 
  * @deprecated This class adds deprecated functions to the repository.
  */
 @Deprecated
@@ -46,7 +47,9 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
       /**
        * Sets the curve calculation configuration.
-       * @param curveConfig The curve calculation configuration
+       * 
+       * @param curveConfig
+       *          The curve calculation configuration
        */
       public void setCurveConfig(final String curveConfig) {
         _curveConfig = curveConfig;
@@ -54,6 +57,7 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
       /**
        * Gets the curve calculation configuration.
+       * 
        * @return The curve calculation configuration.
        */
       public String getCurveConfig() {
@@ -73,8 +77,10 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
     private int _numberOfDays = 1;
 
     /**
-     * Sets the per-currency defaults
-     * @param perCurrencyInfo The per-currency defaults
+     * Sets the per-currency defaults.
+     * 
+     * @param perCurrencyInfo
+     *          The per-currency defaults
      */
     public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
       _perCurrencyInfo.clear();
@@ -83,6 +89,7 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the per-currency defaults.
+     * 
      * @return The per-currency defaults
      */
     public Map<String, CurrencyInfo> getPerCurrencyInfo() {
@@ -91,8 +98,11 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Adds an entry to the per-currency defaults.
-     * @param currency The currency
-     * @param info The defaults for this currency
+     * 
+     * @param currency
+     *          The currency
+     * @param info
+     *          The defaults for this currency
      */
     public void setCurrencyInfo(final String currency, final CurrencyInfo info) {
       _perCurrencyInfo.put(currency, info);
@@ -100,7 +110,9 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the defaults for a currency.
-     * @param currency The currency
+     * 
+     * @param currency
+     *          The currency
      * @return The defaults for this currency
      */
     public CurrencyInfo getCurrencyInfo(final String currency) {
@@ -109,7 +121,9 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Sets the number of days to use in horizon calculations.
-     * @param numberOfDays The number of days
+     * 
+     * @param numberOfDays
+     *          The number of days
      */
     public void setNumberOfDays(final int numberOfDays) {
       _numberOfDays = numberOfDays;
@@ -117,6 +131,7 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Gets the number of days to use in horizon calculations.
+     * 
      * @return The number of days
      */
     public int getNumberOfDays() {
@@ -125,7 +140,9 @@ public class BasicBlackFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Adds default functions for basic Black calculations to the function repository.
-     * @param functions The functions
+     * 
+     * @param functions
+     *          The functions
      */
     protected void addSwaptionBasicBlackDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[getPerCurrencyInfo().size() * 2];

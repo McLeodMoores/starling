@@ -31,7 +31,7 @@ public class ListedEquityOptionBlackValueGammaFunction extends ListedEquityOptio
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

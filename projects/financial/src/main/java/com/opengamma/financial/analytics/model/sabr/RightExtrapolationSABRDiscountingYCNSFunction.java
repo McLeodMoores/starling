@@ -61,7 +61,7 @@ public class RightExtrapolationSABRDiscountingYCNSFunction extends RightExtrapol
   private static final Logger LOGGER = LoggerFactory.getLogger(RightExtrapolationSABRDiscountingYCNSFunction.class);
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public RightExtrapolationSABRDiscountingYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);

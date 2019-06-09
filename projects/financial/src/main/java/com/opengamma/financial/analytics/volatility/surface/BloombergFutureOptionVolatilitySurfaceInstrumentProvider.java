@@ -15,7 +15,7 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides ExternalIds for future options used to build a volatility surface
+ * Provides ExternalIds for future options used to build a volatility surface.
  */
 public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider implements CallPutSurfaceInstrumentProvider<Number, Double> {
   /** The future option prefix */

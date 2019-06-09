@@ -27,7 +27,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Produces Greeks for American call option by using Roll-Geske-Whaley model
+ * Produces Greeks for American call option by using Roll-Geske-Whaley model.
  */
 public class ListedEquityOptionRollGeskeWhaleyGreeksFunction extends ListedEquityOptionRollGeskeWhaleyFunction {
 

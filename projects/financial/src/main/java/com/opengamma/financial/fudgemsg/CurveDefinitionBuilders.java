@@ -26,7 +26,7 @@ import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
 import com.opengamma.id.UniqueId;
 
 /**
- * Contains builders for all classes that extend {@link CurveDefinition}
+ * Contains builders for all classes that extend {@link CurveDefinition}.
  */
 public final class CurveDefinitionBuilders {
   /** The unique id field name */
@@ -43,7 +43,7 @@ public final class CurveDefinitionBuilders {
   }
 
   /**
-   * Fudge builder for a {@link CurveDefinition}
+   * Fudge builder for a {@link CurveDefinition}.
    */
   @FudgeBuilderFor(CurveDefinition.class)
   public static final class CurveDefinitionFudgeBuilder implements FudgeBuilder<CurveDefinition> {
@@ -79,7 +79,7 @@ public final class CurveDefinitionBuilders {
   }
 
   /**
-   * Fudge builder for a {@link InterpolatedCurveDefinition}
+   * Fudge builder for a {@link InterpolatedCurveDefinition}.
    */
   @FudgeBuilderFor(InterpolatedCurveDefinition.class)
   public static final class InterpolatedCurveDefinitionFudgeBuilder implements FudgeBuilder<InterpolatedCurveDefinition> {
@@ -134,7 +134,7 @@ public final class CurveDefinitionBuilders {
   }
 
   /**
-   * Fudge builder for a {@link FixedDateInterpolatedCurveDefinition}
+   * Fudge builder for a {@link FixedDateInterpolatedCurveDefinition}.
    */
   @FudgeBuilderFor(FixedDateInterpolatedCurveDefinition.class)
   public static final class FixedDateInterpolatedCurveDefintion implements FudgeBuilder<FixedDateInterpolatedCurveDefinition> {

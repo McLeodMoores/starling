@@ -57,7 +57,7 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
     _timeThatProportionalDividendsBegin = timeThatProportionalDividendsBegin;
   }
 
-  /** Default constructor */
+  /** Default constructor. */
   public DiscreteDividendFunction() {
     _dividendHorizon = 2.0;
     _timeThatProportionalDividendsBegin = 2.0;

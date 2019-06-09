@@ -47,7 +47,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Calculates the PV01 of an FX forward
+ * Calculates the PV01 of an FX forward.
  *
  * @deprecated Use {@link DiscountingPV01Function}
  */

@@ -25,15 +25,17 @@ public class ExampleSwaptionVolatilitySurfaceInstrumentProvider implements Surfa
   private final boolean _zeroPadSwapMaturityTenor;
   private final boolean _zeroPadSwaptionExpiryTenor;
   private final String _dataFieldName; // expecting MarketDataRequirementNames.MARKET_VALUE or PX_LAST
-  private static final String[] MONTHS_TABLE = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "1A", "1B", "1C",
-    "1D", "1E", "1F", "1G", "1H", "1I", "1J", "1K", "1L"};
+  private static final String[] MONTHS_TABLE = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "1A", "1B", "1C",
+                "1D", "1E", "1F", "1G", "1H", "1I", "1J", "1K", "1L" };
 
-  public ExampleSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor, final boolean zeroPadSwaptionExpiryTenor,
+  public ExampleSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor,
+      final boolean zeroPadSwaptionExpiryTenor,
       final String postfix) {
     this(countryPrefix, typePrefix, zeroPadSwapMaturityTenor, zeroPadSwaptionExpiryTenor, postfix, MarketDataRequirementNames.MARKET_VALUE);
   }
 
-  public ExampleSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor, final boolean zeroPadSwaptionExpiryTenor,
+  public ExampleSwaptionVolatilitySurfaceInstrumentProvider(final String countryPrefix, final String typePrefix, final boolean zeroPadSwapMaturityTenor,
+      final boolean zeroPadSwaptionExpiryTenor,
       final String postfix, final String dataFieldName) {
     Validate.notNull(countryPrefix);
     Validate.notNull(typePrefix);
@@ -83,6 +85,7 @@ public class ExampleSwaptionVolatilitySurfaceInstrumentProvider implements Surfa
 
   /**
    * Gets the countryPrefix field.
+   *
    * @return the countryPrefix
    */
   public String getCountryPrefix() {
@@ -91,6 +94,7 @@ public class ExampleSwaptionVolatilitySurfaceInstrumentProvider implements Surfa
 
   /**
    * Gets the typePrefix field.
+   *
    * @return the typePrefix
    */
   public String getTypePrefix() {
@@ -99,6 +103,7 @@ public class ExampleSwaptionVolatilitySurfaceInstrumentProvider implements Surfa
 
   /**
    * Gets the postfix field.
+   *
    * @return the postfix
    */
   public String getPostfix() {
@@ -107,6 +112,7 @@ public class ExampleSwaptionVolatilitySurfaceInstrumentProvider implements Surfa
 
   /**
    * Gets the zeroPadSwaptionExpiryTenor field.
+   *
    * @return the zeroPadSwaptionExpiryTenor
    */
   public boolean isZeroPadSwapMaturityTenor() {
@@ -115,6 +121,7 @@ public class ExampleSwaptionVolatilitySurfaceInstrumentProvider implements Surfa
 
   /**
    * Gets the zeroPadSwaptionExpiryTenor field.
+   *
    * @return the zeroPadSwaptionExpiryTenor
    */
   public boolean isZeroPadSwaptionExpiryTenor() {

@@ -31,7 +31,7 @@ import com.opengamma.util.PublicSPI;
 public class TimeOverrideRequest extends DirectBean {
 
   /**
-   * The time override
+   * The time override.
    */
   @PropertyDefinition
   private Instant _timeOverride;
@@ -57,7 +57,7 @@ public class TimeOverrideRequest extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the time override
+   * Gets the time override.
    * @return the value of the property
    */
   public Instant getTimeOverride() {
@@ -65,7 +65,7 @@ public class TimeOverrideRequest extends DirectBean {
   }
 
   /**
-   * Sets the time override
+   * Sets the time override.
    * @param timeOverride  the new value of the property
    */
   public void setTimeOverride(Instant timeOverride) {

@@ -10,7 +10,7 @@ import com.opengamma.financial.security.option.ExerciseTypeNameVisitor;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Utility class for custom object rendering
+ * Utility class for custom object rendering.
  */
 public final class FreemarkerCustomRenderer {
 
@@ -21,7 +21,7 @@ public final class FreemarkerCustomRenderer {
   }
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final Object INSTANCE = new FreemarkerCustomRenderer();
 

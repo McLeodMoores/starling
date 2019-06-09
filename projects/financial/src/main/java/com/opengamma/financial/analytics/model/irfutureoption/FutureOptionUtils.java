@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class FutureOptionUtils {
   private static final TemporalAdjuster THIRD_WED_ADJUSTER = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.WEDNESDAY);
-  /** Calendar containing weekdays */
+  /** Calendar containing weekdays. */
   public static final WorkingDayCalendar WEEKDAYS = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
 
   /**

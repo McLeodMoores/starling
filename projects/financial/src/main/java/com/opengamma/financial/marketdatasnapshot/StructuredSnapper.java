@@ -38,11 +38,14 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Extracts some type of structured object from a cycle
+ * Extracts some type of structured object from a cycle.
  *
- * @param <TKey> the key by which these snaps are ided
- * @param <TCalculatedValue> The type of value which comes out of the engine
- * @param <TSnapshot> The type of value which is stored in the snapshots
+ * @param <TKey>
+ *          the key by which these snaps are ided
+ * @param <TCalculatedValue>
+ *          The type of value which comes out of the engine
+ * @param <TSnapshot>
+ *          The type of value which is stored in the snapshots
  */
 public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
 

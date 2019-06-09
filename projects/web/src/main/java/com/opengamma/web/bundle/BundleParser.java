@@ -60,10 +60,12 @@ public class BundleParser {
   private final Map<String, Element> _elementsByIdMap = new HashMap<>();
 
   /**
-   * Creates a parser
+   * Creates a parser.
    *
-   * @param fragmentUriProvider  the URI provider for fragments, not null
-   * @param basePath  the base path, not null
+   * @param fragmentUriProvider
+   *          the URI provider for fragments, not null
+   * @param basePath
+   *          the base path, not null
    */
   public BundleParser(final UriProvider fragmentUriProvider, final String basePath) {
     ArgumentChecker.notNull(fragmentUriProvider, "fragmentUriProvider");
@@ -72,11 +74,12 @@ public class BundleParser {
     _basePath = basePath.startsWith("/") ? basePath : "/" + basePath;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses the XML file, returning the bundle manager.
    *
-   * @param xmlStream the XML input stream, not null
+   * @param xmlStream
+   *          the XML input stream, not null
    * @return the parsed bundle manager, not null
    */
   public BundleManager parse(final InputStream xmlStream) {
@@ -159,7 +162,7 @@ public class BundleParser {
     if (StringUtils.isNotBlank(idRef) && idRefExists(idRef)) {
       return true;
     }
-    throw new OpenGammaRuntimeException(" invalid idref ["  + idRef + "]");
+    throw new OpenGammaRuntimeException(" invalid idref [" + idRef + "]");
   }
 
   private boolean idRefExists(final String idRef) {

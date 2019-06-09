@@ -34,12 +34,11 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class BlackDiscountingForwardIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The underlying market price calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR =
-      UnderlyingMarketPriceSTIRFutureOptionCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR = UnderlyingMarketPriceSTIRFutureOptionCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#FORWARD}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#FORWARD}.
    */
   public BlackDiscountingForwardIRFutureOptionFunction() {
     super(FORWARD);

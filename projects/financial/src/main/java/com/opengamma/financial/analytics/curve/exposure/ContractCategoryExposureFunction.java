@@ -49,14 +49,14 @@ public class ContractCategoryExposureFunction implements ExposureFunction {
    */
   public static final String NAME = "Contract Category";
 
-  /** Contract identifier */
+  /** Contract identifier. */
   public static final String CONTRACT_IDENTIFIER = "ContractType";
 
   private final ContractTypeVisitor _visitor;
 
   /**
    * Default constructor for ContractCategoryExposureFunction.
-   * 
+   *
    * @param securitySource
    *          the security source used to look up the underlying.
    */

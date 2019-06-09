@@ -21,7 +21,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for a {@link TempTargetSource}
+ * RESTful resource for a {@link TempTargetSource}.
  */
 @Path("tempTarget")
 public class DataTempTargetSourceResource extends AbstractDataResource {

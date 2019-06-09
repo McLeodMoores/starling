@@ -122,7 +122,7 @@ public class EquityOptionVolatilitySurfaceDataFunctionDeprecated extends Abstrac
   }
 
   /**
-   * // Computes active expiry dates, which fall on the Saturday following the 3rd Friday of an expiry month
+   * Computes active expiry dates, which fall on the Saturday following the 3rd Friday of an expiry month.
    *
    * @param valDate
    *          The evaluation date

@@ -73,7 +73,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
    */
   public static final String PROPERTY_IMPLIED_VOL_BACKUP = "ImpliedVolBackup";
   /**
-   * Selection of {@link PROPERTY_IMPLIED_VOL_BACKUP} which will throw an error if implied vol is undefined
+   * Selection of {@link PROPERTY_IMPLIED_VOL_BACKUP} which will throw an error if implied vol is undefined.
    */
   public static final String NO_VOL_BACKUP = "None";
 

@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 /**
- * Builder for bucketed shifts
+ * Builder for bucketed shifts.
  */
 public class BucketedShiftManipulatorBuilder {
 
@@ -34,12 +34,15 @@ public class BucketedShiftManipulatorBuilder {
     _shiftType = shiftType;
   }
 
-
   /**
-   * Apply a bucketed shift to a range
-   * @param start Period between the valuation date and the start of the shift
-   * @param end Period between the valuation date and the end of the shift
-   * @param shift shift amount
+   * Apply a bucketed shift to a range.
+   * 
+   * @param start
+   *          Period between the valuation date and the start of the shift
+   * @param end
+   *          Period between the valuation date and the end of the shift
+   * @param shift
+   *          shift amount
    * @return this
    */
   public BucketedShiftManipulatorBuilder shift(final Period start, final Period end, final Number shift) {
@@ -48,14 +51,11 @@ public class BucketedShiftManipulatorBuilder {
     return this;
   }
 
-
   /**
-   * Apply shifts to the scenario.
-   * Should only be called once per {@link BucketedShiftManipulatorBuilder}.
+   * Apply shifts to the scenario. Should only be called once per {@link BucketedShiftManipulatorBuilder}.
    */
   public void build() {
-    final YieldCurveBucketedShiftManipulator shifts =
-        new YieldCurveBucketedShiftManipulator(_shiftType, ImmutableList.copyOf(_shiftList));
+    final YieldCurveBucketedShiftManipulator shifts = new YieldCurveBucketedShiftManipulator(_shiftType, ImmutableList.copyOf(_shiftList));
     _scenario.add(_selector, shifts);
   }
 

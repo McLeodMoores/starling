@@ -14,7 +14,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * A dummy time series writer that merely logs the written data points
+ * A dummy time series writer that merely logs the written data points.
  */
 public class DummyTimeSeriesWriter implements TimeSeriesWriter {
 

@@ -195,7 +195,7 @@ public class SpreadCurveFunctions {
   }
 
   /**
-   * Get spread curve for the given tenors
+   * Get spread curve for the given tenors.
    *
    * @param spreadCurve
    *          the spread curve

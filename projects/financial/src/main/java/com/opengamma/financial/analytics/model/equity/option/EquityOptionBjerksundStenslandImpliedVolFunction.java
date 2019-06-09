@@ -38,14 +38,14 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurity;
 
 /**
- * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel}
+ * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel}.
  */
 public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOptionBjerksundStenslandFunction {
 
   /** The BjerksundStensland present value calculator */
   private static final EqyOptBjerksundStenslandPresentValueCalculator PV_CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBjerksundStenslandImpliedVolFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }

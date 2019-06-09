@@ -24,17 +24,17 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  */
 @Deprecated
 public class ForexLocalVolatilityPDEPresentValueResultCollection {
-  /** Label for pips PV quotes calculated using local volatility */
+  /** Label for pips PV quotes calculated using local volatility. */
   public static final String LV_PIPS = "Local Volatility Pips";
-  /** Label for put PV quotes calculated using local volatility */
+  /** Label for put PV quotes calculated using local volatility. */
   public static final String LV_PUT_PV = "Local Volatility Put Present Value";
-  /** Label for call PV quotes calculated using local volatility */
+  /** Label for call PV quotes calculated using local volatility. */
   public static final String LV_CALL_PV = "Local Volatility Call Present Value";
-  /** Label for pips PV quotes calculated using the Black model */
+  /** Label for pips PV quotes calculated using the Black model. */
   public static final String BLACK_PIPS = "Black Pips";
-  /** Label for put PV quotes calculated using the Black model */
+  /** Label for put PV quotes calculated using the Black model. */
   public static final String BLACK_PUT_PV = "Black Put Present Value";
-  /** Label for call PV quotes calculated using the Black model */
+  /** Label for call PV quotes calculated using the Black model. */
   public static final String BLACK_CALL_PV = "Black Call Present Value";
   private final Map<String, double[]> _pvDataMap = new TreeMap<>();
   private final double[] _strikes;

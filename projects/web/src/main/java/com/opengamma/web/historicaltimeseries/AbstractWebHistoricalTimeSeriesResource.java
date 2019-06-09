@@ -20,11 +20,11 @@ public abstract class AbstractWebHistoricalTimeSeriesResource
     extends AbstractPerRequestWebResource<WebHistoricalTimeSeriesData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "timeseries/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "timeseries/json/";
 

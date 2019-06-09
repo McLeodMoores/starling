@@ -52,7 +52,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for functions that calculate price and risk for interest rate futures
+ * Base class for functions that calculate price and risk for interest rate futures.
  *
  * @deprecated Use descendants of {@link MultiCurvePricingFunction}
  */

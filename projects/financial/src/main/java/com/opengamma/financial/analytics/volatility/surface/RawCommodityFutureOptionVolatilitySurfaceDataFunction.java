@@ -12,12 +12,12 @@ import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Constructs volatility surface data objects for commodity future options if the target is the currency of the option
+ * Constructs volatility surface data objects for commodity future options if the target is the currency of the option.
  */
 public class RawCommodityFutureOptionVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public RawCommodityFutureOptionVolatilitySurfaceDataFunction() {
     super(InstrumentTypeProperties.COMMODITY_FUTURE_OPTION);

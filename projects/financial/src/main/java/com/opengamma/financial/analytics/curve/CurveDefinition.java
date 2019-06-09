@@ -43,7 +43,7 @@ public class CurveDefinition extends AbstractCurveDefinition {
   private SortedSet<CurveNode> _nodes = new TreeSet<>();
 
   /**
-   * For the builder
+   * For the builder.
    */
   public CurveDefinition() {
     super();

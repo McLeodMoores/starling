@@ -53,7 +53,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link CurveNodeWithIdentifier}
+   * Fudge builder for {@link CurveNodeWithIdentifier}.
    */
   @FudgeBuilderFor(CurveNodeWithIdentifier.class)
   public static class CurveNodeWithIdentifierBuilder implements FudgeBuilder<CurveNodeWithIdentifier> {
@@ -89,7 +89,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link BillNode}
+   * Fudge builder for {@link BillNode}.
    */
   @FudgeBuilderFor(BillNode.class)
   public static class BillNodeBuilder implements FudgeBuilder<BillNode> {
@@ -121,7 +121,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link BondNode}
+   * Fudge builder for {@link BondNode}.
    */
   @FudgeBuilderFor(BondNode.class)
   public static class BondNodeBuilder implements FudgeBuilder<BondNode> {
@@ -153,7 +153,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link CashNode}
+   * Fudge builder for {@link CashNode}.
    */
   @FudgeBuilderFor(CashNode.class)
   public static class CashNodeBuilder implements FudgeBuilder<CashNode> {
@@ -193,7 +193,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link ContinuouslyCompoundedRateNode}
+   * Fudge builder for {@link ContinuouslyCompoundedRateNode}.
    */
   @FudgeBuilderFor(ContinuouslyCompoundedRateNode.class)
   public static class ContinuouslyCompoundedRateNodeBuilder implements FudgeBuilder<ContinuouslyCompoundedRateNode> {
@@ -226,7 +226,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link PeriodicallyCompoundedRateNode}
+   * Fudge builder for {@link PeriodicallyCompoundedRateNode}.
    */
   @FudgeBuilderFor(PeriodicallyCompoundedRateNode.class)
   public static class PeriodicallyCompoundedRateNodeBuilder implements FudgeBuilder<PeriodicallyCompoundedRateNode> {
@@ -263,7 +263,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link CreditSpreadNode}
+   * Fudge builder for {@link CreditSpreadNode}.
    */
   @FudgeBuilderFor(CreditSpreadNode.class)
   public static class CreditSpreadNodeBuilder implements FudgeBuilder<CreditSpreadNode> {
@@ -319,7 +319,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link DeliverableSwapFutureNode}
+   * Fudge builder for {@link DeliverableSwapFutureNode}.
    */
   @FudgeBuilderFor(DeliverableSwapFutureNode.class)
   public static class DeliverableSwapFutureNodeBuilder implements FudgeBuilder<DeliverableSwapFutureNode> {
@@ -373,7 +373,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link DiscountFactorNode}
+   * Fudge builder for {@link DiscountFactorNode}.
    */
   @FudgeBuilderFor(DiscountFactorNode.class)
   public static class DiscountFactorNodeBuilder implements FudgeBuilder<DiscountFactorNode> {
@@ -406,7 +406,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link FRANode}
+   * Fudge builder for {@link FRANode}.
    */
   @FudgeBuilderFor(FRANode.class)
   public static class FRANodeBuilder implements FudgeBuilder<FRANode> {
@@ -447,7 +447,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link FXForwardNode}
+   * Fudge builder for {@link FXForwardNode}.
    */
   @FudgeBuilderFor(FXForwardNode.class)
   public static class FXForwardNodeBuilder implements FudgeBuilder<FXForwardNode> {
@@ -496,7 +496,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link RollDateFRANode}
+   * Fudge builder for {@link RollDateFRANode}.
    */
   @FudgeBuilderFor(RollDateFRANode.class)
   public static class RollDateFRANodeBuilder implements FudgeBuilder<RollDateFRANode> {
@@ -545,7 +545,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link RollDateSwapNode}
+   * Fudge builder for {@link RollDateSwapNode}.
    */
   @FudgeBuilderFor(RollDateSwapNode.class)
   public static class RollDateSwapNodeBuilder implements FudgeBuilder<RollDateSwapNode> {
@@ -601,7 +601,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link RateFutureNode}
+   * Fudge builder for {@link RateFutureNode}.
    */
   @FudgeBuilderFor(RateFutureNode.class)
   public static class RateFutureNodeBuilder implements FudgeBuilder<RateFutureNode> {
@@ -650,7 +650,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link SwapNode}
+   * Fudge builder for {@link SwapNode}.
    */
   @FudgeBuilderFor(SwapNode.class)
   public static final class SwapNodeBuilder implements FudgeBuilder<SwapNode> {
@@ -706,7 +706,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link ThreeLegBasisSwapNode}
+   * Fudge builder for {@link ThreeLegBasisSwapNode}.
    */
   @FudgeBuilderFor(ThreeLegBasisSwapNode.class)
   public static final class ThreeLegBasisSwapNodeBuilder implements FudgeBuilder<ThreeLegBasisSwapNode> {
@@ -768,7 +768,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link ZeroCouponInflationNode}
+   * Fudge builder for {@link ZeroCouponInflationNode}.
    */
   @FudgeBuilderFor(ZeroCouponInflationNode.class)
   public static final class ZeroCouponInflationNodeBuilder implements FudgeBuilder<ZeroCouponInflationNode> {
@@ -813,7 +813,7 @@ import com.opengamma.util.time.Tenor;
   }
 
   /**
-   * Fudge builder for {@link CalendarSwapNode}
+   * Fudge builder for {@link CalendarSwapNode}.
    */
   @FudgeBuilderFor(CalendarSwapNode.class)
   public static final class CalendarSwapNodeBuilder implements FudgeBuilder<CalendarSwapNode> {

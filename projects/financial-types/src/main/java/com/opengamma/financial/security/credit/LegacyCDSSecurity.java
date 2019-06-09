@@ -43,7 +43,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "LEGACY_CDS";
 
@@ -54,7 +54,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   private LocalDate _tradeDate;
 
   /**
-   * The start date
+   * The start date.
    */
   @PropertyDefinition(validate = "notNull")
   private LocalDate _startDate;
@@ -72,7 +72,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   private ExternalId _referenceEntity;
 
   /**
-   * Is protection being bought?
+   * Is protection being bought.
    */
   @PropertyDefinition(validate = "notNull")
   private boolean _buyProtection;
@@ -90,31 +90,31 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   private DebtSeniority _debtSeniority;
 
   /**
-   * The premium leg coupon (fractional i.e. 100 bps = 0.01)
+   * The premium leg coupon (fractional i.e. 100 bps = 0.01).
    */
   @PropertyDefinition(validate = "notNull")
   private double _coupon;
 
   /**
-   * The coupon frequency
+   * The coupon frequency.
    */
   @PropertyDefinition(validate = "notNull")
   private Frequency _couponFrequency;
 
   /**
-   * The Daycount
+   * The Daycount.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCount;
 
   /**
-   * The business day convention
+   * The business day convention.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _businessDayConvention;
 
   /**
-   * The holiday calendars
+   * The holiday calendars.
    */
   @PropertyDefinition(validate = "notNull")
   private Set<ExternalId> _calendars;
@@ -132,13 +132,13 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   private InterestRateNotional _upfrontPayment;
 
   /**
-   * The fee settlement date
+   * The fee settlement date.
    */
   @PropertyDefinition(validate = "notNull")
   private LocalDate _feeSettlementDate;
 
   /**
-   * accrued on default
+   * accrued on default.
    */
   @PropertyDefinition(validate = "notNull")
   private boolean _accruedOnDefault;
@@ -330,7 +330,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the start date
+   * Gets the start date.
    * @return the value of the property, not null
    */
   public LocalDate getStartDate() {
@@ -338,7 +338,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the start date
+   * Sets the start date.
    * @param startDate  the new value of the property, not null
    */
   public void setStartDate(LocalDate startDate) {
@@ -408,7 +408,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets is protection being bought?
+   * Gets is protection being bought.
    * @return the value of the property, not null
    */
   public boolean isBuyProtection() {
@@ -416,7 +416,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets is protection being bought?
+   * Sets is protection being bought.
    * @param buyProtection  the new value of the property, not null
    */
   public void setBuyProtection(boolean buyProtection) {
@@ -486,7 +486,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the premium leg coupon (fractional i.e. 100 bps = 0.01)
+   * Gets the premium leg coupon (fractional i.e. 100 bps = 0.01).
    * @return the value of the property, not null
    */
   public double getCoupon() {
@@ -494,7 +494,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the premium leg coupon (fractional i.e. 100 bps = 0.01)
+   * Sets the premium leg coupon (fractional i.e. 100 bps = 0.01).
    * @param coupon  the new value of the property, not null
    */
   public void setCoupon(double coupon) {
@@ -512,7 +512,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the coupon frequency
+   * Gets the coupon frequency.
    * @return the value of the property, not null
    */
   public Frequency getCouponFrequency() {
@@ -520,7 +520,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the coupon frequency
+   * Sets the coupon frequency.
    * @param couponFrequency  the new value of the property, not null
    */
   public void setCouponFrequency(Frequency couponFrequency) {
@@ -538,7 +538,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the Daycount
+   * Gets the Daycount.
    * @return the value of the property, not null
    */
   public DayCount getDayCount() {
@@ -546,7 +546,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the Daycount
+   * Sets the Daycount.
    * @param dayCount  the new value of the property, not null
    */
   public void setDayCount(DayCount dayCount) {
@@ -564,7 +564,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the business day convention
+   * Gets the business day convention.
    * @return the value of the property, not null
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -572,7 +572,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the business day convention
+   * Sets the business day convention.
    * @param businessDayConvention  the new value of the property, not null
    */
   public void setBusinessDayConvention(BusinessDayConvention businessDayConvention) {
@@ -590,7 +590,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the holiday calendars
+   * Gets the holiday calendars.
    * @return the value of the property, not null
    */
   public Set<ExternalId> getCalendars() {
@@ -598,7 +598,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the holiday calendars
+   * Sets the holiday calendars.
    * @param calendars  the new value of the property, not null
    */
   public void setCalendars(Set<ExternalId> calendars) {
@@ -668,7 +668,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the fee settlement date
+   * Gets the fee settlement date.
    * @return the value of the property, not null
    */
   public LocalDate getFeeSettlementDate() {
@@ -676,7 +676,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the fee settlement date
+   * Sets the fee settlement date.
    * @param feeSettlementDate  the new value of the property, not null
    */
   public void setFeeSettlementDate(LocalDate feeSettlementDate) {
@@ -694,7 +694,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets accrued on default
+   * Gets accrued on default.
    * @return the value of the property, not null
    */
   public boolean isAccruedOnDefault() {
@@ -702,7 +702,7 @@ public class LegacyCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets accrued on default
+   * Sets accrued on default.
    * @param accruedOnDefault  the new value of the property, not null
    */
   public void setAccruedOnDefault(boolean accruedOnDefault) {

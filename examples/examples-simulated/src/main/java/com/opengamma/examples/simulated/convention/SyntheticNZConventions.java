@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -24,8 +25,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class SyntheticNZConventions {
@@ -41,7 +41,8 @@ public class SyntheticNZConventions {
 
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
 
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("NZDLIBORP3M"), simpleNameSecurityId("NZD LIBOR 3m")), "NZD LIBOR 3m", act365, following, Period.ofMonths(3), 2, false, nz);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("NZDLIBORP3M"), simpleNameSecurityId("NZD LIBOR 3m")), "NZD LIBOR 3m", act365, following,
+        Period.ofMonths(3), 2, false, nz);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("NZDLIBORP6M")), "NZD LIBOR 6m", act365, following, Period.ofMonths(6), 2, false, nz);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("NZDLIBORP12M")), "NZD LIBOR 12m", act365, following, Period.ofMonths(12), 2, false, nz);
 

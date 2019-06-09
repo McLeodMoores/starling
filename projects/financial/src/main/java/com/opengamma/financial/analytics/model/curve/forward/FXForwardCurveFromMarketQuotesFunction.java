@@ -53,7 +53,7 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
  *
  */
 public class FXForwardCurveFromMarketQuotesFunction extends AbstractFunction {
-  /** Name of the calculation method */
+  /** Name of the calculation method. */
   public static final String FX_FORWARD_QUOTES = "FXForwardQuotes";
 
   private ConfigDBFXForwardCurveSpecificationSource _fxForwardCurveSpecificationSource;

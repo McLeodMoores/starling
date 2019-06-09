@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
- * Computes a flat volatility surface from a single market traded option price, and a forward curve
+ * Computes a flat volatility surface from a single market traded option price, and a forward curve.
  */
 public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.NonCompiledInvoker {
 

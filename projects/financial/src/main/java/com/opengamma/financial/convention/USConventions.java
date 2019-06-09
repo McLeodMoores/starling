@@ -37,7 +37,7 @@ public class USConventions {
 
   /**
    * Adds conventions for deposit, Libor fixings, swaps, FRAs and IR futures.
-   * 
+   *
    * @param conventionMaster
    *          The convention master, not null
    */
@@ -238,8 +238,8 @@ public class USConventions {
   }
 
   /**
-   * Adds conventions for US Treasury bonds,
-   * 
+   * Adds conventions for US Treasury bonds.
+   *
    * @param conventionMaster
    *          The convention master, not null
    */
@@ -251,8 +251,8 @@ public class USConventions {
   }
 
   /**
-   * Adds conventions for USD-denominated corporate bonds
-   * 
+   * Adds conventions for USD-denominated corporate bonds.
+   *
    * @param conventionMaster
    *          The convention master, not null
    */
@@ -266,7 +266,7 @@ public class USConventions {
 
   /**
    * Adds conventions for GBP government bonds.
-   * 
+   *
    * @param conventionMaster
    *          The convention master, not null
    */
@@ -278,8 +278,8 @@ public class USConventions {
   }
 
   /**
-   * Add conventions for USD bond futures
-   * 
+   * Add conventions for USD bond futures.
+   *
    * @param conventionMaster
    *          The convention master, not null
    */

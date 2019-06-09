@@ -19,17 +19,18 @@ import com.opengamma.web.region.WebRegionUris;
  * Abstract base class for RESTful function resources.
  */
 public abstract class AbstractWebFunctionResource
-extends AbstractPerRequestWebResource<WebFunctionData> {
+    extends AbstractPerRequestWebResource<WebFunctionData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "functions/html/";
 
   /**
    * Creates the resource.
    *
-   * @param functionConfigurationSource  the function master, not null
+   * @param functionConfigurationSource
+   *          the function master, not null
    */
   protected AbstractWebFunctionResource(final FunctionConfigurationSource functionConfigurationSource) {
     super(new WebFunctionData());
@@ -40,13 +41,14 @@ extends AbstractPerRequestWebResource<WebFunctionData> {
   /**
    * Creates the resource.
    *
-   * @param parent  the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebFunctionResource(final AbstractWebFunctionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
    *

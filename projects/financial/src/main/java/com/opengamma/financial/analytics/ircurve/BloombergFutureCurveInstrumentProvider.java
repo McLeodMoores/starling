@@ -54,7 +54,7 @@ public class BloombergFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   /**
-   * Sets the market data field to {@link MarketDataRequirementNames#MARKET_VALUE}
+   * Sets the market data field to {@link MarketDataRequirementNames#MARKET_VALUE}.
    *
    * @param futurePrefix
    *          The future prefix, not null

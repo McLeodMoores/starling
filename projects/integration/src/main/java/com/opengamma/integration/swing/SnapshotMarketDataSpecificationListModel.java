@@ -23,7 +23,7 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * List/ComboBox model for historical market data specifications
+ * List/ComboBox model for historical market data specifications.
  */
 public class SnapshotMarketDataSpecificationListModel extends AbstractListModel<String> implements ComboBoxModel<String> {
   private static final long serialVersionUID = 1L;
@@ -71,7 +71,6 @@ public class SnapshotMarketDataSpecificationListModel extends AbstractListModel<
     };
     worker.execute();
   }
-
 
   @Override
   public synchronized int getSize() {

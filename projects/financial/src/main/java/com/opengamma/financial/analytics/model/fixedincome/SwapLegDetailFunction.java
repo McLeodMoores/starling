@@ -73,7 +73,7 @@ public class SwapLegDetailFunction extends InterestRateInstrumentFunction {
 
   /**
    * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or
-   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}.
    *
    * @param payLeg
    *          True if the details to be returned are for the pay leg; false returns details for receive legs.
@@ -84,7 +84,7 @@ public class SwapLegDetailFunction extends InterestRateInstrumentFunction {
 
   /**
    * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or
-   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
+   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}.
    *
    * @param payLeg
    *          True if the details to be returned are for the pay leg; false returns details for receive legs.

@@ -62,15 +62,17 @@ public class WebRolesResource extends AbstractWebRoleResource {
 
   /**
    * Creates the resource.
-   * @param userMaster  the user master, not null
+   * 
+   * @param userMaster
+   *          the user master, not null
    */
   public WebRolesResource(final UserMaster userMaster) {
     super(userMaster);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Produces an HTML GET request
+   * Produces an HTML GET request.
    *
    * @param pgIdx
    *          the paging first-item index, can be null
@@ -131,7 +133,7 @@ public class WebRolesResource extends AbstractWebRoleResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an HTML POST response.
    *
@@ -180,12 +182,11 @@ public class WebRolesResource extends AbstractWebRoleResource {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Finds a role by name. If there is no role of that name, the history is
-   * searched if the master supports this functionality. If no value is found,
-   * an exception is thrown.
-   * 
+   * Finds a role by name. If there is no role of that name, the history is searched if the master supports this functionality. If no value is found, an
+   * exception is thrown.
+   *
    * @param roleName
    *          the role name
    * @return the role
@@ -209,9 +210,10 @@ public class WebRolesResource extends AbstractWebRoleResource {
     return new WebRoleResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -222,10 +224,12 @@ public class WebRolesResource extends AbstractWebRoleResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for roles.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebRoleData data) {

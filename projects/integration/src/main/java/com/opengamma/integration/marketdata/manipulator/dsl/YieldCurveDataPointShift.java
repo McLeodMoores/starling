@@ -24,17 +24,16 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Period;
 
 /**
- * Applies a point shift to a
- * {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve}.
+ * Applies a point shift to a {@link com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve}.
  */
 @BeanDefinition
 public final class YieldCurveDataPointShift implements ImmutableBean {
 
-  /** The tenor of the shift */
+  /** The tenor of the shift. */
   @PropertyDefinition(validate = "notNull")
   private final Period _tenor;
 
-  /** The shift magnitude */
+  /** The shift magnitude. */
   @PropertyDefinition
   private final double _shift;
 
@@ -83,7 +82,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the tenor of the shift
+   * Gets the tenor of the shift.
    * @return the value of the property, not null
    */
   public Period getTenor() {
@@ -92,7 +91,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the shift magnitude
+   * Gets the shift magnitude.
    * @return the value of the property
    */
   public double getShift() {
@@ -336,7 +335,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the tenor of the shift
+     * Sets the tenor of the shift.
      * @param tenor  the new value, not null
      * @return this, for chaining, not null
      */
@@ -347,7 +346,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
     }
 
     /**
-     * Sets the shift magnitude
+     * Sets the shift magnitude.
      * @param shift  the new value
      * @return this, for chaining, not null
      */

@@ -29,11 +29,11 @@ public abstract class AbstractWebMarketDataSnapshotResource
     extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "marketdatasnapshots/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "marketdatasnapshots/json/";
 
@@ -164,7 +164,7 @@ public abstract class AbstractWebMarketDataSnapshotResource
   // -------------------------------------------------------------------------
   /**
    * Gets the fudgeContext.
-   * 
+   *
    * @return the fudgeContext
    */
   @Override

@@ -64,7 +64,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * A generic row parser for Joda beans that automatically identifies fields to be persisted to rows/populated from rows
+ * A generic row parser for Joda beans that automatically identifies fields to be persisted to rows/populated from rows.
  */
 public class JodaBeanRowParser extends RowParser {
 
@@ -180,8 +180,8 @@ public class JodaBeanRowParser extends RowParser {
   }
 
   /**
-   * Creates a new row parser for the specified security type and tool context
-   * 
+   * Creates a new row parser for the specified security type and tool context.
+   *
    * @param securityName
    *          the type of the security for which a row parser is to be created
    * @return the RowParser class for the specified security type, or null if unable to identify a suitable parser
@@ -315,7 +315,7 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Extract a map of column (field) names and types from the properties of the specified direct bean class. Appropriate member classes (such as swap legs) are
    * recursively traversed and their columns also extracted and added to the map.
-   * 
+   *
    * @param clazz
    *          The bean type from which to extract properties
    * @param prefix
@@ -359,7 +359,7 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Build a bean of the specified type by extracting property values from the supplied map of field names to values, using recursion to construct the member
    * beans in the same manner.
-   * 
+   *
    * @param row
    *          The map from property (or column, or field) names to values
    * @param clazz
@@ -431,7 +431,7 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Extracts a map of column names to values from a supplied security bean's properties, using recursion to extract properties from any member beans.
-   * 
+   *
    * @param bean
    *          The bean instance from which to extract property values
    * @param prefix
@@ -597,7 +597,7 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Checks whether the supplied class has a registered Joda string converter
-   * 
+   *
    * @param clazz
    *          the class to check
    * @return the answer

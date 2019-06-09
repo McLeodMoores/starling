@@ -13,7 +13,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Node representing a failed function (more than one unsatisfied value requirements)
+ * Node representing a failed function (more than one unsatisfied value requirements).
  */
 public class FailedFunctionNode extends AbstractFailureWithRequirementsNode {
 

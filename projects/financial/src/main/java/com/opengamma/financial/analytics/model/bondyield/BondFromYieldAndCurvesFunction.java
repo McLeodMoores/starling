@@ -144,7 +144,7 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
   }
 
   /**
-   * Gets the value properties of the result
+   * Gets the value properties of the result.
    *
    * @param target
    *          The computation target

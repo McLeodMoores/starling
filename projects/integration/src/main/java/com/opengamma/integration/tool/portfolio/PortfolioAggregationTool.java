@@ -32,7 +32,7 @@ import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Tool to aggregate portfolios
+ * Tool to aggregate portfolios.
  */
 @Scriptable
 public class PortfolioAggregationTool extends AbstractTool<ToolContext> {

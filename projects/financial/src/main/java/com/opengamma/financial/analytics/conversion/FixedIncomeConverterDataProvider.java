@@ -94,7 +94,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Convert an OG-Financial Security to its OG-Analytics Derivative form as seen from now
+ * Convert an OG-Financial Security to its OG-Analytics Derivative form as seen from now.
  */
 public class FixedIncomeConverterDataProvider {
   /** The logger */
@@ -324,8 +324,7 @@ public class FixedIncomeConverterDataProvider {
         final HistoricalTimeSeriesBundle timeSeries) {
       if (security.getCurrency().equals(Currency.BRL)) {
         @SuppressWarnings("unchecked")
-        final InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries> brlDefinition =
-        (InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries>) definition;
+        final InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries> brlDefinition = (InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries>) definition;
         final ConventionBundle brlSwapConvention = _conventionSource.getConventionBundle(simpleNameSecurityId("BRL_DI_SWAP"));
         final ExternalId indexId = brlSwapConvention.getSwapFloatingLegInitialRate();
         final ConventionBundle indexConvention = getConventionBundleSource().getConventionBundle(indexId);
@@ -352,8 +351,7 @@ public class FixedIncomeConverterDataProvider {
         final HistoricalTimeSeriesBundle timeSeries) {
       if (security.getCurrency().equals(Currency.BRL)) {
         @SuppressWarnings("unchecked")
-        final InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries> brlDefinition =
-        (InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries>) definition;
+        final InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries> brlDefinition = (InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries>) definition;
         final ConventionBundle brlSwapConvention = _conventionSource.getConventionBundle(simpleNameSecurityId("BRL_DI_SWAP"));
         final ExternalId indexId = brlSwapConvention.getSwapFloatingLegInitialRate();
         final ConventionBundle indexConvention = getConventionBundleSource().getConventionBundle(indexId);
@@ -453,8 +451,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<ForwardRateAgreementSecurity, ForwardRateAgreementDefinition> _forwardRateAgreementSecurity =
-      new Converter<ForwardRateAgreementSecurity, ForwardRateAgreementDefinition>() {
+  private final Converter<ForwardRateAgreementSecurity, ForwardRateAgreementDefinition> _forwardRateAgreementSecurity = new Converter<ForwardRateAgreementSecurity, ForwardRateAgreementDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final ForwardRateAgreementSecurity security) {
@@ -514,8 +511,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<CapFloorSecurity, AnnuityCapFloorIborDefinition> _capFloorIborSecurity =
-      new Converter<CapFloorSecurity, AnnuityCapFloorIborDefinition>() {
+  private final Converter<CapFloorSecurity, AnnuityCapFloorIborDefinition> _capFloorIborSecurity = new Converter<CapFloorSecurity, AnnuityCapFloorIborDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final CapFloorSecurity security) {
@@ -562,8 +558,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<CapFloorSecurity, AnnuityCapFloorCMSDefinition> _capFloorCMSSecurity =
-      new Converter<CapFloorSecurity, AnnuityCapFloorCMSDefinition>() {
+  private final Converter<CapFloorSecurity, AnnuityCapFloorCMSDefinition> _capFloorCMSSecurity = new Converter<CapFloorSecurity, AnnuityCapFloorCMSDefinition>() {
 
     @SuppressWarnings("synthetic-access")
     @Override
@@ -602,8 +597,7 @@ public class FixedIncomeConverterDataProvider {
    * Converter for interest rate futures, which will convert to the transaction definition. This requires a time series containing the last margin price on
    * conversion.
    */
-  private final Converter<InterestRateFutureSecurity, InterestRateFutureTransactionDefinition> _irFutureTrade =
-      new Converter<InterestRateFutureSecurity, InterestRateFutureTransactionDefinition>() {
+  private final Converter<InterestRateFutureSecurity, InterestRateFutureTransactionDefinition> _irFutureTrade = new Converter<InterestRateFutureSecurity, InterestRateFutureTransactionDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final InterestRateFutureSecurity security) {
@@ -634,8 +628,7 @@ public class FixedIncomeConverterDataProvider {
   /**
    * Converter for interest rate futures, which will convert to the security definition. This does not require any extra historical data when converting.
    */
-  private final Converter<InterestRateFutureSecurity, InterestRateFutureSecurityDefinition> _irFutureSecurity =
-      new Converter<InterestRateFutureSecurity, InterestRateFutureSecurityDefinition>() {
+  private final Converter<InterestRateFutureSecurity, InterestRateFutureSecurityDefinition> _irFutureSecurity = new Converter<InterestRateFutureSecurity, InterestRateFutureSecurityDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final InterestRateFutureSecurity security) {
@@ -664,8 +657,7 @@ public class FixedIncomeConverterDataProvider {
   /**
    * Converter for FedFunds futures, which will convert to the security definition. This requires only the previous fixings for the underlying FedFunds index.
    */
-  private final Converter<FederalFundsFutureSecurity, FederalFundsFutureSecurityDefinition> _fedFundsFutureSecurity =
-      new Converter<FederalFundsFutureSecurity, FederalFundsFutureSecurityDefinition>() {
+  private final Converter<FederalFundsFutureSecurity, FederalFundsFutureSecurityDefinition> _fedFundsFutureSecurity = new Converter<FederalFundsFutureSecurity, FederalFundsFutureSecurityDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final FederalFundsFutureSecurity security) {
@@ -707,8 +699,7 @@ public class FixedIncomeConverterDataProvider {
    * Converter for FedFunds futures, which will convert to the security definition. This requires the last margin price of the future as well as previous
    * fixings for the underlying FedFunds index.
    */
-  private final Converter<FederalFundsFutureSecurity, FederalFundsFutureTransactionDefinition> _fedFundsFutureTrade =
-      new Converter<FederalFundsFutureSecurity, FederalFundsFutureTransactionDefinition>() {
+  private final Converter<FederalFundsFutureSecurity, FederalFundsFutureTransactionDefinition> _fedFundsFutureTrade = new Converter<FederalFundsFutureSecurity, FederalFundsFutureTransactionDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final FederalFundsFutureSecurity security) {
@@ -756,8 +747,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<IRFutureOptionSecurity, InterestRateFutureOptionMarginTransactionDefinition> _irFutureOptionSecurity =
-      new Converter<IRFutureOptionSecurity, InterestRateFutureOptionMarginTransactionDefinition>() { // CSIGNORE
+  private final Converter<IRFutureOptionSecurity, InterestRateFutureOptionMarginTransactionDefinition> _irFutureOptionSecurity = new Converter<IRFutureOptionSecurity, InterestRateFutureOptionMarginTransactionDefinition>() { // CSIGNORE
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final IRFutureOptionSecurity security) {
@@ -942,8 +932,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<CapFloorCMSSpreadSecurity, AnnuityCapFloorCMSSpreadDefinition> _capFloorCMSSpreadSecurity =
-      new Converter<CapFloorCMSSpreadSecurity, AnnuityCapFloorCMSSpreadDefinition>() {
+  private final Converter<CapFloorCMSSpreadSecurity, AnnuityCapFloorCMSSpreadDefinition> _capFloorCMSSpreadSecurity = new Converter<CapFloorCMSSpreadSecurity, AnnuityCapFloorCMSSpreadDefinition>() {
 
     @SuppressWarnings("synthetic-access")
     @Override
@@ -989,8 +978,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<ZeroCouponInflationSwapSecurity, SwapFixedInflationZeroCouponDefinition> _zeroCouponInflationSwapSecurity =
-      new Converter<ZeroCouponInflationSwapSecurity, SwapFixedInflationZeroCouponDefinition>() {
+  private final Converter<ZeroCouponInflationSwapSecurity, SwapFixedInflationZeroCouponDefinition> _zeroCouponInflationSwapSecurity = new Converter<ZeroCouponInflationSwapSecurity, SwapFixedInflationZeroCouponDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final ZeroCouponInflationSwapSecurity security) {
@@ -1097,8 +1085,7 @@ public class FixedIncomeConverterDataProvider {
 
   };
 
-  private final Converter<YearOnYearInflationSwapSecurity, SwapFixedInflationYearOnYearDefinition> _yearOnYearInflationSwapSecurity =
-      new Converter<YearOnYearInflationSwapSecurity, SwapFixedInflationYearOnYearDefinition>() {
+  private final Converter<YearOnYearInflationSwapSecurity, SwapFixedInflationYearOnYearDefinition> _yearOnYearInflationSwapSecurity = new Converter<YearOnYearInflationSwapSecurity, SwapFixedInflationYearOnYearDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final YearOnYearInflationSwapSecurity security) {
@@ -1482,8 +1469,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<InterestRateSwapSecurity, SwapMultilegDefinition> _irsMultiLegSecurity =
-      new Converter<InterestRateSwapSecurity, SwapMultilegDefinition>() {
+  private final Converter<InterestRateSwapSecurity, SwapMultilegDefinition> _irsMultiLegSecurity = new Converter<InterestRateSwapSecurity, SwapMultilegDefinition>() {
 
     @SuppressWarnings("synthetic-access")
     @Override
@@ -1633,8 +1619,7 @@ public class FixedIncomeConverterDataProvider {
   /**
    * Converts {@link BondTotalReturnSwapSecurity} and {@link EquityTotalReturnSwapSecurity}.
    */
-  private final Converter<TotalReturnSwapSecurity, TotalReturnSwapDefinition> _totalReturnSwapSecurity =
-      new Converter<TotalReturnSwapSecurity, TotalReturnSwapDefinition>() {
+  private final Converter<TotalReturnSwapSecurity, TotalReturnSwapDefinition> _totalReturnSwapSecurity = new Converter<TotalReturnSwapSecurity, TotalReturnSwapDefinition>() {
 
     @SuppressWarnings("synthetic-access")
     @Override
@@ -1675,8 +1660,7 @@ public class FixedIncomeConverterDataProvider {
     }
   };
 
-  private final Converter<DeliverableSwapFutureSecurity, SwapFuturesPriceDeliverableTransactionDefinition> _dsfTrade =
-      new Converter<DeliverableSwapFutureSecurity, SwapFuturesPriceDeliverableTransactionDefinition>() {
+  private final Converter<DeliverableSwapFutureSecurity, SwapFuturesPriceDeliverableTransactionDefinition> _dsfTrade = new Converter<DeliverableSwapFutureSecurity, SwapFuturesPriceDeliverableTransactionDefinition>() {
 
     @Override
     public Set<ValueRequirement> getTimeSeriesRequirements(final DeliverableSwapFutureSecurity security) {

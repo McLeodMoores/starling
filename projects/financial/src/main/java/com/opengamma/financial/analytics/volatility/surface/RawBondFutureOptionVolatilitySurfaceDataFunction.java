@@ -17,7 +17,7 @@ import com.opengamma.id.VersionCorrection;
 public class RawBondFutureOptionVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public RawBondFutureOptionVolatilitySurfaceDataFunction() {
     super(InstrumentTypeProperties.BOND_FUTURE_OPTION);

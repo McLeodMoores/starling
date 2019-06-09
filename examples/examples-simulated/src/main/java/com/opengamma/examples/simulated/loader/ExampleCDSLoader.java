@@ -40,7 +40,8 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.util.money.Currency;
 
 /**
- * Load example CDS security and store for testing
+ * Load example CDS security and store for testing.
+ * 
  * @author Martin Traverse
  * @see CDSSecurity
  * @see CDSSimplePresentValueFunction
@@ -49,17 +50,18 @@ public class ExampleCDSLoader extends AbstractTool<ToolContext> {
 
   private int _counter;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ExampleCDSLoader().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
 
@@ -74,7 +76,6 @@ public class ExampleCDSLoader extends AbstractTool<ToolContext> {
   }
 
   private void portfolioWithSecurity(final Security security, final String portfolioName) {
-
 
     final PositionMaster posMaster = getToolContext().getPositionMaster();
     final PortfolioMaster portMaster = getToolContext().getPortfolioMaster();
@@ -101,11 +102,11 @@ public class ExampleCDSLoader extends AbstractTool<ToolContext> {
     final DayCount dayCount = DayCounts.ACT_360;
     final BusinessDayConvention businessDayConvention = BusinessDayConventions.FOLLOWING;
     final CDSSecurity cds1 = new CDSSecurity(1.0, 0.6, 0.4, Currency.USD, maturity, startDate,
-                                             frequency,
-                                             dayCount,
-                                             businessDayConvention,
-                                             StubType.SHORT_START, 3,
-                                             "US Treasury", Currency.USD, "Senior", "No Restructuring");
+        frequency,
+        dayCount,
+        businessDayConvention,
+        StubType.SHORT_START, 3,
+        "US Treasury", Currency.USD, "Senior", "No Restructuring");
     cds1.addExternalId(ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "TEST_CDS_00001--US912828KY53-A"));
     cds1.setName("TEST CDS" + _counter++);
 

@@ -37,7 +37,7 @@ public class EquityOptionBjerksundStenslandScenarioPnLFunction extends EquityOpt
   /** The Bjerksund-Stensland present value calculator */
   private static final EqyOptBjerksundStenslandPresentValueCalculator PV_CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBjerksundStenslandScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }

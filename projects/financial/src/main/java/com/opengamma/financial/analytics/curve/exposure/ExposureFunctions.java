@@ -65,16 +65,18 @@ public class ExposureFunctions extends DirectBean implements Serializable, Uniqu
   private Map<ExternalId, String> _idsToNames;
 
   /**
-   * For the builder
+   * For the builder.
    */
-  /* package */ExposureFunctions() {
+  /* package */ ExposureFunctions() {
   }
 
   /**
-   * @param name The name of the configuration, not null
-   * @param exposureFunctions The list of exposure functions and curve construction configuration names in order, not null
-   * @param idsToNames A map of ids to curve configuration names, not null
-   * of priority, not null or empty
+   * @param name
+   *          The name of the configuration, not null
+   * @param exposureFunctions
+   *          The list of exposure functions and curve construction configuration names in order, not null
+   * @param idsToNames
+   *          A map of ids to curve configuration names, not null of priority, not null or empty
    */
   public ExposureFunctions(final String name, final List<String> exposureFunctions, final Map<ExternalId, String> idsToNames) {
     ArgumentChecker.notEmpty(exposureFunctions, "exposure functions");

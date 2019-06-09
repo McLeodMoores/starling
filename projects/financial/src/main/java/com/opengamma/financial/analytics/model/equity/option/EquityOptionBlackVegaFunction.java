@@ -31,7 +31,7 @@ public class EquityOptionBlackVegaFunction extends EquityOptionBlackFunction {
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackVegaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackVegaFunction() {
     super(ValueRequirementNames.VEGA);

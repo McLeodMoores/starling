@@ -26,11 +26,11 @@ import com.opengamma.id.UniqueId;
 public class CurrencyPairsFudgeBuilder implements FudgeBuilder<CurrencyPairs> {
 
   /**
-   * Field name for the unique ID
+   * Field name for the unique ID.
    */
   public static final String UNIQUE_ID_FIELD_NAME = "uniqueId";
   /**
-   * Field name for the set of currency pairs
+   * Field name for the set of currency pairs.
    */
   public static final String CURRENCY_PAIRS_FIELD_NAME = "currencyPairs";
 

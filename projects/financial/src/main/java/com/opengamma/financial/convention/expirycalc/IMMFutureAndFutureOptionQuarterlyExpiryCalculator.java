@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 @ExpiryCalculator
 public final class IMMFutureAndFutureOptionQuarterlyExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  /** Name of the calculator */
+  /** Name of the calculator. */
   public static final String NAME = "IMMFutureOptionQuarterlyExpiryCalculator";
   /** Singleton. */
   private static final IMMFutureAndFutureOptionQuarterlyExpiryCalculator INSTANCE = new IMMFutureAndFutureOptionQuarterlyExpiryCalculator();

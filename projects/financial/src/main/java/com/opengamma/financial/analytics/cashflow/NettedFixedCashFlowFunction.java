@@ -58,7 +58,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 @Deprecated
 public class NettedFixedCashFlowFunction extends AbstractFunction {
 
-  /** Property name for the date field */
+  /** Property name for the date field. */
   public static final String PROPERTY_DATE = "Date";
   private static final Logger LOGGER = LoggerFactory.getLogger(NettedFixedCashFlowFunction.class);
   private static final NettedFixedCashFlowFromDateCalculator NETTING_CASH_FLOW_CALCULATOR = NettedFixedCashFlowFromDateCalculator.getInstance();

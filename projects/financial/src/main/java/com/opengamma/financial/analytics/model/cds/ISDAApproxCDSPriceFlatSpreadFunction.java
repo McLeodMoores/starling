@@ -32,7 +32,7 @@ import com.opengamma.financial.security.cds.CDSSecurity;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Price CDS contracts according to the ISDA model using a flat spread
+ * Price CDS contracts according to the ISDA model using a flat spread.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see ISDAApproxCDSPricingMethod

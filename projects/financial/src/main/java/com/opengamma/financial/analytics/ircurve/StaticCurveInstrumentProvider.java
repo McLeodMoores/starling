@@ -29,7 +29,7 @@ public class StaticCurveInstrumentProvider implements CurveInstrumentProvider {
   private final DataFieldType _fieldType;
 
   /**
-   * Sets the data field for market data to {@link MarketDataRequirementNames#MARKET_VALUE}
+   * Sets the data field for market data to {@link MarketDataRequirementNames#MARKET_VALUE}.
    *
    * @param identifier
    *          The market data identifier, not null

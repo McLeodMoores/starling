@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.target.ComputationTargetType;
 
 /**
- * Node for representing ComputationTargetType
+ * Node for representing ComputationTargetType.
  */
 public class ComputationTargetTypeNode extends AbstractTreeTableLeafNode {
 

@@ -33,7 +33,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * The function to compute the theoretical theta of Forex options in the Black model.
- * 
+ *
  * @deprecated Use {@link BlackDiscountingValueThetaFXOptionFunction}
  */
 @Deprecated
@@ -48,7 +48,7 @@ public class FXOptionBlackThetaFunction extends FXOptionBlackSingleValuedFunctio
   private static final double DEFAULT_DAYS_PER_YEAR = 365.25;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}.
    */
   public FXOptionBlackThetaFunction() {
     super(ValueRequirementNames.VALUE_THETA);

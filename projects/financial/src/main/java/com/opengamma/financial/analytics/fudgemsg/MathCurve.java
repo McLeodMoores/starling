@@ -27,7 +27,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Fudge builders for com.opengamma.analytics.math.curve.* classes
+ * Fudge builders for com.opengamma.analytics.math.curve.* classes.
  */
 final class MathCurve {
 
@@ -35,7 +35,7 @@ final class MathCurve {
   }
 
   /**
-   * Fudge builder for {@link ConstantDoublesCurve}
+   * Fudge builder for {@link ConstantDoublesCurve}.
    */
   @FudgeBuilderFor(ConstantDoublesCurve.class)
   public static final class ConstantDoublesCurveBuilder extends AbstractFudgeBuilder<ConstantDoublesCurve> {
@@ -57,7 +57,7 @@ final class MathCurve {
   }
 
   /**
-   * Fudge builder for {@link InterpolatedDoublesCurve}
+   * Fudge builder for {@link InterpolatedDoublesCurve}.
    */
   @FudgeBuilderFor(InterpolatedDoublesCurve.class)
   public static final class InterpolatedDoublesCurveBuilder extends AbstractFudgeBuilder<InterpolatedDoublesCurve> {
@@ -86,7 +86,7 @@ final class MathCurve {
   }
 
   /**
-   * Fudge builder for {@link FunctionalDoublesCurve}
+   * Fudge builder for {@link FunctionalDoublesCurve}.
    */
   @FudgeBuilderFor(FunctionalDoublesCurve.class)
   public static final class FunctionalDoublesCurveBuilder extends AbstractFudgeBuilder<FunctionalDoublesCurve> {
@@ -114,7 +114,7 @@ final class MathCurve {
   }
 
   /**
-   * Fudge builder for {@link NodalDoublesCurve}
+   * Fudge builder for {@link NodalDoublesCurve}.
    */
   @FudgeBuilderFor(NodalDoublesCurve.class)
   public static final class NodalDoublesCurveBuilder extends AbstractFudgeBuilder<NodalDoublesCurve> {
@@ -140,7 +140,7 @@ final class MathCurve {
   }
 
   /**
-   * Fudge builder for {@link NodalTenorDoubleCurve}
+   * Fudge builder for {@link NodalTenorDoubleCurve}.
    */
   @FudgeBuilderFor(NodalTenorDoubleCurve.class)
   public static final class NodalTenorDoubleCurveBuilder extends AbstractFudgeBuilder<NodalTenorDoubleCurve> {
@@ -176,7 +176,7 @@ final class MathCurve {
   }
 
   /**
-   * Fudge builder for {@link NodalObjectsCurve}
+   * Fudge builder for {@link NodalObjectsCurve}.
    */
   @FudgeBuilderFor(NodalObjectsCurve.class)
   public static final class NodalObjectsCurveBuilder extends AbstractFudgeBuilder<NodalObjectsCurve<?, ?>> {

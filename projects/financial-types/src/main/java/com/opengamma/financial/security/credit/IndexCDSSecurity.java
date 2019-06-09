@@ -39,11 +39,11 @@ public class IndexCDSSecurity extends FinancialSecurity {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "INDEX_CDS";
 
-  //optional??
+  // optional??
   /**
    * The trade date, aka T.
    */
@@ -51,7 +51,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
   private LocalDate _tradeDate;
 
   /**
-   * Is protection being bought?
+   * Is protection being bought.
    */
   @PropertyDefinition(validate = "notNull")
   private boolean _buyProtection;
@@ -63,7 +63,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
   private SecurityLink<IndexCDSDefinitionSecurity> _underlyingIndex;
 
   /**
-   * The index tenor, must be listed in the index definition
+   * The index tenor, must be listed in the index definition.
    */
   @PropertyDefinition(validate = "notNull")
   private Tenor _indexTenor;
@@ -74,7 +74,6 @@ public class IndexCDSSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private InterestRateNotional _notional;
 
-
   /**
    * Constructor for Joda bean usage.
    */
@@ -83,7 +82,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * An Index CDS
+   * An Index CDS.
    *
    * @param id
    *          identifier for this index CDS, not null
@@ -110,7 +109,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * An Index CDS
+   * An Index CDS.
    *
    * @param id
    *          identifier for this index CDS, not null
@@ -130,14 +129,14 @@ public class IndexCDSSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
     setBuyProtection(buy);
-    setUnderlyingIndex(SecurityLink.<IndexCDSDefinitionSecurity>resolvable(underlyingIndex));
+    setUnderlyingIndex(SecurityLink.<IndexCDSDefinitionSecurity> resolvable(underlyingIndex));
     setIndexTenor(indexTenor);
     setTradeDate(tradeDate);
     setNotional(notional);
   }
 
   /**
-   * An Index CDS
+   * An Index CDS.
    *
    * @param id
    *          identifier for this index CDS, not null
@@ -168,15 +167,22 @@ public class IndexCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * An Index CDS
+   * An Index CDS.
    *
-   * @param id identifier for this index cds, not null
-   * @param name the descriptive name for the security, not null
-   * @param buy is protection being bought, not null
-   * @param underlyingIndex the underling index definition (generally a RED code), not null
-   * @param indexTenor the unerlying index tenor, not null
-   * @param tradeDate the trade date, not null
-   * @param notional the notional, not null
+   * @param id
+   *          identifier for this index cds, not null
+   * @param name
+   *          the descriptive name for the security, not null
+   * @param buy
+   *          is protection being bought, not null
+   * @param underlyingIndex
+   *          the underling index definition (generally a RED code), not null
+   * @param indexTenor
+   *          the unerlying index tenor, not null
+   * @param tradeDate
+   *          the trade date, not null
+   * @param notional
+   *          the notional, not null
    */
   public IndexCDSSecurity(final ExternalIdBundle id, final String name, final boolean buy, final ExternalId underlyingIndex, final Tenor indexTenor,
       final LocalDate tradeDate, final InterestRateNotional notional) {
@@ -184,7 +190,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
     setExternalIdBundle(id);
     setName(name);
     setBuyProtection(buy);
-    setUnderlyingIndex(SecurityLink.<IndexCDSDefinitionSecurity>resolvable(underlyingIndex));
+    setUnderlyingIndex(SecurityLink.<IndexCDSDefinitionSecurity> resolvable(underlyingIndex));
     setIndexTenor(indexTenor);
     setTradeDate(tradeDate);
     setNotional(notional);
@@ -242,7 +248,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets is protection being bought?
+   * Gets is protection being bought.
    * @return the value of the property, not null
    */
   public boolean isBuyProtection() {
@@ -250,7 +256,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets is protection being bought?
+   * Sets is protection being bought.
    * @param buyProtection  the new value of the property, not null
    */
   public void setBuyProtection(boolean buyProtection) {
@@ -294,7 +300,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the index tenor, must be listed in the index definition
+   * Gets the index tenor, must be listed in the index definition.
    * @return the value of the property, not null
    */
   public Tenor getIndexTenor() {
@@ -302,7 +308,7 @@ public class IndexCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the index tenor, must be listed in the index definition
+   * Sets the index tenor, must be listed in the index definition.
    * @param indexTenor  the new value of the property, not null
    */
   public void setIndexTenor(Tenor indexTenor) {

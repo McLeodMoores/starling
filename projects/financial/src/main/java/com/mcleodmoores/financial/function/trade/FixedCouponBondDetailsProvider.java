@@ -42,7 +42,7 @@ public class FixedCouponBondDetailsProvider implements ImmutableBean, Instrument
   @PropertyDefinition(overrideGet = true)
   private final ZonedDateTime _valuationTime;
   /**
-   * The bond definition
+   * The bond definition.
    */
   @PropertyDefinition(overrideGet = true)
   private final BondFixedTransactionDefinition _definition;
@@ -113,7 +113,7 @@ public class FixedCouponBondDetailsProvider implements ImmutableBean, Instrument
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bond definition
+   * Gets the bond definition.
    * @return the value of the property
    */
   @Override
@@ -415,7 +415,7 @@ public class FixedCouponBondDetailsProvider implements ImmutableBean, Instrument
     }
 
     /**
-     * Sets the bond definition
+     * Sets the bond definition.
      * @param definition  the new value
      * @return this, for chaining, not null
      */

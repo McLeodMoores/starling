@@ -52,7 +52,7 @@ public class VanillaIborLegRollDateConvention extends FinancialConvention {
   @PropertyDefinition
   private boolean _isAdvanceFixing;
   /**
-   * The reset tenor of the underlying index
+   * The reset tenor of the underlying index.
    */
   @PropertyDefinition(validate = "notNull")
   private Tenor _resetTenor;
@@ -208,7 +208,7 @@ public class VanillaIborLegRollDateConvention extends FinancialConvention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the reset tenor of the underlying index
+   * Gets the reset tenor of the underlying index.
    * @return the value of the property, not null
    */
   public Tenor getResetTenor() {
@@ -216,7 +216,7 @@ public class VanillaIborLegRollDateConvention extends FinancialConvention {
   }
 
   /**
-   * Sets the reset tenor of the underlying index
+   * Sets the reset tenor of the underlying index.
    * @param resetTenor  the new value of the property, not null
    */
   public void setResetTenor(Tenor resetTenor) {

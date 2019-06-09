@@ -40,7 +40,7 @@ public class ListedEquityOptionRollGeskeWhaleyImpliedVolFunction extends ListedE
    */
   private static final EqyOptRollGeskeWhaleyImpliedVolatilityCalculator VOL_CALCULATOR = EqyOptRollGeskeWhaleyImpliedVolatilityCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionRollGeskeWhaleyImpliedVolFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }

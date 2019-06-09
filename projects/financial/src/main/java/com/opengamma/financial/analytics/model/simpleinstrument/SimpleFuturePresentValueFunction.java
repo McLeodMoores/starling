@@ -13,7 +13,7 @@ import com.opengamma.analytics.financial.simpleinstruments.pricing.SimpleFutureD
 import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
- * Simple Function computes PV as the difference between Live and last day's closing prices
+ * Simple Function computes PV as the difference between Live and last day's closing prices.
  */
 public class SimpleFuturePresentValueFunction extends SimpleFutureFunction {
 

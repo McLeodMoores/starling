@@ -29,7 +29,7 @@ public class RawEquityFutureOptionVolatilitySurfaceDataFunction extends RawVolat
       ExternalSchemes.ACTIVFEED_TICKER);
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public RawEquityFutureOptionVolatilitySurfaceDataFunction() {
     super(InstrumentTypeProperties.EQUITY_FUTURE_OPTION);

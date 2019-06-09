@@ -31,7 +31,7 @@ public class CommodityFutureOptionBjerksundStenslandValueDeltaFunction extends C
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBjerksundStenslandValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

@@ -26,7 +26,7 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
 
   /**
    * Gets the expiryRules.
-   * 
+   *
    * @return the expiryRules
    */
   public static Map<?, ?> getExpiryRules() {
@@ -82,8 +82,8 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
   }
 
   /**
-   * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme
-   * 
+   * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme.
+   *
    * @param futurePrefix
    *          e.g. "AAPL="
    * @param postfix
@@ -117,7 +117,7 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
    * <p>
    * e.g. AAPL=G3 OC Equity
    * <p>
-   * 
+   *
    * @param futureOptionNumber
    *          n'th future following curve date, not null
    * @param curveDate
@@ -171,7 +171,7 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
 
   /**
    * Gets the exchange.
-   * 
+   *
    * @return the exchange
    */
   public String getExchange() {

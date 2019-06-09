@@ -53,7 +53,7 @@ public class AUDSwapPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
   /** Semi-annual frequency */
   private static final Frequency SEMI_ANNUAL = PeriodFrequency.SEMI_ANNUAL;
   /** The region */
-  private static final ExternalId REGION =  ExternalSchemes.financialRegionId("AU");
+  private static final ExternalId REGION = ExternalSchemes.financialRegionId("AU");
   /** Following business day convention */
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   /** The notional */
@@ -68,22 +68,26 @@ public class AUDSwapPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
   private static final SwapSecurity[] SWAPS = new SwapSecurity[4];
 
   static {
-    final FloatingInterestRateLeg payLeg1 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg payLeg1 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg receiveLeg1 = new FixedInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, 0.04);
     final SwapSecurity swap1 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg1, receiveLeg1);
     swap1.setName("Swap AUD Bank Bill 3m");
     swap1.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    final FloatingInterestRateLeg payLeg2 = new FloatingInterestRateLeg(ACT_365, SEMI_ANNUAL, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_6M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg payLeg2 = new FloatingInterestRateLeg(ACT_365, SEMI_ANNUAL, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_6M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg receiveLeg2 = new FixedInterestRateLeg(ACT_365, SEMI_ANNUAL, REGION, FOLLOWING, NOTIONAL, true, 0.04);
     final SwapSecurity swap2 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg2, receiveLeg2);
     swap2.setName("Swap AUD Bank Bill 6m");
     swap2.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    final FloatingInterestRateLeg payLeg3 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg payLeg3 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg receiveLeg3 = new FixedInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, 0.0365);
     final SwapSecurity swap3 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg3, receiveLeg3);
     swap3.setName("Swap: receive 3.65% fixed ACT/365 vs 3m Bank Bill");
     swap3.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    final FloatingInterestRateLeg receiveLeg4 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg receiveLeg4 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg payLeg4 = new FixedInterestRateLeg(ACT_360, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, 0.036);
     final SwapSecurity swap4 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg4, receiveLeg4);
     swap4.setName("Swap: pay 3.60% fixed vs 3m Bank Bill");

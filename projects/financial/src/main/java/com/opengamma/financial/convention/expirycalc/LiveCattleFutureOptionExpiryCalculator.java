@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 @ExpiryCalculator
 public final class LiveCattleFutureOptionExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  /** Name of the calculator */
+  /** Name of the calculator. */
   public static final String NAME = "LiveCattleFutureOptionExpiryCalculator";
   /** Singleton. */
   private static final LiveCattleFutureOptionExpiryCalculator INSTANCE = new LiveCattleFutureOptionExpiryCalculator();

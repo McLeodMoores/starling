@@ -22,7 +22,7 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * Conversion operation for OptionSecurity to/from OptionSecurityBean
+ * Conversion operation for OptionSecurity to/from OptionSecurityBean.
  */
 public final class SwaptionSecurityBeanOperation extends AbstractSecurityBeanOperation<SwaptionSecurity, SwaptionSecurityBean> {
 

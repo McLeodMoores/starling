@@ -6,8 +6,7 @@
 package com.opengamma.masterdb.security.hibernate;
 
 /**
- * Hibernate bean for storing the
- * {@link com.opengamma.analytics.financial.credit.RestructuringClause} type
+ * Hibernate bean for storing the {@link com.opengamma.analytics.financial.credit.RestructuringClause} type.
  */
 public class RestructuringClauseBean extends EnumBean {
 

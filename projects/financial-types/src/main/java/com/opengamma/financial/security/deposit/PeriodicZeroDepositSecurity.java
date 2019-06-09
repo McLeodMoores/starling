@@ -26,8 +26,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * A security representing a cash deposit with a periodically-compounded zero
- * rate.
+ * A security representing a cash deposit with a periodically-compounded zero rate.
  */
 @BeanDefinition
 @SecurityDescription(type = PeriodicZeroDepositSecurity.SECURITY_TYPE, description = "Periodic zero deposit")
@@ -35,7 +34,7 @@ public class PeriodicZeroDepositSecurity extends FinancialSecurity {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
-  /** The security type */
+  /** The security type. */
   public static final String SECURITY_TYPE = "PERIODIC_ZERO_DEPOSIT";
 
   /** The currency. */

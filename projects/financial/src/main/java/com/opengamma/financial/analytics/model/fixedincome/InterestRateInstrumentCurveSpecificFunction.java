@@ -72,7 +72,7 @@ import com.opengamma.util.money.Currency;
 public abstract class InterestRateInstrumentCurveSpecificFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateInstrumentCurveSpecificFunction.class);
-  /** The requested curve property */
+  /** The requested curve property. */
   protected static final String PROPERTY_REQUESTED_CURVE = ValuePropertyNames.OUTPUT_RESERVED_PREFIX + "RequestedCurve";
   /** The value requirement produced by this function */
   private final String _valueRequirement;

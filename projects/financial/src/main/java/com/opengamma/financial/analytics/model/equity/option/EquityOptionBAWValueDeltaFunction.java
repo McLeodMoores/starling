@@ -31,7 +31,7 @@ public class EquityOptionBAWValueDeltaFunction extends EquityOptionBAWFunction {
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBAWValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

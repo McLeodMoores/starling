@@ -20,7 +20,7 @@ import com.google.common.collect.Sets;
 import com.opengamma.util.money.Currency;
 
 /**
- * TODO this logic is useful for any class that extends Selector - move to helper methods in selector fudge builder
+ * TODO this logic is useful for any class that extends Selector - move to helper methods in selector fudge builder.
  */
 @FudgeBuilderFor(YieldCurveSelector.class)
 public class YieldCurveSelectorFudgeBuilder implements FudgeBuilder<YieldCurveSelector> {

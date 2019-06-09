@@ -32,8 +32,8 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Prototype - Reports {@link ValueRequirementNames#NET_MARKET_VALUE} as the sum of the swap's {@link ValueRequirementNames#NOTIONAL} and its
- * {@link ValueRequirementNames#PRESENT_VALUE}
- * 
+ * {@link ValueRequirementNames#PRESENT_VALUE}.
+ *
  * @deprecated Deprecated
  */
 @Deprecated

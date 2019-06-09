@@ -32,17 +32,14 @@ import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 
 /**
- * Calculates the market quotes of future that have been priced using
- * the discounting method.
+ * Calculates the market quotes of future that have been priced using the discounting method.
  */
 public class DiscountingMarketQuoteFunction extends DiscountingFunction {
   /** The market quote calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> CALCULATOR =
-      MarketQuoteDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> CALCULATOR = MarketQuoteDiscountingCalculator.getInstance();
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#MARKET_QUOTE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#MARKET_QUOTE}.
    */
   public DiscountingMarketQuoteFunction() {
     super(MARKET_QUOTE);

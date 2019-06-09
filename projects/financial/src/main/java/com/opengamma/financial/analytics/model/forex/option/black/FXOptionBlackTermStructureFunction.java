@@ -63,7 +63,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 @Deprecated
 public abstract class FXOptionBlackTermStructureFunction extends AbstractFunction.NonCompiledInvoker {
-  /** The name of the calculation method */
+  /** The name of the calculation method. */
   public static final String BLACK_TERM_STRUCTURE_METHOD = "BlackTermStructure";
   private final String _valueRequirementName;
 

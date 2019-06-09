@@ -38,7 +38,7 @@ public class DiscountingInflationParSpreadFunction extends DiscountingInflationF
       .getInstance();
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PAR_SPREAD}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PAR_SPREAD}.
    */
   public DiscountingInflationParSpreadFunction() {
     super(PAR_SPREAD);

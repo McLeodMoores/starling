@@ -22,7 +22,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingValueVegaIR
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * @deprecated Use {@link BlackDiscountingValueVegaIRFutureOptionFunction}
+ * @deprecated Use {@link BlackDiscountingValueVegaIRFutureOptionFunction}.
  */
 @Deprecated
 public class InterestRateFutureOptionBlackVolatilitySensitivityFunction extends InterestRateFutureOptionBlackFunction {
@@ -30,7 +30,7 @@ public class InterestRateFutureOptionBlackVolatilitySensitivityFunction extends 
   private static final PresentValueBlackSensitivityBlackCalculator CALCULATOR = PresentValueBlackSensitivityBlackCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_VEGA}.
    */
   public InterestRateFutureOptionBlackVolatilitySensitivityFunction() {
     super(ValueRequirementNames.VALUE_VEGA, true);

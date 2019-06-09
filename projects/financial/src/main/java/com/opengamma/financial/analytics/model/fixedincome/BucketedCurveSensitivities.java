@@ -34,7 +34,7 @@ import com.opengamma.util.tuple.Pair;
 public final class BucketedCurveSensitivities implements ImmutableBean {
 
   /**
-   * Sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
+   * Sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities.
    */
   @PropertyDefinition(validate = "notNull")
   private final Map<Pair<String, Currency>, DoubleLabelledMatrix1D> _sensitivities;
@@ -42,8 +42,8 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
   /**
    * Create curve sensitivities from an input map.
    *
-   * @param sensitivities the sensitivities as a map keyed by a {@link Pair} of curve name and currency,
-   * and holding the curve sensitivities
+   * @param sensitivities
+   *          the sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
    * @return the sensitivities object
    */
   public static BucketedCurveSensitivities of(final Map<Pair<String, Currency>, DoubleLabelledMatrix1D> sensitivities) {
@@ -95,7 +95,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
+   * Gets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities.
    * @return the value of the property, not null
    */
   public Map<Pair<String, Currency>, DoubleLabelledMatrix1D> getSensitivities() {
@@ -312,7 +312,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
+     * Sets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities.
      * @param sensitivities  the new value, not null
      * @return this, for chaining, not null
      */

@@ -29,7 +29,7 @@ import com.opengamma.util.money.Currency;
  */
 @BeanDefinition
 public class SecurityEntryData extends DirectBean {
-  /** Name for the external security scheme */
+  /** Name for the external security scheme. */
   public static final String SECURITY_SCHEME = "EXTERNAL_SENSITIVITIES_SECURITY";
   @PropertyDefinition
   private ExternalId _id;
@@ -39,13 +39,13 @@ public class SecurityEntryData extends DirectBean {
   private LocalDate _maturityDate;
   @PropertyDefinition
   private ExternalId _factorSetId;
-  /** Name of the external security type */
+  /** Name of the external security type. */
   public static final String EXTERNAL_SENSITIVITIES_SECURITY_TYPE = "EXTERNAL_SENSITIVITIES_SECURITY";
 
   public SecurityEntryData() {
   }
 
-  public SecurityEntryData(final ExternalId id, final Currency currency, final LocalDate  maturityDate, final ExternalId factorSetId) {
+  public SecurityEntryData(final ExternalId id, final Currency currency, final LocalDate maturityDate, final ExternalId factorSetId) {
     setId(id);
     setCurrency(currency);
     setMaturityDate(maturityDate);

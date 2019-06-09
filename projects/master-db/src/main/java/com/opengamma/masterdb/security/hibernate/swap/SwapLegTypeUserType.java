@@ -17,7 +17,7 @@ import com.opengamma.financial.security.swap.SwapLegVisitor;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the SwapLegType enum
+ * Custom Hibernate usertype for the SwapLegType enum.
  */
 public class SwapLegTypeUserType extends EnumUserType<SwapLegType> {
 

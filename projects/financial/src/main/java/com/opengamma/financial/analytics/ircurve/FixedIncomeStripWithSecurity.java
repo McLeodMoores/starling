@@ -29,7 +29,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the fixed income strip.
-   * 
+   *
    * @return The fixed income strip
    */
   public FixedIncomeStrip getStrip() {
@@ -38,7 +38,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the instrumentType field.
-   * 
+   *
    * @return the instrumentType
    */
   public StripInstrumentType getInstrumentType() {
@@ -46,8 +46,8 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   }
 
   /**
-   * Gets the tenor field
-   * 
+   * Gets the tenor field.
+   *
    * @return the tenor
    */
   public Tenor getTenor() {
@@ -55,8 +55,8 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   }
 
   /**
-   * Gets the resolved tenor field
-   * 
+   * Gets the resolved tenor field.
+   *
    * @return the tenor
    */
   public Tenor getResolvedTenor() {
@@ -65,7 +65,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Get the number of the quarterly IR futures after the tenor to choose. NOTE: THIS DOESN'T REFER TO A GENERIC FUTURE
-   * 
+   *
    * @return number of futures after the tenor
    * @throws IllegalStateException
    *           if called on a non-future strip
@@ -75,7 +75,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   }
 
   /**
-   * Get the periods per year of a periodic zero deposit security
+   * Get the periods per year of a periodic zero deposit security.
    *
    * @return the number of periods per year
    * @throws IllegalStateException
@@ -87,7 +87,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the years field.
-   * 
+   *
    * @return the years
    */
   public ZonedDateTime getMaturity() {
@@ -97,7 +97,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   /**
    * Gets the identifier that was used to resolve the security This is available, just so the same identifier can be conveniently used to retrieve requested
    * market data.
-   * 
+   *
    * @return The security identifier
    */
   public ExternalId getSecurityIdentifier() {
@@ -106,7 +106,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the security field.
-   * 
+   *
    * @return the security
    */
   public Security getSecurity() {

@@ -32,17 +32,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of cap/floors using a shifted lognormal surface and
- * curves constructed using the discounting method.
+ * Calculates the present value of cap/floors using a shifted lognormal surface and curves constructed using the discounting method.
  */
 public class ShiftedLognormalDiscountingPVCapFloorFunction extends ShiftedLognormalDiscountingCapFloorFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      PresentValueBlackSmileShiftCapCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueBlackSmileShiftCapCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public ShiftedLognormalDiscountingPVCapFloorFunction() {
     super(PRESENT_VALUE);

@@ -32,17 +32,14 @@ import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 
 /**
- * Calculates the market quote of futures that have been priced using
- * the Hull-White one factor method.
+ * Calculates the market quote of futures that have been priced using the Hull-White one factor method.
  */
 public class HullWhiteMarketQuoteFunction extends HullWhiteDiscountingFunction {
   /** The market quote calculator */
-  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR =
-      MarketQuoteHullWhiteCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR = MarketQuoteHullWhiteCalculator.getInstance();
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#MARKET_QUOTE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#MARKET_QUOTE}.
    */
   public HullWhiteMarketQuoteFunction() {
     super(MARKET_QUOTE);

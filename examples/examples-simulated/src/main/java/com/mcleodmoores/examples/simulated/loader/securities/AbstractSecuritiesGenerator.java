@@ -249,7 +249,7 @@ public abstract class AbstractSecuritiesGenerator {
   }
 
   /**
-   * Configures the chain for this tool and security generator
+   * Configures the chain for this tool and security generator.
    *
    * @param securityGenerator
    *          The security generator, not null if the object context is not null
@@ -370,7 +370,7 @@ public abstract class AbstractSecuritiesGenerator {
   }
 
   /**
-   * Sets the options for this tool: -s for the security generator name, -w to write to the security master
+   * Sets the options for this tool: -s for the security generator name, -w to write to the security master.
    *
    * @param options
    *          The options

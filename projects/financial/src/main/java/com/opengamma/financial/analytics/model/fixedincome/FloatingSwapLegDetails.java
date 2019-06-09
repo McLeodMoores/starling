@@ -32,7 +32,7 @@ import com.opengamma.util.time.Tenor;
  */
 @Deprecated
 @BeanDefinition
-public class  FloatingSwapLegDetails extends DirectBean implements Serializable {
+public class FloatingSwapLegDetails extends DirectBean implements Serializable {
   /**
    * The start accrual dates label.
    */
@@ -207,39 +207,56 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
   @PropertyDefinition(validate = "notNull")
   private Tenor[] _indexTenors;
   /**
-   * The discounted payment amount
+   * The discounted payment amount.
    */
   public static final String DISCOUNTED_PAYMENT_AMOUNT = "Discounted Payment Amount";
   /**
-   * The discounted projected amount
+   * The discounted projected amount.
    */
   public static final String DISCOUNTED_PROJECTED_PAYMENT = "Discounted Projected Payment";
 
   /**
    * For the builder.
    */
-  /* package */FloatingSwapLegDetails() {
+  /* package */ FloatingSwapLegDetails() {
     super();
   }
 
   /**
-   * @param accrualStartDates The start accrual dates, not null
-   * @param accrualEndDates The end accrual dates, not null
-   * @param accrualYearFractions The accrual year fractions, not null
-   * @param fixingStart The fixing start dates, not null
-   * @param fixingEnd The fixing end dates, not null
-   * @param fixingYearFractions The fixing year fractions, not null
-   * @param forwardRates The forward rates, not null
-   * @param fixedRates The fixed rates, not null
-   * @param paymentDates The payment dates, not null
-   * @param paymentTimes The payment times, not null
-   * @param paymentDiscountFactors The payment discount factors, not null
-   * @param paymentAmounts The payment amounts, not null
-   * @param projectedAmounts The projected amounts, not null
-   * @param notionals The notionals, not null
-   * @param spreads The spreads, not null
-   * @param gearings The gearings, not null
-   * @param indexTenors The index tenors, not null
+   * @param accrualStartDates
+   *          The start accrual dates, not null
+   * @param accrualEndDates
+   *          The end accrual dates, not null
+   * @param accrualYearFractions
+   *          The accrual year fractions, not null
+   * @param fixingStart
+   *          The fixing start dates, not null
+   * @param fixingEnd
+   *          The fixing end dates, not null
+   * @param fixingYearFractions
+   *          The fixing year fractions, not null
+   * @param forwardRates
+   *          The forward rates, not null
+   * @param fixedRates
+   *          The fixed rates, not null
+   * @param paymentDates
+   *          The payment dates, not null
+   * @param paymentTimes
+   *          The payment times, not null
+   * @param paymentDiscountFactors
+   *          The payment discount factors, not null
+   * @param paymentAmounts
+   *          The payment amounts, not null
+   * @param projectedAmounts
+   *          The projected amounts, not null
+   * @param notionals
+   *          The notionals, not null
+   * @param spreads
+   *          The spreads, not null
+   * @param gearings
+   *          The gearings, not null
+   * @param indexTenors
+   *          The index tenors, not null
    */
   public FloatingSwapLegDetails(final LocalDate[] accrualStartDates, final LocalDate[] accrualEndDates, final double[] accrualYearFractions,
       final LocalDate[] fixingStart, final LocalDate[] fixingEnd, final Double[] fixingYearFractions, final Double[] forwardRates,
@@ -283,6 +300,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
 
   /**
    * Gets the total number of cash-flows.
+   * 
    * @return The total number of cash-flows
    */
   @DerivedProperty
@@ -292,6 +310,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
 
   /**
    * Gets the number of fixed cash-flows.
+   * 
    * @return The number of fixed cash-flows
    */
   @DerivedProperty
@@ -301,6 +320,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
 
   /**
    * Gets the number of floating cash-flows.
+   * 
    * @return The number of floating cash-flows
    */
   @DerivedProperty
@@ -310,6 +330,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
 
   /**
    * Gets the discounted payment amounts.
+   * 
    * @return the discounted cashflows
    */
   @DerivedProperty
@@ -328,6 +349,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
 
   /**
    * Gets the discounted projected payment amounts.
+   * 
    * @return the discounted cashflows
    */
   @DerivedProperty
@@ -808,6 +830,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
   //-----------------------------------------------------------------------
   /**
    * Gets the the {@code numberOfCashFlows} property.
+   * 
    * @return the property, not null
    */
   public final Property<Integer> numberOfCashFlows() {
@@ -817,6 +840,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
   //-----------------------------------------------------------------------
   /**
    * Gets the the {@code numberOfFixedCashFlows} property.
+   * 
    * @return the property, not null
    */
   public final Property<Integer> numberOfFixedCashFlows() {
@@ -826,6 +850,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
   //-----------------------------------------------------------------------
   /**
    * Gets the the {@code numberOfFloatingCashFlows} property.
+   * 
    * @return the property, not null
    */
   public final Property<Integer> numberOfFloatingCashFlows() {
@@ -835,6 +860,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
   //-----------------------------------------------------------------------
   /**
    * Gets the the {@code discountedPaymentAmounts} property.
+   * 
    * @return the property, not null
    */
   public final Property<CurrencyAmount[]> discountedPaymentAmounts() {
@@ -844,6 +870,7 @@ public class  FloatingSwapLegDetails extends DirectBean implements Serializable 
   //-----------------------------------------------------------------------
   /**
    * Gets the the {@code discountedProjectedAmounts} property.
+   * 
    * @return the property, not null
    */
   public final Property<CurrencyAmount[]> discountedProjectedAmounts() {

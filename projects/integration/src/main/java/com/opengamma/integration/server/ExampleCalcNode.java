@@ -17,8 +17,8 @@ public final class ExampleCalcNode {
   }
 
   /**
-   * Starts a calculation node
-   * 
+   * Starts a calculation node.
+   *
    * @param args
    *          the arguments, not used
    */

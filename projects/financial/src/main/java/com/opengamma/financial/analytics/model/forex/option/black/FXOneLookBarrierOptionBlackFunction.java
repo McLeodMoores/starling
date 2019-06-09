@@ -51,7 +51,7 @@ import com.opengamma.util.money.Currency;
  * <p>
  * The payoffs are thus restricted, on cannot have a Down-and-Out nor Down-and-In Calls, nor Up-and-In and Up-and-Out Puts
  * <p>
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -153,8 +153,8 @@ public abstract class FXOneLookBarrierOptionBlackFunction extends FXOptionBlackS
   }
 
   /**
-   * This method is defined by extending Functions
-   * 
+   * This method is defined by extending Functions.
+   *
    * @param vanillas
    *          Set of ForexOptionVanilla that European Barrier is composed of. Binaries are modelled as spreads
    * @param market

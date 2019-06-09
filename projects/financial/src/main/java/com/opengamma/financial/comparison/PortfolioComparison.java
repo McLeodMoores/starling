@@ -18,7 +18,7 @@ import com.opengamma.core.position.impl.SimplePortfolioNode;
  * <li>The intersection of identical positions</li>
  * <li>The positions only present in the first portfolio</li>
  * <li>The positions only present in the second portfolio</li>
- * <li>The positions that exist in both but have changed from the first to the second</li>
+ * <li>The positions that exist in both but have changed from the first to the second.</li>
  * </ul>
  */
 public class PortfolioComparison extends PositionSetComparison {

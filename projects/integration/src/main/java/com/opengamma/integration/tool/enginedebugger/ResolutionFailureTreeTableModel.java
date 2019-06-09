@@ -15,7 +15,7 @@ import com.opengamma.engine.depgraph.ResolutionFailureImpl;
 import com.opengamma.integration.tool.enginedebugger.node.TreeTableNode;
 
 /**
- * Tree-table model for browsing ResolutionFailure structures
+ * Tree-table model for browsing ResolutionFailure structures.
  */
 public class ResolutionFailureTreeTableModel extends AbstractTreeTableModel {
 

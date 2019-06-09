@@ -42,8 +42,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 public class RightExtrapolationSABRDiscountingBCSFunction extends RightExtrapolationSABRDiscountingFunction {
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public RightExtrapolationSABRDiscountingBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -59,16 +58,14 @@ public class RightExtrapolationSABRDiscountingBCSFunction extends RightExtrapola
           final FXMatrix fxMatrix) {
         final Set<ComputedValue> result = new HashSet<>();
         final ValueRequirement desiredValue = desiredValues.iterator().next();
-        final DayCount dayCount = DayCounts.ACT_360; //TODO
+        final DayCount dayCount = DayCounts.ACT_360; // TODO
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, dayCount);
         final double strikeCutoff = Double.parseDouble(desiredValue.getConstraint(PROPERTY_STRIKE_CUTOFF));
         final double mu = Double.parseDouble(desiredValue.getConstraint(PROPERTY_MU));
-        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> pvcdsc =
-            new PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator(strikeCutoff, mu);
-        final ParameterSensitivityParameterCalculator<SABRSwaptionProviderInterface> psc =
-            new ParameterSensitivityParameterCalculator<>(pvcdsc);
-        final MarketQuoteSensitivityBlockCalculator<SABRSwaptionProviderInterface> calculator =
-            new MarketQuoteSensitivityBlockCalculator<>(psc);
+        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> pvcdsc = new PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator(
+            strikeCutoff, mu);
+        final ParameterSensitivityParameterCalculator<SABRSwaptionProviderInterface> psc = new ParameterSensitivityParameterCalculator<>(pvcdsc);
+        final MarketQuoteSensitivityBlockCalculator<SABRSwaptionProviderInterface> calculator = new MarketQuoteSensitivityBlockCalculator<>(psc);
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);
         final MultipleCurrencyParameterSensitivity sensitivities = calculator.fromInstrument(derivative, sabrData, blocks);
         for (final ValueRequirement dv : desiredValues) {

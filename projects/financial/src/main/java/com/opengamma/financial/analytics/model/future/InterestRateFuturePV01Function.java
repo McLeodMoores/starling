@@ -21,7 +21,8 @@ import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecifica
 import com.opengamma.financial.analytics.model.discounting.DiscountingPV01Function;
 
 /**
- * PV01 function for interest rate futures
+ * PV01 function for interest rate futures.
+ * 
  * @deprecated Use {@link DiscountingPV01Function}
  */
 @Deprecated

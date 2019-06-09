@@ -44,13 +44,13 @@ public class JPConventions extends ConventionMasterInitializer {
 
   /** Singleton. */
   public static final ConventionMasterInitializer INSTANCE = new JPConventions();
-  /** OIS X-Ccy USD/JPY ON leg convention string **/
+  /** OIS X-Ccy USD/JPY ON leg convention string. **/
   public static final String OIS_USD_JPY_ON_LEG = "JPY Overnight USD/JPY XCcy Leg";
-  /** The Tibor string **/
+  /** The Tibor string. **/
   public static final String TIBOR = "Tibor";
-  /** The Tibor - Japanese Yen (domestic) string **/
+  /** The Tibor - Japanese Yen (domestic) string. **/
   public static final String TIBOR_JAPANESE = TIBOR + " Japanese Yen";
-  /** The Tibor - Euroyen string **/
+  /** The Tibor - Euroyen string. **/
   public static final String TIBOR_EUROYEN = TIBOR + " Euroyen";
 
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
@@ -66,7 +66,7 @@ public class JPConventions extends ConventionMasterInitializer {
   protected JPConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
     final String tenorString = "6M";

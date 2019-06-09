@@ -37,14 +37,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of instruments using SABR parameter surfaces and
- * curves constructed using the discounting method where
+ * Calculates the present value of instruments using SABR parameter surfaces and curves constructed using the discounting method.
  */
 public class RightExtrapolationSABRDiscountingPVFunction extends RightExtrapolationSABRDiscountingFunction {
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public RightExtrapolationSABRDiscountingPVFunction() {
     super(PRESENT_VALUE);
@@ -58,13 +56,13 @@ public class RightExtrapolationSABRDiscountingPVFunction extends RightExtrapolat
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
           final ComputationTarget target, final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative,
           final FXMatrix fxMatrix) {
-        final DayCount dayCount = DayCounts.ACT_360; //TODO
+        final DayCount dayCount = DayCounts.ACT_360; // TODO
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, dayCount);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final double strikeCutoff = Double.parseDouble(desiredValue.getConstraint(PROPERTY_STRIKE_CUTOFF));
         final double mu = Double.parseDouble(desiredValue.getConstraint(PROPERTY_MU));
-        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyAmount> calculator =
-            new PresentValueSABRSwaptionRightExtrapolationCalculator(strikeCutoff, mu);
+        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyAmount> calculator = new PresentValueSABRSwaptionRightExtrapolationCalculator(
+            strikeCutoff, mu);
         final MultipleCurrencyAmount mca = derivative.accept(calculator, sabrData);
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final Currency currency = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());

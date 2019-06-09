@@ -38,7 +38,7 @@ public class StandardCDSSecurity extends FinancialSecurity {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "STANDARD_CDS";
 

@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 @ExpiryCalculator
 public final class GoldFutureOptionExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  /** Name of the calculator */
+  /** Name of the calculator. */
   public static final String NAME = "GoldFutureOptionExpiryCalculator";
   /** Singleton. */
   private static final GoldFutureOptionExpiryCalculator INSTANCE = new GoldFutureOptionExpiryCalculator();

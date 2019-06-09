@@ -57,7 +57,7 @@ public class CreditSpreadNode extends CurveNode {
   private ExternalId _creditCurveConventionId;
 
   /**
-   * For the fudge builder
+   * For the fudge builder.
    */
   public CreditSpreadNode() {
   }

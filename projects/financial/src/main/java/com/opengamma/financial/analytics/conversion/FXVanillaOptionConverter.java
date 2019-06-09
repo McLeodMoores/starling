@@ -19,14 +19,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link FXOptionSecurity} to {@link ForexOptionVanillaDefinition}
+ * Converts {@link FXOptionSecurity} to {@link ForexOptionVanillaDefinition}.
  */
 public class FXVanillaOptionConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** The currency pairs */
   private final CurrencyPairs _currencyPairs;
 
   /**
-   * @param currencyPairs The currency pairs, not null
+   * @param currencyPairs
+   *          The currency pairs, not null
    */
   public FXVanillaOptionConverter(final CurrencyPairs currencyPairs) {
     ArgumentChecker.notNull(currencyPairs, "currency pairs");

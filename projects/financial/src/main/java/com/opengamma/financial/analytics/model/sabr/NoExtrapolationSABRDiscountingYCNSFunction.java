@@ -60,7 +60,7 @@ public class NoExtrapolationSABRDiscountingYCNSFunction extends SABRDiscountingF
   private static final Logger LOGGER = LoggerFactory.getLogger(NoExtrapolationSABRDiscountingYCNSFunction.class);
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public NoExtrapolationSABRDiscountingYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);

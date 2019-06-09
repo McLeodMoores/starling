@@ -15,9 +15,10 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Partial implementation of {@link JSONBuilder}
+ * Partial implementation of {@link JSONBuilder}.
  *
- * @param <T> the config document parameter type
+ * @param <T>
+ *          the config document parameter type
  */
 public abstract class AbstractJSONBuilder<T> implements JSONBuilder<T> {
 

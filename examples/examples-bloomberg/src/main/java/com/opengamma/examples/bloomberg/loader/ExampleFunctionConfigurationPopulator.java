@@ -33,7 +33,7 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.web.spring.DemoStandardFunctionConfiguration;
 
 /**
- * Example code to create the function configurations
+ * Example code to create the function configurations.
  * <p>
  */
 @Scriptable
@@ -51,17 +51,18 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
   private static final String EXAMPLE = "EXAMPLE_FUNCTIONS";
   private static final String CUBE = "CUBE_FUNCTIONS";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new ExampleFunctionConfigurationPopulator().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final AnalyticsFunctions analyticsFunctions = new AnalyticsFunctions() {
@@ -91,8 +92,8 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
 
     final FunctionConfigurationDefinition financialFunc = new FunctionConfigurationDefinition(FINANCIAL,
         ImmutableList.of(AGGREGATION, ANALYTICS, CURRENCY, PROPERTY, VALUE, VIEW),
-        Collections.<StaticFunctionConfiguration>emptyList(),
-        Collections.<ParameterizedFunctionConfiguration>emptyList());
+        Collections.<StaticFunctionConfiguration> emptyList(),
+        Collections.<ParameterizedFunctionConfiguration> emptyList());
     storeFunctionDefinition(financialFunc);
 
     storeFunctionDefinition(STANDARD, DemoStandardFunctionConfiguration.instance());
@@ -100,7 +101,7 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
 
     final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
         ImmutableList.of(FINANCIAL, STANDARD, CURVE, CUBE),
-        Collections.<StaticFunctionConfiguration>emptyList(),
+        Collections.<StaticFunctionConfiguration> emptyList(),
         ImmutableList.of(new ParameterizedFunctionConfiguration(FXOptionBlackSurfaceDefaults.class.getName(),
             Arrays.asList(DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, "USD", "EUR",
                 "DEFAULT"))));

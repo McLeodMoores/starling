@@ -10,7 +10,7 @@ import com.opengamma.financial.security.option.MonitoringType;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the MonitoringType enum
+ * Custom Hibernate usertype for the MonitoringType enum.
  */
 public class MonitoringTypeUserType extends EnumUserType<MonitoringType> {
 

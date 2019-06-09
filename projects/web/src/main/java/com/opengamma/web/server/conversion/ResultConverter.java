@@ -10,13 +10,13 @@ import com.opengamma.engine.value.ValueSpecification;
 /**
  * Converts from a function result into a JSON-friendly object suitable for consumption by the web client.
  *
- * @param <T>  the type of function result handled by the converter
+ * @param <T>
+ *          the type of function result handled by the converter
  */
 public interface ResultConverter<T> {
 
   /**
-   * Converts from a function result into an object suitable for consumption by
-   * the web client as JSON, for display.
+   * Converts from a function result into an object suitable for consumption by the web client as JSON, for display.
    *
    * @param context
    *          the converter context
@@ -31,8 +31,7 @@ public interface ResultConverter<T> {
   Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, T value, ConversionMode mode);
 
   /**
-   * Converts from a function result into an object suitable for consumption by
-   * the web client as JSON, for history.
+   * Converts from a function result into an object suitable for consumption by the web client as JSON, for history.
    *
    * @param context
    *          the converter context
@@ -45,10 +44,8 @@ public interface ResultConverter<T> {
   Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, T value);
 
   /**
-   * Converts from a function result into a more primitive object suitable for
-   * rendering to CSV format. This might be the full <code>double</code> value
-   * in the case of a number, or a string representation of more complex
-   * objects.
+   * Converts from a function result into a more primitive object suitable for rendering to CSV format. This might be the full <code>double</code> value in the
+   * case of a number, or a string representation of more complex objects.
    *
    * @param context
    *          the converter context
@@ -61,7 +58,7 @@ public interface ResultConverter<T> {
   String convertToText(ResultConverterCache context, ValueSpecification valueSpec, T value);
 
   /**
-   * A unique name which indicates to a client both
+   * A unique name which indicates to a client both.
    * <ul>
    * <li>how it should interpret the converted result</li>
    * <li>how it should be rendered</li>

@@ -23,7 +23,7 @@ import com.opengamma.financial.security.future.IndexFutureSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Defaults the pricing of Futures to ValuePropertyNames.CALCULATION_METHOD = "MarkToMarket" (CalculationPropertyNamesAndValues.MARK_TO_MARKET_METHOD)
+ * Defaults the pricing of Futures to ValuePropertyNames.CALCULATION_METHOD = "MarkToMarket" (CalculationPropertyNamesAndValues.MARK_TO_MARKET_METHOD).
  */
 public class FuturesPricingDefaults extends StaticDefaultPropertyFunction {
 
@@ -35,7 +35,7 @@ public class FuturesPricingDefaults extends StaticDefaultPropertyFunction {
 
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_NAMES = new String[] {
-      ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.PRESENT_VALUE,
   };
 
   public FuturesPricingDefaults(final String priority, final String calculationMethod) {

@@ -19,7 +19,7 @@ import com.opengamma.integration.copier.portfolio.writer.SingleSheetSimplePositi
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The portfolio saver tool
+ * The portfolio saver tool.
  */
 @Scriptable
 public class PortfolioTemplateCreationTool {
@@ -94,7 +94,7 @@ public class PortfolioTemplateCreationTool {
 
     final String[] securityTypes = getCommandLine().getOptionValues(SECURITY_TYPE_OPT)[0].equals("all")
         ? SECURITY_TYPES
-            : getCommandLine().getOptionValues(SECURITY_TYPE_OPT);
+        : getCommandLine().getOptionValues(SECURITY_TYPE_OPT);
 
     // Create portfolio writers to write header rows
     for (final String securityType : securityTypes) {

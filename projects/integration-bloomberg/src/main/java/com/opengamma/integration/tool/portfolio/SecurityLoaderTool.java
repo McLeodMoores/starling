@@ -33,7 +33,7 @@ import com.opengamma.master.security.SecurityMasterUtils;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * Tool to load a list of Securities defined by ExternalId (eg Bloomberg Ticker, ISIN)
+ * Tool to load a list of Securities defined by ExternalId (eg Bloomberg Ticker, ISIN).
  */
 public class SecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
 

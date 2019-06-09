@@ -30,7 +30,7 @@ import com.opengamma.financial.security.cds.CDSSecurity;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Base class for ISDA CDS pricing functions
+ * Base class for ISDA CDS pricing functions.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see ISDAApproxCDSPriceHazardCurveFunction

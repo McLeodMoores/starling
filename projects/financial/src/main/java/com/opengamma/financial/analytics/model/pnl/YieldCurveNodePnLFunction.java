@@ -320,7 +320,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
   }
 
   /**
-   * Creates the result properties for the P&amp;L series
+   * Creates the result properties for the P&amp;L series.
    *
    * @param desiredValue
    *          The desired value
@@ -429,7 +429,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
   }
 
   /**
-   * Given a yield curve name, returns the yield curve node sensitivities requirement for that name
+   * Given a yield curve name, returns the yield curve node sensitivities requirement for that name.
    *
    * @param currencyString
    *          The currency

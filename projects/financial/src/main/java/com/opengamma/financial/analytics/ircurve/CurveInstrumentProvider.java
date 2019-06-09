@@ -67,7 +67,7 @@ public interface CurveInstrumentProvider {
   String getMarketDataField();
 
   /**
-   * Gets the type of the market data field
+   * Gets the type of the market data field.
    *
    * @return The data field type
    */

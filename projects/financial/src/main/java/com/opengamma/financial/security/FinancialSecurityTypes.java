@@ -155,7 +155,7 @@ public class FinancialSecurityTypes {
   public static final ObjectComputationTargetType<CorporateBondSecurity> CORPORATE_BOND_SECURITY = ObjectComputationTargetType.of(CorporateBondSecurity.class);
 
   /**
-   * The credit default swap index security type
+   * The credit default swap index security type.
    */
   public static final ObjectComputationTargetType<CreditDefaultSwapIndexSecurity> CREDIT_DEFAULT_SWAP_INDEX_SECURITY = ObjectComputationTargetType
       .of(CreditDefaultSwapIndexSecurity.class);
@@ -191,8 +191,8 @@ public class FinancialSecurityTypes {
   /**
    * The Equity Index Dividend Future Option security type.
    */
-  public static final ObjectComputationTargetType<EquityIndexDividendFutureOptionSecurity> EQUITY_INDEX_DIVIDEND_FUTURE_OPTION_SECURITY =
-      ObjectComputationTargetType.of(EquityIndexDividendFutureOptionSecurity.class);
+  public static final ObjectComputationTargetType<EquityIndexDividendFutureOptionSecurity> EQUITY_INDEX_DIVIDEND_FUTURE_OPTION_SECURITY = ObjectComputationTargetType
+      .of(EquityIndexDividendFutureOptionSecurity.class);
 
   /**
    * The Equity Index Dividend Future security type.
@@ -310,8 +310,8 @@ public class FinancialSecurityTypes {
    * @deprecated use {@link #LEGACY_CDS_SECURITY}
    */
   @Deprecated
-  public static final ObjectComputationTargetType<LegacyVanillaCDSSecurity> LEGACY_VANILLA_CDS_SECURITY =
-  ObjectComputationTargetType.of(LegacyVanillaCDSSecurity.class);
+  public static final ObjectComputationTargetType<LegacyVanillaCDSSecurity> LEGACY_VANILLA_CDS_SECURITY = ObjectComputationTargetType
+      .of(LegacyVanillaCDSSecurity.class);
 
   /**
    * The Metal Future security type.
@@ -326,8 +326,8 @@ public class FinancialSecurityTypes {
   /**
    * The Non-Deliverable FX Digital Option security type.
    */
-  public static final ObjectComputationTargetType<NonDeliverableFXDigitalOptionSecurity> NON_DELIVERABLE_FX_DIGITAL_OPTION_SECURITY =
-      ObjectComputationTargetType.of(NonDeliverableFXDigitalOptionSecurity.class);
+  public static final ObjectComputationTargetType<NonDeliverableFXDigitalOptionSecurity> NON_DELIVERABLE_FX_DIGITAL_OPTION_SECURITY = ObjectComputationTargetType
+      .of(NonDeliverableFXDigitalOptionSecurity.class);
 
   /**
    * The Non-Deliverable FX Forward security type.
@@ -364,8 +364,8 @@ public class FinancialSecurityTypes {
    * @deprecated Use {@link #STANDARD_CDS_SECURITY}
    */
   @Deprecated
-  public static final ObjectComputationTargetType<StandardVanillaCDSSecurity> STANDARD_VANILLA_CDS_SECURITY =
-  ObjectComputationTargetType.of(StandardVanillaCDSSecurity.class);
+  public static final ObjectComputationTargetType<StandardVanillaCDSSecurity> STANDARD_VANILLA_CDS_SECURITY = ObjectComputationTargetType
+      .of(StandardVanillaCDSSecurity.class);
 
   /**
    * The Stock Future security type.

@@ -31,7 +31,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * If attached to security's ExternalIdBundle, displays its {@link ExternalSchemes#BLOOMBERG_TICKER}
+ * If attached to security's ExternalIdBundle, displays its {@link ExternalSchemes#BLOOMBERG_TICKER}.
  */
 public class ISINFunction extends BaseNonCompiledInvoker {
 
@@ -41,9 +41,8 @@ public class ISINFunction extends BaseNonCompiledInvoker {
     return function("ISINFunction", ComputationTargetType.POSITION_OR_TRADE)
         .outputs(
             output(ISIN)
-            .targetSpec(originalTarget())
-            .properties(ValueProperties.all())
-            )
+                .targetSpec(originalTarget())
+                .properties(ValueProperties.all()))
         .inputs();
   }
 
@@ -52,7 +51,6 @@ public class ISINFunction extends BaseNonCompiledInvoker {
       final FunctionInputs inputs,
       final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-
 
     final ValueRequirement desiredValue = functional(desiredValues).first();
     final ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),

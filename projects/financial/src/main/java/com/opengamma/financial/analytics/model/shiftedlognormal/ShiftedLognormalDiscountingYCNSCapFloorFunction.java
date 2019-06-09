@@ -57,7 +57,7 @@ import com.opengamma.util.tuple.Pair;
 public class ShiftedLognormalDiscountingYCNSCapFloorFunction extends ShiftedLognormalDiscountingCapFloorFunction {
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public ShiftedLognormalDiscountingYCNSCapFloorFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);

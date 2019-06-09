@@ -59,15 +59,15 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
   /** 6m Libor ticker */
   private static final ExternalId LIBOR_6M = ExternalSchemes.syntheticSecurityId("USDLIBORP6M");
   /** The tenors */
-  private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS};
+  private static final Tenor[] TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.TEN_YEARS };
   /** The strikes */
-  private static final double[] STRIKES = new double[] {0.01, 0.02, 0.03};
+  private static final double[] STRIKES = new double[] { 0.01, 0.02, 0.03 };
   /** The trade date */
   private static final ZonedDateTime TRADE_DATE = DateUtils.previousWeekDay().atStartOfDay(ZoneOffset.UTC);
   /** The pay tenors */
-  private static final Tenor[] PAY_TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.FIVE_YEARS};
+  private static final Tenor[] PAY_TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.FIVE_YEARS };
   /** The receive tenors */
-  private static final Tenor[] RECEIVE_TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.TEN_YEARS};
+  private static final Tenor[] RECEIVE_TENORS = new Tenor[] { Tenor.TWO_YEARS, Tenor.TEN_YEARS };
   /** The strike formatter */
   private static final DecimalFormat FORMAT = new DecimalFormat("##.##");
   /** Random number generator */
@@ -101,7 +101,7 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
     /** The strikes */
     private final double[] _strikes;
 
-    public CapFloorSecurityGenerator(final ZonedDateTime tradeDate, final Tenor[] tenors, final double[] strikes) {
+    CapFloorSecurityGenerator(final ZonedDateTime tradeDate, final Tenor[] tenors, final double[] strikes) {
       _tradeDate = tradeDate;
       _tenors = tenors;
       _strikes = strikes;
@@ -157,7 +157,7 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
     /** The tenors */
     private final Tenor[] _tenors;
 
-    public CMSSwapSecurityGenerator(final ZonedDateTime tradeDate, final Tenor[] tenors) {
+    CMSSwapSecurityGenerator(final ZonedDateTime tradeDate, final Tenor[] tenors) {
       _tradeDate = tradeDate;
       _tenors = tenors;
     }
@@ -211,9 +211,10 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
         payIbor = false;
       }
       security.setName(CURRENCY.getCode() + " " + FORMAT.format(_notional.getAmount() / 1000000) + "MM Swap, pay " +
-          (payIbor ? frequency.getPeriod().getMonths() + "M Libor, receive " + tenor.getPeriod().getYears() + "Y ISDA fixing (" :
-            tenor.getPeriod().getYears() + "Y ISDA fixing, receive " + frequency.getPeriod().getMonths() + "M Libor (") +
-            _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+          (payIbor ? frequency.getPeriod().getMonths() + "M Libor, receive " + tenor.getPeriod().getYears() + "Y ISDA fixing ("
+              : tenor.getPeriod().getYears() + "Y ISDA fixing, receive " + frequency.getPeriod().getMonths() + "M Libor (")
+          +
+          _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
       return security;
     }
   }
@@ -235,7 +236,7 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
     /** The strikes */
     private final double[] _strikes;
 
-    public CMSCapFloorSpreadSecurityGenerator(final ZonedDateTime tradeDate, final Tenor[] payTenors, final Tenor[] receiveTenors,
+    CMSCapFloorSpreadSecurityGenerator(final ZonedDateTime tradeDate, final Tenor[] payTenors, final Tenor[] receiveTenors,
         final Tenor[] maturities, final double[] strikes) {
       _tradeDate = tradeDate;
       _payTenors = payTenors;
@@ -282,10 +283,11 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
       final ExternalId receiveIdentifier = ExternalSchemes.syntheticSecurityId(receiveTicker);
       final CapFloorCMSSpreadSecurity security = new CapFloorCMSSpreadSecurity(_tradeDate, maturityDate, _notional, payIdentifier, receiveIdentifier, strike,
           PeriodFrequency.ANNUAL, CURRENCY, ACT_360, payer, cap);
-      security.setName(CURRENCY.getCode() + " " + FORMAT.format(_notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike) +
-          "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive " +
-          receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
-          " (" + _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+      security.setName(
+          CURRENCY.getCode() + " " + FORMAT.format(_notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike) +
+              "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive " +
+              receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
+              " (" + _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
       return security;
     }
   }

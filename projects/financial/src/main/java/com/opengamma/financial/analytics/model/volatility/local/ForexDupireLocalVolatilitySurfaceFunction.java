@@ -25,7 +25,7 @@ public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLo
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with spline interpolation
+   * Function producing a local volatility surface using a Black volatility surface with spline interpolation.
    */
   public static class Spline extends ForexDupireLocalVolatilitySurfaceFunction {
 
@@ -37,7 +37,7 @@ public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLo
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation
+   * Function producing a local volatility surface using a Black volatility surface with SABR interpolation.
    */
   public static class SABR extends ForexDupireLocalVolatilitySurfaceFunction {
 
@@ -49,7 +49,7 @@ public abstract class ForexDupireLocalVolatilitySurfaceFunction extends DupireLo
   }
 
   /**
-   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation
+   * Function producing a local volatility surface using a Black volatility surface with mixed log-normal interpolation.
    */
   public static class MixedLogNormal extends ForexDupireLocalVolatilitySurfaceFunction {
 

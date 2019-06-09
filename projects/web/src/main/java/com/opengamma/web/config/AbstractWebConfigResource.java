@@ -27,15 +27,15 @@ import com.opengamma.web.json.VolatilitySurfaceSpecificationJSONBuilder;
 public abstract class AbstractWebConfigResource extends AbstractPerRequestWebResource<WebConfigData> {
 
   /**
-   * Config xml form parameter name
+   * Config xml form parameter name.
    */
   protected static final String CONFIG_XML = "configXML";
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "configs/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "configs/json/";
   /**

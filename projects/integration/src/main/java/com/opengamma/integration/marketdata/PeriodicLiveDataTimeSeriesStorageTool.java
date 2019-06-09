@@ -20,18 +20,18 @@ import com.opengamma.scripts.Scriptable;
 @Scriptable
 public class PeriodicLiveDataTimeSeriesStorageTool extends AbstractTool<ToolContext> {
 
-  /** File name option flag */
+  /** File name option flag. */
   public static final String FILE_NAME_OPT = "f";
-  /** Time series data source option flag*/
+  /** Time series data source option flag. */
   public static final String TIME_SERIES_DATASOURCE_OPT = "s";
-  /** Time series data provider option flag*/
+  /** Time series data provider option flag. */
   public static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
   /** User name for Live Data entitlements. */
   public static final String USER_NAME_OPT = "u";
   /** Flag for whether to actually write to the DB. */
   public static final String WRITE_TO_DB_OPT = "w";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
@@ -40,12 +40,12 @@ public class PeriodicLiveDataTimeSeriesStorageTool extends AbstractTool<ToolCont
    * @throws Exception
    *           if there is a problem
    */
-  public static void main(final String[] args) throws Exception { //CSIGNORE
+  public static void main(final String[] args) throws Exception { // CSIGNORE
     final PeriodicLiveDataTimeSeriesStorageTool tool = new PeriodicLiveDataTimeSeriesStorageTool();
     tool.invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Initiates the system.
    */
@@ -81,7 +81,7 @@ public class PeriodicLiveDataTimeSeriesStorageTool extends AbstractTool<ToolCont
   }
 
   @Override
-  protected  Options createOptions(final boolean contextProvided) {
+  protected Options createOptions(final boolean contextProvided) {
 
     final Options options = super.createOptions(contextProvided);
 

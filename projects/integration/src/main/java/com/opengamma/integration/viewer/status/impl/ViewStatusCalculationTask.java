@@ -63,7 +63,7 @@ import com.opengamma.util.GUIDGenerator;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * View status calculation task
+ * View status calculation task.
  */
 public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> {
 

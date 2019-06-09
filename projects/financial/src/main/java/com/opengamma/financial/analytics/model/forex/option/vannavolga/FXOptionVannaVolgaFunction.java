@@ -66,9 +66,9 @@ import com.opengamma.util.tuple.Pairs;
  */
 @Deprecated
 public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property name for the delta to use */
+  /** Property name for the delta to use. */
   public static final String PROPERTY_OTM_DELTA = "DeltaOTM";
-  /** The name of the calculation method */
+  /** The name of the calculation method. */
   public static final String VANNA_VOLGA_METHOD = "VannaVolgaMethod";
   private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionVannaVolgaFunction.class);
   private final String _valueRequirementName;

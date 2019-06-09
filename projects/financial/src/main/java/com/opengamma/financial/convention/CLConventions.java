@@ -23,7 +23,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information used to construct standard versions of CLP instruments
+ * Contains information used to construct standard versions of CLP instruments.
  *
  * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
@@ -39,8 +39,8 @@ public class CLConventions {
   private static final Frequency SEMI_ANNUAL = SimpleFrequencyFactory.INSTANCE.getFrequency(Frequency.SEMI_ANNUAL_NAME);
 
   /**
-   * Adds conventions for OIS and implied deposits
-   * 
+   * Adds conventions for OIS and implied deposits.
+   *
    * @param conventionMaster
    *          The convention master, not null
    */

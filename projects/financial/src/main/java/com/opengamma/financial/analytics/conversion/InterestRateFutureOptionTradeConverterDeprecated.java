@@ -20,7 +20,7 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converts interest rate future option trades into the form used by the analytics library
+ * Converts interest rate future option trades into the form used by the analytics library.
  *
  * @deprecated Use {@link InterestRateFutureOptionTradeConverter}. {@link ConventionBundleSource} should not be used, as the conventions are not typed.
  */

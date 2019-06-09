@@ -26,15 +26,16 @@ public class ExampleFunctionConfigurationSourceComponentFactory extends Function
     final List<FunctionConfigurationSource> sources = super.initSources();
     return sources;
   }
-//
-//  @Override
-//  protected List<FunctionConfigurationSource> initSources() {
-//    final List<FunctionConfigurationSource> sources = super.initSources();
-//    final FunctionConfigurationBundle configuration = new FunctionConfigurationBundle();
-//    configuration.addFunctions(new ParameterizedFunctionConfiguration(FXOptionBlackSurfaceDefaults.class.getName(), Arrays.asList(DOUBLE_QUADRATIC, LINEAR_EXTRAPOLATOR,
-//        LINEAR_EXTRAPOLATOR, "USD", "EUR", "DEFAULT")));
-//    sources.add(new SimpleFunctionConfigurationSource(configuration));
-//    return sources;
-//  }
+  //
+  // @Override
+  // protected List<FunctionConfigurationSource> initSources() {
+  // final List<FunctionConfigurationSource> sources = super.initSources();
+  // final FunctionConfigurationBundle configuration = new FunctionConfigurationBundle();
+  // configuration.addFunctions(new ParameterizedFunctionConfiguration(FXOptionBlackSurfaceDefaults.class.getName(), Arrays.asList(DOUBLE_QUADRATIC,
+  // LINEAR_EXTRAPOLATOR,
+  // LINEAR_EXTRAPOLATOR, "USD", "EUR", "DEFAULT")));
+  // sources.add(new SimpleFunctionConfigurationSource(configuration));
+  // return sources;
+  // }
 
 }

@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import org.threeten.bp.Period;
 
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.ConventionBundle;
 import com.opengamma.financial.convention.ConventionBundleMaster;
 import com.opengamma.financial.convention.ConventionBundleMasterUtils;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -24,8 +25,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class SyntheticDKConventions {
@@ -44,8 +44,10 @@ public class SyntheticDKConventions {
 
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
 
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKLIBORP3M"), simpleNameSecurityId("DKK CIBOR 3m")), "DKK CIBOR 3m", act360, following, Period.ofMonths(3), 2, false, dk);
-    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKLIBORP6M"), simpleNameSecurityId("DKK CIBOR 6m")), "DKK CIBOR 6m", act360, following, Period.ofMonths(6), 2, false, dk);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKLIBORP3M"), simpleNameSecurityId("DKK CIBOR 3m")), "DKK CIBOR 3m", act360, following,
+        Period.ofMonths(3), 2, false, dk);
+    utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKLIBORP6M"), simpleNameSecurityId("DKK CIBOR 6m")), "DKK CIBOR 6m", act360, following,
+        Period.ofMonths(6), 2, false, dk);
 
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP1D")), "DKKCASHP1D", act360, following, Period.ofDays(1), 0, false, dk);
     utils.addConventionBundle(ExternalIdBundle.of(syntheticSecurityId("DKKCASHP1M")), "DKKCASHP1M", act360, modified, Period.ofMonths(1), 2, false, dk);

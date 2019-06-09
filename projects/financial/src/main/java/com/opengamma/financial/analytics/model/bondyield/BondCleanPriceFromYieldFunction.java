@@ -15,9 +15,8 @@ import com.opengamma.analytics.financial.interestrate.bond.calculator.CleanPrice
 public class BondCleanPriceFromYieldFunction extends BondFromYieldFunction<Double> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#CLEAN_PRICE} and
-   * the calculator to {@link CleanPriceFromYieldCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#CLEAN_PRICE} and the calculator to
+   * {@link CleanPriceFromYieldCalculator}.
    */
   public BondCleanPriceFromYieldFunction() {
     super(CLEAN_PRICE, CleanPriceFromYieldCalculator.getInstance());

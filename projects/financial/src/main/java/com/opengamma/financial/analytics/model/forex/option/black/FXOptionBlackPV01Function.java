@@ -47,7 +47,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Calculates the PV01 for FX options using the Black method
+ * Calculates the PV01 for FX options using the Black method.
  *
  * @deprecated Use {@link BlackDiscountingPV01FXOptionFunction}
  */

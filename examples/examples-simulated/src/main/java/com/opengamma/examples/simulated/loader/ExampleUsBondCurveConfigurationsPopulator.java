@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.loader;
 
@@ -45,13 +45,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Creates a curve construction configurations, interpolated curve definition and curve node id mapper
- * for US bonds. The ISINs used for the bill nodes follow the form "USB000000NNN" where "NNN" is equal
- * to the number of months until bill maturity. Bond nodes follow the form "UST000000NNN" where "NNN"
- * is equal to the number of months until bond maturity.
+ * Creates a curve construction configurations, interpolated curve definition and curve node id mapper for US bonds. The ISINs used for the bill nodes follow
+ * the form "USB000000NNN" where "NNN" is equal to the number of months until bill maturity. Bond nodes follow the form "UST000000NNN" where "NNN" is equal to
+ * the number of months until bond maturity.
  * <p>
- * The bond curve contains bill nodes from 6 months to 18 months in six month increments and bond nodes
- * from 7 bonds with tenors {2y, 3y, 5y, 7y, 10y, 20y, 30y}, and uses the yield quote to construct the curve.
+ * The bond curve contains bill nodes from 6 months to 18 months in six month increments and bond nodes from 7 bonds with tenors {2y, 3y, 5y, 7y, 10y, 20y,
+ * 30y}, and uses the yield quote to construct the curve.
  */
 @Scriptable
 public final class ExampleUsBondCurveConfigurationsPopulator {
@@ -71,9 +70,10 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
   }
 
   /**
-   * Populates a config master with curve configurations, curve definitions
-   * and curve node id mappers.
-   * @param configMaster The config master, not null
+   * Populates a config master with curve configurations, curve definitions and curve node id mappers.
+   * 
+   * @param configMaster
+   *          The config master, not null
    */
   public static void populateConfigAndConventionMaster(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configMaster");
@@ -86,14 +86,14 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
   }
 
   /**
-   * Creates two curve construction configuration for US bonds; one consisting of a single government bond curve
-   * which matches against USD and uses the two-curve configuration as an exogenous discounting curve, and another
-   * that will discount all cash-flows using the OIS curve.
+   * Creates two curve construction configuration for US bonds; one consisting of a single government bond curve which matches against USD and uses the
+   * two-curve configuration as an exogenous discounting curve, and another that will discount all cash-flows using the OIS curve.
+   * 
    * @return The configuration
    */
   private static Collection<CurveConstructionConfiguration> makeCurveConstructionConfiguration() {
-    final Set<Object> keys = Sets.<Object>newHashSet(Currency.USD);
-    final LegalEntityRegion regionFilter = new LegalEntityRegion(false, false, Collections.<Country>emptySet(), true, Collections.singleton(Currency.USD));
+    final Set<Object> keys = Sets.<Object> newHashSet(Currency.USD);
+    final LegalEntityRegion regionFilter = new LegalEntityRegion(false, false, Collections.<Country> emptySet(), true, Collections.singleton(Currency.USD));
     final Set<LegalEntityFilter<LegalEntity>> filters = new HashSet<>();
     filters.add(regionFilter);
     final IssuerCurveTypeConfiguration issuerCurveType = new IssuerCurveTypeConfiguration(keys, filters);
@@ -106,16 +106,16 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
     final CurveGroupConfiguration oisGroup = new CurveGroupConfiguration(0, issuerCurveTypes);
     final List<CurveGroupConfiguration> oisGroups = Arrays.asList(oisGroup);
     final List<String> exogenousConfigs = Collections.singletonList("Default USD Curves");
-    final CurveConstructionConfiguration bondCurveConfig = new CurveConstructionConfiguration(BOND_CURVE_CONSTRUCTION_CONFIG_NAME,
-        bondGroups, exogenousConfigs);
+    final CurveConstructionConfiguration bondCurveConfig = new CurveConstructionConfiguration(BOND_CURVE_CONSTRUCTION_CONFIG_NAME, bondGroups,
+        exogenousConfigs);
     final CurveConstructionConfiguration oisCurveConfig = new CurveConstructionConfiguration(OIS_CURVE_CONSTRUCTION_CONFIG_NAME, oisGroups, exogenousConfigs);
     return Arrays.asList(bondCurveConfig, oisCurveConfig);
   }
 
   /**
-   * Creates an interpolated curve definition containing 3 bills with tenors from 6 months to 18 months
-   * in six month intervals and 7 bonds with tenors {2y, 3y, 5y, 7y, 10y, 20y, 30y}.
-   * The interpolator is double quadratic with linear extrapolation on both sides.
+   * Creates an interpolated curve definition containing 3 bills with tenors from 6 months to 18 months in six month intervals and 7 bonds with tenors {2y, 3y,
+   * 5y, 7y, 10y, 20y, 30y}. The interpolator is double quadratic with linear extrapolation on both sides.
+   * 
    * @return The curve definition
    */
   private static CurveDefinition makeCurveDefinition() {
@@ -123,17 +123,18 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
     for (int i = 6; i <= 18; i += 6) {
       curveNodes.add(new BillNode(Tenor.ofMonths(i), CURVE_NODE_ID_MAPPER_NAME));
     }
-    for (final int i : new int[] {2, 3, 5, 7, 10, 20, 30 }) {
+    for (final int i : new int[] { 2, 3, 5, 7, 10, 20, 30 }) {
       curveNodes.add(new BondNode(Tenor.ofYears(i), CURVE_NODE_ID_MAPPER_NAME));
     }
-    final CurveDefinition curveDefinition = new InterpolatedCurveDefinition(CURVE_NAME, curveNodes,
-        DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+    final CurveDefinition curveDefinition = new InterpolatedCurveDefinition(CURVE_NAME, curveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     return curveDefinition;
   }
 
   /**
-   * Creates a curve node id mapper containing ISINs for 3 bills with tenors from 6 months to 18 months
-   * in six month intervals and 7 bonds with tenors {2y, 3y, 5y, 7y, 10y, 20y, 30y}.
+   * Creates a curve node id mapper containing ISINs for 3 bills with tenors from 6 months to 18 months in six month intervals and 7 bonds with tenors {2y, 3y,
+   * 5y, 7y, 10y, 20y, 30y}.
+   * 
    * @return The curve node id mapper
    */
   private static CurveNodeIdMapper makeCurveNodeIdMapper() {
@@ -152,7 +153,7 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
           DataFieldType.OUTRIGHT);
       billNodes.put(tenor, instrumentProvider);
     }
-    for (final int i : new int[] {2, 3, 5, 7, 10, 20, 30 }) {
+    for (final int i : new int[] { 2, 3, 5, 7, 10, 20, 30 }) {
       final Tenor tenor = Tenor.ofYears(i);
       String suffix;
       if (i < 10) {
@@ -167,17 +168,16 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
           DataFieldType.OUTRIGHT);
       bondNodes.put(tenor, instrumentProvider);
     }
-    final CurveNodeIdMapper curveNodeIdMapper = CurveNodeIdMapper.builder()
-        .name(CURVE_NODE_ID_MAPPER_NAME)
-        .billNodeIds(billNodes)
-        .bondNodeIds(bondNodes)
+    final CurveNodeIdMapper curveNodeIdMapper = CurveNodeIdMapper.builder().name(CURVE_NODE_ID_MAPPER_NAME).billNodeIds(billNodes).bondNodeIds(bondNodes)
         .build();
     return curveNodeIdMapper;
   }
 
   /**
    * Creates a config item from a curve construction configuration object.
-   * @param curveConfig The curve construction configuration
+   * 
+   * @param curveConfig
+   *          The curve construction configuration
    * @return The config item
    */
   private static ConfigItem<CurveConstructionConfiguration> makeConfig(final CurveConstructionConfiguration curveConfig) {
@@ -188,7 +188,9 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
 
   /**
    * Creates a config item from a curve node id mapper object.
-   * @param curveNodeIdMapper The curve node id mapper
+   * 
+   * @param curveNodeIdMapper
+   *          The curve node id mapper
    * @return The config item
    */
   private static ConfigItem<CurveNodeIdMapper> makeConfig(final CurveNodeIdMapper curveNodeIdMapper) {
@@ -199,7 +201,9 @@ public final class ExampleUsBondCurveConfigurationsPopulator {
 
   /**
    * Creates a config item from a curve definition object.
-   * @param curveDefinition The curve definition
+   * 
+   * @param curveDefinition
+   *          The curve definition
    * @return The config item
    */
   private static ConfigItem<CurveDefinition> makeConfig(final CurveDefinition curveDefinition) {

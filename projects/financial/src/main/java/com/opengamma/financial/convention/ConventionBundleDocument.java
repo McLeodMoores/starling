@@ -5,9 +5,8 @@
  */
 package com.opengamma.financial.convention;
 
-
 /**
- * Document to hold the reference rate and meta-data
+ * Document to hold the reference rate and meta-data.
  *
  * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */

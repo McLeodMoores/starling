@@ -23,12 +23,12 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
 
 /**
- * Produces the current value of the underlying index, according to the market data
+ * Produces the current value of the underlying index, according to the market data.
  */
 public class EquityOptionSpotIndexFunction extends EquityOptionFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionSpotIndexFunction() {
     super(ValueRequirementNames.SPOT);
@@ -38,7 +38,7 @@ public class EquityOptionSpotIndexFunction extends EquityOptionFunction {
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
-    //FIXME use the type system
+    // FIXME use the type system
     if (derivative instanceof EquityIndexOption) {
       final EquityIndexOptionBlackMethod model = EquityIndexOptionBlackMethod.getInstance();
       return Collections.singleton(new ComputedValue(resultSpec, model.spotIndexValue(market)));
@@ -57,6 +57,6 @@ public class EquityOptionSpotIndexFunction extends EquityOptionFunction {
     return CalculationPropertyNamesAndValues.ANALYTIC;
   }
 
-  //TODO this function return values unnecessary properties - the surface name, currency, interpolator and calculation method, which are used
+  // TODO this function return values unnecessary properties - the surface name, currency, interpolator and calculation method, which are used
   // to construct the market data bundle.
 }

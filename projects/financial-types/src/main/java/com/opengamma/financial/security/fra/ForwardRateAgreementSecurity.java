@@ -99,19 +99,19 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   private Frequency _indexFrequency;
 
   /**
-   * The day count convention
+   * The day count convention.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCount;
 
   /**
-   * The fixing business day convention
+   * The fixing business day convention.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _fixingBusinessDayConvention;
 
   /**
-   * The fixing lag (generally 0 or 2)
+   * The fixing lag (generally 0 or 2).
    */
   @PropertyDefinition(validate = "notNull")
   private Integer _fixingLag;
@@ -239,7 +239,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
     setFixingLag(fixingLag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitForwardRateAgreementSecurity(this);
@@ -523,7 +523,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the day count convention
+   * Gets the day count convention.
    * @return the value of the property, not null
    */
   public DayCount getDayCount() {
@@ -531,7 +531,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the day count convention
+   * Sets the day count convention.
    * @param dayCount  the new value of the property, not null
    */
   public void setDayCount(DayCount dayCount) {
@@ -549,7 +549,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the fixing business day convention
+   * Gets the fixing business day convention.
    * @return the value of the property, not null
    */
   public BusinessDayConvention getFixingBusinessDayConvention() {
@@ -557,7 +557,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the fixing business day convention
+   * Sets the fixing business day convention.
    * @param fixingBusinessDayConvention  the new value of the property, not null
    */
   public void setFixingBusinessDayConvention(BusinessDayConvention fixingBusinessDayConvention) {
@@ -575,7 +575,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the fixing lag (generally 0 or 2)
+   * Gets the fixing lag (generally 0 or 2).
    * @return the value of the property, not null
    */
   public Integer getFixingLag() {
@@ -583,7 +583,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the fixing lag (generally 0 or 2)
+   * Sets the fixing lag (generally 0 or 2).
    * @param fixingLag  the new value of the property, not null
    */
   public void setFixingLag(Integer fixingLag) {

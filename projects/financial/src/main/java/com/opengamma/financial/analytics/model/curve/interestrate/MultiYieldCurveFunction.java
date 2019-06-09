@@ -304,7 +304,7 @@ public abstract class MultiYieldCurveFunction extends AbstractFunction.NonCompil
   }
 
   /**
-   * Gets the interpolated yield curve specification from the function inputs
+   * Gets the interpolated yield curve specification from the function inputs.
    *
    * @param inputs
    *          The inputs

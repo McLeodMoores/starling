@@ -20,13 +20,12 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the gamma (second order derivative of price with respect to spot) of a vanilla equity barrier option using
- * the Black formula.
+ * Calculates the gamma (second order derivative of price with respect to spot) of a vanilla equity barrier option using the Black formula.
  */
 public class EquityVanillaBarrierOptionSpotGammaFunction extends EquityVanillaBarrierOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionSpotGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

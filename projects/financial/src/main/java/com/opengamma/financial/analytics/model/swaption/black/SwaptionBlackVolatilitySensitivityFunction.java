@@ -21,7 +21,8 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingValueVegaSw
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Calculates the value vega for swaptions using the Black method
+ * Calculates the value vega for swaptions using the Black method.
+ * 
  * @deprecated Use {@link BlackDiscountingValueVegaSwaptionFunction}
  */
 @Deprecated
@@ -30,7 +31,7 @@ public class SwaptionBlackVolatilitySensitivityFunction extends SwaptionBlackFun
   private static final PresentValueBlackSwaptionSensitivityBlackCalculator CALCULATOR = PresentValueBlackSwaptionSensitivityBlackCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_VEGA}.
    */
   public SwaptionBlackVolatilitySensitivityFunction() {
     super(ValueRequirementNames.VALUE_VEGA);

@@ -18,8 +18,9 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Function computes the {@link ValueRequirementNames#THETA}, first order derivative of {@link Security} price with respect to the time,
- * for interest rate future options in the Black world.
+ * Function computes the {@link ValueRequirementNames#THETA}, first order derivative of {@link Security} price with respect to the time, for interest rate
+ * future options in the Black world.
+ * 
  * @deprecated The parent class is deprecated
  */
 @Deprecated
@@ -29,7 +30,7 @@ public class InterestRateFutureOptionBlackThetaFunction extends InterestRateFutu
   private static final PresentValueBlackThetaForSecurityCalculator CALCULATOR = PresentValueBlackThetaForSecurityCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#THETA}
+   * Sets the value requirement name to {@link ValueRequirementNames#THETA}.
    */
   public InterestRateFutureOptionBlackThetaFunction() {
     super(ValueRequirementNames.THETA, false);

@@ -32,17 +32,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of instruments using curves constructed using
- * the Hull-White one-factor discounting method.
+ * Calculates the present value of instruments using curves constructed using the Hull-White one-factor discounting method.
  */
 public class HullWhiteDiscountingPVFunction extends HullWhiteDiscountingFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      PresentValueHullWhiteCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueHullWhiteCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public HullWhiteDiscountingPVFunction() {
     super(PRESENT_VALUE);

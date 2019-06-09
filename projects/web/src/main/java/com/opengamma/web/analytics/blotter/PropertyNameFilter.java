@@ -15,7 +15,7 @@ import com.google.common.collect.Sets;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO I don't know if I'll need this after all
+ * TODO I don't know if I'll need this after all.
  */
 /* package */ class PropertyNameFilter implements BeanVisitorDecorator {
 

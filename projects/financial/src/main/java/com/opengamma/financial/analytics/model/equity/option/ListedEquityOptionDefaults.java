@@ -67,7 +67,7 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
   private static final Logger LOGGER = LoggerFactory.getLogger(ListedEquityOptionDefaults.class);
 
   /**
-   * Basic constructor for configurations with just a single
+   * Basic constructor for configurations with just a single.
    *
    * @param priority
    *          PriorityClass name (e.g. PriorityClass.NORMAL.name())

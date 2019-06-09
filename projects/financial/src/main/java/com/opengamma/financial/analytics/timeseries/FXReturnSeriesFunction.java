@@ -45,9 +45,9 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  * Calculates an absolute return series from a time-series of FX spot rates.
  */
 public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Absolute returns */
+  /** Absolute returns. */
   public static final String ABSOLUTE_RETURNS = "Absolute";
-  /** Relative returns */
+  /** Relative returns. */
   public static final String RELATIVE_RETURNS = "Relative";
   /** Removes weekends */
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -65,7 +65,7 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the result properties for an FX return series with no transformation method set.
-   * 
+   *
    * @return The result properties
    */
   protected ValueProperties getResultProperties() {
@@ -174,7 +174,7 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the spot series start date from the desired value constraints.
-   * 
+   *
    * @param constraints
    *          The constraints
    * @return The spot series start date
@@ -185,7 +185,7 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the return series start date from the desired value constraints.
-   * 
+   *
    * @param constraints
    *          The constraints
    * @return The return series start date
@@ -200,7 +200,7 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the return series end date from the desired value constraints.
-   * 
+   *
    * @param constraints
    *          The constraints
    * @return The return series end date
@@ -215,7 +215,7 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the return series from the spot series.
-   * 
+   *
    * @param spotSeries
    *          The spot FX series
    * @param desiredValue

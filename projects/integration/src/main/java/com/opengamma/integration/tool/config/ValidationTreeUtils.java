@@ -8,7 +8,7 @@ package com.opengamma.integration.tool.config;
 import java.util.ArrayList;
 
 /**
- * Utility methods for processing trees of ValidationNodes
+ * Utility methods for processing trees of ValidationNodes.
  */
 public class ValidationTreeUtils {
   public static boolean containsErrors(final ValidationNode validationNode) {
@@ -48,8 +48,10 @@ public class ValidationTreeUtils {
   }
 
   /**
-   * Modify a tree so all nodes in a path containing an error have their error flag set.  Used to display only paths with errors present.
-   * @param validationNode the root of the tree, not null
+   * Modify a tree so all nodes in a path containing an error have their error flag set. Used to display only paths with errors present.
+   * 
+   * @param validationNode
+   *          the root of the tree, not null
    * @return true, if the tree contains any errors
    */
   public static boolean propagateErrorsUp(final ValidationNode validationNode) {
@@ -62,8 +64,10 @@ public class ValidationTreeUtils {
   }
 
   /**
-   * Modify a tree so all nodes in a path containing an error or warning have their error flag set.  Used to display only paths with errors present.
-   * @param validationNode the root of the tree, not null
+   * Modify a tree so all nodes in a path containing an error or warning have their error flag set. Used to display only paths with errors present.
+   * 
+   * @param validationNode
+   *          the root of the tree, not null
    * @return true, if the tree contains any errors or warnings
    */
   public static boolean propagateErrorsAndWarningsUp(final ValidationNode validationNode) {
@@ -76,8 +80,10 @@ public class ValidationTreeUtils {
   }
 
   /**
-   * Modify a tree to remove all nodes not having an error flag set.  Used to display only paths with errors present.
-   * @param validationNode the root of the tree, not null
+   * Modify a tree to remove all nodes not having an error flag set. Used to display only paths with errors present.
+   * 
+   * @param validationNode
+   *          the root of the tree, not null
    * @return tree root, if the tree contains any errors or warnings, null otherwise
    */
   public static ValidationNode discardNonErrors(final ValidationNode validationNode) {

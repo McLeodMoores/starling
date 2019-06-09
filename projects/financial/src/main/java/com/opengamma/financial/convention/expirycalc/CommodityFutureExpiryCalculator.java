@@ -21,13 +21,13 @@ import com.opengamma.util.ArgumentChecker;
 @ExpiryCalculator
 public final class CommodityFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  /** Name of the calculator */
+  /** Name of the calculator. */
   public static final String NAME = "CommodityFutureExpiryCalculator";
   /** Singleton. */
   private static final CommodityFutureExpiryCalculator INSTANCE = new CommodityFutureExpiryCalculator();
 
   private static final Month[] COMMODITY_FUTURE_EXPIRY_MONTHS = { Month.JANUARY, Month.MARCH, Month.MAY, Month.JULY, Month.AUGUST, Month.SEPTEMBER,
-      Month.NOVEMBER };
+                Month.NOVEMBER };
 
   /**
    * Gets the singleton instance.

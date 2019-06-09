@@ -97,7 +97,7 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
  */
 @Deprecated
 public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property name for the calculation method */
+  /** Property name for the calculation method. */
   public static final String FX_IMPLIED = "FXImplied";
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(FXImpliedYieldCurveFunction.class);
@@ -597,7 +597,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the FX spot rate requirement.
-   * 
+   *
    * @param provider
    *          The FX forward curve instrument provider
    * @param currencies

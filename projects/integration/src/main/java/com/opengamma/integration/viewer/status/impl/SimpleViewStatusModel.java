@@ -20,7 +20,7 @@ import com.opengamma.integration.viewer.status.ViewStatusModel;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Simple implementation of {@link ViewStatusModel}
+ * Simple implementation of {@link ViewStatusModel}.
  */
 public class SimpleViewStatusModel implements ViewStatusModel {
   /**
@@ -117,7 +117,6 @@ public class SimpleViewStatusModel implements ViewStatusModel {
   public int getColumnCount() {
     return Iterables.getFirst(_columnHeaders, Lists.newArrayList()).size();
   }
-
 
   @Override
   public Object getRowValueAt(final int rowIndex, final int columnIndex) {

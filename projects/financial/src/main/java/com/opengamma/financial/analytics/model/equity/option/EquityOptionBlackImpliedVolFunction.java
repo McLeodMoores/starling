@@ -32,7 +32,7 @@ public class EquityOptionBlackImpliedVolFunction extends EquityOptionBlackFuncti
       .getInstance();
 
   /**
-   * Sets the result to {@link ValueRequirementNames#IMPLIED_VOLATILITY}
+   * Sets the result to {@link ValueRequirementNames#IMPLIED_VOLATILITY}.
    */
   public EquityOptionBlackImpliedVolFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);

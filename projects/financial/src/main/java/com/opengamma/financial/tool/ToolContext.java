@@ -223,7 +223,7 @@ public class ToolContext extends DirectBean implements Closeable {
   private volatile AvailableOutputsProvider _avaliableOutputsProvider;
 
   /**
-   * The function configuration source
+   * The function configuration source.
    */
   @PropertyDefinition
   private volatile FunctionConfigurationSource _functionConfigSource;
@@ -234,7 +234,7 @@ public class ToolContext extends DirectBean implements Closeable {
   public ToolContext() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Closes the context, freeing any underlying resources. This calls the manager instance if present.
    */
@@ -244,13 +244,14 @@ public class ToolContext extends DirectBean implements Closeable {
     ReflectionUtils.close(manager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Sets the tool context, used to free any underlying resources.
    * <p>
    * The method {@link ReflectionUtils#isCloseable(Class)} must return true for the object. Call {@link #close()} to close the manager.
    *
-   * @param contextManager the context manager.
+   * @param contextManager
+   *          the context manager.
    */
   public void setContextManager(final Object contextManager) {
     if (ReflectionUtils.isCloseable(contextManager.getClass()) == false) {
@@ -1047,7 +1048,7 @@ public class ToolContext extends DirectBean implements Closeable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the function configuration source
+   * Gets the function configuration source.
    * @return the value of the property
    */
   public FunctionConfigurationSource getFunctionConfigSource() {
@@ -1055,7 +1056,7 @@ public class ToolContext extends DirectBean implements Closeable {
   }
 
   /**
-   * Sets the function configuration source
+   * Sets the function configuration source.
    * @param functionConfigSource  the new value of the property
    */
   public void setFunctionConfigSource(FunctionConfigurationSource functionConfigSource) {

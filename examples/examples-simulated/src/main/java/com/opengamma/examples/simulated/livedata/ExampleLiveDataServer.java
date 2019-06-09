@@ -51,7 +51,7 @@ import net.sf.ehcache.CacheManager;
 
 /**
  * An ultra-simple market data simulator, we load the initial values from a CSV file (with a header row) and the format identification-scheme, identifier-value,
- * requirement-name, value typically, for last price, you'd use "Market_Value" @see MarketDataRequirementNames
+ * requirement-name, value typically, for last price, you'd use "Market_Value" @see MarketDataRequirementNames.
  */
 public class ExampleLiveDataServer extends StandardLiveDataServer {
 
@@ -60,11 +60,11 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final int NUM_FIELDS = 3;
   /**
-   * Default scaling factor
+   * Default scaling factor.
    */
   public static final double SCALING_FACTOR = 0.005; // i.e. 0.5% * 1SD
   /**
-   * Default max millis between ticks
+   * Default max millis between ticks.
    */
   public static final int MAX_MILLIS_BETWEEN_TICKS = 500;
 

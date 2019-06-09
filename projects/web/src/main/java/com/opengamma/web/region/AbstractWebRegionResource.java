@@ -15,21 +15,22 @@ import com.opengamma.web.AbstractPerRequestWebResource;
  * Abstract base class for RESTful region resources.
  */
 public abstract class AbstractWebRegionResource
-extends AbstractPerRequestWebResource<WebRegionData> {
+    extends AbstractPerRequestWebResource<WebRegionData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "regions/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "regions/json/";
 
   /**
    * Creates the resource.
    *
-   * @param regionMaster  the region master, not null
+   * @param regionMaster
+   *          the region master, not null
    */
   protected AbstractWebRegionResource(final RegionMaster regionMaster) {
     super(new WebRegionData());
@@ -40,13 +41,14 @@ extends AbstractPerRequestWebResource<WebRegionData> {
   /**
    * Creates the resource.
    *
-   * @param parent  the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebRegionResource(final AbstractWebRegionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
    *

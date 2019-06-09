@@ -93,9 +93,9 @@ public class MarketInstrumentImpliedYieldCurveFunction extends AbstractFunction.
   private static final String TYPE_FORWARD = "Forward";
   private static final String TYPE_FUNDING = "Funding";
 
-  /** Label setting this function to use the par rate of the instruments in root-finding */
+  /** Label setting this function to use the par rate of the instruments in root-finding. */
   public static final String PAR_RATE_STRING = "ParRate";
-  /** Label setting this function to use the present value of the instruments in root-finding */
+  /** Label setting this function to use the present value of the instruments in root-finding. */
   public static final String PRESENT_VALUE_STRING = "PresentValue";
 
   private final InstrumentDerivativeVisitor<YieldCurveBundle, Double> _calculator;

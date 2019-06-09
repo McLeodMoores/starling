@@ -11,7 +11,7 @@ package com.opengamma.batch.domain;
 public class StatusEntry {
 
   /**
-   * Status constants
+   * Status constants.
    */
   public enum Status {
     /**
@@ -20,8 +20,7 @@ public class StatusEntry {
     SUCCESS,
 
     /**
-     * The computation has failed, wholly or partially. Successfully-calculated results for this target are still
-     * present in the database.
+     * The computation has failed, wholly or partially. Successfully-calculated results for this target are still present in the database.
      */
     FAILURE,
 
@@ -31,12 +30,10 @@ public class StatusEntry {
     RUNNING,
 
     /**
-     * We know that this computation needs to be performed,
-     * but it is not yet running. As of now, unused.
+     * We know that this computation needs to be performed, but it is not yet running. As of now, unused.
      */
     NOT_RUNNING
   }
-
 
   private long _id = -1;
   private long _runId = -1;

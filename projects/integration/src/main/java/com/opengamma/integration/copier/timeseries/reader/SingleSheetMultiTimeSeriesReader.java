@@ -25,39 +25,38 @@ import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSerie
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeriesBuilder;
 
 /**
- * Reads data points, possibly from multiple time series, from an single sheet
+ * Reads data points, possibly from multiple time series, from an single sheet.
  */
 public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TimeSeriesLoader.class);
-//  private static final String ID_SCHEME = "TIME_SERIES_LOADER";
+  // private static final String ID_SCHEME = "TIME_SERIES_LOADER";
   private static final int BUFFER_SIZE = 32;
 
   // CSOFF
-  /** Standard date-time formatter for the input */
+  /** Standard date-time formatter for the input. */
   protected DateTimeFormatter CSV_DATE_FORMATTER;
 
   private static final String ID = "id";
   private static final String DATE = "date";
   private static final String VALUE = "value";
-//  public static final String DATA_SOURCE = "data source";
-//  public static final String DATA_PROVIDER = "data provider";
-//  public static final String DATA_FIELD = "data field";
-//  public static final String OBSERVATION_TIME = "observation time";
+  // public static final String DATA_SOURCE = "data source";
+  // public static final String DATA_PROVIDER = "data provider";
+  // public static final String DATA_FIELD = "data field";
+  // public static final String OBSERVATION_TIME = "observation time";
   // CSON
 
-
-  private final SheetReader _sheet;         // The spreadsheet from which to import
+  private final SheetReader _sheet; // The spreadsheet from which to import
 
   private final String _dataSource, _dataProvider, _dataField, _observationTime, _idScheme;
 
   public SingleSheetMultiTimeSeriesReader(final SheetReader sheet,
-                                          final String dataSource,
-                                          final String dataProvider,
-                                          final String dataField,
-                                          final String observationTime,
-                                          final String idScheme,
-                                          final String dateFormat) {
+      final String dataSource,
+      final String dataProvider,
+      final String dataField,
+      final String observationTime,
+      final String idScheme,
+      final String dateFormat) {
     _sheet = sheet;
 
     _dataSource = dataSource;
@@ -72,13 +71,13 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
   }
 
   public SingleSheetMultiTimeSeriesReader(final SheetFormat sheetFormat,
-                                          final InputStream portfolioFileStream,
-                                          final String dataSource,
-                                          final String dataProvider,
-                                          final String dataField,
-                                          final String observationTime,
-                                          final String idScheme,
-                                          final String dateFormat) {
+      final InputStream portfolioFileStream,
+      final String dataSource,
+      final String dataProvider,
+      final String dataField,
+      final String observationTime,
+      final String idScheme,
+      final String dateFormat) {
     _sheet = SheetReader.newSheetReader(sheetFormat, portfolioFileStream);
 
     _dataSource = dataSource;

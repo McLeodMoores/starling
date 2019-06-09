@@ -29,17 +29,14 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the position vega of interest rate future options using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the position vega of interest rate future options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingPositionVegaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The position delta calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR =
-      PositionVegaSTIRFutureOptionCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR = PositionVegaSTIRFutureOptionCalculator.getInstance();
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_VEGA}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_VEGA}.
    */
   public BlackDiscountingPositionVegaIRFutureOptionFunction() {
     super(POSITION_VEGA);

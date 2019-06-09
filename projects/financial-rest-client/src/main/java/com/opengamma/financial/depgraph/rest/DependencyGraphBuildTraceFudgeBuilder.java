@@ -30,7 +30,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Fudge builder for {@link DependencyGraphBuildTrace} objects
+ * Fudge builder for {@link DependencyGraphBuildTrace} objects.
  */
 @FudgeBuilderFor(DependencyGraphBuildTrace.class)
 public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<DependencyGraphBuildTrace> {
@@ -135,14 +135,14 @@ public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<Depen
       return _sourceClass;
     }
 
-    //note - hc and eq defined for purpose of unit testing fudge builder.
-    //Throwables don't normally define these.
+    // note - hc and eq defined for purpose of unit testing fudge builder.
+    // Throwables don't normally define these.
     @Override
     public int hashCode() {
       return new HashCodeBuilder()
-                  .append(_sourceClass)
-                  .append(getMessage())
-                  .hashCode();
+          .append(_sourceClass)
+          .append(getMessage())
+          .hashCode();
     }
 
     @Override
@@ -152,12 +152,10 @@ public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<Depen
       }
       final ThrowableWithClass other = (ThrowableWithClass) obj;
       return new EqualsBuilder()
-                  .append(_sourceClass, other._sourceClass)
-                  .append(getMessage(), other.getMessage())
-                  .isEquals();
+          .append(_sourceClass, other._sourceClass)
+          .append(getMessage(), other.getMessage())
+          .isEquals();
     }
-
-
 
   }
 

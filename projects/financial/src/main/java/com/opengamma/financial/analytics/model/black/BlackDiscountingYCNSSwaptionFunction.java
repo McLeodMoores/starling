@@ -56,7 +56,7 @@ import com.opengamma.util.tuple.Pair;
 public class BlackDiscountingYCNSSwaptionFunction extends BlackDiscountingSwaptionFunction {
 
   /**
-   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public BlackDiscountingYCNSSwaptionFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);

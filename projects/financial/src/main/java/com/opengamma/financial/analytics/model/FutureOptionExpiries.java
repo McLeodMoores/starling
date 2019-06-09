@@ -101,7 +101,7 @@ public final class FutureOptionExpiries implements ExchangeTradedInstrumentExpir
   }
 
   /**
-   * Compute time between now and future or future option's settlement date,
+   * Compute time between now and future or future option's settlement date.
    *
    * @param n
    *          nth Future after now

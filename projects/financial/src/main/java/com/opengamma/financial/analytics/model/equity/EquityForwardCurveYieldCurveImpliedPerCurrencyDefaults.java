@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Populates {@link EquityForwardCurveFunction} with default properties
+ * Populates {@link EquityForwardCurveFunction} with default properties.
  */
 public class EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults extends DefaultPropertyFunction {
   /** The logger */

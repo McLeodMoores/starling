@@ -47,7 +47,7 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
   /** The BjerksundStensland present value calculator */
   private static final EqyOptBjerksundStenslandPresentValueCalculator PV_CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionBjerksundStenslandImpliedVolFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }

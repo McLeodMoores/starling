@@ -23,19 +23,20 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information used to construct standard versions of MXN instruments
+ * Contains information used to construct standard versions of MXN instruments.
  *
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class MXConventions {
   /** Month codes used by Bloomberg */
-  private static final char[] BBG_MONTH_CODES = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'};
+  private static final char[] BBG_MONTH_CODES = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
 
   /**
    * Add conventions for deposits and implied deposits.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final InMemoryConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");

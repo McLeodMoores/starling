@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.jms.JmsConnector;
 
 /**
- * Distributes computed values over JMS
+ * Distributes computed values over JMS.
  */
 public class JmsAnalyticsDistributor implements AnalyticResultReceiver {
 

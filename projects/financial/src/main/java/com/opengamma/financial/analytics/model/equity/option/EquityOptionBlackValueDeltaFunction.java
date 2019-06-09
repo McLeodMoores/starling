@@ -32,7 +32,7 @@ public class EquityOptionBlackValueDeltaFunction extends EquityOptionBlackFuncti
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

@@ -25,7 +25,7 @@ import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converts interest rate future securities into the definition form used by the analytics library
+ * Converts interest rate future securities into the definition form used by the analytics library.
  */
 public class InterestRateFutureSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** A security source. Used for the Ibor index. */
@@ -38,12 +38,16 @@ public class InterestRateFutureSecurityConverter extends FinancialSecurityVisito
   private final RegionSource _regionSource;
 
   /**
-   * @param securitySource The security source, not null
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
    */
-  public InterestRateFutureSecurityConverter(final SecuritySource securitySource, final HolidaySource holidaySource, 
+  public InterestRateFutureSecurityConverter(final SecuritySource securitySource, final HolidaySource holidaySource,
       final ConventionSource conventionSource, final RegionSource regionSource) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
@@ -58,7 +62,7 @@ public class InterestRateFutureSecurityConverter extends FinancialSecurityVisito
   @Override
   public InterestRateFutureSecurityDefinition visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
     ArgumentChecker.notNull(security, "security");
-    final Security sec = _securitySource.getSingle(security.getUnderlyingId().toBundle()); 
+    final Security sec = _securitySource.getSingle(security.getUnderlyingId().toBundle());
     if (sec == null) {
       throw new OpenGammaRuntimeException("Ibor index with id " + security.getUnderlyingId() + " was null");
     }
@@ -75,7 +79,9 @@ public class InterestRateFutureSecurityConverter extends FinancialSecurityVisito
 
   /**
    * Returns the conventional accrual factor for a given period. For 3 months, the factor is 0.25; for 1 month, the factor is 1/12.
-   * @param period The period.
+   * 
+   * @param period
+   *          The period.
    * @return The accrual factor.
    */
   private static double getAccrualFactor(final Period period) {

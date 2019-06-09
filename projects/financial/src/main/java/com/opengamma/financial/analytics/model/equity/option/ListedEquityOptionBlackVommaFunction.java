@@ -24,15 +24,14 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Returns the spot vomma, i.e. the 2nd order sensitivity of the spot price to the implied vol,
- *          $\frac{\partial^2 (PV)}{\partial \sigma^2}$
+ * Returns the spot vomma, i.e. the 2nd order sensitivity of the spot price to the implied vol, $\frac{\partial^2 (PV)}{\partial \sigma^2}$
  */
 public class ListedEquityOptionBlackVommaFunction extends ListedEquityOptionBlackFunction {
   /** Vomma calculator */
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackVommaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackVommaFunction() {
     super(ValueRequirementNames.VOMMA);

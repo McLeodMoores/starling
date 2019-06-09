@@ -59,7 +59,7 @@ public class ExampleDbFunctionConfigurationSourceComponentFactory extends Exampl
     private final ConfigMaster _configMaster;
     private final String _definitionName;
 
-    public DbFunctionConfigurationSource(final ConfigMaster configMaster, final String definitionName) {
+    DbFunctionConfigurationSource(final ConfigMaster configMaster, final String definitionName) {
       super(ConfigMasterChangeProvider.of(configMaster));
       _configMaster = configMaster;
       _definitionName = definitionName;

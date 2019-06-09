@@ -29,8 +29,8 @@ import com.opengamma.financial.analytics.DoubleLabelledMatrix2D;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Calculates the sensitivity of the present value to the SABR parameters
- * 
+ * Calculates the sensitivity of the present value to the SABR parameters.
+ *
  * @deprecated Deprecated
  */
 @Deprecated

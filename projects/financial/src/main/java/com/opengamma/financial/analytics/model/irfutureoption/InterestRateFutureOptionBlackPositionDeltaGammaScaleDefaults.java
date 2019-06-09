@@ -18,8 +18,8 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * For {@link ValueRequirementNames#POSITION_DELTA} and {@link ValueRequirementNames#POSITION_GAMMA}, includes default value {@link ValuePropertyNames#SCALE} to
- * existing defaults as specified in {@link InterestRateFutureOptionBlackDefaults}
- * 
+ * existing defaults as specified in {@link InterestRateFutureOptionBlackDefaults}.
+ *
  * @deprecated The functions for which these defaults apply are deprecated. See comment in {@link InterestRateFutureOptionBlackFunction}
  */
 @Deprecated

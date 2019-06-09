@@ -32,6 +32,7 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
     /**
      * Gets the curve configuration name.
+     *
      * @return The curve configuration name
      */
     public String getCurveConfiguration() {
@@ -40,14 +41,17 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
     /**
      * Sets the curve configuration name.
-     * @param curveConfiguration The curve configuration name, not null
+     *
+     * @param curveConfiguration
+     *          The curve configuration name, not null
      */
     public void setCurveConfiguration(final String curveConfiguration) {
       _curveConfiguration = curveConfiguration;
     }
 
     /**
-     * Gets the discounting curve name
+     * Gets the discounting curve name.
+     *
      * @return The discounting curve name
      */
     public String getDiscountingCurve() {
@@ -56,7 +60,9 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
     /**
      * Sets the discounting curve name.
-     * @param discountingCurve The discounting curve name, not null
+     *
+     * @param discountingCurve
+     *          The discounting curve name, not null
      */
     public void setDiscountingCurve(final String discountingCurve) {
       _discountingCurve = discountingCurve;
@@ -79,6 +85,7 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
     /**
      * Gets the forward curve name.
+     *
      * @return The forward curve name
      */
     public String getForwardCurveName() {
@@ -86,8 +93,10 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
     }
 
     /**
-     * Sets the forward curve name
-     * @param forwardCurveName The forward curve name, not null
+     * Sets the forward curve name.
+     *
+     * @param forwardCurveName
+     *          The forward curve name, not null
      */
     public void setForwardCurveName(final String forwardCurveName) {
       _forwardCurveName = forwardCurveName;
@@ -99,6 +108,7 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
     }
 
   }
+
   /** The per-currency defaults */
   private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
   /** The per-currency pair defaults */
@@ -106,7 +116,9 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Sets the defaults for a set of currencies.
-   * @param perCurrencyInfo The currency pair defaults
+   *
+   * @param perCurrencyInfo
+   *          The currency pair defaults
    */
   public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
     _perCurrencyInfo.clear();
@@ -115,6 +127,7 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Gets the defaults for a currency.
+   *
    * @return The currency defaults
    */
   public Map<String, CurrencyInfo> getPerCurrencyInfo() {
@@ -123,8 +136,11 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Sets the defaults for a currency.
-   * @param currency The currency
-   * @param info The defaults
+   *
+   * @param currency
+   *          The currency
+   * @param info
+   *          The defaults
    */
   public void setCurrencyInfo(final String currency, final CurrencyInfo info) {
     _perCurrencyInfo.put(currency, info);
@@ -132,7 +148,9 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Gets the defaults for a currency.
-   * @param currency The currency
+   *
+   * @param currency
+   *          The currency
    * @return The defaults
    */
   public CurrencyInfo getCurrencyInfo(final String currency) {
@@ -141,7 +159,9 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Sets the defaults for a set of currency pairs.
-   * @param perCurrencyPairInfo The currency pairs and defaults
+   *
+   * @param perCurrencyPairInfo
+   *          The currency pairs and defaults
    */
   public void setPerCurrencyPairInfo(final Map<Pair<String, String>, CurrencyPairInfo> perCurrencyPairInfo) {
     _perCurrencyPairInfo.clear();
@@ -150,6 +170,7 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Gets the defaults for a currency pair.
+   *
    * @return The defaults
    */
   public Map<Pair<String, String>, CurrencyPairInfo> getPerCurrencyPairInfo() {
@@ -158,8 +179,11 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Sets defaults for a currency pair.
-   * @param currencyPair The currency pair
-   * @param info The currency pair defaults
+   *
+   * @param currencyPair
+   *          The currency pair
+   * @param info
+   *          The currency pair defaults
    */
   public void setCurrencyPairInfo(final Pair<String, String> currencyPair, final CurrencyPairInfo info) {
     _perCurrencyPairInfo.put(currencyPair, info);
@@ -167,7 +191,9 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Gets defaults for a currency pair.
-   * @param currencyPair The currency pair
+   *
+   * @param currencyPair
+   *          The currency pair
    * @return The currency pair defaults
    */
   public CurrencyPairInfo getCurrencyPairInfo(final Pair<String, String> currencyPair) {
@@ -176,7 +202,9 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Adds defaults for FX forwards relevant to the discounting calculation method.
-   * @param functions The list of functions
+   *
+   * @param functions
+   *          The list of functions
    */
   protected void addFXForwardDefaults(final List<FunctionConfiguration> functions) {
     final String[] args = new String[getPerCurrencyInfo().size() * 3];
@@ -191,7 +219,9 @@ public class FXForwardPropertiesFunctions extends AbstractFunctionConfigurationB
 
   /**
    * Adds defaults for FX forwards relevant to the forward point calculation method.
-   * @param functions The list of functions
+   *
+   * @param functions
+   *          The list of functions
    */
   protected void addFXForwardPointsDefaults(final List<FunctionConfiguration> functions) {
     final String[] args = new String[getPerCurrencyPairInfo().size() * 3];

@@ -21,7 +21,7 @@ import com.opengamma.core.config.Config;
 import com.opengamma.core.config.ConfigGroups;
 
 /**
- * Provides all supported configuration types
+ * Provides all supported configuration types.
  */
 public final class ConfigTypesProvider {
 

@@ -91,8 +91,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   private String _optionExpiryCalculator;
 
   /**
-   * Constructor to create a convention bundle for cash/general types
-   * 
+   * Constructor to create a convention bundle for cash/general types.
+   *
    * @param initialBundle
    *          the bundle of ids associated with the type
    * @param name
@@ -118,8 +118,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for generic cash (no frequency applicable)
-   * 
+   * Constructor to create a convention bundle for generic cash (no frequency applicable).
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -142,8 +142,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for cash/general (includes a period and region)
-   * 
+   * Constructor to create a convention bundle for cash/general (includes a period and region).
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -172,8 +172,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for cash/general where EOM is indicated
-   * 
+   * Constructor to create a convention bundle for cash/general where EOM is indicated.
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -206,7 +206,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for *IBOR indices (e.g. floating reference rate for swaps)
-   * 
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -233,7 +233,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for *IBOR indices (e.g. floating reference rate for swaps)
-   * 
+   *
    * @param bundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -267,8 +267,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for futures
-   * 
+   * Constructor to create a convention bundle for futures.
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -297,8 +297,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Swaps and FRA without end-of-month (EOM) convention flag
-   * 
+   * Constructor to create a convention bundle for Swaps and FRA without end-of-month (EOM) convention flag.
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -351,8 +351,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Swaps and FRA with end-of-month (EOM) convention flag
-   * 
+   * Constructor to create a convention bundle for Swaps and FRA with end-of-month (EOM) convention flag.
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -410,7 +410,7 @@ public class ConventionBundleImpl implements ConventionBundle {
   /**
    * Constructor to create a convention bundle for Swap Indices with end-of-month (EOM) convention flag and swap tenor. The payment frequency and compounding
    * frequency of both legs is assumed to be the same, and the compounding type of both legs is assumed to be continuous.
-   * 
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -471,7 +471,7 @@ public class ConventionBundleImpl implements ConventionBundle {
   /**
    * Constructor to create a convention bundle for Swap Indices with end-of-month (EOM) convention flag and the compounding frequency and type of the fixed and
    * float legs.
-   * 
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -540,8 +540,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for OIS Swaps with end-of-month (EOM) convention flag and publication lag
-   * 
+   * Constructor to create a convention bundle for OIS Swaps with end-of-month (EOM) convention flag and publication lag.
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -600,8 +600,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Basis Swaps
-   * 
+   * Constructor to create a convention bundle for Basis Swaps.
+   *
    * @param initialBundle
    *          the bundle of ExternalIds associated with the type
    * @param name
@@ -658,8 +658,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Equity CAPM
-   * 
+   * Constructor to create a convention bundle for Equity CAPM.
+   *
    * @param name
    *          the descriptive name of the type
    * @param capmRiskFreeRate
@@ -677,8 +677,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Bonds
-   * 
+   * Constructor to create a convention bundle for Bonds.
+   *
    * @param name
    *          the descriptive name of the type
    * @param isEOMConvention
@@ -706,8 +706,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Bonds
-   * 
+   * Constructor to create a convention bundle for Bonds.
+   *
    * @param name
    *          the descriptive name of the type
    * @param isEOMConvention
@@ -742,8 +742,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Bond Future deliverables
-   * 
+   * Constructor to create a convention bundle for Bond Future deliverables.
+   *
    * @param name
    *          the descriptive name of the type
    * @param isEOMConvention
@@ -780,8 +780,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Swaptions
-   * 
+   * Constructor to create a convention bundle for Swaptions.
+   *
    * @param name
    *          the descriptive name of the type
    * @param isCashSettled
@@ -874,7 +874,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegDayCount field.
-   * 
+   *
    * @return the swapFixedLegDayCount
    */
   @Override
@@ -884,7 +884,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegBusinessDayConvention field.
-   * 
+   *
    * @return the swapFixedLegBusinessDayConvention
    */
   @Override
@@ -894,7 +894,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegFrequency field.
-   * 
+   *
    * @return the swapFixedLegFrequency
    */
   @Override
@@ -920,7 +920,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegSettlementDays field.
-   * 
+   *
    * @return the swapFixedLegSettlementDays
    */
   @Override
@@ -929,8 +929,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Gets the region identifier for the fixed leg
-   * 
+   * Gets the region identifier for the fixed leg.
+   *
    * @return the region identifier for the fixed leg
    */
   @Override
@@ -940,7 +940,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegDayCount field.
-   * 
+   *
    * @return the swapFloatingLegDayCount
    */
   @Override
@@ -950,7 +950,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegBusinessDayConvention field.
-   * 
+   *
    * @return the swapFloatingLegBusinessDayConvention
    */
   @Override
@@ -960,7 +960,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegFrequency field.
-   * 
+   *
    * @return the swapFloatingLegFrequency
    */
   @Override
@@ -986,7 +986,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegSettlementDays field.
-   * 
+   *
    * @return the swapFloatingLegSettlementDays
    */
   @Override
@@ -996,7 +996,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegInitialRate field.
-   * 
+   *
    * @return the swapFloatingLegInitialRate
    */
   @Override
@@ -1005,8 +1005,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Gets the region identifier for the floating leg
-   * 
+   * Gets the region identifier for the floating leg.
+   *
    * @return the region identifier for the floating leg
    */
   @Override
@@ -1016,7 +1016,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the pointValue field.
-   * 
+   *
    * @return the pointValue
    */
   @Override
@@ -1025,8 +1025,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Gets the name of the risk free rate for CAPM
-   * 
+   * Gets the name of the risk free rate for CAPM.
+   *
    * @return the name
    */
   @Override
@@ -1035,8 +1035,8 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Gets the name of the market for CAPM
-   * 
+   * Gets the name of the market for CAPM.
+   *
    * @return the name
    */
   @Override

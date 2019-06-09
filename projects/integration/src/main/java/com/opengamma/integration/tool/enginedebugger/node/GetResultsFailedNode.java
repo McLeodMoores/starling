@@ -11,7 +11,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Node representing when call to getResults() fails during graph building
+ * Node representing when call to getResults() fails during graph building.
  */
 public class GetResultsFailedNode extends AbstractFailureWithRequirementsNode {
 

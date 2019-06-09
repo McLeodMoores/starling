@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts interest rate future securities into the definition form used by the analytics library
+ * Converts interest rate future securities into the definition form used by the analytics library.
  *
  * @deprecated Use the converter that does not reference a {@link ConventionBundleSource}
  */

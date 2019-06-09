@@ -19,12 +19,12 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * BondOptionSecurityBeanOperation
+ * BondOptionSecurityBeanOperation.
  */
 public final class BondFutureOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<BondFutureOptionSecurity, BondFutureOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final BondFutureOptionSecurityBeanOperation INSTANCE = new BondFutureOptionSecurityBeanOperation();
 

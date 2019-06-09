@@ -36,20 +36,24 @@ import com.opengamma.util.monitor.OperationTimer;
 import com.opengamma.util.redis.RedisConnector;
 
 /**
- * Write last know values in Redis to disk
+ * Write last know values in Redis to disk.
  * <p>
- * output file will be <pre>baseDir/yyyy/mm/dd/observationTime.dump</pre>
+ * output file will be
+ * 
+ * <pre>
+ * baseDir / yyyy / mm / dd / observationTime.dump
+ * </pre>
  */
 public class RedisLKVFileWriter implements Runnable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RedisLKVFileWriter.class);
   private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   /**
-   * Ticks field name
+   * Ticks field name.
    */
   public static final String TICKS = "1";
   /**
-   * Security field name
+   * Security field name.
    */
   public static final String SECURITY = "2";
 
@@ -63,6 +67,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Gets the dataFieldBlackList.
+   * 
    * @return the dataFieldBlackList
    */
   public BlackList getDataFieldBlackList() {
@@ -71,7 +76,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Sets the dataFieldBlackList.
-   * @param dataFieldBlackList  the dataFieldBlackList
+   * 
+   * @param dataFieldBlackList
+   *          the dataFieldBlackList
    */
   public void setDataFieldBlackList(final BlackList dataFieldBlackList) {
     _dataFieldBlackList = dataFieldBlackList;
@@ -79,6 +86,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Gets the schemeBlackList.
+   * 
    * @return the schemeBlackList
    */
   public BlackList getSchemeBlackList() {
@@ -87,7 +95,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Sets the schemeBlackList.
-   * @param schemeBlackList  the schemeBlackList
+   * 
+   * @param schemeBlackList
+   *          the schemeBlackList
    */
   public void setSchemeBlackList(final BlackList schemeBlackList) {
     _schemeBlackList = schemeBlackList;
@@ -95,6 +105,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Gets the observationTime.
+   * 
    * @return the observationTime
    */
   public String getObservationTime() {
@@ -103,7 +114,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Sets the observationTime.
-   * @param observationTime  the observationTime
+   * 
+   * @param observationTime
+   *          the observationTime
    */
   public void setObservationTime(final String observationTime) {
     _observationTime = observationTime;
@@ -111,6 +124,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Gets the normalizationRuleSetId.
+   * 
    * @return the normalizationRuleSetId
    */
   public String getNormalizationRuleSetId() {
@@ -119,7 +133,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Sets the normalizationRuleSetId.
-   * @param normalizationRuleSetId  the normalizationRuleSetId
+   * 
+   * @param normalizationRuleSetId
+   *          the normalizationRuleSetId
    */
   public void setNormalizationRuleSetId(final String normalizationRuleSetId) {
     _normalizationRuleSetId = normalizationRuleSetId;
@@ -127,6 +143,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Gets the globalPrefix.
+   * 
    * @return the globalPrefix
    */
   public String getGlobalPrefix() {
@@ -135,7 +152,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Sets the globalPrefix.
-   * @param globalPrefix  the globalPrefix
+   * 
+   * @param globalPrefix
+   *          the globalPrefix
    */
   public void setGlobalPrefix(final String globalPrefix) {
     _globalPrefix = globalPrefix;
@@ -143,6 +162,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Gets the redisConnector.
+   * 
    * @return the redisConnector
    */
   public RedisConnector getRedisConnector() {
@@ -151,7 +171,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Sets the redisConnector.
-   * @param redisConnector  the redisConnector
+   * 
+   * @param redisConnector
+   *          the redisConnector
    */
   public void setRedisConnector(final RedisConnector redisConnector) {
     _redisConnector = redisConnector;
@@ -159,6 +181,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Gets the baseDir.
+   * 
    * @return the baseDir
    */
   public File getBaseDir() {
@@ -167,7 +190,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   /**
    * Sets the baseDir.
-   * @param baseDir  the baseDir
+   * 
+   * @param baseDir
+   *          the baseDir
    */
   public void setBaseDir(final File baseDir) {
     _baseDir = baseDir;

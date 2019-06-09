@@ -13,7 +13,7 @@ import com.opengamma.financial.security.bond.MunicipalBondSecurity;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the BondType enum
+ * Custom Hibernate usertype for the BondType enum.
  */
 public class BondTypeUserType extends EnumUserType<BondType> {
 

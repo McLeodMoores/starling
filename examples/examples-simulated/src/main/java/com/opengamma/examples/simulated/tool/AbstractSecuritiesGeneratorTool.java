@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.tool;
 
@@ -52,14 +52,14 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * The securities generator creates the list of securities.
-   * 
+   *
    * @return The securities generator
    */
   public abstract SecuritiesGenerator createSecuritiesGenerator();
 
   /**
    * Creates a list of {@link ManageableSecurity} from the securities generator.
-   * 
+   *
    * @return The list of securities
    */
   public List<ManageableSecurity> createSecurities() {
@@ -69,7 +69,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
   /**
    * Runs this tool given a tool context and command line options. The -s option is required (this sets the name of the securities generator), and -w will save
    * the securities to the security master.
-   * 
+   *
    * @param context
    *          The tool context, not null
    * @param commandLine
@@ -83,7 +83,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Runs this tool given a tool context, the securities generator name and a flag indicating whether or not to write the securities to the database.
-   * 
+   *
    * @param context
    *          The tool context, not null
    * @param generatorName
@@ -126,7 +126,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Runs this tool given a tool context, the securities generator name and a flag indicating whether or not to write the securities to the database.
-   * 
+   *
    * @param context
    *          The tool context, not null
    * @param instance
@@ -168,7 +168,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the tool context.
-   * 
+   *
    * @return The tool context
    */
   public ToolContext getToolContext() {
@@ -177,7 +177,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the tool context.
-   * 
+   *
    * @param toolContext
    *          The tool context
    */
@@ -187,7 +187,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the security persister.
-   * 
+   *
    * @return The security persister
    */
   public SecurityPersister getSecurityPersister() {
@@ -196,7 +196,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the security persister.
-   * 
+   *
    * @param securityPersister
    *          The security persister, not null
    */
@@ -220,7 +220,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
    * <li>security master
    * <li>historical time series master
    * </ul>
-   * 
+   *
    * @param securityGenerator
    *          The security generator, not null if the tool context is not null
    */
@@ -244,7 +244,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Configures the chain for this tool and security generator.
-   * 
+   *
    * @param securityGenerator
    *          The security generator, not null if the object context is not null
    */
@@ -257,7 +257,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Configures the chain for this tool by setting the tool context and security persister.
-   * 
+   *
    * @param tool
    *          The tool, not null
    */
@@ -274,7 +274,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the class context and the object context for this tool.
-   * 
+   *
    * @param classContext
    *          The class context
    * @param objectContext
@@ -287,7 +287,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the class context.
-   * 
+   *
    * @return The class context
    */
   private Class<? extends AbstractSecuritiesGeneratorTool> getClassContext() {
@@ -296,7 +296,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Gets the object context.
-   * 
+   *
    * @return The object context
    */
   private AbstractSecuritiesGeneratorTool getObjectContext() {
@@ -307,7 +307,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
    * Gets an instance of the tool given its class and name. If the generator name is not a full path (i.e. contains a "."), this tool looks in the directory of
    * this class for a class named [generatorName]SecuritiesGeneratorTool or [generatorName]SecurityGeneratorTool. If the class is not found, tries the
    * superclass of the required tool.
-   * 
+   *
    * @param clazz
    *          The class of the required securities generator tool
    * @param generatorName
@@ -353,7 +353,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the required field on an option to true.
-   * 
+   *
    * @param option
    *          The option
    * @return The option with the required field set to true
@@ -365,7 +365,7 @@ public abstract class AbstractSecuritiesGeneratorTool {
 
   /**
    * Sets the options for this tool: -s for the security generator name, -w to write to the security master.
-   * 
+   *
    * @param options
    *          The options
    */

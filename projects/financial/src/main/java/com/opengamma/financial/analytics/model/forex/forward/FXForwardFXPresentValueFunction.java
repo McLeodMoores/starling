@@ -33,7 +33,7 @@ public class FXForwardFXPresentValueFunction extends FXForwardMultiValuedFunctio
   private static final PresentValueMCACalculator CALCULATOR = PresentValueMCACalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#FX_PRESENT_VALUE}
+   * Sets the value requirement name to {@link ValueRequirementNames#FX_PRESENT_VALUE}.
    */
   public FXForwardFXPresentValueFunction() {
     super(ValueRequirementNames.FX_PRESENT_VALUE);

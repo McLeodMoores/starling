@@ -20,16 +20,20 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Delegate class for curve node visitors
+ * Delegate class for curve node visitors.
  *
- * @param <T> The return type of the visitor.
+ * @param <T>
+ *          The return type of the visitor.
  */
 public class CurveNodeWithExternalIdVisitorDelegate<T> implements CurveNodeWithExternalIdVisitor<T> {
 
   /** The delegate */
   private final CurveNodeWithExternalIdVisitor<T> _delegate;
 
-  /** @param delegate The delegate, not null */
+  /**
+   * @param delegate
+   *          The delegate, not null
+   */
   public CurveNodeWithExternalIdVisitorDelegate(final CurveNodeWithExternalIdVisitor<T> delegate) {
     ArgumentChecker.notNull(delegate, "delegate");
     _delegate = delegate;
@@ -42,7 +46,7 @@ public class CurveNodeWithExternalIdVisitorDelegate<T> implements CurveNodeWithE
 
   @Override
   public T visitContinuouslyCompoundedRateNode(final ContinuouslyCompoundedRateNode node,
-                                               final ExternalId externalId) {
+      final ExternalId externalId) {
     return _delegate.visitContinuouslyCompoundedRateNode(node, externalId);
   }
 

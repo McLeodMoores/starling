@@ -38,12 +38,12 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInvoker {
 
   /**
-   * The name for the normal historical VaR calculation method
+   * The name for the normal historical VaR calculation method.
    */
   public static final String NORMAL_VAR = "Normal";
 
   /**
-   * The property for the VaR distribution type
+   * The property for the VaR distribution type.
    */
   public static final String PROPERTY_VAR_DISTRIBUTION = "VaRDistributionType";
   /**
