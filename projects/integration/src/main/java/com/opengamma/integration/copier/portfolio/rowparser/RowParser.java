@@ -59,7 +59,7 @@ public abstract class RowParser {
    * Constructs a row from the supplied trade.
    * @param trade The trade to convert
    * @return      The mapping from column names to contents of the current row
-  */
+   */
   public Map<String, String> constructRow(final ManageableTrade trade) {
     return new HashMap<>();
   }
@@ -68,7 +68,7 @@ public abstract class RowParser {
    * Constructs a row from the supplied position.
    * @param position The position to convert
    * @return      The mapping from column names to contents of the current row
-  */
+   */
   public Map<String, String> constructRow(final ManageablePosition position) {
     return new HashMap<>();
   }
@@ -77,7 +77,7 @@ public abstract class RowParser {
    * Constructs a row from the supplied securities.
    * @param securities The securities to convert (securities following the first are assumed to be underlyings)
    * @return      The mapping from column names to contents of the current row
-  */
+   */
   public Map<String, String> constructRow(final ManageableSecurity[] securities) {
     return new HashMap<>();
   }
@@ -169,7 +169,8 @@ public abstract class RowParser {
     return getDateWithException(fieldValueMap, fieldName, _csvDateFormatter, _secondaryCsvDateFormatter);
   }
 
-  public static LocalDate getDateWithException(final Map<String, String> fieldValueMap, final String fieldName, final DateTimeFormatter formatter, final DateTimeFormatter alternativeFormatter) {
+  public static LocalDate getDateWithException(final Map<String, String> fieldValueMap, final String fieldName, final DateTimeFormatter formatter,
+      final DateTimeFormatter alternativeFormatter) {
     try {
       return LocalDate.parse(getWithException(fieldValueMap, fieldName), formatter);
     } catch (final DateTimeParseException ex) {

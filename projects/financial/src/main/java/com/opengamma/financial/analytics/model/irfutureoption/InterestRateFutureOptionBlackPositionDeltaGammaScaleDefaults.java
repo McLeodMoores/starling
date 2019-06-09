@@ -17,8 +17,9 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * For {@link ValueRequirementNames#POSITION_DELTA} and {@link ValueRequirementNames#POSITION_GAMMA},
- * includes default value {@link ValuePropertyNames#SCALE} to existing defaults as specified in {@link InterestRateFutureOptionBlackDefaults}
+ * For {@link ValueRequirementNames#POSITION_DELTA} and {@link ValueRequirementNames#POSITION_GAMMA}, includes default value {@link ValuePropertyNames#SCALE} to
+ * existing defaults as specified in {@link InterestRateFutureOptionBlackDefaults}
+ * 
  * @deprecated The functions for which these defaults apply are deprecated. See comment in {@link InterestRateFutureOptionBlackFunction}
  */
 @Deprecated
@@ -27,7 +28,7 @@ public class InterestRateFutureOptionBlackPositionDeltaGammaScaleDefaults extend
 
   public InterestRateFutureOptionBlackPositionDeltaGammaScaleDefaults(final String... scaleCurrencyCurveConfigAndSurfaceNames) {
     super(Arrays.copyOfRange(scaleCurrencyCurveConfigAndSurfaceNames, 1, scaleCurrencyCurveConfigAndSurfaceNames.length));
-    ArgumentChecker.isTrue((scaleCurrencyCurveConfigAndSurfaceNames.length - 1) % 3 == 0, 
+    ArgumentChecker.isTrue((scaleCurrencyCurveConfigAndSurfaceNames.length - 1) % 3 == 0,
         "Input array must begin with a double representing the scale factor to apply, " +
             "then follow with one curve config and surface name per currency");
     _defaultScale = scaleCurrencyCurveConfigAndSurfaceNames[0];
@@ -43,7 +44,8 @@ public class InterestRateFutureOptionBlackPositionDeltaGammaScaleDefaults extend
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SCALE.equals(propertyName)) {
       return Collections.singleton(_defaultScale);
     }

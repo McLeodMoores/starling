@@ -26,7 +26,8 @@ public class MultipleCurrencyAmountConverter implements ResultConverter<Multiple
   }
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final MultipleCurrencyAmount value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final MultipleCurrencyAmount value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     final int length = value.size();
     result.put("summary", length);

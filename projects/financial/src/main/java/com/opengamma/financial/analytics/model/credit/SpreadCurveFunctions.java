@@ -35,7 +35,7 @@ import com.opengamma.util.time.Tenor;
 @SuppressWarnings("deprecation")
 public class SpreadCurveFunctions {
 
-  //private final static PresentValueCreditDefaultSwap cdsPresentValueCalculator = new PresentValueCreditDefaultSwap();
+  // private final static PresentValueCreditDefaultSwap cdsPresentValueCalculator = new PresentValueCreditDefaultSwap();
   // private static PresentValueStandardCreditDefaultSwap cdsPresentValueCalculator = new PresentValueStandardCreditDefaultSwap();
 
   private static final Collection<Tenor> BUCKET_TENORS = new ArrayList<>();
@@ -110,8 +110,6 @@ public class SpreadCurveFunctions {
     return tenors.toArray(new Tenor[tenors.size()]);
   }
 
-
-
   /**
    * Format the spread curve for a given cds. For IMM dates set all spreads to bucket maturity is in. For non-IMM dates take subset of spreads that correspond
    * to buckets.
@@ -135,8 +133,10 @@ public class SpreadCurveFunctions {
    * @return the spread curve for the given cds
    */
   @Deprecated
-  public static double[] getSpreadCurve(final LegacyVanillaCreditDefaultSwapDefinition cds, final NodalTenorDoubleCurve spreadCurve, final ZonedDateTime[] bucketDates,
-      final StandardCDSQuotingConvention quoteConvention, final ZonedDateTime valuationDate, final ISDACompliantYieldCurve isdaCurve, final ZonedDateTime startDate) {
+  public static double[] getSpreadCurve(final LegacyVanillaCreditDefaultSwapDefinition cds, final NodalTenorDoubleCurve spreadCurve,
+      final ZonedDateTime[] bucketDates,
+      final StandardCDSQuotingConvention quoteConvention, final ZonedDateTime valuationDate, final ISDACompliantYieldCurve isdaCurve,
+      final ZonedDateTime startDate) {
     ArgumentChecker.notNull(spreadCurve, "spread curve");
     ArgumentChecker.notNull(bucketDates, "bucket dates");
     ArgumentChecker.isTrue(spreadCurve.size() > 0, "spread curve had no values");
@@ -161,7 +161,7 @@ public class SpreadCurveFunctions {
           break;
         case POINTS_UPFRONT:
           // can price type vary?
-          //FIXME: Conversion to percentage should happen upstream or in analytics
+          // FIXME: Conversion to percentage should happen upstream or in analytics
           final CDSAnalytic analytic = CDSAnalyticConverter.create(cds, valuationDate.toLocalDate());
           spreadRate = PUF_CONVERTER.pufToQuotedSpread(analytic, cds.getParSpread() * TEN_MINUS_4, isdaCurve, spreadRate / 100.0);
           break;
@@ -254,7 +254,8 @@ public class SpreadCurveFunctions {
    *          control whether to normalise spreads to fractional vlaues
    * @return the cds quote conventions
    */
-  public static CDSQuoteConvention[] getQuotes(final ZonedDateTime pricedCDSMaturity, final double[] values, final double coupon, final StandardCDSQuotingConvention quoteConvention, final boolean normalise) {
+  public static CDSQuoteConvention[] getQuotes(final ZonedDateTime pricedCDSMaturity, final double[] values, final double coupon,
+      final StandardCDSQuotingConvention quoteConvention, final boolean normalise) {
     final CDSQuoteConvention[] result = new CDSQuoteConvention[values.length];
     // PUF normalised to 1%, spreads to 1 BP
     double multiplier = 1;
@@ -263,7 +264,8 @@ public class SpreadCurveFunctions {
     }
     for (int i = 0; i < values.length; i++) {
       if (StandardCDSQuotingConvention.SPREAD.equals(quoteConvention)) {
-        result[i] = IMMDateGenerator.isIMMDate(pricedCDSMaturity) ? new QuotedSpread(coupon * TEN_MINUS_4, values[i] * multiplier) : new ParSpread(values[i] * multiplier);
+        result[i] = IMMDateGenerator.isIMMDate(pricedCDSMaturity) ? new QuotedSpread(coupon * TEN_MINUS_4, values[i] * multiplier)
+            : new ParSpread(values[i] * multiplier);
       } else if (StandardCDSQuotingConvention.POINTS_UPFRONT.equals(quoteConvention)) {
         result[i] = new PointsUpFront(coupon * TEN_MINUS_4, values[i] * multiplier);
       } else {

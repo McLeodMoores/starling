@@ -38,8 +38,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurity;
 
 /**
- * Calculates the implied volatility of an equity index or equity option using
- * the {@link BjerksundStenslandModel}
+ * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel}
  */
 public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOptionBjerksundStenslandFunction {
 
@@ -51,9 +50,9 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }
 
-
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     // Get market price
@@ -130,13 +129,14 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
 
       try {
         if (timeToExpiry < 7. / 365.) {
-          impliedVol = BlackFormulaRepository.impliedVolatility(optionPrice / market.getDiscountCurve().getDiscountFactor(timeToExpiry), fCurve.getForward(timeToExpiry), strike, timeToExpiry, isCall);
+          impliedVol = BlackFormulaRepository.impliedVolatility(optionPrice / market.getDiscountCurve().getDiscountFactor(timeToExpiry),
+              fCurve.getForward(timeToExpiry), strike, timeToExpiry, isCall);
         } else {
           impliedVol = model.impliedVolatility(optionPrice, modSpot, strike, discountRate, costOfCarry, timeToExpiry, isCall, Math.min(volatility * 1.5, 0.15));
         }
       } catch (final IllegalArgumentException e) {
         if (inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE) == null) {
-          impliedVol =  null;
+          impliedVol = null;
         } else {
           LOGGER.warn(MarketDataRequirementNames.IMPLIED_VOLATILITY + " undefined " + targetSpec);
           impliedVol = 0.;
@@ -148,7 +148,6 @@ public class EquityOptionBjerksundStenslandImpliedVolFunction extends EquityOpti
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     return Collections.singleton(new ComputedValue(resultSpec, impliedVol));
   }
-
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {

@@ -40,16 +40,16 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Calculates the PV01 of a swaption using the Black formula with no volatility modeling assumptions. The implied volatility is read directly from the market data system.
+ * Calculates the PV01 of a swaption using the Black formula with no volatility modeling assumptions. The implied volatility is read directly from the market
+ * data system.
  */
 public class ConstantBlackDiscountingPV01SwaptionFunction extends ConstantBlackDiscountingSwaptionFunction {
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivityBlackSwaptionCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityBlackSwaptionCalculator.getInstance());
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public ConstantBlackDiscountingPV01SwaptionFunction() {
     super(PV01);
@@ -106,7 +106,8 @@ public class ConstantBlackDiscountingPV01SwaptionFunction extends ConstantBlackD
       }
 
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         Set<String> curveNames = null;
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueSpecification key = entry.getKey();

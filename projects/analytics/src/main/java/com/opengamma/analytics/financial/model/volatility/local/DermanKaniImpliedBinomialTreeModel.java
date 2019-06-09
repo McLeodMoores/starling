@@ -29,6 +29,7 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
     Validate.isTrue(n > 0);
     _n = n;
   }
+
   @Override
   public ImpliedTreeResult getImpliedTrees(final OptionDefinition definition, final StandardOptionDataBundle data) {
     Validate.notNull(definition, "definition");
@@ -36,8 +37,7 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
 
     final int m1 = RecombiningBinomialTree.NODES.evaluate(_n);
     final int m2 = RecombiningBinomialTree.NODES.evaluate(_n - 1);
-    final double[][] impliedTree = new double[_n + 1][m1]; //TODO this wastes space
-
+    final double[][] impliedTree = new double[_n + 1][m1]; // TODO this wastes space
 
     final double[] transitionProbabilities = new double[m2];
     double[] arrowDebreu = new double[m1];
@@ -72,12 +72,14 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
       for (int j = 0; j < previousNodes; j++) {
         final double f = impliedTree[i - 1][j] * df2;
         transitionProbabilities[j] = (f - impliedTree[i][j]) / (impliedTree[i][j + 1] - impliedTree[i][j]);
-        //TODO emcleod 31-8-10 Need to check that transition probabilities are positive - use adjustment suggested in "The Volatility Smile and its Implied Tree"
-        localVolatilityTree[i - 1][j] = Math.sqrt(transitionProbabilities[j] * (1 - transitionProbabilities[j])) * Math.log(impliedTree[i][j + 1] / impliedTree[i][j]); //TODO need 1/sqrt(dt) here
+        // TODO emcleod 31-8-10 Need to check that transition probabilities are positive - use adjustment suggested in "The Volatility Smile and its Implied
+        // Tree"
+        localVolatilityTree[i - 1][j] = Math.sqrt(transitionProbabilities[j] * (1 - transitionProbabilities[j]))
+            * Math.log(impliedTree[i][j + 1] / impliedTree[i][j]); // TODO need 1/sqrt(dt) here
       }
       final double[] temp = new double[m1];
       temp[0] = (1 - transitionProbabilities[0]) * arrowDebreu[0] / df1;
-      temp[nodes - 1] = (transitionProbabilities[previousNodes - 1] * arrowDebreu[previousNodes - 1]) / df1;
+      temp[nodes - 1] = transitionProbabilities[previousNodes - 1] * arrowDebreu[previousNodes - 1] / df1;
       for (int j = 1; j < nodes - 1; j++) {
         temp[j] = (transitionProbabilities[j - 1] * arrowDebreu[j - 1] + (1 - transitionProbabilities[j]) * arrowDebreu[j]) / df1;
       }
@@ -101,7 +103,8 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
       final BinomialOptionModel<StandardOptionDataBundle> crrModel, final double df1, final double df2, final Expiry expiry, final int mid) {
     double sigma = getLowerSigma(impliedTree, arrowDebreu, step - 1, df2, mid);
     for (int i = mid; i >= 0; i--) {
-      final double p = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i], expiry, false)).evaluate(data).getNode(0, 0).second;
+      final double p = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i], expiry, false)).evaluate(data)
+          .getNode(0, 0).second;
       final double forward = impliedTree[step - 1][i] * df2;
       impliedTree[step][i] = (impliedTree[step][i + 1] * (df1 * p - sigma) + arrowDebreu[i] * impliedTree[step - 1][i] * (forward - impliedTree[step][i + 1]))
           / (df1 * p - sigma + arrowDebreu[i] * (forward - impliedTree[step][i + 1]));
@@ -115,9 +118,11 @@ public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<Opti
       final BinomialOptionModel<StandardOptionDataBundle> crrModel, final double df1, final double df2, final Expiry expiry, final int mid) {
     double sigma = getUpperSigma(impliedTree, arrowDebreu, step - 1, df2, mid);
     for (int i = mid; i < RecombiningBinomialTree.NODES.evaluate(step); i++) {
-      final double c = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i - 1], expiry, true)).evaluate(data).getNode(0, 0).second;
+      final double c = crrModel.getTreeGeneratingFunction(new EuropeanVanillaOptionDefinition(impliedTree[step - 1][i - 1], expiry, true)).evaluate(data)
+          .getNode(0, 0).second;
       final double forward = impliedTree[step - 1][i - 1] * df2;
-      impliedTree[step][i] = (impliedTree[step][i - 1] * (df1 * c - sigma) - arrowDebreu[i - 1] * impliedTree[step - 1][i - 1] * (forward - impliedTree[step][i - 1]))
+      impliedTree[step][i] = (impliedTree[step][i - 1] * (df1 * c - sigma)
+          - arrowDebreu[i - 1] * impliedTree[step - 1][i - 1] * (forward - impliedTree[step][i - 1]))
           / (df1 * c - sigma - arrowDebreu[i - 1] * (forward - impliedTree[step][i - 1]));
       sigma -= arrowDebreu[i] * (impliedTree[step - 1][i] * df2 - impliedTree[step - 1][i - 1]);
     }

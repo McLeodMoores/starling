@@ -44,13 +44,19 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Constructor of the option future from the details.
-   * @param underlyingFuture The underlying future security.
-   * @param expirationTime The time (in year) to expiration.
-   * @param strike The option strike.
-   * @param isCall The cap (true) / floor (false) flag.
+   * 
+   * @param underlyingFuture
+   *          The underlying future security.
+   * @param expirationTime
+   *          The time (in year) to expiration.
+   * @param strike
+   *          The option strike.
+   * @param isCall
+   *          The cap (true) / floor (false) flag.
    */
   @SuppressWarnings("deprecation")
-  public InterestRateFutureOptionPremiumSecurity(final InterestRateFutureSecurity underlyingFuture, final double expirationTime, final double strike, final boolean isCall) {
+  public InterestRateFutureOptionPremiumSecurity(final InterestRateFutureSecurity underlyingFuture, final double expirationTime, final double strike,
+      final boolean isCall) {
     ArgumentChecker.notNull(underlyingFuture, "underlying future");
     _underlyingFuture = underlyingFuture;
     _expirationTime = expirationTime;
@@ -67,6 +73,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the underlying future security.
+   * 
    * @return The underlying future security.
    */
   public InterestRateFutureSecurity getUnderlyingFuture() {
@@ -75,6 +82,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the expiration date.
+   * 
    * @return The expiration date.
    */
   public double getExpirationTime() {
@@ -83,6 +91,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the cap (true) / floor (false) flag.
+   * 
    * @return The cap/floor flag.
    */
   public boolean isCall() {
@@ -91,6 +100,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the option strike.
+   * 
    * @return The option strike.
    */
   public double getStrike() {
@@ -99,6 +109,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * The future option currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -107,6 +118,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the discounting curve name.
+   * 
    * @return The discounting curve name.
    * @deprecated Curve names should not be set in derivatives
    */
@@ -120,6 +132,7 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
 
   /**
    * Gets the forward curve name.
+   * 
    * @return The forward curve name.
    * @deprecated Curve names should not be set in derivatives
    */
@@ -150,11 +163,11 @@ public class InterestRateFutureOptionPremiumSecurity implements InstrumentDeriva
     result = prime * result + (_discountingCurveName == null ? 0 : _discountingCurveName.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_expirationTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_forwardCurveName == null ? 0 : _forwardCurveName.hashCode());
     result = prime * result + (_isCall ? 1231 : 1237);
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingFuture.hashCode();
     return result;
   }

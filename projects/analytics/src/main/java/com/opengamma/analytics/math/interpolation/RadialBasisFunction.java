@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -13,11 +13,12 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class RadialBasisFunction {
 
-  public double evaluate(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final double[] x, final boolean isNormalized) {
+  public double evaluate(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final double[] x,
+      final boolean isNormalized) {
 
     validateInput(weights, x);
 

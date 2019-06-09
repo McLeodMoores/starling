@@ -154,7 +154,8 @@ public class IndexCDSSecurity extends FinancialSecurity {
    * @param notional
    *          the notional, not null
    */
-  public IndexCDSSecurity(final ExternalIdBundle id, final String name, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex, final Tenor indexTenor,
+  public IndexCDSSecurity(final ExternalIdBundle id, final String name, final boolean buy, final SecurityLink<IndexCDSDefinitionSecurity> underlyingIndex,
+      final Tenor indexTenor,
       final LocalDate tradeDate, final InterestRateNotional notional) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);

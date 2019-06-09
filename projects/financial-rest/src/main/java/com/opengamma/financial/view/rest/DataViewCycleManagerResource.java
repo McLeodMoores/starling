@@ -21,7 +21,8 @@ public class DataViewCycleManagerResource extends DataEngineResourceManagerResou
   }
 
   @Override
-  protected DataEngineResourceReferenceResource<ViewCycle> createReferenceResource(final long referenceId, final EngineResourceReference<? extends ViewCycle> reference) {
+  protected DataEngineResourceReferenceResource<ViewCycle> createReferenceResource(final long referenceId,
+      final EngineResourceReference<? extends ViewCycle> reference) {
     return new DataViewCycleReferenceResource(this, referenceId, reference);
   }
 

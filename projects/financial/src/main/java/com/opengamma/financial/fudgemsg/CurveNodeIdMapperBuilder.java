@@ -146,48 +146,42 @@ public class CurveNodeIdMapperBuilder implements FudgeBuilder<CurveNodeIdMapper>
     final Map<Tenor, CurveInstrumentProvider> swapNodeIds = getMapForField(SWAP_NODE_FIELD, deserializer, message);
     final Map<Tenor, CurveInstrumentProvider> threeLegBasisSwapNodeIds = getMapForField(THREE_LEG_BASIS_SWAP_NODE_FIELD, deserializer, message);
     final Map<Tenor, CurveInstrumentProvider> zeroCouponInflationNodeIds = getMapForField(ZERO_COUPON_INFLATION_NODE_FIELD, deserializer, message);
-    final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder().
-        billNodeIds(billNodeIds).
-        bondNodeIds(bondNodeIds).
-        cashNodeIds(cashNodeIds).
-        calendarSwapNodeIds(calendarSwapNodeIds).
-        continuouslyCompoundedRateNodeIds(continuouslyCompoundedRateNodeIds).
-        periodicallyCompoundedRateNodeIds(periodicallyCompoundedRateNodeIds).
-        creditSpreadNodeIds(creditSpreadNodeIds).
-        deliverableSwapFutureNodeIds(deliverableSwapFutureNodeIds).
-        discountFactorNodeIds(discountFactorNodeIds).
-        fraNodeIds(fraNodeIds).
-        fxForwardNodeIds(fxForwardNodeIds).
-        immFRANodeIds(immFRANodeIds).
-        immSwapNodeIds(immSwapNodeIds).
-        rateFutureNodeIds(rateFutureNodeIds).
-        name(name).
-        swapNodeIds(swapNodeIds).
-        threeLegBasisSwapNodeIds(threeLegBasisSwapNodeIds).
-        zeroCouponInflationNodeIds(zeroCouponInflationNodeIds).
-        build();
+    final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder().billNodeIds(billNodeIds).bondNodeIds(bondNodeIds).cashNodeIds(cashNodeIds)
+        .calendarSwapNodeIds(calendarSwapNodeIds).continuouslyCompoundedRateNodeIds(continuouslyCompoundedRateNodeIds)
+        .periodicallyCompoundedRateNodeIds(periodicallyCompoundedRateNodeIds).creditSpreadNodeIds(creditSpreadNodeIds)
+        .deliverableSwapFutureNodeIds(deliverableSwapFutureNodeIds).discountFactorNodeIds(discountFactorNodeIds).fraNodeIds(fraNodeIds)
+        .fxForwardNodeIds(fxForwardNodeIds).immFRANodeIds(immFRANodeIds).immSwapNodeIds(immSwapNodeIds).rateFutureNodeIds(rateFutureNodeIds).name(name)
+        .swapNodeIds(swapNodeIds).threeLegBasisSwapNodeIds(threeLegBasisSwapNodeIds).zeroCouponInflationNodeIds(zeroCouponInflationNodeIds).build();
     return idMapper;
   }
 
   /**
    * Adds (tenor, curve instrument providers) to the Fudge message.
-   * @param serializer The serializer
-   * @param idMap A map of tenors to curve instrument providers
+   *
+   * @param serializer
+   *          The serializer
+   * @param idMap
+   *          A map of tenors to curve instrument providers
    * @return The message
    */
   public static FudgeMsg getMessageForField(final FudgeSerializer serializer, final Map<Tenor, CurveInstrumentProvider> idMap) {
     final MutableFudgeMsg idsMessage = serializer.newMessage();
     for (final Map.Entry<Tenor, CurveInstrumentProvider> entry : idMap.entrySet()) {
-      serializer.addToMessageWithClassHeaders(idsMessage, entry.getKey().toFormattedString(), null, entry.getValue(), CurveInstrumentProvider.class); //entry.getKey().getPeriod().toString()
+      serializer.addToMessageWithClassHeaders(idsMessage, entry.getKey().toFormattedString(), null,
+          entry.getValue(), CurveInstrumentProvider.class); // entry.getKey().getPeriod().toString()
     }
     return idsMessage;
   }
 
   /**
    * Creates a (tenor, curve instrument provider) map from a Fudge message.
-   * @param fieldName The field name
-   * @param deserializer The deserializer
-   * @param message The message
+   *
+   * @param fieldName
+   *          The field name
+   * @param deserializer
+   *          The deserializer
+   * @param message
+   *          The message
    * @return The map
    */
   public static Map<Tenor, CurveInstrumentProvider> getMapForField(final String fieldName, final FudgeDeserializer deserializer, final FudgeMsg message) {
@@ -201,6 +195,5 @@ public class CurveNodeIdMapperBuilder implements FudgeBuilder<CurveNodeIdMapper>
     }
     return null;
   }
-
 
 }

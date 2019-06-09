@@ -24,13 +24,20 @@ public class SABRInterestRateCorrelationParameters extends SABRInterestRateParam
 
   /**
    * Constructor from the parameter surfaces and correlation function. The SABR volatility formula is HaganVolatilityFunction.
-   * @param alpha The alpha parameters.
-   * @param beta The beta parameters.
-   * @param rho The rho parameters.
-   * @param nu The nu parameters.
-   * @param correlation The correlation function.
+   * 
+   * @param alpha
+   *          The alpha parameters.
+   * @param beta
+   *          The beta parameters.
+   * @param rho
+   *          The rho parameters.
+   * @param nu
+   *          The nu parameters.
+   * @param correlation
+   *          The correlation function.
    */
-  public SABRInterestRateCorrelationParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho,
+  public SABRInterestRateCorrelationParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta,
+      final InterpolatedDoublesSurface rho,
       final InterpolatedDoublesSurface nu, final DoubleFunction1D correlation) {
     super(alpha, beta, rho, nu);
     ArgumentChecker.notNull(correlation, "Correlation");
@@ -39,16 +46,24 @@ public class SABRInterestRateCorrelationParameters extends SABRInterestRateParam
 
   /**
    * Constructor from the parameter surfaces and correlation function. The SABR volatility formula is HaganVolatilityFunction.
-   * @param alpha The alpha parameters.
-   * @param beta The beta parameters.
-   * @param rho The rho parameters.
-   * @param nu The nu parameters.
-   * @param dayCount The standard day count for which the parameter surfaces are valid.
-   * @param correlation The correlation function.
+   * 
+   * @param alpha
+   *          The alpha parameters.
+   * @param beta
+   *          The beta parameters.
+   * @param rho
+   *          The rho parameters.
+   * @param nu
+   *          The nu parameters.
+   * @param dayCount
+   *          The standard day count for which the parameter surfaces are valid.
+   * @param correlation
+   *          The correlation function.
    * @deprecated Used the constructor without day count.
    */
   @Deprecated
-  public SABRInterestRateCorrelationParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho,
+  public SABRInterestRateCorrelationParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta,
+      final InterpolatedDoublesSurface rho,
       final InterpolatedDoublesSurface nu, final DayCount dayCount, final DoubleFunction1D correlation) {
     super(alpha, beta, rho, nu, dayCount);
     ArgumentChecker.notNull(correlation, "Correlation");
@@ -57,8 +72,11 @@ public class SABRInterestRateCorrelationParameters extends SABRInterestRateParam
 
   /**
    * Builder from SABR parameter surfaces and the correlation function.
-   * @param sabr The SABR parameters surfaces.
-   * @param correlation The correlation function.
+   * 
+   * @param sabr
+   *          The SABR parameters surfaces.
+   * @param correlation
+   *          The correlation function.
    * @return The SABR with correlation object.
    */
   public static SABRInterestRateCorrelationParameters from(final SABRInterestRateParameters sabr, final DoubleFunction1D correlation) {
@@ -68,6 +86,7 @@ public class SABRInterestRateCorrelationParameters extends SABRInterestRateParam
 
   /**
    * Gets the correlation function.
+   * 
    * @return The correlation.
    */
   public DoubleFunction1D getCorrelation() {

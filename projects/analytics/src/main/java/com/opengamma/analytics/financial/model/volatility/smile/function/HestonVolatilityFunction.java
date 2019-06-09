@@ -57,13 +57,12 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
   }
 
   /**
-   * {@inheritDoc}
-   * Only use this for testing. If you have a set of options with the same expiry but different strikes, use #getVolatilitySetFunction
+   * {@inheritDoc} Only use this for testing. If you have a set of options with the same expiry but different strikes, use #getVolatilitySetFunction
    */
   @Override
   public Function1D<HestonModelData, Double> getVolatilityFunction(final EuropeanVanillaOption option, final double forward) {
 
-    final Function1D<HestonModelData, double[]> func = getVolatilityFunction(forward, new double[] {option.getStrike() }, option.getTimeToExpiry());
+    final Function1D<HestonModelData, double[]> func = getVolatilityFunction(forward, new double[] { option.getStrike() }, option.getTimeToExpiry());
 
     return new Function1D<HestonModelData, Double>() {
 
@@ -87,9 +86,10 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
       @Override
       public double[] evaluate(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
-        //TODO calculations relating to the FFT setup are made each call, even though they will be very similar (depends on Characteristic
+        // TODO calculations relating to the FFT setup are made each call, even though they will be very similar (depends on Characteristic
         // Exponent). Maybe worth calculating a typical setup, outside of this function
-        final double[][] strikeNPrice = FFT_PRICER.price(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha, _limitTolerance);
+        final double[][] strikeNPrice = FFT_PRICER.price(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha,
+            _limitTolerance);
         final int m = strikeNPrice.length;
         final double[] k = new double[m];
         final double[] vol = new double[m];
@@ -106,12 +106,12 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
               count++;
             } catch (final IllegalArgumentException e) {
 
-              //impVol = BlackFormulaRepository.impliedVolatility(price, forward, strike, timeToExpiry, true);
+              // impVol = BlackFormulaRepository.impliedVolatility(price, forward, strike, timeToExpiry, true);
             }
           }
         }
         final double[] res = new double[n];
-        if (count == 0) { //i.e. every single price is invalid, which could happen with extreme parameters. All we can do without stopping the
+        if (count == 0) { // i.e. every single price is invalid, which could happen with extreme parameters. All we can do without stopping the
           // fitter, is return zero vols.
           for (int i = 0; i < n; i++) {
             res[i] = 0.0;
@@ -137,19 +137,29 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
   }
 
   /**
-   * Calculates the volatility given Heston model parameters, market data and option data
-   * @param forward The forward
-   * @param strike The strike
-   * @param timeToExpiry The time to expiry
-   * @param kappa kappa
-   * @param theta theta
-   * @param vol0 initial volatility
-   * @param omega omega
-   * @param rho rho
+   * Calculates the volatility given Heston model parameters, market data and option data.
+   *
+   * @param forward
+   *          The forward
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param kappa
+   *          kappa
+   * @param theta
+   *          theta
+   * @param vol0
+   *          initial volatility
+   * @param omega
+   *          omega
+   * @param rho
+   *          rho
    * @return The volatility
    */
   @ExternalFunction
-  public double getVolatility(final double forward, final double strike, final double timeToExpiry, final double kappa, final double theta, final double vol0, final double omega,
+  public double getVolatility(final double forward, final double strike, final double timeToExpiry, final double kappa, final double theta, final double vol0,
+      final double omega,
       final double rho) {
     final Function1D<HestonModelData, Double> func = getVolatilityFunction(new EuropeanVanillaOption(strike, timeToExpiry, true), forward);
     final HestonModelData data = new HestonModelData(kappa, theta, vol0, omega, rho);
@@ -157,19 +167,29 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
   }
 
   /**
-   * Calculates the volatility given Heston model parameters, market data and an array of strikes
-   * @param forward The forward
-   * @param strikes The strikes
-   * @param timeToExpiry The time to expiry
-   * @param kappa kappa
-   * @param theta theta
-   * @param vol0 initial volatility
-   * @param omega omega
-   * @param rho rho
+   * Calculates the volatility given Heston model parameters, market data and an array of strikes.
+   *
+   * @param forward
+   *          The forward
+   * @param strikes
+   *          The strikes
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param kappa
+   *          kappa
+   * @param theta
+   *          theta
+   * @param vol0
+   *          initial volatility
+   * @param omega
+   *          omega
+   * @param rho
+   *          rho
    * @return The volatility
    */
   @ExternalFunction
-  public double[] getVolatilitySet(final double forward, final double[] strikes, final double timeToExpiry, final double kappa, final double theta, final double vol0, final double omega,
+  public double[] getVolatilitySet(final double forward, final double[] strikes, final double timeToExpiry, final double kappa, final double theta,
+      final double vol0, final double omega,
       final double rho) {
     final Function1D<HestonModelData, double[]> func = getVolatilityFunction(forward, strikes, timeToExpiry);
     final HestonModelData data = new HestonModelData(kappa, theta, vol0, omega, rho);
@@ -179,7 +199,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
   @Override
   public Function1D<HestonModelData, double[]> getVolatilityAdjointFunction(final EuropeanVanillaOption option, final double forward) {
 
-    final Function1D<HestonModelData, double[][]> func = getVolatilityAdjointFunction(forward, new double[] {option.getStrike() }, option.getTimeToExpiry());
+    final Function1D<HestonModelData, double[][]> func = getVolatilityAdjointFunction(forward, new double[] { option.getStrike() }, option.getTimeToExpiry());
     return new Function1D<HestonModelData, double[]>() {
 
       @Override
@@ -208,9 +228,9 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
       @Override
       public double[][] evaluate(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
-        final double[][] greeks =
-            greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha, _limitTolerance);
-        //1st array is strikes and the second is prices (which we don't need)
+        final double[][] greeks = greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha,
+            _limitTolerance);
+        // 1st array is strikes and the second is prices (which we don't need)
         final double[] k = greeks[0];
         final double[] prices = greeks[1];
         final int m = k.length;
@@ -235,11 +255,11 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
         final double[][] volSense = new double[p - 2][m];
         for (int index = 0; index < p - 2; index++) {
           for (int i = 0; i < m; i++) {
-            volSense[index][i] = greeks[index + 2][i] / vega[i]; //TODO here is where vega = 0 -> infinity
+            volSense[index][i] = greeks[index + 2][i] / vega[i]; // TODO here is where vega = 0 -> infinity
           }
         }
 
-        //fake the price, forward, and strike sense since we don't used them
+        // fake the price, forward, and strike sense since we don't used them
         final double[][] res = new double[n][p + 1];
         for (int index = 0; index < p - 2; index++) {
           final double[] temp = volSense[index];
@@ -261,7 +281,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
   @Override
   public Function1D<HestonModelData, double[]> getModelAdjointFunction(final EuropeanVanillaOption option, final double forward) {
 
-    final Function1D<HestonModelData, double[][]> func = getModelAdjointFunction(forward, new double[] {option.getStrike() }, option.getTimeToExpiry());
+    final Function1D<HestonModelData, double[][]> func = getModelAdjointFunction(forward, new double[] { option.getStrike() }, option.getTimeToExpiry());
     return new Function1D<HestonModelData, double[]>() {
 
       @Override
@@ -289,9 +309,9 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
       @Override
       public double[][] evaluate(final HestonModelData x) {
         final MartingaleCharacteristicExponent ce = new HestonCharacteristicExponent(x);
-        final double[][] greeks =
-            greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha, _limitTolerance);
-        //1st array is strikes and the second is prices (which we don't need)
+        final double[][] greeks = greekCal.getGreeks(forward, 1.0, timeToExpiry, true, ce, lowestStrike, highestStrike, n, _limitSigma, _alpha,
+            _limitTolerance);
+        // 1st array is strikes and the second is prices (which we don't need)
 
         final double[] k = greeks[0];
         final double[] prices = greeks[1];
@@ -313,7 +333,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
             }
             count++;
           } catch (final IllegalArgumentException e) {
-            //do nothing
+            // do nothing
           }
         }
 

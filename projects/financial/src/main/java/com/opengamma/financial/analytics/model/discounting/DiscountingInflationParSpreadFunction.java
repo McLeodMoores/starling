@@ -30,16 +30,15 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the par spread of inflation swaps using curves constructed using
- * the discounting method.
+ * Calculates the par spread of inflation swaps using curves constructed using the discounting method.
  */
 public class DiscountingInflationParSpreadFunction extends DiscountingInflationFunction {
   /** The par spread calculator */
-  private static final InstrumentDerivativeVisitor<InflationProviderInterface, Double> CALCULATOR = ParSpreadInflationMarketQuoteDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<InflationProviderInterface, Double> CALCULATOR = ParSpreadInflationMarketQuoteDiscountingCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PAR_SPREAD}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PAR_SPREAD}
    */
   public DiscountingInflationParSpreadFunction() {
     super(PAR_SPREAD);

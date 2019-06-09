@@ -58,8 +58,7 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}
    */
   public InflationBondZspreadFromCurvesFunction() {
     super(Z_SPREAD);
@@ -73,7 +72,8 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondCapitalIndexedTransaction<?> bond, final InflationIssuerProviderInterface issuerCurves,
+  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondCapitalIndexedTransaction<?> bond,
+      final InflationIssuerProviderInterface issuerCurves,
       final double cleanPrice, final ValueSpecification spec) {
     final YieldAndDiscountCurve curve = (YieldAndDiscountCurve) inputs.getValue(YIELD_CURVE);
     final LegalEntity legalEntity = bond.getBondTransaction().getIssuerEntity();
@@ -106,10 +106,12 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
     }
     final String curveExposureConfig = desiredValue.getConstraint(CURVE_EXPOSURES);
     final String curve = Iterables.getOnlyElement(curves);
-    final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+    final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+        target.getTrade());
     boolean curveNameFound = false;
     for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-      final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
+      final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+          .getCurveConstructionConfiguration(curveConstructionConfigurationName);
       final List<CurveGroupConfiguration> groups = curveConstructionConfiguration.getCurveGroups();
       for (final CurveGroupConfiguration group : groups) {
         for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
@@ -121,8 +123,8 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
       }
       final List<String> exoConfigs = curveConstructionConfiguration.getExogenousConfigurations();
       for (final String curveConstructionConfigurationExogenousName : exoConfigs) {
-        final CurveConstructionConfiguration curveConstructionConfigurationExogenous =
-            _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationExogenousName);
+        final CurveConstructionConfiguration curveConstructionConfigurationExogenous = _curveConstructionConfigurationSource
+            .getCurveConstructionConfiguration(curveConstructionConfigurationExogenousName);
         final List<CurveGroupConfiguration> groupsExogenous = curveConstructionConfigurationExogenous.getCurveGroups();
         for (final CurveGroupConfiguration group : groupsExogenous) {
           for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
@@ -146,7 +148,8 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       if (entry.getKey().getValueName().equals(YIELD_CURVE)) {

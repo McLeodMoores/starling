@@ -78,7 +78,8 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction extends AbstractFunction.NonCompiledInvoker {
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction.class);
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivityBlackCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivityBlackCalculator.getInstance());
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
   private FixedIncomeConverterDataProvider _dataConverter;
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
@@ -90,8 +91,9 @@ public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction ex
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    return new InterestRateFutureOptionTradeConverterDeprecated(new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
-        context.getComputationTargetResolver().getVersionCorrection()));
+    return new InterestRateFutureOptionTradeConverterDeprecated(
+        new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
+            context.getComputationTargetResolver().getVersionCorrection()));
   }
 
   private InterestRateFutureOptionTradeConverterDeprecated getConverter(final FunctionExecutionContext context) {
@@ -99,8 +101,9 @@ public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction ex
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
-    return new InterestRateFutureOptionTradeConverterDeprecated(new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
-        context.getComputationTargetResolver().getVersionCorrection()));
+    return new InterestRateFutureOptionTradeConverterDeprecated(
+        new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
+            context.getComputationTargetResolver().getVersionCorrection()));
   }
 
   @Override
@@ -115,7 +118,8 @@ public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction ex
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final LocalDate localNow = now.toLocalDate();
@@ -181,8 +185,10 @@ public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction ex
       final Currency domesticCurrency = ComputationTargetType.CURRENCY.resolve(curveCalculationConfig.getTarget().getUniqueId());
       final Currency foreignCurrency = ComputationTargetType.CURRENCY.resolve(_curveCalculationConfigSource
           .getConfig(curveCalculationConfig.getExogenousConfigData().keySet().iterator().next()).getTarget().getUniqueId());
-      return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(sensitivities, domesticCurrency, foreignCurrency, fullCurveNames, curves,
-          _fxForwardCurveSpecificationSource, _fxForwardCurveDefinitionSource, localNow, getResultSpec(target, currency.getCode(), curveCalculationConfigName, surfaceName, fullCurveName));
+      return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(sensitivities, domesticCurrency, foreignCurrency, fullCurveNames,
+          curves,
+          _fxForwardCurveSpecificationSource, _fxForwardCurveDefinitionSource, localNow,
+          getResultSpec(target, currency.getCode(), curveCalculationConfigName, surfaceName, fullCurveName));
     }
     return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(fullCurveName, data, sensitivities, curveSpec,
         getResultSpec(target, currency.getCode(), curveCalculationConfigName, surfaceName, curveName));
@@ -249,7 +255,8 @@ public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction ex
     if (!curveCalculationMethod.equals(FXImpliedYieldCurveFunction.FX_IMPLIED)) {
       requirements.add(getCurveSpecRequirement(currency, curve));
     }
-    final Set<ValueRequirement> tsRequirements = _dataConverter.getConversionTimeSeriesRequirements(target.getTrade().getSecurity(), getConverter(context).convert(target.getTrade()));
+    final Set<ValueRequirement> tsRequirements = _dataConverter.getConversionTimeSeriesRequirements(target.getTrade().getSecurity(),
+        getConverter(context).convert(target.getTrade()));
     if (tsRequirements == null) {
       return null;
     }
@@ -258,7 +265,8 @@ public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction ex
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Currency ccy = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
     String calculationConfig = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> input : inputs.entrySet()) {
@@ -275,28 +283,35 @@ public class InterestRateFutureOptionBlackYieldCurveNodeSensitivitiesFunction ex
   }
 
   private ValueProperties getResultProperties(final String currency) {
-    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD).withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
-        .withAny(ValuePropertyNames.SURFACE).with(ValuePropertyNames.CURRENCY, currency).with(ValuePropertyNames.CURVE_CURRENCY, currency).withAny(ValuePropertyNames.CURVE).get();
+    return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
+        .withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)
+        .withAny(ValuePropertyNames.SURFACE).with(ValuePropertyNames.CURRENCY, currency).with(ValuePropertyNames.CURVE_CURRENCY, currency)
+        .withAny(ValuePropertyNames.CURVE).get();
   }
 
   private ValueSpecification getResultSpec(final ComputationTarget target, final String currency, final String curveCalculationConfig) {
-    return new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), getResultProperties(currency, curveCalculationConfig));
+    return new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(),
+        getResultProperties(currency, curveCalculationConfig));
   }
 
   private ValueProperties getResultProperties(final String currency, final String curveCalculationConfig) {
     return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
-        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).withAny(ValuePropertyNames.SURFACE).with(ValuePropertyNames.CURRENCY, currency)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).withAny(ValuePropertyNames.SURFACE)
+        .with(ValuePropertyNames.CURRENCY, currency)
         .with(ValuePropertyNames.CURVE_CURRENCY, currency).withAny(ValuePropertyNames.CURVE).get();
   }
 
-  private ValueSpecification getResultSpec(final ComputationTarget target, final String currency, final String curveCalculationConfig, final String surfaceName, final String curveName) {
-    return new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), getResultProperties(currency, curveCalculationConfig, surfaceName,
-        curveName));
+  private ValueSpecification getResultSpec(final ComputationTarget target, final String currency, final String curveCalculationConfig, final String surfaceName,
+      final String curveName) {
+    return new ValueSpecification(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(),
+        getResultProperties(currency, curveCalculationConfig, surfaceName,
+            curveName));
   }
 
   private ValueProperties getResultProperties(final String currency, final String curveCalculationConfig, final String surfaceName, final String curveName) {
     return createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD)
-        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.SURFACE, surfaceName).with(ValuePropertyNames.CURRENCY, currency)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.SURFACE, surfaceName)
+        .with(ValuePropertyNames.CURRENCY, currency)
         .with(ValuePropertyNames.CURVE_CURRENCY, currency).with(ValuePropertyNames.CURVE, curveName).get();
   }
 

@@ -42,7 +42,8 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
   private static final Logger LOGGER = LoggerFactory.getLogger(ForexPutCallDeltaVolatilitySurfaceFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     final String interpolatorName = desiredValue.getConstraint(InterpolatedDataProperties.X_INTERPOLATOR_NAME);
@@ -114,7 +115,9 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
 
   /**
    * Transforms the delta for this surface type into that expected by the analytics library.
-   * @param delta The delta
+   *
+   * @param delta
+   *          The delta
    * @return The transformed delta.
    */
   protected abstract double getTransformedDelta(double delta);

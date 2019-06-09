@@ -81,7 +81,7 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
 
   /**
    * Sets the initial rate of the annuity. This is an optional field.
-   * 
+   *
    * @param initialRate
    *          the initial rate of the annuity.
    * @return itself.
@@ -93,7 +93,7 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
 
   /**
    * Sets the spread of the floating rate coupons. This is an optional field.
-   * 
+   *
    * @param spread
    *          the spread of the floating rate coupons.
    * @return itself.
@@ -110,7 +110,7 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
 
   /**
    * Sets the index of the floating rate coupons. This is a required field.
-   * 
+   *
    * @param index
    *          the index of the floating rate coupons.
    * @return itself.
@@ -122,7 +122,7 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
 
   /**
    * Sets the parameters used to adjust the reset dates. This is an optional field.
-   * 
+   *
    * @param resetDateAdjustmentParameters
    *          the parameters used to adjust the fixing dates.
    * @return itself.
@@ -184,7 +184,7 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
 
   /**
    * Returns the fixing dates relative to the specified set of accrual dates, which are either start or end dates.
-   * 
+   *
    * @param fixingDates
    *          either accrual start or accrual end dates.
    * @return the fixing dates
@@ -235,7 +235,7 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
 
   /**
    * Generates reset dates relative to a given set of accrual dates, which may be either start or end dates.
-   * 
+   *
    * @param accrualDates
    *          start or end accrual dates.
    * @return a set of reset dates relative to accrual dates
@@ -490,14 +490,8 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
                                                                                                                                 // it will come out adjusted
           unadjustedAccrualEndDate, // Pass in the adjusted date - it will come out adjusted
           ((IborIndex) _index).getTenor(), StubType.SHORT_START, getAccrualPeriodAdjustmentParameters().getBusinessDayConvention(),
-          getAccrualPeriodAdjustmentParameters().getCalendar(), getRollDateAdjuster() instanceof GeneralRollDateAdjuster ? null : getRollDateAdjuster()); // using
-                                                                                                                                                          // DoM
-                                                                                                                                                          // adjuster
-                                                                                                                                                          // is
-                                                                                                                                                          // messing
-                                                                                                                                                          // up
-                                                                                                                                                          // maturity
-                                                                                                                                                          // date
+          getAccrualPeriodAdjustmentParameters().getCalendar(), getRollDateAdjuster() instanceof GeneralRollDateAdjuster ? null : getRollDateAdjuster());
+      // using DoM adjuster is messing up maturity date
       final ZonedDateTime[] compoundingAccrualStartDates = new ZonedDateTime[compoundingAccrualEndDates.length];
       compoundingAccrualStartDates[0] = adjustedAccrualStartDate;
       System.arraycopy(compoundingAccrualEndDates, 0, compoundingAccrualStartDates, 1, compoundingAccrualEndDates.length - 1);
@@ -516,21 +510,8 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
         compoundingFixingStartDates[0] = _adjustedResetDateParameters.getBusinessDayConvention().adjustDate(_adjustedFixingDateParameters.getCalendar(),
             compoundingFixingStartDates[0]);
       }
-      final ZonedDateTime[] compoundingFixingEndDates = ScheduleCalculator.getAdjustedDateSchedule(compoundingFixingStartDates, ((IborIndex) _index).getTenor(), // we
-                                                                                                                                                                 // use
-                                                                                                                                                                 // the
-                                                                                                                                                                 // accrual
-                                                                                                                                                                 // freq,
-                                                                                                                                                                 // not
-                                                                                                                                                                 // the
-                                                                                                                                                                 // reset
-                                                                                                                                                                 // freq
-                                                                                                                                                                 // which
-                                                                                                                                                                 // is
-                                                                                                                                                                 // for
-                                                                                                                                                                 // generating
-                                                                                                                                                                 // coupon
-                                                                                                                                                                 // sub-periods
+      // we use the accrual freq, not the reset freq, which is for generating coupon sub-periods
+      final ZonedDateTime[] compoundingFixingEndDates = ScheduleCalculator.getAdjustedDateSchedule(compoundingFixingStartDates, ((IborIndex) _index).getTenor(),
           _adjustedResetDateParameters.getBusinessDayConvention(), // TODO check that we should be using the reset date bdc // getFixingBusinessDayConvention(),
           _adjustedFixingDateParameters.getCalendar(), // This is using the fixing calendar instead of the reset calendar
           null); // getRollDateAdjuster()); // set to null for forward date roll bug

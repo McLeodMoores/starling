@@ -39,7 +39,8 @@ public class SwaptionBlackPV01Function extends SwaptionBlackCurveSpecificFunctio
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative swaption, final YieldCurveWithBlackSwaptionBundle data, final String curveName,
+      final ValueSpecification spec,
       final String curveCalculationConfigName, final String curveCalculationMethod, final FunctionInputs inputs, final ComputationTarget target) {
     final Map<String, Double> pv01 = CALCULATOR.visit(swaption, data);
     final String fullCurveName = curveName + "_" + FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();

@@ -29,7 +29,8 @@ public class PoweredOptionModel extends AnalyticOptionModel<PoweredOptionDefinit
     final Function1D<StandardOptionDataBundle, Double> pricingFunction = new Function1D<StandardOptionDataBundle, Double>() {
 
       /**
-       * @throws OptionPricingException If the power is not an integer.
+       * @throws OptionPricingException
+       *           If the power is not an integer.
        */
       @SuppressWarnings("synthetic-access")
       @Override
@@ -53,7 +54,8 @@ public class PoweredOptionModel extends AnalyticOptionModel<PoweredOptionDefinit
         double price = 0;
         for (int i = 0; i <= power; i++) {
           diff = power - i;
-          price += getCombinatorial(power, i) * Math.pow(sign * s, diff) * Math.pow(-sign * k, i) * Math.exp((diff - 1) * (r + diff * sigmaSq / 2.) * t - diff * (r - b) * t)
+          price += getCombinatorial(power, i) * Math.pow(sign * s, diff) * Math.pow(-sign * k, i)
+              * Math.exp((diff - 1) * (r + diff * sigmaSq / 2.) * t - diff * (r - b) * t)
               * NORMAL.getCDF(sign * getD(x, diff, sigmaT, sigmaSq, t));
         }
         return price;

@@ -15,14 +15,14 @@
  * Before a client can receive notifications of updates it must establish a connection and be assigned a client ID. A connection corresponds to a single view,
  * e.g. a single browser tab. A user can have multiple connections active at the same time. A connection is set up with a request to the handshake URL:
  * </p>
- * 
+ *
  * <pre>
  *   /handshake
  * </pre>
  * <p>
  * The response contains JSON with the client ID, e.g.
  * </p>
- * 
+ *
  * <pre>
  *   {"clientId": "1234"}
  * </pre>
@@ -31,14 +31,14 @@
  * <p>
  * There is no way to explicitly subscribe to notifications. If a client ID is included in a request for a REST resource a subscription will be created. e.g.
  * </p>
- * 
+ *
  * <pre>
  *   /jax/portfolios/DbPrt~234
  * </pre>
  * <p>
  * will return the portfolio details and
  * </p>
- * 
+ *
  * <pre>
  *   /jax/portfolios/DbPrt~234?clientId=1234
  * </pre>
@@ -62,7 +62,7 @@
  * If a client performs a query to search for multiple entities it will receive a notification if something is updated that <em>might</em> change the result of
  * the query. For example if a client searches for positions:
  * </p>
- * 
+ *
  * <pre>
  *   /jax/positions?minquantity=5&amp;maxquantity=10&amp;identifier=
  * </pre>
@@ -78,52 +78,52 @@
  *
  * <h2>Querying the data needed for setting up views</h2>
  * <h3>Live Data Sources</h3>
- * 
+ *
  * <pre>
  *   /jax/livedatasources
  * </pre>
  * <p>
  * returns the names of the available sources of live data
  * </p>
- * 
+ *
  * <pre>
  *   [dataSourceName1, dataSourceName2, ...]
  * </pre>
- * 
+ *
  * <h3>View Definitions</h3>
- * 
+ *
  * <pre>
  *   /jax/viewdefinitions
  * </pre>
  * <p>
  * returns a list of available view definitions
  * </p>
- * 
+ *
  * <pre>
  *   [{id: viewDefId1, name: viewDefName1}, {id: viewDefId2, name: viewDefName2}, ...]
  * </pre>
- * 
+ *
  * <h3>Market Data Snapshots</h3>
- * 
+ *
  * <pre>
  *   /jax/marketdatasnapshots
  * </pre>
  * <p>
  * returns a list of available snapshots
  * </p>
- * 
+ *
  * <pre>
  *   [{basisViewName: basisViewName1, snapshots: [{id: snapshot1Id, name: snapshot1Name}, {id: snapshot2Id, name: snapshot2Name}, ...]},
  *    {basisViewName: basisViewName2, snapshots: [{id: snapshot3Id, name: snapshot3Name}, {id: snapshot4Id, name: snapshot4Name}, ...]}, ...]
  * </pre>
- * 
+ *
  * <pre>
  *   /jax/marketdatasnapshots/{snapshotObjectId}
  * </pre>
  * <p>
  * returns the version history for a snapshot
  * </p>
- * 
+ *
  * <pre>
  *   [{uniqueId: snapshot1Id,
  *     correctionFrom: snapshot1CorrectionFromTime,
@@ -131,22 +131,22 @@
  *     versionFrom: snapshot1VersionFromTime,
  *     versionTo: snapshot1VersionToTime}, ...]
  * </pre>
- * 
+ *
  * <h3>Aggregators</h3>
- * 
+ *
  * <pre>
  *   /jax/aggregators
  * </pre>
  * <p>
  * returns the available portfolio aggregators
  * </p>
- * 
+ *
  * <pre>
  *   [aggregatorName1, aggregatorName2, ...]
  * </pre>
- * 
+ *
  * <h3>Time Series Resolver Keys</h3>
- * 
+ *
  * <pre>
  *   /jax/timeseriesresolverkeys
  * </pre>
@@ -154,7 +154,7 @@
  * returns a list of time series resolver keys (which are the names of configuration entries for
  * {@link com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRating HistoricalTimeSeriesRating}s)
  * </p>
- * 
+ *
  * <pre>
  *   [keyName1, keyName2, ...]
  * </pre>
@@ -163,7 +163,7 @@
  * <p>
  * The structure of the REST URLs for analytics data reflects the hierarchical structure of views, grids and viewports used to view the data.
  * </p>
- * 
+ *
  * <pre>
  *   /jax/views                                                                      POST to create view
  *   /jax/views/{viewId}                                                             POST to pause and resume, DELETE to close
@@ -191,7 +191,7 @@
  * <p>
  * Before a client can receive data for a view it must create a view. This is done by making a {@code POST} request to:
  * </p>
- * 
+ *
  * <pre>
  *   /jax/views?clientId=...
  * </pre>
@@ -220,7 +220,7 @@
  * <p>
  * To retrieve the row and column structure for each grid the client should make a {@code GET} request to:
  * </p>
- * 
+ *
  * <pre>
  *   /jax/views/{viewId}/portfolio
  *   /jax/views/{viewId}/primitives
@@ -235,7 +235,7 @@
  * <p>
  * After creating a view the client must create a viewport in order to receive data. This is done by making a {@code POST} request to:
  * </p>
- * 
+ *
  * <pre>
  *   /jax/views/{viewId}/portfolio/viewports
  *   /jax/views/{viewId}/primitives/viewports
@@ -257,7 +257,7 @@
  * <p>
  * To retrieve data for the viewport the client must make a {@code GET} request to:
  * </p>
- * 
+ *
  * <pre>
  *   /jax/views/{viewId}/portfolio/viewports/{viewportId}
  *   /jax/views/{viewId}/primitives/viewports/{viewportId}

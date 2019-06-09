@@ -27,10 +27,10 @@ import com.opengamma.util.ArgumentChecker;
 public class FXImpliedYieldCurveDefaults extends DefaultPropertyFunction {
   /** The value requirement names for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.YIELD_CURVE,
-      ValueRequirementNames.YIELD_CURVE_JACOBIAN,
-      ValueRequirementNames.FX_IMPLIED_TRANSITION_MATRIX,
-      ValueRequirementNames.YIELD_CURVE_SERIES
+                ValueRequirementNames.YIELD_CURVE,
+                ValueRequirementNames.YIELD_CURVE_JACOBIAN,
+                ValueRequirementNames.FX_IMPLIED_TRANSITION_MATRIX,
+                ValueRequirementNames.YIELD_CURVE_SERIES
   };
   /** The interpolator name */
   private final Set<String> _interpolatorName;
@@ -52,15 +52,24 @@ public class FXImpliedYieldCurveDefaults extends DefaultPropertyFunction {
   private final Set<String> _applicableCurrencies;
 
   /**
-   * @param absoluteTolerance The absolute tolerance used in root-finding
-   * @param relativeTolerance The relative tolerance use in root-finding
-   * @param maxIterations The maximum number of iterations used in root-finding
-   * @param decomposition The matrix decomposition method used in root-finding
-   * @param interpolatorName The interpolator name
-   * @param leftExtrapolatorName The left extrapolator name
-   * @param rightExtrapolatorName The right extrapolator name
-   * @param useFiniteDifference True if calculations should use finite difference in root-finding, otherwise analytic derivatives are used
-   * @param applicableCurrencies The currencies for which these defaults apply
+   * @param absoluteTolerance
+   *          The absolute tolerance used in root-finding
+   * @param relativeTolerance
+   *          The relative tolerance use in root-finding
+   * @param maxIterations
+   *          The maximum number of iterations used in root-finding
+   * @param decomposition
+   *          The matrix decomposition method used in root-finding
+   * @param interpolatorName
+   *          The interpolator name
+   * @param leftExtrapolatorName
+   *          The left extrapolator name
+   * @param rightExtrapolatorName
+   *          The right extrapolator name
+   * @param useFiniteDifference
+   *          True if calculations should use finite difference in root-finding, otherwise analytic derivatives are used
+   * @param applicableCurrencies
+   *          The currencies for which these defaults apply
    */
   public FXImpliedYieldCurveDefaults(final String absoluteTolerance, final String relativeTolerance, final String maxIterations, final String decomposition,
       final String useFiniteDifference, final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName,
@@ -127,7 +136,8 @@ public class FXImpliedYieldCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     switch (propertyName) {
       case MultiYieldCurvePropertiesAndDefaults.PROPERTY_DECOMPOSITION:
         return _decomposition;

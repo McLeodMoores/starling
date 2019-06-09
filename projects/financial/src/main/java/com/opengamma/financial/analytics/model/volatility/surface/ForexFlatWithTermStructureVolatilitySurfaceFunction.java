@@ -57,7 +57,8 @@ public class ForexFlatWithTermStructureVolatilitySurfaceFunction extends ForexVo
       throw new OpenGammaRuntimeException("Could not get " + surfaceRequirement);
     }
     @SuppressWarnings("unchecked")
-    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface = (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
+    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface =
+    (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
     if (fxVolatilitySurface.getYs().length != 1) {
       throw new OpenGammaRuntimeException("Have smile data present in a surface that should only have a term structure");
     }

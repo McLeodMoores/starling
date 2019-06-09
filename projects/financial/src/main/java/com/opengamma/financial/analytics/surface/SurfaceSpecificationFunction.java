@@ -42,7 +42,8 @@ public class SurfaceSpecificationFunction extends AbstractFunction {
   private ConfigDBSurfaceSpecificationSource _surfaceSpecificationSource;
 
   /**
-   * @param surfaceSpecificationName The surface specification name, not null
+   * @param surfaceSpecificationName
+   *          The surface specification name, not null
    */
   public SurfaceSpecificationFunction(final String surfaceSpecificationName) {
     ArgumentChecker.notNull(surfaceSpecificationName, "surfaceSpecificationName");
@@ -68,7 +69,8 @@ public class SurfaceSpecificationFunction extends AbstractFunction {
         .get();
     final ValueSpecification spec = new ValueSpecification(SURFACE_SPECIFICATION, ComputationTargetSpecification.NULL, properties);
     final Set<ComputedValue> result = Collections.singleton(new ComputedValue(spec, specification));
-    return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT).toInstant(), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant()) {
+    return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT).toInstant(),
+        atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000).toInstant()) {
 
       @Override
       public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
@@ -87,7 +89,8 @@ public class SurfaceSpecificationFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         return Collections.emptySet();
       }
     };

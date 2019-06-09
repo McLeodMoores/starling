@@ -70,8 +70,7 @@ import com.opengamma.financial.security.swap.InterestRateNotional;
 import com.opengamma.financial.security.swap.SwapSecurity;
 
 /**
- * Base function for all pricing and risk functions that use curves constructed
- * using the G2++ method. Produces results for trades with following underlying
+ * Base function for all pricing and risk functions that use curves constructed using the G2++ method. Produces results for trades with following underlying
  * securities:
  * <ul>
  * <li>{@link com.opengamma.financial.security.cash.CashSecurity}
@@ -80,18 +79,17 @@ import com.opengamma.financial.security.swap.SwapSecurity;
  * <li>{@link SwapSecurity}
  * <li>{@link SwaptionSecurity}
  * <li>{@link FXForwardSecurity}
- * <li>
- * {@link com.opengamma.financial.security.future.InterestRateFutureSecurity}
+ * <li>{@link com.opengamma.financial.security.future.InterestRateFutureSecurity}
  * <li>{@link NonDeliverableFXForwardSecurity}
  * <li>{@link DeliverableSwapFutureSecurity}
- * <li>
- * {@link com.opengamma.financial.security.future.FederalFundsFutureSecurity}
+ * <li>{@link com.opengamma.financial.security.future.FederalFundsFutureSecurity}
  * </ul>
  */
 public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public G2ppDiscountingFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -112,9 +110,12 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
     final FXForwardSecurityConverter fxForwardSecurityConverter = new FXForwardSecurityConverter();
     final NonDeliverableFXForwardSecurityConverter nonDeliverableFXForwardSecurityConverter = new NonDeliverableFXForwardSecurityConverter();
     final DeliverableSwapFutureSecurityConverter dsfConverter = new DeliverableSwapFutureSecurityConverter(securitySource, swapConverter, irsConverter);
-    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().cashSecurityVisitor(cashConverter)
-        .cashFlowSecurityVisitor(cashFlowConverter).deliverableSwapFutureSecurityVisitor(dsfConverter).fraSecurityVisitor(fraConverter).swapSecurityVisitor(swapConverter)
-        .fxForwardVisitor(fxForwardSecurityConverter).nonDeliverableFxForwardVisitor(nonDeliverableFXForwardSecurityConverter).swaptionVisitor(swaptionConverter).create();
+    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
+        .cashSecurityVisitor(cashConverter)
+        .cashFlowSecurityVisitor(cashFlowConverter).deliverableSwapFutureSecurityVisitor(dsfConverter).fraSecurityVisitor(fraConverter)
+        .swapSecurityVisitor(swapConverter)
+        .fxForwardVisitor(fxForwardSecurityConverter).nonDeliverableFxForwardVisitor(nonDeliverableFXForwardSecurityConverter)
+        .swaptionVisitor(swaptionConverter).create();
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
     return new DefaultTradeConverter(futureTradeConverter, securityConverter);
   }
@@ -131,11 +132,10 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
      * @param definitionToDerivativeConverter
      *          Converts definitions to derivatives, not null
      * @param withCurrency
-     *          True if the result properties set the
-     *          {@link com.opengamma.engine.value.ValuePropertyNames#CURRENCY}
-     *          property
+     *          True if the result properties set the {@link com.opengamma.engine.value.ValuePropertyNames#CURRENCY} property
      */
-    protected G2ppCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
+    protected G2ppCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter);
       _withCurrency = withCurrency;
     }
@@ -153,7 +153,8 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
     @SuppressWarnings("synthetic-access")
     @Override
     protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
-      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, HULL_WHITE_DISCOUNTING).withAny(CURVE_EXPOSURES).withAny(PROPERTY_HULL_WHITE_PARAMETERS)
+      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, HULL_WHITE_DISCOUNTING).withAny(CURVE_EXPOSURES)
+          .withAny(PROPERTY_HULL_WHITE_PARAMETERS)
           .withAny(PROPERTY_G2PP_PARAMETERS);
       if (_withCurrency) {
         final Security security = target.getTrade().getSecurity();
@@ -214,10 +215,13 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
     }
 
     /**
-     * Merges any {@link HullWhiteOneFactorProviderDiscount} curve bundles and FX matrices that are present in the inputs and creates a curve bundle with information for pricing using the G2++ model.
+     * Merges any {@link HullWhiteOneFactorProviderDiscount} curve bundles and FX matrices that are present in the inputs and creates a curve bundle with
+     * information for pricing using the G2++ model.
      *
-     * @param inputs The function inputs
-     * @param matrix The FX matrix
+     * @param inputs
+     *          The function inputs
+     * @param matrix
+     *          The FX matrix
      * @return A curve bundle that can be used in G2++ pricing functions
      */
     protected G2ppProviderInterface getMergedProviders(final FunctionInputs inputs, final FXMatrix matrix) {
@@ -237,7 +241,8 @@ public abstract class G2ppDiscountingFunction extends MultiCurvePricingFunction 
     /**
      * Merges any {@link CurveBuildingBlockBundle}s in the function inputs.
      *
-     * @param inputs The function inputs
+     * @param inputs
+     *          The function inputs
      * @return A curve building block bundle that contains all of the information used to construct the curves used in pricing
      */
     protected CurveBuildingBlockBundle getMergedCurveBuildingBlocks(final FunctionInputs inputs) {

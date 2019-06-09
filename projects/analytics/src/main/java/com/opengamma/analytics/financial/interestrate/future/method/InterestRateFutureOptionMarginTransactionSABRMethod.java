@@ -10,9 +10,10 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.Interest
 import com.opengamma.analytics.financial.model.option.definition.SABRInterestRateDataBundle;
 
 /**
- * Method for the pricing of interest rate future options with up-front premium. The pricing is done with a SABR approach on the future rate (1.0-price).
- * The SABR parameters are represented by (expiration-delay) surfaces. The "delay" is the time between option expiration and future last trading date,
- * i.e. 0 for normal options and x for x-year mid-curve options.
+ * Method for the pricing of interest rate future options with up-front premium. The pricing is done with a SABR approach on the future rate (1.0-price). The
+ * SABR parameters are represented by (expiration-delay) surfaces. The "delay" is the time between option expiration and future last trading date, i.e. 0 for
+ * normal options and x for x-year mid-curve options.
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureOptionMarginTransactionSABRMethod}
  */
 @Deprecated
@@ -25,6 +26,7 @@ public final class InterestRateFutureOptionMarginTransactionSABRMethod extends I
 
   /**
    * Return the method unique instance.
+   *
    * @return The instance.
    */
   public static InterestRateFutureOptionMarginTransactionSABRMethod getInstance() {
@@ -40,12 +42,17 @@ public final class InterestRateFutureOptionMarginTransactionSABRMethod extends I
 
   /**
    * Computes the present value curve sensitivity of a transaction.
-   * @param transaction The future option transaction.
-   * @param sabrData The SABR data bundle.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param sabrData
+   *          The SABR data bundle.
    * @return The present value curve sensitivity.
    */
-  public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final InterestRateFutureOptionMarginTransaction transaction, final SABRInterestRateDataBundle sabrData) {
-    PresentValueSABRSensitivityDataBundle securitySensitivity = ((InterestRateFutureOptionMarginSecuritySABRMethod) getSecurityMethod()).priceSABRSensitivity(transaction.getUnderlyingSecurity(),
+  public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final InterestRateFutureOptionMarginTransaction transaction,
+      final SABRInterestRateDataBundle sabrData) {
+    PresentValueSABRSensitivityDataBundle securitySensitivity = ((InterestRateFutureOptionMarginSecuritySABRMethod) getSecurityMethod()).priceSABRSensitivity(
+        transaction.getUnderlyingSecurity(),
         sabrData);
     securitySensitivity = securitySensitivity.multiplyBy(transaction.getQuantity() * transaction.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
         * transaction.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor());

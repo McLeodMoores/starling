@@ -42,6 +42,7 @@ public class SnapshotMarketDataSpecificationVersionListModel extends AbstractLis
     final SwingWorker<List<Pair<String, UniqueId>>, Object> worker = new SwingWorker<List<Pair<String, UniqueId>>, Object>() {
 
       private final DateTimeFormatter _formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT);
+
       @Override
       protected List<Pair<String, UniqueId>> doInBackground() throws Exception {
         final List<Pair<String, UniqueId>> resolverNames = new ArrayList<>();
@@ -57,7 +58,8 @@ public class SnapshotMarketDataSpecificationVersionListModel extends AbstractLis
 
       private String versionDescription(final MarketDataSnapshotDocument doc) {
         final StringBuilder sb = new StringBuilder();
-        final boolean vcEqual = ObjectUtils.equals(doc.getVersionFromInstant(), doc.getCorrectionFromInstant()) && ObjectUtils.equals(doc.getVersionToInstant(), doc.getCorrectionToInstant());
+        final boolean vcEqual = ObjectUtils.equals(doc.getVersionFromInstant(), doc.getCorrectionFromInstant())
+            && ObjectUtils.equals(doc.getVersionToInstant(), doc.getCorrectionToInstant());
         if (vcEqual) {
           sb.append("Valid:");
         } else {
@@ -122,7 +124,6 @@ public class SnapshotMarketDataSpecificationVersionListModel extends AbstractLis
     };
     worker.execute();
   }
-
 
   @Override
   public synchronized int getSize() {

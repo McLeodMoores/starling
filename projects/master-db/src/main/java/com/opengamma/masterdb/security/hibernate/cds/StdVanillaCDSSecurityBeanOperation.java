@@ -38,7 +38,8 @@ public final class StdVanillaCDSSecurityBeanOperation extends AbstractSecurityBe
   }
 
   @Override
-  public StandardVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final StandardVanillaCDSSecurity security) {
+  public StandardVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final StandardVanillaCDSSecurity security) {
     final StandardVanillaCDSSecurityBean bean = new StandardVanillaCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setQuotedSpread(security.getQuotedSpread());

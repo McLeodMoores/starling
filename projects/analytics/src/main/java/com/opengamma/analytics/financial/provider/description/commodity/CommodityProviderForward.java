@@ -29,8 +29,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class describing a "market" with discounting, forward, price index and credit curves.
- * The forward rate is computed directly.
+ * Class describing a "market" with discounting, forward, price index and credit curves. The forward rate is computed directly.
  */
 public class CommodityProviderForward implements CommodityProviderInterface {
 
@@ -59,7 +58,9 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Constructor with empty maps for discounting, forward and price index.
-   * @param fxMatrix The FXMatrix.
+   * 
+   * @param fxMatrix
+   *          The FXMatrix.
    */
   public CommodityProviderForward(final FXMatrix fxMatrix) {
     _multicurveProvider = new MulticurveProviderForward(fxMatrix);
@@ -69,14 +70,21 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Constructor from an existing market. The given market maps are used for the new market (the same maps are used, not copied).
-   * @param discountingCurves A map with one (discounting) curve by currency.
-   * @param forwardIborCurves A map with one (forward) curve by Ibor index.
-   * @param forwardONCurves A map with one (forward) curve by ON index.
-   * @param commodityForwardCurves A map with one price curve by price index.
-   * @param fxMatrix The FXMatrix.
+   * 
+   * @param discountingCurves
+   *          A map with one (discounting) curve by currency.
+   * @param forwardIborCurves
+   *          A map with one (forward) curve by Ibor index.
+   * @param forwardONCurves
+   *          A map with one (forward) curve by ON index.
+   * @param commodityForwardCurves
+   *          A map with one price curve by price index.
+   * @param fxMatrix
+   *          The FXMatrix.
    */
   public CommodityProviderForward(final Map<Currency, YieldAndDiscountCurve> discountingCurves, final Map<IborIndex, DoublesCurve> forwardIborCurves,
-      final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final Map<CommodityUnderlying, CommodityForwardCurve> commodityForwardCurves, final FXMatrix fxMatrix) {
+      final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final Map<CommodityUnderlying, CommodityForwardCurve> commodityForwardCurves,
+      final FXMatrix fxMatrix) {
     ArgumentChecker.notNull(commodityForwardCurves, "commodityForwardCurves");
     _multicurveProvider = new MulticurveProviderForward(discountingCurves, forwardIborCurves, forwardONCurves, fxMatrix);
     _commodityForwardCurves = commodityForwardCurves;
@@ -84,9 +92,13 @@ public class CommodityProviderForward implements CommodityProviderInterface {
   }
 
   /**
-   * Constructor from exiting multicurveProvider and inflation map. The given provider and map are used for the new provider (the same maps are used, not copied).
-   * @param multicurve The multi-curves provider.
-   * @param commodityForwardCurves The map with commodity forward curves.
+   * Constructor from exiting multicurveProvider and inflation map. The given provider and map are used for the new provider (the same maps are used, not
+   * copied).
+   * 
+   * @param multicurve
+   *          The multi-curves provider.
+   * @param commodityForwardCurves
+   *          The map with commodity forward curves.
    */
   public CommodityProviderForward(final MulticurveProviderForward multicurve, final Map<CommodityUnderlying, CommodityForwardCurve> commodityForwardCurves) {
     _multicurveProvider = multicurve;
@@ -133,7 +145,9 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Gets the price index curve associated to a given price index in the market.
-   * @param index The Price index.
+   * 
+   * @param index
+   *          The Price index.
    * @return The curve.
    */
   public CommodityForwardCurve getCurve(final IndexPrice index) {
@@ -150,8 +164,11 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Sets the price index curve for a price index.
-   * @param commodityUnderlying The price index.
-   * @param curve The curve.
+   * 
+   * @param commodityUnderlying
+   *          The price index.
+   * @param curve
+   *          The curve.
    */
   public void setCurve(final CommodityUnderlying commodityUnderlying, final CommodityForwardCurve curve) {
     ArgumentChecker.notNull(commodityUnderlying, "commodity underlying");
@@ -178,7 +195,7 @@ public class CommodityProviderForward implements CommodityProviderInterface {
     return _multicurveProvider;
   }
 
-  //     =====     Methods related to MulticurveProvider     =====
+  // ===== Methods related to MulticurveProvider =====
 
   @Override
   public double getDiscountFactor(final Currency ccy, final Double time) {
@@ -227,7 +244,9 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Gets the discounting curve associated in a given currency in the market.
-   * @param ccy The currency.
+   * 
+   * @param ccy
+   *          The currency.
    * @return The curve.
    */
   public YieldAndDiscountCurve getCurve(final Currency ccy) {
@@ -236,7 +255,9 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Gets the forward curve associated to a given Ibor index in the market.
-   * @param index The Ibor index.
+   * 
+   * @param index
+   *          The Ibor index.
    * @return The curve.
    */
   public DoublesCurve getCurve(final IborIndex index) {
@@ -245,7 +266,9 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Gets the forward curve associated to a given ON index in the market.
-   * @param index The ON index.
+   * 
+   * @param index
+   *          The ON index.
    * @return The curve.
    */
   public YieldAndDiscountCurve getCurve(final IndexON index) {
@@ -270,8 +293,11 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Sets the discounting curve for a given currency.
-   * @param ccy The currency.
-   * @param curve The yield curve used for discounting.
+   * 
+   * @param ccy
+   *          The currency.
+   * @param curve
+   *          The yield curve used for discounting.
    */
   public void setCurve(final Currency ccy, final YieldAndDiscountCurve curve) {
     _multicurveProvider.setCurve(ccy, curve);
@@ -279,8 +305,11 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Sets the curve associated to an Ibor index.
-   * @param index The index.
-   * @param curve The curve.
+   * 
+   * @param index
+   *          The index.
+   * @param curve
+   *          The curve.
    */
   public void setCurve(final IborIndex index, final DoublesCurve curve) {
     _multicurveProvider.setCurve(index, curve);
@@ -288,8 +317,11 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Sets the curve associated to an ON index.
-   * @param index The index.
-   * @param curve The curve.
+   * 
+   * @param index
+   *          The index.
+   * @param curve
+   *          The curve.
    */
   public void setCurve(final IndexON index, final YieldAndDiscountCurve curve) {
     _multicurveProvider.setCurve(index, curve);
@@ -297,7 +329,9 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Set all the curves contains in another bundle. If a currency or index is already present in the map, the associated curve is changed.
-   * @param other The other bundle.
+   * 
+   * @param other
+   *          The other bundle.
    */
   public void setAll(final CommodityProviderForward other) {
     ArgumentChecker.notNull(other, "Inflation provider");
@@ -307,9 +341,13 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Replaces the discounting curve for a given currency.
-   * @param ccy The currency.
-   * @param curve The yield curve used for discounting.
-   *  @throws IllegalArgumentException if curve name NOT already present
+   * 
+   * @param ccy
+   *          The currency.
+   * @param curve
+   *          The yield curve used for discounting.
+   * @throws IllegalArgumentException
+   *           if curve name NOT already present
    */
   public void replaceCurve(final Currency ccy, final YieldAndDiscountCurve curve) {
     _multicurveProvider.replaceCurve(ccy, curve);
@@ -317,9 +355,13 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Replaces the forward curve for a given index.
-   * @param index The index.
-   * @param curve The yield curve used for forward.
-   *  @throws IllegalArgumentException if curve name NOT already present
+   * 
+   * @param index
+   *          The index.
+   * @param curve
+   *          The yield curve used for forward.
+   * @throws IllegalArgumentException
+   *           if curve name NOT already present
    */
   public void replaceCurve(final IborIndex index, final DoublesCurve curve) {
     _multicurveProvider.replaceCurve(index, curve);
@@ -327,9 +369,13 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Replaces the discounting curve for a price index.
-   * @param commodityUnderlying The price index.
-   * @param curve The price curve for the index.
-   *  @throws IllegalArgumentException if curve name NOT already present
+   * 
+   * @param commodityUnderlying
+   *          The price index.
+   * @param curve
+   *          The price curve for the index.
+   * @throws IllegalArgumentException
+   *           if curve name NOT already present
    */
   public void replaceCurve(final CommodityUnderlying commodityUnderlying, final CommodityForwardCurve curve) {
     ArgumentChecker.notNull(commodityUnderlying, "commodity underlying");
@@ -347,6 +393,7 @@ public class CommodityProviderForward implements CommodityProviderInterface {
 
   /**
    * Gets the underlying FXMatrix containing the exchange rates.
+   * 
    * @return The matrix.
    */
   @Override

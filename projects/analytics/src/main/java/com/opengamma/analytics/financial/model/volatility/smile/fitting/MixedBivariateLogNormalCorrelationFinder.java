@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -26,9 +26,9 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Once given a set of parameters of two log-normal models with normal variables X,Y,
- * find the best-fit correlations X,Y by applying least square method to volatility smile of another mixed log-normal model associated with Z = X-Y.
- * The algorithm is modified such that model constraints are satisfied in every iteration step of fitting.
+ * Once given a set of parameters of two log-normal models with normal variables X,Y, find the best-fit correlations X,Y by applying least square method to
+ * volatility smile of another mixed log-normal model associated with Z = X-Y. The algorithm is modified such that model constraints are satisfied in every
+ * iteration step of fitting.
  */
 public class MixedBivariateLogNormalCorrelationFinder {
   private static final Logger LOGGER = LoggerFactory.getLogger(MixedBivariateLogNormalCorrelationFinder.class);
@@ -49,21 +49,32 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Find a set of correlations such that sum ( (_dataStrikes - exactFunctionValue)^2 ) is minimum.
-   * @param rhosGuess  Initial geuss rhos
-   * @param dataStrikes  Strikes (market data) of Z
-   * @param dataVolatilities  Volatilities (market data) of Z
-   * @param timeToExpiry  The time to expiry
-   * @param weights  The weights  <b>These weights must sum to 1</b>
-   * @param sigmasX  The standard deviation of the normal distributions in X
-   * @param sigmasY  The standard deviation of the normal distributions in Y
-   * @param relativePartialForwardsX  The expectation of each distribution in X is rpf_i*forward
-   * @param relativePartialForwardsY  The expectation of each distribution in Y is rpf_i*forward
-   * (rpf_i is the ith relativePartialForwards)
-   * <b>Must have sum w_i*rpf_i = 1.0</b>
-   * @param forwardX  The forward of X
-   * @param forwardY  The forward of Y
+   * 
+   * @param rhosGuess
+   *          Initial geuss rhos
+   * @param dataStrikes
+   *          Strikes (market data) of Z
+   * @param dataVolatilities
+   *          Volatilities (market data) of Z
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param weights
+   *          The weights <b>These weights must sum to 1</b>
+   * @param sigmasX
+   *          The standard deviation of the normal distributions in X
+   * @param sigmasY
+   *          The standard deviation of the normal distributions in Y
+   * @param relativePartialForwardsX
+   *          The expectation of each distribution in X is rpf_i*forward
+   * @param relativePartialForwardsY
+   *          The expectation of each distribution in Y is rpf_i*forward (rpf_i is the ith relativePartialForwards) <b>Must have sum w_i*rpf_i = 1.0</b>
+   * @param forwardX
+   *          The forward of X
+   * @param forwardY
+   *          The forward of Y
    */
-  public void doFit(final double[] rhosGuess, final double[] dataStrikes, final double[] dataVolatilities, final double timeToExpiry, final double[] weights, final double[] sigmasX,
+  public void doFit(final double[] rhosGuess, final double[] dataStrikes, final double[] dataVolatilities, final double timeToExpiry, final double[] weights,
+      final double[] sigmasX,
       final double[] sigmasY,
       final double[] relativePartialForwardsX, final double[] relativePartialForwardsY, final double forwardX, final double forwardY) {
 
@@ -183,7 +194,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
       k = k + 1;
 
-      ///confirming -1<= rhos <=1 and NotNaN
+      /// confirming -1<= rhos <=1 and NotNaN
       boolean confRhos = false;
       while (confRhos == false) {
 
@@ -315,20 +326,32 @@ public class MixedBivariateLogNormalCorrelationFinder {
   }
 
   /**
-   * @param jump Parameter jump
-   * @param dataStrs Strike data
-   * @param dataVols Volatility data
-   * @param gradFunctionValueM Gradient of the exact function value
-   * @param time Time to expiry
-   * @param wghts Weights
-   * @param sigsX Sigmas of X
-   * @param sigsY Sigmas of Y
-   * @param rpfsX Relative Partial forwards of X
-   * @param rpfsY Relative Partial forwards of Y
-   * @param forwardZ Forward of Z
+   * @param jump
+   *          Parameter jump
+   * @param dataStrs
+   *          Strike data
+   * @param dataVols
+   *          Volatility data
+   * @param gradFunctionValueM
+   *          Gradient of the exact function value
+   * @param time
+   *          Time to expiry
+   * @param wghts
+   *          Weights
+   * @param sigsX
+   *          Sigmas of X
+   * @param sigsY
+   *          Sigmas of Y
+   * @param rpfsX
+   *          Relative Partial forwards of X
+   * @param rpfsY
+   *          Relative Partial forwards of Y
+   * @param forwardZ
+   *          Forward of Z
    * @return Gain ratio which controls update of _shift
    */
-  private double getGainRatio(final double[] jump, final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double time, final double[] wghts, final double[] sigsX,
+  private double getGainRatio(final double[] jump, final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double time,
+      final double[] wghts, final double[] sigsX,
       final double[] sigsY, final double[] rpfsX, final double[] rpfsY, final double forwardZ) {
 
     return exactFunctionDiff(jump, dataStrs, dataVols, time, wghts, sigsX, sigsY, rpfsX, rpfsY, forwardZ) / apprxFunctionDiff(jump, gradFunctionValueM);
@@ -352,7 +375,8 @@ public class MixedBivariateLogNormalCorrelationFinder {
   /**
    * @return Numerator of gain ratio
    */
-  private double exactFunctionDiff(final double[] jump, final double[] dataStrs, final double[] dataVols, final double time, final double[] wghts, final double[] sigsX, final double[] sigsY,
+  private double exactFunctionDiff(final double[] jump, final double[] dataStrs, final double[] dataVols, final double time, final double[] wghts,
+      final double[] sigsX, final double[] sigsY,
       final double[] rpfsX, final double[] rpfsY, final double forwardZ) {
     final int nNormals = jump.length;
     final int nData = dataStrs.length;
@@ -370,8 +394,8 @@ public class MixedBivariateLogNormalCorrelationFinder {
   }
 
   /**
-   * During the iterations of least-square fitting, a set of rhos sometimes breaks the condition 0 < targetPrice < Math.min(forward, strike).
-   * Do not use getImpliedVolatilityZ method in MixedBivariateLogNormalModelVolatility.
+   * During the iterations of least-square fitting, a set of rhos sometimes breaks the condition 0 < targetPrice < Math.min(forward, strike). Do not use
+   * getImpliedVolatilityZ method in MixedBivariateLogNormalModelVolatility.
    */
   private double getVolatility(final EuropeanVanillaOption option, final double forward, final MixedLogNormalModelData data) {
 
@@ -396,19 +420,30 @@ public class MixedBivariateLogNormalCorrelationFinder {
   }
 
   /**
-   * @param rhos Present guess rho
-   * @param dataStrs Strike data
-   * @param dataVols Strike volatility
-   * @param time Time to expiry
-   * @param wghts Weights
-   * @param sigsX Sigmas of X
-   * @param sigsY Sigmas of Y
-   * @param rpfsX Relative Partial forwards of X
-   * @param rpfsY Relative Partial forwards of Y
-   * @param forwardZ Forward of Z
+   * @param rhos
+   *          Present guess rho
+   * @param dataStrs
+   *          Strike data
+   * @param dataVols
+   *          Strike volatility
+   * @param time
+   *          Time to expiry
+   * @param wghts
+   *          Weights
+   * @param sigsX
+   *          Sigmas of X
+   * @param sigsY
+   *          Sigmas of Y
+   * @param rpfsX
+   *          Relative Partial forwards of X
+   * @param rpfsY
+   *          Relative Partial forwards of Y
+   * @param forwardZ
+   *          Forward of Z
    * @return Difference between a market value of volatility and implied volatility with guess parameters
    */
-  private double[] exactFunctionValue(final double[] rhos, final double[] dataStrs, final double[] dataVols, final double time, final double[] wghts, final double[] sigsX, final double[] sigsY,
+  private double[] exactFunctionValue(final double[] rhos, final double[] dataStrs, final double[] dataVols, final double time, final double[] wghts,
+      final double[] sigsX, final double[] sigsY,
       final double[] rpfsX, final double[] rpfsY, final double forwardZ) {
 
     final int nData = dataStrs.length;
@@ -430,18 +465,28 @@ public class MixedBivariateLogNormalCorrelationFinder {
   }
 
   /**
-   * @param rhos Present guess rho
-   * @param dataStrs Strike data
-   * @param time Time to expiry
-   * @param wghts Weights
-   * @param sigsX Sigmas of X
-   * @param sigsY Sigmas of Y
-   * @param rpfsX Relative Partial forwards of X
-   * @param rpfsY Relative Partial forwards of Y
-   * @param forwardZ Forward of Z
+   * @param rhos
+   *          Present guess rho
+   * @param dataStrs
+   *          Strike data
+   * @param time
+   *          Time to expiry
+   * @param wghts
+   *          Weights
+   * @param sigsX
+   *          Sigmas of X
+   * @param sigsY
+   *          Sigmas of Y
+   * @param rpfsX
+   *          Relative Partial forwards of X
+   * @param rpfsY
+   *          Relative Partial forwards of Y
+   * @param forwardZ
+   *          Forward of Z
    * @return First derivatives of exactFunctionValue in terms of rhos
    */
-  private double[][] exactFunctionDerivative(final double[] rhos, final double[] dataStrs, final double time, final double[] wghts, final double[] sigsX, final double[] sigsY, final double[] rpfsX,
+  private double[][] exactFunctionDerivative(final double[] rhos, final double[] dataStrs, final double time, final double[] wghts, final double[] sigsX,
+      final double[] sigsY, final double[] rpfsX,
       final double[] rpfsY, final double forwardZ) {
 
     final int nNormals = rhos.length;
@@ -465,9 +510,11 @@ public class MixedBivariateLogNormalCorrelationFinder {
       final EuropeanVanillaOption option = new EuropeanVanillaOption(dataStrs[j], time, true);
       final double impVolZ = getVolatility(option, forwardZ, guessDataZ);
       for (int i = 0; i < nNormals; ++i) {
-        final double part1 = weightsZ[i] * forwardZ * BlackFormulaRepository.delta(relativePartialForwardsZ[i], dataStrs[j] / forwardZ, time, sigmasZ[i], true) * sigmasX[i] *
+        final double part1 = weightsZ[i] * forwardZ * BlackFormulaRepository.delta(relativePartialForwardsZ[i], dataStrs[j] / forwardZ, time, sigmasZ[i], true)
+            * sigmasX[i] *
             sigmasY[i] * relativePartialForwardsZ[i] / BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
-        final double part2 = forwardZ * weightsZ[i] * BlackFormulaRepository.vega(relativePartialForwardsZ[i], dataStrs[j] / forwardZ, time, sigmasZ[i]) * sigmasX[i] *
+        final double part2 = forwardZ * weightsZ[i] * BlackFormulaRepository.vega(relativePartialForwardsZ[i], dataStrs[j] / forwardZ, time, sigmasZ[i])
+            * sigmasX[i] *
             sigmasY[i] / sigmasZ[i] / BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
         final double factor = weightsZ[i] * relativePartialForwardsZ[i] * sigmasX[i] * sigmasY[i] * correction * correction;
         double part3 = 0.;
@@ -486,20 +533,31 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Solve the matrix equation ( hessian + shift (Id matrix) ) jump = gradFunctionValueM
-   * @param dataStrs Strike data
-   * @param dataVols Volatility data
+   * 
+   * @param dataStrs
+   *          Strike data
+   * @param dataVols
+   *          Volatility data
    * @param gradFunctionValueM
    * @param hessian
-   * @param time Time to expiry
-   * @param wghts Weights
-   * @param sigsX Sigmas of X
-   * @param sigsY Sigmas of Y
-   * @param rpfsX Relative Partial forwards of X
-   * @param rpfsY Relative Partial forwards of Y
-   * @param forwardZ Forward of Z
+   * @param time
+   *          Time to expiry
+   * @param wghts
+   *          Weights
+   * @param sigsX
+   *          Sigmas of X
+   * @param sigsY
+   *          Sigmas of Y
+   * @param rpfsX
+   *          Relative Partial forwards of X
+   * @param rpfsY
+   *          Relative Partial forwards of Y
+   * @param forwardZ
+   *          Forward of Z
    * @return jump
    */
-  private double[] theMatrixEqnSolver(final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double[][] hessian, final double time, final double[] wghts,
+  private double[] theMatrixEqnSolver(final double[] dataStrs, final double[] dataVols, final double[] gradFunctionValueM, final double[][] hessian,
+      final double time, final double[] wghts,
       final double[] sigsX, final double[] sigsY, final double[] rpfsX, final double[] rpfsY, final double forwardZ) {
 
     final int nNormals = gradFunctionValueM.length;
@@ -524,8 +582,11 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Linear problem Ax=b where A is a square matrix and x,b are vector can be solved by LU decomposition
-   * @param doubMat Matrix A
-   * @param doubVec Vector B
+   * 
+   * @param doubMat
+   *          Matrix A
+   * @param doubVec
+   *          Vector B
    * @return Solution to the linear equation, x
    */
   protected double[] decompSol(final double[][] doubMat, final double[] doubVec) {
@@ -541,8 +602,11 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Linear problem Ax=b is solved by forward substitution if A is lower triangular
-   * @param lMat Lower triangular matrix
-   * @param doubVec Vector b
+   * 
+   * @param lMat
+   *          Lower triangular matrix
+   * @param doubVec
+   *          Vector b
    * @return Solution to the linear equation, x
    */
   private double[] forwardSubstitution(final double[][] lMat, final double[] doubVec) {
@@ -563,8 +627,11 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Linear problem Ax=b is solved by backward substitution if A is upper triangular
-   * @param uMat Upper triangular matrix
-   * @param doubVec Vector b
+   * 
+   * @param uMat
+   *          Upper triangular matrix
+   * @param doubVec
+   *          Vector b
    * @return Solution to the linear equation, x
    */
   private double[] backSubstitution(final double[][] uMat, final double[] doubVec) {
@@ -584,7 +651,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
   }
 
   /**
-   *  Add vectorA to VectorB
+   * Add vectorA to VectorB
    */
   private double[] addVectors(final double[] vecA, final double[] vecB) {
     final int dim = vecA.length;
@@ -621,7 +688,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
     double res = 0.;
 
     for (int i = 0; i < nVec; ++i) {
-      res += (vec[i] * vec[i]);
+      res += vec[i] * vec[i];
     }
 
     return res;

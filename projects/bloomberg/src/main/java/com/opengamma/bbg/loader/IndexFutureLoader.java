@@ -68,23 +68,26 @@ public class IndexFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT));
 
   /**
-   * The valid Bloomberg future categories for Index Futures
+   * The valid Bloomberg future categories for Index Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(
       BLOOMBERG_EQUITY_INDEX_TYPE,
       BBG_NON_EQUITY_INDEX_TYPE);
-      // BBG_WEEKLY_INDEX_OPTIONS_TYPE); // THIS IS IFFY - 2EH3 INDEX, FOR EXAMPLE, HAS A FUTURE CATEGORY OF WEEKLY INDEX OPTIONS, THOUGH IT JUST AN ALIAS FOR ESH3 INDEX WHICH IS EQUITY INDEX
-      // TODO: Answer this: Are Equity Index Futures EquityFutureSecurity or IndexFutureSecurity? - See EquityFutureLoader, too
+  // BBG_WEEKLY_INDEX_OPTIONS_TYPE); // THIS IS IFFY - 2EH3 INDEX, FOR EXAMPLE, HAS A FUTURE CATEGORY OF WEEKLY INDEX OPTIONS, THOUGH IT JUST AN ALIAS FOR ESH3
+  // INDEX WHICH IS EQUITY INDEX
+  // TODO: Answer this: Are Equity Index Futures EquityFutureSecurity or IndexFutureSecurity? - See EquityFutureLoader, too
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public IndexFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.INDEX_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);

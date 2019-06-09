@@ -53,22 +53,24 @@ public class ISDACDXAsSingleNameBucketedGammaCS01Function extends ISDACDXAsSingl
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve,
-                                                final CDSAnalytic analytic,
-                                                final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve,
+      final CDSAnalytic analytic,
+      final Tenor[] tenors) {
     final Double spreadCurveBump = Double.valueOf(Iterables.getOnlyElement(properties.getValues(
         CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_CURVE_BUMP)));
-    final SpreadBumpType spreadBumpType = SpreadBumpType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_BUMP_TYPE)));
+    final SpreadBumpType spreadBumpType = SpreadBumpType
+        .valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_BUMP_TYPE)));
     final double[] gammaCS01 = new double[times.length];
     final LocalDate[] dates = new LocalDate[times.length];
-    StandardVanillaBucketedGammaCS01CDSFunction.bucketedGammaCS01(definition, yieldCurve, times, marketSpreads, hazardCurve, analytic, spreadCurveBump, spreadBumpType, gammaCS01, dates, tenors);
+    StandardVanillaBucketedGammaCS01CDSFunction.bucketedGammaCS01(definition, yieldCurve, times, marketSpreads, hazardCurve, analytic, spreadCurveBump,
+        spreadBumpType, gammaCS01, dates, tenors);
     final LocalDateLabelledMatrix1D cs01Matrix = new LocalDateLabelledMatrix1D(dates, gammaCS01);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BUCKETED_GAMMA_CS01, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, cs01Matrix));
@@ -82,8 +84,9 @@ public class ISDACDXAsSingleNameBucketedGammaCS01Function extends ISDACDXAsSingl
     }
     final ValueProperties constraints = desiredValue.getConstraints();
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
-    final String spreadCurveName = "CDS_INDEX_" + security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
+    final String spreadCurveName = "CDS_INDEX_"
+        + security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId().getValue();
+    // TODO shouldn't need all of the yield curve properties
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
     final String yieldCurveCalculationMethod = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_METHOD);
@@ -98,7 +101,8 @@ public class ISDACDXAsSingleNameBucketedGammaCS01Function extends ISDACDXAsSingl
       final Set<String> creditSpreadCurveShiftTypes = constraints.getValues(PROPERTY_SPREAD_CURVE_SHIFT_TYPE);
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

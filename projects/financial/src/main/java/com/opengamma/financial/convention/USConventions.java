@@ -29,16 +29,17 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard versions of USD instruments.
- * 
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class USConventions {
 
   /**
    * Adds conventions for deposit, Libor fixings, swaps, FRAs and IR futures.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -90,7 +91,7 @@ public class USConventions {
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("US0012M Index"), simpleNameSecurityId("USD LIBOR 12m"),
         tullettPrebonSecurityId("ASLIBUSD12L")), "USD LIBOR 12m", act360, modified, Period.ofMonths(12), 2, false, us);
 
-    //TODO need to check that these are right for deposit rates
+    // TODO need to check that these are right for deposit rates
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("USDR1T Curncy"), simpleNameSecurityId("USD DEPOSIT 1d")),
         "USD DEPOSIT 1d", act360, following, Period.ofDays(1), 0, false, us);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("USDR2T Curncy"), simpleNameSecurityId("USD DEPOSIT 2d")),
@@ -136,7 +137,7 @@ public class USConventions {
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("USDR5 Curncy"), simpleNameSecurityId("USD DEPOSIT 5y")),
         "USD DEPOSIT 5y", act360, following, Period.ofYears(5), 2, false, us);
 
-    //TODO with improvement in settlement days definition (i.e. including holiday and adjustment) change this
+    // TODO with improvement in settlement days definition (i.e. including holiday and adjustment) change this
     // should be 2, LON, following
     // holiday for swap should be NY+LON
 
@@ -193,7 +194,7 @@ public class USConventions {
         "USD CPI", act360, modified, Period.ofMonths(1), 2, false, us);
 
     // TODO: Add all ISDA fixing
-    final int[] isdaFixTenor = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30 };
+    final int[] isdaFixTenor = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30 };
     // ISDA fixing 11.00 New-York
     for (final int element : isdaFixTenor) {
       final String tenorString = element + "Y";
@@ -204,20 +205,30 @@ public class USConventions {
           simpleNameSecurityId("USD LIBOR 3m"), us, true, Period.ofYears(element));
     }
 
-    //Identifiers for external data
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.1M").toBundle(), "IR.SWAP.USD.1M", act360, modified, Period.ofMonths(1), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.6M").toBundle(), "IR.SWAP.USD.6M", act360, modified, Period.ofMonths(6), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.12M").toBundle(), "IR.SWAP.USD.12M", act360, modified, Period.ofMonths(12), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.24M").toBundle(), "IR.SWAP.USD.24M", act360, modified, Period.ofMonths(24), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.36M").toBundle(), "IR.SWAP.USD.36M", act360, modified, Period.ofMonths(36), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.60M").toBundle(), "IR.SWAP.USD.60M", act360, modified, Period.ofMonths(60), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.84M").toBundle(), "IR.SWAP.USD.84M", act360, modified, Period.ofMonths(84), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.120M").toBundle(), "IR.SWAP.USD.120M", act360, modified, Period.ofMonths(120), 2, false, null);
-    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.360M").toBundle(), "IR.SWAP.USD.360M", act360, modified, Period.ofMonths(360), 2, false, null);
+    // Identifiers for external data
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.1M").toBundle(), "IR.SWAP.USD.1M", act360, modified,
+        Period.ofMonths(1), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.6M").toBundle(), "IR.SWAP.USD.6M", act360, modified,
+        Period.ofMonths(6), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.12M").toBundle(), "IR.SWAP.USD.12M", act360, modified,
+        Period.ofMonths(12), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.24M").toBundle(), "IR.SWAP.USD.24M", act360, modified,
+        Period.ofMonths(24), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.36M").toBundle(), "IR.SWAP.USD.36M", act360, modified,
+        Period.ofMonths(36), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.60M").toBundle(), "IR.SWAP.USD.60M", act360, modified,
+        Period.ofMonths(60), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.84M").toBundle(), "IR.SWAP.USD.84M", act360, modified,
+        Period.ofMonths(84), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.120M").toBundle(), "IR.SWAP.USD.120M", act360, modified,
+        Period.ofMonths(120), 2, false, null);
+    utils.addConventionBundle(ExternalId.of(FactorExposureData.FACTOR_SCHEME, "IR.SWAP.USD.360M").toBundle(), "IR.SWAP.USD.360M", act360, modified,
+        Period.ofMonths(360), 2, false, null);
   }
 
   /**
-   * @param conventionMaster The convention master, not null
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addCAPMConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -228,7 +239,9 @@ public class USConventions {
 
   /**
    * Adds conventions for US Treasury bonds,
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addTreasuryBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -239,9 +252,11 @@ public class USConventions {
 
   /**
    * Adds conventions for USD-denominated corporate bonds
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
-  //TODO need to get the correct convention
+  // TODO need to get the correct convention
   public static void addCorporateBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
@@ -251,7 +266,9 @@ public class USConventions {
 
   /**
    * Adds conventions for GBP government bonds.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addInflationBondConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -262,7 +279,9 @@ public class USConventions {
 
   /**
    * Add conventions for USD bond futures
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static void addBondFutureConvention(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");

@@ -71,7 +71,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
 
   @Override
   public void init(final FunctionCompilationContext context) {
-    // REVIEW: jim 24-Oct-2012 -- this is a terrible, terrible hack.  Blame Andrew Griffin - he told me to do it.
+    // REVIEW: jim 24-Oct-2012 -- this is a terrible, terrible hack. Blame Andrew Griffin - he told me to do it.
     _htsResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
   }
 
@@ -130,7 +130,8 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     String curveCalculationConfig = null;
     final ComputationTargetSpecification targetSpec = target.toSpecification();
@@ -172,7 +173,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
     assert curveName != null;
     assert curveCalculationConfig != null;
     final RawSecurity security = (RawSecurity) target.getSecurity();
-    //final BigDecimal qty = target.getPosition().getQuantity();
+    // final BigDecimal qty = target.getPosition().getQuantity();
     final ValueRequirement curveRequirement = getCurveRequirement(target, curveName, curveCalculationConfig);
     final Object curveObject = inputs.getValue(curveRequirement);
     if (curveObject == null) {
@@ -195,8 +196,9 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig);
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueSpecification resultSpec = new ValueSpecification(YCNS_REQUIREMENT, targetSpec, properties.get());
-    final Set<ComputedValue> results = YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName, bundle, sensitivitiesForCurves, curveSpec, resultSpec);
-    //LOGGER.debug("execute, returning " + results);
+    final Set<ComputedValue> results = YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName, bundle, sensitivitiesForCurves,
+        curveSpec, resultSpec);
+    // LOGGER.debug("execute, returning " + results);
     return results;
   }
 
@@ -212,7 +214,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
         if (computedValue != null) {
           final ManageableHistoricalTimeSeries mhts = (ManageableHistoricalTimeSeries) computedValue.getValue();
           final Double value = mhts.getTimeSeries().getLatestValue();
-          entries[i] = -value; //* (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1.  DV01 function will invert back.
+          entries[i] = -value; // * (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1. DV01 function will invert back.
         } else {
           LOGGER.warn("Value was null when getting required input data " + swapExternalSensitivitiesData.getExposureExternalId());
           entries[i] = 0d;
@@ -231,7 +233,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
         if (computedValue != null) {
           final ManageableHistoricalTimeSeries mhts = (ManageableHistoricalTimeSeries) computedValue.getValue();
           final Double value = mhts.getTimeSeries().getLatestValue();
-          entries[i] -= value; //* (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1.  DV01 function will invert back.
+          entries[i] -= value; // * (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1. DV01 function will invert back.
         } else {
           LOGGER.warn("Value was null when getting required input data " + bondExternalSensitivitiesData.getExposureExternalId());
         }
@@ -285,11 +287,13 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
 
   protected ValueRequirement getSensitivityRequirement(final ExternalId externalId) {
     final HistoricalTimeSeriesResolutionResult resolutionResult = _htsResolver.resolve(ExternalIdBundle.of(externalId), null, null, null, "EXPOSURE", null);
-    final ValueRequirement htsRequirement = HistoricalTimeSeriesFunctionUtils.createHTSRequirement(resolutionResult, "EXPOSURE", DateConstraint.VALUATION_TIME, true, DateConstraint.VALUATION_TIME,
+    final ValueRequirement htsRequirement = HistoricalTimeSeriesFunctionUtils.createHTSRequirement(resolutionResult, "EXPOSURE", DateConstraint.VALUATION_TIME,
+        true, DateConstraint.VALUATION_TIME,
         true);
     return htsRequirement;
-    //return new ValueRequirement();
-    //return new ValueRequirement(/*ExternalDataRequirementNames.SENSITIVITY*/"EXPOSURE", ComputationTargetType.PRIMITIVE, UniqueId.of(externalId.getScheme().getName(), externalId.getValue()));
+    // return new ValueRequirement();
+    // return new ValueRequirement(/*ExternalDataRequirementNames.SENSITIVITY*/"EXPOSURE", ComputationTargetType.PRIMITIVE,
+    // UniqueId.of(externalId.getScheme().getName(), externalId.getValue()));
   }
 
   protected ValueRequirement getCurveRequirement(final ComputationTarget target, final String curveName, final String curveCalculationConfig) {

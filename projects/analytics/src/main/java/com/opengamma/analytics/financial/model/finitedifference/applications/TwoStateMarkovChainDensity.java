@@ -35,7 +35,8 @@ public class TwoStateMarkovChainDensity {
   private final Function1D<Double, Double> _initCon11;
   private final Function1D<Double, Double> _initCon12;
 
-  public TwoStateMarkovChainDensity(final ForwardCurve forward, final double vol1, final double deltaVol, final double lambda12, final double lambda21, final double probS1, final double beta1,
+  public TwoStateMarkovChainDensity(final ForwardCurve forward, final double vol1, final double deltaVol, final double lambda12, final double lambda21,
+      final double probS1, final double beta1,
       final double beta2) {
     this(forward, new TwoStateMarkovChainDataBundle(vol1, vol1 + deltaVol, lambda12, lambda21, probS1, beta1, beta2));
   }
@@ -52,10 +53,11 @@ public class TwoStateMarkovChainDensity {
 
   PDEFullResults1D[] solve(final PDEGrid1D grid) {
 
-    //BoundaryCondition lower = new FixedSecondDerivativeBoundaryCondition(0, grid.getSpaceNode(0), true);
+    // BoundaryCondition lower = new FixedSecondDerivativeBoundaryCondition(0, grid.getSpaceNode(0), true);
     final BoundaryCondition lower = new NeumannBoundaryCondition(0.0, grid.getSpaceNode(0), true);
-    //BoundaryCondition lower = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(0));//TODO for beta < 0.5 zero is accessible and thus there will be non-zero
-    //density there
+    // BoundaryCondition lower = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(0));//TODO for beta < 0.5 zero is accessible and thus there will be
+    // non-zero
+    // density there
     final BoundaryCondition upper = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(grid.getNumSpaceNodes() - 1));
 
     final CoupledPDEDataBundle d1 = new CoupledPDEDataBundle(_data1, _initCon11, lower, upper, grid);
@@ -63,14 +65,14 @@ public class TwoStateMarkovChainDensity {
 
     final CoupledFiniteDifference solver = new CoupledFiniteDifference(THETA, true);
     final PDEResults1D[] res = solver.solve(d1, d2);
-    //handle this with generics
+    // handle this with generics
     final PDEFullResults1D res1 = (PDEFullResults1D) res[0];
     final PDEFullResults1D res2 = (PDEFullResults1D) res[1];
-    return new PDEFullResults1D[] {res1, res2 };
+    return new PDEFullResults1D[] { res1, res2 };
   }
 
   private Function1D<Double, Double> getInitialCondition(final ForwardCurve forward, final double initialProb) {
-    //using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
+    // using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
     return new Function1D<Double, Double>() {
       private final double _volRootTOffset = 0.01;
 
@@ -86,14 +88,15 @@ public class TwoStateMarkovChainDensity {
     };
   }
 
-  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledPDEDataBundle(final ForwardCurve forward, final double vol, final double lambda1, final double lambda2, final double beta) {
+  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledPDEDataBundle(final ForwardCurve forward, final double vol, final double lambda1,
+      final double lambda2, final double beta) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
       @Override
       public Double evaluate(final Double... ts) {
         Validate.isTrue(ts.length == 2);
         double s = ts[1];
-        if (s <= 0.0) { //TODO review how to handle absorption
+        if (s <= 0.0) { // TODO review how to handle absorption
           s = -s;
         }
         return -Math.pow(s, 2 * beta) * vol * vol / 2;
@@ -132,6 +135,7 @@ public class TwoStateMarkovChainDensity {
       }
     };
 
-    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c), -lambda2);
+    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+        -lambda2);
   }
 }

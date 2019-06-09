@@ -24,7 +24,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculates the currency exposure of FX options using the Garman-Kohlhagan model with a volatility smile.
  */
-public final class CurrencyExposureForexBlackSmileCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, MultipleCurrencyAmount> {
+public final class CurrencyExposureForexBlackSmileCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -39,6 +40,7 @@ public final class CurrencyExposureForexBlackSmileCalculator extends InstrumentD
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static CurrencyExposureForexBlackSmileCalculator getInstance() {

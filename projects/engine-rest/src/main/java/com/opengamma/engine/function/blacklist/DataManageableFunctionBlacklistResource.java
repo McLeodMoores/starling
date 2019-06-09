@@ -25,11 +25,12 @@ import com.opengamma.transport.jaxrs.FudgeRest;
 import com.opengamma.util.jms.JmsConnector;
 
 /**
- * Publishes a {@link ManageableFunctionBlacklist} to remote clients
+ * Publishes a {@link ManageableFunctionBlacklist} to remote clients.
  */
 public class DataManageableFunctionBlacklistResource extends DataFunctionBlacklistResource {
 
-  public DataManageableFunctionBlacklistResource(final ManageableFunctionBlacklist underlying, final FudgeContext fudgeContext, final JmsConnector jmsConnector) {
+  public DataManageableFunctionBlacklistResource(final ManageableFunctionBlacklist underlying, final FudgeContext fudgeContext,
+      final JmsConnector jmsConnector) {
     super(underlying, fudgeContext, jmsConnector);
   }
 

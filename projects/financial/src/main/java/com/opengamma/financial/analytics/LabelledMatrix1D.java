@@ -14,10 +14,12 @@ import com.opengamma.lambdava.functions.Function3;
 
 /**
  *
- * @param <S> The type of the keys
- * @param <T> The type of the tolerance
+ * @param <S>
+ *          The type of the keys
+ * @param <T>
+ *          The type of the tolerance
  */
-//TODO need to test for uniqueness of keys and labels
+// TODO need to test for uniqueness of keys and labels
 public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   private final String _labelsTitle;
   private final String _valuesTitle;
@@ -38,7 +40,8 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
     this(keys, LabelledMatrixUtils.toString(keys), labelsTitle, values, valuesTitle, defaultTolerance);
   }
 
-  public LabelledMatrix1D(final S[] keys, final Object[] labels, final String labelsTitle, final double[] values, final String valuesTitle, final T defaultTolerance) {
+  public LabelledMatrix1D(final S[] keys, final Object[] labels, final String labelsTitle, final double[] values, final String valuesTitle,
+      final T defaultTolerance) {
     Validate.notNull(keys, "labels");
     Validate.notNull(labels, "label names");
     Validate.notNull(values, "values");
@@ -81,11 +84,13 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a labelled matrix to this one and returns a new matrix.
    * <p>
-   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but
-   * the labels do not match, then the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in
-   * the new matrix, the result will be (3, "3", 0.6)
-   * @param other Another labelled matrix
+   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
+   * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
+   * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
+   * "3", 0.6)
+   * 
+   * @param other
+   *          Another labelled matrix
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> addIgnoringLabel(final LabelledMatrix1D<S, T> other) {
@@ -95,12 +100,15 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a labelled matrix to this one and returns a new matrix.
    * <p>
-   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but
-   * the labels do not match, then the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in
-   * the new matrix, the result will be (3, "3", 0.6).
-   * @param other Another labelled matrix
-   * @param tolerance The tolerance
+   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
+   * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
+   * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
+   * "3", 0.6).
+   * 
+   * @param other
+   *          Another labelled matrix
+   * @param tolerance
+   *          The tolerance
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> addIgnoringLabel(final LabelledMatrix1D<S, T> other, final T tolerance) {
@@ -110,10 +118,12 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a labelled matrix to this one and returns a new matrix.
    * <p>
-   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but
-   * the labels do not match, then an exception is thrown.
-   * @param other Another labelled matrix, not null
+   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
+   * label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not
+   * match, then an exception is thrown.
+   * 
+   * @param other
+   *          Another labelled matrix, not null
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> add(final LabelledMatrix1D<S, T> other) {
@@ -123,11 +133,14 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a labelled matrix to this one and returns a new matrix.
    * <p>
-   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but
-   * the labels do not match, then an exception is thrown.
-   * @param other Another labelled matrix, not null
-   * @param tolerance The tolerance
+   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
+   * label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not
+   * match, then an exception is thrown.
+   * 
+   * @param other
+   *          Another labelled matrix, not null
+   * @param tolerance
+   *          The tolerance
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> add(final LabelledMatrix1D<S, T> other, final T tolerance) {
@@ -137,13 +150,17 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a key, label and value to this matrix, returning a new matrix.
    * <p>
-   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but
-   * the labels do not match, then the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in
-   * the new matrix, the result will be (3, "3", 0.6)
-   * @param key The key to which a value is to be added
-   * @param label The label for the key
-   * @param value The value to add
+   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
+   * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
+   * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
+   * "3", 0.6)
+   * 
+   * @param key
+   *          The key to which a value is to be added
+   * @param label
+   *          The label for the key
+   * @param value
+   *          The value to add
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> addIgnoringLabel(final S key, final Object label, final double value) {
@@ -153,14 +170,19 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a key, label and value to this matrix, returning a new matrix.
    * <p>
-   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but
-   * the labels do not match, then the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in
-   * the new matrix, the result will be (3, "3", 0.6)
-   * @param key The key to which a value is to be added
-   * @param label The label for the key
-   * @param value The value to add
-   * @param tolerance The tolerance
+   * Each key in the new matrix is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key,
+   * label and value are attached to the end of the matrix. This method ignores the label - if there is a key already present but the labels do not match, then
+   * the new label is the original. For example, if there is an entry (3, "3", 0.1) and an entry (3, "THREE", 0.5) in the new matrix, the result will be (3,
+   * "3", 0.6)
+   * 
+   * @param key
+   *          The key to which a value is to be added
+   * @param label
+   *          The label for the key
+   * @param value
+   *          The value to add
+   * @param tolerance
+   *          The tolerance
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> addIgnoringLabel(final S key, final Object label, final double value, final T tolerance) {
@@ -170,12 +192,16 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a key, label and value to this matrix, returning a new matrix.
    * <p>
-   * The key is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but
-   * the labels do not match, then an exception is thrown.
-   * @param key The key to which a value is to be added
-   * @param label The label for the key
-   * @param value The value to add
+   * The key is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key, label and value are
+   * attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not match, then an
+   * exception is thrown.
+   * 
+   * @param key
+   *          The key to which a value is to be added
+   * @param label
+   *          The label for the key
+   * @param value
+   *          The value to add
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> add(final S key, final Object label, final double value) {
@@ -185,13 +211,18 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   /**
    * Adds a key, label and value to this matrix, returning a new matrix.
    * <p>
-   * The key is checked to see if it is in the original; if so, the value for that key is added. If the key is not present,
-   * the new key, label and value are attached to the end of the matrix. This method does not ignores the label - if there is a key already present but
-   * the labels do not match, then an exception is thrown.
-   * @param key The key to which a value is to be added
-   * @param label The label for the key
-   * @param value The value to add
-   * @param tolerance The tolerance
+   * The key is checked to see if it is in the original; if so, the value for that key is added. If the key is not present, the new key, label and value are
+   * attached to the end of the matrix. This method does not ignores the label - if there is a key already present but the labels do not match, then an
+   * exception is thrown.
+   * 
+   * @param key
+   *          The key to which a value is to be added
+   * @param label
+   *          The label for the key
+   * @param value
+   *          The value to add
+   * @param tolerance
+   *          The tolerance
    * @return The sum of the matrices
    */
   public LabelledMatrix1D<S, T> add(final S key, final Object label, final double value, final T tolerance) {
@@ -216,7 +247,8 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
       final int index = binarySearchWithTolerance(originalKeys, otherKeys[i], tolerance);
       if (index >= 0) {
         if (!ignoreLabel && !originalLabels[index].equals(otherLabels[i])) {
-          throw new IllegalArgumentException("Have a value for " + otherKeys[i] + " but the label of the value to add (" + otherLabels[i] + ") did not match the original (" + originalLabels[index]
+          throw new IllegalArgumentException("Have a value for " + otherKeys[i] + " but the label of the value to add (" + otherLabels[i]
+              + ") did not match the original (" + originalLabels[index]
               + ")");
         }
         count--;
@@ -241,7 +273,8 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
     final int index = binarySearchWithTolerance(originalKeys, key, tolerance);
     if (index >= 0) {
       if (!ignoreLabel && !originalLabels[index].equals(label)) {
-        throw new IllegalArgumentException("Have a value for " + key + " but the label of the value to add (" + label + ") did not match the original (" + originalLabels[index] + ")");
+        throw new IllegalArgumentException(
+            "Have a value for " + key + " but the label of the value to add (" + label + ") did not match the original (" + originalLabels[index] + ")");
       }
       final S[] newKeys = Arrays.copyOf(originalKeys, n);
       final Object[] newLabels = Arrays.copyOf(originalLabels, n);
@@ -263,25 +296,28 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
   }
 
   /**
-   * Compares two keys and indicates whether the first would be considered less than, equal to or greater than the
-   * second.
+   * Compares two keys and indicates whether the first would be considered less than, equal to or greater than the second.
    *
-   * @param key1  the first key to compare, not null
-   * @param key2  the second key to compare, not null
-   * @param tolerance  the tolerance for equality of the keys
-   * @return the value 0 if {@code key1} is equal to {@code key2}; a value less than 0 if {@code key1} is less than
-   *         {@code key2}; and a value greater than 0 if {@code key1} is greater than {@code key2}.
+   * @param key1
+   *          the first key to compare, not null
+   * @param key2
+   *          the second key to compare, not null
+   * @param tolerance
+   *          the tolerance for equality of the keys
+   * @return the value 0 if {@code key1} is equal to {@code key2}; a value less than 0 if {@code key1} is less than {@code key2}; and a value greater than 0 if
+   *         {@code key1} is greater than {@code key2}.
    */
   public abstract int compare(S key1, S key2, T tolerance);
 
   /**
-   * Compares two keys using the default equality tolerance, and indicates whether the first would be considered less
-   * than, equal to or greater than the second.
+   * Compares two keys using the default equality tolerance, and indicates whether the first would be considered less than, equal to or greater than the second.
    *
-   * @param key1  the first key to compare, not null
-   * @param key2  the second key to compare, not null
-   * @return the value 0 if {@code key1} is equal to {@code key2}; a value less than 0 if {@code key1} is less than
-   *         {@code key2}; and a value greater than 0 if {@code key1} is greater than {@code key2}.
+   * @param key1
+   *          the first key to compare, not null
+   * @param key2
+   *          the second key to compare, not null
+   * @return the value 0 if {@code key1} is equal to {@code key2}; a value less than 0 if {@code key1} is less than {@code key2}; and a value greater than 0 if
+   *         {@code key1} is greater than {@code key2}.
    */
   public int compare(final S key1, final S key2) {
     return compare(key1, key2, getDefaultTolerance());
@@ -328,8 +364,6 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
     }
     return -(low + 1);
   }
-
-
 
   @Override
   public int hashCode() {
@@ -380,7 +414,6 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
     }
     return true;
   }
-
 
   public LabelledMatrix1D<S, T> mapValues(final Function3<S, Double, Object, Double> mapper) {
     final double[] values = new double[_values.length];

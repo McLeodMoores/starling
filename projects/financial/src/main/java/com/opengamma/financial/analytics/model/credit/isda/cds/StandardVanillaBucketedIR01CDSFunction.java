@@ -43,34 +43,36 @@ public class StandardVanillaBucketedIR01CDSFunction extends StandardVanillaIR01C
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
 
     final LocalDate[] dates = new LocalDate[yieldCurve.getNumberOfKnots()];
 
     final double[] ir01 = getBucketedIR01(definition, yieldCurve, valuationDate, properties, hazardCurve, analytic, dates);
 
-    //final String[] labels = CreditFunctionUtils.getFormattedBucketedXAxis(dates, valuationDate);
+    // final String[] labels = CreditFunctionUtils.getFormattedBucketedXAxis(dates, valuationDate);
     final LocalDateLabelledMatrix1D ir01Matrix = new LocalDateLabelledMatrix1D(dates, ir01);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BUCKETED_IR01, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, ir01Matrix));
   }
 
   public static double[] getBucketedIR01(final CreditDefaultSwapDefinition definition,
-                                   final ISDACompliantYieldCurve yieldCurve,
-                                   final ZonedDateTime valuationDate,
-                                   final ValueProperties properties,
-                                   final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final LocalDate[] dates) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime valuationDate,
+      final ValueProperties properties,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final LocalDate[] dates) {
     final Double interestRateCurveBump = Double.valueOf(Iterables.getOnlyElement(properties.getValues(
         CreditInstrumentPropertyNamesAndValues.PROPERTY_INTEREST_RATE_CURVE_BUMP)));
-    //final InterestRateBumpType interestRateBumpType = InterestRateBumpType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_INTEREST_RATE_BUMP_TYPE)));
-    //final PriceType priceType = PriceType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_CDS_PRICE_TYPE)));
+    // final InterestRateBumpType interestRateBumpType =
+    // InterestRateBumpType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_INTEREST_RATE_BUMP_TYPE)));
+    // final PriceType priceType =
+    // PriceType.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_CDS_PRICE_TYPE)));
 
     final double[] ir01 = CALCULATOR.bucketedIR01(analytic, getCoupon(definition), hazardCurve, yieldCurve);
     for (int i = 0; i < ir01.length; i++) {

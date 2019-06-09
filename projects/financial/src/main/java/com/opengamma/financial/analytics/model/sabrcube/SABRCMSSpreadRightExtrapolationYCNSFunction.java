@@ -74,7 +74,8 @@ public class SABRCMSSpreadRightExtrapolationYCNSFunction extends SABRYCNSFunctio
     final InterpolatedDoublesSurface nuSurface = surfaces.getNuSurface();
     final InterpolatedDoublesSurface rhoSurface = surfaces.getRhoSurface();
     final DoubleFunction1D correlationFunction = getCorrelationFunction();
-    final SABRInterestRateCorrelationParameters modelParameters = new SABRInterestRateCorrelationParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, correlationFunction);
+    final SABRInterestRateCorrelationParameters modelParameters = new SABRInterestRateCorrelationParameters(alphaSurface, betaSurface, rhoSurface, nuSurface,
+        correlationFunction);
     return new SABRInterestRateDataBundle(modelParameters, yieldCurves);
   }
 

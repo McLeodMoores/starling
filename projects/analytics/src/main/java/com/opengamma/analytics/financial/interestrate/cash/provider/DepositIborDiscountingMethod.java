@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.cash.provider;
@@ -32,6 +32,7 @@ public final class DepositIborDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static DepositIborDiscountingMethod getInstance() {
@@ -46,8 +47,11 @@ public final class DepositIborDiscountingMethod {
 
   /**
    * Compute the present value by discounting of a "Ibor deposit", i.e. a fictitious deposit representing the Ibor fixing.
-   * @param deposit The deposit.
-   * @param multicurves The multi-curves provider.
+   *
+   * @param deposit
+   *          The deposit.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final DepositIbor deposit, final MulticurveProviderInterface multicurves) {
@@ -61,15 +65,19 @@ public final class DepositIborDiscountingMethod {
 
   /**
    * Compute the present value curve sensitivity by discounting.
-   * @param deposit The deposit.
-   * @param multicurves The multi-curves provider.
+   *
+   * @param deposit
+   *          The deposit.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final DepositIbor deposit, final MulticurveProviderInterface multicurves) {
     ArgumentChecker.notNull(deposit, "Deposit");
     ArgumentChecker.notNull(multicurves, "Multicurves");
     final double dfEnd = multicurves.getDiscountFactor(deposit.getCurrency(), deposit.getEndTime());
-    final double forward = multicurves.getSimplyCompoundForwardRate(deposit.getIndex(), deposit.getStartTime(), deposit.getEndTime(), deposit.getAccrualFactor());
+    final double forward = multicurves.getSimplyCompoundForwardRate(deposit.getIndex(), deposit.getStartTime(), deposit.getEndTime(),
+        deposit.getAccrualFactor());
     // Backward sweep
     final double forwardBar = deposit.getAccrualFactor() * dfEnd;
     final double dfEndBar = deposit.getAccrualFactor() * (deposit.getRate() - forward);
@@ -87,21 +95,28 @@ public final class DepositIborDiscountingMethod {
   }
 
   /**
-   * Computes the spread to be added to the Ibor rate to have a zero present value.
-   * When deposit has already start the number may not be meaning full as only the final payment remains (no initial payment).
-   * @param deposit The deposit.
-   * @param multicurve The curves.
+   * Computes the spread to be added to the Ibor rate to have a zero present value. When deposit has already start the number may not be meaning full as only
+   * the final payment remains (no initial payment).
+   *
+   * @param deposit
+   *          The deposit.
+   * @param multicurve
+   *          The curves.
    * @return The spread.
    */
   public double parSpread(final DepositIbor deposit, final MulticurveProviderInterface multicurve) {
-    return multicurve.getSimplyCompoundForwardRate(deposit.getIndex(), deposit.getStartTime(), deposit.getEndTime(), deposit.getAccrualFactor()) - deposit.getRate();
+    return multicurve.getSimplyCompoundForwardRate(deposit.getIndex(), deposit.getStartTime(), deposit.getEndTime(), deposit.getAccrualFactor())
+        - deposit.getRate();
   }
 
   /**
-   * Computes the par spread curve sensitivity.
-   * When deposit has already start the number may not be meaning full as only the final payment remains (no initial payment).
-   * @param deposit The deposit.
-   * @param multicurve The curves.
+   * Computes the par spread curve sensitivity. When deposit has already start the number may not be meaning full as only the final payment remains (no initial
+   * payment).
+   *
+   * @param deposit
+   *          The deposit.
+   * @param multicurve
+   *          The curves.
    * @return The spread curve sensitivity.
    */
   public MulticurveSensitivity parSpreadCurveSensitivity(final DepositIbor deposit, final MulticurveProviderInterface multicurve) {

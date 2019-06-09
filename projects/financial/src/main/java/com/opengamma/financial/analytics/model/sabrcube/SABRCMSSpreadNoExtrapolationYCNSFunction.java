@@ -34,7 +34,8 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public class SABRCMSSpreadNoExtrapolationYCNSFunction extends SABRYCNSFunction {
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivitySABRCalculator.getInstance());
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -54,7 +55,8 @@ public class SABRCMSSpreadNoExtrapolationYCNSFunction extends SABRYCNSFunction {
     final InterpolatedDoublesSurface nuSurface = surfaces.getNuSurface();
     final InterpolatedDoublesSurface rhoSurface = surfaces.getRhoSurface();
     final DoubleFunction1D correlationFunction = getCorrelationFunction();
-    final SABRInterestRateCorrelationParameters modelParameters = new SABRInterestRateCorrelationParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, correlationFunction);
+    final SABRInterestRateCorrelationParameters modelParameters = new SABRInterestRateCorrelationParameters(alphaSurface, betaSurface, rhoSurface, nuSurface,
+        correlationFunction);
     return new SABRInterestRateDataBundle(modelParameters, yieldCurves);
   }
 

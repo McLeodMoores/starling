@@ -64,7 +64,8 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends InterestRateInstrumentCurveSpecificFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateInstrumentYieldCurveNodeSensitivitiesFunction.class);
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivitySABRCalculator.getInstance());
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
 
   private ConfigDBFXForwardCurveSpecificationSource _fxForwardCurveSpecificationSource;
@@ -82,7 +83,8 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     final Clock snapshotClock = executionContext.getValuationClock();
@@ -133,7 +135,8 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
       final Currency domesticCurrency = ComputationTargetType.CURRENCY.resolve(curveCalculationConfig.getTarget().getUniqueId());
       final Currency foreignCurrency = ComputationTargetType.CURRENCY.resolve(getCurveCalculationConfigSource()
           .getConfig(curveCalculationConfig.getExogenousConfigData().keySet().iterator().next()).getTarget().getUniqueId());
-      return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(sensitivities, domesticCurrency, foreignCurrency, fullCurveNames, curves,
+      return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(sensitivities, domesticCurrency, foreignCurrency, fullCurveNames,
+          curves,
           _fxForwardCurveSpecificationSource, _fxForwardCurveDefinitionSource, localNow, resultSpec);
     }
     final ValueRequirement curveSpecRequirement = getCurveSpecRequirement(currency, curveName, curveCalculationMethod);
@@ -143,10 +146,12 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
     }
     if (curveCalculationMethod.equals(InterpolatedDataProperties.CALCULATION_METHOD_NAME)) {
       final CurveSpecification curveSpec = (CurveSpecification) curveSpecObject;
-      return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName + "_" + currency.getCode(), curves, sensitivities, curveSpec, resultSpec);
+      return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName + "_" + currency.getCode(), curves, sensitivities,
+          curveSpec, resultSpec);
     }
     final InterpolatedYieldCurveSpecificationWithSecurities curveSpec = (InterpolatedYieldCurveSpecificationWithSecurities) curveSpecObject;
-    return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName + "_" + currency.getCode(), curves, sensitivities, curveSpec, resultSpec);
+    return YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName + "_" + currency.getCode(), curves, sensitivities, curveSpec,
+        resultSpec);
   }
 
   @Override
@@ -173,17 +178,18 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
       return null;
     }
     final String[] availableCurveNames = curveCalculationConfig.getYieldCurveNames();
-    if ((requestedCurveNames == null) || requestedCurveNames.isEmpty()) {
+    if (requestedCurveNames == null || requestedCurveNames.isEmpty()) {
       requestedCurveNames = Sets.newHashSet(availableCurveNames);
     } else {
       final Set<String> intersection = YieldCurveFunctionUtils.intersection(requestedCurveNames, availableCurveNames);
       if (intersection.isEmpty()) {
-        LOGGER.info("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
+        LOGGER.info("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames,
+            curveCalculationConfigName);
         return null;
       }
       requestedCurveNames = intersection;
     }
-    if (!permissive && (requestedCurveNames.size() != 1)) {
+    if (!permissive && requestedCurveNames.size() != 1) {
       LOGGER.info("Must specify single curve name constraint, got {}", requestedCurveNames);
       return null;
     }
@@ -205,7 +211,8 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
       requirements.add(getCouponSensitivitiesRequirement(currency, curveCalculationConfigName));
     }
     try {
-      final Set<ValueRequirement> timeSeriesRequirements = InterestRateInstrumentFunction.getDerivativeTimeSeriesRequirements(security, security.accept(getVisitor()), getConverter());
+      final Set<ValueRequirement> timeSeriesRequirements = InterestRateInstrumentFunction.getDerivativeTimeSeriesRequirements(security,
+          security.accept(getVisitor()), getConverter());
       if (timeSeriesRequirements == null) {
         return null;
       }
@@ -226,9 +233,11 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_SPEC, ComputationTargetSpecification.of(currency), properties);
   }
 
-  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName, final String curveCalculationMethod, final String curveName) {
+  private static ValueRequirement getJacobianRequirement(final Currency currency, final String curveCalculationConfigName, final String curveCalculationMethod,
+      final String curveName) {
     final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName)
-        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, curveCalculationMethod).with(ValuePropertyNames.CURVE, curveName).withOptional(ValuePropertyNames.CURVE).get();
+        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, curveCalculationMethod).with(ValuePropertyNames.CURVE, curveName)
+        .withOptional(ValuePropertyNames.CURVE).get();
     return new ValueRequirement(ValueRequirementNames.YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(currency), properties);
   }
 
@@ -239,7 +248,8 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
   }
 
   @Override
-  protected Set<ComputedValue> getResults(final InstrumentDerivative derivative, final String curveName, final YieldCurveBundle curves, final String curveCalculationConfigName,
+  protected Set<ComputedValue> getResults(final InstrumentDerivative derivative, final String curveName, final YieldCurveBundle curves,
+      final String curveCalculationConfigName,
       final String curveCalculationMethod, final FunctionInputs inputs, final ComputationTarget target, final ValueSpecification resultSpec) {
     throw new NotImplementedException();
   }

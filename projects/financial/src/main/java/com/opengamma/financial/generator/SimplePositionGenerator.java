@@ -14,7 +14,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Utility class for creating a position as a quantity/security pair.
  *
- * @param <T> the security type or a common super-type of the securities
+ * @param <T>
+ *          the security type or a common super-type of the securities
  */
 public class SimplePositionGenerator<T extends ManageableSecurity> implements PositionGenerator {
 
@@ -37,15 +38,17 @@ public class SimplePositionGenerator<T extends ManageableSecurity> implements Po
     _counterPartyGenerator = counterPartyGenerator;
   }
 
-  public SimplePositionGenerator(final SecurityGenerator<? extends T> securityGenerator, final SecurityPersister securityPersister, final NameGenerator counterPartyGenerator) {
-    this(new StaticQuantityGenerator(1), securityGenerator, securityPersister,  counterPartyGenerator);
+  public SimplePositionGenerator(final SecurityGenerator<? extends T> securityGenerator, final SecurityPersister securityPersister,
+      final NameGenerator counterPartyGenerator) {
+    this(new StaticQuantityGenerator(1), securityGenerator, securityPersister, counterPartyGenerator);
   }
 
   public SimplePositionGenerator(final SecurityGenerator<? extends T> securityGenerator, final SecurityPersister securityPersister) {
     this(new StaticQuantityGenerator(1), securityGenerator, securityPersister);
   }
 
-  public SimplePositionGenerator(final QuantityGenerator quantityGenerator, final SecurityGenerator<? extends T> securityGenerator, final SecurityPersister securityPersister) {
+  public SimplePositionGenerator(final QuantityGenerator quantityGenerator, final SecurityGenerator<? extends T> securityGenerator,
+      final SecurityPersister securityPersister) {
     this(quantityGenerator, securityGenerator, securityPersister, new StaticNameGenerator(DEFAULT_COUNTER_PARTY));
   }
 
@@ -76,20 +79,20 @@ public class SimplePositionGenerator<T extends ManageableSecurity> implements Po
 
   @Override
   public Position createPosition() {
-    //    final ManageableTrade trade = getSecurityGenerator().createSecurityTrade(getQuantityGenerator(), getSecurityPersister(), getCounterPartyGenerator());
-    //    if (trade == null) {
-    //      final BigDecimal quantity = getQuantityGenerator().createQuantity();
-    //      if (quantity == null) {
-    //        return null;
-    //      }
-    //      final T security = getSecurityGenerator().createSecurity();
-    //      if (security == null) {
-    //        return null;
-    //      }
-    //      return new SimplePosition(quantity, getSecurityPersister().storeSecurity(security));
-    //    } else {
-    //      return createPositionFromTrade(trade);
-    //    }
+    // final ManageableTrade trade = getSecurityGenerator().createSecurityTrade(getQuantityGenerator(), getSecurityPersister(), getCounterPartyGenerator());
+    // if (trade == null) {
+    // final BigDecimal quantity = getQuantityGenerator().createQuantity();
+    // if (quantity == null) {
+    // return null;
+    // }
+    // final T security = getSecurityGenerator().createSecurity();
+    // if (security == null) {
+    // return null;
+    // }
+    // return new SimplePosition(quantity, getSecurityPersister().storeSecurity(security));
+    // } else {
+    // return createPositionFromTrade(trade);
+    // }
 
     Position position = null;
     final ManageableTrade trade = getSecurityGenerator().createSecurityTrade(getQuantityGenerator(), getSecurityPersister(), getCounterPartyGenerator());

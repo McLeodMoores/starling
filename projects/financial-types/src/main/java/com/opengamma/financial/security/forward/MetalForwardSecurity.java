@@ -48,7 +48,8 @@ public class MetalForwardSecurity extends CommodityForwardSecurity {
    * @param category
    *          the category, not null
    */
-  public MetalForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount, final String category) {
+  public MetalForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount,
+      final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }
 

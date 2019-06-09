@@ -10,30 +10,32 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.cube.Cube;
 
 /**
- * Peaceman-Rachford splitting
- * <b>Note</b> this is for testing purposes and is not recommended for actual use
+ * Peaceman-Rachford splitting <b>Note</b> this is for testing purposes and is not recommended for actual use
  */
 @SuppressWarnings("deprecation")
 public class PeacemanRachfordFiniteDifference2D implements ConvectionDiffusionPDESolver2D {
 
-  //private static final Decomposition<?> DCOMP = new LUDecompositionCommons();
+  // private static final Decomposition<?> DCOMP = new LUDecompositionCommons();
   // Theta = 0 - explicit
   // private static final double THETA = 0.5;
 
   @Override
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax, final BoundaryCondition2D xLowerBoundary,
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax,
+      final BoundaryCondition2D xLowerBoundary,
       final BoundaryCondition2D xUpperBoundary,
       final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary) {
     return solve(pdeData, tSteps, xSteps, ySteps, tMax, xLowerBoundary, xUpperBoundary, yLowerBoundary, yUpperBoundary, null);
   }
 
   @Override
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax, final BoundaryCondition2D xLowerBoundary,
-      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary, final Cube<Double, Double, Double, Double> freeBoundary) {
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax,
+      final BoundaryCondition2D xLowerBoundary,
+      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary,
+      final Cube<Double, Double, Double, Double> freeBoundary) {
 
-    final double dt = tMax / (tSteps);
-    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / (xSteps);
-    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / (ySteps);
+    final double dt = tMax / tSteps;
+    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / xSteps;
+    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / ySteps;
     final double dtdx2 = dt / dx / dx;
     final double dtdx = dt / dx;
     final double dtdy2 = dt / dy / dy;
@@ -132,8 +134,8 @@ public class PeacemanRachfordFiniteDifference2D implements ConvectionDiffusionPD
           errorSqr = 0.0;
           scale = 0.0;
           for (int l = 0; l <= xSteps; l++) {
-            min = (l == xSteps ? 0 : Math.max(0, l - 1));
-            max = (l == 0 ? xSteps : Math.min(xSteps, l + 1));
+            min = l == xSteps ? 0 : Math.max(0, l - 1);
+            max = l == 0 ? xSteps : Math.min(xSteps, l + 1);
             sum = 0;
             // for (int k = 0; k <= xSteps; k++) {
             for (int k = min; k <= max; k++) { // mx is tri-diagonal so only need 3 steps here
@@ -251,8 +253,8 @@ public class PeacemanRachfordFiniteDifference2D implements ConvectionDiffusionPD
           scale = 0.0;
           int min, max;
           for (int l = 0; l <= ySteps; l++) {
-            min = (l == ySteps ? 0 : Math.max(0, l - 1));
-            max = (l == 0 ? ySteps : Math.min(ySteps, l + 1));
+            min = l == ySteps ? 0 : Math.max(0, l - 1);
+            max = l == 0 ? ySteps : Math.min(ySteps, l + 1);
             sum = 0;
             // for (int k = 0; k <= ySteps; k++) {
             for (int k = min; k <= max; k++) {

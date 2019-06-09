@@ -41,7 +41,9 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
 
   /**
    * Constructor specifying bump amount
-   * @param bump The bump amount
+   * 
+   * @param bump
+   *          The bump amount
    */
   public VolatilitySwapFiniteDifferenceGreeksCalculator(final double bump) {
     _bumpSpot = bump;
@@ -51,8 +53,11 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
 
   /**
    * Constructor specifying bump amount and base calculator
-   * @param bump The bump amount
-   * @param baseCal Base calculator
+   * 
+   * @param bump
+   *          The bump amount
+   * @param baseCal
+   *          Base calculator
    */
   public VolatilitySwapFiniteDifferenceGreeksCalculator(final double bump, final CarrLeeFXVolatilitySwapCalculator baseCal) {
     _bumpSpot = bump;
@@ -61,11 +66,15 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
   }
 
   /**
-   * Greeks calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes},
-   * i.e., assuming the fair value has been already calculated. For theta the bump amount is 1 working day.
-   * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap
-   * @param data The FX data for Carr-Lee
+   * Greeks calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, i.e., assuming the fair value
+   * has been already calculated. For theta the bump amount is 1 working day.
+   * 
+   * @param result
+   *          {@link VolatilitySwapCalculatorResultWithStrikes}
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return Array of {delta, vega, theta}
    */
   public double[] getFXVolatilitySwapGreeks(final VolatilitySwapCalculatorResultWithStrikes result, final FXVolatilitySwap swap, final CarrLeeFXData data) {
@@ -115,8 +124,10 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
 
     final double bumpedTimeToObservationStart = swap.getTimeToObservationStart() == 0. ? 0. : swap.getTimeToObservationStart() - timeBumpAmount;
 
-    final FXVolatilitySwap timeBumpedSwap = new FXVolatilitySwap(bumpedTimeToObservationStart, swap.getTimeToObservationEnd() - timeBumpAmount, swap.getObservationFrequency(),
-        swap.getTimeToMaturity() - timeBumpAmount, swap.getVolatilityStrike(), swap.getVolatilityNotional(), swap.getCurrency(), swap.getBaseCurrency(), swap.getCounterCurrency(), aFac);
+    final FXVolatilitySwap timeBumpedSwap = new FXVolatilitySwap(bumpedTimeToObservationStart, swap.getTimeToObservationEnd() - timeBumpAmount,
+        swap.getObservationFrequency(),
+        swap.getTimeToMaturity() - timeBumpAmount, swap.getVolatilityStrike(), swap.getVolatilityNotional(), swap.getCurrency(), swap.getBaseCurrency(),
+        swap.getCounterCurrency(), aFac);
     final VolatilitySwapCalculatorResult timeBumpedRes = _combinedCal.visitFXVolatilitySwap(timeBumpedSwap, data);
     final double timeBumpedFV = timeBumpedRes.getFairValue();
 
@@ -127,11 +138,13 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
     if (rv == null) {
       final double stdVol = smile.getVolatility(Triple.of(timeToExpiry, forward, forward));
       final double bumpedStdVol = stdVol + _bumpVol;
-      final VolatilitySwapCalculatorResult volBumpedRes = NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate, bumpedPutVols, bumpedStdVol, bumpedCallVols);
+      final VolatilitySwapCalculatorResult volBumpedRes = NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate,
+          bumpedPutVols, bumpedStdVol, bumpedCallVols);
       volBumpedFV = volBumpedRes.getFairValue();
     } else {
       final double timeFromInception = swap.getTimeToObservationStart() < 0 ? Math.abs(swap.getTimeToObservationStart()) : 0;
-      final VolatilitySwapCalculatorResult volBumpedRes = SEASONED_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeFromInception, domesticRate, foreignRate, bumpedPutVols,
+      final VolatilitySwapCalculatorResult volBumpedRes = SEASONED_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeFromInception,
+          domesticRate, foreignRate, bumpedPutVols,
           bumpedCallVols, rv);
       volBumpedFV = volBumpedRes.getFairValue();
     }
@@ -143,10 +156,12 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
   }
 
   /**
-   * Greeks calculator for FX volatility swap based on "bump and reprice."
-   * For theta the bump amount is 1 working day.
-   * @param swap The FX volatility swap
-   * @param data The FX data for Carr-Lee
+   * Greeks calculator for FX volatility swap based on "bump and reprice." For theta the bump amount is 1 working day.
+   * 
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return Array of {delta, vega, theta}
    */
   public double[] getFXVolatilitySwapGreeks(final FXVolatilitySwap swap, final CarrLeeFXData data) {

@@ -38,8 +38,9 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Function to source time series data for each of the instruments in a {@link CurveSpecification} from a {@link HistoricalTimeSeriesSource} attached to the execution context. These time series are
- * used to convert {@link InstrumentDefinition}s into the {@link InstrumentDerivative}s used in pricing and curve construction.
+ * Function to source time series data for each of the instruments in a {@link CurveSpecification} from a {@link HistoricalTimeSeriesSource} attached to the
+ * execution context. These time series are used to convert {@link InstrumentDefinition}s into the {@link InstrumentDerivative}s used in pricing and curve
+ * construction.
  */
 public class CurveConfigurationHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -53,7 +54,7 @@ public class CurveConfigurationHistoricalTimeSeriesFunction extends AbstractFunc
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues)
-          throws AsynchronousExecution {
+      throws AsynchronousExecution {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final HistoricalTimeSeriesBundle bundle = new HistoricalTimeSeriesBundle();
     for (final ComputedValue value : inputs.getAllValues()) {
@@ -98,8 +99,8 @@ public class CurveConfigurationHistoricalTimeSeriesFunction extends AbstractFunc
     final List<CurveGroupConfiguration> groups = constructionConfig.getCurveGroups();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     for (final CurveGroupConfiguration group : groups) {
-      //TODO do we want to put information in about whether or not to use fixing time series?
-      //TODO do we want to exclude node types that definitely don't need fixing data?
+      // TODO do we want to put information in about whether or not to use fixing time series?
+      // TODO do we want to exclude node types that definitely don't need fixing data?
       for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
         final String curveName = entry.getKey();
         final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName).get();

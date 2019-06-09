@@ -42,7 +42,8 @@ public class VolatilityCubeDefinitionFunction extends AbstractFunction {
   private ConfigDBVolatilityCubeDefinitionSource _volatilityCubeDefinitionSource;
 
   /**
-   * @param cubeDefinitionName The cube definition name, not null
+   * @param cubeDefinitionName
+   *          The cube definition name, not null
    */
   public VolatilityCubeDefinitionFunction(final String cubeDefinitionName) {
     ArgumentChecker.notNull(cubeDefinitionName, "cubeDefinitionName");
@@ -86,7 +87,8 @@ public class VolatilityCubeDefinitionFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         return Collections.emptySet();
       }
 

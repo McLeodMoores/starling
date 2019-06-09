@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.rootfinding.BracketRoot;
  */
 public class GenericImpliedVolatiltySolver {
 
-  private static final int MAX_ITERATIONS = 20; //something's wrong if Newton-Raphson taking longer than this
+  private static final int MAX_ITERATIONS = 20; // something's wrong if Newton-Raphson taking longer than this
   private static final double VOL_TOL = 1e-9; // 1 part in 100,000 basis points will do for implied vol
 
   public static double impliedVolatility(final double optionPrice, final Function1D<Double, double[]> pavFunc) {
@@ -38,7 +38,7 @@ public class GenericImpliedVolatiltySolver {
 
     double[] pnv = pavFunc.evaluate(sigma);
 
-    //This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
+    // This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
     if (pnv[1] == 0 || Double.isNaN(pnv[1])) {
       return solveByBisection(optionPrice, pavFunc, lowerSigma, upperSigma);
     }
@@ -92,9 +92,13 @@ public class GenericImpliedVolatiltySolver {
 
   /**
    * Compute implied volatility with geuss value as an input
-   * @param optionPrice Option price
-   * @param pavFunc Model
-   * @param guess Guess value
+   * 
+   * @param optionPrice
+   *          Option price
+   * @param pavFunc
+   *          Model
+   * @param guess
+   *          Guess value
    * @return Implied volatility
    */
   public static double impliedVolatility(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double guess) {
@@ -116,7 +120,7 @@ public class GenericImpliedVolatiltySolver {
 
     double[] pnv = pavFunc.evaluate(sigma);
 
-    //This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
+    // This can happen for American options, where low volatilities puts you in the early excise region which obviously has zero vega
     if (Math.abs(pnv[1]) < 1.e-14 || Double.isNaN(pnv[1])) {
       return solveByBisection(optionPrice, pavFunc, lowerSigma, upperSigma);
     }
@@ -179,7 +183,8 @@ public class GenericImpliedVolatiltySolver {
     return bracketer.getBracketedPoints(func, sigma - Math.abs(change), sigma + Math.abs(change), 0, Double.POSITIVE_INFINITY);
   }
 
-  private static double[] bracketRoot(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double sigma, final double change, final double shift) {
+  private static double[] bracketRoot(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double sigma, final double change,
+      final double shift) {
     final BracketRoot bracketer = new BracketRoot();
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override

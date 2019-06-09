@@ -12,8 +12,7 @@ import com.opengamma.analytics.financial.interestrate.future.provider.InterestRa
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSTIRFuturesProviderInterface;
 
 /**
- * Calculates the gamma (second derivative of the price with respect to the underlying future price) for interest
- * rate future options.
+ * Calculates the gamma (second derivative of the price with respect to the underlying future price) for interest rate future options.
  */
 public final class GammaSTIRFutureOptionCalculator extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, Double> {
   /**
@@ -23,6 +22,7 @@ public final class GammaSTIRFutureOptionCalculator extends InstrumentDerivativeV
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static GammaSTIRFutureOptionCalculator getInstance() {
@@ -38,15 +38,18 @@ public final class GammaSTIRFutureOptionCalculator extends InstrumentDerivativeV
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginSecurityBlackSmileMethod METHOD_STIR_MARGIN = InterestRateFutureOptionMarginSecurityBlackSmileMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSmileMethod METHOD_STIR_MARGIN = InterestRateFutureOptionMarginSecurityBlackSmileMethod
+      .getInstance();
 
   @Override
-  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final BlackSTIRFuturesProviderInterface black) {
+  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
     return METHOD_STIR_MARGIN.priceGamma(futures.getUnderlyingSecurity(), black);
   }
 
   @Override
-  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity futures, final BlackSTIRFuturesProviderInterface black) {
+  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity futures,
+      final BlackSTIRFuturesProviderInterface black) {
     return METHOD_STIR_MARGIN.priceGamma(futures, black);
   }
 }

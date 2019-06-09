@@ -40,12 +40,18 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * Constructor of the option future from the details.
-   * @param underlyingFuture The underlying future security.
-   * @param expirationDate The expiration date.
-   * @param strike The option strike.
-   * @param isCall The call (true) / put (false) flag.
+   *
+   * @param underlyingFuture
+   *          The underlying future security.
+   * @param expirationDate
+   *          The expiration date.
+   * @param strike
+   *          The option strike.
+   * @param isCall
+   *          The call (true) / put (false) flag.
    */
-  public BondFutureOptionPremiumSecurityDefinition(final BondFutureDefinition underlyingFuture, final ZonedDateTime expirationDate, final double strike, final boolean isCall) {
+  public BondFutureOptionPremiumSecurityDefinition(final BondFutureDefinition underlyingFuture, final ZonedDateTime expirationDate, final double strike,
+      final boolean isCall) {
     ArgumentChecker.notNull(underlyingFuture, "underlying future");
     ArgumentChecker.notNull(expirationDate, "expiration");
     _underlyingFuture = underlyingFuture;
@@ -56,6 +62,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * Gets the underlying future security.
+   *
    * @return The underlying future security.
    */
   public BondFutureDefinition getUnderlyingFuture() {
@@ -64,6 +71,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * Gets the expiration date.
+   *
    * @return The expiration date.
    */
   public ZonedDateTime getExpirationDate() {
@@ -72,6 +80,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * Gets the notional.
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -80,6 +89,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * Gets the cap (true) / floor (false) flag.
+   *
    * @return The cap/floor flag.
    */
   public boolean isCall() {
@@ -88,6 +98,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * Gets the option strike.
+   *
    * @return The option strike.
    */
   public double getStrike() {
@@ -96,6 +107,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * The future option currency.
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -104,6 +116,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -145,7 +158,7 @@ public class BondFutureOptionPremiumSecurityDefinition implements InstrumentDefi
     result = prime * result + (_isCall ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingFuture.hashCode();
     return result;
   }

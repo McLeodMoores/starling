@@ -38,7 +38,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurity;
 
 /**
- * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel}.<p>
+ * Calculates the implied volatility of an equity index or equity option using the {@link BjerksundStenslandModel}.
+ * <p>
  * See {@link ListedEquityOptionBjerksundStenslandFunction}
  */
 public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends ListedEquityOptionBjerksundStenslandFunction {
@@ -52,7 +53,8 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     // Get market price
@@ -129,7 +131,8 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
 
       try {
         if (timeToExpiry < 7. / 365.) {
-          impliedVol = BlackFormulaRepository.impliedVolatility(optionPrice / market.getDiscountCurve().getDiscountFactor(timeToExpiry), fCurve.getForward(timeToExpiry), strike, timeToExpiry, isCall);
+          impliedVol = BlackFormulaRepository.impliedVolatility(optionPrice / market.getDiscountCurve().getDiscountFactor(timeToExpiry),
+              fCurve.getForward(timeToExpiry), strike, timeToExpiry, isCall);
         } else {
           impliedVol = model.impliedVolatility(optionPrice, modSpot, strike, discountRate, costOfCarry, timeToExpiry, isCall, Math.min(volatility * 1.5, 0.2));
         }

@@ -75,17 +75,23 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
 
   /**
    * Creates the resource.
-   * @param securityMaster  the security master, not null
-   * @param securityLoader  the security loader, not null
-   * @param htsMaster  the historical time series master, not null
-   * @param legalEntityMaster the organization master, not null
+   * 
+   * @param securityMaster
+   *          the security master, not null
+   * @param securityLoader
+   *          the security loader, not null
+   * @param htsMaster
+   *          the historical time series master, not null
+   * @param legalEntityMaster
+   *          the organization master, not null
    */
   public WebSecuritiesResource(
-      final SecurityMaster securityMaster, final SecurityLoader securityLoader, final HistoricalTimeSeriesMaster htsMaster, final LegalEntityMaster legalEntityMaster) {
+      final SecurityMaster securityMaster, final SecurityLoader securityLoader, final HistoricalTimeSeriesMaster htsMaster,
+      final LegalEntityMaster legalEntityMaster) {
     super(securityMaster, securityLoader, htsMaster, legalEntityMaster);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.SECURITY)
@@ -155,7 +161,7 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -190,7 +196,7 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
           }
           final ManageableSecurity security = addSecurity(trimmedSecurityXml, trimmedUniqueIdScheme);
           final WebSecuritiesUris webSecuritiesUris = new WebSecuritiesUris(data());
-          responseURI =  webSecuritiesUris.security(security);
+          responseURI = webSecuritiesUris.security(security);
         } catch (final Exception ex) {
           out.put("err_securityXmlMsg", ex.getMessage());
           out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(securityXml)));
@@ -336,7 +342,7 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("metaData")
   @Produces(MediaType.APPLICATION_JSON)
@@ -358,7 +364,7 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
     return metaData.getSchemaVersion();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{securityId}")
   public WebSecurityResource findSecurity(@Subscribe @PathParam("securityId") final String idStr) {
     data().setUriSecurityId(idStr);
@@ -378,9 +384,10 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
     return new WebSecurityResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -413,13 +420,12 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
     return out;
   }
 
-
-
-
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for securities.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data) {
@@ -428,8 +434,11 @@ public class WebSecuritiesResource extends AbstractWebSecurityResource {
 
   /**
    * Builds a URI for securities.
-   * @param data  the data, not null
-   * @param identifiers  the identifiers to search for, may be null
+   * 
+   * @param data
+   *          the data, not null
+   * @param identifiers
+   *          the identifiers to search for, may be null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data, final ExternalIdBundle identifiers) {

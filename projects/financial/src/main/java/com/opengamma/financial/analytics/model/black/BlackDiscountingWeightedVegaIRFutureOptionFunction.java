@@ -38,14 +38,13 @@ import com.opengamma.util.time.ExpiryAccuracy;
  * Calculates the weighted position vega of interest rate future options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingWeightedVegaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
-  /** Property name for the number of base days */
+  /** Property name for the number of base days. */
   public static final String PROPERTY_BASE_DAYS = "BaseDays";
   /** Default number of base days to use */
   private static final double DEFAULT_BASE_DAYS = 90;
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_WEIGHTED_VEGA}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_WEIGHTED_VEGA}.
    */
   public BlackDiscountingWeightedVegaIRFutureOptionFunction() {
     super(POSITION_WEIGHTED_VEGA);
@@ -85,7 +84,8 @@ public class BlackDiscountingWeightedVegaIRFutureOptionFunction extends BlackDis
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         if (super.getRequirements(compilationContext, target, desiredValue) == null) {
           return null;
         }

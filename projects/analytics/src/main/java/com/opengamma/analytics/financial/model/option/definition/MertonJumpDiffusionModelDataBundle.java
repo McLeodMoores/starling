@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -12,13 +12,14 @@ import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurf
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class MertonJumpDiffusionModelDataBundle extends StandardOptionDataBundle {
   private final double _lambda;
   private final double _gamma;
 
-  public MertonJumpDiffusionModelDataBundle(final YieldAndDiscountCurve discountCurve, final double b, final VolatilitySurface volatilitySurface, final double spot, final ZonedDateTime date,
+  public MertonJumpDiffusionModelDataBundle(final YieldAndDiscountCurve discountCurve, final double b, final VolatilitySurface volatilitySurface,
+      final double spot, final ZonedDateTime date,
       final double lambda, final double gamma) {
     super(discountCurve, b, volatilitySurface, spot, date);
     ArgumentChecker.notZero(lambda, 1e-15, "lambda");
@@ -88,9 +89,9 @@ public class MertonJumpDiffusionModelDataBundle extends StandardOptionDataBundle
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_gamma);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lambda);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -45,17 +45,18 @@ public class PortfolioAggregationTool extends AbstractTool<ToolContext> {
   private static final String AGGREGATION_OPT = "a";
   private static final String SPLIT_OPT = "s";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioAggregationTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     populateAggregationFunctionMap(getToolContext().getSecuritySource());
@@ -69,14 +70,15 @@ public class PortfolioAggregationTool extends AbstractTool<ToolContext> {
         getCommandLine().hasOption(SPLIT_OPT));
   }
 
-
   private void populateAggregationFunctionMap(final SecuritySource secSource) {
     _aggregationFunctions.put("AssetClass", new AssetClassAggregationFunction());
     _aggregationFunctions.put("Currency", new CurrencyAggregationFunction());
     _aggregationFunctions.put("DetailedAssetClass", new DetailedAssetClassAggregationFunction());
     _aggregationFunctions.put("Underlying", new UnderlyingAggregationFunction(secSource, "BLOOMBERG_TICKER"));
-    _aggregationFunctions.put("ReferenceEntityName", new CdsObligorNameAggregationFunction(getToolContext().getSecuritySource(), getToolContext().getLegalEntitySource()));
-    _aggregationFunctions.put("ReferenceEntityTicker", new CdsObligorTickerAggregationFunction(getToolContext().getSecuritySource(), getToolContext().getLegalEntitySource()));
+    _aggregationFunctions.put("ReferenceEntityName",
+        new CdsObligorNameAggregationFunction(getToolContext().getSecuritySource(), getToolContext().getLegalEntitySource()));
+    _aggregationFunctions.put("ReferenceEntityTicker",
+        new CdsObligorTickerAggregationFunction(getToolContext().getSecuritySource(), getToolContext().getLegalEntitySource()));
     _aggregationFunctions.put("Sector", new GICSAggregationFunction(getToolContext().getSecuritySource(),
         getToolContext().getLegalEntitySource(),
         GICSAggregationFunction.Level.SECTOR, false, false));
@@ -107,30 +109,27 @@ public class PortfolioAggregationTool extends AbstractTool<ToolContext> {
     final Options options = super.createOptions(contextProvided);
 
     @SuppressWarnings("static-access")
-    final
-    Option baseViewOption = OptionBuilder.withLongOpt("portfolio")
-    .hasArg()
-    .isRequired()
-    .withDescription("The portfolio name")
-    .create(PORTFOLIO_OPT);
+    final Option baseViewOption = OptionBuilder.withLongOpt("portfolio")
+        .hasArg()
+        .isRequired()
+        .withDescription("The portfolio name")
+        .create(PORTFOLIO_OPT);
     options.addOption(baseViewOption);
     @SuppressWarnings("static-access")
-    final
-    Option aggregationTypesOption = OptionBuilder.withLongOpt("aggregation-types")
-    .hasArgs()
-    .isRequired()
-    .withValueSeparator(',')
-    .withDescription("The (comma, no space seperated) names of the aggregation" +
-        " styles to use: e.g AssetClass,Currency,DetailedAssetClass")
-    .create(AGGREGATION_OPT);
+    final Option aggregationTypesOption = OptionBuilder.withLongOpt("aggregation-types")
+        .hasArgs()
+        .isRequired()
+        .withValueSeparator(',')
+        .withDescription("The (comma, no space seperated) names of the aggregation" +
+            " styles to use: e.g AssetClass,Currency,DetailedAssetClass")
+        .create(AGGREGATION_OPT);
     options.addOption(aggregationTypesOption);
     @SuppressWarnings("static-access")
-    final
-    Option splitPortfoliosOption =  OptionBuilder.withLongOpt("split")
-    .withDescription(
-        "Split into separate portfolios grouped by the top-level aggregator" +
-        " instead of aggregating the existing portfoliio")
-    .create(SPLIT_OPT);
+    final Option splitPortfoliosOption = OptionBuilder.withLongOpt("split")
+        .withDescription(
+            "Split into separate portfolios grouped by the top-level aggregator" +
+                " instead of aggregating the existing portfoliio")
+        .create(SPLIT_OPT);
     options.addOption(splitPortfoliosOption);
     return options;
   }

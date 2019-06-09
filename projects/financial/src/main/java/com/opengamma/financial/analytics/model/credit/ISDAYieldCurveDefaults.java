@@ -5,7 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.credit;
 
-
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -55,7 +54,8 @@ public class ISDAYieldCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = target.getUniqueId().getValue();
     final String offset = _offsetsForCurrency.get(currency);
     if (offset != null) {

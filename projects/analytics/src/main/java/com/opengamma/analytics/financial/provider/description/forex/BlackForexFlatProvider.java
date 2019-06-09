@@ -37,12 +37,18 @@ public class BlackForexFlatProvider implements BlackForexFlatProviderInterface {
   private final Pair<Currency, Currency> _currencyPair;
 
   /**
-   * Constructor from exiting multicurveProvider and volatility model. The given provider and parameters are used for the new provider (the same maps are used, not copied).
-   * @param multicurves The multi-curves provider, not null
-   * @param volatility Volatility, not null
-   * @param currencyPair The currency pair, not null
+   * Constructor from exiting multicurveProvider and volatility model. The given provider and parameters are used for the new provider (the same maps are used,
+   * not copied).
+   * 
+   * @param multicurves
+   *          The multi-curves provider, not null
+   * @param volatility
+   *          Volatility, not null
+   * @param currencyPair
+   *          The currency pair, not null
    */
-  public BlackForexFlatProvider(final MulticurveProviderInterface multicurves, final BlackForexTermStructureParameters volatility, final Pair<Currency, Currency> currencyPair) {
+  public BlackForexFlatProvider(final MulticurveProviderInterface multicurves, final BlackForexTermStructureParameters volatility,
+      final Pair<Currency, Currency> currencyPair) {
     ArgumentChecker.notNull(multicurves, "multicurves");
     ArgumentChecker.notNull(volatility, "volatility");
     ArgumentChecker.notNull(currencyPair, "currencyPair");
@@ -69,10 +75,10 @@ public class BlackForexFlatProvider implements BlackForexFlatProviderInterface {
 
   @Override
   public boolean checkCurrencies(final Currency ccy1, final Currency ccy2) {
-    if ((ccy1.equals(_currencyPair.getFirst())) && ccy2.equals(_currencyPair.getSecond())) {
+    if (ccy1.equals(_currencyPair.getFirst()) && ccy2.equals(_currencyPair.getSecond())) {
       return true;
     }
-    if ((ccy2.equals(_currencyPair.getFirst())) && ccy1.equals(_currencyPair.getSecond())) {
+    if (ccy2.equals(_currencyPair.getFirst()) && ccy1.equals(_currencyPair.getSecond())) {
       return true;
     }
     return false;
@@ -85,9 +91,13 @@ public class BlackForexFlatProvider implements BlackForexFlatProviderInterface {
 
   /**
    * Returns volatility for a expiration, strike and forward. The volatility take into account the curerncy order.
-   * @param ccy1 The first currency.
-   * @param ccy2 The second currency.
-   * @param time The expiration time.
+   * 
+   * @param ccy1
+   *          The first currency.
+   * @param ccy2
+   *          The second currency.
+   * @param time
+   *          The expiration time.
    * @return The volatility.
    */
   @Override

@@ -48,7 +48,8 @@ public class BondPositionDetailsFunction extends AbstractFunction.NonCompiledInv
       scaledPaymentAmounts[i] = paymentAmounts[i].multipliedBy(quantity);
       scaledNotionals[i] = notionals[i].multipliedBy(quantity);
     }
-    final FixedSwapLegDetails scaledDetails = new FixedSwapLegDetails(details.getAccrualStart(), details.getAccrualEnd(), details.getDiscountFactors(), details.getPaymentTimes(),
+    final FixedSwapLegDetails scaledDetails = new FixedSwapLegDetails(details.getAccrualStart(), details.getAccrualEnd(), details.getDiscountFactors(),
+        details.getPaymentTimes(),
         details.getPaymentFractions(), scaledPaymentAmounts, scaledNotionals, details.getFixedRates());
     final ValueProperties properties = Iterables.getOnlyElement(desiredValues).getConstraints().copy().get();
     return Collections.singleton(new ComputedValue(new ValueSpecification(BOND_DETAILS, target.toSpecification(), properties), scaledDetails));

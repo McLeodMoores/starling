@@ -45,15 +45,12 @@ import com.opengamma.util.db.DbMapSqlParameterSource;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
-
 /**
  * A worker that provides the implementation of the data points part of the time-series master.
  * <p>
- * The time-series data points are effectively stored completely separately from the
- * information document about the time-series.
+ * The time-series data points are effectively stored completely separately from the information document about the time-series.
  * <p>
- * The SQL is stored externally in {@code DbHistoricalTimeSeriesMaster.elsql}.
- * Alternate databases or specific SQL requirements can be handled using database
+ * The SQL is stored externally in {@code DbHistoricalTimeSeriesMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database
  * specific overrides, such as {@code DbHistoricalTimeSeriesMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
@@ -76,14 +73,15 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   /**
    * Creates an instance.
    *
-   * @param master  the database master, not null
+   * @param master
+   *          the database master, not null
    */
   public DbHistoricalTimeSeriesDataPointsWorker(final DbHistoricalTimeSeriesMaster master) {
     super(master.getDbConnector(), master.getUniqueIdScheme());
     _master = master;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the master.
    *
@@ -103,9 +101,10 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     return getMaster().getElSqlBundle();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
-  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection, final HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
 
     final long oid = extractOid(objectId);
     final VersionCorrection vc = versionCorrection.withLatestFixed(now());
@@ -160,13 +159,14 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
       final LocalDateDoubleTimeSeries series = namedJdbc.query(sqlPoints, args, new DataPointsExtractor());
       result.setTimeSeries(series);
     } else {
-      //TODO: this is a hack, most of the places that call with this condition want some kind of metadata, which it would be cheaper for us to expose specifically
+      // TODO: this is a hack, most of the places that call with this condition want some kind of metadata, which it would be cheaper for us to expose
+      // specifically
       result.setTimeSeries(ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
     }
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public UniqueId updateTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
@@ -191,8 +191,10 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   /**
    * Checks the data points can be inserted.
    *
-   * @param uniqueId  the unique identifier, not null
-   * @param series  the time-series data points, not empty, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param series
+   *          the time-series data points, not empty, not null
    */
   protected void insertDataPointsCheckMaxDate(final UniqueId uniqueId, final LocalDateDoubleTimeSeries series) {
     final Long docOid = extractOid(uniqueId);
@@ -216,9 +218,12 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   /**
    * Inserts the data points.
    *
-   * @param uniqueId  the unique identifier, not null
-   * @param series  the time-series data points, not empty, not null
-   * @param now  the current instant, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param series
+   *          the time-series data points, not empty, not null
+   * @param now
+   *          the current instant, not null
    * @return the unique identifier, not null
    */
   protected UniqueId insertDataPoints(final UniqueId uniqueId, final LocalDateDoubleTimeSeries series, final Instant now) {
@@ -244,7 +249,7 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     return createTimeSeriesUniqueId(docOid, now, now);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public UniqueId correctTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
@@ -267,9 +272,12 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   /**
    * Corrects the data points.
    *
-   * @param uniqueId  the unique identifier, not null
-   * @param series  the time-series data points, not empty, not null
-   * @param now  the current instant, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param series
+   *          the time-series data points, not empty, not null
+   * @param now
+   *          the current instant, not null
    * @return the unique identifier, not null
    */
   protected UniqueId correctDataPoints(final UniqueId uniqueId, final LocalDateDoubleTimeSeries series, final Instant now) {
@@ -294,7 +302,7 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     return resolveObjectId(uniqueId, VersionCorrection.of(now, now));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public UniqueId removeTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDate fromDateInclusive, final LocalDate toDateInclusive) {
     ArgumentChecker.notNull(objectId, "objectId");
     if (fromDateInclusive != null && toDateInclusive != null) {
@@ -317,10 +325,14 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   /**
    * Removes data points.
    *
-   * @param uniqueId  the unique identifier, not null
-   * @param fromDateInclusive  the start date to remove from, not null
-   * @param toDateInclusive  the end date to remove to, not null
-   * @param now  the current instant, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param fromDateInclusive
+   *          the start date to remove from, not null
+   * @param toDateInclusive
+   *          the end date to remove to, not null
+   * @param now
+   *          the current instant, not null
    * @return the unique identifier, not null
    */
   protected UniqueId removeDataPoints(final UniqueId uniqueId, final LocalDate fromDateInclusive, final LocalDate toDateInclusive, final Instant now) {
@@ -348,11 +360,12 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     return resolveObjectId(uniqueId, VersionCorrection.of(now, now));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extracts the object row id from the object identifier.
    *
-   * @param objectId  the object identifier, not null
+   * @param objectId
+   *          the object identifier, not null
    * @return the date, null if no point date
    */
   @Override
@@ -363,9 +376,12 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   /**
    * Creates a unique identifier.
    *
-   * @param oid  the object identifier
-   * @param verInstant  the version instant, not null
-   * @param corrInstant  the correction instant, not null
+   * @param oid
+   *          the object identifier
+   * @param verInstant
+   *          the version instant, not null
+   * @param corrInstant
+   *          the correction instant, not null
    * @return the unique identifier
    */
   protected UniqueId createTimeSeriesUniqueId(final long oid, final Instant verInstant, final Instant corrInstant) {
@@ -382,16 +398,18 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
       return super.extractRowId(uniqueId);
     }
     final VersionCorrection vc = getMaster().extractTimeSeriesInstants(uniqueId);
-    final HistoricalTimeSeriesInfoDocument doc = getMaster().get(uniqueId.getObjectId(), vc);  // not very efficient, but works
+    final HistoricalTimeSeriesInfoDocument doc = getMaster().get(uniqueId.getObjectId(), vc); // not very efficient, but works
     return super.extractRowId(doc.getUniqueId());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Resolves an object identifier to a unique identifier.
    *
-   * @param objectId  the time-series object identifier, not null
-   * @param versionCorrection  the version-correction locator to search at, not null
+   * @param objectId
+   *          the time-series object identifier, not null
+   * @param versionCorrection
+   *          the version-correction locator to search at, not null
    * @return the time-series, not null
    */
   protected UniqueId resolveObjectId(final ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
@@ -414,7 +432,7 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     return uniqueId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a LocalDateDoubleTimeSeries.
    */
@@ -442,15 +460,17 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a UniqueId.
    */
   protected final class UniqueIdExtractor implements ResultSetExtractor<UniqueId> {
     private final long _objectId;
+
     public UniqueIdExtractor(final long objectId) {
       _objectId = objectId;
     }
+
     @Override
     public UniqueId extractData(final ResultSet rs) throws SQLException, DataAccessException {
       while (rs.next()) {
@@ -468,15 +488,17 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a ManageableHistoricalTimeSeries.
    */
   protected final class ManageableHTSExtractor implements ResultSetExtractor<ManageableHistoricalTimeSeries> {
     private final long _objectId;
+
     public ManageableHTSExtractor(final long objectId) {
       _objectId = objectId;
     }
+
     @Override
     public ManageableHistoricalTimeSeries extractData(final ResultSet rs) throws SQLException, DataAccessException {
       while (rs.next()) {
@@ -494,6 +516,5 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
       return null;
     }
   }
-
 
 }

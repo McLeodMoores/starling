@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.var;
@@ -31,7 +31,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class EmpiricalHistoricalVaRFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -43,7 +43,8 @@ public class EmpiricalHistoricalVaRFunction extends AbstractFunction.NonCompiled
   private static final EmpiricalDistributionVaRCalculator CALCULATOR = new EmpiricalDistributionVaRCalculator();
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final String currency = getCurrency(inputs);
     final Object pnlSeriesObj = inputs.getValue(ValueRequirementNames.PNL_SERIES);
     if (pnlSeriesObj == null) {
@@ -108,12 +109,12 @@ public class EmpiricalHistoricalVaRFunction extends AbstractFunction.NonCompiled
     if (pnlContributionNames != null && pnlContributionNames.size() != 1) {
       return null;
     }
-    String pnlContributionName = pnlContributionNames != null ? pnlContributionNames.iterator().next() : DEFAULT_PNL_CONTRIBUTIONS;
+    final String pnlContributionName = pnlContributionNames != null ? pnlContributionNames.iterator().next() : DEFAULT_PNL_CONTRIBUTIONS;
     final ValueProperties.Builder properties = ValueProperties.builder()
         .with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriodName.iterator().next())
         .with(ValuePropertyNames.SCHEDULE_CALCULATOR, scheduleCalculatorName.iterator().next())
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName.iterator().next())
-        .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, pnlContributionName); //TODO
+        .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, pnlContributionName); // TODO
     final Set<String> desiredCurrencyValues = desiredValue.getConstraints().getValues(ValuePropertyNames.CURRENCY);
     if (desiredCurrencyValues == null || desiredCurrencyValues.isEmpty()) {
       properties.withAny(ValuePropertyNames.CURRENCY);
@@ -135,13 +136,15 @@ public class EmpiricalHistoricalVaRFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final String currency = input.getProperty(ValuePropertyNames.CURRENCY);
     if (currency == null) {
       return null;
     }
-    final ValueProperties properties = getResultProperties(currency, input.getProperty(ValuePropertyNames.AGGREGATION), input.getProperty(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS));
+    final ValueProperties properties = getResultProperties(currency, input.getProperty(ValuePropertyNames.AGGREGATION),
+        input.getProperty(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS));
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.HISTORICAL_VAR, target.toSpecification(), properties));
   }
 
@@ -178,7 +181,8 @@ public class EmpiricalHistoricalVaRFunction extends AbstractFunction.NonCompiled
     return properties.get();
   }
 
-  private EmpiricalDistributionVaRParameters getParameters(final Set<String> scheduleCalculatorNames, final Set<String> horizonNames, final Set<String> confidenceLevelNames) {
+  private EmpiricalDistributionVaRParameters getParameters(final Set<String> scheduleCalculatorNames, final Set<String> horizonNames,
+      final Set<String> confidenceLevelNames) {
     if (scheduleCalculatorNames == null || scheduleCalculatorNames.isEmpty() || scheduleCalculatorNames.size() != 1) {
       throw new OpenGammaRuntimeException("Missing or non-unique schedule calculator name: " + scheduleCalculatorNames);
     }

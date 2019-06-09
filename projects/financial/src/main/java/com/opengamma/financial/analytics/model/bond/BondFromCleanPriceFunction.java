@@ -33,13 +33,15 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Bond related figures computed from the market clean price.
+ * 
  * @deprecated This class uses deprecated analytics functions.
  */
 @Deprecated
 public abstract class BondFromCleanPriceFunction extends BondFunction<Double> {
 
   @Override
-  protected Set<ComputedValue> calculate(final ZonedDateTime date, final BondSecurity bondSecurity, final Double data, final ComputationTarget target, final FunctionInputs inputs,
+  protected Set<ComputedValue> calculate(final ZonedDateTime date, final BondSecurity bondSecurity, final Double data, final ComputationTarget target,
+      final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String riskFreeCurveName = desiredValue.getConstraint(PROPERTY_RISK_FREE_CURVE);
@@ -90,14 +92,15 @@ public abstract class BondFromCleanPriceFunction extends BondFunction<Double> {
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, riskFreeCurveConfig)
         .withOptional(PROPERTY_RISK_FREE_CURVE).with(PROPERTY_RISK_FREE_CURVE, riskFreeCurveName)
         .withOptional(PROPERTY_RISK_FREE_CURVE_CONFIG).with(PROPERTY_RISK_FREE_CURVE_CONFIG, riskFreeCurveConfig).get();
-    final ValueRequirement riskFreeCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), riskFreeCurveProperties);
+    final ValueRequirement riskFreeCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        riskFreeCurveProperties);
     final ValueProperties creditCurveProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURVE, creditCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, creditCurveConfig)
         .withOptional(PROPERTY_CREDIT_CURVE).with(PROPERTY_CREDIT_CURVE, creditCurveName)
         .withOptional(PROPERTY_CREDIT_CURVE_CONFIG).with(PROPERTY_CREDIT_CURVE_CONFIG, creditCurveConfig).get();
-    final ValueRequirement creditCurveRequirement =
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), creditCurveProperties);
+    final ValueRequirement creditCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        creditCurveProperties);
     return Sets.newHashSet(riskFreeCurveRequirement, creditCurveRequirement, getCleanPriceRequirement(target));
   }
 
@@ -108,7 +111,8 @@ public abstract class BondFromCleanPriceFunction extends BondFunction<Double> {
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String riskFreeCurveName = null;
     String creditCurveName = null;
     String riskFreeCurveConfig = null;
@@ -148,19 +152,23 @@ public abstract class BondFromCleanPriceFunction extends BondFunction<Double> {
 
   /**
    * Gets the calculator of the desired value.
+   * 
    * @return The calculator
    */
   protected abstract InstrumentDerivativeVisitorAdapter<Double, Double> getCalculator();
 
   /**
    * Gets the value requirement name.
+   * 
    * @return The value requirement name
    */
   protected abstract String getValueRequirementName();
 
   /**
    * Gets the yield market data requirement.
-   * @param target The target
+   * 
+   * @param target
+   *          The target
    * @return The value requirement
    */
   private ValueRequirement getCleanPriceRequirement(final ComputationTarget target) {
@@ -169,6 +177,7 @@ public abstract class BondFromCleanPriceFunction extends BondFunction<Double> {
 
   /**
    * Gets the result properties.
+   * 
    * @return The result properties
    */
   private ValueProperties.Builder getResultProperties() {
@@ -182,10 +191,15 @@ public abstract class BondFromCleanPriceFunction extends BondFunction<Double> {
 
   /**
    * Gets the result properties.
-   * @param riskFreeCurveName The risk-free curve name
-   * @param creditCurveName The credit curve name
-   * @param riskFreeCurveConfig The risk-free curve calculation configuration name
-   * @param creditCurveConfig The credit curve calculation configuration name
+   * 
+   * @param riskFreeCurveName
+   *          The risk-free curve name
+   * @param creditCurveName
+   *          The credit curve name
+   * @param riskFreeCurveConfig
+   *          The risk-free curve calculation configuration name
+   * @param creditCurveConfig
+   *          The credit curve calculation configuration name
    * @return The result properties
    */
   private ValueProperties.Builder getResultProperties(final String riskFreeCurveName, final String creditCurveName, final String riskFreeCurveConfig,

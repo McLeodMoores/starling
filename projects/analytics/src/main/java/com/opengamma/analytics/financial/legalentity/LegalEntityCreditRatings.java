@@ -66,18 +66,23 @@ public class LegalEntityCreditRatings implements LegalEntityFilter<LegalEntity>,
    */
   public LegalEntityCreditRatings() {
     setUseRating(false);
-    setPerAgencyRatings(Collections.<String>emptySet());
+    setPerAgencyRatings(Collections.<String> emptySet());
     setUseRatingDescription(false);
-    setPerAgencyRatingDescriptions(Collections.<String>emptySet());
+    setPerAgencyRatingDescriptions(Collections.<String> emptySet());
   }
 
   /**
-   * @param useRating True if the rating is to be used as a filter
-   * @param ratings A set of agencies to be used to filter by rating, not null. Can be empty
-   * @param useRatingDescription True if the rating description is to be used as a filter
-   * @param ratingDescriptions A set of agencies to be used to filter by rating description, not null. Can be empty
+   * @param useRating
+   *          True if the rating is to be used as a filter
+   * @param ratings
+   *          A set of agencies to be used to filter by rating, not null. Can be empty
+   * @param useRatingDescription
+   *          True if the rating description is to be used as a filter
+   * @param ratingDescriptions
+   *          A set of agencies to be used to filter by rating description, not null. Can be empty
    */
-  public LegalEntityCreditRatings(final boolean useRating, final Set<String> ratings, final boolean useRatingDescription, final Set<String> ratingDescriptions) {
+  public LegalEntityCreditRatings(final boolean useRating, final Set<String> ratings, final boolean useRatingDescription,
+      final Set<String> ratingDescriptions) {
     setUseRating(useRating);
     setPerAgencyRatings(ratings);
     setUseRatingDescription(useRatingDescription);
@@ -143,7 +148,8 @@ public class LegalEntityCreditRatings implements LegalEntityFilter<LegalEntity>,
   /**
    * Sets the agencies with which to filter ratings. This also sets the _useRating field to true.
    *
-   * @param perAgencyRatings The new value of the property, not null
+   * @param perAgencyRatings
+   *          The new value of the property, not null
    */
   public void setPerAgencyRatings(final Set<String> perAgencyRatings) {
     JodaBeanUtils.notNull(perAgencyRatings, "perAgencyRatings");
@@ -156,7 +162,8 @@ public class LegalEntityCreditRatings implements LegalEntityFilter<LegalEntity>,
   /**
    * Sets the agencies with which to filter rating descriptions. This also sets the _useRatingDescription field to true.
    *
-   * @param perAgencyRatingDescriptions The new value of the property, not null
+   * @param perAgencyRatingDescriptions
+   *          The new value of the property, not null
    */
   public void setPerAgencyRatingDescriptions(final Set<String> perAgencyRatingDescriptions) {
     JodaBeanUtils.notNull(perAgencyRatingDescriptions, "perAgencyRatingDescriptions");

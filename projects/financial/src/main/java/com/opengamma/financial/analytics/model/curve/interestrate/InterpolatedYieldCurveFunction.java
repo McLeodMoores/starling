@@ -56,7 +56,8 @@ public class InterpolatedYieldCurveFunction extends AbstractFunction {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+      public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues) {
         String curveName = null;
         String curveCalculationConfig = null;
         for (final ValueRequirement desiredValue : desiredValues) {

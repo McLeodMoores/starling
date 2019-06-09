@@ -23,7 +23,8 @@ import com.opengamma.financial.analytics.volatility.surface.BloombergEquityOptio
  */
 @Deprecated
 @FudgeBuilderFor(BloombergEquityOptionVolatilitySurfaceInstrumentProvider.class)
-public class BloombergEquityOptionVolatilitySurfaceInstrumentProviderFudgeBuilderDeprecated implements FudgeBuilder<BloombergEquityOptionVolatilitySurfaceInstrumentProvider> {
+public class BloombergEquityOptionVolatilitySurfaceInstrumentProviderFudgeBuilderDeprecated
+    implements FudgeBuilder<BloombergEquityOptionVolatilitySurfaceInstrumentProvider> {
 
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final BloombergEquityOptionVolatilitySurfaceInstrumentProvider object) {
@@ -38,17 +39,17 @@ public class BloombergEquityOptionVolatilitySurfaceInstrumentProviderFudgeBuilde
   @Override
   public BloombergEquityOptionVolatilitySurfaceInstrumentProvider buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     String prefix = message.getString(PREFIX_FIELD_NAME);
-    //backward compatibility
+    // backward compatibility
     if (prefix == null) {
       prefix = message.getString("underlyingPrefix");
     }
     String postfix = message.getString(POSTFIX_FIELD_NAME);
-    //backward compatibility
+    // backward compatibility
     if (postfix == null) {
       postfix = message.getString("postfix");
     }
     String dataField = message.getString(DATA_FIELD_NAME);
-    //backward compatibility
+    // backward compatibility
     if (dataField == null) {
       dataField = message.getString("dataFieldName");
     }

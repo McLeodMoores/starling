@@ -18,8 +18,9 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingGammaIRFutureOptionFunction;
 
 /**
- * Function computes the {@link ValueRequirementNames#GAMMA}, second order derivative of position price with respect to the futures rate,
- * for interest rate future options in the Black world.
+ * Function computes the {@link ValueRequirementNames#GAMMA}, second order derivative of position price with respect to the futures rate, for interest rate
+ * future options in the Black world.
+ * 
  * @deprecated Use {@link BlackDiscountingGammaIRFutureOptionFunction}
  */
 @Deprecated
@@ -38,7 +39,8 @@ public class InterestRateFutureOptionBlackGammaFunction extends InterestRateFutu
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle data,
+      final ValueSpecification spec,
       final Set<ValueRequirement> desiredValues) {
     final double gamma = irFutureOptionTransaction.accept(CALCULATOR, data);
     return Collections.singleton(new ComputedValue(spec, gamma / 100.));

@@ -22,9 +22,9 @@ import com.opengamma.id.ExternalIdBundle;
 /**
  * Dummy function to inject default properties from the calculation configuration into the dependency graph.
  * <p>
- * Any default properties of the form <code>[PRIMITIVE|SECURITY|TRADE|POSITION|PORTFOLIO_NODE].<em>ValueName</em>.DEFAULT_<em>PropertyName</em>[.<em>UniqueId</em>]</code>
- * will be processed to introduce a default value for any omitted <em>PropertyName</em> on <em>ValueName</em> for that
- * target.
+ * Any default properties of the form
+ * <code>[PRIMITIVE|SECURITY|TRADE|POSITION|PORTFOLIO_NODE].<em>ValueName</em>.DEFAULT_<em>PropertyName</em>[.<em>UniqueId</em>]</code> will be processed to
+ * introduce a default value for any omitted <em>PropertyName</em> on <em>ValueName</em> for that target.
  */
 public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyFunction {
 
@@ -180,7 +180,8 @@ public abstract class CalcConfigDefaultPropertyFunction extends DefaultPropertyF
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String typeName = getPrefix(context, target);
     final StringBuilder sbSpecific = new StringBuilder(typeName).append('.').append(desiredValue.getValueName()).append(SEP).append(propertyName);
     final StringBuilder sbWildcard = new StringBuilder(typeName).append("." + WILDCARD + SEP).append(propertyName);

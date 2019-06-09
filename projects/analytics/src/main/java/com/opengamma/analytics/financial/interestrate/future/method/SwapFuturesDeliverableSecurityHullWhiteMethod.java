@@ -22,7 +22,9 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Method to compute the price for an deliverable swap futures with convexity adjustment from a Hull-White one factor model.
- * <p> Reference: Henrard M., Deliverable Interest Rate Swap Futures: pricing in Gaussian HJM model, September 2012.
+ * <p>
+ * Reference: Henrard M., Deliverable Interest Rate Swap Futures: pricing in Gaussian HJM model, September 2012.
+ * 
  * @deprecated Use {@link SwapFuturesPriceDeliverableSecurityHullWhiteMethod}
  */
 @Deprecated
@@ -35,6 +37,7 @@ public final class SwapFuturesDeliverableSecurityHullWhiteMethod {
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static SwapFuturesDeliverableSecurityHullWhiteMethod getInstance() {
@@ -62,8 +65,11 @@ public final class SwapFuturesDeliverableSecurityHullWhiteMethod {
 
   /**
    * Computes the futures price.
-   * @param futures The futures.
-   * @param curves The curves and the Hull-White parameters.
+   * 
+   * @param futures
+   *          The futures.
+   * @param curves
+   *          The curves and the Hull-White parameters.
    * @return The price.
    */
   public double price(final SwapFuturesPriceDeliverableSecurity futures, final HullWhiteOneFactorPiecewiseConstantDataBundle curves) {
@@ -72,7 +78,8 @@ public final class SwapFuturesDeliverableSecurityHullWhiteMethod {
     final double[] adjustments = new double[nbCf];
     final double[] df = new double[nbCf];
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      adjustments[loopcf] = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), futures.getTradingLastTime(), cfe.getNthPayment(loopcf).getPaymentTime(), futures.getDeliveryTime());
+      adjustments[loopcf] = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), futures.getTradingLastTime(),
+          cfe.getNthPayment(loopcf).getPaymentTime(), futures.getDeliveryTime());
       df[loopcf] = curves.getCurve(cfe.getNthPayment(loopcf).getFundingCurveName()).getDiscountFactor(cfe.getNthPayment(loopcf).getPaymentTime());
     }
     double price = 1.0;
@@ -82,13 +89,15 @@ public final class SwapFuturesDeliverableSecurityHullWhiteMethod {
     return price;
   }
 
-  public InterestRateCurveSensitivity pricecurveSensitivity(final SwapFuturesPriceDeliverableSecurity futures, final HullWhiteOneFactorPiecewiseConstantDataBundle curves) {
+  public InterestRateCurveSensitivity pricecurveSensitivity(final SwapFuturesPriceDeliverableSecurity futures,
+      final HullWhiteOneFactorPiecewiseConstantDataBundle curves) {
     final AnnuityPaymentFixed cfe = futures.getUnderlyingSwap().accept(CFEC, curves);
     final int nbCf = cfe.getNumberOfPayments();
     final double[] adjustments = new double[nbCf];
     final double[] df = new double[nbCf];
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      adjustments[loopcf] = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), futures.getTradingLastTime(), cfe.getNthPayment(loopcf).getPaymentTime(), futures.getDeliveryTime());
+      adjustments[loopcf] = MODEL.futuresConvexityFactor(curves.getHullWhiteParameter(), futures.getTradingLastTime(),
+          cfe.getNthPayment(loopcf).getPaymentTime(), futures.getDeliveryTime());
       df[loopcf] = curves.getCurve(cfe.getNthPayment(loopcf).getFundingCurveName()).getDiscountFactor(cfe.getNthPayment(loopcf).getPaymentTime());
     }
     double price = 1.0;
@@ -108,7 +117,8 @@ public final class SwapFuturesDeliverableSecurityHullWhiteMethod {
     }
     final List<DoublesPair> listDfSensi = new ArrayList<>();
     for (int loopcf = 0; loopcf < cfe.getNumberOfPayments(); loopcf++) {
-      final DoublesPair dfSensi = DoublesPair.of(cfe.getNthPayment(loopcf).getPaymentTime(), -cfe.getNthPayment(loopcf).getPaymentTime() * df[loopcf] * dfBar[loopcf]);
+      final DoublesPair dfSensi = DoublesPair.of(cfe.getNthPayment(loopcf).getPaymentTime(),
+          -cfe.getNthPayment(loopcf).getPaymentTime() * df[loopcf] * dfBar[loopcf]);
       listDfSensi.add(dfSensi);
     }
     final Map<String, List<DoublesPair>> pvsDF = new HashMap<>();

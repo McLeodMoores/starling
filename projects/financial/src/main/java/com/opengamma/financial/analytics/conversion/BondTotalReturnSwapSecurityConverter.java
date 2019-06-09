@@ -47,8 +47,7 @@ import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link BondTotalReturnSwapSecurity} classes to {@link BondTotalReturnSwapDefinition},
- * which are required for use in the analytics library.
+ * Converts {@link BondTotalReturnSwapSecurity} classes to {@link BondTotalReturnSwapDefinition}, which are required for use in the analytics library.
  */
 public class BondTotalReturnSwapSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** The convention source */
@@ -61,10 +60,14 @@ public class BondTotalReturnSwapSecurityConverter extends FinancialSecurityVisit
   private final SecuritySource _securitySource;
 
   /**
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param securitySource The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param securitySource
+   *          The security source, not null
    */
   public BondTotalReturnSwapSecurityConverter(final ConventionSource conventionSource, final HolidaySource holidaySource,
       final RegionSource regionSource, final SecuritySource securitySource) {
@@ -81,7 +84,7 @@ public class BondTotalReturnSwapSecurityConverter extends FinancialSecurityVisit
   @Override
   public BondTotalReturnSwapDefinition visitBondTotalReturnSwapSecurity(final BondTotalReturnSwapSecurity security) {
     ArgumentChecker.notNull(security, "security");
-    final FinancialSecurity underlying = (FinancialSecurity) _securitySource.getSingle(security.getAssetId().toBundle()); //TODO ignoring version
+    final FinancialSecurity underlying = (FinancialSecurity) _securitySource.getSingle(security.getAssetId().toBundle()); // TODO ignoring version
     if (!(underlying instanceof BondSecurity)) {
       throw new OpenGammaRuntimeException("Underlying for bond TRS was not a bond");
     }
@@ -89,12 +92,13 @@ public class BondTotalReturnSwapSecurityConverter extends FinancialSecurityVisit
     final boolean isPayer = fundingLeg.getPayReceiveType() == PayReceiveType.PAY ? true : false;
     final LocalDate startDate = security.getEffectiveDate();
     final LocalDate endDate = security.getMaturityDate();
-    final NotionalExchange notionalExchange = NotionalExchange.builder().exchangeFinalNotional(true).build(); //NotionalExchange.NO_EXCHANGE;
-    final AnnuityDefinition<? extends PaymentDefinition> annuityDefinition = AnnuityUtils.buildFloatingAnnuityDefinition(_conventionSource, _holidaySource, _securitySource, isPayer,
+    final NotionalExchange notionalExchange = NotionalExchange.builder().exchangeFinalNotional(true).build(); // NotionalExchange.NO_EXCHANGE;
+    final AnnuityDefinition<? extends PaymentDefinition> annuityDefinition = AnnuityUtils.buildFloatingAnnuityDefinition(_conventionSource, _holidaySource,
+        _securitySource, isPayer,
         startDate, endDate, notionalExchange, fundingLeg);
     final BondSecurity bond = (BondSecurity) underlying;
     final BondConvention convention = getConvention(bond, _conventionSource);
-    final LegalEntity legalEntity = BondAndBondFutureTradeWithEntityConverter.getLegalEntityForBond(Collections.<String, String>emptyMap(), bond);
+    final LegalEntity legalEntity = BondAndBondFutureTradeWithEntityConverter.getLegalEntityForBond(Collections.<String, String> emptyMap(), bond);
     final ExternalId regionId = ExternalSchemes.financialRegionId(bond.getIssuerDomicile());
     if (regionId == null) {
       throw new OpenGammaRuntimeException("Could not find region for " + bond.getIssuerDomicile());
@@ -134,7 +138,9 @@ public class BondTotalReturnSwapSecurityConverter extends FinancialSecurityVisit
 
   /**
    * Gets the convention for a bond from its domicile.
-   * @param bond The bond
+   *
+   * @param bond
+   *          The bond
    * @return The convention
    */
   private static BondConvention getConvention(final BondSecurity bond, final ConventionSource conventionSource) {

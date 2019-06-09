@@ -124,7 +124,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   // -------------------------------------------------------------------------
   /**
    * Gets the country.
-   * 
+   *
    * @return the value of the property
    */
   @Override
@@ -149,7 +149,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   // -------------------------------------------------------------------------
   /**
    * Gets the currency.
-   * 
+   *
    * @return the value of the property
    */
   @Override
@@ -174,7 +174,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   // -------------------------------------------------------------------------
   /**
    * Gets the time-zone. For larger regions, there can be multiple time-zones, so this is only reliable for municipalities.
-   * 
+   *
    * @return the value of the property
    */
   @Override

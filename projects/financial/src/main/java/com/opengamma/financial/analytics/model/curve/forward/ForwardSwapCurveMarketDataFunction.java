@@ -78,7 +78,8 @@ public class ForwardSwapCurveMarketDataFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -129,7 +130,8 @@ public class ForwardSwapCurveMarketDataFunction extends AbstractFunction {
         }
         final ForwardSwapCurveInstrumentProvider provider = (ForwardSwapCurveInstrumentProvider) specification.getCurveInstrumentProvider();
         final Tenor forwardTenor = Tenor.of(Period.parse(forwardTenorName));
-        final ValueRequirement spotRequirement = new ValueRequirement(provider.getDataFieldName(), ComputationTargetType.PRIMITIVE, provider.getSpotInstrument(forwardTenor));
+        final ValueRequirement spotRequirement = new ValueRequirement(provider.getDataFieldName(), ComputationTargetType.PRIMITIVE,
+            provider.getSpotInstrument(forwardTenor));
         if (inputs.getValue(spotRequirement) == null) {
           throw new OpenGammaRuntimeException("Could not get value for spot; requirement was " + spotRequirement);
         }

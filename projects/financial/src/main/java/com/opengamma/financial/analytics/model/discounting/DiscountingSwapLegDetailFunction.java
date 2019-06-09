@@ -67,28 +67,22 @@ public class DiscountingSwapLegDetailFunction extends DiscountingFunction {
   private final boolean _payLeg;
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS}
-   * or
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or
    * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
    *
    * @param payLeg
-   *          True if the details to be returned are for the pay leg; false
-   *          returns details for receive legs.
+   *          True if the details to be returned are for the pay leg; false returns details for receive legs.
    */
   public DiscountingSwapLegDetailFunction(final String payLeg) {
     this(Boolean.parseBoolean(payLeg));
   }
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS}
-   * or
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_PAY_LEG_DETAILS} or
    * {@link com.opengamma.engine.value.ValueRequirementNames#SWAP_RECEIVE_LEG_DETAILS}
    *
    * @param payLeg
-   *          True if the details to be returned are for the pay leg; false
-   *          returns details for receive legs.
+   *          True if the details to be returned are for the pay leg; false returns details for receive legs.
    */
   public DiscountingSwapLegDetailFunction(final boolean payLeg) {
     super(payLeg ? SWAP_PAY_LEG_DETAILS : SWAP_RECEIVE_LEG_DETAILS);
@@ -145,7 +139,8 @@ public class DiscountingSwapLegDetailFunction extends DiscountingFunction {
         final Double[] fixedRates = legDerivative.accept(AnnuityFixedRatesVisitor.getInstance());
         final double[] discountFactors = legDerivative.accept(AnnuityDiscountFactorsVisitor.getInstance(), data);
         if (isFixed) {
-          final FixedSwapLegDetails details = new FixedSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), discountFactors, paymentTimes, paymentFractions, paymentAmounts,
+          final FixedSwapLegDetails details = new FixedSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), discountFactors, paymentTimes,
+              paymentFractions, paymentAmounts,
               notionals, fixedRates);
           return Collections.singleton(new ComputedValue(spec, details));
         }
@@ -157,11 +152,12 @@ public class DiscountingSwapLegDetailFunction extends DiscountingFunction {
         final double[] spreads = legDefinition.accept(AnnuitySpreadsVisitor.getInstance(), now);
         final double[] gearings = legDefinition.accept(AnnuityGearingsVisitor.getInstance(), now);
         final Tenor[] indexTenors = legDefinition.accept(AnnuityIndexTenorsVisitor.getInstance(), now);
-        final FloatingSwapLegDetails details = new FloatingSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), paymentFractions, fixingDates.getFirst(), fixingDates.getSecond(),
-            fixingYearFractions, forwardRates, fixedRates, paymentDates, paymentTimes, discountFactors, paymentAmounts, projectedAmounts, notionals, spreads, gearings, indexTenors);
+        final FloatingSwapLegDetails details = new FloatingSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), paymentFractions,
+            fixingDates.getFirst(), fixingDates.getSecond(),
+            fixingYearFractions, forwardRates, fixedRates, paymentDates, paymentTimes, discountFactors, paymentAmounts, projectedAmounts, notionals, spreads,
+            gearings, indexTenors);
         return Collections.singleton(new ComputedValue(spec, details));
       }
-
 
     };
   }

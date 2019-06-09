@@ -33,15 +33,15 @@ public class InflationBondPresentValueFromCleanPriceFunction extends InflationBo
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public InflationBondPresentValueFromCleanPriceFunction() {
     super(PRESENT_VALUE);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondCapitalIndexedTransaction<?> bond, final InflationIssuerProviderInterface provider, final double cleanPrice,
+  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondCapitalIndexedTransaction<?> bond,
+      final InflationIssuerProviderInterface provider, final double cleanPrice,
       final ValueSpecification spec) {
     final String expectedCurrency = spec.getProperty(CURRENCY);
     final MultipleCurrencyAmount pvBond = CALCULATOR.presentValueFromCleanRealPrice(bond.getBondTransaction(), provider, cleanPrice);

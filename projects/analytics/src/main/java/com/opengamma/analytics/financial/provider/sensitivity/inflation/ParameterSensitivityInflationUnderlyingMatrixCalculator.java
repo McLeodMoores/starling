@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.inflation;
-
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,30 +19,39 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
 /**
- * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
- * The meaning of "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.).
- * The return format is ParameterSensitivity object.
+ * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The meaning of
+ * "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.). The return format is ParameterSensitivity object.
  */
 public class ParameterSensitivityInflationUnderlyingMatrixCalculator extends ParameterSensitivityInflationMatrixProviderAbstractCalculator {
 
   /**
    * Constructor
-   * @param curveSensitivityCalculator The curve sensitivity calculator.
+   * 
+   * @param curveSensitivityCalculator
+   *          The curve sensitivity calculator.
    */
-  public ParameterSensitivityInflationUnderlyingMatrixCalculator(final InstrumentDerivativeVisitor<InflationProviderInterface, InflationSensitivity> curveSensitivityCalculator) {
+  public ParameterSensitivityInflationUnderlyingMatrixCalculator(
+      final InstrumentDerivativeVisitor<InflationProviderInterface, InflationSensitivity> curveSensitivityCalculator) {
     super(curveSensitivityCalculator);
   }
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate.
-   * @param sensitivity The point sensitivity.
-   * @param inflation The inflation provider. Not null.
-   * @param curvesSet The set of curves for which the sensitivity will be computed. Not null.
+   * 
+   * @param sensitivity
+   *          The point sensitivity.
+   * @param inflation
+   *          The inflation provider. Not null.
+   * @param curvesSet
+   *          The set of curves for which the sensitivity will be computed. Not null.
    * @return The sensitivity (as a ParameterSensitivity). ??The order of the sensitivity is by curve as provided by the curvesSet??
    */
   @Override
-  public DoubleMatrix1D pointToParameterSensitivity(final InflationSensitivity sensitivity, final InflationProviderInterface inflation, final Set<String> curvesSet) {
+  public DoubleMatrix1D pointToParameterSensitivity(final InflationSensitivity sensitivity, final InflationProviderInterface inflation,
+      final Set<String> curvesSet) {
     // TODO: The first part depends only of the inflationprovider and curvesSet, not the sensitivity. Should it be refactored and done only once?
     final Set<String> curveNamesSet = inflation.getAllCurveNames(); // curvesSet; //
     // Implementation note: Check sensicurve are in multicurve
@@ -58,7 +65,8 @@ public class ParameterSensitivityInflationUnderlyingMatrixCalculator extends Par
     }
     final int[] nbNewParameters = new int[nbCurve];
     final int[] nbParameters = new int[nbCurve];
-    // Implementation note: nbNewParameters - number of new parameters in the curve, parameters not from an underlying curve which is another curve of the bundle.
+    // Implementation note: nbNewParameters - number of new parameters in the curve, parameters not from an underlying curve which is another curve of the
+    // bundle.
     loopname = 0;
     for (final String name : curveNamesSet) { // loop over all curves (by name)
       nbParameters[loopname] = inflation.getNumberOfParameters(name);
@@ -111,7 +119,8 @@ public class ParameterSensitivityInflationUnderlyingMatrixCalculator extends Par
       startOwnParameter[num] = loopstart;
       startUnderlyingParameter[num] = startUnderlyingParamList.toIntArray();
     }
-    // Implementation note: Compute the "dirty" sensitivity, i.e. the sensitivity to all the parameters in each curve. The underlying are taken into account in the "clean" step.
+    // Implementation note: Compute the "dirty" sensitivity, i.e. the sensitivity to all the parameters in each curve. The underlying are taken into account in
+    // the "clean" step.
     final double[][] sensiDirty = new double[nbCurve][];
     final Map<String, List<DoublesPair>> sensitivityDiscountAndPriceIndex = sensitivity.getDiscountAndPriceIndexSensitivities();
     final Map<String, List<ForwardSensitivity>> sensitivityFwd = sensitivity.getForwardSensitivities();

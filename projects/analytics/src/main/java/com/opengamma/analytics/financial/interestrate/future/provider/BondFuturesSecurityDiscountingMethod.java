@@ -24,6 +24,7 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
 
   /**
    * Return the method unique instance.
+   * 
    * @return The instance.
    */
   public static BondFuturesSecurityDiscountingMethod getInstance() {
@@ -47,9 +48,13 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
 
   /**
    * Computes the futures price from the curves used to price the underlying bonds and the net basis.
-   * @param futures The future security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param netBasis The net basis associated to the future.
+   * 
+   * @param futures
+   *          The future security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param netBasis
+   *          The net basis associated to the future.
    * @return The future price.
    */
   public double priceFromNetBasis(final BondFuturesSecurity futures, final IssuerProviderInterface issuerMulticurves, final double netBasis) {
@@ -57,7 +62,8 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final double[] priceFromBond = new double[futures.getDeliveryBasketAtDeliveryDate().length];
     for (int loopbasket = 0; loopbasket < futures.getDeliveryBasketAtDeliveryDate().length; loopbasket++) {
-      priceFromBond[loopbasket] = (BOND_METHOD.cleanPriceFromCurves(futures.getDeliveryBasketAtDeliveryDate()[loopbasket], issuerMulticurves) - netBasis) / futures.getConversionFactor()[loopbasket];
+      priceFromBond[loopbasket] = (BOND_METHOD.cleanPriceFromCurves(futures.getDeliveryBasketAtDeliveryDate()[loopbasket], issuerMulticurves) - netBasis)
+          / futures.getConversionFactor()[loopbasket];
     }
     final double priceFuture = MIN_FUNCTION.evaluate(priceFromBond);
     return priceFuture;
@@ -65,9 +71,13 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
 
   /**
    * Computes the gross basis of the bonds in the underlying basket from their clean prices.
-   * @param futures The future security.
-   * @param cleanPrices The clean prices (at standard bond market spot date) of the bond in the basket.
-   * @param futurePrice The future price.
+   * 
+   * @param futures
+   *          The future security.
+   * @param cleanPrices
+   *          The clean prices (at standard bond market spot date) of the bond in the basket.
+   * @param futurePrice
+   *          The future price.
    * @return The gross basis for each bond in the basket.
    */
   public double[] grossBasisFromPrices(final BondFuturesSecurity futures, final double[] cleanPrices, final double futurePrice) {
@@ -84,9 +94,13 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
 
   /**
    * Computes the gross basis of the bonds in the underlying basket from the curves.
-   * @param futures The future security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param futurePrice The future price.
+   * 
+   * @param futures
+   *          The future security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param futurePrice
+   *          The future price.
    * @return The gross basis for each bond in the basket.
    */
   public double[] grossBasisFromCurves(final BondFuturesSecurity futures, final IssuerProviderInterface issuerMulticurves, final double futurePrice) {
@@ -103,9 +117,13 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
 
   /**
    * Computes the net basis of all the bonds in the underlying basket from the curves and the future price.
-   * @param futures The future security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param futurePrice The future price.
+   * 
+   * @param futures
+   *          The future security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param futurePrice
+   *          The future price.
    * @return The net basis for each bond in the basket.
    */
   public double[] netBasisAllBonds(final BondFuturesSecurity futures, final IssuerProviderInterface issuerMulticurves, final double futurePrice) {
@@ -122,9 +140,13 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
 
   /**
    * Computes the net basis of associated to the cheapest to deliver bonds in the underlying basket from the curves and the future price.
-   * @param futures The future security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param futurePrice The future price.
+   * 
+   * @param futures
+   *          The future security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param futurePrice
+   *          The future price.
    * @return The net basis.
    */
   public double netBasisCheapest(final BondFuturesSecurity futures, final IssuerProviderInterface issuerMulticurves, final double futurePrice) {
@@ -133,7 +155,8 @@ public final class BondFuturesSecurityDiscountingMethod extends FuturesSecurityI
     final int nbBasket = futures.getDeliveryBasketAtDeliveryDate().length;
     final double[] netBasis = new double[nbBasket];
     for (int loopbasket = 0; loopbasket < futures.getDeliveryBasketAtDeliveryDate().length; loopbasket++) {
-      netBasis[loopbasket] = BOND_METHOD.cleanPriceFromCurves(futures.getDeliveryBasketAtDeliveryDate()[loopbasket], issuerMulticurves) - futurePrice * futures.getConversionFactor()[loopbasket];
+      netBasis[loopbasket] = BOND_METHOD.cleanPriceFromCurves(futures.getDeliveryBasketAtDeliveryDate()[loopbasket], issuerMulticurves)
+          - futurePrice * futures.getConversionFactor()[loopbasket];
     }
     return MIN_FUNCTION.evaluate(netBasis);
   }

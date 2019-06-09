@@ -49,7 +49,7 @@ public class BlackDiscountingBCSSwaptionFunction extends BlackDiscountingSwaptio
 
   /**
    * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public BlackDiscountingBCSSwaptionFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -68,7 +68,8 @@ public class BlackDiscountingBCSSwaptionFunction extends BlackDiscountingSwaptio
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, blackData, blocks);
         for (final ValueRequirement desiredValue : desiredValues) {
-          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints().copy().get());
+          final ValueSpecification spec =
+              new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;

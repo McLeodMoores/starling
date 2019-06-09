@@ -58,8 +58,10 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
   /**
    * Creates an instance.
    *
-   * @param underlying  the underlying source, not null
-   * @param cacheManager  the cache manager, not null
+   * @param underlying
+   *          the underlying source, not null
+   * @param cacheManager
+   *          the cache manager, not null
    */
   public EHCachingHistoricalTimeSeriesProvider(final HistoricalTimeSeriesProvider underlying, final CacheManager cacheManager) {
     ArgumentChecker.notNull(underlying, "underlying");
@@ -69,7 +71,7 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
     _cache = EHCacheUtils.getCacheFromManager(cacheManager, DATA_CACHE_NAME);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the underlying provider.
    *
@@ -88,7 +90,7 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
     return _cache;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesProviderGetResult doBulkGet(final HistoricalTimeSeriesProviderGetRequest request) {
     final HistoricalTimeSeriesProviderGetResult result = new HistoricalTimeSeriesProviderGetResult();
@@ -145,7 +147,8 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
   /**
    * Lookup when there is only one bundle in the request.
    *
-   * @param requestKey  the request suitable for use as the cache key, not null
+   * @param requestKey
+   *          the request suitable for use as the cache key, not null
    * @return the result, not null
    */
   protected LocalDateDoubleTimeSeries doSingleGetInCache(final HistoricalTimeSeriesProviderGetRequest requestKey) {
@@ -166,7 +169,7 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
         }
         final LocalDateDoubleTimeSeries wholeHts = (LocalDateDoubleTimeSeries) cacheElement.getObjectValue();
         final LocalDateDoubleTimeSeries filteredHts = filterResult(wholeHts, requestKey.getDateRange(), requestKey.getMaxPoints());
-        _cache.put(new Element(requestKey, filteredHts));  // re-cache under filtered values
+        _cache.put(new Element(requestKey, filteredHts)); // re-cache under filtered values
         LOGGER.debug("Derived time-series from cache: {}", requestKey);
         return filteredHts;
       }
@@ -179,12 +182,16 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
   /**
    * Creates a cache key.
    *
-   * @param request  the base request object, not null
-   * @param bundle  the bundle to set, null to leave as is (already one key)
-   * @param allDataPoints  true to create a key for all data points
+   * @param request
+   *          the base request object, not null
+   * @param bundle
+   *          the bundle to set, null to leave as is (already one key)
+   * @param allDataPoints
+   *          true to create a key for all data points
    * @return a clone of the request with the bundle set, not null
    */
-  protected HistoricalTimeSeriesProviderGetRequest createCacheKey(final HistoricalTimeSeriesProviderGetRequest request, final ExternalIdBundle bundle, final boolean allDataPoints) {
+  protected HistoricalTimeSeriesProviderGetRequest createCacheKey(final HistoricalTimeSeriesProviderGetRequest request, final ExternalIdBundle bundle,
+      final boolean allDataPoints) {
     final HistoricalTimeSeriesProviderGetRequest key = JodaBeanUtils.clone(request);
     if (bundle != null) {
       key.setExternalIdBundles(Collections.singleton(bundle));
@@ -196,7 +203,7 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
     return key;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return getClass().getSimpleName() + "[" + getUnderlying() + "]";

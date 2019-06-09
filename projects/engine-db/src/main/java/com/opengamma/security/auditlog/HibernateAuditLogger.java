@@ -23,10 +23,8 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An audit logger that uses JDBC batch insert (through Hibernate) to insert
- * audit log entries into a database. If there is a server crash, audit log
- * entries stored in memory that have not yet been committed into
- * the database may be lost.
+ * An audit logger that uses JDBC batch insert (through Hibernate) to insert audit log entries into a database. If there is a server crash, audit log entries
+ * stored in memory that have not yet been committed into the database may be lost.
  *
  */
 public class HibernateAuditLogger extends AbstractAuditLogger implements Closeable {
@@ -79,15 +77,15 @@ public class HibernateAuditLogger extends AbstractAuditLogger implements Closeab
 
   private Session getSession() {
     return SessionFactoryUtils.getSession(
-            _hibernateTemplate.getSessionFactory(),
-            _hibernateTemplate.getEntityInterceptor(),
-            _hibernateTemplate.getJdbcExceptionTranslator());
+        _hibernateTemplate.getSessionFactory(),
+        _hibernateTemplate.getEntityInterceptor(),
+        _hibernateTemplate.getJdbcExceptionTranslator());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * The <code>Flusher</code> background thread ensures that all log entries are written into
-   * the DB in a timely fashion, even if the flow of new log entries from clients stops abruptly.
+   * The <code>Flusher</code> background thread ensures that all log entries are written into the DB in a timely fashion, even if the flow of new log entries
+   * from clients stops abruptly.
    */
   private class Flusher extends TimerTask {
     @Override
@@ -101,7 +99,8 @@ public class HibernateAuditLogger extends AbstractAuditLogger implements Closeab
   }
 
   @Override
-  public void log(final String user, final String originatingSystem, final String object, final String operation, final String description, final boolean success) {
+  public void log(final String user, final String originatingSystem, final String object, final String operation, final String description,
+      final boolean success) {
     ArgumentChecker.notNull(user, "User ID");
     ArgumentChecker.notNull(user, "Originating system name");
     ArgumentChecker.notNull(object, "Object ID");

@@ -19,18 +19,22 @@ import com.opengamma.util.ParallelArrayBinarySort;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * A surface that is constructed from a set of parallel curves ({@link Curve}), with an interpolator to find points between these curves. The
- * curves are assumed to be coplanar (with the planes parallel to the <i>x</i> or <i>y</i> axis), with their orientation supplied on construction.
+ * A surface that is constructed from a set of parallel curves ({@link Curve}), with an interpolator to find points between these curves. The curves are assumed
+ * to be coplanar (with the planes parallel to the <i>x</i> or <i>y</i> axis), with their orientation supplied on construction.
  *
  */
 public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double, Double> {
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
@@ -39,11 +43,15 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
@@ -52,11 +60,15 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves A list of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          A list of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
@@ -65,9 +77,12 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param curves A map of points of intersection of the curves to curves, not null
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param curves
+   *          A map of points of intersection of the curves to curves, not null
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves,
@@ -76,12 +91,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
@@ -90,12 +110,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
@@ -104,12 +129,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves A list of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          A list of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
@@ -118,10 +148,14 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param curves A map of points of intersection of the curves to curves, not null
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param curves
+   *          A map of points of intersection of the curves to curves, not null
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface from(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves,
@@ -130,11 +164,15 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
@@ -143,11 +181,15 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
@@ -156,11 +198,15 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param curves A list of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param curves
+   *          A list of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
@@ -169,9 +215,12 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param curves A map of points of intersection of the curves to curves, not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param interpolator The interpolator
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param curves
+   *          A map of points of intersection of the curves to curves, not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param interpolator
+   *          The interpolator
    * @return A surface with an automatically-generated name
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves,
@@ -180,12 +229,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
@@ -194,12 +248,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
@@ -208,12 +267,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param curves A list of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param curves
+   *          A list of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
@@ -222,10 +286,14 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param curves A map of points of intersection of the curves to curves, not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
-   * @param interpolator The interpolator
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param curves
+   *          A map of points of intersection of the curves to curves, not null. Assumed to be sorted (increasing in <i>x</i> or <i>y</i>).
+   * @param interpolator
+   *          The interpolator
+   * @param name
+   *          The name of the surface
    * @return A surface
    */
   public static InterpolatedFromCurvesDoublesSurface fromSorted(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves,
@@ -240,12 +308,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   private final boolean _xzCurves;
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
    */
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
       final Interpolator1D interpolator, final boolean isSorted) {
@@ -267,12 +340,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
    */
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
       final Interpolator1D interpolator, final boolean isSorted) {
@@ -298,12 +376,17 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves A list of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          A list of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
@@ -332,10 +415,14 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param curves A map of points of intersection of the curves to curves, not null
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param curves
+   *          A map of points of intersection of the curves to curves, not null
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves, final Interpolator1D interpolator,
@@ -364,13 +451,19 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
+   * @param name
+   *          The name of the surface
    */
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final double[] points, final Curve<Double, Double>[] curves,
       final Interpolator1D interpolator, final boolean isSorted, final String name) {
@@ -392,13 +485,19 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves An array of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          An array of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          An array of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
+   * @param name
+   *          The name of the surface
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final Double[] points, final Curve<Double, Double>[] curves,
@@ -427,13 +526,19 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param points A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
-   * the curves cross the <i>y</i> axis). Not null
-   * @param curves A list of curves, not null, must be the same length as the array of points of intersection
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param points
+   *          A list of points of intersection of the curves on the remaining axis (e.g. if the curves are in the <i>x-z</i> plane, the points indicate where
+   *          the curves cross the <i>y</i> axis). Not null
+   * @param curves
+   *          A list of curves, not null, must be the same length as the array of points of intersection
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
+   * @param name
+   *          The name of the surface
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final List<Double> points, final List<Curve<Double, Double>> curves,
@@ -462,11 +567,16 @@ public class InterpolatedFromCurvesDoublesSurface extends Surface<Double, Double
   }
 
   /**
-   * @param xzCurves Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
-   * @param curves A map of points of intersection of the curves to curves, not null
-   * @param interpolator The interpolator
-   * @param isSorted Are the intersection points of the curve sorted in increasing order
-   * @param name The name of the surface
+   * @param xzCurves
+   *          Do the curves lie in the <i>x-z</i> plane or the <i>y-z</i> plane.
+   * @param curves
+   *          A map of points of intersection of the curves to curves, not null
+   * @param interpolator
+   *          The interpolator
+   * @param isSorted
+   *          Are the intersection points of the curve sorted in increasing order
+   * @param name
+   *          The name of the surface
    */
   @SuppressWarnings("unchecked")
   public InterpolatedFromCurvesDoublesSurface(final boolean xzCurves, final Map<Double, Curve<Double, Double>> curves, final Interpolator1D interpolator,

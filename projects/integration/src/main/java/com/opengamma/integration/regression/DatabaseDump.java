@@ -82,68 +82,68 @@ import com.opengamma.util.ArgumentChecker;
   private final Map<String, AtomicInteger> _nextIdByType = new HashMap<>();
 
   /* package */ DatabaseDump(final String outputDir,
-                            final SecurityMaster securityMaster,
-                            final PositionMaster positionMaster,
-                            final PortfolioMaster portfolioMaster,
-                            final ConfigMaster configMaster,
-                            final HistoricalTimeSeriesMaster timeSeriesMaster,
-                            final HolidayMaster holidayMaster,
-                            final ExchangeMaster exchangeMaster,
-                            final MarketDataSnapshotMaster snapshotMaster,
-                            final LegalEntityMaster legalEntityMaster,
-                            final ConventionMaster conventionMaster) {
+      final SecurityMaster securityMaster,
+      final PositionMaster positionMaster,
+      final PortfolioMaster portfolioMaster,
+      final ConfigMaster configMaster,
+      final HistoricalTimeSeriesMaster timeSeriesMaster,
+      final HolidayMaster holidayMaster,
+      final ExchangeMaster exchangeMaster,
+      final MarketDataSnapshotMaster snapshotMaster,
+      final LegalEntityMaster legalEntityMaster,
+      final ConventionMaster conventionMaster) {
     this(outputDir,
-         securityMaster,
-         positionMaster,
-         portfolioMaster,
-         configMaster,
-         timeSeriesMaster,
-         holidayMaster,
-         exchangeMaster,
-         snapshotMaster,
-         legalEntityMaster,
-         conventionMaster,
-         MasterQueryManager.queryAll());
+        securityMaster,
+        positionMaster,
+        portfolioMaster,
+        configMaster,
+        timeSeriesMaster,
+        holidayMaster,
+        exchangeMaster,
+        snapshotMaster,
+        legalEntityMaster,
+        conventionMaster,
+        MasterQueryManager.queryAll());
   }
 
   /* package */ DatabaseDump(final String outputDir,
-                            final SecurityMaster securityMaster,
-                            final PositionMaster positionMaster,
-                            final PortfolioMaster portfolioMaster,
-                            final ConfigMaster configMaster,
-                            final HistoricalTimeSeriesMaster timeSeriesMaster,
-                            final HolidayMaster holidayMaster,
-                            final ExchangeMaster exchangeMaster,
-                            final MarketDataSnapshotMaster snapshotMaster,
-                            final LegalEntityMaster legalEntityMaster,
-                            final ConventionMaster conventionMaster,
-                            final MasterQueryManager masterFilterManager) {
+      final SecurityMaster securityMaster,
+      final PositionMaster positionMaster,
+      final PortfolioMaster portfolioMaster,
+      final ConfigMaster configMaster,
+      final HistoricalTimeSeriesMaster timeSeriesMaster,
+      final HolidayMaster holidayMaster,
+      final ExchangeMaster exchangeMaster,
+      final MarketDataSnapshotMaster snapshotMaster,
+      final LegalEntityMaster legalEntityMaster,
+      final ConventionMaster conventionMaster,
+      final MasterQueryManager masterFilterManager) {
     this(new SubdirsRegressionIO(new File(outputDir), new FudgeXMLFormat(), true),
-         securityMaster,
-         positionMaster,
-         portfolioMaster,
-         configMaster,
-         timeSeriesMaster,
-         holidayMaster,
-         exchangeMaster,
-         snapshotMaster,
-         legalEntityMaster,
-         conventionMaster,
-         masterFilterManager);
+        securityMaster,
+        positionMaster,
+        portfolioMaster,
+        configMaster,
+        timeSeriesMaster,
+        holidayMaster,
+        exchangeMaster,
+        snapshotMaster,
+        legalEntityMaster,
+        conventionMaster,
+        masterFilterManager);
   }
 
   /* package */ DatabaseDump(final RegressionIO io,
-                            final SecurityMaster securityMaster,
-                            final PositionMaster positionMaster,
-                            final PortfolioMaster portfolioMaster,
-                            final ConfigMaster configMaster,
-                            final HistoricalTimeSeriesMaster timeSeriesMaster,
-                            final HolidayMaster holidayMaster,
-                            final ExchangeMaster exchangeMaster,
-                            final MarketDataSnapshotMaster snapshotMaster,
-                            final LegalEntityMaster legalEntityMaster,
-                            final ConventionMaster conventionMaster,
-                            final MasterQueryManager masterQueryManager) {
+      final SecurityMaster securityMaster,
+      final PositionMaster positionMaster,
+      final PortfolioMaster portfolioMaster,
+      final ConfigMaster configMaster,
+      final HistoricalTimeSeriesMaster timeSeriesMaster,
+      final HolidayMaster holidayMaster,
+      final ExchangeMaster exchangeMaster,
+      final MarketDataSnapshotMaster snapshotMaster,
+      final LegalEntityMaster legalEntityMaster,
+      final ConventionMaster conventionMaster,
+      final MasterQueryManager masterQueryManager) {
     _io = ArgumentChecker.notNull(io, "io");
     _legalEntityMaster = ArgumentChecker.notNull(legalEntityMaster, "legalEntityMaster");
     _snapshotMaster = ArgumentChecker.notNull(snapshotMaster, "snapshotMaster");
@@ -176,8 +176,10 @@ import com.opengamma.util.ArgumentChecker;
     final String serverUrl = args[1];
     int exitCode = 0;
     try (RemoteServer server = RemoteServer.create(serverUrl)) {
-      final DatabaseDump databaseDump = new DatabaseDump(io, server.getSecurityMaster(), server.getPositionMaster(), server.getPortfolioMaster(), server.getConfigMaster(),
-          server.getHistoricalTimeSeriesMaster(), server.getHolidayMaster(), server.getExchangeMaster(), server.getMarketDataSnapshotMaster(), server.getLegalEntityMaster(),
+      final DatabaseDump databaseDump = new DatabaseDump(io, server.getSecurityMaster(), server.getPositionMaster(), server.getPortfolioMaster(),
+          server.getConfigMaster(),
+          server.getHistoricalTimeSeriesMaster(), server.getHolidayMaster(), server.getExchangeMaster(), server.getMarketDataSnapshotMaster(),
+          server.getLegalEntityMaster(),
           server.getConventionMaster(), MasterQueryManager.queryAll());
       io.beginWrite();
       try {
@@ -193,10 +195,10 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   /**
-   * Dump db to injected {@link RegressionIO} instance. Note the
-   * regression io instance should have already been opened
-   * before this method is called.
-   * @throws IOException if an IO exception is thrown
+   * Dump db to injected {@link RegressionIO} instance. Note the regression io instance should have already been opened before this method is called.
+   * 
+   * @throws IOException
+   *           if an IO exception is thrown
    */
   public void dumpDatabase() throws IOException {
     final Map<ObjectId, Integer> ids = Maps.newHashMap(_idMappings.getIds());
@@ -330,8 +332,7 @@ import com.opengamma.util.ArgumentChecker;
     @Override
     public TimeSeriesWithInfo apply(final HistoricalTimeSeriesInfoDocument infoDoc) {
       final ManageableHistoricalTimeSeriesInfo info = infoDoc.getInfo();
-      final ManageableHistoricalTimeSeries timeSeries =
-          _timeSeriesMaster.getTimeSeries(info.getTimeSeriesObjectId(), VersionCorrection.LATEST);
+      final ManageableHistoricalTimeSeries timeSeries = _timeSeriesMaster.getTimeSeries(info.getTimeSeriesObjectId(), VersionCorrection.LATEST);
       return new TimeSeriesWithInfo(info, timeSeries);
     }
   }

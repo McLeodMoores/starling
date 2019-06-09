@@ -69,8 +69,7 @@ public class FXFutureLoader extends SecurityLoader {
       FIELD_FUT_FIRST_TRADE_DT));
 
   /**
-   * Maps from the QUOTE_UNITS field to the unit amount. As more units are encountered, this approach will need to be
-   * improved.
+   * Maps from the QUOTE_UNITS field to the unit amount. As more units are encountered, this approach will need to be improved.
    */
   private static final Map<String, Double> UNIT_AMOUNT_MAP = ImmutableMap.of(
       "cents/CHF", 100d,
@@ -85,13 +84,15 @@ public class FXFutureLoader extends SecurityLoader {
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public FXFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.FX_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
@@ -155,7 +156,8 @@ public class FXFutureLoader extends SecurityLoader {
     final Currency tradingCurrency = Currency.parse(tradingCurrencyCode);
     final Currency quotedCurrency = Currency.parse(quotedCurrencyCode);
 
-    final FXFutureSecurity security = new FXFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, tradingCurrency, quotedCurrency, category);
+    final FXFutureSecurity security = new FXFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, tradingCurrency, quotedCurrency,
+        category);
     security.setName(name);
     parseIdentifiers(fieldData, security, FIELD_FUT_FIRST_TRADE_DT, FIELD_LAST_TRADEABLE_DT);
     return security;

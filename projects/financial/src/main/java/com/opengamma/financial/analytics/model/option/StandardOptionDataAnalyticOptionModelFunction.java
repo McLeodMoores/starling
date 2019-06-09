@@ -30,7 +30,7 @@ import com.opengamma.financial.security.option.EquityOptionSecurity;
 /**
  *
  */
-//TODO urgently needs a rename
+// TODO urgently needs a rename
 @Deprecated
 public abstract class StandardOptionDataAnalyticOptionModelFunction extends AnalyticOptionModelFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(StandardOptionDataAnalyticOptionModelFunction.class);
@@ -68,7 +68,8 @@ public abstract class StandardOptionDataAnalyticOptionModelFunction extends Anal
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> originalResults = getResults(context, target);
     String curveName = null;
     for (final ValueSpecification input : inputs.keySet()) {
@@ -82,8 +83,9 @@ public abstract class StandardOptionDataAnalyticOptionModelFunction extends Anal
     }
     final Set<ValueSpecification> newResults = Sets.newHashSetWithExpectedSize(originalResults.size());
     for (final ValueSpecification result : originalResults) {
-      newResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), result.getProperties().copy().withoutAny(ValuePropertyNames.CURVE)
-          .with(ValuePropertyNames.CURVE, curveName).get()));
+      newResults
+          .add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), result.getProperties().copy().withoutAny(ValuePropertyNames.CURVE)
+              .with(ValuePropertyNames.CURVE, curveName).get()));
     }
     return newResults;
   }

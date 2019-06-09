@@ -67,7 +67,7 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
   private static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("Weekend");
   private static final Greek GREEK = Greek.DELTA;
-  private static final String REQUIREMENT_NAME = ValueRequirementNames.VALUE_DELTA; //TODO remove hard-coding
+  private static final String REQUIREMENT_NAME = ValueRequirementNames.VALUE_DELTA; // TODO remove hard-coding
   private static final SensitivityPnLCalculator PNL_CALCULATOR = new SensitivityPnLCalculator();
   private final String _resolutionKey;
 
@@ -77,7 +77,8 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     String currency = null;
     for (final ComputedValue value : inputs.getAllValues()) {
       final String newCurrency = value.getSpecification().getProperty(ValuePropertyNames.CURRENCY);
@@ -108,7 +109,7 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
     final Schedule scheduleCalculator = getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
     final TimeSeriesReturnCalculator returnCalculator = getTimeSeriesReturnCalculator(returnCalculatorName);
-    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
+    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     final LocalDateDoubleTimeSeries sampledTS = samplingFunction.getSampledTimeSeries(timeSeries.getTimeSeries(), schedule);
     for (final UnderlyingType underlyingType : valueGreek.getUnderlyingGreek().getUnderlying().getUnderlyings()) {
       if (underlyingType != UnderlyingType.SPOT_PRICE) {
@@ -134,7 +135,7 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    return target.getPosition().getSecurity() instanceof EquityOptionSecurity; //TODO need to widen this
+    return target.getPosition().getSecurity() instanceof EquityOptionSecurity; // TODO need to widen this
   }
 
   @Override
@@ -158,9 +159,11 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(new ValueRequirement(REQUIREMENT_NAME, target.toSpecification()));
-    final UnderlyingTimeSeriesProvider timeSeriesProvider = new UnderlyingTimeSeriesProvider(OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context), _resolutionKey,
+    final UnderlyingTimeSeriesProvider timeSeriesProvider = new UnderlyingTimeSeriesProvider(
+        OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context), _resolutionKey,
         context.getSecuritySource());
-    requirements.add(timeSeriesProvider.getSeriesRequirement(GREEK, (FinancialSecurity) target.getPosition().getSecurity(), DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()),
+    requirements.add(timeSeriesProvider.getSeriesRequirement(GREEK, (FinancialSecurity) target.getPosition().getSecurity(),
+        DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()),
         DateConstraint.VALUATION_TIME));
     return requirements;
   }
@@ -179,7 +182,6 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
     results.add(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), properties));
     return results;
   }
-
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,

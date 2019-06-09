@@ -91,7 +91,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static PresentValueDiscountingCalculator getInstance() {
@@ -120,14 +120,14 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
   private static final CouponIborCompoundingSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SPREAD = CouponIborCompoundingSpreadDiscountingMethod.getInstance();
   private static final CouponIborCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_FLAT_SPREAD = CouponIborCompoundingFlatSpreadDiscountingMethod
       .getInstance();
-  private static final CouponIborCompoundingSimpleSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SIMPLE_SPREAD = CouponIborCompoundingSimpleSpreadDiscountingMethod
-      .getInstance();
+  private static final CouponIborCompoundingSimpleSpreadDiscountingMethod METHOD_CPN_IBOR_COMP_SIMPLE_SPREAD =
+      CouponIborCompoundingSimpleSpreadDiscountingMethod.getInstance();
   private static final CouponONDiscountingMethod METHOD_CPN_ON = CouponONDiscountingMethod.getInstance();
   private static final CouponONSpreadDiscountingMethod METHOD_CPN_ON_SPREAD = CouponONSpreadDiscountingMethod.getInstance();
   private static final CouponONArithmeticAverageDiscountingApproxMethod METHOD_CPN_AAON_APPROX = CouponONArithmeticAverageDiscountingApproxMethod.getInstance();
   private static final CouponONArithmeticAverageSpreadDiscountingMethod METHOD_CPN_AAON_SPREAD = CouponONArithmeticAverageSpreadDiscountingMethod.getInstance();
-  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_CPN_ONAA_SPREADSIMPL_APPROX = CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod
-      .getInstance();
+  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_CPN_ONAA_SPREADSIMPL_APPROX =
+      CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod.getInstance();
   private static final ForwardRateAgreementDiscountingProviderMethod METHOD_FRA = ForwardRateAgreementDiscountingProviderMethod.getInstance();
   private static final ForexDiscountingMethod METHOD_FOREX = ForexDiscountingMethod.getInstance();
   private static final ForexSwapDiscountingMethod METHOD_FOREX_SWAP = ForexSwapDiscountingMethod.getInstance();
@@ -140,10 +140,10 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
       .getInstance();
   private static final CouponIborAverageFixingDatesDiscountingMethod METHOD_CPN_IBOR_AVERAGE_FIXING_DATES = CouponIborAverageFixingDatesDiscountingMethod
       .getInstance();
-  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD_CPN_IBOR_AVERAGE_CMP = CouponIborAverageFixingDatesCompoundingDiscountingMethod
-      .getInstance();
-  private static final CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_FLAT_CMP_SPREAD = CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod
-      .getInstance();
+  private static final CouponIborAverageFixingDatesCompoundingDiscountingMethod METHOD_CPN_IBOR_AVERAGE_CMP =
+      CouponIborAverageFixingDatesCompoundingDiscountingMethod.getInstance();
+  private static final CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod METHOD_CPN_IBOR_FLAT_CMP_SPREAD =
+      CouponIborAverageFixingDatesCompoundingFlatSpreadDiscountingMethod.getInstance();
 
   // ----- Deposit -----
 
@@ -377,7 +377,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
     /**
      * Create a pricing object
-     * 
+     *
      * @param amount
      *          the initial amount in the series of payments
      */
@@ -394,7 +394,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
     /**
      * Add the amount to the existing sum
-     * 
+     *
      * @param amountToAdd
      *          the amount to add
      */
@@ -415,7 +415,7 @@ public final class PresentValueDiscountingCalculator extends InstrumentDerivativ
 
     /**
      * Get the sum of all the payments
-     * 
+     *
      * @return the sum
      */
     public MultipleCurrencyAmount getSum() {

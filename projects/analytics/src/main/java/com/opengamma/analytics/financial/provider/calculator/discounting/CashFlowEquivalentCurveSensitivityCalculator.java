@@ -33,7 +33,8 @@ import com.opengamma.util.tuple.DoublesPair;
  * sensitivity is represented by the double which is the time of the cash flow and the MulticurveSensitivity which is the sensitivity of the cash flow at that
  * date.
  */
-public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Map<Double, MulticurveSensitivity>> {
+public class CashFlowEquivalentCurveSensitivityCalculator
+    extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Map<Double, MulticurveSensitivity>> {
 
   /**
    * The unique instance of the calculator.
@@ -42,6 +43,7 @@ public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDeri
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static CashFlowEquivalentCurveSensitivityCalculator getInstance() {
@@ -74,7 +76,8 @@ public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDeri
     final double paymentTime = payment.getPaymentTime();
     final double dfRatio = multicurves.getDiscountFactor(ccy, paymentTime) / multicurves.getDiscountFactor(ccy, fixingStartTime);
     final double af = payment.getFixingAccrualFactor();
-    final double beta = (1.0 + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
+    final double beta = (1.0
+        + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
     final double betaBar = payment.getNotional() * payment.getPaymentYearFraction() / af;
     final double forwardBar = af * dfRatio * betaBar;
 
@@ -106,7 +109,8 @@ public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDeri
     final double paymentTime = payment.getPaymentTime();
     final double dfRatio = multicurves.getDiscountFactor(ccy, paymentTime) / multicurves.getDiscountFactor(ccy, fixingStartTime);
     final double af = payment.getFixingAccrualFactor();
-    final double beta = (1.0 + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
+    final double beta = (1.0
+        + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
     final double betaBar = payment.getNotional() * payment.getPaymentYearFraction() / af;
     final double forwardBar = af * dfRatio * betaBar;
 

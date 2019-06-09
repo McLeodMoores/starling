@@ -66,7 +66,8 @@ public class DataInterpolatedYieldCurveDefinitionSourceResource extends Abstract
       @QueryParam("name") final String name) {
     final Currency currency = Currency.parse(currencyStr);
     if (versionAsOfStr != null) {
-      final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name, VersionCorrection.parse(versionAsOfStr, null));
+      final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name,
+          VersionCorrection.parse(versionAsOfStr, null));
       return responseOkObject(result);
     }
     final YieldCurveDefinition result = getInterpolatedYieldCurveDefinitionSource().getDefinition(currency, name);

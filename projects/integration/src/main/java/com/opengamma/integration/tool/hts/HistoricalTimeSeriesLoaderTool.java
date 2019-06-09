@@ -25,45 +25,47 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoaderReque
 import com.opengamma.scripts.Scriptable;
 
 /**
- * A tool to load a list of historical timeseries from the system's hts loader (e.g. Quandl/Bloomberg).  File contains only the ids you want to load, not the data itself.
- * For raw data loading, see TimeSeriesLoaderTool.
+ * A tool to load a list of historical timeseries from the system's hts loader (e.g. Quandl/Bloomberg). File contains only the ids you want to load, not the
+ * data itself. For raw data loading, see TimeSeriesLoaderTool.
  */
 @Scriptable
 public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesLoaderTool.class);
   /** File name option flag */
   public static final String FILE_NAME_OPT = "f";
-  /** Time series data source option flag*/
+  /** Time series data source option flag */
   public static final String TIME_SERIES_DATASOURCE_OPT = "s";
-  /** Time series data provider option flag*/
+  /** Time series data provider option flag */
   public static final String TIME_SERIES_DATAPROVIDER_OPT = "p";
-  /** Time series data field option flag*/
+  /** Time series data field option flag */
   public static final String TIME_SERIES_DATAFIELD_OPT = "d";
-  /** Time series ID scheme option flag*/
+  /** Time series ID scheme option flag */
   public static final String TIME_SERIES_IDSCHEME_OPT = "i";
   /** Default value for the data provider */
   private static final String DEFAULT_DATA_PROVIDER = "DEFAULT";
   private static final String HELP_HEADER = "Tool to load time series from the system data source from a text file, one line per identifier.";
   private static final String HELP_FOOTER = null; // NOTE: jim 26-Jan-15 -- checked that printHelp code handles nulls okay.
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the arguments, not null
+   * @param args
+   *          the arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new HistoricalTimeSeriesLoaderTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the test portfolio into the position master.
    */
   @Override
   protected void doRun() {
     final String fileName = getCommandLine().getOptionValue(FILE_NAME_OPT);
-    final String dataProvider = getCommandLine().hasOption(TIME_SERIES_DATAPROVIDER_OPT) ? getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT) : DEFAULT_DATA_PROVIDER;
+    final String dataProvider = getCommandLine().hasOption(TIME_SERIES_DATAPROVIDER_OPT) ? getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT)
+        : DEFAULT_DATA_PROVIDER;
     final String dataField = getCommandLine().getOptionValue(TIME_SERIES_DATAFIELD_OPT);
     final HistoricalTimeSeriesLoader loader = getToolContext().getHistoricalTimeSeriesLoader();
     try {
@@ -95,7 +97,7 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected  Options createOptions(final boolean contextProvided) {
+  protected Options createOptions(final boolean contextProvided) {
 
     final Options options = super.createOptions(contextProvided);
 
@@ -127,7 +129,5 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
     formatter.setWidth(120);
     formatter.printHelp("historical-time-series-loader-tool.sh", HELP_HEADER, options, HELP_FOOTER, true);
   }
-
-
 
 }

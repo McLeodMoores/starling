@@ -43,15 +43,12 @@ public class NoExtrapolationSABRDiscountingBCSFunction extends SABRDiscountingFu
   private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
       PresentValueCurveSensitivitySABRSwaptionCalculator.getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<SABRSwaptionProviderInterface> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final ParameterSensitivityParameterCalculator<SABRSwaptionProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<SABRSwaptionProviderInterface> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<SABRSwaptionProviderInterface> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public NoExtrapolationSABRDiscountingBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -66,12 +63,13 @@ public class NoExtrapolationSABRDiscountingBCSFunction extends SABRDiscountingFu
           final ComputationTarget target, final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative,
           final FXMatrix fxMatrix) {
         final Set<ComputedValue> result = new HashSet<>();
-        final DayCount dayCount = DayCounts.ACT_360; //TODO
+        final DayCount dayCount = DayCounts.ACT_360; // TODO
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, dayCount);
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, sabrData, blocks);
         for (final ValueRequirement desiredValue : desiredValues) {
-          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints().copy().get());
+          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(),
+              desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;

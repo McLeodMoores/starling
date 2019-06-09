@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  The standard data required to price two-asset options.
+ * The standard data required to price two-asset options.
  */
 public class StandardTwoAssetOptionDataBundle {
   private final YieldAndDiscountCurve _interestRateCurve;
@@ -53,7 +53,8 @@ public class StandardTwoAssetOptionDataBundle {
    * @throws IllegalArgumentException
    *           If $\rho &lt; -1$ or $\rho &gt; 1$
    */
-  public StandardTwoAssetOptionDataBundle(final YieldAndDiscountCurve interestRateCurve, final double b1, final double b2, final VolatilitySurface volatilitySurface1,
+  public StandardTwoAssetOptionDataBundle(final YieldAndDiscountCurve interestRateCurve, final double b1, final double b2,
+      final VolatilitySurface volatilitySurface1,
       final VolatilitySurface volatilitySurface2, final double spot1, final double spot2, final double rho, final ZonedDateTime date) {
     if (!ArgumentChecker.isInRangeInclusive(-1, 1, rho)) {
       throw new IllegalArgumentException("Correlation must be between -1 and 1");
@@ -71,8 +72,11 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Copies the data from another two-asset option data bundle
-   * @param other The data bundle
-   * @throws IllegalArgumentException If the other data bundle is null
+   * 
+   * @param other
+   *          The data bundle
+   * @throws IllegalArgumentException
+   *           If the other data bundle is null
    */
   public StandardTwoAssetOptionDataBundle(final StandardTwoAssetOptionDataBundle other) {
     Validate.notNull(other, "data bundle");
@@ -89,7 +93,9 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Gets the interest rate as a decimal
-   * @param t The time to expiry
+   * 
+   * @param t
+   *          The time to expiry
    * @return The interest rate
    */
   public double getInterestRate(final double t) {
@@ -98,6 +104,7 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Gets the cost of carry of the first asset as a decimal
+   * 
    * @return The cost of carry
    */
   public double getFirstCostOfCarry() {
@@ -106,6 +113,7 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Gets the cost of carry of the second asset as a decimal
+   * 
    * @return The cost of carry
    */
   public double getSecondCostOfCarry() {
@@ -114,8 +122,11 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Gets the volatility of the first asset as a decimal
-   * @param timeToExpiry The time to expiry
-   * @param strike The strike
+   * 
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param strike
+   *          The strike
    * @return The volatility
    */
   public double getFirstVolatility(final double timeToExpiry, final double strike) {
@@ -124,8 +135,11 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Gets the volatility of the second asset as a decimal
-   * @param timeToExpiry The time to expiry
-   * @param strike The strike
+   * 
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param strike
+   *          The strike
    * @return The volatility
    */
   public double getSecondVolatility(final double timeToExpiry, final double strike) {
@@ -190,77 +204,98 @@ public class StandardTwoAssetOptionDataBundle {
 
   /**
    * Returns a new data bundle with the interest rate curve replaced by the argument
-   * @param interestRateCurve The new interest rate curve
+   * 
+   * @param interestRateCurve
+   *          The new interest rate curve
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withInterestRateCurve(final YieldAndDiscountCurve interestRateCurve) {
-    return new StandardTwoAssetOptionDataBundle(interestRateCurve, getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(), getSecondVolatilitySurface(), getFirstSpot(),
+    return new StandardTwoAssetOptionDataBundle(interestRateCurve, getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(),
+        getSecondVolatilitySurface(), getFirstSpot(),
         getSecondSpot(), getCorrelation(), getDate());
   }
 
   /**
    * Returns a new data bundle with the cost of carry of the first asset replaced by the argument
-   * @param costOfCarry The new cost of carry
+   * 
+   * @param costOfCarry
+   *          The new cost of carry
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withFirstCostOfCarry(final double costOfCarry) {
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), costOfCarry, getSecondCostOfCarry(), getFirstVolatilitySurface(), getSecondVolatilitySurface(), getFirstSpot(),
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), costOfCarry, getSecondCostOfCarry(), getFirstVolatilitySurface(),
+        getSecondVolatilitySurface(), getFirstSpot(),
         getSecondSpot(), getCorrelation(), getDate());
   }
 
   /**
    * Returns a new data bundle with the cost of carry of the second asset replaced by the argument
-   * @param costOfCarry The new cost of carry
+   * 
+   * @param costOfCarry
+   *          The new cost of carry
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withSecondCostOfCarry(final double costOfCarry) {
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), costOfCarry, getFirstVolatilitySurface(), getSecondVolatilitySurface(), getFirstSpot(), getSecondSpot(),
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), costOfCarry, getFirstVolatilitySurface(),
+        getSecondVolatilitySurface(), getFirstSpot(), getSecondSpot(),
         getCorrelation(), getDate());
   }
 
   /**
    * Returns a new data bundle with the volatility surface of the first asset replaced by the argument
-   * @param volatilitySurface The new volatility surface
+   * 
+   * @param volatilitySurface
+   *          The new volatility surface
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withFirstVolatilitySurface(final VolatilitySurface volatilitySurface) {
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), volatilitySurface, getSecondVolatilitySurface(), getFirstSpot(),
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), volatilitySurface,
+        getSecondVolatilitySurface(), getFirstSpot(),
         getSecondSpot(), getCorrelation(), getDate());
   }
 
   /**
    * Returns a new data bundle with the volatility surface of the second asset replaced by the argument
-   * @param volatilitySurface The new volatility surface
+   * 
+   * @param volatilitySurface
+   *          The new volatility surface
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withSecondVolatilitySurface(final VolatilitySurface volatilitySurface) {
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(), volatilitySurface, getFirstSpot(), getSecondSpot(),
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(),
+        volatilitySurface, getFirstSpot(), getSecondSpot(),
         getCorrelation(), getDate());
   }
 
   /**
    * Returns a new data bundle with the spot value of the first asset replaced by the argument
-   * @param spot The new spot
+   * 
+   * @param spot
+   *          The new spot
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withFirstSpot(final double spot) {
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(), getSecondVolatilitySurface(), spot,
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(),
+        getSecondVolatilitySurface(), spot,
         getSecondSpot(), getCorrelation(), getDate());
   }
 
   /**
    * Returns a new data bundle with the spot value of the second asset replaced by the argument
-   * @param spot The new spot
+   * 
+   * @param spot
+   *          The new spot
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withSecondSpot(final double spot) {
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(), getSecondVolatilitySurface(), getFirstSpot(), spot,
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(),
+        getSecondVolatilitySurface(), getFirstSpot(), spot,
         getCorrelation(), getDate());
   }
 
   /**
    * Returns a new data bundle with the correlation between the two spot prices replaced by the argument
-   * 
+   *
    * @param correlation
    *          The correlation
    * @return The new data bundle
@@ -271,17 +306,21 @@ public class StandardTwoAssetOptionDataBundle {
     if (!ArgumentChecker.isInRangeInclusive(-1, 1, correlation)) {
       throw new IllegalArgumentException("Correlation must be between 0 and 1");
     }
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(), getSecondVolatilitySurface(), getFirstSpot(),
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(),
+        getSecondVolatilitySurface(), getFirstSpot(),
         getSecondSpot(), correlation, getDate());
   }
 
   /**
    * Returns a new data bundle with the date replaced by the argument
-   * @param date The date
+   * 
+   * @param date
+   *          The date
    * @return The new data bundle
    */
   public StandardTwoAssetOptionDataBundle withDate(final ZonedDateTime date) {
-    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(), getSecondVolatilitySurface(), getFirstSpot(),
+    return new StandardTwoAssetOptionDataBundle(getInterestRateCurve(), getFirstCostOfCarry(), getSecondCostOfCarry(), getFirstVolatilitySurface(),
+        getSecondVolatilitySurface(), getFirstSpot(),
         getSecondSpot(), getCorrelation(), date);
   }
 

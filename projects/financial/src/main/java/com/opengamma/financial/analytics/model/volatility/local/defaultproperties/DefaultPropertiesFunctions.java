@@ -172,10 +172,14 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(ForwardPDEDefaults.class, Double.toString(getTheta()), Integer.toString(getNTimeSteps()), Integer.toString(getNSpaceSteps()),
-        Double.toString(getTimeStepBunching()), Double.toString(getSpaceStepBunching()), Double.toString(getMaxProxyDelta()), Double.toString(getCentreMoneyness()), getSpaceDirectionInterpolator()));
-    functions.add(functionConfiguration(BackwardPDEDefaults.class, Double.toString(getTheta()), Integer.toString(getNTimeSteps()), Integer.toString(getNSpaceSteps()),
-        Double.toString(getTimeStepBunching()), Double.toString(getSpaceStepBunching()), Double.toString(getMaxMoneynessScale()), getSpaceDirectionInterpolator()));
+    functions
+        .add(functionConfiguration(ForwardPDEDefaults.class, Double.toString(getTheta()), Integer.toString(getNTimeSteps()), Integer.toString(getNSpaceSteps()),
+            Double.toString(getTimeStepBunching()), Double.toString(getSpaceStepBunching()), Double.toString(getMaxProxyDelta()),
+            Double.toString(getCentreMoneyness()), getSpaceDirectionInterpolator()));
+    functions.add(
+        functionConfiguration(BackwardPDEDefaults.class, Double.toString(getTheta()), Integer.toString(getNTimeSteps()), Integer.toString(getNSpaceSteps()),
+            Double.toString(getTimeStepBunching()), Double.toString(getSpaceStepBunching()), Double.toString(getMaxMoneynessScale()),
+            getSpaceDirectionInterpolator()));
     if (!getPerCurrencyInfo().isEmpty()) {
       addPDECurveDefaults(functions);
     }

@@ -71,22 +71,25 @@ public class VolatilitySurfaceDefinitionFunction extends AbstractFunction {
             }
           }
         } else if (instrumentType.equals(InstrumentTypeProperties.EQUITY_OPTION) || instrumentType.equals(InstrumentTypeProperties.EQUITY_FUTURE_OPTION)) {
-          //FIXME: Modify to take ExternalId to avoid incorrect cast to UniqueId
+          // FIXME: Modify to take ExternalId to avoid incorrect cast to UniqueId
           final String fullDefinitionName = surfaceName + "_" + EquitySecurityUtils.getTrimmedTarget(UniqueId.parse(target.getValue().toString()));
           definition = _volatilitySurfaceDefinitionSource.getDefinition(fullDefinitionName, instrumentType);
           if (definition == null) {
-            throw new OpenGammaRuntimeException("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + instrumentType);
+            throw new OpenGammaRuntimeException(
+                "Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + instrumentType);
           }
         } else {
           final String fullDefinitionName = surfaceName + "_" + target.getUniqueId().getValue();
           definition = _volatilitySurfaceDefinitionSource.getDefinition(fullDefinitionName, instrumentType);
           if (definition == null) {
-            throw new OpenGammaRuntimeException("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + instrumentType);
+            throw new OpenGammaRuntimeException(
+                "Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + instrumentType);
           }
         }
         @SuppressWarnings("synthetic-access")
-        final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DEFINITION, target.toSpecification(), createValueProperties()
-            .with(ValuePropertyNames.SURFACE, surfaceName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, instrumentType).get());
+        final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DEFINITION, target.toSpecification(),
+            createValueProperties()
+                .with(ValuePropertyNames.SURFACE, surfaceName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, instrumentType).get());
         return Collections.singleton(new ComputedValue(spec, definition));
       }
 
@@ -98,12 +101,14 @@ public class VolatilitySurfaceDefinitionFunction extends AbstractFunction {
       @SuppressWarnings("synthetic-access")
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-        return Collections.singleton(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DEFINITION, target.toSpecification(), createValueProperties()
-            .withAny(ValuePropertyNames.SURFACE).withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE).get()));
+        return Collections
+            .singleton(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DEFINITION, target.toSpecification(), createValueProperties()
+                .withAny(ValuePropertyNames.SURFACE).withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE).get()));
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final Set<String> surfaceNames = desiredValue.getConstraints().getValues(ValuePropertyNames.SURFACE);
         if (surfaceNames == null || surfaceNames.size() != 1) {
           return null;

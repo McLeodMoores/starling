@@ -47,11 +47,10 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 
 /**
- * Function that computes the profit or loss since previous close,
- * as defined by {@link ValueRequirementNames#HISTORICAL_TIME_SERIES_LATEST}. This will get most recent closing price before today.
- * By intention, this will not be today's close even if it's available. Note that this may be stale, if time series aren't updated nightly, as we take latest value.
- * Illiquid securities do not trade each day.
- * As the name MarkToMarket implies, this simple Function applies to Trades on Exchange-Traded Securities.
+ * Function that computes the profit or loss since previous close, as defined by {@link ValueRequirementNames#HISTORICAL_TIME_SERIES_LATEST}. This will get most
+ * recent closing price before today. By intention, this will not be today's close even if it's available. Note that this may be stale, if time series aren't
+ * updated nightly, as we take latest value. Illiquid securities do not trade each day. As the name MarkToMarket implies, this simple Function applies to Trades
+ * on Exchange-Traded Securities.
  */
 public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -87,9 +86,9 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext,
-                                    final FunctionInputs inputs,
-                                    final ComputationTarget target,
-                                    final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+      final FunctionInputs inputs,
+      final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     // 1. Unpack
     final Trade trade = target.getTrade();
     final Security security = trade.getSecurity();
@@ -102,7 +101,8 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
     final String tradeType = desiredValue.getConstraint(PnLFunctionUtils.PNL_TRADE_TYPE_CONSTRAINT);
     if (tradeType == null) {
       throw new OpenGammaRuntimeException("TradeType not set for: " + security.getName() +
-          ". Choose one of {" + PnLFunctionUtils.PNL_TRADE_TYPE_OPEN + "," + PnLFunctionUtils.PNL_TRADE_TYPE_NEW + "," + PnLFunctionUtils.PNL_TRADE_TYPE_ALL + "}");
+          ". Choose one of {" + PnLFunctionUtils.PNL_TRADE_TYPE_OPEN + "," + PnLFunctionUtils.PNL_TRADE_TYPE_NEW + "," + PnLFunctionUtils.PNL_TRADE_TYPE_ALL
+          + "}");
     }
 
     // Create output specification. Check for trivial cases
@@ -187,8 +187,8 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(getValueRequirementName(),
-                                                        target.toSpecification(),
-                                                        createValueProperties(target).get()));
+        target.toSpecification(),
+        createValueProperties(target).get()));
   }
 
   @Override

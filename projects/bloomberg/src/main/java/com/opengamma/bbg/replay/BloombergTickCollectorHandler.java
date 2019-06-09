@@ -50,8 +50,10 @@ public class BloombergTickCollectorHandler implements EventHandler {
   private final BloombergTicksCollector _ticksCollector;
 
   /**
-   * @param allTicksQueue  the queue of ticks, not null
-   * @param ticksCollector the ticks collector, not null
+   * @param allTicksQueue
+   *          the queue of ticks, not null
+   * @param ticksCollector
+   *          the ticks collector, not null
    */
   public BloombergTickCollectorHandler(final BlockingQueue<FudgeMsg> allTicksQueue, final BloombergTicksCollector ticksCollector) {
     ArgumentChecker.notNull(allTicksQueue, "allTicksQueue");
@@ -85,8 +87,8 @@ public class BloombergTickCollectorHandler implements EventHandler {
     while (msgIter.hasNext()) {
       final Message msg = msgIter.next();
       final String topic = (String) msg.correlationID().object();
-      LOGGER.debug("{}: {} - {}", new Object[]{_dateFormat
-          .format(Calendar.getInstance().getTime()), topic, msg.messageType()});
+      LOGGER.debug("{}: {} - {}", new Object[] { _dateFormat
+                    .format(Calendar.getInstance().getTime()), topic, msg.messageType() });
       if (msg.messageType().equals("SubscriptionTerminated")) {
         LOGGER.warn("SubscriptionTerminated for {}", msg.correlationID().object());
         LOGGER.warn("msg = {}", msg.toString());
@@ -96,7 +98,8 @@ public class BloombergTickCollectorHandler implements EventHandler {
         // This can occur on SubscriptionFailure.
         final Element reason = msg.getElement(REASON);
         LOGGER.warn("{}: security={} category={} description={}",
-            new Object[]{_dateFormat.format(Calendar.getInstance().getTime()), topic, reason.getElement(CATEGORY).getValueAsString(), reason.getElement(DESCRIPTION).getValueAsString()});
+            new Object[] { _dateFormat.format(Calendar.getInstance().getTime()), topic, reason.getElement(CATEGORY).getValueAsString(),
+                          reason.getElement(DESCRIPTION).getValueAsString() });
       }
 
       if (msg.hasElement(EXCEPTIONS)) {
@@ -108,7 +111,8 @@ public class BloombergTickCollectorHandler implements EventHandler {
           final Element fieldId = exInfo.getElement(FIELD_ID);
           final Element reason = exInfo.getElement(REASON);
           LOGGER.warn("{}: security={} field={} category={}",
-              new Object[]{_dateFormat.format(Calendar.getInstance().getTime()), topic, fieldId.getValueAsString(), reason.getElement(CATEGORY).getValueAsString()});
+              new Object[] { _dateFormat.format(Calendar.getInstance().getTime()), topic, fieldId.getValueAsString(),
+                            reason.getElement(CATEGORY).getValueAsString() });
         }
       }
       LOGGER.debug("");
@@ -129,8 +133,8 @@ public class BloombergTickCollectorHandler implements EventHandler {
           tickMsg.add(RECEIVED_TS_KEY, epochMillis);
           tickMsg.add(SECURITY_KEY, securityDes);
           tickMsg.add(FIELDS_KEY, BloombergDataUtils.parseElement(msg.asElement()));
-          LOGGER.debug("{}: {} - {}", new Object[]{_dateFormat
-              .format(Calendar.getInstance().getTime()), securityDes, msg.messageType()});
+          LOGGER.debug("{}: {} - {}", new Object[] { _dateFormat
+                        .format(Calendar.getInstance().getTime()), securityDes, msg.messageType() });
           LOGGER.debug("{}", msg.asElement());
           _allTicksQueue.put(tickMsg);
           LOGGER.debug("singleQueueSize {}", _allTicksQueue.size());

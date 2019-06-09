@@ -16,7 +16,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public abstract class AbstractFailureWithRequirementsNode extends AbstractFailureNode {
   private final ValueSpecificationToRequirementMapNode _valueSpecificationToRequirementMap;
 
-  public AbstractFailureWithRequirementsNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
+  public AbstractFailureWithRequirementsNode(final Object parent, final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> satisfied, final String mapName) {
     super(parent, valueRequirement, function, desiredOutput);
     _valueSpecificationToRequirementMap = new ValueSpecificationToRequirementMapNode(this, satisfied, mapName);

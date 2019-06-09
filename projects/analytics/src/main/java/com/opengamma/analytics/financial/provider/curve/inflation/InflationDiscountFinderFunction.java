@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.curve.inflation;
@@ -18,8 +18,8 @@ import com.opengamma.util.ArgumentChecker;
 public class InflationDiscountFinderFunction extends Function1D<DoubleMatrix1D, DoubleMatrix1D> {
 
   /**
-  * The instrument value calculator.
-  */
+   * The instrument value calculator.
+   */
   private final InstrumentDerivativeVisitor<InflationProviderInterface, Double> _calculator;
 
   /**
@@ -28,11 +28,15 @@ public class InflationDiscountFinderFunction extends Function1D<DoubleMatrix1D, 
   private final InflationDiscountBuildingData _data;
 
   /**
-   * Constructor
-   * @param inflationCalculator The instrument value calculator.
-   * @param data The data required for curve building.
+   * Constructor.
+   * 
+   * @param inflationCalculator
+   *          The instrument value calculator.
+   * @param data
+   *          The data required for curve building.
    */
-  public InflationDiscountFinderFunction(final InstrumentDerivativeVisitor<InflationProviderInterface, Double> inflationCalculator, final InflationDiscountBuildingData data) {
+  public InflationDiscountFinderFunction(final InstrumentDerivativeVisitor<InflationProviderInterface, Double> inflationCalculator,
+      final InflationDiscountBuildingData data) {
     ArgumentChecker.notNull(inflationCalculator, "Calculator");
     ArgumentChecker.notNull(data, "Data");
     _calculator = inflationCalculator;

@@ -36,13 +36,14 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Calculates Present Value on FX Forward instruments.
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
 public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final ComputationTargetType TYPE = FinancialSecurityTypes.FX_FORWARD_SECURITY.or(FinancialSecurityTypes.NON_DELIVERABLE_FX_FORWARD_SECURITY).or(FinancialSecurityTypes.SWAP_SECURITY);
+  private static final ComputationTargetType TYPE = FinancialSecurityTypes.FX_FORWARD_SECURITY.or(FinancialSecurityTypes.NON_DELIVERABLE_FX_FORWARD_SECURITY)
+      .or(FinancialSecurityTypes.SWAP_SECURITY);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -88,7 +89,8 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
         return null;
       }
     }
-    final ValueRequirement fxPvRequirement = new ValueRequirement(ValueRequirementNames.FX_PRESENT_VALUE, target.toSpecification(), constraints.copy().withoutAny(ValuePropertyNames.CURRENCY).get());
+    final ValueRequirement fxPvRequirement = new ValueRequirement(ValueRequirementNames.FX_PRESENT_VALUE, target.toSpecification(),
+        constraints.copy().withoutAny(ValuePropertyNames.CURRENCY).get());
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final Currency payCurrency = getPayCurrency(security);
     final Currency receiveCurrency = getReceiveCurrency(security);
@@ -97,7 +99,8 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     ValueProperties properties = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       if (entry.getKey().getValueName().equals(ValueRequirementNames.FX_PRESENT_VALUE)) {
@@ -109,7 +112,8 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
       return null;
     }
     final Currency currency = getPayCurrency((FinancialSecurity) target.getSecurity());
-    return ImmutableSet.of(new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, target.toSpecification(), getResultProperties(currency, properties.copy())));
+    return ImmutableSet
+        .of(new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, target.toSpecification(), getResultProperties(currency, properties.copy())));
   }
 
   @Override
@@ -122,7 +126,8 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
     final ValueSpecification inputSpec = input.getSpecification();
     final CurrencyLabelledMatrix1D fxPresentValue = (CurrencyLabelledMatrix1D) input.getValue();
     if (fxPresentValue.size() != 2) {
-      throw new OpenGammaRuntimeException("Expected " + ValueRequirementNames.FX_PRESENT_VALUE + " input to contain 2 currency values, but found " + fxPresentValue.size());
+      throw new OpenGammaRuntimeException(
+          "Expected " + ValueRequirementNames.FX_PRESENT_VALUE + " input to contain 2 currency values, but found " + fxPresentValue.size());
     }
     int payIndex = -1;
     int receiveIndex = -1;
@@ -133,7 +138,8 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
       } else if (receiveCurrency.equals(currency)) {
         receiveIndex = i;
       } else {
-        throw new OpenGammaRuntimeException(ValueRequirementNames.FX_PRESENT_VALUE + " contains unexpected currency " + currency + ". Expected " + payCurrency + " or " + receiveCurrency + ".");
+        throw new OpenGammaRuntimeException(ValueRequirementNames.FX_PRESENT_VALUE + " contains unexpected currency " + currency + ". Expected " + payCurrency
+            + " or " + receiveCurrency + ".");
       }
     }
 
@@ -146,8 +152,10 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * @param target The target
-   * @param fxPresentValueProperties The properties of the FX present value input
+   * @param target
+   *          The target
+   * @param fxPresentValueProperties
+   *          The properties of the FX present value input
    * @return The result specification
    */
   protected ValueSpecification getResultSpec(final ComputationTarget target, final ValueProperties.Builder fxPresentValueProperties) {
@@ -156,8 +164,10 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * @param currency The currency of the result
-   * @param fxPresentValueProperties The properties of the FX present value input
+   * @param currency
+   *          The currency of the result
+   * @param fxPresentValueProperties
+   *          The properties of the FX present value input
    * @return The result properties
    */
   protected ValueProperties getResultProperties(final Currency currency, final ValueProperties.Builder fxPresentValueProperties) {
@@ -169,8 +179,9 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Gets the pay currency of the security.
-   * 
-   * @param security The security
+   *
+   * @param security
+   *          The security
    * @return The pay currency
    */
   protected Currency getPayCurrency(final FinancialSecurity security) {
@@ -179,8 +190,9 @@ public class FXForwardPresentValueFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Gets the receive currency of the security.
-   * 
-   * @param security The security
+   *
+   * @param security
+   *          The security
    * @return The receive currency
    */
   protected Currency getReceiveCurrency(final FinancialSecurity security) {

@@ -20,7 +20,8 @@ import com.opengamma.analytics.financial.model.interestrate.definition.HullWhite
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- *  Pricing and sensitivities of a CMS coupon by discounting (no convexity adjustment).
+ * Pricing and sensitivities of a CMS coupon by discounting (no convexity adjustment).
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -33,6 +34,7 @@ public final class CouponCMSDiscountingMethod implements PricingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponCMSDiscountingMethod getInstance() {
@@ -47,8 +49,11 @@ public final class CouponCMSDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the present value of a CMS coupon by discounting (no convexity adjustment).
-   * @param cmsCoupon The CMS coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param cmsCoupon
+   *          The CMS coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The coupon price.
    */
   public CurrencyAmount presentValue(final CouponCMS cmsCoupon, final YieldCurveBundle curves) {
@@ -71,8 +76,11 @@ public final class CouponCMSDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the present value sensitivity to the yield curves of a CMS coupon by discounting (no convexity adjustment).
-   * @param cmsCoupon The CMS coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param cmsCoupon
+   *          The CMS coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value curve sensitivity.
    */
   public InterestRateCurveSensitivity presentValueSensitivity(final CouponCMS cmsCoupon, final YieldCurveBundle curves) {
@@ -86,7 +94,8 @@ public final class CouponCMSDiscountingMethod implements PricingMethod {
     final double paymentDiscountFactor = fundingCurve.getDiscountFactor(paymentTime);
     final ParRateCurveSensitivityCalculator parRateSensCal = ParRateCurveSensitivityCalculator.getInstance();
     final InterestRateCurveSensitivity swapRateSens = new InterestRateCurveSensitivity(cmsCoupon.getUnderlyingSwap().accept(parRateSensCal, curves));
-    final InterestRateCurveSensitivity payDFSens = new InterestRateCurveSensitivity(PresentValueCurveSensitivityCalculator.discountFactorSensitivity(fundingCurveName, fundingCurve, paymentTime));
+    final InterestRateCurveSensitivity payDFSens = new InterestRateCurveSensitivity(
+        PresentValueCurveSensitivityCalculator.discountFactorSensitivity(fundingCurveName, fundingCurve, paymentTime));
     InterestRateCurveSensitivity result = swapRateSens.multipliedBy(paymentDiscountFactor);
     result = result.plus(payDFSens.multipliedBy(swapRate));
     result = result.multipliedBy(cmsCoupon.getNotional() * cmsCoupon.getPaymentYearFraction());

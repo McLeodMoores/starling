@@ -45,7 +45,8 @@ implements FinancialSecurityVisitorWithData<Double, InstrumentDefinitionWithData
   @Override
   public InstrumentDefinitionWithData<?, Double> visit(final FutureSecurity future, final Double referencePrice) {
 
-    final FinancialSecurityVisitor<InstrumentDefinitionWithData<?, Double>> visitor = new FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>() {
+    final FinancialSecurityVisitor<InstrumentDefinitionWithData<?, Double>> visitor =
+        new FinancialSecurityVisitorAdapter<InstrumentDefinitionWithData<?, Double>>() {
 
       @Override
       public InstrumentDefinitionWithData<?, Double> visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
@@ -94,7 +95,6 @@ implements FinancialSecurityVisitorWithData<Double, InstrumentDefinitionWithData
         final ZonedDateTime expiry = security.getExpiry().getExpiry();
         return new EquityFutureDefinition(expiry, expiry, referencePrice, security.getCurrency(), security.getUnitAmount());
       }
-
 
       @Override
       public InstrumentDefinitionWithData<?, Double> visitIndexFutureSecurity(final IndexFutureSecurity security) {

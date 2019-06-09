@@ -23,7 +23,8 @@ public class SimpleFutureDefinition implements SimpleInstrumentDefinition<Simple
   private final Currency _currency;
   private final double _unitAmount;
 
-  public SimpleFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double referencePrice, final Currency currency, final double unitAmount) {
+  public SimpleFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double referencePrice, final Currency currency,
+      final double unitAmount) {
     Validate.notNull(expiryDate, "expiry date");
     Validate.notNull(settlementDate, "settlement date");
     Validate.notNull(currency, "currency");

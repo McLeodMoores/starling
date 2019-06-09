@@ -34,9 +34,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a physical delivery swaption with Black model.
- *  The implied Black volatilities are expiry and underlying maturity dependent (no smile).
- *  The swap underlying the swaption should be a Fixed for Ibor (without spread) swap.
+ * Class used to compute the price and sensitivity of a physical delivery swaption with Black model. The implied Black volatilities are expiry and underlying
+ * maturity dependent (no smile). The swap underlying the swaption should be a Fixed for Ibor (without spread) swap.
  */
 public final class SwaptionPhysicalFixedIborBlackMethod {
 
@@ -47,6 +46,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborBlackMethod getInstance() {
@@ -68,8 +68,11 @@ public final class SwaptionPhysicalFixedIborBlackMethod {
 
   /**
    * Computes the present value of a physical delivery European swaption in the Black model.
-   * @param swaption The swaption.
-   * @param blackMulticurves Black volatility for swaption and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param blackMulticurves
+   *          Black volatility for swaption and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final BlackSwaptionFlatProviderInterface blackMulticurves) {
@@ -111,8 +114,11 @@ public final class SwaptionPhysicalFixedIborBlackMethod {
 
   /**
    * Computes the implied Black volatility of the vanilla swaption.
-   * @param swaption The swaption.
-   * @param blackMulticurves Black volatility for swaption and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param blackMulticurves
+   *          Black volatility for swaption and multi-curves provider.
    * @return The implied volatility.
    */
   public double impliedVolatility(final SwaptionPhysicalFixedIbor swaption, final BlackSwaptionFlatProviderInterface blackMulticurves) {
@@ -125,11 +131,15 @@ public final class SwaptionPhysicalFixedIborBlackMethod {
 
   /**
    * Computes the present value rate sensitivity to rates of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param blackMulticurves Black volatility for swaption and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param blackMulticurves
+   *          Black volatility for swaption and multi-curves provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption, final BlackSwaptionFlatProviderInterface blackMulticurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface blackMulticurves) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(blackMulticurves, "Black volatility for swaption and multicurve");
     final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = blackMulticurves.getBlackParameters().getGeneratorSwap();
@@ -176,11 +186,15 @@ public final class SwaptionPhysicalFixedIborBlackMethod {
 
   /**
    * Computes the 2nd order sensitivity of the present value to rates of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param blackMulticurves Black volatility for swaption and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param blackMulticurves
+   *          Black volatility for swaption and multi-curves provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueSecondOrderCurveSensitivity(final SwaptionPhysicalFixedIbor swaption, final BlackSwaptionFlatProviderInterface blackMulticurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueSecondOrderCurveSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface blackMulticurves) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(blackMulticurves, "Black volatility for swaption and multicurve");
     final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = blackMulticurves.getBlackParameters().getGeneratorSwap();
@@ -210,7 +224,8 @@ public final class SwaptionPhysicalFixedIborBlackMethod {
     final MulticurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification,
         calendar, multicurves);
     final MulticurveSensitivity forwardModifiedDr = PRCSDC.visitFixedCouponSwap(swaption.getUnderlyingSwap(), dayCountModification, multicurves);
-    final MulticurveSensitivity pvbpModifiedDr2 = METHOD_SWAP.presentValueBasisPointSecondOrderCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification,
+    final MulticurveSensitivity pvbpModifiedDr2 = METHOD_SWAP.presentValueBasisPointSecondOrderCurveSensitivity(swaption.getUnderlyingSwap(),
+        dayCountModification,
         calendar, multicurves);
     final MulticurveSensitivity forwardModifiedDr2 = PRCSDC.visitFixedCouponSwapDerivative(swaption.getUnderlyingSwap(), dayCountModification, multicurves);
 
@@ -232,11 +247,15 @@ public final class SwaptionPhysicalFixedIborBlackMethod {
 
   /**
    * Computes the present value sensitivity to the Black volatility (also called vega) of a physical delivery European swaption in the Black swaption model.
-   * @param swaption The swaption.
-   * @param blackMulticurves Black volatility for swaption and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param blackMulticurves
+   *          Black volatility for swaption and multi-curves provider.
    * @return The present value Black sensitivity.
    */
-  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionPhysicalFixedIbor swaption, final BlackSwaptionFlatProviderInterface blackMulticurves) {
+  public PresentValueBlackSwaptionSensitivity presentValueBlackSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface blackMulticurves) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(blackMulticurves, "Black volatility for swaption and multicurve");
     final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = blackMulticurves.getBlackParameters().getGeneratorSwap();

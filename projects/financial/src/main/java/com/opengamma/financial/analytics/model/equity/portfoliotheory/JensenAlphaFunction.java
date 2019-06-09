@@ -54,7 +54,7 @@ import com.opengamma.timeseries.TimeSeriesIntersector;
 public class JensenAlphaFunction extends AbstractFunction.NonCompiledInvoker {
 
   private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION);
-  private static final double DAYS_PER_YEAR = 365.25; //TODO
+  private static final double DAYS_PER_YEAR = 365.25; // TODO
   private final String _resolutionKey;
 
   public JensenAlphaFunction(final String resolutionKey) {
@@ -84,7 +84,8 @@ public class JensenAlphaFunction extends AbstractFunction.NonCompiledInvoker {
     if (riskFreeRateTS == null) {
       throw new OpenGammaRuntimeException("Risk free rate series was not available");
     }
-    final Object assetPnLObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec)); //TODO replace with return series when portfolio weights are in
+    final Object assetPnLObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec)); // TODO replace with return series when
+                                                                                                                       // portfolio weights are in
     if (assetPnLObject == null) {
       throw new OpenGammaRuntimeException("Asset P&L was null");
     }
@@ -169,7 +170,8 @@ public class JensenAlphaFunction extends AbstractFunction.NonCompiledInvoker {
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM"));
     final DateConstraint startDate = DateConstraint.VALUATION_TIME.minus(samplingPeriodName);
-    HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
+    HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE,
+        _resolutionKey);
     if (timeSeries == null) {
       return null;
     }
@@ -226,6 +228,6 @@ public class JensenAlphaFunction extends AbstractFunction.NonCompiledInvoker {
     }
     final Function<double[], Double> expectedExcessReturnCalculator = StatisticsCalculatorFactory.getCalculator(excessReturnCalculatorNames.iterator().next());
     final DoubleTimeSeriesStatisticsCalculator excessReturnCalculator = new DoubleTimeSeriesStatisticsCalculator(expectedExcessReturnCalculator);
-    return new JensenAlphaCalculator(excessReturnCalculator, excessReturnCalculator, excessReturnCalculator); //TODO check that they can both be the same
+    return new JensenAlphaCalculator(excessReturnCalculator, excessReturnCalculator, excessReturnCalculator); // TODO check that they can both be the same
   }
 }

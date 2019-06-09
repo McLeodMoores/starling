@@ -35,12 +35,19 @@ public abstract class CouponDefinition extends PaymentDefinition {
 
   /**
    * Constructor from all the coupon details.
-   * @param currency The coupon currency.
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period.
-   * @param accrualEndDate The end date of the accrual period.
-   * @param paymentAccrualFactor The accrual factor of the accrual period.
-   * @param notional The coupon notional.
+   *
+   * @param currency
+   *          The coupon currency.
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period.
+   * @param accrualEndDate
+   *          The end date of the accrual period.
+   * @param paymentAccrualFactor
+   *          The accrual factor of the accrual period.
+   * @param notional
+   *          The coupon notional.
    */
   public CouponDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
       final double paymentAccrualFactor, final double notional) {
@@ -57,11 +64,17 @@ public abstract class CouponDefinition extends PaymentDefinition {
 
   /**
    * Constructor with reduced number of dates. The payment date is used for the coupon accrual end date.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional Coupon notional.
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
    */
   public CouponDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final double accrualFactor,
       final double notional) {
@@ -75,6 +88,7 @@ public abstract class CouponDefinition extends PaymentDefinition {
 
   /**
    * Gets the accrual start date.
+   *
    * @return The accrual start date.
    */
   public ZonedDateTime getAccrualStartDate() {
@@ -83,6 +97,7 @@ public abstract class CouponDefinition extends PaymentDefinition {
 
   /**
    * Gets the accrual end date.
+   *
    * @return The accrual end date.
    */
   public ZonedDateTime getAccrualEndDate() {
@@ -91,6 +106,7 @@ public abstract class CouponDefinition extends PaymentDefinition {
 
   /**
    * Gets the accrual factor (or year fraction).
+   *
    * @return The accrual factor.
    */
   public double getPaymentYearFraction() {
@@ -99,6 +115,7 @@ public abstract class CouponDefinition extends PaymentDefinition {
 
   /**
    * Gets the notional field.
+   *
    * @return the notional
    */
   public double getNotional() {
@@ -107,7 +124,8 @@ public abstract class CouponDefinition extends PaymentDefinition {
 
   @Override
   public String toString() {
-    return super.toString() + ", Coupon period = [" + _accrualStartDate.toString() + " - " + _accrualEndDate.toString() + " - " + _paymentYearFraction + "], Notional = "
+    return super.toString() + ", Coupon period = [" + _accrualStartDate.toString() + " - " + _accrualEndDate.toString() + " - " + _paymentYearFraction
+        + "], Notional = "
         + _notional;
   }
 
@@ -124,9 +142,9 @@ public abstract class CouponDefinition extends PaymentDefinition {
     result = prime * result + _accrualStartDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_paymentYearFraction);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

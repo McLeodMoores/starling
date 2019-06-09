@@ -59,7 +59,7 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
     _resolutionKey = resolutionKey;
   }
 
-  //TODO need to have a schedule for the price series
+  // TODO need to have a schedule for the price series
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
@@ -70,17 +70,18 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
     final HistoricalTimeSeriesBundle timeSeries = new HistoricalTimeSeriesBundle();
     for (final ComputedValue input : inputs.getAllValues()) {
       if (ValueRequirementNames.PNL_SERIES.equals(input.getSpecification().getValueName())) {
-        assetPnL = (DoubleTimeSeries<?>) inputs.getValue(ValueRequirementNames.PNL_SERIES); //TODO replace with return series when portfolio weights are in
+        assetPnL = (DoubleTimeSeries<?>) inputs.getValue(ValueRequirementNames.PNL_SERIES); // TODO replace with return series when portfolio weights are in
       } else if (ValueRequirementNames.FAIR_VALUE.equals(input.getSpecification().getValueName())) {
         assetFairValue = (Double) inputs.getValue(ValueRequirementNames.FAIR_VALUE);
       } else if (ValueRequirementNames.HISTORICAL_TIME_SERIES.equals(input.getSpecification().getValueName())) {
         final HistoricalTimeSeries ts = (HistoricalTimeSeries) input.getValue();
-        timeSeries.add(input.getSpecification().getProperty(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY), timeSeriesSource.getExternalIdBundle(ts.getUniqueId()), ts);
+        timeSeries.add(input.getSpecification().getProperty(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY),
+            timeSeriesSource.getExternalIdBundle(ts.getUniqueId()), ts);
       }
     }
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
-    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); //TODO
+    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); // TODO
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueProperties constraints = desiredValue.getConstraints();
     final HistoricalTimeSeries marketTimeSeries = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, bundle.getCAPMMarket());
@@ -101,19 +102,27 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
     final double alphaStdError = regression.getStandardErrorOfBetas()[0];
     final ValueProperties resultProperties = getResultProperties(desiredValues.iterator().next());
     final Set<ComputedValue> result = new HashSet<>();
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ADJUSTED_R_SQUARED, targetSpec, resultProperties), regression.getAdjustedRSquared()));
+    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ADJUSTED_R_SQUARED, targetSpec, resultProperties),
+        regression.getAdjustedRSquared()));
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ALPHA, targetSpec, resultProperties), alpha));
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA, targetSpec, resultProperties), regression.getBetas()[1]));
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_MEAN_SQUARE_ERROR, targetSpec, resultProperties), regression.getMeanSquareError()));
+    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_MEAN_SQUARE_ERROR, targetSpec, resultProperties),
+        regression.getMeanSquareError()));
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ALPHA_PVALUES, targetSpec, resultProperties), alphaPValue));
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA_PVALUES, targetSpec, resultProperties), regression.getPValues()[1]));
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_R_SQUARED, targetSpec, resultProperties), regression.getRSquared()));
+    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA_PVALUES, targetSpec, resultProperties),
+        regression.getPValues()[1]));
+    result.add(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_R_SQUARED, targetSpec, resultProperties), regression.getRSquared()));
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ALPHA_RESIDUALS, targetSpec, resultProperties), alphaResidual));
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA_RESIDUALS, targetSpec, resultProperties), regression.getResiduals()[1]));
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_ALPHA, targetSpec, resultProperties), alphaStdError));
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_BETA, targetSpec, resultProperties), regression.getStandardErrorOfBetas()[1]));
+    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA_RESIDUALS, targetSpec, resultProperties),
+        regression.getResiduals()[1]));
+    result.add(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_ALPHA, targetSpec, resultProperties), alphaStdError));
+    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_BETA, targetSpec, resultProperties),
+        regression.getStandardErrorOfBetas()[1]));
     result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_ALPHA_TSTATS, targetSpec, resultProperties), alphaTStat));
-    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA_TSTATS, targetSpec, resultProperties), regression.getTStatistics()[1]));
+    result.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.CAPM_REGRESSION_BETA_TSTATS, targetSpec, resultProperties),
+        regression.getTStatistics()[1]));
     return result;
   }
 
@@ -146,15 +155,17 @@ public class CAPMFromRegressionModelFunction extends AbstractFunction.NonCompile
         .with(ValuePropertyNames.RETURN_CALCULATOR, returnCalculatorName.iterator().next()).get()));
     requirements.add(new ValueRequirement(ValueRequirementNames.FAIR_VALUE, target.toSpecification()));
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); //TODO
+    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); // TODO
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final HistoricalTimeSeriesResolutionResult marketTimeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
+    final HistoricalTimeSeriesResolutionResult marketTimeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
     if (marketTimeSeries == null) {
       return null;
     }
     requirements.add(HistoricalTimeSeriesFunctionUtils.createHTSRequirement(marketTimeSeries,
         MarketDataRequirementNames.MARKET_VALUE, DateConstraint.VALUATION_TIME.minus(samplingPeriod), true, DateConstraint.VALUATION_TIME, true));
-    final HistoricalTimeSeriesResolutionResult riskFreeTimeSeries = resolver.resolve(bundle.getCAPMRiskFreeRate(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
+    final HistoricalTimeSeriesResolutionResult riskFreeTimeSeries = resolver.resolve(bundle.getCAPMRiskFreeRate(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
     if (riskFreeTimeSeries == null) {
       return null;
     }

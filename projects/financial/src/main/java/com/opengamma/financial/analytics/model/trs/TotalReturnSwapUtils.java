@@ -26,16 +26,21 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class TotalReturnSwapUtils {
 
-
   /**
    * Gets the index time series and adds zone and time information.
-   * @param leg The funding leg, not null
-   * @param swapEffectiveDate The effective date of the swap, not null
-   * @param now The valuation time, not null
-   * @param timeSeries The time series bundle, not null
+   * 
+   * @param leg
+   *          The funding leg, not null
+   * @param swapEffectiveDate
+   *          The effective date of the swap, not null
+   * @param now
+   *          The valuation time, not null
+   * @param timeSeries
+   *          The time series bundle, not null
    * @return The time series with zone and time information added.
    */
-  public static ZonedDateTimeDoubleTimeSeries getIndexTimeSeries(final FloatingInterestRateSwapLeg leg, final LocalDate swapEffectiveDate, final ZonedDateTime now,
+  public static ZonedDateTimeDoubleTimeSeries getIndexTimeSeries(final FloatingInterestRateSwapLeg leg, final LocalDate swapEffectiveDate,
+      final ZonedDateTime now,
       final HistoricalTimeSeriesBundle timeSeries) {
     ArgumentChecker.notNull(leg, "leg");
     ArgumentChecker.notNull(swapEffectiveDate, "swapEffectiveDate");
@@ -58,8 +63,11 @@ public class TotalReturnSwapUtils {
 
   /**
    * Converts a local date-based time series to a zoned date time-based series.
-   * @param timeZone The time zone, not null
-   * @param localDateTS The local date time series, not null
+   * 
+   * @param timeZone
+   *          The time zone, not null
+   * @param localDateTS
+   *          The local date time series, not null
    * @return A zoned date time series
    */
   public static ZonedDateTimeDoubleTimeSeries convertTimeSeries(final ZoneId timeZone, final LocalDateDoubleTimeSeries localDateTS) {

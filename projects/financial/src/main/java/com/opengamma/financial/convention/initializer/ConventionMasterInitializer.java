@@ -104,14 +104,15 @@ public abstract class ConventionMasterInitializer {
 
   protected void addIborSecurity(final SecurityMaster securityMaster, final VanillaIborLegConvention convention) {
     ArgumentChecker.notEmpty(convention.getExternalIdBundle(), "externalIdBundle");
-    addSecurity(securityMaster, new IborIndex(convention.getName(), convention.getName(), convention.getResetTenor(), convention.getIborIndexConvention(), convention.getExternalIdBundle()));
+    addSecurity(securityMaster, new IborIndex(convention.getName(), convention.getName(), convention.getResetTenor(), convention.getIborIndexConvention(),
+        convention.getExternalIdBundle()));
   }
 
   protected void addOvernightSecurity(final SecurityMaster securityMaster, final OvernightIndexConvention convention) {
     ArgumentChecker.notEmpty(convention.getExternalIdBundle(), "externalIdBundle");
     addSecurity(securityMaster,
-                new OvernightIndex(convention.getName(), convention.getName(), convention.getExternalIdBundle().iterator().next(),
-                                   convention.getExternalIdBundle()));
+        new OvernightIndex(convention.getName(), convention.getName(), convention.getExternalIdBundle().iterator().next(),
+            convention.getExternalIdBundle()));
   }
 
   //-------------------------------------------------------------------------

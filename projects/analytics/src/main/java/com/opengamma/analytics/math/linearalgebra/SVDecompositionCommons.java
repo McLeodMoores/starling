@@ -14,8 +14,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * This class is a wrapper for the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/linear/SingularValueDecompositionImpl.html">Commons Math library implementation</a>
- * of singular value decomposition.
+ * This class is a wrapper for the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/linear/SingularValueDecompositionImpl.html">Commons
+ * Math library implementation</a> of singular value decomposition.
  */
 public class SVDecompositionCommons extends Decomposition<SVDecompositionResult> {
 
@@ -30,7 +30,5 @@ public class SVDecompositionCommons extends Decomposition<SVDecompositionResult>
     final SingularValueDecomposition svd = new SingularValueDecompositionImpl(commonsMatrix);
     return new SVDecompositionCommonsResult(svd);
   }
-
-
 
 }

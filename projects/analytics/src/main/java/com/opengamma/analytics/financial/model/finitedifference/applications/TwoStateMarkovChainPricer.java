@@ -33,9 +33,9 @@ public class TwoStateMarkovChainPricer {
   private final Function1D<Double, Double> _initalCond1;
   private final Function1D<Double, Double> _initalCond2;
 
-  //  private final double _lambda12;
-  //  private final double _lambda21;
-  //  private final double _p0;
+  // private final double _lambda12;
+  // private final double _lambda21;
+  // private final double _p0;
 
   public TwoStateMarkovChainPricer(final ForwardCurve forward, final TwoStateMarkovChainDataBundle chainDB) {
     Validate.notNull(forward, "null forward curve");
@@ -49,12 +49,17 @@ public class TwoStateMarkovChainPricer {
   }
 
   /**
-   * Solves a coupled forward PDE for the price of a call option when the process is CEV with vol levels determined by a two state Markov chain
-   * @param forward The forward curve of the underlying asset
-   * @param chainDB The chain data bundle
-   * @param localVolOverlay The local volatility overlay
+   * Solves a coupled forward PDE for the price of a call option when the process is CEV with vol levels determined by a two state Markov chain.
+   *
+   * @param forward
+   *          The forward curve of the underlying asset
+   * @param chainDB
+   *          The chain data bundle
+   * @param localVolOverlay
+   *          The local volatility overlay
    */
-  public TwoStateMarkovChainPricer(final ForwardCurve forward, final TwoStateMarkovChainDataBundle chainDB, final AbsoluteLocalVolatilitySurface localVolOverlay) {
+  public TwoStateMarkovChainPricer(final ForwardCurve forward, final TwoStateMarkovChainDataBundle chainDB,
+      final AbsoluteLocalVolatilitySurface localVolOverlay) {
     Validate.notNull(forward, "null forward curve");
     Validate.notNull(chainDB, "null MC DB");
     Validate.notNull(localVolOverlay, "null local vol");

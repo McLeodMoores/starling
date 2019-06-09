@@ -95,7 +95,6 @@ public class BatchJobRunner {
     return LocalDate.now();
   }
 
-
   private static Instant getValuationTime(final CommandLine line, final Properties configProperties, final String configPropertysFile) {
     final String observationDate = getProperty("valuationTime", line, configProperties, configPropertysFile, false);
     if (observationDate != null) {
@@ -114,13 +113,13 @@ public class BatchJobRunner {
 
   /**
    * Creates an runs a batch job based on a properties file and configuration.
-   * 
+   *
    * @param args
    *          the command line arguments
    * @throws Exception
    *           if there is a problem
    */
-  public static void main(final String[] args) throws Exception {  // CSIGNORE
+  public static void main(final String[] args) throws Exception { // CSIGNORE
     if (args.length == 0) {
       usage();
       System.exit(-1);
@@ -220,7 +219,8 @@ public class BatchJobRunner {
     return getProperty(propertyName, line, properties, configPropertysFile, true);
   }
 
-  private static String getProperty(final String propertyName, final CommandLine line, final Properties properties, final String configPropertysFile, final boolean required) {
+  private static String getProperty(final String propertyName, final CommandLine line, final Properties properties, final String configPropertysFile,
+      final boolean required) {
     String optionValue = null;
     if (line != null) {
       optionValue = line.getOptionValue(propertyName);
@@ -251,28 +251,29 @@ public class BatchJobRunner {
   private static Options getOptions() {
     final Options options = new Options();
 
-    //options.addOption("reason", true, "Run reason. Default - Manual run started on {yyyy-MM-ddTHH:mm:ssZZ} by {user.name}.");
+    // options.addOption("reason", true, "Run reason. Default - Manual run started on {yyyy-MM-ddTHH:mm:ssZZ} by {user.name}.");
 
-    //options.addOption("observationTime", true, "Observation time - for example, LDN_CLOSE. Default - " + BatchJobParameters.AD_HOC_OBSERVATION_TIME + ".");
+    // options.addOption("observationTime", true, "Observation time - for example, LDN_CLOSE. Default - " + BatchJobParameters.AD_HOC_OBSERVATION_TIME + ".");
     options.addOption("observationDate", true, "Observation date (= run date). yyyyMMdd - for example, 20100621. Default - system clock date.");
 
     options.addOption("valuationTime", true, "Valuation time. HH:mm[:ss] - for example, 16:22:09. Default - system clock.");
 
     options.addOption("view", true, "View name in configuration database. You must specify this.");
 
-    options.addOption("engineURI", true, "URI to remote OG engine - for example 'http://localhost:8080/jax/components/ViewProcessor/main'. You must specify this.");
+    options.addOption("engineURI", true,
+        "URI to remote OG engine - for example 'http://localhost:8080/jax/components/ViewProcessor/main'. You must specify this.");
     options.addOption("brokerURL", true, "URL to activeMQ broker - for example 'tcp://localhost:61616'. You must specify this.");
 
-    //options.addOption("viewTime", true, "Time at which view should be loaded. HH:mm[:ss]. Default - system clock.");
-    //    options.addOption("snapshotObservationTime", true, "Observation time of LiveData snapshot to use - for example, LDN_CLOSE. Default - same as observationTime.");
-    //    options.addOption("snapshotObservationDate", true, "Observation date of LiveData snapshot to use. yyyyMMdd. Default - same as observationDate");
+    // options.addOption("viewTime", true, "Time at which view should be loaded. HH:mm[:ss]. Default - system clock.");
+    // options.addOption("snapshotObservationTime", true, "Observation time of LiveData snapshot to use - for example, LDN_CLOSE. Default - same as
+    // observationTime.");
+    // options.addOption("snapshotObservationDate", true, "Observation date of LiveData snapshot to use. yyyyMMdd. Default - same as observationDate");
 
     options.addOption("runCreationMode", true, "One of auto, create_new, create_new_overwrite, reuse_existing (case insensitive)." +
         " Specifies whether to create a new run in the database." +
         " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
 
-
-    //options.addOption("timeZone", true, "Time zone in which times on the command line are given. Default - system time zone.");
+    // options.addOption("timeZone", true, "Time zone in which times on the command line are given. Default - system time zone.");
 
     return options;
   }

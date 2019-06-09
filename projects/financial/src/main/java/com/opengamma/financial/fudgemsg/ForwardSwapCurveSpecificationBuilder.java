@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -17,7 +17,7 @@ import com.opengamma.financial.analytics.forwardcurve.ForwardSwapCurveSpecificat
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 @FudgeBuilderFor(ForwardSwapCurveSpecification.class)
 public class ForwardSwapCurveSpecificationBuilder implements FudgeBuilder<ForwardSwapCurveSpecification> {
@@ -38,7 +38,8 @@ public class ForwardSwapCurveSpecificationBuilder implements FudgeBuilder<Forwar
   public ForwardSwapCurveSpecification buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final Currency target = deserializer.fieldValueToObject(Currency.class, message.getByName(TARGET_FIELD));
     final String name = message.getString(NAME_FIELD);
-    final ForwardSwapCurveInstrumentProvider provider = deserializer.fieldValueToObject(ForwardSwapCurveInstrumentProvider.class, message.getByName(INSTRUMENT_PROVIDER_FIELD));
+    final ForwardSwapCurveInstrumentProvider provider = deserializer.fieldValueToObject(ForwardSwapCurveInstrumentProvider.class,
+        message.getByName(INSTRUMENT_PROVIDER_FIELD));
     return new ForwardSwapCurveSpecification(name, target, provider);
   }
 

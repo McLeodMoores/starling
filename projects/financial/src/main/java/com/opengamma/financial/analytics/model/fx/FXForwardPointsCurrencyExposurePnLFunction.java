@@ -57,7 +57,6 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
-
 /**
  *
  */
@@ -77,7 +76,8 @@ public class FXForwardPointsCurrencyExposurePnLFunction extends AbstractFunction
     final Currency currencyNonBase = currencyPair.getCounter(); // The non-base currency
     final double exposure = mca.getAmount(currencyNonBase);
     final LocalDateDoubleTimeSeries fxSpotReturnSeries = (LocalDateDoubleTimeSeries) inputs.getValue(RETURN_SERIES);
-    final LocalDateDoubleTimeSeries pnlSeries = fxSpotReturnSeries.multiply(position.getQuantity().doubleValue() * exposure); // The P/L time series is in the base currency
+    final LocalDateDoubleTimeSeries pnlSeries = fxSpotReturnSeries.multiply(position.getQuantity().doubleValue() * exposure); // The P/L time series is in the
+                                                                                                                              // base currency
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), desiredValue.getConstraints());
     return Collections.singleton(new ComputedValue(spec, pnlSeries));
   }
@@ -97,19 +97,19 @@ public class FXForwardPointsCurrencyExposurePnLFunction extends AbstractFunction
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties properties = createValueProperties()
-          .withAny(START_DATE_PROPERTY)
-          .withAny(END_DATE_PROPERTY)
-          .withAny(INCLUDE_START_PROPERTY)
-          .withAny(INCLUDE_END_PROPERTY)
-          .withAny(TRANSFORMATION_METHOD)
-          .withAny(SCHEDULE_CALCULATOR)
-          .withAny(SAMPLING_FUNCTION)
-          .withAny(CURVE_EXPOSURES)
-          .withAny(FORWARD_CURVE_NAME)
-          .with(PROPERTY_CURVE_TYPE, FORWARD_POINTS)
-          .with(PROPERTY_PNL_CONTRIBUTIONS, FX_CURRENCY_EXPOSURE)
-          .withAny(CURRENCY)
-          .get();
+        .withAny(START_DATE_PROPERTY)
+        .withAny(END_DATE_PROPERTY)
+        .withAny(INCLUDE_START_PROPERTY)
+        .withAny(INCLUDE_END_PROPERTY)
+        .withAny(TRANSFORMATION_METHOD)
+        .withAny(SCHEDULE_CALCULATOR)
+        .withAny(SAMPLING_FUNCTION)
+        .withAny(CURVE_EXPOSURES)
+        .withAny(FORWARD_CURVE_NAME)
+        .with(PROPERTY_CURVE_TYPE, FORWARD_POINTS)
+        .with(PROPERTY_PNL_CONTRIBUTIONS, FX_CURRENCY_EXPOSURE)
+        .withAny(CURRENCY)
+        .get();
     return Collections.singleton(new ValueSpecification(PNL_SERIES, target.toSpecification(), properties));
   }
 
@@ -162,7 +162,8 @@ public class FXForwardPointsCurrencyExposurePnLFunction extends AbstractFunction
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
     final Currency payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor());
     final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
-    final ComputationTargetSpecification fxSpotReturnSeriesSpec = ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(UnorderedCurrencyPair.of(payCurrency, receiveCurrency));
+    final ComputationTargetSpecification fxSpotReturnSeriesSpec = ComputationTargetType.UNORDERED_CURRENCY_PAIR
+        .specification(UnorderedCurrencyPair.of(payCurrency, receiveCurrency));
     final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties returnSeriesProperties = ValueProperties.builder()
         .with(SCHEDULE_CALCULATOR, scheduleMethods)
@@ -181,7 +182,8 @@ public class FXForwardPointsCurrencyExposurePnLFunction extends AbstractFunction
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String includeStart = null;
     String includeEnd = null;
     String startDate = null;
@@ -210,7 +212,7 @@ public class FXForwardPointsCurrencyExposurePnLFunction extends AbstractFunction
     if (includeStart == null || curveExposures == null) {
       return null;
     }
-    //TODO how should this be done?
+    // TODO how should this be done?
     final CurrencyPairs pairs = OpenGammaCompilationContext.getCurrencyPairsSource(context).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
     final Currency payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor());

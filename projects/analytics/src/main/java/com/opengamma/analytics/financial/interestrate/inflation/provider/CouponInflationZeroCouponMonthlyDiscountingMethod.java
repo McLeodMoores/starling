@@ -25,8 +25,11 @@ public class CouponInflationZeroCouponMonthlyDiscountingMethod {
 
   /**
    * Computes the net amount of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
   public MultipleCurrencyAmount netAmount(final CouponInflationZeroCouponMonthly coupon, final InflationProviderInterface inflation) {
@@ -39,8 +42,11 @@ public class CouponInflationZeroCouponMonthlyDiscountingMethod {
 
   /**
    * Computes the present value of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponInflationZeroCouponMonthly coupon, final InflationProviderInterface inflation) {
@@ -52,8 +58,11 @@ public class CouponInflationZeroCouponMonthlyDiscountingMethod {
 
   /**
    * Computes the estimated index with the weight and the reference end date.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The estimated index.
    */
   public double indexEstimation(final CouponInflationZeroCouponMonthly coupon, final InflationProviderInterface inflation) {
@@ -63,11 +72,15 @@ public class CouponInflationZeroCouponMonthlyDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Inflation coupon.
-   * @param coupon The coupon.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponMonthly coupon, final InflationProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponMonthly coupon,
+      final InflationProviderInterface inflation) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndex = indexEstimation(coupon, inflation);

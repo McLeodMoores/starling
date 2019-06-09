@@ -25,7 +25,7 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Triple;
 
 /**
- *  Class used to compute the price and sensitivity of a physical delivery swaption with SABR model.
+ * Class used to compute the price and sensitivity of a physical delivery swaption with SABR model.
  */
 public final class SwaptionPhysicalFixedIborSABRMethod {
 
@@ -36,6 +36,7 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborSABRMethod getInstance() {
@@ -57,8 +58,11 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
 
   /**
    * Computes the present value of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param sabrData The SABR and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
@@ -83,8 +87,11 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
 
   /**
    * Computes the present value of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param sabrData The SABR and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR and multi-curves provider.
    * @return The implied volatility.
    */
   public double impliedVolatility(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
@@ -102,11 +109,15 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
 
   /**
    * Computes the present value rate sensitivity to rates of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data. The SABR function need to be the Hagan function.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data. The SABR function need to be the Hagan function.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final DayCount dayCountModification = sabrData.getSABRGenerator().getFixedLegDayCount();
@@ -115,8 +126,10 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
     final double strikeModified = METHOD_SWAP.couponEquivalent(swaption.getUnderlyingSwap(), pvbpModified, sabrData.getMulticurveProvider());
     final double maturity = swaption.getMaturityTime();
     // Derivative of the forward and pvbp with respect to the rates.
-    final MulticurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification, sabrData.getMulticurveProvider());
-    final MulticurveSensitivity forwardModifiedDr = PRCSDC.visitFixedCouponSwap(swaption.getUnderlyingSwap(), dayCountModification, sabrData.getMulticurveProvider());
+    final MulticurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification,
+        sabrData.getMulticurveProvider());
+    final MulticurveSensitivity forwardModifiedDr = PRCSDC.visitFixedCouponSwap(swaption.getUnderlyingSwap(), dayCountModification,
+        sabrData.getMulticurveProvider());
     // Implementation note: strictly speaking, the strike equivalent is curve dependent; that dependency is ignored.
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strikeModified, swaption.getTimeToExpiry(), swaption.isCall());
     // Implementation note: option required to pass the strike (in case the swap has non-constant coupon).
@@ -134,11 +147,15 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
 
   /**
    * Computes the present value SABR sensitivity of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data. The SABR function need to be the Hagan function.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data. The SABR function need to be the Hagan function.
    * @return The present value SABR sensitivity.
    */
-  public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
+  public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final DayCount dayCountModification = sabrData.getSABRGenerator().getFixedLegDayCount();
@@ -154,7 +171,7 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
     final double[] volatilityAdjoint = sabrData.getSABRParameter().getVolatilityAdjoint(swaption.getTimeToExpiry(), maturity, strikeModified, forwardModified);
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, 1.0, volatilityAdjoint[0]);
     final double[] bsAdjoint = blackFunction.getPriceAdjoint(option, dataBlack);
-    final double omega = (swaption.isLong() ? 1.0 : -1.0);
+    final double omega = swaption.isLong() ? 1.0 : -1.0;
     sensi.addAlpha(expiryMaturity, omega * pvbpModified * bsAdjoint[2] * volatilityAdjoint[3]);
     sensi.addBeta(expiryMaturity, omega * pvbpModified * bsAdjoint[2] * volatilityAdjoint[4]);
     sensi.addRho(expiryMaturity, omega * pvbpModified * bsAdjoint[2] * volatilityAdjoint[5]);
@@ -165,11 +182,15 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
   /**
    * Computes the present value of a physical delivery European swaption in the SABR model and its sensitivities with respect to the curve and SABR parameters.
    * The sensitivities are computed using algorithmic differentiation.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data.
    * @return The present value, present value curves sensitivity and present value SABR sensitivity.
    */
-  public Triple<MultipleCurrencyAmount, MultipleCurrencyMulticurveSensitivity, PresentValueSABRSensitivityDataBundle> presentValueAD(final SwaptionPhysicalFixedIbor swaption,
+  public Triple<MultipleCurrencyAmount, MultipleCurrencyMulticurveSensitivity, PresentValueSABRSensitivityDataBundle> presentValueAD(
+      final SwaptionPhysicalFixedIbor swaption,
       final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
@@ -185,10 +206,13 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
     final double[] volatilityAdjoint = sabrData.getSABRParameter().getVolatilityAdjoint(swaption.getTimeToExpiry(), maturity, strikeModified, forwardModified);
     final BlackFunctionData dataBlack = new BlackFunctionData(forwardModified, 1.0, volatilityAdjoint[0]);
     final Function1D<BlackFunctionData, Double> func = blackFunction.getPriceFunction(option);
-    final MultipleCurrencyAmount pv = MultipleCurrencyAmount.of(swaption.getCurrency(), pvbpModified * func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0));
+    final MultipleCurrencyAmount pv = MultipleCurrencyAmount.of(swaption.getCurrency(),
+        pvbpModified * func.evaluate(dataBlack) * (swaption.isLong() ? 1.0 : -1.0));
     // Curve sensitivity
-    final MulticurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification, sabrData.getMulticurveProvider());
-    final MulticurveSensitivity forwardModifiedDr = PRCSDC.visitFixedCouponSwap(swaption.getUnderlyingSwap(), dayCountModification, sabrData.getMulticurveProvider());
+    final MulticurveSensitivity pvbpModifiedDr = METHOD_SWAP.presentValueBasisPointCurveSensitivity(swaption.getUnderlyingSwap(), dayCountModification,
+        sabrData.getMulticurveProvider());
+    final MulticurveSensitivity forwardModifiedDr = PRCSDC.visitFixedCouponSwap(swaption.getUnderlyingSwap(), dayCountModification,
+        sabrData.getMulticurveProvider());
     final double[] bsAdjoint = blackFunction.getPriceAdjoint(option, dataBlack);
     MulticurveSensitivity result = pvbpModifiedDr.multipliedBy(bsAdjoint[0]);
     result = result.plus(forwardModifiedDr.multipliedBy(pvbpModified * (bsAdjoint[1] + bsAdjoint[2] * volatilityAdjoint[1])));
@@ -199,7 +223,7 @@ public final class SwaptionPhysicalFixedIborSABRMethod {
     // SABR sensitivity
     final PresentValueSABRSensitivityDataBundle pvss = new PresentValueSABRSensitivityDataBundle();
     final DoublesPair expiryMaturity = DoublesPair.of(swaption.getTimeToExpiry(), maturity);
-    final double omega = (swaption.isLong() ? 1.0 : -1.0);
+    final double omega = swaption.isLong() ? 1.0 : -1.0;
     pvss.addAlpha(expiryMaturity, omega * pvbpModified * bsAdjoint[2] * volatilityAdjoint[3]);
     pvss.addBeta(expiryMaturity, omega * pvbpModified * bsAdjoint[2] * volatilityAdjoint[4]);
     pvss.addRho(expiryMaturity, omega * pvbpModified * bsAdjoint[2] * volatilityAdjoint[5]);

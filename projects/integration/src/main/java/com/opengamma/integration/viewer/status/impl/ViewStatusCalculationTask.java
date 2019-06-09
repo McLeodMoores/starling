@@ -87,7 +87,8 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     @Override
     public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
       LOGGER.error("View definition compiled");
-      final CompiledViewCalculationConfiguration compiledCalculationConfiguration = compiledViewDefinition.getCompiledCalculationConfiguration(DEFAULT_CALC_CONFIG);
+      final CompiledViewCalculationConfiguration compiledCalculationConfiguration = compiledViewDefinition
+          .getCompiledCalculationConfiguration(DEFAULT_CALC_CONFIG);
       final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs = compiledCalculationConfiguration.getTerminalOutputSpecifications();
       for (final ValueSpecification valueSpec : terminalOutputs.keySet()) {
         final ComputationTargetType computationTargetType = valueSpec.getTargetSpecification().getType();
@@ -190,7 +191,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     LOGGER.debug("Start calculating result for security:{} with values{}", _securityType, Sets.newTreeSet(_valueRequirementNames).toString());
 
     final PerViewStatusResult statusResult = new PerViewStatusResult(_securityType);
-    //No need to do any work if there are no ValueRequirements to compute
+    // No need to do any work if there are no ValueRequirements to compute
     if (_valueRequirementNames.isEmpty()) {
       return statusResult;
     }
@@ -215,8 +216,6 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     LOGGER.debug("PerViewStatusResult for securityType:{} is {}", _securityType, statusResult);
     return statusResult;
   }
-
-
 
   protected boolean isValidTargetType(final ComputationTargetType computationTargetType) {
     if (ComputationTargetType.POSITION.isCompatible(computationTargetType) || ComputationTargetType.PORTFOLIO.isCompatible(computationTargetType) ||

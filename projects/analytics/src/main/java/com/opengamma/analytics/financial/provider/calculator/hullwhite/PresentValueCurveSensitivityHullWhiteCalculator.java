@@ -27,7 +27,8 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 /**
  * Calculates the sensitivity of the present value to curves using the Hull-White one factor model.
  */
-public final class PresentValueCurveSensitivityHullWhiteCalculator extends InstrumentDerivativeVisitorDelegate<HullWhiteOneFactorProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityHullWhiteCalculator
+extends InstrumentDerivativeVisitorDelegate<HullWhiteOneFactorProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -36,6 +37,7 @@ public final class PresentValueCurveSensitivityHullWhiteCalculator extends Instr
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityHullWhiteCalculator getInstance() {
@@ -54,13 +56,15 @@ public final class PresentValueCurveSensitivityHullWhiteCalculator extends Instr
    */
   private static final CapFloorIborHullWhiteMethod METHOD_CAPFLOOR_IBOR = CapFloorIborHullWhiteMethod.getInstance();
   private static final InterestRateFutureTransactionHullWhiteMethod METHOD_STIRFUT = InterestRateFutureTransactionHullWhiteMethod.getInstance();
-  private static final InterestRateFutureOptionMarginTransactionHullWhiteMethod METHOD_STIRFUT_OPT_MAR = InterestRateFutureOptionMarginTransactionHullWhiteMethod.getInstance();
-  private static final SwapFuturesPriceDeliverableTransactionHullWhiteMethod METHOD_SWAPFUT = SwapFuturesPriceDeliverableTransactionHullWhiteMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionHullWhiteMethod METHOD_STIRFUT_OPT_MAR =
+      InterestRateFutureOptionMarginTransactionHullWhiteMethod.getInstance();
+  private static final SwapFuturesPriceDeliverableTransactionHullWhiteMethod METHOD_SWAPFUT = SwapFuturesPriceDeliverableTransactionHullWhiteMethod
+      .getInstance();
   private static final SwaptionPhysicalFixedIborHullWhiteMethod METHOD_SWPT_PHYS = SwaptionPhysicalFixedIborHullWhiteMethod.getInstance();
   private static final SwaptionCashFixedIborHullWhiteApproximationMethod METHOD_SWPT_CASH = SwaptionCashFixedIborHullWhiteApproximationMethod.getInstance();
   private static final CouponCMSHullWhiteApproximationMethod METHOD_CMS_CPN = CouponCMSHullWhiteApproximationMethod.getInstance();
 
-  //     -----     Payment/Coupon     -----
+  // ----- Payment/Coupon -----
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitCapFloorIbor(final CapFloorIbor cap, final HullWhiteOneFactorProviderInterface hullWhite) {
@@ -72,10 +76,11 @@ public final class PresentValueCurveSensitivityHullWhiteCalculator extends Instr
     return METHOD_CMS_CPN.presentValueCurveSensitivity(cms, hullWhite);
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction future, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction future,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_STIRFUT.presentValueCurveSensitivity(future, hullWhite);
   }
 
@@ -86,19 +91,22 @@ public final class PresentValueCurveSensitivityHullWhiteCalculator extends Instr
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyMulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_SWAPFUT.presentValueCurveSensitivity(futures, hullWhite);
   }
 
-  //     -----     Swaption     -----
+  // ----- Swaption -----
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_SWPT_PHYS.presentValueCurveSensitivity(swaption, hullWhite);
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_SWPT_CASH.presentValueCurveSensitivity(swaption, hullWhite);
   }
 

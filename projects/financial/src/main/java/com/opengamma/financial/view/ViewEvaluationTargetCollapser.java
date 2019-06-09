@@ -52,7 +52,8 @@ public class ViewEvaluationTargetCollapser implements ComputationTargetCollapser
   }
 
   @Override
-  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
+  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+      final ComputationTargetSpecification b) {
     LOGGER.debug("Request to collapse {} against {}", a, b);
     final ViewEvaluationTarget targetA = getTarget(a);
     if (targetA == null) {

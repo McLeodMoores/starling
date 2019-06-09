@@ -218,7 +218,8 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String definitionName = null;
     String specificationName = null;
     String surfaceQuoteType = null;

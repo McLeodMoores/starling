@@ -90,14 +90,16 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
         final ValueProperties properties = createValueProperties().withAny(ValuePropertyNames.CURVE).withAny(PROPERTY_FORWARD_CURVE_INTERPOLATOR)
-            .withAny(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR).withAny(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR).withAny(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR)
+            .withAny(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR).withAny(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR)
+            .withAny(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR)
             .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, ForwardSwapCurveMarketDataFunction.FORWARD_SWAP_QUOTES).get();
         final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.FORWARD_CURVE, target.toSpecification(), properties);
         return Collections.singleton(spec);
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -123,7 +125,8 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         }
         final String curveName = curveNames.iterator().next();
         final String forwardTenor = forwardTenors.iterator().next();
-        final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName).with(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR, forwardTenor)
+        final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName)
+            .with(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR, forwardTenor)
             .get();
         return Collections.singleton(new ValueRequirement(ValueRequirementNames.FORWARD_SWAP_CURVE_MARKET_DATA, target.toSpecification(), properties));
       }
@@ -160,7 +163,8 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         final String rightExtrapolatorName = desiredValue.getConstraint(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR);
         final String forwardTenorName = desiredValue.getConstraint(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR);
         final String conventionName = currency.getCode() + "_SWAP";
-        final ConventionBundle convention = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
+        final ConventionBundle convention = conventionSource
+            .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
         if (convention == null) {
           throw new OpenGammaRuntimeException("Could not get convention named " + conventionName);
         }
@@ -176,7 +180,7 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         final LocalDate localNow = now.toLocalDate();
         final Period forwardPeriod = Period.parse(forwardTenorName);
         final Tenor forwardTenor = Tenor.of(forwardPeriod);
-        final LocalDate forwardStart = ScheduleCalculator.getAdjustedDate(localNow.plus(forwardPeriod), settlementDays, calendar); //TODO check adjustments
+        final LocalDate forwardStart = ScheduleCalculator.getAdjustedDate(localNow.plus(forwardPeriod), settlementDays, calendar); // TODO check adjustments
         for (final Tenor tenor : definition.getTenors()) {
           final ExternalId identifier = provider.getInstrument(localNow, tenor, forwardTenor);
           if (data.containsKey(identifier)) {
@@ -190,12 +194,15 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         }
         final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         final ForwardCurve curve = new ForwardCurve(InterpolatedDoublesCurve.from(expiries, forwards, interpolator));
-        return Collections.singleton(new ComputedValue(getResultSpec(target, curveName, interpolatorName, leftExtrapolatorName, rightExtrapolatorName, forwardTenorName), curve));
+        return Collections.singleton(
+            new ComputedValue(getResultSpec(target, curveName, interpolatorName, leftExtrapolatorName, rightExtrapolatorName, forwardTenorName), curve));
       }
 
-      private ValueSpecification getResultSpec(final ComputationTarget target, final String curveName, final String interpolatorName, final String leftExtrapolatorName,
+      private ValueSpecification getResultSpec(final ComputationTarget target, final String curveName, final String interpolatorName,
+          final String leftExtrapolatorName,
           final String rightExtrapolatorName, final String forwardTenor) {
-        final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName).with(PROPERTY_FORWARD_CURVE_INTERPOLATOR, interpolatorName)
+        final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName)
+            .with(PROPERTY_FORWARD_CURVE_INTERPOLATOR, interpolatorName)
             .with(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR, leftExtrapolatorName).with(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR, rightExtrapolatorName)
             .with(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR, forwardTenor)
             .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, ForwardSwapCurveMarketDataFunction.FORWARD_SWAP_QUOTES).get();

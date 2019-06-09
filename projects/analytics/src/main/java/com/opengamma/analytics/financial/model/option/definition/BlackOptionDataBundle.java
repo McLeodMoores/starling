@@ -11,12 +11,13 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * 
+ *
  */
 public class BlackOptionDataBundle extends OptionDataBundle {
   private final double _forward;
 
-  public BlackOptionDataBundle(final double forward, final YieldAndDiscountCurve interestRateCurve, final VolatilitySurface volatilitySurface, final ZonedDateTime date) {
+  public BlackOptionDataBundle(final double forward, final YieldAndDiscountCurve interestRateCurve, final VolatilitySurface volatilitySurface,
+      final ZonedDateTime date) {
     super(interestRateCurve, volatilitySurface, date);
     _forward = forward;
   }
@@ -59,7 +60,7 @@ public class BlackOptionDataBundle extends OptionDataBundle {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_forward);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

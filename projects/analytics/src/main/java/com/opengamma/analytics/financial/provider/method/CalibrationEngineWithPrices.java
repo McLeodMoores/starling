@@ -17,7 +17,9 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Generic calibration engine for interest rate instruments. This calibrate a model using prices.
- * @param <DATA_TYPE> The type of the data for the base calculator.
+ *
+ * @param <DATA_TYPE>
+ *          The type of the data for the base calculator.
  */
 public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterProviderInterface> {
   /**
@@ -32,8 +34,11 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
 
   /**
    * Constructor of the calibration engine. The basket and calculator list are empty.
-   * @param fxMatrix The exchange rate to convert the present values in a unique currency.
-   * @param ccy The unique currency in which all present values are converted.
+   *
+   * @param fxMatrix
+   *          The exchange rate to convert the present values in a unique currency.
+   * @param ccy
+   *          The unique currency in which all present values are converted.
    */
   public CalibrationEngineWithPrices(final FXMatrix fxMatrix, final Currency ccy) {
     _basket = new ArrayList<>();
@@ -42,8 +47,11 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
 
   /**
    * Add an instrument to the basket and the associated calculator.
-   * @param instrument An interest rate derivative.
-   * @param calibrationPrice The price of the instrument we want to calibrate on.
+   *
+   * @param instrument
+   *          An interest rate derivative.
+   * @param calibrationPrice
+   *          The price of the instrument we want to calibrate on.
    */
   public void addInstrument(final InstrumentDerivative instrument, final double calibrationPrice) {
     _basket.add(instrument);
@@ -51,10 +59,13 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
   }
 
   /**
-   * Add an array of instruments to the basket and the associated calculator. The same method is used for all the instruments.
-   * instrument and calibration{rices should have the same length, and the same order ie the price of the first instrmwent is the first double of the vector calibrationPrices etc...
-   * @param instrument An interest rate derivative array.
-   * @param calibrationPrices The prices of the instruments we want to calibrate on.
+   * Add an array of instruments to the basket and the associated calculator. The same method is used for all the instruments. instrument and calibration{rices
+   * should have the same length, and the same order ie the price of the first instrmwent is the first double of the vector calibrationPrices etc...
+   *
+   * @param instrument
+   *          An interest rate derivative array.
+   * @param calibrationPrices
+   *          The prices of the instruments we want to calibrate on.
    */
   public void addInstrument(final InstrumentDerivative[] instrument, final double[] calibrationPrices) {
     Validate.notNull(instrument, "Instrument");
@@ -66,12 +77,15 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
 
   /**
    * Calibrate the model using a given curve bundle.
-   * @param data Data.
+   *
+   * @param data
+   *          Data.
    */
   public abstract void calibrate(DATA_TYPE data);
 
   /**
    * Gets the instrument basket.
+   *
    * @return The basket.
    */
   public List<InstrumentDerivative> getBasket() {
@@ -80,6 +94,7 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
 
   /**
    * Gets the _calibrationPrice field.
+   *
    * @return the _calibrationPrice
    */
   public List<Double> getCalibrationPrices() {

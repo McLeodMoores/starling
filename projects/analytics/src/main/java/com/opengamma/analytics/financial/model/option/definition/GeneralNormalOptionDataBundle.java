@@ -21,7 +21,7 @@ public class GeneralNormalOptionDataBundle extends StandardOptionDataBundle {
 
   /**
    * Creates a data bundle for the SDE df = a(f,t)dt + b(f,t)dw
-   * 
+   *
    * @param discountCurve
    *          the discounting curve
    * @param localDrift
@@ -33,7 +33,8 @@ public class GeneralNormalOptionDataBundle extends StandardOptionDataBundle {
    * @param date
    *          Date created
    */
-  public GeneralNormalOptionDataBundle(final YieldAndDiscountCurve discountCurve, final DriftSurface localDrift, final VolatilitySurface localVolatility, final double spot, final ZonedDateTime date) {
+  public GeneralNormalOptionDataBundle(final YieldAndDiscountCurve discountCurve, final DriftSurface localDrift, final VolatilitySurface localVolatility,
+      final double spot, final ZonedDateTime date) {
     super(discountCurve, 0.0, localVolatility, spot, date);
     Validate.notNull(localDrift, "null localDrift");
     _drift = localDrift;
@@ -46,6 +47,7 @@ public class GeneralNormalOptionDataBundle extends StandardOptionDataBundle {
 
   /**
    * Gets the drift field.
+   * 
    * @return the drift
    */
   public DriftSurface getDriftSurface() {
@@ -84,10 +86,12 @@ public class GeneralNormalOptionDataBundle extends StandardOptionDataBundle {
     return new GeneralNormalOptionDataBundle(getInterestRateCurve(), localDrift, getVolatilitySurface(), getSpot(), getDate());
   }
 
-  //TODO finish this once we have the ability to multiply / divide surfaces by a constant amount
-  /*public static ForwardOptionDataBundle fromNormalSurfaces(final DriftSurface localDrift, final VolatilitySurface localVolatility, double f) {
-
-  }*/
+  // TODO finish this once we have the ability to multiply / divide surfaces by a constant amount
+  /*
+   * public static ForwardOptionDataBundle fromNormalSurfaces(final DriftSurface localDrift, final VolatilitySurface localVolatility, double f) {
+   * 
+   * }
+   */
 
   @Override
   public int hashCode() {

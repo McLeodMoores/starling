@@ -57,8 +57,7 @@ public class G2ppDiscountingYCNSFunction extends G2ppDiscountingFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(G2ppDiscountingYCNSFunction.class);
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
    */
   public G2ppDiscountingYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);
@@ -78,8 +77,8 @@ public class G2ppDiscountingYCNSFunction extends G2ppDiscountingFunction {
         for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : entries.entrySet()) {
           if (curveName.equals(entry.getKey().getFirst())) {
             final ValueProperties properties = desiredValue.getConstraints().copy().with(CURVE, curveName).get();
-            final CurveSpecification curveSpecification =
-                (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.builder()
+            final CurveSpecification curveSpecification = (CurveSpecification) inputs
+                .getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.builder()
                     .with(CURVE, curveName).get()));
             final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
             final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
@@ -91,7 +90,8 @@ public class G2ppDiscountingYCNSFunction extends G2ppDiscountingFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -109,7 +109,8 @@ public class G2ppDiscountingYCNSFunction extends G2ppDiscountingFunction {
         if (hullWhiteCurrencies == null || hullWhiteCurrencies.size() != 1) {
           return null;
         }
-        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, HULL_WHITE_DISCOUNTING).with(PROPERTY_HULL_WHITE_PARAMETERS, hullWhiteParameters)
+        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, HULL_WHITE_DISCOUNTING)
+            .with(PROPERTY_HULL_WHITE_PARAMETERS, hullWhiteParameters)
             .with(PROPERTY_HULL_WHITE_CURRENCY, hullWhiteCurrencies).with(CURVE_EXPOSURES, curveExposureConfigs).get();
         final ValueProperties curveProperties = ValueProperties.with(CURVE, curveNames).get();
         final Set<ValueRequirement> requirements = new HashSet<>();

@@ -42,7 +42,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * @return  the functions
+   * @return the functions
    * @deprecated Deprecated
    */
   @Deprecated
@@ -52,6 +52,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Function repository configuration source for the deprecated functions contained in this package.
+   * 
    * @deprecated Deprecated
    */
   @Deprecated
@@ -286,7 +287,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      *
-     * @param samplingPeriodName  the sampling period name
+     * @param samplingPeriodName
+     *          the sampling period name
      * @deprecated use start and end instead
      */
     @Deprecated
@@ -297,7 +299,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     /**
      *
      * @return the sampling period name
-     * @deprecated  use start and end instead
+     * @deprecated use start and end instead
      */
     @Deprecated
     public String getSamplingPeriodName() {
@@ -527,7 +529,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
             getSamplingCalculatorName()));
       }
       if (getPayCurveName() != null && getReceiveCurveName() != null) {
-        functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(), getScheduleName(),
+        functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(),
+            getScheduleName(),
             getSamplingCalculatorName()));
       }
       functions.add(functionConfiguration(ValueGreekSensitivityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
@@ -570,7 +573,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(PositionPnLFunction.class));
     functions.add(functionConfiguration(SwaptionBlackYieldCurveNodePnLFunction.class));
     functions.add(functionConfiguration(YieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
+    functions
+        .add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.YIELD_CURVE_PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.CURVE_PNL_SERIES));

@@ -12,12 +12,14 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present value of the instrument is zero.
- * The notion of "spread" will depend of each instrument.
+ * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present
+ * value of the instrument is zero. The notion of "spread" will depend of each instrument.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
-public final class ParSpreadMarketQuoteCurveMapSensitivityCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, Map<String, List<DoublesPair>>> {
+public final class ParSpreadMarketQuoteCurveMapSensitivityCalculator
+    extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, Map<String, List<DoublesPair>>> {
 
   /**
    * The unique instance of the calculator.
@@ -26,6 +28,7 @@ public final class ParSpreadMarketQuoteCurveMapSensitivityCalculator extends Ins
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteCurveMapSensitivityCalculator getInstance() {

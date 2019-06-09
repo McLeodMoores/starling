@@ -23,6 +23,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Specific calibration engine for the LMM model with swaption.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -43,10 +44,14 @@ public class SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine extends
 
   /**
    * Constructor of the calibration engine.
-   * @param calibrationObjective The calibration objective.
-   * @param nbInstrumentsBlock The number of instruments in a calibration block.
+   *
+   * @param calibrationObjective
+   *          The calibration objective.
+   * @param nbInstrumentsBlock
+   *          The number of instruments in a calibration block.
    */
-  public SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective calibrationObjective, final int nbInstrumentsBlock) {
+  public SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine(final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective calibrationObjective,
+      final int nbInstrumentsBlock) {
     super(calibrationObjective);
     _instrumentIndex.add(0);
     _nbInstrumentsBlock = nbInstrumentsBlock;
@@ -54,6 +59,7 @@ public class SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine extends
 
   /**
    * Gets the instrument index.
+   *
    * @return The instrument index.
    */
   public List<Integer> getInstrumentIndex() {
@@ -62,6 +68,7 @@ public class SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine extends
 
   /**
    * Returns the number of instruments in a calibration block.
+   *
    * @return The number.
    */
   public int getNbInstrumentsBlock() {
@@ -77,8 +84,9 @@ public class SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine extends
     getBasket().add(instrument);
     getMethod().add(method);
     getCalibrationPrice().add(0.0);
-    _instrumentIndex.add(Arrays.binarySearch(((SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective) getCalibrationObjective()).getLMMParameters().getIborTime(), swaption
-        .getUnderlyingSwap().getSecondLeg().getNthPayment(swaption.getUnderlyingSwap().getSecondLeg().getNumberOfPayments() - 1).getPaymentTime()));
+    _instrumentIndex.add(Arrays
+        .binarySearch(((SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective) getCalibrationObjective()).getLMMParameters().getIborTime(), swaption
+            .getUnderlyingSwap().getSecondLeg().getNthPayment(swaption.getUnderlyingSwap().getSecondLeg().getNumberOfPayments() - 1).getPaymentTime()));
   }
 
   @Override
@@ -88,9 +96,10 @@ public class SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine extends
     final int nbBlocks = nbInstruments / _nbInstrumentsBlock;
     computeCalibrationPrice(curves);
     getCalibrationObjective().setCurves(curves);
-    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective = (SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective) getCalibrationObjective();
+    final SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective objective =
+        (SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationObjective) getCalibrationObjective();
     final NonLinearLeastSquare ls = new NonLinearLeastSquare(DecompositionFactory.SV_COMMONS, MatrixAlgebraFactory.OG_ALGEBRA, DEFAULT_PRECISION);
-    //    final NonLinearLeastSquare ls = new NonLinearLeastSquare();
+    // final NonLinearLeastSquare ls = new NonLinearLeastSquare();
     for (int loopblock = 0; loopblock < nbBlocks; loopblock++) {
       final InstrumentDerivative[] instruments = new InstrumentDerivative[_nbInstrumentsBlock];
       final double[] prices = new double[_nbInstrumentsBlock];
@@ -105,10 +114,9 @@ public class SwaptionPhysicalLMMDDSuccessiveLeastSquareCalibrationEngine extends
       // Implementation note: the index start is from the first instrument of the block and the index end is from the last instrument of the block.
       final DoubleMatrix1D observedValues = new DoubleMatrix1D(_nbInstrumentsBlock, 0.0);
       @SuppressWarnings("unused")
-      final
-      LeastSquareResults result = ls.solve(observedValues, getCalibrationObjective(), new DoubleMatrix1D(1.0, 0.0));
+      final LeastSquareResults result = ls.solve(observedValues, getCalibrationObjective(), new DoubleMatrix1D(1.0, 0.0));
       // Implementation note: the start value is a multiplicative factor of one and an additive term of 0 (parameters unchanged).
-      //   The observed values are 0 as the function returns the difference between the calculated prices and the targets.
+      // The observed values are 0 as the function returns the difference between the calculated prices and the targets.
     }
   }
 

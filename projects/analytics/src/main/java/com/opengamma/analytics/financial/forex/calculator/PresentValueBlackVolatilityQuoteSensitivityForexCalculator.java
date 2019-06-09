@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.model.option.definition.SmileDeltaTermS
  */
 @Deprecated
 public final class PresentValueBlackVolatilityQuoteSensitivityForexCalculator extends
-    InstrumentDerivativeVisitorSameMethodAdapter<SmileDeltaTermStructureDataBundle, PresentValueForexBlackVolatilityQuoteSensitivityDataBundle> {
+InstrumentDerivativeVisitorSameMethodAdapter<SmileDeltaTermStructureDataBundle, PresentValueForexBlackVolatilityQuoteSensitivityDataBundle> {
 
   /**
    * The unique instance of the calculator.
@@ -25,6 +25,7 @@ public final class PresentValueBlackVolatilityQuoteSensitivityForexCalculator ex
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBlackVolatilityQuoteSensitivityForexCalculator getInstance() {
@@ -40,7 +41,8 @@ public final class PresentValueBlackVolatilityQuoteSensitivityForexCalculator ex
   /**
    * The calculator used to compute the vega with respect to the volatilities by strikes.
    */
-  private static final PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator VEGA_CALCULATOR = PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator.getInstance();
+  private static final PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator VEGA_CALCULATOR =
+      PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator.getInstance();
 
   @Override
   public PresentValueForexBlackVolatilityQuoteSensitivityDataBundle visit(final InstrumentDerivative derivative, final SmileDeltaTermStructureDataBundle data) {

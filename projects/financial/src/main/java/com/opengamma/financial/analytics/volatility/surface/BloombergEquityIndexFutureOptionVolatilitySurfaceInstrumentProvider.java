@@ -33,7 +33,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
   private static final HashMap<String, FutureOptionExpiries> EXPIRY_RULES;
   static {
     EXPIRY_RULES = new HashMap<>();
-    EXPIRY_RULES.put("DEFAULT", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1))); //TODO
+    EXPIRY_RULES.put("DEFAULT", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1))); // TODO
   }
   private final String _futureOptionPrefix;
   private final String _postfix;
@@ -43,12 +43,18 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
   private final String _tickerSchemeName;
 
   /**
-   * @param futureOptionPrefix the prefix to the resulting code (e.g. SP), not null
-   * @param postfix the postfix to the resulting code (e.g. Index), not null
-   * @param dataFieldName the name of the data field, not null.
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the exchange id, not null
-   * @param tickerSchemeName the ticker scheme name, not null
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code (e.g. SP), not null
+   * @param postfix
+   *          the postfix to the resulting code (e.g. Index), not null
+   * @param dataFieldName
+   *          the name of the data field, not null.
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the exchange id, not null
+   * @param tickerSchemeName
+   *          the ticker scheme name, not null
    */
   public BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
       final Double useCallAboveStrike, final String exchangeIdName, final String tickerSchemeName) {
@@ -61,14 +67,19 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
   }
 
   /**
-   * Provides an ExternalID for Bloomberg ticker,
-   * given a reference date and an integer offset, the n'th subsequent option <p>
-   * The format is prefix + month + year + callPutFlag + strike + postfix <p>
+   * Provides an ExternalID for Bloomberg ticker, given a reference date and an integer offset, the n'th subsequent option
+   * <p>
+   * The format is prefix + month + year + callPutFlag + strike + postfix
+   * <p>
    * e.g. SPH3C 1000.0 Index
    * <p>
-   * @param nthOfPeriod n'th future following curve date, not null
-   * @param strike option's strike, expressed as price in %, e.g. 98.750, not null
-   * @param surfaceDate date of curve validity; valuation date, not null
+   * 
+   * @param nthOfPeriod
+   *          n'th future following curve date, not null
+   * @param strike
+   *          option's strike, expressed as price in %, e.g. 98.750, not null
+   * @param surfaceDate
+   *          date of curve validity; valuation date, not null
    * @return the id of the Bloomberg ticker
    */
   @Override
@@ -79,7 +90,8 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
     final String prefix = getFutureOptionPrefix();
     final StringBuffer ticker = new StringBuffer();
     ticker.append(prefix);
-    FutureOptionExpiries expiryRule = EXPIRY_RULES.get(prefix); // TODO: Review whether we can hoist from loop in RawVolatilitySurfaceDataFunction.buildDataRequirements
+    FutureOptionExpiries expiryRule = EXPIRY_RULES.get(prefix); // TODO: Review whether we can hoist from loop in
+                                                                // RawVolatilitySurfaceDataFunction.buildDataRequirements
     if (expiryRule == null) {
       LOGGER.info("No expiry rule has been setup for " + prefix + ". Using Default of 3rd Friday.");
       expiryRule = EXPIRY_RULES.get("DEFAULT");
@@ -99,6 +111,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the expiryRules.
+   * 
    * @return the expiryRules
    */
   public static HashMap<String, FutureOptionExpiries> getExpiryRules() {
@@ -121,6 +134,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the future option prefix.
+   * 
    * @return The future option prefix
    */
   public String getFutureOptionPrefix() {
@@ -129,6 +143,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the postfix.
+   * 
    * @return The postfix
    */
   public String getPostfix() {
@@ -137,6 +152,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the exchange id.
+   * 
    * @return The exchange id
    */
   public String getExchangeIdName() {
@@ -145,6 +161,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
 
   /**
    * Gets the ticker scheme name.
+   * 
    * @return The ticker scheme name
    */
   public String getTickerSchemeName() {
@@ -193,6 +210,5 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
     }
     return true;
   }
-
 
 }

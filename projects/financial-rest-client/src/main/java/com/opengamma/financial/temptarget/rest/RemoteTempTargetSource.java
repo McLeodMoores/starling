@@ -21,15 +21,16 @@ import com.opengamma.util.rest.AbstractRemoteClient;
 import com.opengamma.util.rest.UniformInterfaceException404NotFound;
 
 /**
- * Provides remote access to a {@link TempTargetSource}. It is not normally necessary to explicitly cache instances of this; it will not normally be used directly but by a {@link TempTargetResolver}
- * which will in turn be cached by an owning {@link CachingComputationTargetResolver}.
+ * Provides remote access to a {@link TempTargetSource}. It is not normally necessary to explicitly cache instances of this; it will not normally be used
+ * directly but by a {@link TempTargetResolver} which will in turn be cached by an owning {@link CachingComputationTargetResolver}.
  */
 public class RemoteTempTargetSource extends AbstractRemoteClient implements TempTargetSource {
 
   /**
    * Creates an instance.
    *
-   * @param baseUri the base target URI for all RESTful web services, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
    */
   public RemoteTempTargetSource(final URI baseUri) {
     super(baseUri);

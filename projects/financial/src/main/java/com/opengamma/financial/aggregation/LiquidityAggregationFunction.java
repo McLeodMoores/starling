@@ -43,7 +43,8 @@ public class LiquidityAggregationFunction implements AggregationFunction<String>
   private static final String RESOLUTION_KEY = "DEFAULT_TSS_CONFIG";
   private static final String NO_LIQUIDITY = "N/A";
 
-  private static final List<String> REQUIRED = Arrays.asList(MORE_THAN_10_0, FROM_3_0_TO_10_0, FROM_1_0_TO_3_0, FROM_0_5_TO_1_0, FROM_0_2_TO_0_5, LESS_THAN_0_2, NO_LIQUIDITY);
+  private static final List<String> REQUIRED = Arrays.asList(MORE_THAN_10_0, FROM_3_0_TO_10_0, FROM_1_0_TO_3_0, FROM_0_5_TO_1_0, FROM_0_2_TO_0_5, LESS_THAN_0_2,
+      NO_LIQUIDITY);
 
   private final HistoricalTimeSeriesSource _htsSource;
   private final SecuritySource _secSource;

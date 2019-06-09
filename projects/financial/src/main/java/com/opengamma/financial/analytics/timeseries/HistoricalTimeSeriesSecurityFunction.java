@@ -71,16 +71,18 @@ public class HistoricalTimeSeriesSecurityFunction extends AbstractFunction.NonCo
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final HistoricalTimeSeriesResolver htsResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final Set<String> dataFieldConstraints = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
-    if ((dataFieldConstraints != null) && (dataFieldConstraints.size() > 1)) {
+    if (dataFieldConstraints != null && dataFieldConstraints.size() > 1) {
       return null;
     }
-    final String dataField = ((dataFieldConstraints == null) || dataFieldConstraints.isEmpty()) ? null : Iterables.getOnlyElement(dataFieldConstraints);
-    final HistoricalTimeSeriesResolutionResult resolutionResult = htsResolver.resolve(target.getSecurity().getExternalIdBundle(), null, null, null, dataField, null);
+    final String dataField = dataFieldConstraints == null || dataFieldConstraints.isEmpty() ? null : Iterables.getOnlyElement(dataFieldConstraints);
+    final HistoricalTimeSeriesResolutionResult resolutionResult = htsResolver.resolve(target.getSecurity().getExternalIdBundle(), null, null, null, dataField,
+        null);
     if (resolutionResult == null) {
       return null;
     }
     final UniqueId htsId = resolutionResult.getHistoricalTimeSeriesInfo().getUniqueId();
-    final ValueRequirement valueRequirement = new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, ComputationTargetType.PRIMITIVE, htsId, desiredValue.getConstraints());
+    final ValueRequirement valueRequirement = new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, ComputationTargetType.PRIMITIVE, htsId,
+        desiredValue.getConstraints());
     return Collections.singleton(valueRequirement);
   }
 

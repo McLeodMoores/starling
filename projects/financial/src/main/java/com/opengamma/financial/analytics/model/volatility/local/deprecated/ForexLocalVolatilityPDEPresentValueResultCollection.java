@@ -40,7 +40,8 @@ public class ForexLocalVolatilityPDEPresentValueResultCollection {
   private final double[] _strikes;
   private final int _n;
 
-  public ForexLocalVolatilityPDEPresentValueResultCollection(final double[] strikes, final double[] lvPutPips, final double[] blackPutPips, final double spotFX, final Currency putCurrency,
+  public ForexLocalVolatilityPDEPresentValueResultCollection(final double[] strikes, final double[] lvPutPips, final double[] blackPutPips, final double spotFX,
+      final Currency putCurrency,
       final Currency callCurrency, final double putAmount, final double callAmount) {
     ArgumentChecker.notNull(strikes, "strikes");
     ArgumentChecker.notNull(lvPutPips, "LV put pips");
@@ -58,10 +59,12 @@ public class ForexLocalVolatilityPDEPresentValueResultCollection {
     final double[] blackPutPV = new double[_n];
     final double[] blackCallPV = new double[_n];
     for (int i = 0; i < _n; i++) {
-      MultipleCurrencyAmount mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(lvPutPips[i], spotFX, putCurrency, callCurrency, putAmount, callAmount);
+      MultipleCurrencyAmount mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(lvPutPips[i], spotFX, putCurrency, callCurrency,
+          putAmount, callAmount);
       lvPutPV[i] = mca.getAmount(callCurrency);
       lvCallPV[i] = mca.getAmount(putCurrency);
-      mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(blackPutPips[i], spotFX, putCurrency, callCurrency, putAmount, callAmount);
+      mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(blackPutPips[i], spotFX, putCurrency, callCurrency, putAmount,
+          callAmount);
       blackPutPV[i] = mca.getAmount(callCurrency);
       blackCallPV[i] = mca.getAmount(putCurrency);
     }

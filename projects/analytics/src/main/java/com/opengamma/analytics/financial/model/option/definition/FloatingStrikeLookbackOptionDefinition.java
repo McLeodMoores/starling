@@ -20,7 +20,8 @@ import com.opengamma.util.time.Expiry;
  *
  */
 public class FloatingStrikeLookbackOptionDefinition extends OptionDefinition {
-  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
+  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction =
+      new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
 
     @Override
     public double getPayoff(final StandardOptionWithSpotTimeSeriesDataBundle data, final Double optionPrice) {

@@ -24,6 +24,7 @@ public final class DeltaBlackBondFuturesCalculator extends InstrumentDerivativeV
 
   /**
    * Returns the calculator instance.
+   * 
    * @return the calculator.
    */
   public static DeltaBlackBondFuturesCalculator getInstance() {
@@ -37,7 +38,8 @@ public final class DeltaBlackBondFuturesCalculator extends InstrumentDerivativeV
   }
 
   /** The method used to compute the future option price */
-  private static final BondFuturesOptionMarginSecurityBlackBondFuturesMethod METHOD_FUTURE_OPTION = BondFuturesOptionMarginSecurityBlackBondFuturesMethod.getInstance();
+  private static final BondFuturesOptionMarginSecurityBlackBondFuturesMethod METHOD_FUTURE_OPTION = BondFuturesOptionMarginSecurityBlackBondFuturesMethod
+      .getInstance();
 
   @Override
   public Double visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option, final BlackBondFuturesProviderInterface data) {

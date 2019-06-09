@@ -76,7 +76,7 @@ public class BatchRunner {
    */
   private static Instant s_correctedTo;
 
-  public static void main(final String[] args) throws Exception {  // CSIGNORE
+  public static void main(final String[] args) throws Exception { // CSIGNORE
     if (args.length == 0) {
       usage();
       System.exit(-1);
@@ -94,7 +94,6 @@ public class BatchRunner {
 
     AbstractApplicationContext appContext = null;
 
-
     try {
       appContext = getApplicationContext();
       appContext.start();
@@ -103,7 +102,8 @@ public class BatchRunner {
 
       final ViewClient viewClient = viewProcessor.createViewClient(UserPrincipal.getLocalUser());
       final MarketDataSpecification marketDataSpec = new FixedHistoricalMarketDataSpecification(s_observationDateTime.toLocalDate());
-      final ViewCycleExecutionOptions cycleOptions = ViewCycleExecutionOptions.builder().setValuationTime(s_valuationInstant).setMarketDataSpecification(marketDataSpec)
+      final ViewCycleExecutionOptions cycleOptions = ViewCycleExecutionOptions.builder().setValuationTime(s_valuationInstant)
+          .setMarketDataSpecification(marketDataSpec)
           .setResolverVersionCorrection(VersionCorrection.of(s_versionAsOf, s_correctedTo)).create();
       final ViewCycleExecutionSequence executionSequence = ArbitraryViewCycleExecutionSequence.of(cycleOptions);
 
@@ -116,13 +116,9 @@ public class BatchRunner {
       }
     }
 
-    /*if (failed) {
-      LOGGER.error("Batch failed.");
-      System.exit(-1);
-    } else {
-      LOGGER.info("Batch succeeded.");
-      System.exit(0);
-    }*/
+    /*
+     * if (failed) { LOGGER.error("Batch failed."); System.exit(-1); } else { LOGGER.info("Batch succeeded."); System.exit(0); }
+     */
   }
 
   private static void initialize(final CommandLine line) throws OpenGammaRuntimeException {
@@ -139,8 +135,8 @@ public class BatchRunner {
         s_runCreationMode = RunCreationMode.REUSE_EXISTING;
       } else {
         throw new OpenGammaRuntimeException("Unrecognized runCreationMode. " +
-          "Should be one of AUTO, CREATE_NEW, CREATE_NEW_OVERWRITE, REUSE_EXISTING. " +
-          "Was " + creationMode);
+            "Should be one of AUTO, CREATE_NEW, CREATE_NEW_OVERWRITE, REUSE_EXISTING. " +
+            "Was " + creationMode);
       }
     }
 
@@ -152,8 +148,8 @@ public class BatchRunner {
         s_snapshotMode = SnapshotMode.WRITE_THROUGH;
       } else {
         throw new OpenGammaRuntimeException("Unrecognized snapshotMode. " +
-          "Should be one of PREPARED, WRITE_THROUGH. " +
-          "Was " + snapshotMode);
+            "Should be one of PREPARED, WRITE_THROUGH. " +
+            "Was " + snapshotMode);
       }
     }
 
@@ -190,7 +186,8 @@ public class BatchRunner {
 
     options.addOption("reason", true, "Run reason. Default - Manual run started on {yyyy-MM-ddTHH:mm:ssZZ} by {user.name}.");
 
-    options.addOption("observationDateTime", true, "Observation instant (= market data snapshot instant). yyyy-MM-ddTHH:mm:ssZZ - for example, 2011-12-15T14:48:59.323Z. Default - system clock date.");
+    options.addOption("observationDateTime", true,
+        "Observation instant (= market data snapshot instant). yyyy-MM-ddTHH:mm:ssZZ - for example, 2011-12-15T14:48:59.323Z. Default - system clock date.");
 
     options.addOption("valuationInstant", true, "Valuation instant. yyyy-MM-ddTHH:mm:ssZZ - for example, 2011-12-15T14:48:59.323Z. Default - system clock.");
 
@@ -201,11 +198,11 @@ public class BatchRunner {
     options.addOption("correctedTo", true, "Version corrected to. yyyy-MM-ddTHH:mm:ssZZ - for example, 2011-12-15T14:48:59.323Z.");
 
     options.addOption("runCreationMode", true, "One of AUTO, CREATE_NEW, CREATE_NEW_OVERWRITE, REUSE_EXISTING (case insensitive)." +
-      " Specifies whether to create a new run in the database." +
-      " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
+        " Specifies whether to create a new run in the database." +
+        " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
 
     options.addOption("snapshotMode", true, "One of PREPARED, WRITE_THROUGH (case insensitive)." +
-      " Specifies whether to save market data in the batch database or such data should be present in advance of batch run.");
+        " Specifies whether to save market data in the batch database or such data should be present in advance of batch run.");
 
     return options;
   }

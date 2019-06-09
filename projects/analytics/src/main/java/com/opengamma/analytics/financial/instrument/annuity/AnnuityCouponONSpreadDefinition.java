@@ -31,8 +31,11 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
 
   /**
    * Constructor from a list of overnight coupons.
-   * @param payments The coupons.
-   * @param calendar The holiday calendar
+   * 
+   * @param payments
+   *          The coupons.
+   * @param calendar
+   *          The holiday calendar
    */
   public AnnuityCouponONSpreadDefinition(final CouponONSpreadDefinition[] payments, final Calendar calendar) {
     super(payments, calendar);
@@ -40,12 +43,19 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
 
   /**
    * Build a annuity of overnight coupons from financial details.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param tenorAnnuity The total tenor of the annuity, not null.
-   * @param notional The annuity notional.
-   * @param generator The overnight generator, not null.
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param spread The spread
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param tenorAnnuity
+   *          The total tenor of the annuity, not null.
+   * @param notional
+   *          The annuity notional.
+   * @param generator
+   *          The overnight generator, not null.
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param spread
+   *          The spread
    * @return The annuity.
    */
   public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final Period tenorAnnuity, final double notional,
@@ -53,19 +63,27 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(tenorAnnuity, "tenor annuity");
     ArgumentChecker.notNull(generator, "generator");
-    final ZonedDateTime[] endFixingPeriodDate = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, tenorAnnuity, generator.getLegsPeriod(), generator.isStubShort(), generator.isFromEnd(),
+    final ZonedDateTime[] endFixingPeriodDate = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, tenorAnnuity, generator.getLegsPeriod(),
+        generator.isStubShort(), generator.isFromEnd(),
         generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
     return AnnuityCouponONSpreadDefinition.from(settlementDate, endFixingPeriodDate, notional, generator, isPayer, spread);
   }
 
   /**
    * Build a annuity of overnight coupons from financial details.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param tenorAnnuity The total tenor of the annuity, not null.
-   * @param notional The annuity notional.
-   * @param generator The Ibor/ON generator, not null.
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param spread The spread
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param tenorAnnuity
+   *          The total tenor of the annuity, not null.
+   * @param notional
+   *          The annuity notional.
+   * @param generator
+   *          The Ibor/ON generator, not null.
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param spread
+   *          The spread
    * @return The annuity.
    */
   public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final Period tenorAnnuity, final double notional,
@@ -73,48 +91,74 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(tenorAnnuity, "tenor annuity");
     ArgumentChecker.notNull(generator, "generator");
-    final ZonedDateTime[] endFixingPeriodDate = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, tenorAnnuity, generator.getIndexIbor().getTenor(), generator.isStubShort(),
+    final ZonedDateTime[] endFixingPeriodDate = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, tenorAnnuity, generator.getIndexIbor().getTenor(),
+        generator.isStubShort(),
         generator.isFromEnd(), generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
     return AnnuityCouponONSpreadDefinition.from(settlementDate, endFixingPeriodDate, notional, generator, isPayer, spread);
   }
 
   /**
    * Build a annuity of overnight coupons from financial details.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param endFixingPeriodDate The end date of the overnight accrual period. Also called the maturity date of the annuity even if the actual payment can take place one or two days later. Not null.
-   * @param notional The annuity notional.
-   * @param generator The overnight generator, not null.
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param spread The spread
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param endFixingPeriodDate
+   *          The end date of the overnight accrual period. Also called the maturity date of the annuity even if the actual payment can take place one or two
+   *          days later. Not null.
+   * @param notional
+   *          The annuity notional.
+   * @param generator
+   *          The overnight generator, not null.
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param spread
+   *          The spread
    * @return The annuity.
    */
-  public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional, final GeneratorSwapFixedON generator,
+  public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional,
+      final GeneratorSwapFixedON generator,
       final boolean isPayer, final double spread) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(endFixingPeriodDate, "End fixing period date");
     ArgumentChecker.notNull(generator, "generator");
-    final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endFixingPeriodDate, generator.getLegsPeriod(), generator.isStubShort(),
+    final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endFixingPeriodDate, generator.getLegsPeriod(),
+        generator.isStubShort(),
         generator.isFromEnd(), generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
     return AnnuityCouponONSpreadDefinition.from(settlementDate, endFixingPeriodDates, notional, generator, isPayer, spread);
   }
 
   /**
    * Build a annuity of overnight coupons from financial details.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param endFixingPeriodDate The end date of the overnight accrual period. Also called the maturity date of the annuity even if the actual payment can take place one or two days later. Not null.
-   * @param notional The annuity notional.
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param indexON The overnight index.
-   * @param paymentLag The payment lag.
-   * @param indexCalendar The calendar for the overnight index.
-   * @param businessDayConvention The business day convention.
-   * @param paymentPeriod The payment period.
-   * @param isEOM Is EOM.
-   * @param spread The spread
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param endFixingPeriodDate
+   *          The end date of the overnight accrual period. Also called the maturity date of the annuity even if the actual payment can take place one or two
+   *          days later. Not null.
+   * @param notional
+   *          The annuity notional.
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param indexON
+   *          The overnight index.
+   * @param paymentLag
+   *          The payment lag.
+   * @param indexCalendar
+   *          The calendar for the overnight index.
+   * @param businessDayConvention
+   *          The business day convention.
+   * @param paymentPeriod
+   *          The payment period.
+   * @param isEOM
+   *          Is EOM.
+   * @param spread
+   *          The spread
    * @return The annuity.
    */
-  public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional, final boolean isPayer,
-      final IndexON indexON, final int paymentLag, final Calendar indexCalendar, final BusinessDayConvention businessDayConvention, final Period paymentPeriod, final boolean isEOM,
+  public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional,
+      final boolean isPayer,
+      final IndexON indexON, final int paymentLag, final Calendar indexCalendar, final BusinessDayConvention businessDayConvention, final Period paymentPeriod,
+      final boolean isEOM,
       final double spread) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(endFixingPeriodDate, "End fixing period date");
@@ -123,7 +167,7 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
     ArgumentChecker.notNull(businessDayConvention, "business day convention");
     ArgumentChecker.notNull(paymentPeriod, "payment period");
     final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endFixingPeriodDate, paymentPeriod, true,
-        false, businessDayConvention, indexCalendar, isEOM); //TODO get rid of hard-codings
+        false, businessDayConvention, indexCalendar, isEOM); // TODO get rid of hard-codings
     final double sign = isPayer ? -1.0 : 1.0;
     final double notionalSigned = sign * notional;
     final CouponONSpreadDefinition[] coupons = new CouponONSpreadDefinition[endFixingPeriodDates.length];
@@ -137,43 +181,63 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
 
   /**
    * Build a annuity of overnight coupons from financial details.
-   * @param settlementDate The annuity settlement or first fixing date, not null.
-   * @param endFixingPeriodDate The end date of the overnight accrual period. Also called the maturity date of the annuity even if the actual payment can take place one or two days later. Not null.
-   * @param notional The annuity notional.
-   * @param generator The Ibor/ON generator, not null.
-   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
-   * @param spread The spread
+   * 
+   * @param settlementDate
+   *          The annuity settlement or first fixing date, not null.
+   * @param endFixingPeriodDate
+   *          The end date of the overnight accrual period. Also called the maturity date of the annuity even if the actual payment can take place one or two
+   *          days later. Not null.
+   * @param notional
+   *          The annuity notional.
+   * @param generator
+   *          The Ibor/ON generator, not null.
+   * @param isPayer
+   *          The flag indicating if the annuity is paying (true) or receiving (false).
+   * @param spread
+   *          The spread
    * @return The annuity.
    */
-  public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional, final GeneratorSwapIborON generator,
+  public static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final double notional,
+      final GeneratorSwapIborON generator,
       final boolean isPayer, final double spread) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(endFixingPeriodDate, "End fixing period date");
     ArgumentChecker.notNull(generator, "generator");
-    final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endFixingPeriodDate, generator.getIndexIbor().getTenor(), generator.isStubShort(),
+    final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endFixingPeriodDate,
+        generator.getIndexIbor().getTenor(), generator.isStubShort(),
         generator.isFromEnd(), generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
     return AnnuityCouponONSpreadDefinition.from(settlementDate, endFixingPeriodDates, notional, generator, isPayer, spread);
   }
 
   /**
    * Creates an overnight annuity with spread.
-   * @param settlementDate The setttlement date
-   * @param endFixingPeriodDate The end fixing period dates
-   * @param notional The notional
-   * @param generator A fixed / overnight swap generator
-   * @param isPayer True if the annuity is paid
-   * @param spread The spread
+   * 
+   * @param settlementDate
+   *          The setttlement date
+   * @param endFixingPeriodDate
+   *          The end fixing period dates
+   * @param notional
+   *          The notional
+   * @param generator
+   *          A fixed / overnight swap generator
+   * @param isPayer
+   *          True if the annuity is paid
+   * @param spread
+   *          The spread
    * @return An overnight annuity with spread
    */
-  private static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime[] endFixingPeriodDate, final double notional, final GeneratorSwapFixedON generator,
+  private static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime[] endFixingPeriodDate, final double notional,
+      final GeneratorSwapFixedON generator,
       final boolean isPayer, final double spread) {
     final double sign = isPayer ? -1.0 : 1.0;
     final double notionalSigned = sign * notional;
     final CouponONSpreadDefinition[] coupons = new CouponONSpreadDefinition[endFixingPeriodDate.length];
-    coupons[0] = CouponONSpreadDefinition.from(generator.getIndex(), settlementDate, endFixingPeriodDate[0], notionalSigned, generator.getPaymentLag(), generator.getOvernightCalendar(),
+    coupons[0] = CouponONSpreadDefinition.from(generator.getIndex(), settlementDate, endFixingPeriodDate[0], notionalSigned, generator.getPaymentLag(),
+        generator.getOvernightCalendar(),
         spread);
     for (int loopcpn = 1; loopcpn < endFixingPeriodDate.length; loopcpn++) {
-      coupons[loopcpn] = CouponONSpreadDefinition.from(generator.getIndex(), endFixingPeriodDate[loopcpn - 1], endFixingPeriodDate[loopcpn], notionalSigned, generator.getPaymentLag(),
+      coupons[loopcpn] = CouponONSpreadDefinition.from(generator.getIndex(), endFixingPeriodDate[loopcpn - 1], endFixingPeriodDate[loopcpn], notionalSigned,
+          generator.getPaymentLag(),
           generator.getOvernightCalendar(), spread);
     }
     return new AnnuityCouponONSpreadDefinition(coupons, generator.getOvernightCalendar());
@@ -181,22 +245,32 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
 
   /**
    * Creates an overnight annuity with spread.
-   * @param settlementDate The setttlement date
-   * @param endFixingPeriodDate The end fixing period dates
-   * @param notional The notional
-   * @param generator A ibor / overnight swap generator
-   * @param isPayer True if the annuity is paid
-   * @param spread The spread
+   * 
+   * @param settlementDate
+   *          The setttlement date
+   * @param endFixingPeriodDate
+   *          The end fixing period dates
+   * @param notional
+   *          The notional
+   * @param generator
+   *          A ibor / overnight swap generator
+   * @param isPayer
+   *          True if the annuity is paid
+   * @param spread
+   *          The spread
    * @return An overnight annuity with spread
    */
-  private static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime[] endFixingPeriodDate, final double notional, final GeneratorSwapIborON generator,
+  private static AnnuityCouponONSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime[] endFixingPeriodDate, final double notional,
+      final GeneratorSwapIborON generator,
       final boolean isPayer, final double spread) {
     final double sign = isPayer ? -1.0 : 1.0;
     final double notionalSigned = sign * notional;
     final CouponONSpreadDefinition[] coupons = new CouponONSpreadDefinition[endFixingPeriodDate.length];
-    coupons[0] = CouponONSpreadDefinition.from(generator.getIndexON(), settlementDate, endFixingPeriodDate[0], notionalSigned, generator.getPaymentLag(), generator.getOvernightCalendar(), spread);
+    coupons[0] = CouponONSpreadDefinition.from(generator.getIndexON(), settlementDate, endFixingPeriodDate[0], notionalSigned, generator.getPaymentLag(),
+        generator.getOvernightCalendar(), spread);
     for (int loopcpn = 1; loopcpn < endFixingPeriodDate.length; loopcpn++) {
-      coupons[loopcpn] = CouponONSpreadDefinition.from(generator.getIndexON(), endFixingPeriodDate[loopcpn - 1], endFixingPeriodDate[loopcpn], notionalSigned, generator.getPaymentLag(),
+      coupons[loopcpn] = CouponONSpreadDefinition.from(generator.getIndexON(), endFixingPeriodDate[loopcpn - 1], endFixingPeriodDate[loopcpn], notionalSigned,
+          generator.getPaymentLag(),
           generator.getOvernightCalendar(), spread);
     }
     return new AnnuityCouponONSpreadDefinition(coupons, generator.getOvernightCalendar());
@@ -204,11 +278,13 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
-  public Annuity<? extends Coupon> toDerivative(final ZonedDateTime valZdt, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final String... yieldCurveNames) {
+  public Annuity<? extends Coupon> toDerivative(final ZonedDateTime valZdt, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(valZdt, "date");
     ArgumentChecker.notNull(indexFixingTS, "index fixing time series");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
@@ -217,9 +293,9 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
     final ZonedDateTime valZdtInPaymentZone = valZdt.withZoneSameInstant(payments[0].getPaymentDate().getZone());
     final LocalDate valDate = valZdtInPaymentZone.toLocalDate();
 
-    for (int loopcoupon = 0; loopcoupon < payments.length; loopcoupon++) {
-      if (!valDate.isAfter(payments[loopcoupon].getPaymentDate().toLocalDate())) {
-        resultList.add(payments[loopcoupon].toDerivative(valZdt, indexFixingTS, yieldCurveNames));
+    for (final CouponONSpreadDefinition payment : payments) {
+      if (!valDate.isAfter(payment.getPaymentDate().toLocalDate())) {
+        resultList.add(payment.toDerivative(valZdt, indexFixingTS, yieldCurveNames));
       }
     }
     return new Annuity<>(resultList.toArray(new Coupon[resultList.size()]));
@@ -234,9 +310,9 @@ public class AnnuityCouponONSpreadDefinition extends AnnuityCouponDefinition<Cou
     final ZonedDateTime valZdtInPaymentZone = valZdt.withZoneSameInstant(payments[0].getPaymentDate().getZone());
     final LocalDate valDate = valZdtInPaymentZone.toLocalDate();
 
-    for (int loopcoupon = 0; loopcoupon < payments.length; loopcoupon++) {
-      if (!valDate.isAfter(payments[loopcoupon].getPaymentDate().toLocalDate())) {
-        resultList.add(payments[loopcoupon].toDerivative(valZdt, indexFixingTS));
+    for (final CouponONSpreadDefinition payment : payments) {
+      if (!valDate.isAfter(payment.getPaymentDate().toLocalDate())) {
+        resultList.add(payment.toDerivative(valZdt, indexFixingTS));
       }
     }
     return new Annuity<>(resultList.toArray(new Coupon[resultList.size()]));

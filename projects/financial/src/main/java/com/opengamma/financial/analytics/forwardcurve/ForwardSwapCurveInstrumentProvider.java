@@ -46,7 +46,8 @@ public abstract class ForwardSwapCurveInstrumentProvider implements ForwardCurve
   }
 
   @Override
-  public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType, final IndexType receiveIndexType) {
+  public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType,
+      final IndexType receiveIndexType) {
     throw new UnsupportedOperationException();
   }
 

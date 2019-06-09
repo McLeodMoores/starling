@@ -27,6 +27,7 @@ import com.opengamma.financial.analytics.model.discounting.DiscountingPV01Functi
 
 /**
  * Computes the PV01 of interest rate instruments.
+ * 
  * @deprecated Use {@link DiscountingPV01Function}
  */
 @Deprecated
@@ -35,7 +36,7 @@ public class InterestRateInstrumentPV01Function extends InterestRateInstrumentCu
   private static final PV01Calculator CALCULATOR = PV01Calculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#PV01}
+   * Sets the value requirement name to {@link ValueRequirementNames#PV01}.
    */
   public InterestRateInstrumentPV01Function() {
     super(ValueRequirementNames.PV01);
@@ -52,7 +53,8 @@ public class InterestRateInstrumentPV01Function extends InterestRateInstrumentCu
         final Swap<Payment, Payment> swap = (Swap<Payment, Payment>) derivative;
         final Annuity<Payment> firstLeg = swap.getFirstLeg();
         final Annuity<Payment> secondLeg = swap.getSecondLeg();
-        if ((firstLeg.getPayments().length <= 1 && secondLeg.getPayments().length == 1) || (firstLeg.getPayments().length == 1 && secondLeg.getPayments().length <= 1)) {
+        if (firstLeg.getPayments().length <= 1 && secondLeg.getPayments().length == 1
+            || firstLeg.getPayments().length == 1 && secondLeg.getPayments().length <= 1) {
           boolean firstPaymentFixed = true;
           if (firstLeg.getNumberOfPayments() > 0) {
             final Payment lastPayment = firstLeg.getNthPayment(0);
@@ -74,6 +76,5 @@ public class InterestRateInstrumentPV01Function extends InterestRateInstrumentCu
     }
     return Collections.singleton(new ComputedValue(resultSpec, pv01.get(curveName)));
   }
-
 
 }

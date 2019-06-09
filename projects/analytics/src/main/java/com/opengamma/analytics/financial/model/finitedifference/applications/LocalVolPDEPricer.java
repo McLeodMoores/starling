@@ -34,14 +34,15 @@ public class LocalVolPDEPricer {
   private static final ThetaMethodFiniteDifference INITIAL_SOLVER = new ThetaMethodFiniteDifference(1.0, false);
   private static final ThetaMethodFiniteDifference SOLVER = new ThetaMethodFiniteDifference();
   /*
-   * Crank-Nicolson (i.e. theta = 0.5) is known to give poor results around at-the-money. This can be solved by using a short fully implicit (theta = 1.0) burn-in period.
-   * Eigenvalues associated with the discontinuity in the first derivative are not damped out when theta = 0.5, but are for theta = 1.0 - the time step for this phase should be
-   * such that the Crank-Nicolson (order(dt^2)) accuracy is not destroyed.
+   * Crank-Nicolson (i.e. theta = 0.5) is known to give poor results around at-the-money. This can be solved by using a short fully implicit (theta = 1.0)
+   * burn-in period. Eigenvalues associated with the discontinuity in the first derivative are not damped out when theta = 0.5, but are for theta = 1.0 - the
+   * time step for this phase should be such that the Crank-Nicolson (order(dt^2)) accuracy is not destroyed.
    */
   private static final boolean USE_BURNIN = true;
   private static final double BURNIN_FRACTION = 0.20;
 
-  public double price(final double s0, final double k, final double r, final double b, final double t, final LocalVolatilitySurfaceStrike locVol, final boolean isCall, final boolean isAmerican,
+  public double price(final double s0, final double k, final double r, final double b, final double t, final LocalVolatilitySurfaceStrike locVol,
+      final boolean isCall, final boolean isAmerican,
       final int spaceNodes, final int timeNodes) {
 
     final double q = r - b;
@@ -55,7 +56,7 @@ public class LocalVolPDEPricer {
     final double tBurn = USE_BURNIN ? BURNIN_FRACTION * t * t / timeNodes : 0.0;
 
     // set up a near-uniform mesh that includes spot and strike
-    final MeshingFunction xMesh = new ExponentialMeshing(sMin, sMax, spaceNodes, 0.0, new double[] {s0, k});
+    final MeshingFunction xMesh = new ExponentialMeshing(sMin, sMax, spaceNodes, 0.0, new double[] { s0, k });
     final MeshingFunction tMeshBurn = USE_BURNIN ? new ExponentialMeshing(0.0, tBurn, tBurnNodes, 0.0) : null;
     final MeshingFunction tMesh = new ExponentialMeshing(tBurn, t, timeNodes - tBurnNodes, 0.0);
     final PDEGrid1D gridBurn = USE_BURNIN ? new PDEGrid1D(tMeshBurn, xMesh) : null;
@@ -90,13 +91,16 @@ public class LocalVolPDEPricer {
 
       final FunctionalDoublesSurface free = new FunctionalDoublesSurface(func);
       if (USE_BURNIN) {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper, free, gridBurn);
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower,
+            upper, free, gridBurn);
         final PDEResults1D resBurn = INITIAL_SOLVER.solve(dataBurn);
 
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, resBurn.getTerminalResults(), lower, upper, free, grid);
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef,
+            resBurn.getTerminalResults(), lower, upper, free, grid);
         res = SOLVER.solve(data);
       } else {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper, free, grid);
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper,
+            free, grid);
         res = SOLVER.solve(data);
       }
 
@@ -121,13 +125,16 @@ public class LocalVolPDEPricer {
         upper = new NeumannBoundaryCondition(0.0, sMax, false);
       }
       if (USE_BURNIN) {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper, gridBurn);
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> dataBurn = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower,
+            upper, gridBurn);
         final PDEResults1D resBurn = INITIAL_SOLVER.solve(dataBurn);
 
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, resBurn.getTerminalResults(), lower, upper, grid);
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef,
+            resBurn.getTerminalResults(), lower, upper, grid);
         res = SOLVER.solve(data);
       } else {
-        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper, grid);
+        final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, payoff, lower, upper,
+            grid);
         res = SOLVER.solve(data);
       }
     }

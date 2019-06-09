@@ -30,6 +30,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Calculates the sensitivity of the present value to the SABR parameters
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -66,6 +67,7 @@ public class IRFutureOptionSABRSensitivitiesFunction extends IRFutureOptionSABRF
 
   private DoubleLabelledMatrix2D getMatrix(final SurfaceValue values) {
     final Map.Entry<DoublesPair, Double> entry = Iterables.getOnlyElement(values.getMap().entrySet());
-    return new DoubleLabelledMatrix2D(new Double[] {entry.getKey().first}, new Double[] {entry.getKey().second}, new double[][] {new double[] {entry.getValue()}});
+    return new DoubleLabelledMatrix2D(new Double[] { entry.getKey().first }, new Double[] { entry.getKey().second },
+        new double[][] { new double[] { entry.getValue() } });
   }
 }

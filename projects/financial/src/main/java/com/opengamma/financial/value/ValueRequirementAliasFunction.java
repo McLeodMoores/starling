@@ -25,8 +25,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * A generic function for exposing a particular value requirement under a different name. This may allow the value to be delivered through a heavily constrained value requirement, but output through a
- * simple value requirement name.
+ * A generic function for exposing a particular value requirement under a different name. This may allow the value to be delivered through a heavily constrained
+ * value requirement, but output through a simple value requirement name.
  */
 public class ValueRequirementAliasFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -41,11 +41,16 @@ public class ValueRequirementAliasFunction extends AbstractFunction.NonCompiledI
   /**
    * Constructs an instance.
    *
-   * @param aliasedValueRequirementName the value requirement name under which to expose the input value, not null
-   * @param inputRequirementName the input value requirement name, not null
-   * @param inputConstraints the static input value requirement constraints, not null
-   * @param preservedProperties the properties preserved on the output which may be constrained, not null
-   * @param targetType the function target type, not null
+   * @param aliasedValueRequirementName
+   *          the value requirement name under which to expose the input value, not null
+   * @param inputRequirementName
+   *          the input value requirement name, not null
+   * @param inputConstraints
+   *          the static input value requirement constraints, not null
+   * @param preservedProperties
+   *          the properties preserved on the output which may be constrained, not null
+   * @param targetType
+   *          the function target type, not null
    */
   public ValueRequirementAliasFunction(final String aliasedValueRequirementName, final String inputRequirementName,
       final ValueProperties inputConstraints, final Set<String> preservedProperties, final ComputationTargetType targetType) {
@@ -81,7 +86,8 @@ public class ValueRequirementAliasFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification inputSpec = Iterables.getOnlyElement(inputs.keySet());
     final Builder builder = createValueProperties();
     appendPreservedProperties(inputSpec.getProperties(), builder);
@@ -89,10 +95,12 @@ public class ValueRequirementAliasFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final Object result = inputs.getValue(_inputRequirementName);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    return ImmutableSet.of(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), result));
+    return ImmutableSet
+        .of(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), result));
   }
 
   private ValueRequirement createValueRequirement(final ComputationTarget target, final ValueRequirement desiredValue) {

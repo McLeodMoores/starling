@@ -41,7 +41,8 @@ import com.opengamma.util.time.Expiry;
 public class PractitionerBlackScholesVolatilitySurfaceFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ZonedDateTime now = ZonedDateTime.now(Clock.systemUTC());
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
     final ValueRequirement underlyingPriceRequirement = getPriceRequirement(option.getUnderlyingId());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
@@ -19,8 +19,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method for the pricing of bond future options. The pricing is done with a Black approach on the bond future.
- * The Black parameters are represented by (expiration-strike) surfaces.  
+ * Method for the pricing of bond future options. The pricing is done with a Black approach on the bond future. The Black parameters are represented by
+ * (expiration-strike) surfaces.
  */
 public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
@@ -37,6 +37,7 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
   /**
    * Return the method unique instance.
+   *
    * @return The instance.
    */
   public static BondFutureOptionPremiumSecurityBlackSmileMethod getInstance() {
@@ -49,14 +50,17 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   private static final BlackPriceFunction BLACK_FUNCTION = new BlackPriceFunction();
 
   /**
-   * The method used to compute the future price. 
+   * The method used to compute the future price.
    */
   private static final BondFutureDiscountingMethod METHOD_FUTURE = BondFutureDiscountingMethod.getInstance();
 
   /**
    * Computes the option security price from future price.
-   * @param security The future option security, not null
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   *
+   * @param security
+   *          The future option security, not null
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return The security price.
    */
   public double price(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
@@ -71,9 +75,12 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price. The future price is computed from the curves. 
-   * @param security The bond future option security, not null
-   * @param black The curve and Black volatility data, not null
+   * Computes the option security price. The future price is computed from the curves.
+   *
+   * @param security
+   *          The bond future option security, not null
+   * @param black
+   *          The curve and Black volatility data, not null
    * @return The security price.
    */
   public double price(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
@@ -84,15 +91,18 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price curve sensitivity. 
-   * It is supposed that for a given strike the volatility does not change with the curves.
-   * The option price and its derivative wrt the futures price is computed using the futures price. 
-   * The derivatives of the futures price with respect to the curves are computed using the curves.
-   * @param security The future option security, not null
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   * Computes the option security price curve sensitivity. It is supposed that for a given strike the volatility does not change with the curves. The option
+   * price and its derivative wrt the futures price is computed using the futures price. The derivatives of the futures price with respect to the curves are
+   * computed using the curves.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return The security price curve sensitivity.
    */
-  public MulticurveSensitivity priceCurveSensitivity(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
+  public MulticurveSensitivity priceCurveSensitivity(final BondFutureOptionPremiumSecurity security,
+      final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(blackPrice, "Black data");
     // Forward sweep
@@ -110,11 +120,13 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price curve sensitivity. 
-   * It is supposed that for a given strike the volatility does not change with the curves.
-   * The futures price and its derivatives with respect to the curves are computed using the curves.
-   * @param security The future option security, not null
-   * @param black The curve and Black volatility data, not null
+   * Computes the option security price curve sensitivity. It is supposed that for a given strike the volatility does not change with the curves. The futures
+   * price and its derivatives with respect to the curves are computed using the curves.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param black
+   *          The curve and Black volatility data, not null
    * @return The security price curve sensitivity.
    */
   public MulticurveSensitivity priceCurveSensitivity(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
@@ -125,11 +137,13 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price volatility sensitivity. 
-   * The option price and its derivative wrt the futures price is computed using the futures price. 
+   * Computes the option security price volatility sensitivity. The option price and its derivative wrt the futures price is computed using the futures price.
    * The derivatives of the futures price with respect to the curves are computed using the curves.
-   * @param security The future option security, not null
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   *
+   * @param security
+   *          The future option security, not null
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return The security price Black sensitivity.
    */
   public SurfaceValue priceBlackSensitivity(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
@@ -150,10 +164,13 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price Black sensitivity. 
-   * All the results are computed using the curves, including the futures price. The futures price is computed by discounting like a forward on the CTD.
-   * @param security The future option security, not null
-   * @param black The curve, Black volatility data.
+   * Computes the option security price Black sensitivity. All the results are computed using the curves, including the futures price. The futures price is
+   * computed by discounting like a forward on the CTD.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param black
+   *          The curve, Black volatility data.
    * @return The security price Black sensitivity.
    */
   public SurfaceValue priceBlackSensitivity(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
@@ -165,8 +182,11 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
   /**
    * Computes the option's value delta, the first derivative of the security price wrt underlying futures rate.
-   * @param security The future option security, not null
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   *
+   * @param security
+   *          The future option security, not null
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return The security value delta.
    */
   public double priceDelta(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
@@ -183,8 +203,11 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
   /**
    * The delta (first order derivative) of the option price wrt the futures price.
-   * @param security The future option security, not null
-   * @param black The curve, Black volatility data.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param black
+   *          The curve, Black volatility data.
    * @return The option price delta wrt the underlying futures price.
    */
   public double priceDelta(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
@@ -195,9 +218,12 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option's value gamma, the second derivative of the security price wrt underlying futures rate. 
-   * @param security The future option security, not null
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   * Computes the option's value gamma, the second derivative of the security price wrt underlying futures rate.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return The security price gamma.
    */
   public double priceGamma(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
@@ -216,8 +242,11 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
   /**
    * The gamma (second order derivative) of the option price wrt the futures price.
-   * @param security The future option security, not null
-   * @param black The curve, Black volatility data.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param black
+   *          The curve, Black volatility data.
    * @return The option price gamma.
    */
   public double priceGamma(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
@@ -228,9 +257,12 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option's value vega, the first derivative of the security price wrt implied vol. 
-   * @param security The future option security, not null
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   * Computes the option's value vega, the first derivative of the security price wrt implied vol.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return The security value delta.
    */
   public double priceVega(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
@@ -247,8 +279,11 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
   /**
    * The vega (first order derivative) of the option price wrt the volatility.
-   * @param security The future option security, not null
-   * @param black The curve, Black volatility data.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param black
+   *          The curve, Black volatility data.
    * @return The option price gamma.
    */
   public double priceVega(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
@@ -259,9 +294,12 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Interpolates and returns the option's implied volatility 
-   * @param security The future option security, not null
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   * Interpolates and returns the option's implied volatility
+   *
+   * @param security
+   *          The future option security, not null
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return Lognormal Implied Volatility.
    */
   public double impliedVolatility(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
@@ -272,8 +310,11 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
   /**
    * The (Black) implied volatility associated to the expiration and strike.
-   * @param security The future option security, not null
-   * @param black The curve, Black volatility data.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param black
+   *          The curve, Black volatility data.
    * @return The option price vega.
    */
   public double impliedVolatility(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
@@ -284,9 +325,12 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the underlying future security price. 
-   * @param security The future option security, not null
-   * @param issuerMulticurves Issuer and multi-curves provider.
+   * Computes the underlying future security price.
+   *
+   * @param security
+   *          The future option security, not null
+   * @param issuerMulticurves
+   *          Issuer and multi-curves provider.
    * @return The security price.
    */
   public double underlyingFuturePrice(final BondFutureOptionPremiumSecurity security, final IssuerProviderInterface issuerMulticurves) {

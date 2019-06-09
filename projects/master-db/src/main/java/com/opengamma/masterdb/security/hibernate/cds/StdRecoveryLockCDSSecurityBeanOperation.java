@@ -25,7 +25,8 @@ import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 /**
  *
  */
-public final class StdRecoveryLockCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<StandardRecoveryLockCDSSecurity, StandardRecoveryLockCDSSecurityBean> {
+public final class StdRecoveryLockCDSSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<StandardRecoveryLockCDSSecurity, StandardRecoveryLockCDSSecurityBean> {
 
   /**
    * Singleton
@@ -37,7 +38,8 @@ public final class StdRecoveryLockCDSSecurityBeanOperation extends AbstractSecur
   }
 
   @Override
-  public StandardRecoveryLockCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final StandardRecoveryLockCDSSecurity security) {
+  public StandardRecoveryLockCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final StandardRecoveryLockCDSSecurity security) {
     final StandardRecoveryLockCDSSecurityBean bean = new StandardRecoveryLockCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setQuotedSpread(security.getQuotedSpread());

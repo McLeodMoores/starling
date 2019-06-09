@@ -31,7 +31,7 @@ public class ListedEquityOptionBlackSpotDeltaFunction extends ListedEquityOption
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackSpotDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackSpotDeltaFunction() {
     super(ValueRequirementNames.DELTA);
@@ -46,11 +46,9 @@ public class ListedEquityOptionBlackSpotDeltaFunction extends ListedEquityOption
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> resultsWithCcy = super.getResults(context, target, inputs);
     return getResultsWithoutCurrency(resultsWithCcy);
   }
 }
-
-
-

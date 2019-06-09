@@ -27,7 +27,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Converts interest rate future securities into the definition form used by the analytics library
- * 
+ *
  * @deprecated Use the converter that does not reference a {@link ConventionBundleSource}
  */
 @Deprecated
@@ -42,11 +42,15 @@ public class InterestRateFutureSecurityConverterDeprecated extends FinancialSecu
   /** The version/correction timestamp */
 
   /**
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
    */
-  public InterestRateFutureSecurityConverterDeprecated(final HolidaySource holidaySource, final ConventionBundleSource conventionSource, final RegionSource regionSource) {
+  public InterestRateFutureSecurityConverterDeprecated(final HolidaySource holidaySource, final ConventionBundleSource conventionSource,
+      final RegionSource regionSource) {
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(conventionSource, "convention source");
     ArgumentChecker.notNull(regionSource, "region source");
@@ -62,7 +66,8 @@ public class InterestRateFutureSecurityConverterDeprecated extends FinancialSecu
     final Currency currency = security.getCurrency();
     ConventionBundle iborConvention = _conventionSource.getConventionBundle(security.getUnderlyingId());
     if (iborConvention == null) {
-      iborConvention = _conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_IR_FUTURE"));
+      iborConvention = _conventionSource
+          .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_IR_FUTURE"));
       if (iborConvention == null) {
         throw new OpenGammaRuntimeException("Could not get ibor convention for " + currency.getCode());
       }
@@ -77,8 +82,9 @@ public class InterestRateFutureSecurityConverterDeprecated extends FinancialSecu
 
   /**
    * Returns the conventional accrual factor for a given period. For 3 months, the factor is 0.25; for 1 month, the factor is 1/12.
-   * 
-   * @param period The period.
+   *
+   * @param period
+   *          The period.
    * @return The accrual factor.
    */
   private static double getAccrualFactor(final Period period) {

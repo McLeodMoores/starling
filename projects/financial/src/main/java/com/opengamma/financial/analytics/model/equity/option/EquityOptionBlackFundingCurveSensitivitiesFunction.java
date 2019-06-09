@@ -45,13 +45,14 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Calculates the nodal sensitivities of an equity index or equity option to the funding curve (bucketed rho).
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
 public class EquityOptionBlackFundingCurveSensitivitiesFunction extends EquityOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackFundingCurveSensitivitiesFunction() {
     super(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES);
@@ -75,7 +76,8 @@ public class EquityOptionBlackFundingCurveSensitivitiesFunction extends EquityOp
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = super.getResults(context, target, inputs);
     final Set<ValueSpecification> resultsWithCurve = Sets.newHashSetWithExpectedSize(results.size());
     for (final ValueSpecification spec : results) {
@@ -118,10 +120,10 @@ public class EquityOptionBlackFundingCurveSensitivitiesFunction extends EquityOp
     // We have two dates of interest, expiry and settlement
     // Sensitivity to the rate to expiry might be used to estimate the underlying's forward, but we don't include this here.
     // The sensitivity to settlement rate is in the discounting, the ZeroBond price: PV = Z(t,S) * C(F,K,sig,T)
-    //REVIEW emcleod 21-12-2012 calculations of analytic values does not belong in OG-Financial - this logic should be moved into OG-Analytics
+    // REVIEW emcleod 21-12-2012 calculations of analytic values does not belong in OG-Financial - this logic should be moved into OG-Analytics
     final double settle;
     final double rhoSettle;
-    //FIXME
+    // FIXME
     if (derivative instanceof EquityIndexOption) {
       settle = ((EquityIndexOption) derivative).getTimeToSettlement();
       final EquityIndexOptionBlackMethod model = EquityIndexOptionBlackMethod.getInstance();
@@ -131,7 +133,7 @@ public class EquityOptionBlackFundingCurveSensitivitiesFunction extends EquityOp
       final EquityOptionBlackMethod model = EquityOptionBlackMethod.getInstance();
       rhoSettle = -1 * settle * model.presentValue((EquityOption) derivative, market);
     }
-    //  We use PresentValueNodeSensitivityCalculator to distribute this risk across the curve
+    // We use PresentValueNodeSensitivityCalculator to distribute this risk across the curve
     final NodeYieldSensitivityCalculator distributor = PresentValueNodeSensitivityCalculator.getDefaultInstance();
     // What's left is to package up the inputs to the distributor, a YieldCurveBundle and a Map of Sensitivities
     final Map<String, List<DoublesPair>> curveSensMap = new HashMap<>();

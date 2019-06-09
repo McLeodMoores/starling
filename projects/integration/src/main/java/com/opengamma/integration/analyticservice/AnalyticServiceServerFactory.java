@@ -87,7 +87,8 @@ public class AnalyticServiceServerFactory extends AbstractComponentFactory {
     container.setPubSubDomain(false);
     container.setConnectionFactory(getListenJmsConnector().getConnectionFactory());
 
-    final JmsAnalyticsDistributor analyticsDistributor = new JmsAnalyticsDistributor(new DefaultJmsTopicNameResolver(getPositionSource()), OpenGammaFudgeContext.getInstance(), _listenJmsConnector);
+    final JmsAnalyticsDistributor analyticsDistributor = new JmsAnalyticsDistributor(new DefaultJmsTopicNameResolver(getPositionSource()),
+        OpenGammaFudgeContext.getInstance(), _listenJmsConnector);
     server.setAnalyticResultReceiver(analyticsDistributor);
 
     server.setTradeProducer(tradeProducer);

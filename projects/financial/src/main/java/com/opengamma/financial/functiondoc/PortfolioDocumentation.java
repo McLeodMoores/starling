@@ -33,8 +33,7 @@ import com.opengamma.util.MdcAwareThreadPoolExecutor;
 import com.opengamma.util.NamedThreadPoolFactory;
 
 /**
- * Utility template for generating documentation from a function repository by iterating through
- * the defined portfolios.
+ * Utility template for generating documentation from a function repository by iterating through the defined portfolios.
  */
 public class PortfolioDocumentation extends AbstractDocumentation {
 
@@ -45,7 +44,8 @@ public class PortfolioDocumentation extends AbstractDocumentation {
   private final SecuritySource _securitySource;
   private final ExecutorService _executorService;
 
-  public PortfolioDocumentation(final CompiledFunctionRepository functionRepository, final FunctionExclusionGroups functionExclusionGroups, final PortfolioMaster portfolioMaster,
+  public PortfolioDocumentation(final CompiledFunctionRepository functionRepository, final FunctionExclusionGroups functionExclusionGroups,
+      final PortfolioMaster portfolioMaster,
       final PositionSource positionSource, final SecuritySource securitySource) {
     super(functionRepository, functionExclusionGroups);
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
@@ -55,7 +55,8 @@ public class PortfolioDocumentation extends AbstractDocumentation {
     _positionSource = positionSource;
     _securitySource = securitySource;
     final int threads = 32;
-    final ThreadPoolExecutor executor = new MdcAwareThreadPoolExecutor(threads, threads, 3, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new NamedThreadPoolFactory("doc"));
+    final ThreadPoolExecutor executor = new MdcAwareThreadPoolExecutor(threads, threads, 3, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+        new NamedThreadPoolFactory("doc"));
     executor.allowCoreThreadTimeOut(true);
     _executorService = executor;
   }

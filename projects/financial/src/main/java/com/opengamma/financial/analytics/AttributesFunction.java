@@ -35,12 +35,13 @@ import com.opengamma.financial.OpenGammaCompilationContext;
  *
  */
 public class AttributesFunction extends AbstractFunction.NonCompiledInvoker {
-  /** The attribute property name */
+  /** The attribute property name. */
   public static final String PROPERTY_ATTRIBUTE_NAME = "AttributeName";
   private static final Logger LOGGER = LoggerFactory.getLogger(AttributesFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ValueProperties properties = desiredValue.getConstraints();
     final String attributeName = properties.getSingleValue(PROPERTY_ATTRIBUTE_NAME);
@@ -49,8 +50,8 @@ public class AttributesFunction extends AbstractFunction.NonCompiledInvoker {
     String result = attributes.get(attributeName);
     if (result == null) {
       if (security instanceof Bean) {
-        Bean ms = (Bean) security;
-        MetaBean metaBean = ms.metaBean();
+        final Bean ms = (Bean) security;
+        final MetaBean metaBean = ms.metaBean();
         if (metaBean.metaPropertyExists(attributeName)) {
           result = metaBean.metaProperty(attributeName).getString(ms);
         }
@@ -78,14 +79,14 @@ public class AttributesFunction extends AbstractFunction.NonCompiledInvoker {
     }
     final ValueProperties.Builder properties = createValueProperties();
     if (!attributes.isEmpty()) {
-      for (String attribute : attributes.keySet()) {
+      for (final String attribute : attributes.keySet()) {
         properties.with(PROPERTY_ATTRIBUTE_NAME, attribute);
       }
     }
     if (security instanceof Bean) {
-      Bean bean = (Bean) security;
-      MetaBean metaBean = bean.metaBean();
-      for (MetaProperty<?> property : metaBean.metaPropertyIterable()) {
+      final Bean bean = (Bean) security;
+      final MetaBean metaBean = bean.metaBean();
+      for (final MetaProperty<?> property : metaBean.metaPropertyIterable()) {
         properties.with(PROPERTY_ATTRIBUTE_NAME, property.name());
       }
     }

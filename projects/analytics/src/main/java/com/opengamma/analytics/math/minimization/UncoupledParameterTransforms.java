@@ -15,10 +15,11 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * For a set of <i>n</i> function parameters, this takes <i>n</i> ParameterLimitsTransform (which can be the NullTransform which does NOT transform the parameter) which transform
- * a constrained function parameter (e.g. must be between -1 and 1) to a unconstrained fit parameter. It also takes a BitSet (of length <i>n</i>) with an element set to <b>true</b> if
- * that parameter is fixed - a set of <i>n</i> startValues must also be provided, with only those corresponding to fixed parameters being used (i.e. the parameter is fixed at the startValue).
- * The purpose is to allow an optimiser to work with unconstrained parameters without modifying the function that one wishes to optimise.
+ * For a set of <i>n</i> function parameters, this takes <i>n</i> ParameterLimitsTransform (which can be the NullTransform which does NOT transform the
+ * parameter) which transform a constrained function parameter (e.g. must be between -1 and 1) to a unconstrained fit parameter. It also takes a BitSet (of
+ * length <i>n</i>) with an element set to <b>true</b> if that parameter is fixed - a set of <i>n</i> startValues must also be provided, with only those
+ * corresponding to fixed parameters being used (i.e. the parameter is fixed at the startValue). The purpose is to allow an optimiser to work with unconstrained
+ * parameters without modifying the function that one wishes to optimise.
  */
 // TODO not tested
 public class UncoupledParameterTransforms implements NonLinearParameterTransforms {
@@ -30,10 +31,13 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
 
   /**
    *
-   * @param startValues fixed parameter values (if no parameters are fixed this is completely ignored)
-   * @param transforms Array of ParameterLimitsTransform (which can be the NullTransform which does NOT transform the parameter) which transform
-   * a constrained function parameter (e.g. must be between -1 and 1) to a unconstrained fit parameter.
-   * @param fixed BitSet with an element set to <b>true</b> if that parameter is fixed
+   * @param startValues
+   *          fixed parameter values (if no parameters are fixed this is completely ignored)
+   * @param transforms
+   *          Array of ParameterLimitsTransform (which can be the NullTransform which does NOT transform the parameter) which transform a constrained function
+   *          parameter (e.g. must be between -1 and 1) to a unconstrained fit parameter.
+   * @param fixed
+   *          BitSet with an element set to <b>true</b> if that parameter is fixed
    */
   public UncoupledParameterTransforms(final DoubleMatrix1D startValues, final ParameterLimitsTransform[] transforms, final BitSet fixed) {
     ArgumentChecker.notNull(startValues, "null start values");
@@ -78,7 +82,7 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
    * Transforms from a set of function parameters (some of which may have constrained range and/or be fixed) to a (possibly smaller) set of unconstrained
    * fitting parameters <b>Note:</b> If a parameter is fixed, it is its value as provided by <i>startValues</i> not the value given here that will be returned
    * by inverseTransform (and thus used in the function)
-   * 
+   *
    * @param functionParameters
    *          The function parameters
    * @return The fitting parameters
@@ -98,8 +102,11 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
   }
 
   /**
-   * Transforms from a set of unconstrained fitting parameters to a (possibly larger) set of function parameters (some of which may have constrained range and/or be fixed).
-   * @param fittingParameters The fitting parameters
+   * Transforms from a set of unconstrained fitting parameters to a (possibly larger) set of function parameters (some of which may have constrained range
+   * and/or be fixed).
+   * 
+   * @param fittingParameters
+   *          The fitting parameters
    * @return The function parameters
    */
   @Override
@@ -119,9 +126,11 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
   }
 
   /**
-   * Calculates the Jacobian of the transform from function parameters to fitting parameters - the i,j element will be the partial derivative of i^th fitting parameter with respect
-   * to the j^th function parameter
-   * @param functionParameters The function parameters
+   * Calculates the Jacobian of the transform from function parameters to fitting parameters - the i,j element will be the partial derivative of i^th fitting
+   * parameter with respect to the j^th function parameter
+   * 
+   * @param functionParameters
+   *          The function parameters
    * @return matrix of partial derivative of fitting parameter with respect to function parameters
    */
   // TODO not tested
@@ -140,25 +149,27 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
   }
 
   /**
-   * Calculates the Jacobian of the transform from fitting parameters to function parameters - the i,j element will be the partial derivative of i^th function parameter with respect
-   * to the j^th  fitting parameter
-   * @param fittingParameters  The fitting parameters
-   * @return  matrix of partial derivative of function parameter with respect to fitting parameters
+   * Calculates the Jacobian of the transform from fitting parameters to function parameters - the i,j element will be the partial derivative of i^th function
+   * parameter with respect to the j^th fitting parameter
+   * 
+   * @param fittingParameters
+   *          The fitting parameters
+   * @return matrix of partial derivative of function parameter with respect to fitting parameters
    */
   // TODO not tested
-  //  @Override
-  //  public DoubleMatrix2D inverseJacobian(final DoubleMatrix1D fittingParameters) {
-  //    ArgumentChecker.notNull(fittingParameters, "fitting parameters");
-  //    ArgumentChecker.isTrue(fittingParameters.getNumberOfElements() == _nFP, "fitting parameters wrong dimension");
-  //    final double[][] jac = new double[_nMP][_nFP];
-  //    for (int i = 0, j = 0; i < _nMP; i++) {
-  //      if (_fixed[i]) {
-  //        jac[i][j] = _transforms[i].inverseTransformGradient(fittingParameters.getEntry(j));
-  //        j++;
-  //      }
-  //    }
-  //    return DoubleMatrix2D.noCopy(jac);
-  //  }
+  // @Override
+  // public DoubleMatrix2D inverseJacobian(final DoubleMatrix1D fittingParameters) {
+  // ArgumentChecker.notNull(fittingParameters, "fitting parameters");
+  // ArgumentChecker.isTrue(fittingParameters.getNumberOfElements() == _nFP, "fitting parameters wrong dimension");
+  // final double[][] jac = new double[_nMP][_nFP];
+  // for (int i = 0, j = 0; i < _nMP; i++) {
+  // if (_fixed[i]) {
+  // jac[i][j] = _transforms[i].inverseTransformGradient(fittingParameters.getEntry(j));
+  // j++;
+  // }
+  // }
+  // return DoubleMatrix2D.noCopy(jac);
+  // }
 
   @SuppressWarnings("deprecation")
   @Override

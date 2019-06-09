@@ -39,15 +39,12 @@ public class DiscountingBCSFunction extends DiscountingFunction {
   private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
       PresentValueCurveSensitivityDiscountingCalculator.getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<MulticurveProviderInterface> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<MulticurveProviderInterface> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public DiscountingBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -67,7 +64,8 @@ public class DiscountingBCSFunction extends DiscountingFunction {
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, curves, blocks);
         for (final ValueRequirement desiredValue : desiredValues) {
-          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints().copy().get());
+          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(),
+              desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;

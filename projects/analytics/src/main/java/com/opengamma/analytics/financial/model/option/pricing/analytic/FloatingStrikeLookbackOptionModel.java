@@ -17,7 +17,7 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.util.CompareUtils;
 
 /**
- * 
+ *
  */
 public class FloatingStrikeLookbackOptionModel extends AnalyticOptionModel<FloatingStrikeLookbackOptionDefinition, StandardOptionWithSpotTimeSeriesDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -51,8 +51,11 @@ public class FloatingStrikeLookbackOptionModel extends AnalyticOptionModel<Float
           final double x = isCall ? cdf1 - 1 : cdf1;
           y = CompareUtils.closeEquals(sigma, 0, 1e-15) ? 0 : s * df2 * sigma * Math.sqrt(t) * (NORMAL.getPDF(d1) + d1 * x);
         } else {
-          y = CompareUtils.closeEquals(sigma, 0, 1e-15) ? 0 : s * df2 * sigma * sigma
-              * (sign * Math.pow(s / k, -2 * b / sigma / sigma) * NORMAL.getCDF(sign * (2 * b * Math.sqrt(t) / sigma - d1)) - sign * Math.exp(b * t) * NORMAL.getCDF(-sign * d1)) / 2 / b;
+          y = CompareUtils.closeEquals(sigma, 0, 1e-15) ? 0
+              : s * df2 * sigma * sigma
+              * (sign * Math.pow(s / k, -2 * b / sigma / sigma) * NORMAL.getCDF(sign * (2 * b * Math.sqrt(t) / sigma - d1))
+                  - sign * Math.exp(b * t) * NORMAL.getCDF(-sign * d1))
+              / 2 / b;
         }
         return sign * (s * df1 * NORMAL.getCDF(sign * d1) - k * df2 * NORMAL.getCDF(sign * d2)) + y;
       }

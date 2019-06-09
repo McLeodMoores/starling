@@ -17,16 +17,18 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
+ *
  */
 public class ExtremeSpreadOptionDefinition extends OptionDefinition {
   private final OptionExerciseFunction<StandardOptionWithSpotTimeSeriesDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
-  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
+  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction =
+      new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
 
     @Override
     public double getPayoff(final StandardOptionWithSpotTimeSeriesDataBundle data, final Double optionPrice) {
       Validate.notNull(data, "data");
-      final DoubleTimeSeries<ZonedDateTime> ts = ImmutableZonedDateTimeDoubleTimeSeries.of((PreciseDoubleTimeSeries<?>) data.getSpotTimeSeries(), ZoneOffset.UTC);
+      final DoubleTimeSeries<ZonedDateTime> ts = ImmutableZonedDateTimeDoubleTimeSeries.of((PreciseDoubleTimeSeries<?>) data.getSpotTimeSeries(),
+          ZoneOffset.UTC);
       final ZonedDateTime periodEnd = getPeriodEnd().getExpiry();
       final DoubleTimeSeries<ZonedDateTime> firstPeriod = ts.subSeries(data.getDate(), true, periodEnd, true);
       final DoubleTimeSeries<ZonedDateTime> secondPeriod = ts.subSeries(periodEnd, false, ts.getLatestTime(), true);
@@ -79,7 +81,7 @@ public class ExtremeSpreadOptionDefinition extends OptionDefinition {
     final int prime = 31;
     int result = super.hashCode();
     result = prime * result + (_isReverse ? 1231 : 1237);
-    result = prime * result + ((_periodEnd == null) ? 0 : _periodEnd.hashCode());
+    result = prime * result + (_periodEnd == null ? 0 : _periodEnd.hashCode());
     return result;
   }
 

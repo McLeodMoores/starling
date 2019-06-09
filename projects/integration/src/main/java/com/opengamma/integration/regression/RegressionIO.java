@@ -17,8 +17,8 @@ import com.google.common.collect.Maps;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Abstraction of the I/O pattern for the database dump/restore tools. Data is written to a logical sub-directory for each object type with a logical file for each object. Sub-classes may implement
- * this with physical directories and files, or use a structured file format such as a ZIP file.
+ * Abstraction of the I/O pattern for the database dump/restore tools. Data is written to a logical sub-directory for each object type with a logical file for
+ * each object. Sub-classes may implement this with physical directories and files, or use a structured file format such as a ZIP file.
  */
 public abstract class RegressionIO {
 

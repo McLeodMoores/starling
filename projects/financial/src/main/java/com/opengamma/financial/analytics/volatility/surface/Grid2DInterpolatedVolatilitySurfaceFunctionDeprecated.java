@@ -45,7 +45,8 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
  * @deprecated This has been replaced by the pair, RawEquityOptionVolatilitySurfaceDataFunction, EquityFutureOptionVolatilitySurfaceDataFunction
  */
 @Deprecated
-public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends AbstractFunction.NonCompiledInvoker { //TODO rename or make less specific to equity vol surfaces
+public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends AbstractFunction.NonCompiledInvoker { // TODO rename or make less specific to equity
+                                                                                                                 // vol surfaces
   private final String _definitionName;
   private final String _instrumentType;
   private final GridInterpolator2D _interpolator;
@@ -54,7 +55,8 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
   private Set<ValueSpecification> _results;
   private ValueRequirement _requirement;
 
-  public Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated(final String definitionName, final String instrumentType, final String tInterpolatorName, final String tLeftExtrapolatorName,
+  public Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated(final String definitionName, final String instrumentType, final String tInterpolatorName,
+      final String tLeftExtrapolatorName,
       final String tRightExtrapolatorName, final String kInterpolatorName, final String kLeftExtrapolatorName, final String kRightExtrapolatorName) {
     Validate.notNull(definitionName, "definition name");
     Validate.notNull(instrumentType, "instrument type");
@@ -79,17 +81,25 @@ public class Grid2DInterpolatedVolatilitySurfaceFunctionDeprecated extends Abstr
     }
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, _definitionName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-        .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get();
+        .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*
+                                                                                            * , VarianceSwapStaticReplication.StrikeParameterization.STRIKE.
+                                                                                            * toString()
+                                                                                            */).get();
     final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(_definition.getTarget().getUniqueId());
     _requirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, targetSpec, surfaceProperties);
-    _result = new ValueSpecification(ValueRequirementNames.INTERPOLATED_VOLATILITY_SURFACE, targetSpec, createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName)
-        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-        .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*, VarianceSwapStaticReplication.StrikeParameterization.STRIKE.toString()*/).get());
+    _result = new ValueSpecification(ValueRequirementNames.INTERPOLATED_VOLATILITY_SURFACE, targetSpec,
+        createValueProperties().with(ValuePropertyNames.SURFACE, _definitionName)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
+            .withAny(EquityVarianceSwapStaticReplicationFunction.STRIKE_PARAMETERIZATION_METHOD/*
+                                                                                                * , VarianceSwapStaticReplication.StrikeParameterization.STRIKE.
+                                                                                                * toString()
+                                                                                                */).get());
     _results = Collections.singleton(_result);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final Object volatilitySurfaceDataObject = inputs.getValue(_requirement);

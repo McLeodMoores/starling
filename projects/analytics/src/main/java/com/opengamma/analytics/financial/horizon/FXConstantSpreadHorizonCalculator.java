@@ -28,13 +28,15 @@ public class FXConstantSpreadHorizonCalculator implements HorizonCalculatorDepre
   private static final PresentValueMCACalculator PV_CALCULATOR = PresentValueMCACalculator.getInstance();
 
   @Override
-  public MultipleCurrencyAmount getTheta(final ForexDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final YieldCurveBundle data,
+  public MultipleCurrencyAmount getTheta(final ForexDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final YieldCurveBundle data,
       final int daysForward, final Calendar calendar) {
     return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar);
   }
 
   @Override
-  public MultipleCurrencyAmount getTheta(final ForexDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final YieldCurveBundle data,
+  public MultipleCurrencyAmount getTheta(final ForexDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final YieldCurveBundle data,
       final int daysForward, final Calendar calendar, final Void additionalData) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");

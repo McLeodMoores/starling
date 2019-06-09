@@ -46,7 +46,7 @@ public class BlackDiscountingVegaMatrixSwaptionFunction extends BlackDiscounting
       PresentValueBlackSensitivityBlackSwaptionCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VEGA_MATRIX}
+   * Sets the value requirement to {@link ValueRequirementNames#VEGA_MATRIX}.
    */
   public BlackDiscountingVegaMatrixSwaptionFunction() {
     super(VEGA_MATRIX);
@@ -64,7 +64,8 @@ public class BlackDiscountingVegaMatrixSwaptionFunction extends BlackDiscounting
         // Compute scalar value of the Black Vega
         final PresentValueBlackSwaptionSensitivity vegaSens = derivative.accept(VEGA_CALCULATOR, blackData);
         // Distribute the vega back onto the nodes of the Vol Surface according to the interpolator
-        final PresentValueBlackSwaptionSensitivity vegaMap = new BlackSwaptionSensitivityNodeCalculator().calculateNodeSensitivities(vegaSens, blackData.getBlackParameters());
+        final PresentValueBlackSwaptionSensitivity vegaMap = new BlackSwaptionSensitivityNodeCalculator().calculateNodeSensitivities(vegaSens,
+            blackData.getBlackParameters());
         // Repackage the sensitivities into a format easy that's fit for display
         final DoubleLabelledMatrix2D vegaMatrix = VegaMatrixUtils.getVegaSwaptionMatrix(vegaMap);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);

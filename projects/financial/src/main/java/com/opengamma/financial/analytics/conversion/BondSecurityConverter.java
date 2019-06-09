@@ -51,9 +51,12 @@ public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
   private final RegionSource _regionSource;
 
   /**
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
    */
   public BondSecurityConverter(final HolidaySource holidaySource, final ConventionBundleSource conventionSource, final RegionSource regionSource) {
     ArgumentChecker.notNull(holidaySource, "holiday source");
@@ -91,11 +94,14 @@ public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
   }
 
   /**
-   * Creates {@link BondFixedSecurityDefinition} for fixed-coupon bonds or {@link PaymentFixedDefinition}
-   * for zero-coupon bonds.
-   * @param security The security
-   * @param convention The convention
-   * @param conventionName The convention name
+   * Creates {@link BondFixedSecurityDefinition} for fixed-coupon bonds or {@link PaymentFixedDefinition} for zero-coupon bonds.
+   * 
+   * @param security
+   *          The security
+   * @param convention
+   *          The convention
+   * @param conventionName
+   *          The convention name
    * @return The definition
    */
   private InstrumentDefinition<?> visitBondSecurity(final BondSecurity security, final ConventionBundle convention,
@@ -120,7 +126,7 @@ public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     }
     final boolean isEOM = convention.isEOMConvention();
     final YieldConvention yieldConvention = security.getYieldConvention();
-    if (security.getCouponType().equals("NONE") || security.getCouponType().equals("ZERO COUPON")) { //TODO find where string is
+    if (security.getCouponType().equals("NONE") || security.getCouponType().equals("ZERO COUPON")) { // TODO find where string is
       return new PaymentFixedDefinition(currency, maturityDate, 1);
     }
     if (convention.getBondSettlementDays(firstAccrualDate, maturityDate) == null) {
@@ -129,7 +135,8 @@ public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     final int settlementDays = convention.getBondSettlementDays(firstAccrualDate, maturityDate);
     final Period paymentPeriod = ConversionUtils.getTenor(security.getCouponFrequency());
     final ZonedDateTime firstCouponDate = ZonedDateTime.of(security.getFirstCouponDate().toLocalDate().atStartOfDay(), zone);
-    return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount, businessDay,
+    return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount,
+        businessDay,
         yieldConvention, isEOM, security.getIssuerName());
   }
 

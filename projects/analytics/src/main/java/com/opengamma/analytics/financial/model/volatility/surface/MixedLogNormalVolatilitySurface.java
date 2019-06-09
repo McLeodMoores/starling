@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -19,8 +19,8 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Utility to produce volatility surfaces (implied and local) via a mixed log-normal model. This guarantees an arbitrage free implied volatility surface and a corresponding
- * local volatility surface. It's use is primarily in testing
+ * Utility to produce volatility surfaces (implied and local) via a mixed log-normal model. This guarantees an arbitrage free implied volatility surface and a
+ * corresponding local volatility surface. It's use is primarily in testing
  */
 public class MixedLogNormalVolatilitySurface {
 
@@ -28,12 +28,17 @@ public class MixedLogNormalVolatilitySurface {
 
   /**
    * The out-the-money price surface
-   * @param fwdCurve The forward curve
-   * @param disCurve the discount curve
-   * @param data parameters of a Mixed Log-Normal Model
+   * 
+   * @param fwdCurve
+   *          The forward curve
+   * @param disCurve
+   *          the discount curve
+   * @param data
+   *          parameters of a Mixed Log-Normal Model
    * @return out-the-money price surface
    */
-  public static PriceSurface getPriceSurface(final ForwardCurve fwdCurve, final YieldAndDiscountCurve disCurve, final MultiHorizonMixedLogNormalModelData data) {
+  public static PriceSurface getPriceSurface(final ForwardCurve fwdCurve, final YieldAndDiscountCurve disCurve,
+      final MultiHorizonMixedLogNormalModelData data) {
     final double minT = 1e-6;
     ArgumentChecker.notNull(fwdCurve, "null fwdCurve");
     ArgumentChecker.notNull(data, "null data");
@@ -81,8 +86,11 @@ public class MixedLogNormalVolatilitySurface {
 
   /**
    * Gets the implied volatility surface from a mixed log-normal model
-   * @param fwdCurve The forward curve
-   * @param data parameters of a Mixed Log-Normal Model
+   * 
+   * @param fwdCurve
+   *          The forward curve
+   * @param data
+   *          parameters of a Mixed Log-Normal Model
    * @return implied volatility surface
    */
   public static BlackVolatilitySurfaceStrike getImpliedVolatilitySurface(final ForwardCurve fwdCurve, final MultiHorizonMixedLogNormalModelData data) {
@@ -128,7 +136,8 @@ public class MixedLogNormalVolatilitySurface {
           return BlackFormulaRepository.impliedVolatility(price, 1.0, kStar, t, isCall);
         }
 
-        // if we are such an extreme strike that the price is zero to machine accuracy then the implied vol is a bit moot, although some value may be useful for extrapolation.
+        // if we are such an extreme strike that the price is zero to machine accuracy then the implied vol is a bit moot, although some value may be useful for
+        // extrapolation.
         // Clearly the value found here, if put back into the Black formula will give a price of zero.
         double largestSigma = 0.0;
         for (int i = 0; i < n; i++) {
@@ -144,8 +153,11 @@ public class MixedLogNormalVolatilitySurface {
 
   /**
    * Gets the local volatility surface from a mixed log-normal model
-   * @param fwdCurve The forward curve
-   * @param data parameters of a Mixed Log-Normal Model
+   * 
+   * @param fwdCurve
+   *          The forward curve
+   * @param data
+   *          parameters of a Mixed Log-Normal Model
    * @return local volatility surface
    */
   public static LocalVolatilitySurfaceStrike getLocalVolatilitySurface(final ForwardCurve fwdCurve, final MultiHorizonMixedLogNormalModelData data) {

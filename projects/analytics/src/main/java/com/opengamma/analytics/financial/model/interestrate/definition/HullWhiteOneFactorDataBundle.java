@@ -11,12 +11,13 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.volatility.curve.VolatilityCurve;
 
 /**
- * 
+ *
  */
 public class HullWhiteOneFactorDataBundle extends StandardDiscountBondModelDataBundle {
   private final double _reversionSpeed;
 
-  public HullWhiteOneFactorDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve shortRateVolatilityCurve, final ZonedDateTime date, final double reversionSpeed) {
+  public HullWhiteOneFactorDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve shortRateVolatilityCurve, final ZonedDateTime date,
+      final double reversionSpeed) {
     super(shortRateCurve, shortRateVolatilityCurve, date);
     _reversionSpeed = reversionSpeed;
   }
@@ -31,7 +32,7 @@ public class HullWhiteOneFactorDataBundle extends StandardDiscountBondModelDataB
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_reversionSpeed);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

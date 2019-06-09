@@ -44,7 +44,8 @@ public class FXForwardSpotRateFunction extends AbstractFunction.NonCompiledInvok
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final String dataType = desiredValue.getConstraint(PROPERTY_DATA_TYPE);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
-    final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(security.accept(ForexVisitors.getPayCurrencyVisitor()), security.accept(ForexVisitors.getReceiveCurrencyVisitor()));
+    final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(security.accept(ForexVisitors.getPayCurrencyVisitor()),
+        security.accept(ForexVisitors.getReceiveCurrencyVisitor()));
     if (dataType.equals(LIVE)) {
       final Object spotObject = inputs.getValue(ValueRequirementNames.SPOT_RATE);
       if (spotObject == null) {
@@ -79,9 +80,10 @@ public class FXForwardSpotRateFunction extends AbstractFunction.NonCompiledInvok
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
-    final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(security.accept(ForexVisitors.getPayCurrencyVisitor()), security.accept(ForexVisitors.getReceiveCurrencyVisitor()));
+    final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(security.accept(ForexVisitors.getPayCurrencyVisitor()),
+        security.accept(ForexVisitors.getReceiveCurrencyVisitor()));
     final Set<String> dataTypes = desiredValue.getConstraints().getValues(PROPERTY_DATA_TYPE);
-    if ((dataTypes == null) || dataTypes.isEmpty() || dataTypes.contains(LIVE)) {
+    if (dataTypes == null || dataTypes.isEmpty() || dataTypes.contains(LIVE)) {
       // Live
       return Collections.singleton(ConventionBasedFXRateFunction.getSpotRateRequirement(currencyPair));
     }

@@ -33,7 +33,8 @@ public final class FxFutureOptionSecurityBeanOperation extends AbstractSecurityB
   }
 
   @Override
-  public FxFutureOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final FxFutureOptionSecurity security) {
+  public FxFutureOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final FxFutureOptionSecurity security) {
     final FxFutureOptionSecurityBean bean = new FxFutureOptionSecurityBean();
     bean.setOptionExerciseType(OptionExerciseType.identify(security.getExerciseType()));
     bean.setOptionType(security.getOptionType());
@@ -52,14 +53,14 @@ public final class FxFutureOptionSecurityBeanOperation extends AbstractSecurityB
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
     return new FxFutureOptionSecurity(
-      bean.getTradingExchange().getName(),
-      bean.getSettlementExchange().getName(),
-      expiryBeanToExpiry(bean.getExpiry()),
-      exerciseType,
-      externalIdBeanToExternalId(bean.getUnderlying()),
-      bean.getPointValue(),
-      currencyBeanToCurrency(bean.getCurrency()),
-      bean.getStrike(), bean.getOptionType());
+        bean.getTradingExchange().getName(),
+        bean.getSettlementExchange().getName(),
+        expiryBeanToExpiry(bean.getExpiry()),
+        exerciseType,
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        bean.getPointValue(),
+        currencyBeanToCurrency(bean.getCurrency()),
+        bean.getStrike(), bean.getOptionType());
   }
 
 }

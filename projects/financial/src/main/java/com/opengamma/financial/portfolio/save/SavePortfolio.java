@@ -72,7 +72,8 @@ public class SavePortfolio {
     this(executor, portfolios, positions, false);
   }
 
-  protected SavePortfolio(final ExecutorService executor, final PortfolioMaster portfolios, final PositionMaster positions, final boolean rewriteExistingPositions) {
+  protected SavePortfolio(final ExecutorService executor, final PortfolioMaster portfolios, final PositionMaster positions,
+      final boolean rewriteExistingPositions) {
     _executor = executor;
     _portfolios = portfolios;
     _positions = positions;

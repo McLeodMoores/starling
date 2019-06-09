@@ -16,6 +16,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Methods for the pricing of Federal Funds futures generic to all models.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -28,6 +29,7 @@ public abstract class FederalFundsFutureTransactionMethod implements PricingMeth
 
   /**
    * Gets the security method.
+   * 
    * @return The method.
    */
   public FederalFundsFutureSecurityMethod getMethodSecurity() {
@@ -36,7 +38,9 @@ public abstract class FederalFundsFutureTransactionMethod implements PricingMeth
 
   /**
    * Sets the security method.
-   * @param methodSecurity The method.
+   * 
+   * @param methodSecurity
+   *          The method.
    */
   public void setMethodSecurity(final FederalFundsFutureSecurityMethod methodSecurity) {
     this._methodSecurity = methodSecurity;
@@ -44,19 +48,26 @@ public abstract class FederalFundsFutureTransactionMethod implements PricingMeth
 
   /**
    * Compute the present value of a future transaction from a quoted price.
-   * @param future The future.
-   * @param price The quoted price.
+   * 
+   * @param future
+   *          The future.
+   * @param price
+   *          The quoted price.
    * @return The present value.
    */
   public CurrencyAmount presentValueFromPrice(final FederalFundsFutureTransaction future, final double price) {
-    final double pv = (price - future.getReferencePrice()) * future.getUnderlyingSecurity().getPaymentAccrualFactor() * future.getUnderlyingSecurity().getNotional() * future.getQuantity();
+    final double pv = (price - future.getReferencePrice()) * future.getUnderlyingSecurity().getPaymentAccrualFactor()
+        * future.getUnderlyingSecurity().getNotional() * future.getQuantity();
     return CurrencyAmount.of(future.getUnderlyingSecurity().getCurrency(), pv);
   }
 
   /**
    * Compute the present value of a future transaction from the curves.
-   * @param future The future.
-   * @param curves The yield curves.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The yield curves.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final FederalFundsFutureTransaction future, final YieldCurveBundle curves) {
@@ -72,14 +83,18 @@ public abstract class FederalFundsFutureTransactionMethod implements PricingMeth
 
   /**
    * Compute the present value sensitivity to rates of a interest rate future by discounting.
-   * @param future The future.
-   * @param curves The yield curves.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The yield curves.
    * @return The present value rate sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final FederalFundsFutureTransaction future, final YieldCurveBundle curves) {
     Validate.notNull(future, "Future");
     final InterestRateCurveSensitivity priceSensi = _methodSecurity.priceCurveSensitivity(future.getUnderlyingSecurity(), curves);
-    final InterestRateCurveSensitivity result = priceSensi.multipliedBy(future.getUnderlyingSecurity().getPaymentAccrualFactor() * future.getUnderlyingSecurity().getNotional() * future.getQuantity());
+    final InterestRateCurveSensitivity result = priceSensi
+        .multipliedBy(future.getUnderlyingSecurity().getPaymentAccrualFactor() * future.getUnderlyingSecurity().getNotional() * future.getQuantity());
     return result;
   }
 

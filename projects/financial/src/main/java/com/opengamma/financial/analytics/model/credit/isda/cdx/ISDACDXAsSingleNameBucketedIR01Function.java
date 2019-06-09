@@ -38,20 +38,21 @@ public class ISDACDXAsSingleNameBucketedIR01Function extends ISDACDXAsSingleName
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve,
-                                                final CDSAnalytic analytic,
-                                                final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve,
+      final CDSAnalytic analytic,
+      final Tenor[] tenors) {
     final LocalDate[] dates = new LocalDate[yieldCurve.getNumberOfKnots()];
 
-    final double[] ir01 = StandardVanillaBucketedIR01CDSFunction.getBucketedIR01(definition, yieldCurve, valuationDate, properties, hazardCurve, analytic, dates);
-    //final String[] labels = CreditFunctionUtils.getFormattedBucketedXAxis(dates, valuationDate);
+    final double[] ir01 = StandardVanillaBucketedIR01CDSFunction.getBucketedIR01(definition, yieldCurve, valuationDate, properties, hazardCurve, analytic,
+        dates);
+    // final String[] labels = CreditFunctionUtils.getFormattedBucketedXAxis(dates, valuationDate);
     final LocalDateLabelledMatrix1D ir01Matrix = new LocalDateLabelledMatrix1D(dates, ir01);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BUCKETED_IR01, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, ir01Matrix));

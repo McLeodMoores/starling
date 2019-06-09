@@ -44,17 +44,18 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(SingleConfigImportTool.class);
   private static final long DEFAULT_MARK_BUFFER = 1000000; // 1MB should do it.
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new SingleConfigImportTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final ToolContext toolContext = getToolContext();
@@ -65,15 +66,15 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
     final SecurityMaster secMaster = toolContext.getSecurityMaster();
     final CommandLine commandLine = getCommandLine();
     @SuppressWarnings("unchecked")
-    final
-    List<String> fileList = commandLine.getArgList();
+    final List<String> fileList = commandLine.getArgList();
     for (final String file : fileList) {
       System.err.println(file);
     }
     final boolean verbose = commandLine.hasOption("verbose");
     if (commandLine.hasOption("load")) {
       checkForInvalidOption("type");
-      final SingleConfigLoader configLoader = new SingleConfigLoader(secMaster, configMaster, configSource, conventionMaster, marketDataSnapshotMaster, commandLine.hasOption("do-not-update"));
+      final SingleConfigLoader configLoader = new SingleConfigLoader(secMaster, configMaster, configSource, conventionMaster, marketDataSnapshotMaster,
+          commandLine.hasOption("do-not-update"));
       if (fileList.size() > 0) {
         boolean problems = false;
         for (final String fileName : fileList) {
@@ -232,7 +233,8 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createTypeOption() {
-    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type").create("t");
+    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type")
+        .create("t");
   }
 
   @SuppressWarnings("static-access")

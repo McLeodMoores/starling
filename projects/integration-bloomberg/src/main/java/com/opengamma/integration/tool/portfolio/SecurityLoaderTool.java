@@ -32,7 +32,6 @@ import com.opengamma.master.security.SecurityMasterUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-
 /**
  * Tool to load a list of Securities defined by ExternalId (eg Bloomberg Ticker, ISIN)
  */
@@ -48,9 +47,10 @@ public class SecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new SecurityLoaderTool().invokeAndTerminate(args);
   }
 
@@ -111,7 +111,8 @@ public class SecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
   }
 
   private void loadSecurityData(final boolean write, final Set<ExternalId> externalIds) {
-    final BloombergBulkSecurityLoader bulkSecurityLoader = new BloombergBulkSecurityLoader(getToolContext().getBloombergReferenceDataProvider(), DefaultExchangeDataProvider.getInstance());
+    final BloombergBulkSecurityLoader bulkSecurityLoader = new BloombergBulkSecurityLoader(getToolContext().getBloombergReferenceDataProvider(),
+        DefaultExchangeDataProvider.getInstance());
     final SecurityMaster secMaster = getToolContext().getSecurityMaster();
     final Set<ExternalIdBundle> externalIdBundles = new HashSet<>();
     for (final ExternalId externalId : externalIds) {
@@ -146,7 +147,8 @@ public class SecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
     fileNameOption.setRequired(true);
     options.addOption(fileNameOption);
 
-    final Option writeOption = new Option(WRITE_OPT, "write", false, "Actually persists the time series to the database if specified, otherwise pretty-prints without persisting");
+    final Option writeOption = new Option(WRITE_OPT, "write", false,
+        "Actually persists the time series to the database if specified, otherwise pretty-prints without persisting");
     options.addOption(writeOption);
 
     final Option verboseOption = new Option(VERBOSE_OPT, "verbose", false, "Displays progress messages on the terminal");

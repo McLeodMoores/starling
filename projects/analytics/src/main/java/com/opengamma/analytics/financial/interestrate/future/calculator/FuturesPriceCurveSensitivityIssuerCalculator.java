@@ -15,7 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Computes the par rate for different instrument. The meaning of "par rate" is instrument dependent.
  */
-public final class FuturesPriceCurveSensitivityIssuerCalculator extends InstrumentDerivativeVisitorAdapter<ParameterIssuerProviderInterface, MulticurveSensitivity> {
+public final class FuturesPriceCurveSensitivityIssuerCalculator
+    extends InstrumentDerivativeVisitorAdapter<ParameterIssuerProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -24,6 +25,7 @@ public final class FuturesPriceCurveSensitivityIssuerCalculator extends Instrume
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static FuturesPriceCurveSensitivityIssuerCalculator getInstance() {
@@ -39,7 +41,7 @@ public final class FuturesPriceCurveSensitivityIssuerCalculator extends Instrume
   /** Method used to compute bond yield **/
   private static final BondSecurityDiscountingMethod METHOD_BND = BondSecurityDiscountingMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public MulticurveSensitivity visitBondFuturesSecurity(final BondFuturesSecurity futures, final ParameterIssuerProviderInterface multicurve) {
@@ -49,13 +51,15 @@ public final class FuturesPriceCurveSensitivityIssuerCalculator extends Instrume
     int indexCTD = 0;
     double priceMin = 2.0;
     for (int loopbasket = 0; loopbasket < futures.getDeliveryBasketAtDeliveryDate().length; loopbasket++) {
-      priceFromBond[loopbasket] = (METHOD_BND.cleanPriceFromCurves(futures.getDeliveryBasketAtDeliveryDate()[loopbasket], multicurve.getIssuerProvider())) / futures.getConversionFactor()[loopbasket];
+      priceFromBond[loopbasket] = METHOD_BND.cleanPriceFromCurves(futures.getDeliveryBasketAtDeliveryDate()[loopbasket], multicurve.getIssuerProvider())
+          / futures.getConversionFactor()[loopbasket];
       if (priceFromBond[loopbasket] < priceMin) {
         priceMin = priceFromBond[loopbasket];
         indexCTD = loopbasket;
       }
     }
-    final MulticurveSensitivity result = METHOD_BND.dirtyPriceCurveSensitivity(futures.getDeliveryBasketAtDeliveryDate()[indexCTD], multicurve.getIssuerProvider());
+    final MulticurveSensitivity result = METHOD_BND.dirtyPriceCurveSensitivity(futures.getDeliveryBasketAtDeliveryDate()[indexCTD],
+        multicurve.getIssuerProvider());
     return result.multipliedBy(1.0 / futures.getConversionFactor()[indexCTD]);
   }
 

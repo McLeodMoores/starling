@@ -28,9 +28,13 @@ public class GeneratorDepositIbor extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Constructor.
-   * @param name The generator name.
-   * @param index The index.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param name
+   *          The generator name.
+   * @param index
+   *          The index.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    */
   public GeneratorDepositIbor(final String name, final IborIndex index, final Calendar calendar) {
     super(name);
@@ -42,6 +46,7 @@ public class GeneratorDepositIbor extends GeneratorInstrument<GeneratorAttribute
 
   /**
    * Gets the index.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -49,7 +54,8 @@ public class GeneratorDepositIbor extends GeneratorInstrument<GeneratorAttribute
   }
 
   @Override
-  public DepositIborDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional, final GeneratorAttribute attribute) {
+  public DepositIborDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional,
+      final GeneratorAttribute attribute) {
     return DepositIborDefinition.fromTrade(date, notional, marketQuote, _index, _calendar);
   }
 

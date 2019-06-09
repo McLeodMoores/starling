@@ -74,19 +74,25 @@ public class LegalEntityRegion implements LegalEntityFilter<LegalEntity>, Bean {
   public LegalEntityRegion() {
     setUseName(false);
     setUseCountry(false);
-    setCountries(Collections.<Country>emptySet());
+    setCountries(Collections.<Country> emptySet());
     setUseCurrency(false);
-    setCurrencies(Collections.<Currency>emptySet());
+    setCurrencies(Collections.<Currency> emptySet());
   }
 
   /**
-   * @param useName True if the name of the region is to be used as a filter
-   * @param useCountries True if the countries are to be used as a filter
-   * @param countries A set of countries to be used as a filter, not null. Can be empty
-   * @param useCurrencies True if the countries are to be used as a filter
-   * @param currencies A set of currencies to be used as a filter, not null. Can be empty
+   * @param useName
+   *          True if the name of the region is to be used as a filter
+   * @param useCountries
+   *          True if the countries are to be used as a filter
+   * @param countries
+   *          A set of countries to be used as a filter, not null. Can be empty
+   * @param useCurrencies
+   *          True if the countries are to be used as a filter
+   * @param currencies
+   *          A set of currencies to be used as a filter, not null. Can be empty
    */
-  public LegalEntityRegion(final boolean useName, final boolean useCountries, final Set<Country> countries, final boolean useCurrencies, final Set<Currency> currencies) {
+  public LegalEntityRegion(final boolean useName, final boolean useCountries, final Set<Country> countries, final boolean useCurrencies,
+      final Set<Currency> currencies) {
     setUseName(useName);
     setUseCountry(useCountries);
     setCountries(countries);
@@ -151,7 +157,8 @@ public class LegalEntityRegion implements LegalEntityFilter<LegalEntity>, Bean {
   /**
    * Sets the countries to be used as a filter. This also sets the _useCountry field to true.
    *
-   * @param countries The new value of the property, not null
+   * @param countries
+   *          The new value of the property, not null
    */
   public void setCountries(final Set<Country> countries) {
     JodaBeanUtils.notNull(countries, "countries");
@@ -164,7 +171,8 @@ public class LegalEntityRegion implements LegalEntityFilter<LegalEntity>, Bean {
   /**
    * Sets the currencies to be used as a filter. This also sets the _useCountry field to true.
    *
-   * @param currencies The new value of the property, not null
+   * @param currencies
+   *          The new value of the property, not null
    */
   public void setCurrencies(final Set<Currency> currencies) {
     JodaBeanUtils.notNull(currencies, "currencies");

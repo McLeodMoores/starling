@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -36,7 +36,8 @@ public class YieldCurveInstrumentConversionHistoricalTimeSeriesShiftFunction ext
   }
 
   @Override
-  protected HistoricalTimeSeriesBundle apply(final FunctionExecutionContext context, final OverrideOperation operation, final HistoricalTimeSeriesBundle value, final ValueSpecification valueSpec) {
+  protected HistoricalTimeSeriesBundle apply(final FunctionExecutionContext context, final OverrideOperation operation, final HistoricalTimeSeriesBundle value,
+      final ValueSpecification valueSpec) {
     return applyOverride(context, operation, value);
   }
 

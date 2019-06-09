@@ -20,8 +20,9 @@ import com.opengamma.util.tuple.Triple;
  */
 public class PresentValueBlackBondFuturesCubeSensitivity {
 
-  /** The object containing the volatility sensitivity. Not null. 
-   * The dimension of the cube are expiration/delay/strike        */
+  /**
+   * The object containing the volatility sensitivity. Not null. The dimension of the cube are expiration/delay/strike
+   */
   private final CubeValue _sensitivity;
   /** The currency of the sensitivity. Not null. */
   private final Currency _currency;
@@ -30,8 +31,11 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Constructor with empty sensitivity.
-   * @param currency The currency of the sensitivity.
-   * @param legalEntity The legal entity of the bonds underlying the futures for which the volatility data is valid.
+   *
+   * @param currency
+   *          The currency of the sensitivity.
+   * @param legalEntity
+   *          The legal entity of the bonds underlying the futures for which the volatility data is valid.
    */
   public PresentValueBlackBondFuturesCubeSensitivity(final Currency currency, final LegalEntity legalEntity) {
     ArgumentChecker.notNull(currency, "currency");
@@ -43,9 +47,13 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Constructor from parameter sensitivities.
-   * @param sensitivity The volatility sensitivity as a map.
-   * @param currency The currency of the sensitivity.
-   * @param legalEntity The legal entity of the bonds underlying the futures for which the volatility data is valid.
+   *
+   * @param sensitivity
+   *          The volatility sensitivity as a map.
+   * @param currency
+   *          The currency of the sensitivity.
+   * @param legalEntity
+   *          The legal entity of the bonds underlying the futures for which the volatility data is valid.
    */
   public PresentValueBlackBondFuturesCubeSensitivity(final Map<Triple<Double, Double, Double>, Double> sensitivity,
       final Currency currency, final LegalEntity legalEntity) {
@@ -59,9 +67,13 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Constructor from parameter sensitivities. The SurfaceValue are not copied but used directly.
-   * @param sensitivity The volatility sensitivity as a SurfaceValue.
-   * @param currency The currency of the sensitivity.
-   * @param legalEntity The legal entity of the bonds underlying the futures for which the volatility data is valid.
+   *
+   * @param sensitivity
+   *          The volatility sensitivity as a SurfaceValue.
+   * @param currency
+   *          The currency of the sensitivity.
+   * @param legalEntity
+   *          The legal entity of the bonds underlying the futures for which the volatility data is valid.
    */
   public PresentValueBlackBondFuturesCubeSensitivity(final CubeValue sensitivity,
       final Currency currency, final LegalEntity legalEntity) {
@@ -74,10 +86,13 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
   }
 
   /**
-   * Add one sensitivity to the volatility sensitivity. The existing object is modified. If the point is not in the existing points of the sensitivity, it is put in the map.
-   * If a point is already in the existing points of the object, the value is added to the existing value.
-   * @param expiryDelayStrike The expiration time/delay time/strike triple.
-   * @param sensitivity The sensitivity.
+   * Add one sensitivity to the volatility sensitivity. The existing object is modified. If the point is not in the existing points of the sensitivity, it is
+   * put in the map. If a point is already in the existing points of the object, the value is added to the existing value.
+   *
+   * @param expiryDelayStrike
+   *          The expiration time/delay time/strike triple.
+   * @param sensitivity
+   *          The sensitivity.
    */
   public void addSensitivity(final Triple<Double, Double, Double> expiryDelayStrike, final double sensitivity) {
     _sensitivity.add(expiryDelayStrike, sensitivity);
@@ -85,7 +100,9 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Create a new sensitivity object with all the sensitivities multiplied by a common factor.
-   * @param factor The multiplicative factor.
+   *
+   * @param factor
+   *          The multiplicative factor.
    * @return The multiplied sensitivity.
    */
   public PresentValueBlackBondFuturesCubeSensitivity multipliedBy(final double factor) {
@@ -94,7 +111,9 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Return the sum of to sensitivities in a new one. The original sensitivities are unchanged. The associated swap generators should be identical.
-   * @param sensi The Black sensitivity to add.
+   *
+   * @param sensi
+   *          The Black sensitivity to add.
    * @return The sum sensitivity.
    */
   public PresentValueBlackBondFuturesCubeSensitivity plus(final PresentValueBlackBondFuturesCubeSensitivity sensi) {
@@ -104,6 +123,7 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Gets the volatility sensitivity.
+   *
    * @return The sensitivity.
    */
   public CubeValue getSensitivity() {
@@ -112,6 +132,7 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Returns the sensitivity currency.
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -120,6 +141,7 @@ public class PresentValueBlackBondFuturesCubeSensitivity {
 
   /**
    * Returns legal entity of the bonds underlying the futures for which the volatility data is valid.
+   *
    * @return The legal entity.
    */
   public LegalEntity getLegalEntiry() {

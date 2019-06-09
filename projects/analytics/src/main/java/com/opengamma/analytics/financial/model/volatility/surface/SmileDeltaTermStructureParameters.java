@@ -25,8 +25,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Class describing the a term structure of smiles from ATM, risk reversal and strangle as used in Forex market.
- * The delta used is the delta with respect to forward.
+ * Class describing the a term structure of smiles from ATM, risk reversal and strangle as used in Forex market. The delta used is the delta with respect to
+ * forward.
  */
 public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedSensitivitiesModel<Triple<Double, Double, Double>> {
 
@@ -51,7 +51,9 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from volatility term structure.
-   * @param volatilityTerm The volatility description at the different expiration.
+   * 
+   * @param volatilityTerm
+   *          The volatility description at the different expiration.
    */
   public SmileDeltaTermStructureParameters(final SmileDeltaParameters[] volatilityTerm) {
     this(volatilityTerm, DEFAULT_INTERPOLATOR_EXPIRY);
@@ -59,8 +61,11 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from volatility term structure.
-   * @param volatilityTerm The volatility description at the different expiration.
-   * @param interpolator The time interpolator
+   * 
+   * @param volatilityTerm
+   *          The volatility description at the different expiration.
+   * @param interpolator
+   *          The time interpolator
    */
   public SmileDeltaTermStructureParameters(final SmileDeltaParameters[] volatilityTerm, final Interpolator1D interpolator) {
     ArgumentChecker.notNull(volatilityTerm, "Volatility term structure");
@@ -76,10 +81,14 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from market data.
-   * @param timeToExpiration The time to expiration of each volatility smile, not null
-   * @param delta The delta at which the volatilities are given. Must be positive and sorted in ascending order. The put will have as delta the opposite of the numbers.
-   * Common to all time to expiration. Not null
-   * @param volatility The volatilities at each delta, not null
+   * 
+   * @param timeToExpiration
+   *          The time to expiration of each volatility smile, not null
+   * @param delta
+   *          The delta at which the volatilities are given. Must be positive and sorted in ascending order. The put will have as delta the opposite of the
+   *          numbers. Common to all time to expiration. Not null
+   * @param volatility
+   *          The volatilities at each delta, not null
    */
   public SmileDeltaTermStructureParameters(final double[] timeToExpiration, final double[] delta, final double[][] volatility) {
     ArgumentChecker.notNull(timeToExpiration, "time to expiry");
@@ -87,7 +96,8 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
     ArgumentChecker.notNull(volatility, "volatility");
     final int nbExp = timeToExpiration.length;
     ArgumentChecker.isTrue(volatility.length == nbExp, "Volatility array length {} should be equal to the number of expiries {}", volatility.length, nbExp);
-    ArgumentChecker.isTrue(volatility[0].length == 2 * delta.length + 1, "Volatility array {} should be equal to (2 * number of deltas) + 1, have {}", volatility[0].length, 2 * delta.length + 1);
+    ArgumentChecker.isTrue(volatility[0].length == 2 * delta.length + 1, "Volatility array {} should be equal to (2 * number of deltas) + 1, have {}",
+        volatility[0].length, 2 * delta.length + 1);
     _timeToExpiration = timeToExpiration;
     _volatilityTerm = new SmileDeltaParameters[nbExp];
     for (int loopexp = 0; loopexp < nbExp; loopexp++) {
@@ -99,26 +109,41 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from market data. The default interpolator is used for the time dimension.
-   * @param timeToExpiration The time to expiration of each volatility smile.
-   * @param delta The delta at which the volatilities are given. Common to all time to expiration.
-   * @param atm The ATM volatilities for each time to expiration. The length should be equal to the length of timeToExpiration.
-   * @param riskReversal The risk reversal figures.
-   * @param strangle The strangle figures.
+   * 
+   * @param timeToExpiration
+   *          The time to expiration of each volatility smile.
+   * @param delta
+   *          The delta at which the volatilities are given. Common to all time to expiration.
+   * @param atm
+   *          The ATM volatilities for each time to expiration. The length should be equal to the length of timeToExpiration.
+   * @param riskReversal
+   *          The risk reversal figures.
+   * @param strangle
+   *          The strangle figures.
    */
-  public SmileDeltaTermStructureParameters(final double[] timeToExpiration, final double[] delta, final double[] atm, final double[][] riskReversal, final double[][] strangle) {
+  public SmileDeltaTermStructureParameters(final double[] timeToExpiration, final double[] delta, final double[] atm, final double[][] riskReversal,
+      final double[][] strangle) {
     this(timeToExpiration, delta, atm, riskReversal, strangle, DEFAULT_INTERPOLATOR_EXPIRY);
   }
 
   /**
    * Constructor from market data.
-   * @param timeToExpiration The time to expiration of each volatility smile, not null
-   * @param delta The delta at which the volatilities are given. Common to all time to expiration. Not null
-   * @param atm The ATM volatilities for each time to expiration. The length should be equal to the length of timeToExpiration. Not null
-   * @param riskReversal The risk reversal figures, not null.
-   * @param strangle The strangle figures, not null.
-   * @param timeInterpolator The interpolator to be used in the time dimension, not null.
+   * 
+   * @param timeToExpiration
+   *          The time to expiration of each volatility smile, not null
+   * @param delta
+   *          The delta at which the volatilities are given. Common to all time to expiration. Not null
+   * @param atm
+   *          The ATM volatilities for each time to expiration. The length should be equal to the length of timeToExpiration. Not null
+   * @param riskReversal
+   *          The risk reversal figures, not null.
+   * @param strangle
+   *          The strangle figures, not null.
+   * @param timeInterpolator
+   *          The interpolator to be used in the time dimension, not null.
    */
-  public SmileDeltaTermStructureParameters(final double[] timeToExpiration, final double[] delta, final double[] atm, final double[][] riskReversal, final double[][] strangle,
+  public SmileDeltaTermStructureParameters(final double[] timeToExpiration, final double[] delta, final double[] atm, final double[][] riskReversal,
+      final double[][] strangle,
       final Interpolator1D timeInterpolator) {
     ArgumentChecker.notNull(timeToExpiration, "time to expiry");
     ArgumentChecker.notNull(delta, "delta");
@@ -147,7 +172,9 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Get smile at a given time. The smile is described by the volatilities at a given delta. The smile is obtained from the data by the given interpolator.
-   * @param time The time to expiration.
+   * 
+   * @param time
+   *          The time to expiration.
    * @return The smile.
    */
   public SmileDeltaParameters getSmileForTime(final double time) {
@@ -169,9 +196,11 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Get the smile at a given time and the sensitivities with respect to the volatilities.
-   * @param time The time to expiration.
-   * @param volatilityAtTimeSensitivity The sensitivity to the volatilities of the smile at the given time.
-   * After the methods, it contains the volatility sensitivity to the data points.
+   * 
+   * @param time
+   *          The time to expiration.
+   * @param volatilityAtTimeSensitivity
+   *          The sensitivity to the volatilities of the smile at the given time. After the methods, it contains the volatility sensitivity to the data points.
    * @return The smile
    */
   public SmileAndBucketedSensitivities getSmileAndSensitivitiesForTime(final double time, final double[] volatilityAtTimeSensitivity) {
@@ -200,6 +229,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the times to expiration.
+   * 
    * @return The times.
    */
   public double[] getTimeToExpiration() {
@@ -208,6 +238,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the number of expirations.
+   * 
    * @return The number of expirations.
    */
   public int getNumberExpiration() {
@@ -216,6 +247,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the time interpolator
+   * 
    * @return The time interpolator
    */
   public Interpolator1D getTimeInterpolator() {
@@ -224,6 +256,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the volatility smiles from delta.
+   * 
    * @return The volatility smiles.
    */
   public SmileDeltaParameters[] getVolatilityTerm() {
@@ -232,6 +265,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the number of strikes (common to all dates).
+   * 
    * @return The number of strikes.
    */
   public int getNumberStrike() {
@@ -240,6 +274,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets delta (common to all time to expiration).
+   * 
    * @return The delta.
    */
   public double[] getDelta() {
@@ -248,6 +283,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets put delta absolute value for all strikes. The ATM is 0.50 delta and the x call are transformed in 1-x put.
+   * 
    * @return The delta.
    */
   public double[] getDeltaFull() {
@@ -263,7 +299,9 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Get the volatility from a triple.
-   * @param tsf The Time, Strike, Forward triple, not null
+   * 
+   * @param tsf
+   *          The Time, Strike, Forward triple, not null
    * @return The volatility.
    */
   @Override

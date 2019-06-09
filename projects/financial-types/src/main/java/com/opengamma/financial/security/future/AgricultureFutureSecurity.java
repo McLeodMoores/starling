@@ -50,7 +50,8 @@ public class AgricultureFutureSecurity extends CommodityFutureSecurity {
    * @deprecated Use the constructor that takes the unit name and number
    */
   @Deprecated
-  public AgricultureFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
+  public AgricultureFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
 

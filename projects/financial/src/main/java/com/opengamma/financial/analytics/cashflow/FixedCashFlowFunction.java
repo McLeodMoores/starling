@@ -59,7 +59,8 @@ public abstract class FixedCashFlowFunction extends AbstractFunction {
   private final String _valueRequirementName;
   private final InstrumentDefinitionVisitor<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> _cashFlowVisitor;
 
-  public FixedCashFlowFunction(final String valueRequirementName, final InstrumentDefinitionVisitor<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> cashFlowVisitor) {
+  public FixedCashFlowFunction(final String valueRequirementName,
+      final InstrumentDefinitionVisitor<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> cashFlowVisitor) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement name");
     ArgumentChecker.notNull(cashFlowVisitor, "cash-flow visitor");
     _valueRequirementName = valueRequirementName;
@@ -78,10 +79,10 @@ public abstract class FixedCashFlowFunction extends AbstractFunction {
     final FRASecurityConverterDeprecated fraConverter = new FRASecurityConverterDeprecated(holidaySource, regionSource, conventionSource);
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter =
-        new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource,
+        regionSource);
     final ForexSecurityConverter fxConverter = new ForexSecurityConverter(baseQuotePairs);
-    return new Compiled(FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder()
+    return new Compiled(FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
         .cashSecurityVisitor(cashConverter)
         .fraSecurityVisitor(fraConverter)
         .swapSecurityVisitor(swapConverter)

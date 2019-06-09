@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -15,32 +15,42 @@ public abstract class DoublesScheduleGenerator {
   private static final double TOL = 1. / 730;
 
   /**
-   * Combines the knot points on the yield and credit curves into a single (ordered) list of times strictly between the specified 
-   * start and end. The start and end values are added at the beginning and end of the list. If two times are very close (defined as 
-   * less than half a day - 1/730 years different) only the smaller value is kept (with the exception of the end value which takes 
-   * precedence). <p>
-   * Since ISDACompliantCurve is piecewise constant in the forward rate, this makes the integrals that appear in CDS pricing (i.e. 
-   * $$\int_0^T P(t) \frac{dQ(t)}{dt} dt$$ on the protection leg and $$\sum_{i=0}^{N-1}\int_{T_i}^{T_{i+1}} (t-T_i) P(t) \frac{dQ(t)}{dt} dt$$
-   * on the premium leg) analytic between the points in the list. 
-   * @param start First time in the list
-   * @param end last time in the list
-   * @param yieldCurve The yield curve 
-   * @param creditCurve The credit curve
+   * Combines the knot points on the yield and credit curves into a single (ordered) list of times strictly between the specified start and end. The start and
+   * end values are added at the beginning and end of the list. If two times are very close (defined as less than half a day - 1/730 years different) only the
+   * smaller value is kept (with the exception of the end value which takes precedence).
+   * <p>
+   * Since ISDACompliantCurve is piecewise constant in the forward rate, this makes the integrals that appear in CDS pricing (i.e. $$\int_0^T P(t)
+   * \frac{dQ(t)}{dt} dt$$ on the protection leg and $$\sum_{i=0}^{N-1}\int_{T_i}^{T_{i+1}} (t-T_i) P(t) \frac{dQ(t)}{dt} dt$$ on the premium leg) analytic
+   * between the points in the list.
+   * 
+   * @param start
+   *          First time in the list
+   * @param end
+   *          last time in the list
+   * @param yieldCurve
+   *          The yield curve
+   * @param creditCurve
+   *          The credit curve
    * @return A list of times used to split CDS pricing integrals into analytic pieces.
    */
-  public static double[] getIntegrationsPoints(final double start, final double end, final ISDACompliantYieldCurve yieldCurve, final ISDACompliantCreditCurve creditCurve) {
+  public static double[] getIntegrationsPoints(final double start, final double end, final ISDACompliantYieldCurve yieldCurve,
+      final ISDACompliantCreditCurve creditCurve) {
     return getIntegrationsPoints(start, end, yieldCurve.getKnotTimes(), creditCurve.getKnotTimes());
   }
 
   /**
-   * Combines two sets of numbers and return only the values  strictly between the specified 
-   * start and end. The start and end values are added at the beginning and end of the list. If two times are very close (defined as 
-   * less than half a day - 1/730 years different) only the smaller value is kept (with the exception of the end value which takes 
-   * precedence). 
-   * @param start First time in the list
-   * @param end last time in the list
-   * @param setA the first set
-   * @param setB the second
+   * Combines two sets of numbers and return only the values strictly between the specified start and end. The start and end values are added at the beginning
+   * and end of the list. If two times are very close (defined as less than half a day - 1/730 years different) only the smaller value is kept (with the
+   * exception of the end value which takes precedence).
+   * 
+   * @param start
+   *          First time in the list
+   * @param end
+   *          last time in the list
+   * @param setA
+   *          the first set
+   * @param setB
+   *          the second
    * @return Combined list between first and last value
    */
   public static double[] getIntegrationsPoints(final double start, final double end, final double[] setA, final double[] setB) {
@@ -78,11 +88,14 @@ public abstract class DoublesScheduleGenerator {
   }
 
   /**
-   * Combines two sets of numbers (times) and return the unique sorted set. 
-   *  If two times are very close (defined as  less than half a day - 1/730 years different) only the smaller value is kept. 
-   * @param set1 The first set 
-   * @param set2 The second set 
-   * @return The unique sorted set, set1 U set2  
+   * Combines two sets of numbers (times) and return the unique sorted set. If two times are very close (defined as less than half a day - 1/730 years
+   * different) only the smaller value is kept.
+   * 
+   * @param set1
+   *          The first set
+   * @param set2
+   *          The second set
+   * @return The unique sorted set, set1 U set2
    */
   public static double[] combineSets(final double[] set1, final double[] set2) {
     final int n1 = set1.length;
@@ -117,20 +130,24 @@ public abstract class DoublesScheduleGenerator {
   }
 
   /**
-   * Truncates an array of doubles so it contains only the values between lower and upper, plus the values of lower and higher (as the first
-   * and last entry respectively). If no values met this criteria an array just containing lower and upper is returned. If the first (last) 
-   * entry of set is too close to lower (upper) - defined by TOL - the first (last) entry of set is replaced by lower (upper).
-   * @param lower The lower value
-   * @param upper The upper value
-   * @param set The numbers must be sorted in ascending order
-   * @return the truncated array 
+   * Truncates an array of doubles so it contains only the values between lower and upper, plus the values of lower and higher (as the first and last entry
+   * respectively). If no values met this criteria an array just containing lower and upper is returned. If the first (last) entry of set is too close to lower
+   * (upper) - defined by TOL - the first (last) entry of set is replaced by lower (upper).
+   * 
+   * @param lower
+   *          The lower value
+   * @param upper
+   *          The upper value
+   * @param set
+   *          The numbers must be sorted in ascending order
+   * @return the truncated array
    */
   public static double[] truncateSetInclusive(final double lower, final double upper, final double[] set) {
     // this is private, so assume inputs are fine
     final double[] temp = truncateSetExclusive(lower, upper, set);
     final int n = temp.length;
     if (n == 0) {
-      return new double[] {lower, upper };
+      return new double[] { lower, upper };
     }
     final boolean addLower = different(lower, temp[0]);
     final boolean addUpper = different(upper, temp[n - 1]);
@@ -142,7 +159,7 @@ public abstract class DoublesScheduleGenerator {
 
     final int m = n + (addLower ? 1 : 0) + (addUpper ? 1 : 0);
     final double[] res = new double[m];
-    System.arraycopy(temp, 0, res, (addLower ? 1 : 0), n);
+    System.arraycopy(temp, 0, res, addLower ? 1 : 0, n);
     res[0] = lower;
     res[m - 1] = upper;
 
@@ -150,12 +167,15 @@ public abstract class DoublesScheduleGenerator {
   }
 
   /**
-   * Truncates an array of doubles so it contains only the values between lower and upper exclusive. If no values met this criteria an 
-   * empty array is returned 
-   * @param lower The lower value
-   * @param upper The upper value
-   * @param set The numbers must be sorted in ascending order
-   * @return the truncated array 
+   * Truncates an array of doubles so it contains only the values between lower and upper exclusive. If no values met this criteria an empty array is returned
+   * 
+   * @param lower
+   *          The lower value
+   * @param upper
+   *          The upper value
+   * @param set
+   *          The numbers must be sorted in ascending order
+   * @return the truncated array
    */
   public static double[] truncateSetExclusive(final double lower, final double upper, final double[] set) {
     // this is private, so assume inputs are fine

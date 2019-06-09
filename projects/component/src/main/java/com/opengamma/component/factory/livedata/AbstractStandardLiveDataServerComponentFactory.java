@@ -100,9 +100,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   @PropertyDefinition
   private int _jmsSubscriptionQueueConcurrentConsumers = 1;
   /**
-   * The maximum number of listeners for the subscription queue (if used). When the
-   * limit is reached, messages will queue up until a listener becomes available to
-   * handle them.
+   * The maximum number of listeners for the subscription queue (if used). When the limit is reached, messages will queue up until a listener becomes available
+   * to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    */
@@ -114,7 +113,7 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
    */
   private String _jmsSubscriptionQueue;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final StandardLiveDataServer server = initServer(repo);
@@ -134,7 +133,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
    * <p>
    * The calling code will register it and publish via JMS and REST.
    *
-   * @param repo the repository, not null
+   * @param repo
+   *          the repository, not null
    * @return the server, not null
    */
   protected abstract StandardLiveDataServer initServer(ComponentRepository repo);
@@ -142,8 +142,10 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   /**
    * Publishes the server by JMS.
    *
-   * @param repo the repository, not null
-   * @param server the server, not null
+   * @param repo
+   *          the repository, not null
+   * @param server
+   *          the server, not null
    */
   protected void publishJms(final ComponentRepository repo, final StandardLiveDataServer server) {
     publishJmsSubscription(repo, server);
@@ -154,8 +156,10 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   /**
    * Publishes the JMS subscription topic.
    *
-   * @param repo the repository, not null
-   * @param server the server, not null
+   * @param repo
+   *          the repository, not null
+   * @param server
+   *          the server, not null
    */
   protected void publishJmsSubscription(final ComponentRepository repo, final StandardLiveDataServer server) {
     final SubscriptionRequestReceiver receiver = new SubscriptionRequestReceiver(server);
@@ -173,9 +177,9 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
     if (queueName != null) {
       final JmsByteArrayRequestDispatcher queueDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
       final JmsQueueContainer queueContainer = getJmsConnector().getQueueContainerFactory().create(queueName,
-                                                                                             queueDispatcher,
-                                                                                             getJmsSubscriptionQueueConcurrentConsumers(),
-                                                                                             getJmsSubscriptionQueueMaxConcurrentConsumers());
+          queueDispatcher,
+          getJmsSubscriptionQueueConcurrentConsumers(),
+          getJmsSubscriptionQueueMaxConcurrentConsumers());
       repo.registerLifecycle(queueContainer);
     }
   }
@@ -183,8 +187,10 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   /**
    * Publishes the JMS entitlement topic.
    *
-   * @param repo the repository, not null
-   * @param server the server, not null
+   * @param repo
+   *          the repository, not null
+   * @param server
+   *          the server, not null
    */
   protected void publishJmsEntitlement(final ComponentRepository repo, final StandardLiveDataServer server) {
     final EntitlementServer entitlementServer = new EntitlementServer(server.getEntitlementChecker());
@@ -197,8 +203,10 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   /**
    * Publishes the JMS heartbeat topic.
    *
-   * @param repo the repository, not null
-   * @param server the server, not null
+   * @param repo
+   *          the repository, not null
+   * @param server
+   *          the server, not null
    */
   protected void publishJmsHeartbeat(final ComponentRepository repo, final StandardLiveDataServer server) {
     final HeartbeatReceiver receiver = new HeartbeatReceiver(server.getExpirationManager());
@@ -210,8 +218,10 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   /**
    * Publishes the component over REST by publishing a meta-data provider.
    *
-   * @param repo the repository, not null
-   * @param server the server being produced, not null
+   * @param repo
+   *          the repository, not null
+   * @param server
+   *          the server being produced, not null
    */
   @SuppressWarnings("deprecation")
   protected void publishRest(final ComponentRepository repo, final StandardLiveDataServer server) {
@@ -232,14 +242,17 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   /**
    * Creates the shell meta-data for REST that will have JMS details attached.
    *
-   * @param repo the repository, not null
+   * @param repo
+   *          the repository, not null
    * @return the meta-data, not null
    */
   protected abstract LiveDataMetaData createMetaData(ComponentRepository repo);
 
   /**
    * Sets the prefix of the subscription queue name, null if not used.
-   * @param jmsSubscriptionQueuePrefix  the new value of the property
+   * 
+   * @param jmsSubscriptionQueuePrefix
+   *          the new value of the property
    */
   public void setJmsSubscriptionQueuePrefix(final String jmsSubscriptionQueuePrefix) {
     _jmsSubscriptionQueuePrefix = jmsSubscriptionQueuePrefix;
@@ -514,9 +527,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the maximum number of listeners for the subscription queue (if used). When the
-   * limit is reached, messages will queue up until a listener becomes available to
-   * handle them.
+   * Gets the maximum number of listeners for the subscription queue (if used). When the limit is reached, messages will queue up until a listener becomes available
+   * to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    * @return the value of the property
@@ -526,9 +538,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   }
 
   /**
-   * Sets the maximum number of listeners for the subscription queue (if used). When the
-   * limit is reached, messages will queue up until a listener becomes available to
-   * handle them.
+   * Sets the maximum number of listeners for the subscription queue (if used). When the limit is reached, messages will queue up until a listener becomes available
+   * to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    * @param jmsSubscriptionQueueMaxConcurrentConsumers  the new value of the property
@@ -539,8 +550,7 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   /**
    * Gets the the {@code jmsSubscriptionQueueMaxConcurrentConsumers} property.
-   * limit is reached, messages will queue up until a listener becomes available to
-   * handle them.
+   * to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    * @return the property, not null

@@ -14,10 +14,13 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
+
 // CSOFF
 /**
  * Pricing method for Forex transactions (spot or forward) by forward points.
- * <p>Documentation: Forex Swaps and Cross-currency Swaps. OpenGamma Documentation n. 21
+ * <p>
+ * Documentation: Forex Swaps and Cross-currency Swaps. OpenGamma Documentation n. 21
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated. Use {@link com.opengamma.analytics.financial.forex.provider.ForexForwardPointsMethod}
  */
 @Deprecated
@@ -30,6 +33,7 @@ public final class ForexForwardPointsMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static ForexForwardPointsMethod getInstance() {
@@ -44,9 +48,13 @@ public final class ForexForwardPointsMethod {
 
   /**
    * Compute the present value by estimating the forward points (on the second currency). The present value is computed in the second currency.
-   * @param fx The Forex derivative.
-   * @param curves The curve bundle containing the discounting curves.
-   * @param forwardPoints The curve with the forward points
+   * 
+   * @param fx
+   *          The Forex derivative.
+   * @param curves
+   *          The curve bundle containing the discounting curves.
+   * @param forwardPoints
+   *          The curve with the forward points
    * @return The multi-currency present value (in currency 2).
    */
   public MultipleCurrencyAmount presentValue(final Forex fx, final YieldCurveBundle curves, final DoublesCurve forwardPoints) {
@@ -62,9 +70,13 @@ public final class ForexForwardPointsMethod {
 
   /**
    * Compute the present value by estimating the forward points (on the second currency). The present value is computed in the second currency.
-   * @param fx The Forex derivative.
-   * @param curves The curve bundle containing the discounting curves.
-   * @param forwardPoints The curve with the forward points
+   * 
+   * @param fx
+   *          The Forex derivative.
+   * @param curves
+   *          The curve bundle containing the discounting curves.
+   * @param forwardPoints
+   *          The curve with the forward points
    * @return The multi-currency present value (in currency 2).
    */
   public MultipleCurrencyAmount currencyExposure(final Forex fx, final YieldCurveBundle curves, final DoublesCurve forwardPoints) {
@@ -82,14 +94,19 @@ public final class ForexForwardPointsMethod {
   }
 
   /**
-   * Computes the present value curve sensitivity for forex by forward point method.
-   * The sensitivity is only to the final discounting, not to the forward points.
-   * @param fx The Forex derivative.
-   * @param curves The curve bundle containing the discounting curves.
-   * @param forwardPoints The curve with the forward points
+   * Computes the present value curve sensitivity for forex by forward point method. The sensitivity is only to the final discounting, not to the forward
+   * points.
+   * 
+   * @param fx
+   *          The Forex derivative.
+   * @param curves
+   *          The curve bundle containing the discounting curves.
+   * @param forwardPoints
+   *          The curve with the forward points
    * @return The sensitivity.
    */
-  public MultipleCurrencyInterestRateCurveSensitivity presentValueCurveSensitivity(final Forex fx, final YieldCurveBundle curves, final DoublesCurve forwardPoints) {
+  public MultipleCurrencyInterestRateCurveSensitivity presentValueCurveSensitivity(final Forex fx, final YieldCurveBundle curves,
+      final DoublesCurve forwardPoints) {
     final double fxRate = curves.getFxRates().getFxRate(fx.getCurrency1(), fx.getCurrency2());
     final double payTime = fx.getPaymentTime();
     final double fwdPts = forwardPoints.getYValue(payTime);
@@ -102,14 +119,19 @@ public final class ForexForwardPointsMethod {
     final DoublesPair s = DoublesPair.of(payTime, -payTime * df2 * df2Bar);
     final List<DoublesPair> list = new ArrayList<>();
     list.add(s);
-    return MultipleCurrencyInterestRateCurveSensitivity.of(fx.getCurrency2(), InterestRateCurveSensitivity.of(fx.getPaymentCurrency2().getFundingCurveName(), list));
+    return MultipleCurrencyInterestRateCurveSensitivity.of(fx.getCurrency2(),
+        InterestRateCurveSensitivity.of(fx.getPaymentCurrency2().getFundingCurveName(), list));
   }
 
   /**
    * Computes the sensitivity of the present value to the figures in the forward points curves.
-   * @param fx The Forex derivative.
-   * @param curves The curve bundle containing the discounting curves.
-   * @param forwardPoints The curve with the forward points
+   * 
+   * @param fx
+   *          The Forex derivative.
+   * @param curves
+   *          The curve bundle containing the discounting curves.
+   * @param forwardPoints
+   *          The curve with the forward points
    * @return The sensitivity.
    */
   public double[] presentValueForwardPointsSensitivity(final Forex fx, final YieldCurveBundle curves, final DoublesCurve forwardPoints) {

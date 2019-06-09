@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Converts interest rate future option securities into the form used by the analytics library
- * 
+ *
  * @deprecated Use {@link InterestRateFutureOptionSecurityConverter}. {@link ConventionBundleSource} should not be used, as the conventions are not typed.
  */
 @Deprecated
@@ -41,13 +41,19 @@ public class InterestRateFutureOptionSecurityConverterDeprecated extends Financi
   private final VersionCorrection _versionCorrection;
 
   /**
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
-   * @param securitySource The security source, not null
-   * @param versionCorrection The resolution timestamp, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param versionCorrection
+   *          The resolution timestamp, not null
    */
-  public InterestRateFutureOptionSecurityConverterDeprecated(final HolidaySource holidaySource, final ConventionBundleSource conventionSource, final RegionSource regionSource,
+  public InterestRateFutureOptionSecurityConverterDeprecated(final HolidaySource holidaySource, final ConventionBundleSource conventionSource,
+      final RegionSource regionSource,
       final SecuritySource securitySource, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
@@ -60,7 +66,8 @@ public class InterestRateFutureOptionSecurityConverterDeprecated extends Financi
   public InstrumentDefinition<?> visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
     ArgumentChecker.notNull(security, "security");
     final ExternalId underlyingIdentifier = security.getUnderlyingId();
-    final InterestRateFutureSecurity underlyingSecurity = ((InterestRateFutureSecurity) _securitySource.getSingle(ExternalIdBundle.of(underlyingIdentifier), _versionCorrection));
+    final InterestRateFutureSecurity underlyingSecurity = (InterestRateFutureSecurity) _securitySource.getSingle(ExternalIdBundle.of(underlyingIdentifier),
+        _versionCorrection);
     if (underlyingSecurity == null) {
       throw new OpenGammaRuntimeException("Underlying security " + underlyingIdentifier + " was not found in database");
     }

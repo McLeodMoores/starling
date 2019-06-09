@@ -25,9 +25,8 @@ import com.opengamma.util.Connector;
 /**
  * Connector used to access Bloomberg.
  * <p>
- * This class performs only minimal session connections; the caller must
- * configure them and attach them to Bloomberg services.
- * This is mainly a data holder for connectivity.
+ * This class performs only minimal session connections; the caller must configure them and attach them to Bloomberg services. This is mainly a data holder for
+ * connectivity.
  * <p>
  * This class is usually configured using the associated factory bean.
  */
@@ -65,8 +64,10 @@ public class BloombergConnector implements Connector {
   /**
    * Creates an instance.
    *
-   * @param name the configuration name, not null
-   * @param sessionOptions the Bloomberg session options, not null
+   * @param name
+   *          the configuration name, not null
+   * @param sessionOptions
+   *          the Bloomberg session options, not null
    */
   public BloombergConnector(final String name, final SessionOptions sessionOptions) {
     this(name, sessionOptions, NullBloombergReferenceDataStatistics.INSTANCE);
@@ -75,9 +76,12 @@ public class BloombergConnector implements Connector {
   /**
    * Creates an instance.
    *
-   * @param name the configuration name, not null
-   * @param sessionOptions the Bloomberg session options, not null
-   * @param statistics the Bloomberg statistics, not null
+   * @param name
+   *          the configuration name, not null
+   * @param sessionOptions
+   *          the Bloomberg session options, not null
+   * @param statistics
+   *          the Bloomberg statistics, not null
    */
   public BloombergConnector(final String name, final SessionOptions sessionOptions, final BloombergReferenceDataStatistics statistics) {
     ArgumentChecker.notNull(name, "name");
@@ -93,8 +97,10 @@ public class BloombergConnector implements Connector {
    * <p>
    * Subclasses must override the session options getter.
    *
-   * @param name the configuration name, not null
-   * @param statistics the Bloomberg statistics, not null
+   * @param name
+   *          the configuration name, not null
+   * @param statistics
+   *          the Bloomberg statistics, not null
    */
   protected BloombergConnector(final String name, final BloombergReferenceDataStatistics statistics) {
     ArgumentChecker.notNull(name, "name");
@@ -104,7 +110,7 @@ public class BloombergConnector implements Connector {
     _referenceDataStatistics = statistics;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final String getName() {
     return _name;
@@ -115,7 +121,7 @@ public class BloombergConnector implements Connector {
     return BloombergConnector.class;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the Bloomberg session options.
    * <p>
@@ -143,22 +149,25 @@ public class BloombergConnector implements Connector {
    * <p>
    *
    * @return the started Bloomberg session, not null
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public Session createOpenSession() {
     return createOpenSession(null);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates and starts a new Bloomberg {@code Session}.
    * <p>
-   * The connector does not retain the state of the session, thus the caller is responsible for its lifecycle.
-   * If the specified eventHandler is not null then this Session will operate in asynchronous mode, otherwise the Session will operate in Synchronous mode.
+   * The connector does not retain the state of the session, thus the caller is responsible for its lifecycle. If the specified eventHandler is not null then
+   * this Session will operate in asynchronous mode, otherwise the Session will operate in Synchronous mode.
    *
-   * @param eventHandler the event handler if provided
+   * @param eventHandler
+   *          the event handler if provided
    * @return the started Bloomberg session, not null
-   * @throws RuntimeException if an error occurs
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public Session createOpenSession(final EventHandler eventHandler) {
     final Session session = createSession(eventHandler);
@@ -204,9 +213,11 @@ public class BloombergConnector implements Connector {
    * Creates a Bloomberg session that uses the session options.
    *
    * <p>
-   * The session is not opened.
-   * If the specified eventHandler is not null then this Session will operate in asynchronous mode, otherwise the Session will operate in Synchronous mode.
-   * @param eventHandler the event handler if provided
+   * The session is not opened. If the specified eventHandler is not null then this Session will operate in asynchronous mode, otherwise the Session will
+   * operate in Synchronous mode.
+   *
+   * @param eventHandler
+   *          the event handler if provided
    *
    * @return the Bloomberg session, not null
    */
@@ -214,13 +225,13 @@ public class BloombergConnector implements Connector {
     return new Session(getSessionOptions(), eventHandler);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void close() {
     // no action, as the connector holds no closeable state
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a description of this object suitable for debugging.
    *
@@ -234,7 +245,8 @@ public class BloombergConnector implements Connector {
   /**
    * Registers a callback to be notified when {@link #notifyAvailabilityListeners} gets called.
    *
-   * @param listener the callback to register, not null
+   * @param listener
+   *          the callback to register, not null
    */
   public void addAvailabilityListener(final AvailabilityListener listener) {
     ArgumentChecker.notNull(listener, "listener");
@@ -244,7 +256,8 @@ public class BloombergConnector implements Connector {
   /**
    * Removes a callback previously registered with {@link #addAvailabilityListener}.
    *
-   * @param listener the listener to remove, not null
+   * @param listener
+   *          the listener to remove, not null
    */
   public void removeAvailabilityListener(final AvailabilityListener listener) {
     _listeners.remove(listener);
@@ -253,8 +266,8 @@ public class BloombergConnector implements Connector {
   /**
    * Calls the {@link AvailabilityListener#bloombergAvailable()} method on all registered listeners.
    * <p>
-   * These calls are made inline - callers should take care not to be holding locks that may cause potential deadlocks and be aware that they too will be called if they are also registered as a
-   * listener.
+   * These calls are made inline - callers should take care not to be holding locks that may cause potential deadlocks and be aware that they too will be called
+   * if they are also registered as a listener.
    */
   public void notifyAvailabilityListeners() {
     for (final AvailabilityListener listener : _listeners) {
@@ -264,7 +277,7 @@ public class BloombergConnector implements Connector {
   }
 
   /**
-   * Checks if the session needs authentication
+   * Checks if the session needs authentication.
    *
    * @return true if authentication options is set, otherwise false
    */

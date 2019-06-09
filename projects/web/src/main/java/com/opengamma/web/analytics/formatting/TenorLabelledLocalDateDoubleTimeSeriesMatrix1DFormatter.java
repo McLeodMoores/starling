@@ -17,11 +17,11 @@ import com.opengamma.util.time.Tenor;
 /**
  *
  */
-/*package*/ class TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter extends AbstractFormatter<TenorLabelledLocalDateDoubleTimeSeriesMatrix1D> {
+/* package */ class TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter extends AbstractFormatter<TenorLabelledLocalDateDoubleTimeSeriesMatrix1D> {
 
   private LocalDateDoubleTimeSeriesFormatter _timeSeriesFormatter;
 
-  /*package*/ TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter(final LocalDateDoubleTimeSeriesFormatter timeSeriesFormatter) {
+  /* package */ TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter(final LocalDateDoubleTimeSeriesFormatter timeSeriesFormatter) {
     super(TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class);
     _timeSeriesFormatter = timeSeriesFormatter;
 
@@ -42,7 +42,8 @@ import com.opengamma.util.time.Tenor;
     return formatInline(value, valueSpec, Format.CELL, inlineKey);
   }
 
-  private Object formatInline(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix, final ValueSpecification valueSpec, final Format format, final Object inlineKey) {
+  private Object formatInline(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix, final ValueSpecification valueSpec, final Format format,
+      final Object inlineKey) {
     final LocalDateDoubleTimeSeries ts = getTimeSeries(matrix, inlineKey);
     return ts != null ? _timeSeriesFormatter.format(ts, valueSpec, format, inlineKey) : null;
   }

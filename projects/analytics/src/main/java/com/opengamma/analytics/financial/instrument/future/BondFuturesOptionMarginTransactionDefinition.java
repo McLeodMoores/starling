@@ -21,18 +21,25 @@ public class BondFuturesOptionMarginTransactionDefinition extends FuturesTransac
 
   /**
    * Constructor of the future option transaction from details.
-   * @param underlyingOption The underlying option future security.
-   * @param quantity The quantity of the transaction. Can be positive or negative.
-   * @param tradeDate The transaction date.
-   * @param tradePrice The transaction price.
+   * 
+   * @param underlyingOption
+   *          The underlying option future security.
+   * @param quantity
+   *          The quantity of the transaction. Can be positive or negative.
+   * @param tradeDate
+   *          The transaction date.
+   * @param tradePrice
+   *          The transaction price.
    */
-  public BondFuturesOptionMarginTransactionDefinition(final BondFuturesOptionMarginSecurityDefinition underlyingOption, final int quantity, final ZonedDateTime tradeDate,
+  public BondFuturesOptionMarginTransactionDefinition(final BondFuturesOptionMarginSecurityDefinition underlyingOption, final int quantity,
+      final ZonedDateTime tradeDate,
       final double tradePrice) {
     super(underlyingOption, quantity, tradeDate, tradePrice);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -43,6 +50,7 @@ public class BondFuturesOptionMarginTransactionDefinition extends FuturesTransac
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -53,12 +61,12 @@ public class BondFuturesOptionMarginTransactionDefinition extends FuturesTransac
 
   @Override
   public BondFuturesOptionMarginTransaction toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of InterestRateTransactionDefinition does not support the one argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of InterestRateTransactionDefinition does not support the one argument method (without margin price data).");
   }
 
   /**
-   * {@inheritDoc}
-   * The lastMarginPrice is the last closing price used for margining. It is usually the official closing price of the previous business day.
+   * {@inheritDoc} The lastMarginPrice is the last closing price used for margining. It is usually the official closing price of the previous business day.
    */
   @Override
   public BondFuturesOptionMarginTransaction toDerivative(final ZonedDateTime dateTime, final Double lastMarginPrice) {

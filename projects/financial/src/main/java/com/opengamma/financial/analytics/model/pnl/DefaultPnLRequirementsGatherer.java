@@ -111,13 +111,15 @@ public class DefaultPnLRequirementsGatherer implements PnLRequirementsGatherer {
   }
 
   @Override
-  public Set<ValueRequirement> getFirstOrderRequirements(final FinancialSecurity security, final String samplingPeriod, final String scheduleCalculator, final String samplingFunction,
+  public Set<ValueRequirement> getFirstOrderRequirements(final FinancialSecurity security, final String samplingPeriod, final String scheduleCalculator,
+      final String samplingFunction,
       final ComputationTargetSpecification targetSpec, final String currency) {
     return security.accept(getFirstOrderRequirements(samplingPeriod, scheduleCalculator, samplingFunction, targetSpec, currency));
   }
 
   //TODO another visitor that takes desiredValue and uses those properties instead of the static defaults
-  protected FinancialSecurityVisitor<Set<ValueRequirement>> getFirstOrderRequirements(final String samplingPeriod, final String scheduleCalculator, final String samplingFunction,
+  protected FinancialSecurityVisitor<Set<ValueRequirement>> getFirstOrderRequirements(final String samplingPeriod, final String scheduleCalculator,
+      final String samplingFunction,
       final ComputationTargetSpecification targetSpec, final String currency) {
     final ValueProperties commonProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, currency)

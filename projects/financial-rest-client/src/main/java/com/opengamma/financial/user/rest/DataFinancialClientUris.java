@@ -105,7 +105,8 @@ public class DataFinancialClientUris {
    * @return the URI, not null
    */
   public static URI uriInterpolatedYieldCurveDefinitionMaster(final URI baseUri, final String userName, final String clientName) {
-    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(INTERPOLATED_YIELD_CURVE_DEFINITION_MASTER_PATH);
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName))
+        .path(INTERPOLATED_YIELD_CURVE_DEFINITION_MASTER_PATH);
     return bld.build();
   }
 

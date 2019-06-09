@@ -172,7 +172,8 @@ public class SwaptionSecurityGenerator extends SecurityGenerator<SwaptionSecurit
         return null;
       }
     }
-    final SwaptionSecurity security = new SwaptionSecurity(isPayer, getSecurityPersister().storeSecurity(underlying).iterator().next(), isLong, new Expiry(expiry), isCashSettled, currency, notional,
+    final SwaptionSecurity security = new SwaptionSecurity(isPayer, getSecurityPersister().storeSecurity(underlying).iterator().next(), isLong,
+        new Expiry(expiry), isCashSettled, currency, notional,
         new EuropeanExerciseType(), settlementDate);
     security.setName(createName(currency, optionLength, (int) MONTHS.between(underlying.getEffectiveDate(), underlying.getMaturityDate()), notional, rate));
     return security;

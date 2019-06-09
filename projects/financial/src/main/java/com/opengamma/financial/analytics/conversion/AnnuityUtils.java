@@ -58,17 +58,27 @@ public class AnnuityUtils {
 
   /**
    * Builds a floating annuity definition from an {@link InterestRateSwapLeg}.
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param securitySource The security source, not null
-   * @param payer True if the swap is a payer (i.e. pays a fixed rate)
-   * @param startDate The start date, not null
-   * @param endDate The end date, not null
-   * @param notionalExchange The type of notional exchange, not null
-   * @param leg The interest rate swap leg, not null
+   * 
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param payer
+   *          True if the swap is a payer (i.e. pays a fixed rate)
+   * @param startDate
+   *          The start date, not null
+   * @param endDate
+   *          The end date, not null
+   * @param notionalExchange
+   *          The type of notional exchange, not null
+   * @param leg
+   *          The interest rate swap leg, not null
    * @return A floating annuity definition. The coupons are not necessarily the same type.
    */
-  public static AnnuityDefinition<?> buildFloatingAnnuityDefinition(final ConventionSource conventionSource, final HolidaySource holidaySource, final SecuritySource securitySource,
+  public static AnnuityDefinition<?> buildFloatingAnnuityDefinition(final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final SecuritySource securitySource,
       final boolean payer, final LocalDate startDate, final LocalDate endDate, final NotionalExchange notionalExchange, final InterestRateSwapLeg leg) {
     ArgumentChecker.notNull(conventionSource, "conventionSource");
     ArgumentChecker.notNull(holidaySource, "holidaySource");
@@ -132,14 +142,18 @@ public class AnnuityUtils {
 
     OffsetAdjustedDateParameters paymentDateParameters = null;
     if (leg.getPaymentDateCalendars() != null && leg.getPaymentDateBusinessDayConvention() != null) {
-      final Calendar paymentDateCalendar = new HolidaySourceCalendarAdapter(holidaySource, leg.getPaymentDateCalendars().toArray(new ExternalId[leg.getPaymentDateCalendars().size()]));
-      paymentDateParameters = new OffsetAdjustedDateParameters(paymentOffset, OffsetType.BUSINESS, paymentDateCalendar, leg.getPaymentDateBusinessDayConvention());
+      final Calendar paymentDateCalendar = new HolidaySourceCalendarAdapter(holidaySource,
+          leg.getPaymentDateCalendars().toArray(new ExternalId[leg.getPaymentDateCalendars().size()]));
+      paymentDateParameters = new OffsetAdjustedDateParameters(paymentOffset, OffsetType.BUSINESS, paymentDateCalendar,
+          leg.getPaymentDateBusinessDayConvention());
     }
 
     OffsetAdjustedDateParameters fixingDateParameters = null;
     if (floatLeg.getFixingDateCalendars() != null && floatLeg.getFixingDateBusinessDayConvention() != null) {
-      final Calendar fixingDateCalendar = new HolidaySourceCalendarAdapter(holidaySource, floatLeg.getFixingDateCalendars().toArray(new ExternalId[floatLeg.getFixingDateCalendars().size()]));
-      fixingDateParameters = new OffsetAdjustedDateParameters(floatLeg.getFixingDateOffset(), floatLeg.getFixingDateOffsetType(), fixingDateCalendar, floatLeg.getFixingDateBusinessDayConvention());
+      final Calendar fixingDateCalendar = new HolidaySourceCalendarAdapter(holidaySource,
+          floatLeg.getFixingDateCalendars().toArray(new ExternalId[floatLeg.getFixingDateCalendars().size()]));
+      fixingDateParameters = new OffsetAdjustedDateParameters(floatLeg.getFixingDateOffset(), floatLeg.getFixingDateOffsetType(), fixingDateCalendar,
+          floatLeg.getFixingDateBusinessDayConvention());
     }
 
     com.opengamma.analytics.financial.instrument.annuity.CompoundingMethod compoundingMethod;
@@ -173,7 +187,7 @@ public class AnnuityUtils {
     final List<Double> notionalList = leg.getNotional().getNotionals();
     double[] notionalSchedule;
     if (notionalList.isEmpty()) {
-      notionalSchedule = new double[] {(payer ? -1 : 1) * leg.getNotional().getInitialAmount()};
+      notionalSchedule = new double[] { (payer ? -1 : 1) * leg.getNotional().getInitialAmount() };
     } else {
       notionalSchedule = new double[notionalList.size()];
       for (int i = 0; i < notionalSchedule.length; i++) {
@@ -181,50 +195,42 @@ public class AnnuityUtils {
       }
     }
 
-    return new FloatingAnnuityDefinitionBuilder().
-        payer(payer).
-        currency(leg.getNotional().getCurrency()).
-        notional(getNotionalProvider(leg.getNotional(), leg.getAccrualPeriodBusinessDayConvention(),
-            new HolidaySourceCalendarAdapter(holidaySource, leg.getAccrualPeriodCalendars().toArray(new ExternalId[leg.getAccrualPeriodCalendars().size()])))).
-        startDate(startDate).
-        endDate(endDate).
-        endDateAdjustmentParameters(maturityDateParameters).
-        dayCount(leg.getDayCountConvention()).
-        rollDateAdjuster(rollDateAdjuster).
-        exchangeInitialNotional(notionalExchange.isExchangeInitialNotional()).
-        exchangeFinalNotional(notionalExchange.isExchangeFinalNotional()).
-        accrualPeriodFrequency(ConversionUtils.getTenor(leg.getPaymentDateFrequency())).
-        accrualPeriodParameters(accrualPeriodParameters).
-        paymentDateRelativeTo(leg.getPaymentDateRelativeTo()).
-        paymentDateAdjustmentParameters(paymentDateParameters).
-        spread(spread).
-        index(index).
-        resetDateAdjustmentParameters(resetDateParameters).
-        resetRelativeTo(floatLeg.getResetDateRelativeTo()).
-        fixingDateAdjustmentParameters(fixingDateParameters).
-        compoundingMethod(compoundingMethod).
-        startStub(startStub).
-        endStub(endStub).
-        initialRate(floatLeg.getCustomRates() != null ? floatLeg.getCustomRates().getInitialRate() : Double.NaN).
-        build();
+    return new FloatingAnnuityDefinitionBuilder().payer(payer).currency(leg.getNotional().getCurrency())
+        .notional(getNotionalProvider(leg.getNotional(), leg.getAccrualPeriodBusinessDayConvention(),
+            new HolidaySourceCalendarAdapter(holidaySource, leg.getAccrualPeriodCalendars().toArray(new ExternalId[leg.getAccrualPeriodCalendars().size()]))))
+        .startDate(startDate).endDate(endDate).endDateAdjustmentParameters(maturityDateParameters).dayCount(leg.getDayCountConvention())
+        .rollDateAdjuster(rollDateAdjuster).exchangeInitialNotional(notionalExchange.isExchangeInitialNotional())
+        .exchangeFinalNotional(notionalExchange.isExchangeFinalNotional()).accrualPeriodFrequency(ConversionUtils.getTenor(leg.getPaymentDateFrequency()))
+        .accrualPeriodParameters(accrualPeriodParameters).paymentDateRelativeTo(leg.getPaymentDateRelativeTo())
+        .paymentDateAdjustmentParameters(paymentDateParameters).spread(spread).index(index).resetDateAdjustmentParameters(resetDateParameters)
+        .resetRelativeTo(floatLeg.getResetDateRelativeTo()).fixingDateAdjustmentParameters(fixingDateParameters).compoundingMethod(compoundingMethod)
+        .startStub(startStub).endStub(endStub).initialRate(floatLeg.getCustomRates() != null ? floatLeg.getCustomRates().getInitialRate() : Double.NaN).build();
   }
-
-
 
   /**
    * Builds a fixed annuity definition from an {@link InterestRateSwapLeg}.
-   * @param securitySource The security source, not null
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param payer True if the swap is a payer (i.e. pays a fixed rate)
-   * @param startDate The start date, not null
-   * @param endDate The end date, not null
-   * @param notionalExchange The type of notional exchange, not null
-   * @param leg The interest rate swap leg, not null
+   * 
+   * @param securitySource
+   *          The security source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param payer
+   *          True if the swap is a payer (i.e. pays a fixed rate)
+   * @param startDate
+   *          The start date, not null
+   * @param endDate
+   *          The end date, not null
+   * @param notionalExchange
+   *          The type of notional exchange, not null
+   * @param leg
+   *          The interest rate swap leg, not null
    * @return A fixed annuity definition. The coupons are not necessarily the same type.
    */
-  public static AnnuityDefinition<?> buildFixedAnnuityDefinition(final SecuritySource securitySource, final HolidaySource holidaySource, final ConventionSource conventionSource, final boolean payer, final LocalDate startDate,
-     final LocalDate endDate, final NotionalExchange notionalExchange, final InterestRateSwapLeg leg) {
+  public static AnnuityDefinition<?> buildFixedAnnuityDefinition(final SecuritySource securitySource, final HolidaySource holidaySource,
+      final ConventionSource conventionSource, final boolean payer, final LocalDate startDate,
+      final LocalDate endDate, final NotionalExchange notionalExchange, final InterestRateSwapLeg leg) {
     ArgumentChecker.notNull(securitySource, "securitySource");
     ArgumentChecker.notNull(holidaySource, "holidaySource");
     ArgumentChecker.notNull(conventionSource, "conventionSource");
@@ -236,19 +242,22 @@ public class AnnuityUtils {
 
     AdjustedDateParameters maturityDateParameters = null;
     if (leg.getMaturityDateCalendars() != null && leg.getMaturityDateBusinessDayConvention() != null) {
-      final Calendar maturityDateCalendar = new HolidaySourceCalendarAdapter(holidaySource, leg.getMaturityDateCalendars().toArray(new ExternalId[leg.getMaturityDateCalendars().size()]));
+      final Calendar maturityDateCalendar = new HolidaySourceCalendarAdapter(holidaySource,
+          leg.getMaturityDateCalendars().toArray(new ExternalId[leg.getMaturityDateCalendars().size()]));
       maturityDateParameters = new AdjustedDateParameters(maturityDateCalendar, leg.getMaturityDateBusinessDayConvention());
     }
 
     AdjustedDateParameters accrualPeriodParameters = null;
     if (leg.getAccrualPeriodCalendars() != null && leg.getAccrualPeriodBusinessDayConvention() != null) {
-      final Calendar accrualPeriodCalendar = new HolidaySourceCalendarAdapter(holidaySource, leg.getAccrualPeriodCalendars().toArray(new ExternalId[leg.getAccrualPeriodCalendars().size()]));
+      final Calendar accrualPeriodCalendar = new HolidaySourceCalendarAdapter(holidaySource,
+          leg.getAccrualPeriodCalendars().toArray(new ExternalId[leg.getAccrualPeriodCalendars().size()]));
       accrualPeriodParameters = new AdjustedDateParameters(accrualPeriodCalendar, leg.getAccrualPeriodBusinessDayConvention());
     }
 
     OffsetAdjustedDateParameters paymentDateParameters = null;
     if (leg.getPaymentDateCalendars() != null && leg.getPaymentDateBusinessDayConvention() != null) {
-      final Calendar paymentDateCalendar = new HolidaySourceCalendarAdapter(holidaySource, leg.getPaymentDateCalendars().toArray(new ExternalId[leg.getPaymentDateCalendars().size()]));
+      final Calendar paymentDateCalendar = new HolidaySourceCalendarAdapter(holidaySource,
+          leg.getPaymentDateCalendars().toArray(new ExternalId[leg.getPaymentDateCalendars().size()]));
       paymentDateParameters = new OffsetAdjustedDateParameters(
           leg.getPaymentOffset(),
           OffsetType.BUSINESS,
@@ -273,10 +282,10 @@ public class AnnuityUtils {
       endStub = stubs.getSecond();
     }
 
-   final List<Double> notionalList = leg.getNotional().getNotionals();
+    final List<Double> notionalList = leg.getNotional().getNotionals();
     double[] notionalSchedule;
     if (notionalList.isEmpty()) {
-      notionalSchedule = new double[] {(payer ? -1 : 1) * leg.getNotional().getInitialAmount()};
+      notionalSchedule = new double[] { (payer ? -1 : 1) * leg.getNotional().getInitialAmount() };
     } else {
       notionalSchedule = new double[notionalList.size()];
       for (int i = 0; i < notionalSchedule.length; i++) {
@@ -284,38 +293,31 @@ public class AnnuityUtils {
       }
     }
 
-    return new FixedAnnuityDefinitionBuilder().
-        payer(payer).
-        currency(leg.getNotional().getCurrency()).
-        notional(getNotionalProvider(leg.getNotional(), leg.getAccrualPeriodBusinessDayConvention(),
-            new HolidaySourceCalendarAdapter(holidaySource, leg.getAccrualPeriodCalendars().toArray(new ExternalId[leg.getAccrualPeriodCalendars().size()])))).
-        startDate(startDate).
-        endDate(endDate).
-        endDateAdjustmentParameters(maturityDateParameters).
-        dayCount(leg.getDayCountConvention()).
-        rollDateAdjuster(rollDateAdjuster).
-        exchangeInitialNotional(notionalExchange.isExchangeInitialNotional()).
-        exchangeFinalNotional(notionalExchange.isExchangeFinalNotional()).
-        accrualPeriodFrequency(ConversionUtils.getTenor(leg.getPaymentDateFrequency())).
-        accrualPeriodParameters(accrualPeriodParameters).
-        paymentDateRelativeTo(leg.getPaymentDateRelativeTo()).
-        paymentDateAdjustmentParameters(paymentDateParameters).
-        rate(fixedLeg.getRate().getInitialRate()).
-        startStub(startStub).
-        endStub(endStub).
-        build();
+    return new FixedAnnuityDefinitionBuilder().payer(payer).currency(leg.getNotional().getCurrency())
+        .notional(getNotionalProvider(leg.getNotional(), leg.getAccrualPeriodBusinessDayConvention(),
+            new HolidaySourceCalendarAdapter(holidaySource, leg.getAccrualPeriodCalendars().toArray(new ExternalId[leg.getAccrualPeriodCalendars().size()]))))
+        .startDate(startDate).endDate(endDate).endDateAdjustmentParameters(maturityDateParameters).dayCount(leg.getDayCountConvention())
+        .rollDateAdjuster(rollDateAdjuster).exchangeInitialNotional(notionalExchange.isExchangeInitialNotional())
+        .exchangeFinalNotional(notionalExchange.isExchangeFinalNotional()).accrualPeriodFrequency(ConversionUtils.getTenor(leg.getPaymentDateFrequency()))
+        .accrualPeriodParameters(accrualPeriodParameters).paymentDateRelativeTo(leg.getPaymentDateRelativeTo())
+        .paymentDateAdjustmentParameters(paymentDateParameters).rate(fixedLeg.getRate().getInitialRate()).startStub(startStub).endStub(endStub).build();
   }
 
   /**
    * Converts the {@link StubCalculationMethod} to a {@link CouponStub}.
-   * @param stubCalcMethod The stub calculation method, not null
-   * @param securitySource The security source to perform a lookup of indices, not null
-   * @param conventionSource The convention source to perform a lookup of conventions for backwards compatibility, not null
+   * 
+   * @param stubCalcMethod
+   *          The stub calculation method, not null
+   * @param securitySource
+   *          The security source to perform a lookup of indices, not null
+   * @param conventionSource
+   *          The convention source to perform a lookup of conventions for backwards compatibility, not null
    * @return A pair of front and back stubs
    */
-  public static Pair<CouponStub, CouponStub> parseStubs(final StubCalculationMethod stubCalcMethod, final SecuritySource securitySource, final ConventionSource conventionSource) {
+  public static Pair<CouponStub, CouponStub> parseStubs(final StubCalculationMethod stubCalcMethod, final SecuritySource securitySource,
+      final ConventionSource conventionSource) {
 
-  //Walk the stub to determine the details; when done - build a CouponStub with those details
+    // Walk the stub to determine the details; when done - build a CouponStub with those details
     CouponStub startStub = null;
     CouponStub endStub = null;
 
@@ -354,7 +356,7 @@ public class AnnuityUtils {
         lastStubEndIndex = (IborIndex) getIborIndex(lastStubEndReferenceRateId, securitySource, conventionSource);
       }
 
-      //Determine the stub type and build with any subtleties encountered
+      // Determine the stub type and build with any subtleties encountered
       if (StubType.BOTH == stubType) {
         if (!Double.isNaN(firstStubRate)) {
           startStub = new CouponStub(stubType, firstStubDate, stubCalcMethod.getFirstStubRate());
@@ -392,7 +394,7 @@ public class AnnuityUtils {
         startStub = new CouponStub(stubType);
         endStub = new CouponStub(stubType);
       }
-   }
+    }
     return Pairs.of(startStub, endStub);
   }
 
@@ -418,26 +420,25 @@ public class AnnuityUtils {
 
     return new IborIndex(iborIndexConvention.getCurrency(),
         ((VanillaIborLegConvention) iborLegConvention).getResetTenor().getPeriod(),
-        iborIndexConvention.getSettlementDays(),  // fixing lag
+        iborIndexConvention.getSettlementDays(), // fixing lag
         iborIndexConvention.getDayCount(),
         iborIndexConvention.getBusinessDayConvention(),
         ((IborIndexConvention) iborConvention).isIsEOM(),
         indexId.getValue());
   }
 
-
-
-
-
   /**
-   * Returns a notional provider that will supply absolute notionals (i.e. will convert relative
-   * or delta notionals to absolute form).
-   * @param notional The notional, not null
-   * @param convention The business day convention, not null
-   * @param calendar The calendar, not null
+   * Returns a notional provider that will supply absolute notionals (i.e. will convert relative or delta notionals to absolute form).
+   * 
+   * @param notional
+   *          The notional, not null
+   * @param convention
+   *          The business day convention, not null
+   * @param calendar
+   *          The calendar, not null
    * @return A notional provider supplies absolute notionals
    */
-  //TODO: Would be nice to make this support Notional
+  // TODO: Would be nice to make this support Notional
   public static NotionalProvider getNotionalProvider(final InterestRateSwapNotional notional, final BusinessDayConvention convention, final Calendar calendar) {
     final InterestRateSwapNotionalVisitor<LocalDate, Double> visitor = new InterestRateSwapNotionalAmountVisitor();
     final InterestRateSwapNotional adjustedNotional;
@@ -459,6 +460,5 @@ public class AnnuityUtils {
       }
     };
   }
-
 
 }

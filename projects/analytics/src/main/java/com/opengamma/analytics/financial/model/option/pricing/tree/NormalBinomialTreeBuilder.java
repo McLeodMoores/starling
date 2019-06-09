@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -11,11 +11,14 @@ import com.opengamma.analytics.financial.model.option.definition.GeneralNormalOp
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
-* Builds a binomial tree where the nodes are set to locally match a normal process. The process that the tree is emulating is of the form  df = a(f,t)dt + b(f,t)dw.
-* From a node at (f,t) the two daughter nodes f+ and f- (at time t + dt) are set such that p*(1-p)*(f+ - f-)^2 = dt*b(f,t)^2, where p is the probability of reaching f+ from f. 
-* The forwarding condition is p*f+ + (1-p)*f- = f + a(f,t)*dt. This is adapted from the paper Derman and Kani, The Volatility Smile and Its Implied Tree. 
-* @param <T> A GeneralNormalOptionDataBundle or anything that extends it 
-*/
+ * Builds a binomial tree where the nodes are set to locally match a normal process. The process that the tree is emulating is of the form df = a(f,t)dt +
+ * b(f,t)dw. From a node at (f,t) the two daughter nodes f+ and f- (at time t + dt) are set such that p*(1-p)*(f+ - f-)^2 = dt*b(f,t)^2, where p is the
+ * probability of reaching f+ from f. The forwarding condition is p*f+ + (1-p)*f- = f + a(f,t)*dt. This is adapted from the paper Derman and Kani, The
+ * Volatility Smile and Its Implied Tree.
+ *
+ * @param <T>
+ *          A GeneralNormalOptionDataBundle or anything that extends it
+ */
 public class NormalBinomialTreeBuilder<T extends GeneralNormalOptionDataBundle> extends BinomialTreeBuilder<T> {
 
   @Override

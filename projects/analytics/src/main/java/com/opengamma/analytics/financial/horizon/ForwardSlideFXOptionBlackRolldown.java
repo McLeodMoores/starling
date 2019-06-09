@@ -13,8 +13,8 @@ import com.opengamma.util.tuple.Pair;
 
 //CSOFF
 /**
- * Calculates the change in value of a FX option when the curves and (Black) surface have been
- * shifted forward in time.
+ * Calculates the change in value of a FX option when the curves and (Black) surface have been shifted forward in time.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -26,6 +26,7 @@ public final class ForwardSlideFXOptionBlackRolldown implements RolldownFunction
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static ForwardSlideFXOptionBlackRolldown getInstance() {
@@ -43,7 +44,8 @@ public final class ForwardSlideFXOptionBlackRolldown implements RolldownFunction
     final YieldCurveBundle shiftedCurves = CURVES_ROLLDOWN.rollDown(data, shiftTime);
     final Pair<Currency, Currency> currencyPair = data.getCurrencyPair();
     final SmileDeltaTermStructureParametersStrikeInterpolation volatilityData = data.getVolatilityModel();
-    final SmileDeltaTermStructureParametersStrikeInterpolation smile = new SmileDeltaTermStructureParametersStrikeInterpolation(volatilityData.getVolatilityTerm(),
+    final SmileDeltaTermStructureParametersStrikeInterpolation smile = new SmileDeltaTermStructureParametersStrikeInterpolation(
+        volatilityData.getVolatilityTerm(),
         volatilityData.getStrikeInterpolator()) {
 
       @Override

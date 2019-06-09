@@ -17,9 +17,10 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 public class MultipleYieldCurveFinderFunction extends Function1D<DoubleMatrix1D, DoubleMatrix1D> {
   private final InstrumentDerivativeVisitor<YieldCurveBundle, Double> _calculator;
   private final MultipleYieldCurveFinderDataBundle _data;
-  private final YieldCurveBundleBuildingFunction _curveBuilderFunction; //TODO this could be moved into MultipleYieldCurveFinderDataBundle
+  private final YieldCurveBundleBuildingFunction _curveBuilderFunction; // TODO this could be moved into MultipleYieldCurveFinderDataBundle
 
-  public MultipleYieldCurveFinderFunction(final MultipleYieldCurveFinderDataBundle data, final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator) {
+  public MultipleYieldCurveFinderFunction(final MultipleYieldCurveFinderDataBundle data,
+      final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator) {
     Validate.notNull(data, "data");
     Validate.notNull(calculator, "calculator");
     _calculator = calculator;

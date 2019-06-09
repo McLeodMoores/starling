@@ -38,12 +38,13 @@ import com.opengamma.util.ArgumentChecker;
  * Converts the curve nodes into instruments, in particular for curve calibration.
  */
 public class CurveNodeConverter {
-  
+
   /** The convention source */
   private final ConventionSource _conventionSource;
 
   /**
-   * @param conventionSource The convention source, not null
+   * @param conventionSource
+   *          The convention source, not null
    */
   public CurveNodeConverter(final ConventionSource conventionSource) {
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -51,12 +52,18 @@ public class CurveNodeConverter {
   }
 
   /**
-   * Given an {@link InstrumentDefinition} (the time-independent form used in the analytics library) and a valuation time, converts to the
-   * time-dependent {@link InstrumentDerivative} form.
-   * @param node The curve node, not null
-   * @param definition The definition, not null
-   * @param now The valuation time, not null
-   * @param timeSeries A fixing time series, not null if {@link #requiresFixingSeries(CurveNode)} is true and definition is an instance of {@link InstrumentDefinitionWithData}.
+   * Given an {@link InstrumentDefinition} (the time-independent form used in the analytics library) and a valuation time, converts to the time-dependent
+   * {@link InstrumentDerivative} form.
+   *
+   * @param node
+   *          The curve node, not null
+   * @param definition
+   *          The definition, not null
+   * @param now
+   *          The valuation time, not null
+   * @param timeSeries
+   *          A fixing time series, not null if {@link #requiresFixingSeries(CurveNode)} is true and definition is an instance of
+   *          {@link InstrumentDefinitionWithData}.
    * @return A derivative instrument
    */
   @SuppressWarnings("unchecked")
@@ -89,22 +96,23 @@ public class CurveNodeConverter {
         final ZonedDateTimeDoubleTimeSeries multiply = convertTimeSeries(ZoneId.of("UTC"), (LocalDateDoubleTimeSeries) ts.multiply(100));
         return ((InstrumentDefinitionWithData<?, ZonedDateTimeDoubleTimeSeries[]>) definition).toDerivative(
             now,
-            new ZonedDateTimeDoubleTimeSeries[] {multiply, multiply });
+            new ZonedDateTimeDoubleTimeSeries[] { multiply, multiply });
       }
       if (definition instanceof FederalFundsFutureTransactionDefinition) {
         ArgumentChecker.notNull(timeSeries, "time series");
-        RateFutureNode nodeFFF = (RateFutureNode) node.getCurveNode();
-        FederalFundsFutureConvention conventionFFF =  ConventionLink.resolvable(nodeFFF.getFutureConvention(), FederalFundsFutureConvention.class).resolve();
+        final RateFutureNode nodeFFF = (RateFutureNode) node.getCurveNode();
+        final FederalFundsFutureConvention conventionFFF =
+            ConventionLink.resolvable(nodeFFF.getFutureConvention(), FederalFundsFutureConvention.class).resolve();
         // Retrieving id of the underlying index.
-        final HistoricalTimeSeries historicalTimeSeriesUnderlyingIndex = timeSeries.get(node.getDataField(), conventionFFF.getIndexConvention()); 
+        final HistoricalTimeSeries historicalTimeSeriesUnderlyingIndex = timeSeries.get(node.getDataField(), conventionFFF.getIndexConvention());
         if (historicalTimeSeriesUnderlyingIndex == null) {
           throw new OpenGammaRuntimeException("Could not get price time series for " + conventionFFF.getIndexConvention());
         }
         final DoubleTimeSeries<ZonedDateTime>[] tsArray = new DoubleTimeSeries[1];
         tsArray[0] = convertTimeSeries(now.getZone(), historicalTimeSeriesUnderlyingIndex.getTimeSeries());
         // No time series is passed for the closing price; for curve calibration only the trade price is required.
-        InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]> definitonInstWithData =  //CSIGNORE
-            (InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]>) definition; //CSIGNORE
+        final InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]> definitonInstWithData = // CSIGNORE
+            (InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]>) definition; // CSIGNORE
         return definitonInstWithData.toDerivative(now, tsArray);
       }
       if (node.getCurveNode() instanceof RateFutureNode || node.getCurveNode() instanceof DeliverableSwapFutureNode) {
@@ -117,10 +125,10 @@ public class CurveNodeConverter {
   }
 
   public static boolean requiresFixingSeries(final CurveNode node) {
-    /** Implementation node: fixing series are required for 
-        - inflation swaps (starting price index) 
-        - Fed Fund futures: underlying overnight index fixing (when fixing month has started) 
-        - Ibor swaps (when the UseFixing flag is true)  */
+    /**
+     * Implementation node: fixing series are required for - inflation swaps (starting price index) - Fed Fund futures: underlying overnight index fixing (when
+     * fixing month has started) - Ibor swaps (when the UseFixing flag is true)
+     */
     return node instanceof ZeroCouponInflationNode || node instanceof RateFutureNode;
     // [PLAT-6430] Add case for (SwapNode) node).isUseFixings()
   }

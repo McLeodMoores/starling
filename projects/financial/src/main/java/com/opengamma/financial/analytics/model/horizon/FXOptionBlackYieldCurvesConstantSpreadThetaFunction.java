@@ -65,7 +65,8 @@ public class FXOptionBlackYieldCurvesConstantSpreadThetaFunction extends FXOptio
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -104,11 +105,11 @@ public class FXOptionBlackYieldCurvesConstantSpreadThetaFunction extends FXOptio
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
       ccy1 = putCurrency;
       ccy2 = callCurrency;
-      curves = new YieldAndDiscountCurve[] {putFundingCurve, callFundingCurve};
-      allCurveNames = new String[] {fullPutCurveName, fullCallCurveName};
+      curves = new YieldAndDiscountCurve[] { putFundingCurve, callFundingCurve };
+      allCurveNames = new String[] { fullPutCurveName, fullCallCurveName };
     } else {
-      curves = new YieldAndDiscountCurve[] {callFundingCurve, putFundingCurve};
-      allCurveNames = new String[] {fullCallCurveName, fullPutCurveName};
+      curves = new YieldAndDiscountCurve[] { callFundingCurve, putFundingCurve };
+      allCurveNames = new String[] { fullCallCurveName, fullPutCurveName };
       ccy1 = callCurrency;
       ccy2 = putCurrency;
     }
@@ -118,7 +119,8 @@ public class FXOptionBlackYieldCurvesConstantSpreadThetaFunction extends FXOptio
       throw new OpenGammaRuntimeException("Could not get spot requirement");
     }
     final double spot = (Double) spotObject;
-    final ValueRequirement fxVolatilitySurfaceRequirement = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final ValueRequirement fxVolatilitySurfaceRequirement = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName,
+        leftExtrapolatorName, rightExtrapolatorName);
     final Object volatilitySurfaceObject = inputs.getValue(fxVolatilitySurfaceRequirement);
     if (volatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + fxVolatilitySurfaceRequirement);

@@ -57,7 +57,8 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues)
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues)
       throws AsynchronousExecution {
     final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -70,7 +71,8 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
       resolutionKey = Iterables.getOnlyElement(resolutionKeyConstraint);
     }
     final LocalDate startDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
-    final boolean includeStart = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
+    final boolean includeStart = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
     final Set<String> endDateConstraint = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
     final String endDateString;
     if (endDateConstraint == null || endDateConstraint.size() != 1) {
@@ -79,7 +81,8 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
       endDateString = Iterables.getOnlyElement(endDateConstraint);
     }
     final LocalDate endDate = DateConstraint.evaluate(executionContext, endDateString);
-    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
+    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     final VolatilitySurfaceDefinition<Object, Object> definition = getSurfaceDefinition(target, surfaceName);
     final VolatilitySurfaceSpecification specification = getSurfaceSpecification(target, surfaceName);
@@ -93,7 +96,8 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
           id = ExternalSchemes.bloombergTickerSecurityId(id.getValue());
         }
         final ExternalIdBundle identifier = ExternalIdBundle.of(id);
-        final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, identifier, resolutionKey, startDate, includeStart, endDate, includeEnd);
+        final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, identifier, resolutionKey, startDate, includeStart, endDate,
+            includeEnd);
         if (timeSeries != null) {
           bundle.add(dataField, identifier, timeSeries);
         } else {
@@ -101,8 +105,9 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
         }
       }
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_HISTORICAL_TIME_SERIES, target.toSpecification(), desiredValue
-        .getConstraints()), bundle));
+    return Collections.singleton(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_HISTORICAL_TIME_SERIES, target.toSpecification(), desiredValue
+            .getConstraints()), bundle));
   }
 
   @Override
@@ -112,12 +117,14 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final ValueProperties properties = createValueProperties().withAny(ValuePropertyNames.SURFACE).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
+    final ValueProperties properties = createValueProperties().withAny(ValuePropertyNames.SURFACE)
+        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
         .with(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY, getDataField()).withAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
         .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
         .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
         .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE).get();
+        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+        .get();
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_HISTORICAL_TIME_SERIES, target.toSpecification(), properties));
   }
 
@@ -142,7 +149,8 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
       if (constraints == null) {
         constraints = desiredValueConstraints.copy();
       }
-      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
+      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY,
+          values.iterator().next());
     }
     values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
     if (values == null || values.isEmpty()) {
@@ -173,11 +181,13 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
       constraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
     }
     return Collections.emptySet();
-    //    if (constraints == null) {
-    //      return Collections.singleton(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
-    //    }
-    //    // We need to substitute ourselves with the adjusted constraints
-    //    return Collections.singleton(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
+    // if (constraints == null) {
+    // return Collections.singleton(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_HISTORICAL_TIME_SERIES, target.toSpecification(),
+    // constraints.get()));
+    // }
+    // // We need to substitute ourselves with the adjusted constraints
+    // return Collections.singleton(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_HISTORICAL_TIME_SERIES, target.toSpecification(),
+    // constraints.get()));
   }
 
   protected abstract String getInstrumentType();
@@ -187,10 +197,12 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
   private VolatilitySurfaceDefinition<Object, Object> getSurfaceDefinition(final ComputationTarget target, final String definitionName) {
     final String fullDefinitionName = definitionName + "_" + target.getUniqueId().getValue();
     @SuppressWarnings("unchecked")
-    final VolatilitySurfaceDefinition<Object, Object> definition = (VolatilitySurfaceDefinition<Object, Object>) _volatilitySurfaceDefinitionSource.getDefinition(fullDefinitionName,
-        getInstrumentType());
+    final VolatilitySurfaceDefinition<Object, Object> definition = (VolatilitySurfaceDefinition<Object, Object>) _volatilitySurfaceDefinitionSource
+        .getDefinition(fullDefinitionName,
+            getInstrumentType());
     if (definition == null) {
-      throw new OpenGammaRuntimeException("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + getInstrumentType());
+      throw new OpenGammaRuntimeException(
+          "Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + getInstrumentType());
     }
     return definition;
   }

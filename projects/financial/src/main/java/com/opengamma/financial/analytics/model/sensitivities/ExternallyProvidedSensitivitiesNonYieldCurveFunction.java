@@ -84,15 +84,16 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties.Builder externalProperties = createCurrencyValueProperties(target);
     externalProperties.withAny(ValuePropertyNames.CURRENCY);
-    final Set<ValueSpecification> results = Collections.singleton(new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, target.toSpecification(), externalProperties.get()));
-    //LOGGER.warn("getResults(1) = " + results);
+    final Set<ValueSpecification> results = Collections
+        .singleton(new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, target.toSpecification(), externalProperties.get()));
+    // LOGGER.warn("getResults(1) = " + results);
     return results;
   }
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<ValueRequirement> requirements = getSensitivityRequirements(context.getSecuritySource(), (RawSecurity) target.getPosition().getSecurity());
-    //LOGGER.warn("getRequirements() returned " + requirements);
+    // LOGGER.warn("getRequirements() returned " + requirements);
     return requirements;
   }
 
@@ -106,22 +107,26 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final Set<ValueSpecification> results = Collections.singleton(new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, targetSpec, createCurrencyValueProperties(target).get()));
-    //LOGGER.warn("getResults(2) returning " + results);
+    final Set<ValueSpecification> results = Collections
+        .singleton(new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, targetSpec, createCurrencyValueProperties(target).get()));
+    // LOGGER.warn("getResults(2) returning " + results);
     return results;
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final RawSecurity security = (RawSecurity) target.getPosition().getSecurity();
     final Set<ComputedValue> results = getResultsForExternalRiskFactors(executionContext.getSecuritySource(), inputs, target, security);
-    //LOGGER.warn("execute, returning " + results);
+    // LOGGER.warn("execute, returning " + results);
     return results;
   }
 
-  private Set<ComputedValue> getResultsForExternalRiskFactors(final SecuritySource secSource, final FunctionInputs inputs, final ComputationTarget target, final RawSecurity security) {
+  private Set<ComputedValue> getResultsForExternalRiskFactors(final SecuritySource secSource, final FunctionInputs inputs, final ComputationTarget target,
+      final RawSecurity security) {
     final List<FactorExposureData> factors = decodeSensitivities(secSource, security);
     Collections.sort(factors, new FactorExposureDataComparator());
     final List<String> indices = Lists.newArrayList();
@@ -140,7 +145,8 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
       }
     }
     final StringLabelledMatrix1D labelledMatrix = new StringLabelledMatrix1D(indices.toArray(new String[] {}), labels.toArray(), values.toDoubleArray());
-    final ValueSpecification valueSpecification = new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, target.toSpecification(), createCurrencyValueProperties(target).get());
+    final ValueSpecification valueSpecification = new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, target.toSpecification(),
+        createCurrencyValueProperties(target).get());
     return Collections.singleton(new ComputedValue(valueSpecification, labelledMatrix));
   }
 
@@ -153,7 +159,7 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
       final List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
       return factorExposureDataList;
     }
-      throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
+    throw new OpenGammaRuntimeException("Couldn't find factor list security " + securityEntryData.getFactorSetId());
   }
 
   @Override
@@ -162,7 +168,7 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
   }
 
   protected ValueRequirement getSensitivityRequirement(final ExternalId externalId) {
-    return new ValueRequirement(/*ExternalDataRequirementNames.SENSITIVITY*/"EXPOSURE", ComputationTargetType.PRIMITIVE, externalId);
+    return new ValueRequirement(/* ExternalDataRequirementNames.SENSITIVITY */"EXPOSURE", ComputationTargetType.PRIMITIVE, externalId);
   }
 
 }

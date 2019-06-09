@@ -21,18 +21,21 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * @deprecated Deprecated
  */
 @Deprecated
-public class VanillaFXOptionConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<ForexOptionVanillaDefinition, SmileDeltaTermStructureDataBundle, Void> {
+public class VanillaFXOptionConstantSpreadHorizonCalculator
+    implements HorizonCalculatorDeprecated<ForexOptionVanillaDefinition, SmileDeltaTermStructureDataBundle, Void> {
   /** Rolls down FX option data (surfaces and surface) */
   private static final ConstantSpreadFXOptionBlackRolldown FX_OPTION_ROLLDOWN = ConstantSpreadFXOptionBlackRolldown.getInstance();
 
   @Override
-  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final SmileDeltaTermStructureDataBundle data,
+  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final SmileDeltaTermStructureDataBundle data,
       final int daysForward, final Calendar calendar) {
     return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar);
   }
 
   @Override
-  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final SmileDeltaTermStructureDataBundle data,
+  public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
+      final SmileDeltaTermStructureDataBundle data,
       final int daysForward, final Calendar calendar, final Void additionalData) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");

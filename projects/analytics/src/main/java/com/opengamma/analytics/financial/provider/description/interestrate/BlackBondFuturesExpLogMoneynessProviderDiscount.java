@@ -14,11 +14,15 @@ import com.opengamma.analytics.math.surface.Surface;
 public class BlackBondFuturesExpLogMoneynessProviderDiscount extends BlackBondFuturesExpLogMoneynessProvider {
 
   /**
-   * @param issuerProvider The issuer and multi-curve provider.
-   * @param parameters The Black parameters.
-   * @param legalEntity The legal entity of the bonds underlying the futures for which the volatility data is valid.
+   * @param issuerProvider
+   *          The issuer and multi-curve provider.
+   * @param parameters
+   *          The Black parameters.
+   * @param legalEntity
+   *          The legal entity of the bonds underlying the futures for which the volatility data is valid.
    */
-  public BlackBondFuturesExpLogMoneynessProviderDiscount(final IssuerProviderDiscount issuerProvider, final Surface<Double, Double, Double> parameters, final LegalEntity legalEntity) {
+  public BlackBondFuturesExpLogMoneynessProviderDiscount(final IssuerProviderDiscount issuerProvider, final Surface<Double, Double, Double> parameters,
+      final LegalEntity legalEntity) {
     super(issuerProvider, parameters, legalEntity);
   }
 

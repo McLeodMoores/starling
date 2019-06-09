@@ -26,8 +26,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Abstract aggregation function for CDS reference entity data. If used with
- * non-CDS securities, all items will be classified as "N/A".
+ * Abstract aggregation function for CDS reference entity data. If used with non-CDS securities, all items will be classified as "N/A".
  */
 public class EntityNameAggregationFunction implements AggregationFunction<String> {
 
@@ -53,9 +52,10 @@ public class EntityNameAggregationFunction implements AggregationFunction<String
   /**
    * Creates the aggregation function.
    *
-   * @param legalEntitySource the organization source used for the finding the
-   *  organization from the red code of the CDS security, not null
-   * @param securitySource the security source used for resolution of the CDS security, not null
+   * @param legalEntitySource
+   *          the organization source used for the finding the organization from the red code of the CDS security, not null
+   * @param securitySource
+   *          the security source used for resolution of the CDS security, not null
    */
   public EntityNameAggregationFunction(final LegalEntitySource legalEntitySource, final SecuritySource securitySource) {
     ArgumentChecker.notNull(legalEntitySource, "legalEntitySource");
@@ -64,7 +64,7 @@ public class EntityNameAggregationFunction implements AggregationFunction<String
     _legalEntitySource = legalEntitySource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Collection<String> getRequiredEntries() {
     return ImmutableList.of();
@@ -83,7 +83,8 @@ public class EntityNameAggregationFunction implements AggregationFunction<String
 
     } else if (security instanceof CreditDefaultSwapIndexSecurity) {
       final CreditDefaultSwapIndexSecurity cdsIndex = (CreditDefaultSwapIndexSecurity) security;
-      final CreditDefaultSwapIndexDefinitionSecurity definition = (CreditDefaultSwapIndexDefinitionSecurity) _securitySource.getSingle(ExternalIdBundle.of(cdsIndex.getReferenceEntity()));
+      final CreditDefaultSwapIndexDefinitionSecurity definition = (CreditDefaultSwapIndexDefinitionSecurity) _securitySource
+          .getSingle(ExternalIdBundle.of(cdsIndex.getReferenceEntity()));
       return definition.getName();
     } else if (security instanceof CreditDefaultSwapSecurity) {
       final AbstractCreditDefaultSwapSecurity cds = (AbstractCreditDefaultSwapSecurity) security;
@@ -100,6 +101,7 @@ public class EntityNameAggregationFunction implements AggregationFunction<String
 
   /**
    * Gets the security source.
+   * 
    * @return The security source
    */
   public SecuritySource getSecuritySource() {

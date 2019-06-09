@@ -63,12 +63,16 @@ public class VolatilitySurfaceInterpolator {
   }
 
   /**
-   * <b>Note</b> The combination of useIntegratedVariance = true, useLogTime != useLogValue can produce very bad results, including considerable dips/humps between points at the same level (all other
-   * combinations give a flat line), and thus should be avoided.
+   * <b>Note</b> The combination of useIntegratedVariance = true, useLogTime != useLogValue can produce very bad results, including considerable dips/humps
+   * between points at the same level (all other combinations give a flat line), and thus should be avoided.
    *
-   * @param useIntegratedVariance if true integrated variance ($\sigma^2t$) is used in the interpolation, otherwise variance is used
-   * @param useLogTime if true the natural-log of the time values are used in interpolation, if false the time values are used directly. This can be useful if the expiries vary greatly in magnitude
-   * @param useLogVariance If true the log of variance (actually either variance or integrated variance) is used in the interpolation
+   * @param useIntegratedVariance
+   *          if true integrated variance ($\sigma^2t$) is used in the interpolation, otherwise variance is used
+   * @param useLogTime
+   *          if true the natural-log of the time values are used in interpolation, if false the time values are used directly. This can be useful if the
+   *          expiries vary greatly in magnitude
+   * @param useLogVariance
+   *          If true the log of variance (actually either variance or integrated variance) is used in the interpolation
    */
   public VolatilitySurfaceInterpolator(final boolean useIntegratedVariance, final boolean useLogTime, final boolean useLogVariance) {
     _smileInterpolator = DEFAULT_SMILE_INTERPOLATOR;
@@ -77,8 +81,9 @@ public class VolatilitySurfaceInterpolator {
     _useIntegratedVariance = useIntegratedVariance;
     _useLogVar = useLogVariance;
     if (_useIntegratedVariance && _useLogVar != _useLogTime) {
-      LOGGER.warn("The combination of useIntegratedVariance = true, useLogTime != useLogValue  can produce very bad results, including considerable dips between "
-          + "points at the same level (all other combinations give a flat line), and thus should be avoided.");
+      LOGGER
+          .warn("The combination of useIntegratedVariance = true, useLogTime != useLogValue  can produce very bad results, including considerable dips between "
+              + "points at the same level (all other combinations give a flat line), and thus should be avoided.");
     }
   }
 
@@ -87,7 +92,8 @@ public class VolatilitySurfaceInterpolator {
     this(smileInterpolator, DEFAULT_TIME_INTERPOLATOR, useLogTime, useIntegratedVariance, useLogValue);
   }
 
-  public VolatilitySurfaceInterpolator(final Interpolator1D timeInterpolator, final boolean useLogTime, final boolean useIntegratedVariance, final boolean useLogValue) {
+  public VolatilitySurfaceInterpolator(final Interpolator1D timeInterpolator, final boolean useLogTime, final boolean useIntegratedVariance,
+      final boolean useLogValue) {
     this(DEFAULT_SMILE_INTERPOLATOR, timeInterpolator, useLogTime, useIntegratedVariance, useLogValue);
   }
 
@@ -101,12 +107,13 @@ public class VolatilitySurfaceInterpolator {
     _useIntegratedVariance = useIntegratedVariance;
     _useLogVar = useLogValue;
     if (_useIntegratedVariance && _useLogVar != _useLogTime) {
-      LOGGER.warn("The combination of useIntegratedVariance = true, useLogTime != useLogValue  can produce very bad results, including considerable dips between "
-          + "points at the same level (all other combinations give a flat line), and thus should be avoided.");
+      LOGGER
+          .warn("The combination of useIntegratedVariance = true, useLogTime != useLogValue  can produce very bad results, including considerable dips between "
+              + "points at the same level (all other combinations give a flat line), and thus should be avoided.");
     }
   }
 
-  //TODO add new constructor pattern using builder to set options, as in EquityVarianceSwapPricer
+  // TODO add new constructor pattern using builder to set options, as in EquityVarianceSwapPricer
 
   public Function1D<Double, Double>[] getIndependentSmileFits(final SmileSurfaceDataBundle marketData) {
     ArgumentChecker.notNull(marketData, "market data");
@@ -116,7 +123,7 @@ public class VolatilitySurfaceInterpolator {
     final double[] expiries = marketData.getExpiries();
     final double[][] vols = marketData.getVolatilities();
 
-    //fit each smile independently
+    // fit each smile independently
     @SuppressWarnings("unchecked")
     final Function1D<Double, Double>[] smileFunctions = new Function1D[n];
     for (int i = 0; i < n; i++) {
@@ -126,16 +133,18 @@ public class VolatilitySurfaceInterpolator {
   }
 
   /**
-   * For a given expiry and strike, perform an interpolation between either the variance (square of volatility) or integrated variances of points with the same proxy delta (defined as d =
-   * Math.log(forward / k) / Math.sqrt(t)) on the fitted smiles.
+   * For a given expiry and strike, perform an interpolation between either the variance (square of volatility) or integrated variances of points with the same
+   * proxy delta (defined as d = Math.log(forward / k) / Math.sqrt(t)) on the fitted smiles.
    * <p>
-   * Each smile is fitted independently using the supplied GeneralSmileInterpolator (the default is SmileInterpolatorSABR), which produces a curve (the smile) that fits all the market implied
-   * volatilities and has sensible extrapolation behaviour.
+   * Each smile is fitted independently using the supplied GeneralSmileInterpolator (the default is SmileInterpolatorSABR), which produces a curve (the smile)
+   * that fits all the market implied volatilities and has sensible extrapolation behaviour.
    * <p>
-   * The interpolation in the time direction uses the supplied interpolator (default is natural cubic spline) using the four nearest points. There is no guarantees of a monotonically increasing
-   * integrated variance (hence calendar arbitrage or negative local volatility are possible), but using log time to better space out the x-points helps.
+   * The interpolation in the time direction uses the supplied interpolator (default is natural cubic spline) using the four nearest points. There is no
+   * guarantees of a monotonically increasing integrated variance (hence calendar arbitrage or negative local volatility are possible), but using log time to
+   * better space out the x-points helps.
    *
-   * @param marketData The mark data - contains the forwards, expiries, and strikes and (market) implied volatilities at each expiry, not null
+   * @param marketData
+   *          The mark data - contains the forwards, expiries, and strikes and (market) implied volatilities at each expiry, not null
    * @return Implied volatility surface parameterised by time and moneyness
    */
   public BlackVolatilitySurfaceMoneynessFcnBackedByGrid getVolatilitySurface(final SmileSurfaceDataBundle marketData) {
@@ -149,8 +158,10 @@ public class VolatilitySurfaceInterpolator {
    * <p>
    * Access to the individual parts of getVolatilitySurface() permits user to bump vols without having to recalibrate each independent smile
    *
-   * @param smileFunctions Array of Function1D's, one per expiry, that return volatility given strike
-   * @param marketData The mark data - contains the forwards, expiries, and strikes and (market) implied volatilities at each expiry, not null
+   * @param smileFunctions
+   *          Array of Function1D's, one per expiry, that return volatility given strike
+   * @param marketData
+   *          The mark data - contains the forwards, expiries, and strikes and (market) implied volatilities at each expiry, not null
    * @return Implied volatility surface parameterised by time and moneyness
    */
   public BlackVolatilitySurfaceMoneynessFcnBackedByGrid combineIndependentSmileFits(final Function1D<Double, Double>[] smileFunctions,
@@ -227,7 +238,7 @@ public class VolatilitySurfaceInterpolator {
         }
 
         // Case 4: Interpolation when n >= 4
-        //FIXME Time interpolator hard-coded to be a natural cubic spline when n > 3
+        // FIXME Time interpolator hard-coded to be a natural cubic spline when n > 3
         int lower;
         if (index == 0) {
           lower = 0;
@@ -263,7 +274,9 @@ public class VolatilitySurfaceInterpolator {
       }
 
       public Object writeReplace() {
-        return new InvokedSerializedForm(new InvokedSerializedForm(new InvokedSerializedForm(VolatilitySurfaceInterpolator.this, "getVolatilitySurface", marketData), "getSurface"), "getFunction");
+        return new InvokedSerializedForm(
+            new InvokedSerializedForm(new InvokedSerializedForm(VolatilitySurfaceInterpolator.this, "getVolatilitySurface", marketData), "getSurface"),
+            "getFunction");
       }
 
     };
@@ -278,8 +291,9 @@ public class VolatilitySurfaceInterpolator {
     };
   }
 
-  //TODO find a way of bumping a single point without recalibrating all unaffected smiles
-  public BlackVolatilitySurfaceMoneynessFcnBackedByGrid getBumpedVolatilitySurface(final SmileSurfaceDataBundle marketData, final int expiryIndex, final int strikeIndex,
+  // TODO find a way of bumping a single point without recalibrating all unaffected smiles
+  public BlackVolatilitySurfaceMoneynessFcnBackedByGrid getBumpedVolatilitySurface(final SmileSurfaceDataBundle marketData, final int expiryIndex,
+      final int strikeIndex,
       final double amount) {
     ArgumentChecker.notNull(marketData, "marketData");
     final SmileSurfaceDataBundle bumpedData = marketData.withBumpedPoint(expiryIndex, strikeIndex, amount);

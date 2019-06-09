@@ -32,35 +32,35 @@ import com.opengamma.util.tuple.Pairs;
 public abstract class FXForwardCurveFromYieldCurvesDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardCurveFromYieldCurvesDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.FORWARD_CURVE,
-      ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
-      ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
-      ValueRequirementNames.PURE_VOLATILITY_SURFACE,
-      ValueRequirementNames.FORWARD_DELTA,
-      ValueRequirementNames.DUAL_DELTA,
-      ValueRequirementNames.DUAL_GAMMA,
-      ValueRequirementNames.FORWARD_GAMMA,
-      ValueRequirementNames.FOREX_DOMESTIC_PRICE,
-      ValueRequirementNames.FOREX_PV_QUOTES,
-      ValueRequirementNames.FORWARD_VEGA,
-      ValueRequirementNames.FORWARD_VOMMA,
-      ValueRequirementNames.FORWARD_VANNA,
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.FX_PRESENT_VALUE,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_DUAL_DELTA,
-      ValueRequirementNames.GRID_DUAL_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_DELTA,
-      ValueRequirementNames.GRID_FORWARD_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_VEGA,
-      ValueRequirementNames.GRID_FORWARD_VANNA,
-      ValueRequirementNames.GRID_FORWARD_VOMMA,
-      ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_PRESENT_VALUE
+                ValueRequirementNames.FORWARD_CURVE,
+                ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
+                ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
+                ValueRequirementNames.PURE_VOLATILITY_SURFACE,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.DUAL_GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.FOREX_DOMESTIC_PRICE,
+                ValueRequirementNames.FOREX_PV_QUOTES,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.FORWARD_VOMMA,
+                ValueRequirementNames.FORWARD_VANNA,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_DUAL_DELTA,
+                ValueRequirementNames.GRID_DUAL_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_DELTA,
+                ValueRequirementNames.GRID_FORWARD_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_VEGA,
+                ValueRequirementNames.GRID_FORWARD_VANNA,
+                ValueRequirementNames.GRID_FORWARD_VOMMA,
+                ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_PRESENT_VALUE
   };
   private final Map<String, Pair<String, String>> _currencyCurveConfigAndDiscountingCurveNames;
 
-  //TODO there are ordering issues in this class (the currency pair) - it makes an assumption about which is pay and which is receive
+  // TODO there are ordering issues in this class (the currency pair) - it makes an assumption about which is pay and which is receive
   public FXForwardCurveFromYieldCurvesDefaults(final ComputationTargetType target, final String... currencyCurveConfigAndDiscountingCurveNames) {
     super(target, true);
     ArgumentChecker.notNull(currencyCurveConfigAndDiscountingCurveNames, "currency and curve config names");
@@ -87,7 +87,8 @@ public abstract class FXForwardCurveFromYieldCurvesDefaults extends DefaultPrope
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String firstCurrency = getFirstCurrency(target);
     final String secondCurrency = getSecondCurrency(target);
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(firstCurrency)) {

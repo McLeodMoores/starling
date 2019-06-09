@@ -71,7 +71,8 @@ import com.opengamma.financial.security.option.SwaptionSecurity;
 public abstract class SABRDiscountingFunction extends DiscountingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public SABRDiscountingFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -86,7 +87,8 @@ public abstract class SABRDiscountingFunction extends DiscountingFunction {
     final SwapSecurityConverter swapConverter = new SwapSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
     final InterestRateSwapSecurityConverter irsConverter = new InterestRateSwapSecurityConverter(holidaySource, conventionSource, securitySource);
     final SwaptionSecurityConverter swaptionConverter = new SwaptionSecurityConverter(swapConverter, irsConverter);
-    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().swaptionVisitor(swaptionConverter)
+    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
+        .swaptionVisitor(swaptionConverter)
         .create();
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
     return new DefaultTradeConverter(futureTradeConverter, securityConverter);
@@ -98,11 +100,15 @@ public abstract class SABRDiscountingFunction extends DiscountingFunction {
   protected abstract class SABRDiscountingCompiledFunction extends DiscountingCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
      */
-    protected SABRDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
+    protected SABRDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
         final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter, withCurrency);
     }
@@ -184,7 +190,8 @@ public abstract class SABRDiscountingFunction extends DiscountingFunction {
      */
     protected abstract String getCalculationMethod();
 
-    protected SABRSwaptionProvider getSABRSurfaces(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final FXMatrix fxMatrix,
+    protected SABRSwaptionProvider getSABRSurfaces(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final FXMatrix fxMatrix,
         final DayCount dayCount) {
       final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
       final SwaptionSecurity security = (SwaptionSecurity) target.getTrade().getSecurity();
@@ -194,7 +201,8 @@ public abstract class SABRDiscountingFunction extends DiscountingFunction {
       final InterpolatedDoublesSurface betaSurface = surfaces.getBetaSurface();
       final InterpolatedDoublesSurface nuSurface = surfaces.getNuSurface();
       final InterpolatedDoublesSurface rhoSurface = surfaces.getRhoSurface();
-      final SABRInterestRateParameters modelParameters = new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, VolatilityFunctionFactory.HAGAN_FORMULA);
+      final SABRInterestRateParameters modelParameters = new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface,
+          VolatilityFunctionFactory.HAGAN_FORMULA);
       final MulticurveProviderDiscount curves = getMergedProviders(inputs, fxMatrix);
       final GeneratorInstrument<GeneratorAttributeIR> generatorSwap = SwaptionUtils.getSwapGenerator(security, definition, securitySource);
       // TODO: [PLAT-6237]

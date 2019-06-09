@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.fittedresults;
@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class SABRFittedSurfaces {
   private final InterpolatedDoublesSurface _alphaSurface;
@@ -24,7 +24,8 @@ public class SABRFittedSurfaces {
   private final InterpolatedDoublesSurface _rhoSurface;
   private final Map<DoublesPair, DoubleMatrix2D> _inverseJacobian;
 
-  public SABRFittedSurfaces(final InterpolatedDoublesSurface alphaSurface, final InterpolatedDoublesSurface betaSurface, final InterpolatedDoublesSurface nuSurface,
+  public SABRFittedSurfaces(final InterpolatedDoublesSurface alphaSurface, final InterpolatedDoublesSurface betaSurface,
+      final InterpolatedDoublesSurface nuSurface,
       final InterpolatedDoublesSurface rhoSurface, final Map<DoublesPair, DoubleMatrix2D> inverseJacobian) {
     ArgumentChecker.notNull(alphaSurface, "alpha surface");
     ArgumentChecker.notNull(betaSurface, "beta surface");

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
@@ -17,7 +17,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * 
+ *
  */
 public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
 
@@ -34,6 +34,7 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
 
   /**
    * Return the method unique instance.
+   * 
    * @return The instance.
    */
   public static BondFutureOptionPremiumTransactionBlackSmileMethod getInstance() {
@@ -48,12 +49,17 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
 
   /**
    * Compute the present value of a bond future option transaction from the quoted option price.
-   * @param option The future option, not null
-   * @param multicurves The multi-curves provider.
-   * @param price The quoted price of the option on futures security.
+   * 
+   * @param option
+   *          The future option, not null
+   * @param multicurves
+   *          The multi-curves provider.
+   * @param price
+   *          The quoted price of the option on futures security.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromPrice(final BondFutureOptionPremiumTransaction option, final MulticurveProviderInterface multicurves, final double price) {
+  public MultipleCurrencyAmount presentValueFromPrice(final BondFutureOptionPremiumTransaction option, final MulticurveProviderInterface multicurves,
+      final double price) {
     ArgumentChecker.notNull(option, "option");
     final Currency ccy = option.getCurrency();
     final MultipleCurrencyAmount premiumPV = METHOD_PAY_FIXED.presentValue(option.getPremium(), multicurves);
@@ -63,11 +69,15 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
 
   /**
    * Computes the present value of a bond future option. The bond futures price available in the provider is used.
-   * @param transaction The option transaction.
-   * @param blackPrice The curve, Black volatility data and future price, not null
+   * 
+   * @param transaction
+   *          The option transaction.
+   * @param blackPrice
+   *          The curve, Black volatility data and future price, not null
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final BondFutureOptionPremiumTransaction transaction, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
+  public MultipleCurrencyAmount presentValue(final BondFutureOptionPremiumTransaction transaction,
+      final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
     ArgumentChecker.notNull(transaction, "transaction");
     ArgumentChecker.notNull(blackPrice, "Black parameters and futures price");
     final double priceSecurity = METHOD_SECURITY.price(transaction.getUnderlyingOption(), blackPrice);
@@ -77,8 +87,11 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
 
   /**
    * Computes the present value of a bond future option. The bond futures price is computed from the curves.
-   * @param transaction The option transaction.
-   * @param black The curve and Black volatility data, not null
+   * 
+   * @param transaction
+   *          The option transaction.
+   * @param black
+   *          The curve and Black volatility data, not null
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BondFutureOptionPremiumTransaction transaction, final BlackBondFuturesSmileProviderInterface black) {
@@ -89,10 +102,12 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
     return pvTransaction;
   }
 
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFutureOptionPremiumTransaction transaction, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFutureOptionPremiumTransaction transaction,
+      final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
     ArgumentChecker.notNull(transaction, "transaction");
     ArgumentChecker.notNull(blackPrice, "Black parameters");
-    final MultipleCurrencyMulticurveSensitivity premiumSensitivity = METHOD_PAY_FIXED.presentValueCurveSensitivity(transaction.getPremium(), blackPrice.getMulticurveProvider());
+    final MultipleCurrencyMulticurveSensitivity premiumSensitivity = METHOD_PAY_FIXED.presentValueCurveSensitivity(transaction.getPremium(),
+        blackPrice.getMulticurveProvider());
     final MulticurveSensitivity securitySensitivity = METHOD_SECURITY.priceCurveSensitivity(transaction.getUnderlyingOption(), blackPrice);
     return premiumSensitivity.plus(MultipleCurrencyMulticurveSensitivity.of(transaction.getCurrency(),
         securitySensitivity.multipliedBy(transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional())));
@@ -100,14 +115,19 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
 
   /**
    * Computes the present value curve sensitivity of a transaction. The bond futures price is computed from the curves.
-   * @param transaction The option transaction.
-   * @param black The curve and Black volatility data, not null
+   * 
+   * @param transaction
+   *          The option transaction.
+   * @param black
+   *          The curve and Black volatility data, not null
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFutureOptionPremiumTransaction transaction, final BlackBondFuturesSmileProviderInterface black) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFutureOptionPremiumTransaction transaction,
+      final BlackBondFuturesSmileProviderInterface black) {
     ArgumentChecker.notNull(transaction, "transaction");
     ArgumentChecker.notNull(black, "Black parameters");
-    final MultipleCurrencyMulticurveSensitivity premiumSensitivity = METHOD_PAY_FIXED.presentValueCurveSensitivity(transaction.getPremium(), black.getMulticurveProvider());
+    final MultipleCurrencyMulticurveSensitivity premiumSensitivity = METHOD_PAY_FIXED.presentValueCurveSensitivity(transaction.getPremium(),
+        black.getMulticurveProvider());
     final MulticurveSensitivity securitySensitivity = METHOD_SECURITY.priceCurveSensitivity(transaction.getUnderlyingOption(), black);
     return premiumSensitivity.plus(MultipleCurrencyMulticurveSensitivity.of(transaction.getCurrency(),
         securitySensitivity.multipliedBy(transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional())));
@@ -115,8 +135,11 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
 
   /**
    * Computes the present value delta of a transaction (i.e. the first order derivative of the present value with respect to the bond futures price).
-   * @param transaction The option transaction.
-   * @param black The curve and Black volatility data, not null
+   * 
+   * @param transaction
+   *          The option transaction.
+   * @param black
+   *          The curve and Black volatility data, not null
    * @return The delta.
    */
   public double presentValueDelta(final BondFutureOptionPremiumTransaction transaction, final BlackBondFuturesSmileProviderInterface black) {
@@ -128,10 +151,13 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
   }
 
   /**
-   * Computes the present value gamma of a transaction (i.e. the second order derivative of the present value with respect to the bond futures price).
-   * The bond futures price is computed from the curves.
-   * @param transaction The option transaction.
-   * @param black The curve and Black volatility data, not null
+   * Computes the present value gamma of a transaction (i.e. the second order derivative of the present value with respect to the bond futures price). The bond
+   * futures price is computed from the curves.
+   * 
+   * @param transaction
+   *          The option transaction.
+   * @param black
+   *          The curve and Black volatility data, not null
    * @return The gamma.
    */
   public double presentValueGamma(final BondFutureOptionPremiumTransaction transaction, final BlackBondFuturesSmileProviderInterface black) {
@@ -143,10 +169,13 @@ public final class BondFutureOptionPremiumTransactionBlackSmileMethod {
   }
 
   /**
-   * Computes the present value vega of a transaction (i.e. the first order derivative of the present value with respect to the volatility used).
-   * The bond futures price is computed from the curves.
-   * @param transaction The option transaction.
-   * @param black The curve and Black volatility data, not null
+   * Computes the present value vega of a transaction (i.e. the first order derivative of the present value with respect to the volatility used). The bond
+   * futures price is computed from the curves.
+   * 
+   * @param transaction
+   *          The option transaction.
+   * @param black
+   *          The curve and Black volatility data, not null
    * @return The delta.
    */
   public double presentValueVega(final BondFutureOptionPremiumTransaction transaction, final BlackBondFuturesSmileProviderInterface black) {

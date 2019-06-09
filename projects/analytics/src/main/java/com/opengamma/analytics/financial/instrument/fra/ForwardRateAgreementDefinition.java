@@ -30,8 +30,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a Forward Rate Agreement (FRA). The pay-off is (Ibor fixing-FRA rate) multiplied by the notional and accrual fraction and discounted with the fixing rate to the payment date.
- * This correspond to "buy" a FRA is the same as buying the Ibor rate and paying the FRA rate for it.
+ * Class describing a Forward Rate Agreement (FRA). The pay-off is (Ibor fixing-FRA rate) multiplied by the notional and accrual fraction and discounted with
+ * the fixing rate to the payment date. This correspond to "buy" a FRA is the same as buying the Ibor rate and paying the FRA rate for it.
  */
 public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
   /**
@@ -64,21 +64,33 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
   private final Calendar _calendar;
 
   /**
-   * Constructor of a FRA from contract details and the Ibor index. The payment currency is the index currency.
-   * The fixing period dates are computed from the index conventions.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date (should be a good business day).
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param calendar The holiday calendar for the ibor leg.
-   * @param rate The FRA rate.
+   * Constructor of a FRA from contract details and the Ibor index. The payment currency is the index currency. The fixing period dates are computed from the
+   * index conventions.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date (should be a good business day).
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
+   * @param rate
+   *          The FRA rate.
    */
   public ForwardRateAgreementDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
-      final ZonedDateTime accrualEndDate, final double accrualFactor, final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double rate,
+      final ZonedDateTime accrualEndDate, final double accrualFactor, final double notional, final ZonedDateTime fixingDate, final IborIndex index,
+      final double rate,
       final Calendar calendar) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate);
     ArgumentChecker.notNull(index, "index");
@@ -93,20 +105,33 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
   }
 
   /**
-   * Constructor of a FRA from contract details and the Ibor index. The payment currency is the index currency.
-   * There is no check that the fixing period dates are in line with index conventions.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date (should be a good business day).
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param fixingPeriodStartDate The coupon fixing period start date.
-   * @param fixingPeriodEndDate The coupon fixing period end date.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param rate The FRA rate.
-   * @param calendar The holiday calendar for the ibor leg.
+   * Constructor of a FRA from contract details and the Ibor index. The payment currency is the index currency. There is no check that the fixing period dates
+   * are in line with index conventions.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date (should be a good business day).
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param fixingPeriodStartDate
+   *          The coupon fixing period start date.
+   * @param fixingPeriodEndDate
+   *          The coupon fixing period end date.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param rate
+   *          The FRA rate.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    */
   public ForwardRateAgreementDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
       final ZonedDateTime accrualEndDate, final double accrualFactor, final double notional, final ZonedDateTime fixingDate,
@@ -125,11 +150,17 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
 
   /**
    * Builder of FRA from a coupon, the fixing date and the index. The fixing period dates are deduced from the index and the fixing date.
-   * @param coupon Underlying coupon.
-   * @param fixingDate The coupon fixing date.
-   * @param index The FRA Ibor index.
-   * @param rate The FRA rate.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param coupon
+   *          Underlying coupon.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param index
+   *          The FRA Ibor index.
+   * @param rate
+   *          The FRA rate.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The FRA.
    */
   public static ForwardRateAgreementDefinition from(final CouponDefinition coupon, final ZonedDateTime fixingDate, final IborIndex index, final double rate,
@@ -143,12 +174,19 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
 
   /**
    * Builder of FRA from a coupon, the fixing date and the index. The fixing period dates are deduced from the index and the fixing date.
-   * @param tradeDate The FRA trade date.
-   * @param startPeriod The period from trade to start date.
-   * @param notional The notional
-   * @param index The FRA Ibor index.
-   * @param rate The FRA rate.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param tradeDate
+   *          The FRA trade date.
+   * @param startPeriod
+   *          The period from trade to start date.
+   * @param notional
+   *          The notional
+   * @param index
+   *          The FRA Ibor index.
+   * @param rate
+   *          The FRA rate.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The FRA.
    */
   public static ForwardRateAgreementDefinition fromTrade(final ZonedDateTime tradeDate, final Period startPeriod, final double notional, final IborIndex index,
@@ -162,13 +200,14 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final ZonedDateTime accrualEndDate = ScheduleCalculator.getAdjustedDate(spotDate, endPeriod, index, calendar);
     final ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(accrualStartDate, -index.getSpotLag(), calendar);
     final double accrualFactor = index.getDayCount().getDayCountFraction(accrualStartDate, accrualEndDate, calendar);
-    return new ForwardRateAgreementDefinition(index.getCurrency(), accrualStartDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate, index, rate,
+    return new ForwardRateAgreementDefinition(index.getCurrency(), accrualStartDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate,
+        index, rate,
         calendar);
   }
 
   /**
    * Builder of FRA from the accrual start date, the accrual end date and the index. The fixing period dates are computed from the index conventions.
-   * 
+   *
    * @param accrualStartDate
    *          (Unadjusted) start date of the accrual period
    * @param accrualEndDate
@@ -190,20 +229,28 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     ArgumentChecker.notNull(index, "index");
     final ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(accrualStartDate, -index.getSpotLag(), calendar);
     final double paymentAccrualFactor = index.getDayCount().getDayCountFraction(accrualStartDate, accrualEndDate, calendar);
-    return new ForwardRateAgreementDefinition(index.getCurrency(), accrualStartDate, accrualStartDate, accrualEndDate, paymentAccrualFactor, notional, fixingDate, index,
+    return new ForwardRateAgreementDefinition(index.getCurrency(), accrualStartDate, accrualStartDate, accrualEndDate, paymentAccrualFactor, notional,
+        fixingDate, index,
         rate, calendar);
   }
 
   /**
-   * Builder of FRA from the accrual start date, the accrual end date and the index.
-   * The fixing period dates are computed from the index conventions.
-   * @param accrualStartDate (Unadjusted) start date of the accrual period
-   * @param accrualEndDate (Unadjusted) end date of the accrual period
-   * @param notional The notional
-   * @param index The FRA Ibor index.
-   * @param rate The FRA rate.
-   * @param fixingCalendar The holiday calendar for the ibor leg.
-   * @param paymentCalendar the payment calendar.
+   * Builder of FRA from the accrual start date, the accrual end date and the index. The fixing period dates are computed from the index conventions.
+   * 
+   * @param accrualStartDate
+   *          (Unadjusted) start date of the accrual period
+   * @param accrualEndDate
+   *          (Unadjusted) end date of the accrual period
+   * @param notional
+   *          The notional
+   * @param index
+   *          The FRA Ibor index.
+   * @param rate
+   *          The FRA rate.
+   * @param fixingCalendar
+   *          The holiday calendar for the ibor leg.
+   * @param paymentCalendar
+   *          the payment calendar.
    * @return The FRA.
    */
   public static ForwardRateAgreementDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double notional,
@@ -214,12 +261,14 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(accrualStartDate, -index.getSpotLag(), fixingCalendar);
     final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(accrualStartDate, 0, paymentCalendar);
     final double paymentAccrualFactor = index.getDayCount().getDayCountFraction(accrualStartDate, accrualEndDate, fixingCalendar);
-    return new ForwardRateAgreementDefinition(index.getCurrency(), paymentDate, accrualStartDate, accrualEndDate, paymentAccrualFactor, notional, fixingDate, index,
+    return new ForwardRateAgreementDefinition(index.getCurrency(), paymentDate, accrualStartDate, accrualEndDate, paymentAccrualFactor, notional, fixingDate,
+        index,
         rate, fixingCalendar);
   }
 
   /**
    * Gets the Ibor index of the instrument.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -228,6 +277,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the fixing period start date.
+   * 
    * @return The fixing period start date.
    */
   public ZonedDateTime getFixingPeriodStartDate() {
@@ -236,6 +286,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the fixing period end date field.
+   * 
    * @return the fixing period end date
    */
   public ZonedDateTime getFixingPeriodEndDate() {
@@ -244,6 +295,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the fixingPeriodAccrualFactor field.
+   * 
    * @return the fixing period accrual factor
    */
   public double getFixingPeriodAccrualFactor() {
@@ -252,6 +304,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the FRA rate.
+   * 
    * @return The rate.
    */
   public double getRate() {
@@ -272,14 +325,16 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public Payment toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(date.isBefore(getFixingDate()), "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " "
-        + date);
+    ArgumentChecker.isTrue(date.isBefore(getFixingDate()),
+        "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " "
+            + date);
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     ArgumentChecker.isTrue(yieldCurveNames.length > 1, "at least two curve names are required");
     ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date is after payment date");
@@ -292,12 +347,14 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final double fixingTime = actAct.getDayCountFraction(zonedDate, getFixingDate(), _calendar);
     final double fixingPeriodStartTime = actAct.getDayCountFraction(zonedDate, getFixingPeriodStartDate(), _calendar);
     final double fixingPeriodEndTime = actAct.getDayCountFraction(zonedDate, getFixingPeriodEndDate(), _calendar);
-    return new ForwardRateAgreement(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), _index, fixingTime, fixingPeriodStartTime,
+    return new ForwardRateAgreement(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), _index, fixingTime,
+        fixingPeriodStartTime,
         fixingPeriodEndTime, getFixingPeriodAccrualFactor(), _rate, forwardCurveName);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -314,7 +371,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final double paymentTime = actAct.getDayCountFraction(zonedDate, getPaymentDate(), _calendar);
     if (date.isAfter(getFixingDate()) || date.equals(getFixingDate())) {
       Double fixedRate = indexFixingTimeSeries.getValue(getFixingDate());
-      //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+      // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
       if (fixedRate == null) {
         final ZonedDateTime fixingDateAtLiborFixingTime = getFixingDate().with(LocalTime.of(11, 0));
         fixedRate = indexFixingTimeSeries.getValue(fixingDateAtLiborFixingTime);
@@ -322,7 +379,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
       if (fixedRate == null) {
         final ZonedDateTime previousBusinessDay = PRECEDING_BDC.adjustDate(_calendar, getFixingDate().minusDays(1));
         fixedRate = indexFixingTimeSeries.getValue(previousBusinessDay);
-        //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+        // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
         if (fixedRate == null) {
           final ZonedDateTime previousBusinessDayAtLiborFixingTime = previousBusinessDay.with(LocalTime.of(11, 0));
           fixedRate = indexFixingTimeSeries.getValue(previousBusinessDayAtLiborFixingTime);
@@ -338,15 +395,17 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final double fixingTime = actAct.getDayCountFraction(zonedDate, getFixingDate(), _calendar);
     final double fixingPeriodStartTime = actAct.getDayCountFraction(zonedDate, getFixingPeriodStartDate(), _calendar);
     final double fixingPeriodEndTime = actAct.getDayCountFraction(zonedDate, getFixingPeriodEndDate(), _calendar);
-    return new ForwardRateAgreement(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), _index, fixingTime, fixingPeriodStartTime,
+    return new ForwardRateAgreement(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), _index, fixingTime,
+        fixingPeriodStartTime,
         fixingPeriodEndTime, getFixingPeriodAccrualFactor(), _rate, forwardCurveName);
   }
 
   @Override
   public Payment toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(date.isBefore(getFixingDate()), "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " "
-        + date);
+    ArgumentChecker.isTrue(date.isBefore(getFixingDate()),
+        "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " "
+            + date);
     ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date is after payment date");
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
     final ZonedDateTime zonedDate = date.toLocalDate().atStartOfDay(ZoneOffset.UTC);
@@ -368,7 +427,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
     final double paymentTime = actAct.getDayCountFraction(zonedDate, getPaymentDate(), _calendar);
     if (date.isAfter(getFixingDate()) || date.equals(getFixingDate())) {
       Double fixedRate = indexFixingTimeSeries.getValue(getFixingDate());
-      //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+      // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
       if (fixedRate == null) {
         final ZonedDateTime fixingDateAtLiborFixingTime = getFixingDate().with(LocalTime.of(11, 0));
         fixedRate = indexFixingTimeSeries.getValue(fixingDateAtLiborFixingTime);
@@ -377,7 +436,7 @@ public class ForwardRateAgreementDefinition extends CouponFloatingDefinition {
         final ZonedDateTime previousBusinessDay = PRECEDING_BDC.adjustDate(_calendar,
             getFixingDate().minusDays(1));
         fixedRate = indexFixingTimeSeries.getValue(previousBusinessDay);
-        //TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
+        // TODO remove me when times are sorted out in the swap definitions or we work out how to deal with this another way
         if (fixedRate == null) {
           final ZonedDateTime previousBusinessDayAtLiborFixingTime = previousBusinessDay.with(LocalTime.of(11, 0));
           fixedRate = indexFixingTimeSeries.getValue(previousBusinessDayAtLiborFixingTime);

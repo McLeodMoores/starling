@@ -105,8 +105,8 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixedCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverage;
-import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDates;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborAverageFixingDatesCompoundingFlatSpread;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompounding;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborCompoundingFlatSpread;
@@ -140,23 +140,31 @@ import com.opengamma.analytics.financial.volatilityswap.VolatilitySwap;
 
 /**
  * Adapter that uses the same method regardless of the type of the derivative.
- * @param <DATA_TYPE> The type of the data
- * @param <RESULT_TYPE> The type of the results
+ * 
+ * @param <DATA_TYPE>
+ *          The type of the data
+ * @param <RESULT_TYPE>
+ *          The type of the results
  */
 @SuppressWarnings("deprecation")
 public abstract class InstrumentDerivativeVisitorSameMethodAdapter<DATA_TYPE, RESULT_TYPE> implements InstrumentDerivativeVisitor<DATA_TYPE, RESULT_TYPE> {
 
   /**
    * Calculates the result
-   * @param derivative The derivative
+   * 
+   * @param derivative
+   *          The derivative
    * @return The result
    */
   public abstract RESULT_TYPE visit(InstrumentDerivative derivative);
 
   /**
    * Calculates the result
-   * @param derivative The derivative
-   * @param data The data
+   * 
+   * @param derivative
+   *          The derivative
+   * @param data
+   *          The data
    * @return The result
    */
   public abstract RESULT_TYPE visit(InstrumentDerivative derivative, DATA_TYPE data);
@@ -482,12 +490,14 @@ public abstract class InstrumentDerivativeVisitorSameMethodAdapter<DATA_TYPE, RE
   }
 
   @Override
-  public RESULT_TYPE visitInterpolatedStubCoupon(final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment, final DATA_TYPE data) {
+  public RESULT_TYPE visitInterpolatedStubCoupon(
+      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment, final DATA_TYPE data) {
     return visit(payment, data);
   }
 
   @Override
-  public RESULT_TYPE visitInterpolatedStubCoupon(final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment) {
+  public RESULT_TYPE visitInterpolatedStubCoupon(
+      final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> payment) {
     return visit(payment);
   }
 
@@ -752,7 +762,8 @@ public abstract class InstrumentDerivativeVisitorSameMethodAdapter<DATA_TYPE, RE
   }
 
   @Override
-  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMargin coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMargin coupon,
+      final DATA_TYPE data) {
     return visit(coupon, data);
   }
 

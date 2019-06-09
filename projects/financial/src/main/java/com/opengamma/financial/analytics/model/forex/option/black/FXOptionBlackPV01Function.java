@@ -68,7 +68,8 @@ public class FXOptionBlackPV01Function extends FXOptionBlackSingleValuedFunction
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative forex, final ForexOptionDataBundle<?> data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative forex, final ForexOptionDataBundle<?> data, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues,
       final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final String currency = desiredValue.getConstraint(ValuePropertyNames.CURVE_CURRENCY);
@@ -109,7 +110,7 @@ public class FXOptionBlackPV01Function extends FXOptionBlackSingleValuedFunction
     final String putCurveName = Iterables.getOnlyElement(constraints.getValues(PUT_CURVE));
     final String curveName = Iterables.getOnlyElement(curveNames);
     if (!(curveName.equals(putCurveName) || curveName.equals(callCurveName))) {
-      LOGGER.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] {curveName, putCurveName, callCurveName });
+      LOGGER.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] { curveName, putCurveName, callCurveName });
       return null;
     }
     final String callCurveCalculationConfigName = Iterables.getOnlyElement(constraints.getValues(CALL_CURVE_CALC_CONFIG));
@@ -137,13 +138,15 @@ public class FXOptionBlackPV01Function extends FXOptionBlackSingleValuedFunction
       LOGGER.error("Could not find curve calculation configuration named " + resultCurveConfigName + " for currency " + resultCurrency);
       return null;
     }
-    requirements.add(getCurveSensitivitiesRequirement(putCurveName, putCurveCalculationConfigName, callCurveName, callCurveCalculationConfigName, surfaceName, interpolatorName,
+    requirements.add(getCurveSensitivitiesRequirement(putCurveName, putCurveCalculationConfigName, callCurveName, callCurveCalculationConfigName, surfaceName,
+        interpolatorName,
         leftExtrapolatorName, rightExtrapolatorName, resultCurrency, target));
     return requirements;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String currencyPairConfigName = null;
     String putCurveName = null;
     String putCurveCalculationConfig = null;
@@ -159,12 +162,14 @@ public class FXOptionBlackPV01Function extends FXOptionBlackSingleValuedFunction
         if (constraints.getProperties().contains(PUT_CURVE)) {
           putCurveName = Iterables.getOnlyElement(constraints.getValues(ValuePropertyNames.CURVE));
           putCurveCalculationConfig = Iterables.getOnlyElement(constraints.getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
-          final ValueProperties properties = ValuePropertiesUtils.removeAll(constraints.copy().get(), ValuePropertyNames.CURVE, ValuePropertyNames.CURVE_CALCULATION_CONFIG).get();
+          final ValueProperties properties = ValuePropertiesUtils
+              .removeAll(constraints.copy().get(), ValuePropertyNames.CURVE, ValuePropertyNames.CURVE_CALCULATION_CONFIG).get();
           ValuePropertiesUtils.withAllOptional(optionalProperties, properties);
         } else if (constraints.getProperties().contains(CALL_CURVE)) {
           callCurveName = Iterables.getOnlyElement(constraints.getValues(ValuePropertyNames.CURVE));
           callCurveCalculationConfig = Iterables.getOnlyElement(constraints.getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
-          final ValueProperties properties = ValuePropertiesUtils.removeAll(constraints.copy().get(), ValuePropertyNames.CURVE, ValuePropertyNames.CURVE_CALCULATION_CONFIG).get();
+          final ValueProperties properties = ValuePropertiesUtils
+              .removeAll(constraints.copy().get(), ValuePropertyNames.CURVE, ValuePropertyNames.CURVE_CALCULATION_CONFIG).get();
           ValuePropertiesUtils.withAllOptional(optionalProperties, properties);
         }
       } else if (specification.getValueName().equals(ValueRequirementNames.CURRENCY_PAIRS)) {
@@ -185,8 +190,9 @@ public class FXOptionBlackPV01Function extends FXOptionBlackSingleValuedFunction
       LOGGER.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
       return null;
     }
-    final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target, putCurveName, putCurveCalculationConfig,
-        callCurveName, callCurveCalculationConfig, curveCurrency, baseQuotePair, optionalProperties.get()).get());
+    final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(),
+        getResultProperties(target, putCurveName, putCurveCalculationConfig,
+            callCurveName, callCurveCalculationConfig, curveCurrency, baseQuotePair, optionalProperties.get()).get());
     return Collections.singleton(resultSpec);
   }
 
@@ -197,16 +203,18 @@ public class FXOptionBlackPV01Function extends FXOptionBlackSingleValuedFunction
   }
 
   @Override
-  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig, final String callCurve,
+  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
+      final String callCurve,
       final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
     throw new UnsupportedOperationException();
   }
 
-  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig, final String callCurve,
+  protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
+      final String callCurve,
       final String callCurveCalculationConfig, final String currency, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
-    final ValueProperties.Builder properties = super
-        .getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair, optionalProperties).withoutAny(ValuePropertyNames.CURRENCY)
-        .with(ValuePropertyNames.CURRENCY, currency).withAny(ValuePropertyNames.CURVE_CURRENCY).withAny(ValuePropertyNames.CURVE);
+    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig,
+        baseQuotePair, optionalProperties).withoutAny(ValuePropertyNames.CURRENCY)
+            .with(ValuePropertyNames.CURRENCY, currency).withAny(ValuePropertyNames.CURVE_CURRENCY).withAny(ValuePropertyNames.CURVE);
     return properties;
   }
 

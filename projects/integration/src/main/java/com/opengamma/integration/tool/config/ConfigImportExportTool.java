@@ -39,17 +39,18 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigImportExportTool.class);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new ConfigImportExportTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final ToolContext toolContext = getToolContext();
@@ -57,8 +58,7 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
     final PortfolioMaster portfolioMaster = toolContext.getPortfolioMaster();
     final CommandLine commandLine = getCommandLine();
     @SuppressWarnings("unchecked")
-    final
-    List<String> fileList = commandLine.getArgList();
+    final List<String> fileList = commandLine.getArgList();
     for (final String file : fileList) {
       System.err.println(file);
     }
@@ -177,12 +177,14 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createTypeOption() {
-    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type").create("t");
+    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type")
+        .create("t");
   }
 
   @SuppressWarnings("static-access")
   private Option createSearchOption() {
-    return OptionBuilder.isRequired(false).hasArgs().withArgName("name search string").withDescription("The name(s) you want to search for (globbing available)").withLongOpt("name")
+    return OptionBuilder.isRequired(false).hasArgs().withArgName("name search string")
+        .withDescription("The name(s) you want to search for (globbing available)").withLongOpt("name")
         .create("n");
   }
 
@@ -198,12 +200,14 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createPortablePortfolioReferencesOption() {
-    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Attempt to port portfolio reference ids").withLongOpt("portable-portfolios").create("p");
+    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Attempt to port portfolio reference ids").withLongOpt("portable-portfolios")
+        .create("p");
   }
 
   @SuppressWarnings("static-access")
   private Option createDoNotPersistOption() {
-    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Simulate writing rather than actually writing to DB").withLongOpt("do-not-persist").create("d");
+    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Simulate writing rather than actually writing to DB").withLongOpt("do-not-persist")
+        .create("d");
   }
 
   @SuppressWarnings("static-access")
@@ -213,7 +217,8 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createSortOption() {
-    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Sort output by config name (default=most recent first)").withLongOpt("sort-by-name").create("s");
+    return OptionBuilder.isRequired(false).hasArg(false).withDescription("Sort output by config name (default=most recent first)").withLongOpt("sort-by-name")
+        .create("s");
   }
 
   @Override

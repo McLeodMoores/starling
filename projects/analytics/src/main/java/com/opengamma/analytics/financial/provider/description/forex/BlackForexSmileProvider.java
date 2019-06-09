@@ -38,12 +38,18 @@ public class BlackForexSmileProvider implements BlackForexSmileProviderInterface
   private final Pair<Currency, Currency> _currencyPair;
 
   /**
-   * Constructor from exiting multicurveProvider and volatility model. The given provider and parameters are used for the new provider (the same maps are used, not copied).
-   * @param multicurves The multi-curves provider, not null
-   * @param smile Smile, not null
-   * @param currencyPair The currency pair, not null
+   * Constructor from exiting multicurveProvider and volatility model. The given provider and parameters are used for the new provider (the same maps are used,
+   * not copied).
+   * 
+   * @param multicurves
+   *          The multi-curves provider, not null
+   * @param smile
+   *          Smile, not null
+   * @param currencyPair
+   *          The currency pair, not null
    */
-  public BlackForexSmileProvider(final MulticurveProviderInterface multicurves, final SmileDeltaTermStructureParametersStrikeInterpolation smile, final Pair<Currency, Currency> currencyPair) {
+  public BlackForexSmileProvider(final MulticurveProviderInterface multicurves, final SmileDeltaTermStructureParametersStrikeInterpolation smile,
+      final Pair<Currency, Currency> currencyPair) {
     ArgumentChecker.notNull(multicurves, "multicurves");
     ArgumentChecker.notNull(smile, "smile");
     ArgumentChecker.notNull(currencyPair, "currencyPair");
@@ -70,10 +76,10 @@ public class BlackForexSmileProvider implements BlackForexSmileProviderInterface
 
   @Override
   public boolean checkCurrencies(final Currency ccy1, final Currency ccy2) {
-    if ((ccy1.equals(_currencyPair.getFirst())) && ccy2.equals(_currencyPair.getSecond())) {
+    if (ccy1.equals(_currencyPair.getFirst()) && ccy2.equals(_currencyPair.getSecond())) {
       return true;
     }
-    if ((ccy2.equals(_currencyPair.getFirst())) && ccy1.equals(_currencyPair.getSecond())) {
+    if (ccy2.equals(_currencyPair.getFirst()) && ccy1.equals(_currencyPair.getSecond())) {
       return true;
     }
     return false;
@@ -86,11 +92,17 @@ public class BlackForexSmileProvider implements BlackForexSmileProviderInterface
 
   /**
    * Returns volatility for a expiration, strike and forward. The volatility take into account the currency order.
-   * @param ccy1 The first currency.
-   * @param ccy2 The second currency.
-   * @param time The expiration time.
-   * @param strike The strike.
-   * @param forward The forward rate.
+   * 
+   * @param ccy1
+   *          The first currency.
+   * @param ccy2
+   *          The second currency.
+   * @param time
+   *          The expiration time.
+   * @param strike
+   *          The strike.
+   * @param forward
+   *          The forward rate.
    * @return The volatility.
    */
   @Override
@@ -105,7 +117,8 @@ public class BlackForexSmileProvider implements BlackForexSmileProviderInterface
   }
 
   @Override
-  public VolatilityAndBucketedSensitivities getVolatilityAndSensitivities(final Currency ccy1, final Currency ccy2, final double time, final double strike, final double forward) {
+  public VolatilityAndBucketedSensitivities getVolatilityAndSensitivities(final Currency ccy1, final Currency ccy2, final double time, final double strike,
+      final double forward) {
     if (getCurrencyPair().getFirst().equals(ccy1) && getCurrencyPair().getSecond().equals(ccy2)) {
       return getVolatility().getVolatilityAndSensitivities(time, strike, forward);
     }

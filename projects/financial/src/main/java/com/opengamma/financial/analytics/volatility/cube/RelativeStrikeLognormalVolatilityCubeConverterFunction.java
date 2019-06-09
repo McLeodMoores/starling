@@ -47,7 +47,8 @@ public class RelativeStrikeLognormalVolatilityCubeConverterFunction extends Stan
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    final VolatilityCubeData<Object, Object, Object> volatilityCubeData = (VolatilityCubeData<Object, Object, Object>) inputs.getValue(VOLATILITY_CUBE_MARKET_DATA);
+    final VolatilityCubeData<Object, Object, Object> volatilityCubeData = (VolatilityCubeData<Object, Object, Object>) inputs
+        .getValue(VOLATILITY_CUBE_MARKET_DATA);
     final SurfaceData<Object, Object> forwardSurfaceData = (SurfaceData<Object, Object>) inputs.getValue(SURFACE_DATA);
     final Map<Triple<Object, Object, Object>, Double> values = new HashMap<>();
     for (final Object x : volatilityCubeData.getXs()) {
@@ -58,7 +59,7 @@ public class RelativeStrikeLognormalVolatilityCubeConverterFunction extends Stan
             final Double data = volatilityCubeData.getVolatility(x, y, z);
             if (data != null) {
               final double strike = forward + (Double) z / 10000.;
-              values.put(Triple.<Object, Object, Object>of((Tenor) x, (Tenor) y, strike), data);
+              values.put(Triple.<Object, Object, Object> of((Tenor) x, (Tenor) y, strike), data);
             }
           }
         }

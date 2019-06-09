@@ -60,7 +60,8 @@ public abstract class BondFromCleanPriceAndCurvesFunction extends AbstractFuncti
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
+   * @param valueRequirementName
+   *          The value requirement name, not null
    */
   public BondFromCleanPriceAndCurvesFunction(final String valueRequirementName) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement");
@@ -122,7 +123,8 @@ public abstract class BondFromCleanPriceAndCurvesFunction extends AbstractFuncti
     final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(new ValueRequirement(MARKET_VALUE, ComputationTargetSpecification.of(security), ValueProperties.builder().get()));
     try {
-      final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+      final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+          target.getTrade());
       for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
         final ValueProperties properties = ValueProperties.builder()
             .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
@@ -141,9 +143,10 @@ public abstract class BondFromCleanPriceAndCurvesFunction extends AbstractFuncti
   }
 
   /**
-   * Gets the value properties of the result
+   * Gets the value properties of the result.
    *
-   * @param target The computation target
+   * @param target
+   *          The computation target
    * @return The properties
    */
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target) {
@@ -157,13 +160,19 @@ public abstract class BondFromCleanPriceAndCurvesFunction extends AbstractFuncti
   /**
    * Calculates the result.
    *
-   * @param inputs The function inputs
-   * @param bond The bond transaction
-   * @param issuerCurves The issuer and discounting curves
-   * @param cleanPrice The clean price of the bond
-   * @param spec The result specification
+   * @param inputs
+   *          The function inputs
+   * @param bond
+   *          The bond transaction
+   * @param issuerCurves
+   *          The issuer and discounting curves
+   * @param cleanPrice
+   *          The clean price of the bond
+   * @param spec
+   *          The result specification
    * @return The set of results
    */
-  protected abstract Set<ComputedValue> getResult(FunctionInputs inputs, BondFixedTransaction bond, IssuerProvider issuerCurves, double cleanPrice, ValueSpecification spec);
+  protected abstract Set<ComputedValue> getResult(FunctionInputs inputs, BondFixedTransaction bond, IssuerProvider issuerCurves, double cleanPrice,
+      ValueSpecification spec);
 
 }

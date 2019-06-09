@@ -108,12 +108,13 @@ public abstract class LabelledMatrix2D<S extends Comparable<S>, T extends Compar
 
   public abstract <Y> int compareY(T key1, T key2, Y tolerance);
 
-  public abstract LabelledMatrix2D<S, T> getMatrix(S[] xKeys, Object[] xLabels, String xTitle, T[] yKeys, Object[] yLabels, String yTitle, double[][] values, String valuesTitle);
+  public abstract LabelledMatrix2D<S, T> getMatrix(S[] xKeys, Object[] xLabels, String xTitle, T[] yKeys, Object[] yLabels, String yTitle, double[][] values,
+      String valuesTitle);
 
   public abstract LabelledMatrix2D<S, T> getMatrix(S[] xKeys, Object[] xLabels, T[] yKeys, Object[] yLabels, double[][] values);
 
-  //TODO this needs rewriting
-  //TODO this ignores labels - using the original labels first and only using the labels from other when a new row / column is added
+  // TODO this needs rewriting
+  // TODO this ignores labels - using the original labels first and only using the labels from other when a new row / column is added
   public <X, Y> LabelledMatrix2D<S, T> add(final LabelledMatrix2D<S, T> other, final X xTolerance, final Y yTolerance) {
     Validate.notNull(other, "labelled matrix");
     final S[] otherXKeys = other.getXKeys();

@@ -27,8 +27,7 @@ import com.opengamma.financial.security.lookup.SecurityAttributeMapper;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Function which uses mappings configured in the {@link SecurityAttributeMapper} to
- * extract its values from securities.
+ * Function which uses mappings configured in the {@link SecurityAttributeMapper} to extract its values from securities.
  */
 public class DefaultSecurityAttributeFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -58,7 +57,8 @@ public class DefaultSecurityAttributeFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final CurrencyPairs ccyPairs = (CurrencyPairs) inputs.getComputedValue(ValueRequirementNames.CURRENCY_PAIRS).getValue();
 
     final SecurityAttributeMapper mapper = DefaultSecurityAttributeMappings.create(ccyPairs);

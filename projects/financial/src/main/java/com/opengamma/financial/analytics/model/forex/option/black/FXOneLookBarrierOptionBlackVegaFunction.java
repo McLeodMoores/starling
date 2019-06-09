@@ -31,7 +31,8 @@ public class FXOneLookBarrierOptionBlackVegaFunction extends FXOneLookBarrierOpt
   /**
    * The relevant calculator.
    */
-  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator CALCULATOR = PresentValueBlackVolatilitySensitivityBlackForexCalculator.getInstance();
+  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator CALCULATOR =
+      PresentValueBlackVolatilitySensitivityBlackForexCalculator.getInstance();
 
   @Override
   protected Object computeValues(final Set<ForexOptionVanilla> vanillaOptions, final ForexOptionDataBundle<?> market) {

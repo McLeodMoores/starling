@@ -42,7 +42,8 @@ public final class CapFloorCMSSpreadSecurityBeanOperation extends AbstractSecuri
   }
 
   @Override
-  public CapFloorCMSSpreadSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CapFloorCMSSpreadSecurity security) {
+  public CapFloorCMSSpreadSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final CapFloorCMSSpreadSecurity security) {
     validateFrequency(security.getFrequency().getName());
     validateDayCount(security.getDayCount().getName());
 

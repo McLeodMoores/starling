@@ -33,7 +33,8 @@ public class BondMarketCleanPriceFunction extends BondMarketDataFunction {
   }
 
   @Override
-  protected Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final FinancialSecurity security, final ComputationTargetSpecification target) {
+  protected Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final FinancialSecurity security,
+      final ComputationTargetSpecification target) {
     final ValueProperties.Builder properties = createValueProperties();
     final ValueSpecification specification = new ValueSpecification(ValueRequirementNames.MARKET_CLEAN_PRICE, target, properties.get());
     return Sets.newHashSet(new ComputedValue(specification, value * 100));

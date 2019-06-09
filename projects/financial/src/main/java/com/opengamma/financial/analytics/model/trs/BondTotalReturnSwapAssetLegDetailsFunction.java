@@ -57,8 +57,7 @@ import com.opengamma.util.tuple.Pair;
 public class BondTotalReturnSwapAssetLegDetailsFunction extends BondTotalReturnSwapFunction {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#BOND_DETAILS}.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#BOND_DETAILS}.
    */
   public BondTotalReturnSwapAssetLegDetailsFunction() {
     super(BOND_DETAILS);
@@ -90,13 +89,15 @@ public class BondTotalReturnSwapAssetLegDetailsFunction extends BondTotalReturnS
         final CurrencyAmount[] paymentAmounts = couponDerivatives.accept(AnnuityPaymentAmountsVisitor.getInstance());
         final Double[] fixedRates = couponDerivatives.accept(AnnuityFixedRatesVisitor.getInstance());
         final double[] discountFactors = bondDerivative.accept(BondDiscountFactorsVisitor.getInstance(), issuerCurves);
-        final FixedSwapLegDetails details = new FixedSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), discountFactors, paymentTimes, paymentFractions, paymentAmounts,
+        final FixedSwapLegDetails details = new FixedSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), discountFactors, paymentTimes,
+            paymentFractions, paymentAmounts,
             notionals, fixedRates);
         return Collections.singleton(new ComputedValue(spec, details));
       }
 
       @Override
-      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
           final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
         throw new IllegalStateException("Should never reach this method");
       }

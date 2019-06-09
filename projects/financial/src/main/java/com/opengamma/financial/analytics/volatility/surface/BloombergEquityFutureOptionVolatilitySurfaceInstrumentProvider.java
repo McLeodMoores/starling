@@ -60,7 +60,8 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider exte
    * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
    * @param exchangeIdName the exchange id, not null
    */
-  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName);
   }
@@ -73,7 +74,8 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider exte
    * @param exchangeIdName the exchange id, not null
    * @param schemeName the ticker scheme name, not null
    */
-  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName, final String schemeName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName, schemeName);
   }

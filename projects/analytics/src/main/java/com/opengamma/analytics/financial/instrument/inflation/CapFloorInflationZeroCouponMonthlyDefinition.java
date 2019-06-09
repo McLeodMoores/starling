@@ -23,11 +23,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an zero-coupon inflation caplet/floorlet were the inflation figure are the one of the reference month and are not interpolated.
- * The notional is positive for long the option and negative for short the option.
- * The start index value is known when the coupon is traded/issued.
- * The index for a given month is given in the yield curve and in the time series on the first of the month.
- * The pay-off is [(Index_End / Index_Start - 1)-((1+strike)^T-1)]^{+}
+ * Class describing an zero-coupon inflation caplet/floorlet were the inflation figure are the one of the reference month and are not interpolated. The notional
+ * is positive for long the option and negative for short the option. The start index value is known when the coupon is traded/issued. The index for a given
+ * month is given in the yield curve and in the time series on the first of the month. The pay-off is [(Index_End / Index_Start - 1)-((1+strike)^T-1)]^{+}
  */
 public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflationDefinition implements CapFloor {
 
@@ -40,18 +38,20 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
    */
   private final ZonedDateTime _lastKnownFixingDate;
   /**
-   * The reference dates for the index at the coupon end. Two months are required for the interpolation.
-   * There is usually a difference of two or three month between the reference date and the payment date.
+   * The reference dates for the index at the coupon end. Two months are required for the interpolation. There is usually a difference of two or three month
+   * between the reference date and the payment date.
    */
   private final ZonedDateTime _referenceEndDate;
 
   /**
-   * The lag in month between the index validity and the coupon dates for the standard product. (the one in exchange market and used for the calibration, this lag is in most cases 3 month).
+   * The lag in month between the index validity and the coupon dates for the standard product. (the one in exchange market and used for the calibration, this
+   * lag is in most cases 3 month).
    */
   private final int _conventionalMonthLag;
 
   /**
-   * The lag in month between the index validity and the coupon dates for the actual product. (In most of the cases,lags are standard so _conventionalMonthLag=_monthLag)
+   * The lag in month between the index validity and the coupon dates for the actual product. (In most of the cases,lags are standard so
+   * _conventionalMonthLag=_monthLag)
    */
   private final int _monthLag;
 
@@ -72,24 +72,41 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Constructor from all the cap/floor details.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period; used for the payment.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param lastKnownFixingDate The fixing date (always the first of a month) of the last known fixing.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates  for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates  for the actual product.
-   * @param maturity The cap/floor maturity in years.
-   * @param referenceStartDate The reference date for the index at the coupon start.
-   * @param referenceEndDate The reference date for the index at the coupon end.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period; used for the payment.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param lastKnownFixingDate
+   *          The fixing date (always the first of a month) of the last known fixing.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param maturity
+   *          The cap/floor maturity in years.
+   * @param referenceStartDate
+   *          The reference date for the index at the coupon start.
+   * @param referenceEndDate
+   *          The reference date for the index at the coupon end.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
    */
   public CapFloorInflationZeroCouponMonthlyDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
-      final ZonedDateTime accrualEndDate, final double paymentYearFraction, final double notional, final IndexPrice priceIndex, final ZonedDateTime lastKnownFixingDate,
+      final ZonedDateTime accrualEndDate, final double paymentYearFraction, final double notional, final IndexPrice priceIndex,
+      final ZonedDateTime lastKnownFixingDate,
       final int conventionalMonthLag, final int monthLag, final int maturity, final ZonedDateTime referenceStartDate,
       final ZonedDateTime referenceEndDate, final double strike, final boolean isCap) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional, priceIndex);
@@ -109,22 +126,36 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Builder from all the cap/floor details, using details inside the price index.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param paymentDate Coupon payment date.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates.
-   * @param monthLag  The lag in month between the index validity and the coupon dates.
-   * @param maturity The cap/floor maturity in years.
-   * @param lastKnownFixingDate The fixing date (always the first of a month) of the last known fixing.
-   * @param referenceStartDate TODO
-   * @param referenceEndDate The reference date for the index at the coupon end.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
+   * 
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates.
+   * @param maturity
+   *          The cap/floor maturity in years.
+   * @param lastKnownFixingDate
+   *          The fixing date (always the first of a month) of the last known fixing.
+   * @param referenceStartDate
+   *          TODO
+   * @param referenceEndDate
+   *          The reference date for the index at the coupon end.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
    * @return The cap/floor.
    */
   public static CapFloorInflationZeroCouponMonthlyDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime paymentDate, final double notional,
-      final IndexPrice priceIndex, final int conventionalMonthLag, final int monthLag, final int maturity, final ZonedDateTime lastKnownFixingDate, final ZonedDateTime referenceStartDate,
+      final IndexPrice priceIndex, final int conventionalMonthLag, final int monthLag, final int maturity, final ZonedDateTime lastKnownFixingDate,
+      final ZonedDateTime referenceStartDate,
       final ZonedDateTime referenceEndDate, final double strike, final boolean isCap) {
     Validate.notNull(priceIndex, "Price index");
     return new CapFloorInflationZeroCouponMonthlyDefinition(priceIndex.getCurrency(), paymentDate, accrualStartDate, paymentDate, 1.0,
@@ -133,20 +164,32 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Builder from all the cap/floor details, using details inside the price index with standard reference end date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param paymentDate Coupon payment date.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates.
-   * @param monthLag  The lag in month between the index validity and the coupon dates.
-   * @param maturity The cap/floor maturity in years.
-   * @param lastKnownFixingDate The fixing date (always the first of a month) of the last known fixing.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
+   * 
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates.
+   * @param maturity
+   *          The cap/floor maturity in years.
+   * @param lastKnownFixingDate
+   *          The fixing date (always the first of a month) of the last known fixing.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
    * @return The cap/floor.
    */
   public static CapFloorInflationZeroCouponMonthlyDefinition from(final ZonedDateTime accrualStartDate, final ZonedDateTime paymentDate, final double notional,
-      final IndexPrice priceIndex, final int conventionalMonthLag, final int monthLag, final int maturity, final ZonedDateTime lastKnownFixingDate, final double strike,
+      final IndexPrice priceIndex, final int conventionalMonthLag, final int monthLag, final int maturity, final ZonedDateTime lastKnownFixingDate,
+      final double strike,
       final boolean isCap) {
     Validate.notNull(priceIndex, "Price index");
     final ZonedDateTime referenceEndDate = paymentDate.minusMonths(conventionalMonthLag).with(TemporalAdjusters.lastDayOfMonth());
@@ -157,17 +200,25 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Builder from a zero-coupon inflation interpolation coupon the cap/floor strike and isCap flag.
-   * @param couponInflation The underlying inflation coupon.
-   * @param lastKnownFixingDate The fixing date (always the first of a month) of the last known fixing.
-   * @param maturity The cap/floor maturity in years.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
+   * 
+   * @param couponInflation
+   *          The underlying inflation coupon.
+   * @param lastKnownFixingDate
+   *          The fixing date (always the first of a month) of the last known fixing.
+   * @param maturity
+   *          The cap/floor maturity in years.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
    * @return The cap/floor
    */
-  public static CapFloorInflationZeroCouponMonthlyDefinition from(final CouponInflationZeroCouponMonthlyDefinition couponInflation, final ZonedDateTime lastKnownFixingDate, final int maturity,
+  public static CapFloorInflationZeroCouponMonthlyDefinition from(final CouponInflationZeroCouponMonthlyDefinition couponInflation,
+      final ZonedDateTime lastKnownFixingDate, final int maturity,
       final double strike, final boolean isCap) {
     Validate.notNull(couponInflation, "coupon Ibor");
-    return new CapFloorInflationZeroCouponMonthlyDefinition(couponInflation.getCurrency(), couponInflation.getPaymentDate(), couponInflation.getAccrualStartDate(),
+    return new CapFloorInflationZeroCouponMonthlyDefinition(couponInflation.getCurrency(), couponInflation.getPaymentDate(),
+        couponInflation.getAccrualStartDate(),
         couponInflation.getAccrualEndDate(), couponInflation.getPaymentYearFraction(), couponInflation.getNotional(), couponInflation.getPriceIndex(),
         lastKnownFixingDate, couponInflation.getMonthLag(), couponInflation.getMonthLag(), maturity, couponInflation.getReferenceStartDate(),
         couponInflation.getReferenceEndDate(), strike, isCap);
@@ -175,6 +226,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets the fixing date (always the first of a month) of the last known fixing..
+   * 
    * @return the last known fixing date.
    */
   public ZonedDateTime getlastKnownFixingDate() {
@@ -183,6 +235,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets the reference date for the index at the coupon start.
+   * 
    * @return The reference date for the index at the coupon start.
    */
   public ZonedDateTime getReferenceStartDate() {
@@ -191,6 +244,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets the reference date for the index at the coupon end.
+   * 
    * @return The reference date for the index at the coupon end.
    */
   public ZonedDateTime getReferenceEndDate() {
@@ -199,6 +253,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets the lag in month between the index validity and the coupon dates for the standard product.
+   * 
    * @return The lag.
    */
   public int getConventionalMonthLag() {
@@ -207,6 +262,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets the lag in month between the index validity and the coupon dates for the actual product.
+   * 
    * @return The lag.
    */
   public int getMonthLag() {
@@ -215,6 +271,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets the cap/floor maturity in years..
+   * 
    * @return The maturity.
    */
   public int getMaturity() {
@@ -223,6 +280,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets the cap/floor strike in years.
+   * 
    * @return The strike.
    */
   @Override
@@ -232,6 +290,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * Gets The cap (true) / floor (false) flag.
+   * 
    * @return The flag.
    */
   @Override
@@ -240,7 +299,8 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
   }
 
   @Override
-  public CouponInflationDefinition with(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double notional) {
+  public CouponInflationDefinition with(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final double notional) {
     return null;
   }
 
@@ -249,12 +309,13 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
    */
   @Override
   public double payOff(final double fixing) {
-    final double omega = (_isCap) ? 1.0 : -1.0;
+    final double omega = _isCap ? 1.0 : -1.0;
     return Math.max(omega * (fixing - Math.pow(1 + _strike, _maturity)), 0);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -265,6 +326,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -292,7 +354,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
       final Double fixedEndIndex = priceIndexTimeSeries.getValue(getReferenceEndDate());
 
       if (fixedEndIndex != null) {
-        final Double fixedRate = (fixedEndIndex / fixedStartIndex - 1.0);
+        final Double fixedRate = fixedEndIndex / fixedStartIndex - 1.0;
         return new CouponFixed(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), payOff(fixedRate));
       }
     }
@@ -301,7 +363,8 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
     final double lastKnownFixingTime = TimeCalculator.getTimeBetween(date, getlastKnownFixingDate());
     final ZonedDateTime naturalPaymentDate = getPaymentDate().minusMonths(_monthLag - _conventionalMonthLag);
     final double naturalPaymentEndTime = TimeCalculator.getTimeBetween(date, naturalPaymentDate);
-    return new CapFloorInflationZeroCouponMonthly(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), lastKnownFixingTime, fixedStartIndex, referenceEndTime,
+    return new CapFloorInflationZeroCouponMonthly(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), lastKnownFixingTime,
+        fixedStartIndex, referenceEndTime,
         naturalPaymentEndTime, _maturity, _strike, _isCap);
   }
 
@@ -328,14 +391,14 @@ public class CapFloorInflationZeroCouponMonthlyDefinition extends CouponInflatio
     int result = super.hashCode();
     result = prime * result + _conventionalMonthLag;
     result = prime * result + (_isCap ? 1231 : 1237);
-    result = prime * result + ((_lastKnownFixingDate == null) ? 0 : _lastKnownFixingDate.hashCode());
+    result = prime * result + (_lastKnownFixingDate == null ? 0 : _lastKnownFixingDate.hashCode());
     result = prime * result + _maturity;
     result = prime * result + _monthLag;
-    result = prime * result + ((_referenceEndDate == null) ? 0 : _referenceEndDate.hashCode());
-    result = prime * result + ((_referenceStartDate == null) ? 0 : _referenceStartDate.hashCode());
+    result = prime * result + (_referenceEndDate == null ? 0 : _referenceEndDate.hashCode());
+    result = prime * result + (_referenceStartDate == null ? 0 : _referenceStartDate.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

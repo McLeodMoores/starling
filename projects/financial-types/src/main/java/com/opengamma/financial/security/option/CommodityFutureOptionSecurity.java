@@ -113,7 +113,8 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
    * @param optionType
    *          the option type, not null
    */
-  public CommodityFutureOptionSecurity(final String tradingExchange, final String settlementExchange, final Expiry expiry, final ExerciseType exerciseType, final ExternalId underlyingIdentifier,
+  public CommodityFutureOptionSecurity(final String tradingExchange, final String settlementExchange, final Expiry expiry, final ExerciseType exerciseType,
+      final ExternalId underlyingIdentifier,
       final double pointValue, final Currency currency, final double strike, final OptionType optionType) {
     super(SECURITY_TYPE);
     setTradingExchange(tradingExchange);
@@ -127,7 +128,7 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
     setOptionType(optionType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCommodityFutureOptionSecurity(this);

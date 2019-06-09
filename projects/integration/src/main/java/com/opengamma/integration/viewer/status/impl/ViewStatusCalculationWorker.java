@@ -60,7 +60,8 @@ public class ViewStatusCalculationWorker {
     this(toolContext, portfolioId, option, DEFAULT_EXECUTOR);
   }
 
-  public ViewStatusCalculationWorker(final ToolContext toolContext, final UniqueId portfolioId, final ViewStatusOption option, final ExecutorService executorService) {
+  public ViewStatusCalculationWorker(final ToolContext toolContext, final UniqueId portfolioId, final ViewStatusOption option,
+      final ExecutorService executorService) {
     ArgumentChecker.notNull(toolContext, "toolContex");
     ArgumentChecker.notNull(portfolioId, "portfolioId");
     ArgumentChecker.notNull(option, "option");

@@ -18,7 +18,9 @@ import com.opengamma.analytics.financial.model.interestrate.definition.G2ppPiece
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Specific objective function for G2++ model calibration with swaptions (both volatilities are calibrated to the same swaption by imposing a ratio between the volatilities).
+ * Specific objective function for G2++ model calibration with swaptions (both volatilities are calibrated to the same swaption by imposing a ratio between the
+ * volatilities).
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -47,10 +49,13 @@ public class SwaptionPhysicalG2ppCalibrationObjective extends SuccessiveRootFind
   private static final CashFlowEquivalentCalculator CASH_FLOW_EQUIVALENT_CALCULATOR = CashFlowEquivalentCalculator.getInstance();
 
   /**
-   * Constructor of the objective function with the G2++ parameters. The parameters range and accuracy are set at some default value
-   * (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
-   * @param parameters The G2++ parameters.
-   * @param ratio The ratio between the first factor volatility and the second factor volatility.
+   * Constructor of the objective function with the G2++ parameters. The parameters range and accuracy are set at some default value (minimum: 1.0E-6; maximum:
+   * 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
+   * 
+   * @param parameters
+   *          The G2++ parameters.
+   * @param ratio
+   *          The ratio between the first factor volatility and the second factor volatility.
    */
   public SwaptionPhysicalG2ppCalibrationObjective(final G2ppPiecewiseConstantParameters parameters, final double ratio) {
     ArgumentChecker.notNull(parameters, "parameters");
@@ -64,7 +69,9 @@ public class SwaptionPhysicalG2ppCalibrationObjective extends SuccessiveRootFind
 
   /**
    * Sets the G2++ curve bundle using the Hull-White parameters and a given set of curves.
-   * @param curves The curves.
+   * 
+   * @param curves
+   *          The curves.
    */
   @Override
   public void setCurves(final YieldCurveBundle curves) {
@@ -73,6 +80,7 @@ public class SwaptionPhysicalG2ppCalibrationObjective extends SuccessiveRootFind
 
   /**
    * Gets the G2++ data.
+   * 
    * @return The G2++ data.
    */
   public G2ppPiecewiseConstantParameters getG2Parameters() {
@@ -81,6 +89,7 @@ public class SwaptionPhysicalG2ppCalibrationObjective extends SuccessiveRootFind
 
   /**
    * Sets the G2++ curve bundle.
+   * 
    * @return The G2++ curve bundle.
    */
   public G2ppPiecewiseConstantDataBundle getG2Bundle() {
@@ -89,7 +98,9 @@ public class SwaptionPhysicalG2ppCalibrationObjective extends SuccessiveRootFind
 
   /**
    * Sets the calibration time for the next calibration.
-   * @param calibrationTime The calibration time.
+   * 
+   * @param calibrationTime
+   *          The calibration time.
    */
   public void setNextCalibrationTime(final double calibrationTime) {
     _g2Parameters.addVolatility(_g2Parameters.getLastVolatilities(), calibrationTime);
@@ -104,7 +115,7 @@ public class SwaptionPhysicalG2ppCalibrationObjective extends SuccessiveRootFind
 
   @Override
   public Double evaluate(final Double x) {
-    _g2Bundle.getG2ppParameter().setLastVolatilities(new double[] {x, x / _ratio });
+    _g2Bundle.getG2ppParameter().setLastVolatilities(new double[] { x, x / _ratio });
     return METHOD_G2_SWAPTION.presentValue((SwaptionPhysicalFixedIbor) getInstrument(), _cfe, _g2Bundle).getAmount() - getPrice();
   }
 

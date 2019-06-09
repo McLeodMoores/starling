@@ -55,15 +55,17 @@ public class ISDACDXAsSingleNameAccruedCDSFunction extends AbstractFunction.NonC
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
-                                    final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
     final LegalEntitySource legalEntitySource = OpenGammaExecutionContext.getLegalEntitySource(executionContext);
     final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
-    final CreditDefaultIndexSwapSecurityToProxyConverter converter = new CreditDefaultIndexSwapSecurityToProxyConverter(holidaySource, regionSource, legalEntitySource, securitySource, valuationTime);
+    final CreditDefaultIndexSwapSecurityToProxyConverter converter = new CreditDefaultIndexSwapSecurityToProxyConverter(holidaySource, regionSource,
+        legalEntitySource, securitySource, valuationTime);
     final CreditDefaultSwapIndexSecurity security = (CreditDefaultSwapIndexSecurity) target.getSecurity();
-    final CreditDefaultSwapIndexDefinitionSecurity underlyingDefinition = (CreditDefaultSwapIndexDefinitionSecurity) securitySource.getSingle(ExternalIdBundle.of(security.getReferenceEntity()));
+    final CreditDefaultSwapIndexDefinitionSecurity underlyingDefinition = (CreditDefaultSwapIndexDefinitionSecurity) securitySource
+        .getSingle(ExternalIdBundle.of(security.getReferenceEntity()));
     if (underlyingDefinition == null) {
       throw new OpenGammaRuntimeException("Could not get underlying index definition");
     }
@@ -72,13 +74,14 @@ public class ISDACDXAsSingleNameAccruedCDSFunction extends AbstractFunction.NonC
     LegacyVanillaCreditDefaultSwapDefinition definition = (LegacyVanillaCreditDefaultSwapDefinition) security.accept(converter);
     definition = definition.withEffectiveDate(FOLLOWING.adjustDate(calendar, valuationTime.withHour(0).withMinute(0).withSecond(
         0).withNano(0)));
-    //definition = StandardVanillaAccruedCDSFunction.getStartDate(definition, security, valuationTime);
+    // definition = StandardVanillaAccruedCDSFunction.getStartDate(definition, security, valuationTime);
     definition = definition.withRecoveryRate(recoveryRate);
     final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(recoveryRate, definition.getCouponFrequency().getPeriod())
         .with(definition.getBusinessDayAdjustmentConvention())
         .with(definition.getCalendar()).with(definition.getStubType())
         .withAccrualDCC(definition.getDayCountFractionConvention());
-    final CDSAnalytic pricingCDS = analyticFactory.makeCDS(definition.getEffectiveDate().toLocalDate(), definition.getStartDate().toLocalDate(), definition.getMaturityDate().toLocalDate());
+    final CDSAnalytic pricingCDS = analyticFactory.makeCDS(definition.getEffectiveDate().toLocalDate(), definition.getStartDate().toLocalDate(),
+        definition.getMaturityDate().toLocalDate());
 
     final int buySellPremiumFactor = security.isBuy() ? -1 : 1;
     final double coupon = definition.getParSpread() * 1e-4;
@@ -88,12 +91,14 @@ public class ISDACDXAsSingleNameAccruedCDSFunction extends AbstractFunction.NonC
       switch (desired.getValueName()) {
         case ValueRequirementNames.ACCRUED_DAYS:
           final int accruedDays = pricingCDS.getAccruedDays();
-          final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.ACCRUED_DAYS, target.toSpecification(), desired.getConstraints().copy().get());
+          final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.ACCRUED_DAYS, target.toSpecification(),
+              desired.getConstraints().copy().get());
           results.add(new ComputedValue(spec, accruedDays));
           break;
         case ValueRequirementNames.ACCRUED_PREMIUM:
           final double accruedInterest = pricingCDS.getAccruedPremium(coupon) * definition.getNotional() * buySellPremiumFactor;
-          final ValueSpecification spec2 = new ValueSpecification(ValueRequirementNames.ACCRUED_PREMIUM, target.toSpecification(), desired.getConstraints().copy().get());
+          final ValueSpecification spec2 = new ValueSpecification(ValueRequirementNames.ACCRUED_PREMIUM, target.toSpecification(),
+              desired.getConstraints().copy().get());
           results.add(new ComputedValue(spec2, accruedInterest));
           break;
         default:
@@ -113,7 +118,7 @@ public class ISDACDXAsSingleNameAccruedCDSFunction extends AbstractFunction.NonC
     final Currency ccy = FinancialSecurityUtils.getCurrency(target.getSecurity());
     final ValueSpecification daysSpec = new ValueSpecification(ValueRequirementNames.ACCRUED_DAYS, target.toSpecification(), createValueProperties().get());
     final ValueSpecification interestSpec = new ValueSpecification(ValueRequirementNames.ACCRUED_PREMIUM, target.toSpecification(),
-                                                             createValueProperties().with(ValuePropertyNames.CURRENCY, ccy.getCode()).get());
+        createValueProperties().with(ValuePropertyNames.CURRENCY, ccy.getCode()).get());
     return Sets.newHashSet(daysSpec, interestSpec);
   }
 
@@ -122,14 +127,14 @@ public class ISDACDXAsSingleNameAccruedCDSFunction extends AbstractFunction.NonC
     return Collections.emptySet();
   }
 
-  //@Override
-  //protected ValueProperties.Builder getCommonResultProperties() {
-  //  return createValueProperties()
-  //      .withAny(CreditInstrumentPropertyNamesAndValues.PROPERTY_CDS_PRICE_TYPE);
-  //}
+  // @Override
+  // protected ValueProperties.Builder getCommonResultProperties() {
+  // return createValueProperties()
+  // .withAny(CreditInstrumentPropertyNamesAndValues.PROPERTY_CDS_PRICE_TYPE);
+  // }
   //
-  //@Override
-  //protected boolean labelResultWithCurrency() {
-  //  return true;
-  //}
+  // @Override
+  // protected boolean labelResultWithCurrency() {
+  // return true;
+  // }
 }

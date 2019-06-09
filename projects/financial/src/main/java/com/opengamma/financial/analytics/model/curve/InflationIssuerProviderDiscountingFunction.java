@@ -104,7 +104,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class InflationIssuerProviderDiscountingFunction extends
 
-    MultiCurveFunction<InflationIssuerProviderInterface, InflationIssuerDiscountBuildingRepository, GeneratorPriceIndexCurve, InflationSensitivity> {
+MultiCurveFunction<InflationIssuerProviderInterface, InflationIssuerDiscountBuildingRepository, GeneratorPriceIndexCurve, InflationSensitivity> {
 
   /** The logger */
 
@@ -114,15 +114,15 @@ public class InflationIssuerProviderDiscountingFunction extends
   private static final ParSpreadInflationMarketQuoteIssuerDiscountingCalculator PSIMQC = ParSpreadInflationMarketQuoteIssuerDiscountingCalculator.getInstance();
   /** The sensitivity calculator */
 
-  private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSIMQCSC = ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator
-      .getInstance();
+  private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSIMQCSC =
+      ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
 
   private static final ParSpreadInflationMarketQuoteIssuerDiscountingCalculator PSIMQCWI = ParSpreadInflationMarketQuoteIssuerDiscountingCalculator
       .getInstance();
   /** The sensitivity calculator */
 
-  private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSIMQCSCWI = ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator
-      .getInstance();
+  private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSIMQCSCWI =
+      ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
 
   /**
    * @param configurationName

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -16,10 +16,10 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.FirstThenSecondPairComparator;
 
 /**
- * 
+ *
  */
 public class GridInterpolator2D extends Interpolator2D {
-  //TODO this is really inefficient - needs to be changed in a similar way to 1D interpolation
+  // TODO this is really inefficient - needs to be changed in a similar way to 1D interpolation
   /** The x interpolator */
   private final Interpolator1D _xInterpolator;
   /** The y interpolator */
@@ -28,8 +28,10 @@ public class GridInterpolator2D extends Interpolator2D {
   private final FirstThenSecondPairComparator<Double, Double> _comparator;
 
   /**
-   * @param xInterpolator The x interpolator, not null
-   * @param yInterpolator The y interpolator, not null
+   * @param xInterpolator
+   *          The x interpolator, not null
+   * @param yInterpolator
+   *          The y interpolator, not null
    */
   public GridInterpolator2D(final Interpolator1D xInterpolator, final Interpolator1D yInterpolator) {
     ArgumentChecker.notNull(xInterpolator, "x interpolator");
@@ -40,12 +42,17 @@ public class GridInterpolator2D extends Interpolator2D {
   }
 
   /**
-   * @param xInterpolator The x interpolator, not null
-   * @param yInterpolator The y interpolator, not null
-   * @param xExtrapolator The x extrapolator, not null
-   * @param yExtrapolator The y extrapolator, not null
+   * @param xInterpolator
+   *          The x interpolator, not null
+   * @param yInterpolator
+   *          The y interpolator, not null
+   * @param xExtrapolator
+   *          The x extrapolator, not null
+   * @param yExtrapolator
+   *          The y extrapolator, not null
    */
-  public GridInterpolator2D(final Interpolator1D xInterpolator, final Interpolator1D yInterpolator, final Interpolator1D xExtrapolator, final Interpolator1D yExtrapolator) {
+  public GridInterpolator2D(final Interpolator1D xInterpolator, final Interpolator1D yInterpolator, final Interpolator1D xExtrapolator,
+      final Interpolator1D yExtrapolator) {
     ArgumentChecker.notNull(xInterpolator, "x interpolator");
     ArgumentChecker.notNull(yInterpolator, "y interpolator");
     ArgumentChecker.notNull(xExtrapolator, "x extrapolator");
@@ -79,13 +86,14 @@ public class GridInterpolator2D extends Interpolator2D {
     final double[][] temp = new double[dataBundle.size()][];
     int i = 0;
     for (final Map.Entry<Double, Interpolator1DDataBundle> entry : dataBundle.entrySet()) {
-      //this is the sensitivity of the point projected onto a column of y-points to those points
+      // this is the sensitivity of the point projected onto a column of y-points to those points
       temp[i++] = _yInterpolator.getNodeSensitivitiesForValue(entry.getValue(), value.getSecond());
       xData.put(entry.getKey(), _yInterpolator.interpolate(entry.getValue(), value.getSecond()));
     }
-    //this is the sensitivity of the point to the points projected onto y columns
+    // this is the sensitivity of the point to the points projected onto y columns
     final double[] xSense = _xInterpolator.getNodeSensitivitiesForValue(_xInterpolator.getDataBundle(xData), value.getFirst());
-    ArgumentChecker.isTrue(xSense.length == dataBundle.size(), "Number of x sensitivities {} must be equal to the data bundle size {}", xSense.length, dataBundle.size());
+    ArgumentChecker.isTrue(xSense.length == dataBundle.size(), "Number of x sensitivities {} must be equal to the data bundle size {}", xSense.length,
+        dataBundle.size());
     final Map<DoublesPair, Double> res = new HashMap<>();
 
     double sense;
@@ -102,6 +110,7 @@ public class GridInterpolator2D extends Interpolator2D {
 
     return res;
   }
+
   private Map<Double, Interpolator1DDataBundle> testData(final Map<DoublesPair, Double> data) {
     final Map<Double, Interpolator1DDataBundle> result = new TreeMap<>();
     final TreeMap<DoublesPair, Double> sorted = new TreeMap<>(_comparator);
@@ -155,8 +164,8 @@ public class GridInterpolator2D extends Interpolator2D {
   @Override
   public int hashCode() {
     int hc = 1;
-    hc = (hc * 31) + getXInterpolator().hashCode();
-    hc = (hc * 31) + getYInterpolator().hashCode();
+    hc = hc * 31 + getXInterpolator().hashCode();
+    hc = hc * 31 + getYInterpolator().hashCode();
     return hc;
   }
 

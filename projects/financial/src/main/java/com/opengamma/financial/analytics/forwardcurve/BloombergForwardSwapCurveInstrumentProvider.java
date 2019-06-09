@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.forwardcurve;
@@ -18,13 +18,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class BloombergForwardSwapCurveInstrumentProvider extends ForwardSwapCurveInstrumentProvider {
   private static final String DATA_FIELD = MarketDataRequirementNames.MARKET_VALUE;
   private static final DataFieldType FIELD_TYPE = DataFieldType.OUTRIGHT;
   private static final ExternalScheme SCHEME = ExternalSchemes.BLOOMBERG_TICKER_WEAK;
-  private static final String[] MONTHS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "1A", "1B", "1C", "1D", "1E", "1F", "1G", "1H", "1I", "1J", "1K", "1L" };
+  private static final String[] MONTHS = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "1A", "1B", "1C", "1D", "1E", "1F", "1G", "1H", "1I",
+                "1J", "1K", "1L" };
   private final String _prefix;
   private final String _postfix;
   private final String _spotPrefix;

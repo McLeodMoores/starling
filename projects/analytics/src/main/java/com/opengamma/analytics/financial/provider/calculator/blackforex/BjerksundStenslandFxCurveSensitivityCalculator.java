@@ -10,11 +10,11 @@ import com.opengamma.analytics.financial.provider.description.forex.BlackForexSm
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
 /**
- * Calculates the sensitivity of the present value to the nodes of the curve(s) using in pricing. The underlying
- * model used is the 2002 Bjerksund-Stensland model and the volatility surface assumes Black volatilities with
- * a smile.
+ * Calculates the sensitivity of the present value to the nodes of the curve(s) using in pricing. The underlying model used is the 2002 Bjerksund-Stensland
+ * model and the volatility surface assumes Black volatilities with a smile.
  */
-public final class BjerksundStenslandFxCurveSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class BjerksundStenslandFxCurveSensitivityCalculator
+extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -29,6 +29,7 @@ public final class BjerksundStenslandFxCurveSensitivityCalculator extends Instru
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static BjerksundStenslandFxCurveSensitivityCalculator getInstance() {

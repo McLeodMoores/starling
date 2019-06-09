@@ -43,8 +43,9 @@ public class BlackScholesModelCostOfCarryFunction extends AbstractFunction.NonCo
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.COST_OF_CARRY, target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURVE)
-        .withAny(ValuePropertyNames.CURVE_CALCULATION_METHOD).get()));
+    return Collections.singleton(
+        new ValueSpecification(ValueRequirementNames.COST_OF_CARRY, target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURVE)
+            .withAny(ValuePropertyNames.CURVE_CALCULATION_METHOD).get()));
   }
 
   @Override
@@ -66,11 +67,13 @@ public class BlackScholesModelCostOfCarryFunction extends AbstractFunction.NonCo
         constraints.withOptional(ValuePropertyNames.CURVE_CALCULATION_METHOD);
       }
     }
-    return Collections.singleton(new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(option.getCurrency()), constraints.get()));
+    return Collections
+        .singleton(new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(option.getCurrency()), constraints.get()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueProperties.Builder properties = createValueProperties();
     final String curveName = input.getProperties().getStrictValue(ValuePropertyNames.CURVE);
@@ -83,7 +86,8 @@ public class BlackScholesModelCostOfCarryFunction extends AbstractFunction.NonCo
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
     final Object curveObject = inputs.getValue(ValueRequirementNames.YIELD_CURVE);
@@ -95,7 +99,8 @@ public class BlackScholesModelCostOfCarryFunction extends AbstractFunction.NonCo
     final double t = DateUtils.getDifferenceInYears(now, expiry.getExpiry());
     final double b = curve.getInterestRate(t);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.COST_OF_CARRY, target.toSpecification(), desiredValue.getConstraints()), b));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.COST_OF_CARRY, target.toSpecification(), desiredValue.getConstraints()), b));
   }
 
   @Override

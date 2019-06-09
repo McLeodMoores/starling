@@ -61,7 +61,8 @@ public class MultiCurveCalculationConfigFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         return Collections.emptySet();
       }
 
@@ -72,7 +73,8 @@ public class MultiCurveCalculationConfigFunction extends AbstractFunction {
         final String curveConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
         final MultiCurveCalculationConfig config = _curveCalculationConfigSource.getConfig(curveConfigName);
         final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveConfigName).get();
-        return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.CURVE_CALCULATION_CONFIG, target.toSpecification(), properties), config));
+        return Collections
+            .singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.CURVE_CALCULATION_CONFIG, target.toSpecification(), properties), config));
       }
 
     };

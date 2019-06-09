@@ -19,8 +19,9 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingDeltaIRFutureOptionFunction;
 
 /**
- * Function computes the {@link ValueRequirementNames#DELTA}, first order derivative of {@link Security} price with respect to the futures price,
- * for interest rate future options in the Black world.
+ * Function computes the {@link ValueRequirementNames#DELTA}, first order derivative of {@link Security} price with respect to the futures price, for interest
+ * rate future options in the Black world.
+ *
  * @deprecated Use {@link BlackDiscountingDeltaIRFutureOptionFunction}
  */
 @Deprecated
@@ -37,7 +38,8 @@ public class InterestRateFutureOptionBlackDeltaFunction extends InterestRateFutu
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle curveBundle, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle curveBundle,
+      final ValueSpecification spec,
       final Set<ValueRequirement> desiredValues) {
     final double delta = irFutureOptionTransaction.accept(CALCULATOR, curveBundle);
     return Collections.singleton(new ComputedValue(spec, delta));

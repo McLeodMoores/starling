@@ -60,7 +60,7 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
     // TODO We need to know how long after expiry settlement occurs?
     // IndexOptions are obviously Cash Settled
     final LocalDate settlementDate = expiryDT.toLocalDate(); // FIXME Needs to come from convention
-    //TODO settlement type needs to come from trade or convention
+    // TODO settlement type needs to come from trade or convention
     return new EquityIndexOptionDefinition(isCall, strike, ccy, exerciseType, expiryDT, settlementDate, unitNotional, SettlementType.CASH);
   }
 
@@ -76,7 +76,7 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
     // TODO We need to know how long after expiry settlement occurs?
     // IndexOptions are obviously Cash Settled
     final LocalDate settlementDate = expiryDT.toLocalDate(); // FIXME Needs to come from convention
-    //TODO settlement type needs to come from trade or convention
+    // TODO settlement type needs to come from trade or convention
     return new EquityOptionDefinition(isCall, strike, ccy, exerciseType, expiryDT, settlementDate, unitNotional, SettlementType.PHYSICAL);
   }
 
@@ -94,7 +94,8 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
     // REVIEW Andrew -- This call to getSingle is not correct as the resolution time of the view cycle will not be considered
     final Security underlyingSecurity = _securitySource.getSingle(ExternalIdBundle.of(underlyingIdentifier));
     if (underlyingSecurity == null) {
-      throw new OpenGammaRuntimeException("Underlying security " + underlyingIdentifier + " of option " + security.getExternalIdBundle().toString() + " was not found in database");
+      throw new OpenGammaRuntimeException(
+          "Underlying security " + underlyingIdentifier + " of option " + security.getExternalIdBundle().toString() + " was not found in database");
     }
 
     IndexFutureDefinition underlying = null;
@@ -104,7 +105,8 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
     } else if (underlyingSecurity instanceof EquityFutureSecurity) {
       final EquityFutureSecurity underlyingFuture = (EquityFutureSecurity) underlyingSecurity;
       final EquityFutureDefinition eqFut = (EquityFutureDefinition) underlyingFuture.accept(_futureSecurityConverter);
-      underlying = new IndexFutureDefinition(eqFut.getExpiryDate(), eqFut.getSettlementDate(), eqFut.getStrikePrice(), eqFut.getCurrency(), eqFut.getUnitAmount(), underlyingFuture.getUnderlyingId());
+      underlying = new IndexFutureDefinition(eqFut.getExpiryDate(), eqFut.getSettlementDate(), eqFut.getStrikePrice(), eqFut.getCurrency(),
+          eqFut.getUnitAmount(), underlyingFuture.getUnderlyingId());
     }
 
     final double strike = security.getStrike();
@@ -116,7 +118,4 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
 
   }
 
-
 }
-
-

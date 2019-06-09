@@ -47,7 +47,8 @@ public class CashSecurityGenerator extends SecurityGenerator<CashSecurity> {
     final ZonedDateTime start = previousWorkingDay(ZonedDateTime.now().minusDays(getRandom(60) + 7), currency);
     final int length = getRandom(6) + 3;
     final ZonedDateTime maturity = nextWorkingDay(start.plusMonths(length), currency);
-    final ConventionBundle convention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_GENERIC_CASH"));
+    final ConventionBundle convention = getConventionBundleSource()
+        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_GENERIC_CASH"));
     if (convention == null) {
       return null;
     }
@@ -56,9 +57,10 @@ public class CashSecurityGenerator extends SecurityGenerator<CashSecurity> {
     if (cashRate == null) {
       return null;
     }
-    final HistoricalTimeSeries timeSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, cashRate.toBundle(), null, start.toLocalDate(), true,
+    final HistoricalTimeSeries timeSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, cashRate.toBundle(), null,
+        start.toLocalDate(), true,
         start.toLocalDate(), true);
-    if ((timeSeries == null) || timeSeries.getTimeSeries().isEmpty()) {
+    if (timeSeries == null || timeSeries.getTimeSeries().isEmpty()) {
       return null;
     }
     final double rate = timeSeries.getTimeSeries().getEarliestValue() * getRandom(0.8, 1.2);

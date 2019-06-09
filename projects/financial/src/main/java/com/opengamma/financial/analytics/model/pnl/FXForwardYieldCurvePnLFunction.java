@@ -46,7 +46,8 @@ public class FXForwardYieldCurvePnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueProperties properties = inputs.entrySet().iterator().next().getKey().getProperties().copy()
         .withoutAny(ValuePropertyNames.FUNCTION)
         .with(ValuePropertyNames.FUNCTION, getUniqueId())
@@ -55,9 +56,11 @@ public class FXForwardYieldCurvePnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D nodalPnlSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs.getValue(ValueRequirementNames.YIELD_CURVE_PNL_SERIES);
+    final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D nodalPnlSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs
+        .getValue(ValueRequirementNames.YIELD_CURVE_PNL_SERIES);
     LocalDateDoubleTimeSeries result = nodalPnlSeries.getValues()[0];
     for (int i = 1; i < nodalPnlSeries.size(); i++) {
       result = result.add(nodalPnlSeries.getValues()[i]);

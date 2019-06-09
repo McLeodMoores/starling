@@ -30,6 +30,7 @@ import com.opengamma.util.money.Currency;
 public final class CurveUtils {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(CurveUtils.class);
+
   /**
    * Restricted constructor.
    */
@@ -37,10 +38,11 @@ public final class CurveUtils {
   }
 
   /**
-   * Extracts the currency from a discounting curve type configuration or throws an exception if the reference cannot be
-   * parsed as a currency
-   * @param configuration  the configuration, not null
-   * @return  the currency
+   * Extracts the currency from a discounting curve type configuration or throws an exception if the reference cannot be parsed as a currency
+   * 
+   * @param configuration
+   *          the configuration, not null
+   * @return the currency
    */
   public static Currency getCurrencyFromConfiguration(final DiscountingCurveTypeConfiguration configuration) {
     ArgumentChecker.notNull(configuration, "configuration");
@@ -53,14 +55,17 @@ public final class CurveUtils {
   }
 
   /**
-   * Creates the {@link IborIndex} from an ibor curve type configuration by trying first to use a {@link com.opengamma.financial.security.index.IborIndex}
-   * from the security source (to preserve the base OpenGamma behaviour). If the security is not found, a search for an {@link IborIndexConvention} in
-   * the convention source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an
-   * exception.
-   * @param configuration  the configuration, not null
-   * @param securitySource  the security source, not null
-   * @param conventionSource  the convention source, not null
-   * @return  the index
+   * Creates the {@link IborIndex} from an ibor curve type configuration by trying first to use a {@link com.opengamma.financial.security.index.IborIndex} from
+   * the security source (to preserve the base OpenGamma behaviour). If the security is not found, a search for an {@link IborIndexConvention} in the convention
+   * source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an exception.
+   * 
+   * @param configuration
+   *          the configuration, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param conventionSource
+   *          the convention source, not null
+   * @return the index
    */
   public static IborIndex getIborIndexFromConfiguration(final IborCurveTypeConfiguration configuration, final SecuritySource securitySource,
       final ConventionSource conventionSource) {
@@ -90,14 +95,18 @@ public final class CurveUtils {
   }
 
   /**
-   * Creates the {@link IndexON} from an overnight curve type configuration by trying first to use a {@link com.opengamma.financial.security.index.OvernightIndex}
-   * from the security source (to preserve the base OpenGamma behaviour). If the security is not found, a search for an {@link OvernightIndexConvention} in
-   * the convention source is made using the convention id from the configuration. If neither a security nor convention can be found, throws an
-   * exception.
-   * @param configuration  the configuration, not null
-   * @param securitySource  the security source, not null
-   * @param conventionSource  the convention source, not null
-   * @return  the index
+   * Creates the {@link IndexON} from an overnight curve type configuration by trying first to use a
+   * {@link com.opengamma.financial.security.index.OvernightIndex} from the security source (to preserve the base OpenGamma behaviour). If the security is not
+   * found, a search for an {@link OvernightIndexConvention} in the convention source is made using the convention id from the configuration. If neither a
+   * security nor convention can be found, throws an exception.
+   * 
+   * @param configuration
+   *          the configuration, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param conventionSource
+   *          the convention source, not null
+   * @return the index
    */
   public static IndexON getOvernightIndexFromConfiguration(final OvernightCurveTypeConfiguration configuration, final SecuritySource securitySource,
       final ConventionSource conventionSource) {

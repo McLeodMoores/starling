@@ -41,8 +41,10 @@ public class BloombergBulkSecurityLoader {
   private final SecurityTypeResolver _bbgSecurityTypeResolver;
 
   /**
-   * @param referenceDataProvider the reference data provider, not-null
-   * @param exchangeDataProvider the exchange data provider, not-null
+   * @param referenceDataProvider
+   *          the reference data provider, not-null
+   * @param exchangeDataProvider
+   *          the exchange data provider, not-null
    */
   public BloombergBulkSecurityLoader(final ReferenceDataProvider referenceDataProvider, final ExchangeDataProvider exchangeDataProvider) {
     ArgumentChecker.notNull(referenceDataProvider, "ReferenceDataProvider");
@@ -124,7 +126,8 @@ public class BloombergBulkSecurityLoader {
     return result;
   }
 
-  private Map<SecurityType, Set<String>> groupBySecurityType(final Map<ExternalIdBundle, SecurityType> securityTypeResult, final BiMap<ExternalIdBundle, String> bundle2bbgKey) {
+  private Map<SecurityType, Set<String>> groupBySecurityType(final Map<ExternalIdBundle, SecurityType> securityTypeResult,
+      final BiMap<ExternalIdBundle, String> bundle2bbgKey) {
     final Map<SecurityType, Set<String>> result = Maps.newHashMap();
     for (final Entry<ExternalIdBundle, SecurityType> entry : securityTypeResult.entrySet()) {
       final SecurityType securityType = entry.getValue();

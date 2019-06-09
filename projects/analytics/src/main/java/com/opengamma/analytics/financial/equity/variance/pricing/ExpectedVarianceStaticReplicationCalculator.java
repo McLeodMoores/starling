@@ -95,8 +95,8 @@ public class ExpectedVarianceStaticReplicationCalculator {
    * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a diffusion (i.e. no jumps) and the Black
    * volatility surface is parameterised by strike.
    * <p>
-   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction} can be
-   * useful for this)
+   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero
+   * ({@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction} can be useful for this)
    *
    * @param forward
    *          The forward value of the underlying at expiry, must be greater than 0

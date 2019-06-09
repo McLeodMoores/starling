@@ -26,7 +26,9 @@ public class UniformMeshing extends MeshingFunction {
 
   /**
    * Crates a set of points (mesh) equally spaced between 0.0 and 1.0 inclusive
-   * @param nPoints Number of points in the mesh
+   * 
+   * @param nPoints
+   *          Number of points in the mesh
    */
   public UniformMeshing(final int nPoints) {
     super(nPoints);
@@ -36,10 +38,14 @@ public class UniformMeshing extends MeshingFunction {
   }
 
   /**
-   * Crates a set of points (mesh) approximately equally spaced between 0.0 and 1.0 inclusive, such that the specified <em>fixedPoints</em> are included as points
-   * @param nPoints Number of points in the mesh
-   * @param fixedPoints Set of points that must be in the mesh. <b>Note:</b> the mesh can be far from uniform if fixed-points are close together and/or a small
-   * number of points are used
+   * Crates a set of points (mesh) approximately equally spaced between 0.0 and 1.0 inclusive, such that the specified <em>fixedPoints</em> are included as
+   * points
+   * 
+   * @param nPoints
+   *          Number of points in the mesh
+   * @param fixedPoints
+   *          Set of points that must be in the mesh. <b>Note:</b> the mesh can be far from uniform if fixed-points are close together and/or a small number of
+   *          points are used
    */
   public UniformMeshing(final int nPoints, final double[] fixedPoints) {
     super(nPoints);
@@ -48,15 +54,15 @@ public class UniformMeshing extends MeshingFunction {
     // sort and remove duplicates, preserving order
     _fpValues = FunctionUtils.unique(fixedPoints);
     // remove any fixed points on the boundary
-//    int nn = temp.length;
-//    if (nn > 0 && temp[0] == 0.0) {
-//      temp = Arrays.copyOfRange(temp, 1, nn - 1);
-//    }
-//    nn = temp.length;
-//    if (nn > 0 && temp[nn - 1] == 1.0) {
-//      temp = Arrays.copyOfRange(temp, 0, nn - 2);
-//    }
-//    _fpValues = temp;
+    // int nn = temp.length;
+    // if (nn > 0 && temp[0] == 0.0) {
+    // temp = Arrays.copyOfRange(temp, 1, nn - 1);
+    // }
+    // nn = temp.length;
+    // if (nn > 0 && temp[nn - 1] == 1.0) {
+    // temp = Arrays.copyOfRange(temp, 0, nn - 2);
+    // }
+    // _fpValues = temp;
     final int m = _fpValues.length;
     if (m == 0) {
       _db = null;

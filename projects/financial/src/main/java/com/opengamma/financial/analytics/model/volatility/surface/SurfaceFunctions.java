@@ -41,14 +41,14 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
     private String _rightXExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
     private String _leftYExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
     private String _rightYExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
-    private boolean _useFixedAlpha; /* = false;*/
+    private boolean _useFixedAlpha; /* = false; */
     private boolean _useFixedBeta = true;
-    private boolean _useFixedRho; /* = false;*/
-    private boolean _useFixedNu; /* = false;*/
+    private boolean _useFixedRho; /* = false; */
+    private boolean _useFixedNu; /* = false; */
     private double _alpha = 0.05;
     private double _beta = 1.0;
     private double _rho = 0.07;
-    private double _nu; /* = 0.0;*/
+    private double _nu; /* = 0.0; */
     private double _error = 0.001;
 
     public void setXInterpolatorName(final String xInterpolatorName) {
@@ -185,8 +185,10 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       functions.add(functionConfiguration(SABRIRFutureOptionNLSSDefaults.class,
-          getXInterpolatorName(), getYInterpolatorName(), getLeftXExtrapolatorName(), getRightXExtrapolatorName(), getLeftYExtrapolatorName(), getRightYExtrapolatorName(),
-          Boolean.toString(isUseFixedAlpha()), Boolean.toString(isUseFixedBeta()), Boolean.toString(isUseFixedRho()), Boolean.toString(isUseFixedNu()), Double.toString(getAlpha()),
+          getXInterpolatorName(), getYInterpolatorName(), getLeftXExtrapolatorName(), getRightXExtrapolatorName(), getLeftYExtrapolatorName(),
+          getRightYExtrapolatorName(),
+          Boolean.toString(isUseFixedAlpha()), Boolean.toString(isUseFixedBeta()), Boolean.toString(isUseFixedRho()), Boolean.toString(isUseFixedNu()),
+          Double.toString(getAlpha()),
           Double.toString(getBeta()), Double.toString(getRho()), Double.toString(getNu()), Double.toString(getError())));
     }
 

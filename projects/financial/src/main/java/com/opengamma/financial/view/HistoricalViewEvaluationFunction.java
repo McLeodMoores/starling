@@ -50,7 +50,8 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
   }
 
   protected ValueSpecification getMarketDataResultSpec(final ComputationTargetSpecification targetSpec) {
-    return new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES, targetSpec, createValueProperties().with(MARKET_DATA_PROPERTY_NAME, MARKET_DATA_PROPERTY_VALUE).get());
+    return new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES, targetSpec,
+        createValueProperties().with(MARKET_DATA_PROPERTY_NAME, MARKET_DATA_PROPERTY_VALUE).get());
   }
 
   // CompiledFunctionDefinition
@@ -66,7 +67,8 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
 
   @Override
   protected ViewCycleExecutionOptions getDefaultCycleOptions(final FunctionExecutionContext context) {
-    return ViewCycleExecutionOptions.builder().setValuationTime(context.getValuationTime()).setResolverVersionCorrection(context.getComputationTargetResolver().getVersionCorrection()).create();
+    return ViewCycleExecutionOptions.builder().setValuationTime(context.getValuationTime())
+        .setResolverVersionCorrection(context.getComputationTargetResolver().getVersionCorrection()).create();
   }
 
   @Override
@@ -121,7 +123,7 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
     return results;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private static LocalDate getResultsDate(final ViewCycleExecutionOptions cycleExecutionOptions) {
     // NOTE jonathan 2013-02-28 -- could imagine using constraints
     final List<MarketDataSpecification> marketDataSpecifications = cycleExecutionOptions.getMarketDataSpecifications();

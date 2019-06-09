@@ -23,8 +23,11 @@ public class ExchangeConventions {
     ArgumentChecker.notNull(conventionMaster, "convention master");
     final ConventionBundleMasterUtils utils = new ConventionBundleMasterUtils(conventionMaster);
 
-    utils.addConventionBundle(ExternalIdBundle.of(simpleExchangeNameSecurityId("CME")), IRFutureOptionSecurity.SECURITY_TYPE, IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME);
-    utils.addConventionBundle(ExternalIdBundle.of(simpleExchangeNameSecurityId("CBT")), BondFutureOptionSecurity.SECURITY_TYPE, BondFutureOptionExpiryCalculator.NAME);
-    utils.addConventionBundle(ExternalIdBundle.of(simpleExchangeNameSecurityId("EUX")), BondFutureOptionSecurity.SECURITY_TYPE, BondFutureOptionExpiryCalculator.NAME);
+    utils.addConventionBundle(ExternalIdBundle.of(simpleExchangeNameSecurityId("CME")), IRFutureOptionSecurity.SECURITY_TYPE,
+        IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME);
+    utils.addConventionBundle(ExternalIdBundle.of(simpleExchangeNameSecurityId("CBT")), BondFutureOptionSecurity.SECURITY_TYPE,
+        BondFutureOptionExpiryCalculator.NAME);
+    utils.addConventionBundle(ExternalIdBundle.of(simpleExchangeNameSecurityId("EUX")), BondFutureOptionSecurity.SECURITY_TYPE,
+        BondFutureOptionExpiryCalculator.NAME);
   }
 }

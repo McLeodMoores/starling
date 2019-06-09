@@ -20,19 +20,18 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.option.SwaptionSecurity;
 
 /**
- * Provides "Surface" (DEFAULT) and "VolatilityModel" (Black)
- * TODO - Remove or refactor this Function. Created for purpose of demonstration.
+ * Provides "Surface" (DEFAULT) and "VolatilityModel" (Black) TODO - Remove or refactor this Function. Created for purpose of demonstration.
  */
 public class BlackDiscountingSwaptionFunctionDefaults extends DefaultPropertyFunction {
 
   /** The value requirement names that the function applies to */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
-    ValueRequirementNames.BUCKETED_PV01
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
+                ValueRequirementNames.BUCKETED_PV01
   };
 
   public BlackDiscountingSwaptionFunctionDefaults() {
@@ -53,7 +52,8 @@ public class BlackDiscountingSwaptionFunctionDefaults extends DefaultPropertyFun
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SURFACE.equals(propertyName)) {
       return Collections.singleton("DEFAULT");
     }

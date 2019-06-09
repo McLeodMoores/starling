@@ -24,9 +24,8 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard versions of CLP instruments
- * 
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class CLConventions {
@@ -41,7 +40,9 @@ public class CLConventions {
 
   /**
    * Adds conventions for OIS and implied deposits
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -51,10 +52,12 @@ public class CLConventions {
       final String impliedDepositName = "CLP IMPLIED DEPOSIT " + i + "m";
       final ExternalId tullettImpliedDeposit = tullettPrebonSecurityId("LMIDPCLPSPT" + (i < 10 ? "0" : "") + i + "M");
       final ExternalId simpleImpliedDeposit = simpleNameSecurityId(impliedDepositName);
-      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, ACT_360, FOLLOWING, Period.ofMonths(i), 0, false, CL);
+      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, ACT_360, FOLLOWING, Period.ofMonths(i), 0,
+          false, CL);
     }
 
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CHIBNOM Index"), simpleNameSecurityId("CLP DEPOSIT O/N")), "CLP DEPOSIT O/N", ACT_360,
+    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CHIBNOM Index"), simpleNameSecurityId("CLP DEPOSIT O/N")), "CLP DEPOSIT O/N",
+        ACT_360,
         FOLLOWING, Period.ofDays(1), 0, false, CL);
     utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("CLICP Index"), simpleNameSecurityId("CLICP Index")), "CLICP Index", ACT_360,
         FOLLOWING, Period.ofDays(1), 0, false, CL, 0);

@@ -13,8 +13,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class defining an analytical approximation for American option prices as
- * derived by Bjerksund and Stensland (2002).
+ * Class defining an analytical approximation for American option prices as derived by Bjerksund and Stensland (2002).
  *
  * @deprecated Use {@link BjerksundStenslandModel} instead.
  */
@@ -55,13 +54,21 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get the price of an American option by the Bjerksund and Stensland (2002) approximation.
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @param isCall true for calls
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @param isCall
+   *          true for calls
    * @return The American option price
    */
   public double price(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
@@ -70,29 +77,38 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get the price of an American call option by the Bjerksund and Stensland (2002) approximation.
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
+   * 
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
    * @return The American option price
    */
   protected double getCallPrice(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
-    //minimum price condition is imposed in the end of the computation
+    // minimum price condition is imposed in the end of the computation
     return MODEL.price(s0, k, r, b, t, sigma, true);
   }
 
-  protected double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b, final double sigma) {
+  protected double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b,
+      final double sigma) {
     return MODEL.getPhi(s, t, gamma, h, x, r, b, sigma);
   }
 
-  protected double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2, final double x1, final double r, final double b, final double sigma) {
+  protected double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2, final double x1,
+      final double r, final double b, final double sigma) {
     return MODEL.getPsi(s, t1, t2, gamma, h, x2, x1, r, b, sigma);
   }
 
-  //**************
-  //adjoint stuff
+  // **************
+  // adjoint stuff
 
   /**
    * get the price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry), theta (expiry), vega
@@ -139,7 +155,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          true for calls
    * @return length 3 array of price, delta and gamma
    */
-  public double[] getPriceDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double[] getPriceDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     return MODEL.getPriceDeltaGamma(s0, k, r, b, t, sigma, isCall);
   }
 
@@ -185,7 +202,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          true for calls
    * @return A function from volatility (sigma) to price and vega
    */
-  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
+  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t,
+      final boolean isCall) {
     return MODEL.getPriceAndVegaFunction(s0, k, r, b, t, isCall);
   }
 
@@ -226,16 +244,20 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
     return MODEL.getCallDeltaGamma(s0, k, r, b, t, sigma);
   }
 
-  //TODO Have an AD version
+  // TODO Have an AD version
   protected double[] getPutDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
     return MODEL.getPutDeltaGamma(s0, k, r, b, t, sigma);
   }
 
   /**
    * get alpha and its sensitivity to k, x (I) and beta
-   * @param k The strike
-   * @param x x
-   * @param beta beta
+   * 
+   * @param k
+   *          The strike
+   * @param x
+   *          x
+   * @param beta
+   *          beta
    * @return The adjoints of alpha
    */
   protected double[] getAlphaAdjoint(final double k, final double x, final double beta) {
@@ -244,10 +266,15 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get lambda and its sensitivity to gamma, r, b and sigma-squared
-   * @param gamma gamma
-   * @param r the interest rate
-   * @param b the cost-of-carry
-   * @param sigmaSq volatility squared
+   * 
+   * @param gamma
+   *          gamma
+   * @param r
+   *          the interest rate
+   * @param b
+   *          the cost-of-carry
+   * @param sigmaSq
+   *          volatility squared
    * @return length 5 array of lambda and its sensitivity to gamma, r, b and sigma-squared
    */
   protected double[] getLambdaAdjoint(final double gamma, final double r, final double b, final double sigmaSq) {
@@ -256,9 +283,13 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get kappa and its sensitivity to gamma, b and sigma-squared
-   * @param gamma gamma
-   * @param b cost-of-carry
-   * @param sigmaSq volatility squared
+   * 
+   * @param gamma
+   *          gamma
+   * @param b
+   *          cost-of-carry
+   * @param sigmaSq
+   *          volatility squared
    * @return length 4 array of kappa and its sensitivity to gamma, b and sigma-squared
    */
   protected double[] getKappaAdjoint(final double gamma, final double b, final double sigmaSq) {
@@ -267,7 +298,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * get phi and its sensitivity to s, t, gamma, h, x (I), r, b &amp; sigma
-   * 
+   *
    * @param s
    *          the strike
    * @param t
@@ -293,14 +324,22 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * @param s The spot
-   * @param t The time to expiry
-   * @param gamma gamma
-   * @param h h
-   * @param x x
-   * @param r The interest rate
-   * @param b The cost-of-carry
-   * @param sigma The volatility
+   * @param s
+   *          The spot
+   * @param t
+   *          The time to expiry
+   * @param gamma
+   *          gamma
+   * @param h
+   *          h
+   * @param x
+   *          x
+   * @param r
+   *          The interest rate
+   * @param b
+   *          The cost-of-carry
+   * @param sigma
+   *          The volatility
    * @return The phi delta array
    */
   protected double[] getPhiDelta(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b,
@@ -311,15 +350,25 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * get Psi and its sensitivity to s, t, gamma, h, x2, x1, r, b and sigma
-   * @param s The spot
-   * @param t The time to expiry
-   * @param gamma gamma
-   * @param h h
-   * @param x2 x2
-   * @param x1 x1
-   * @param r The interest rate
-   * @param b The cost-of-carry
-   * @param sigma The volatility
+   * 
+   * @param s
+   *          The spot
+   * @param t
+   *          The time to expiry
+   * @param gamma
+   *          gamma
+   * @param h
+   *          h
+   * @param x2
+   *          x2
+   * @param x1
+   *          x1
+   * @param r
+   *          The interest rate
+   * @param b
+   *          The cost-of-carry
+   * @param sigma
+   *          The volatility
    * @return array of length 10 of Psi and its sensitivity to s, t, gamma, h, x2, x1, r, b and sigma
    */
   protected double[] getPsiAdjoint(final double s, final double t, final double gamma, final double h, final double x2, final double x1,
@@ -329,15 +378,24 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * @param s The spot
-   * @param t The time to expiry
-   * @param gamma gamma
-   * @param h h
-   * @param x2 x2
-   * @param x1 x1
-   * @param r The interest rate
-   * @param b The cost-of-carry
-   * @param sigma The volatility
+   * @param s
+   *          The spot
+   * @param t
+   *          The time to expiry
+   * @param gamma
+   *          gamma
+   * @param h
+   *          h
+   * @param x2
+   *          x2
+   * @param x1
+   *          x1
+   * @param r
+   *          The interest rate
+   * @param b
+   *          The cost-of-carry
+   * @param sigma
+   *          The volatility
    * @return The array of psi delta
    */
   protected double[] getPsiDelta(final double s, final double t, final double gamma, final double h, final double x2, final double x1,
@@ -348,9 +406,13 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get the first and second derivatives of the bi-variate normal with respect to a and b (rho is fixed)
-   * @param a first coordinate
-   * @param b second coordinate
-   * @param posRho true if RHO used, false is -RHO used
+   * 
+   * @param a
+   *          first coordinate
+   * @param b
+   *          second coordinate
+   * @param posRho
+   *          true if RHO used, false is -RHO used
    * @return array of length 5 in order dB/da, dB/db, d^2B/da^2, d^2B/db^2, d^2B/dadb
    */
   protected double[] bivariateNormDiv(final double a, final double b, final boolean posRho) {
@@ -359,9 +421,13 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get beta and its sensitivity to r, b and sigma-squared
-   * @param r The interest rate
-   * @param b The cost-of-carry
-   * @param sigmaSq The volatility squared
+   * 
+   * @param r
+   *          The interest rate
+   * @param b
+   *          The cost-of-carry
+   * @param sigmaSq
+   *          The volatility squared
    * @return length 4 array of beta and its sensitivity to r, b and sigma-squared
    */
   protected double[] getBetaAdjoint(final double r, final double b, final double sigmaSq) {
@@ -370,7 +436,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * get I1 and its sensitivity to k, r, b, sigma &amp; t
-   * 
+   *
    * @param k
    *          The strike
    * @param r
@@ -389,7 +455,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * get I2 and its sensitivity to k, r, b, sigma &amp; t
-   * 
+   *
    * @param k
    *          The strike
    * @param r

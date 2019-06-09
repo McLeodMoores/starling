@@ -19,8 +19,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 //CSOFF
 /**
- * Calculates the change in value of a FX option when the (Black) surface has been
- * shifted forward in time without slide.
+ * Calculates the change in value of a FX option when the (Black) surface has been shifted forward in time without slide.
+ *
  * @deprecated {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -30,6 +30,7 @@ public final class VolatilitySurfaceConstantSpreadCalculator {
 
   /**
    * Gets the singleton instance.
+   *
    * @return The instance
    */
   public static VolatilitySurfaceConstantSpreadCalculator getInstance() {
@@ -44,7 +45,8 @@ public final class VolatilitySurfaceConstantSpreadCalculator {
 
   public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
       final SmileDeltaTermStructureDataBundle data, final int daysForward) {
-    ArgumentChecker.isTrue(daysForward == 1 || daysForward == -1, "daysForward must be either 1 or -1"); // TODO: Update signature of function to take ForwardOrBack
+    ArgumentChecker.isTrue(daysForward == 1 || daysForward == -1, "daysForward must be either 1 or -1"); // TODO: Update signature of function to take
+    // ForwardOrBack
     final InstrumentDerivative instrumentToday = definition.toDerivative(date, yieldCurveNames);
     final ZonedDateTime horizonDate = date.plusDays(daysForward);
     final double shiftTime = TimeCalculator.getTimeBetween(date, horizonDate);
@@ -52,7 +54,8 @@ public final class VolatilitySurfaceConstantSpreadCalculator {
     final InstrumentDerivative instrumentTomorrow = definition.toDerivative(horizonDate, yieldCurveNames);
     final MultipleCurrencyAmount paymentToday = instrumentToday.accept(paymentCalculator);
     final SmileDeltaTermStructureParametersStrikeInterpolation volatilityData = data.getVolatilityModel();
-    final SmileDeltaTermStructureParametersStrikeInterpolation smile = new SmileDeltaTermStructureParametersStrikeInterpolation(volatilityData.getVolatilityTerm(),
+    final SmileDeltaTermStructureParametersStrikeInterpolation smile = new SmileDeltaTermStructureParametersStrikeInterpolation(
+        volatilityData.getVolatilityTerm(),
         volatilityData.getStrikeInterpolator()) {
 
       @Override

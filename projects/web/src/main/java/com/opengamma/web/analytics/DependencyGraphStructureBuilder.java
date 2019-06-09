@@ -55,7 +55,8 @@ import com.opengamma.engine.view.cycle.ViewCycle;
    * @param valueMappings
    *          the mappings between requirements and specifcations
    */
-  /* package */DependencyGraphStructureBuilder(final CompiledViewDefinition compiledViewDef, final ValueRequirement rootValueRequirement, final String calcConfigName,
+  /* package */ DependencyGraphStructureBuilder(final CompiledViewDefinition compiledViewDef, final ValueRequirement rootValueRequirement,
+      final String calcConfigName,
       final ComputationTargetResolver targetResolver, final FunctionRepository functions, final ViewCycle cycle, final ValueMappings valueMappings) {
     // TODO see [PLAT-2478] this is a bit nasty
     // with this hack in place the user can open a dependency graph before the first set of results arrives
@@ -90,12 +91,15 @@ import com.opengamma.engine.view.cycle.ViewCycle;
   }
 
   /**
-   * Builds the tree structure of the graph starting at a node and working up the dependency graph through all the nodes it depends on. Recursively builds up the node structure representing whole the
-   * dependency graph.
+   * Builds the tree structure of the graph starting at a node and working up the dependency graph through all the nodes it depends on. Recursively builds up
+   * the node structure representing whole the dependency graph.
    *
-   * @param valueSpecification The value specification of the target that is the current root
-   * @param targetNode The node producing {@code valueSpec}, not null
-   * @param rootNode Whether the value specification is for the root node of the dependency graph
+   * @param valueSpecification
+   *          The value specification of the target that is the current root
+   * @param targetNode
+   *          The node producing {@code valueSpec}, not null
+   * @param rootNode
+   *          Whether the value specification is for the root node of the dependency graph
    * @return Root node of the grid structure representing the dependency graph for the value
    */
   private AnalyticsNode createNode(final ValueSpecification valueSpecification, final DependencyNode targetNode, final boolean rootNode) {
@@ -107,7 +111,7 @@ import com.opengamma.engine.view.cycle.ViewCycle;
     if (inputCount == 0) {
       if (rootNode) {
         // the root node should never be null even if it has no children
-        return new AnalyticsNode(nodeStart, _lastRow, Collections.<AnalyticsNode>emptyList(), false);
+        return new AnalyticsNode(nodeStart, _lastRow, Collections.<AnalyticsNode> emptyList(), false);
       }
       // non-root leaf nodes don't need a node of their own, their place in the structure is handled by their parent
       return null;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.differentiation;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class VectorFieldSecondOrderDifferentiator implements Differentiator<DoubleMatrix1D, DoubleMatrix1D, DoubleMatrix2D[]> {
 
@@ -34,9 +34,11 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
   }
 
   /**
-   * This computes the second derivative of a vector field, which is a rank 3 tensor field. The tensor is represented as an array of DoubleMatrix2D, where each matrix is
+   * 
    * a Hessian (for the dependent variable y_i), so the indexing is H^i_{j,k} =\partial^2y_i/\partial x_j \partial x_k
-   * @param function the function representing the vector field
+   * 
+   * @param function
+   *          the function representing the vector field
    * @return A function representing the second derivative of the vector field (i.e. a rank 3 tensor field)
    */
   @Override
@@ -48,14 +50,15 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
       @SuppressWarnings("synthetic-access")
       @Override
       public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
-        DoubleMatrix2D[] gamma = hFunc.evaluate(x);
+        final DoubleMatrix2D[] gamma = hFunc.evaluate(x);
         return reshapeTensor(gamma);
       }
     };
   }
 
   @Override
-  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final Function1D<DoubleMatrix1D, Boolean> domain) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix2D[]> differentiate(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function,
+      final Function1D<DoubleMatrix1D, Boolean> domain) {
     Validate.notNull(function);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = _vectorFieldDiff.differentiate(function, domain);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D[]> hFunc = _maxtrixFieldDiff.differentiate(jacFunc, domain);
@@ -64,28 +67,30 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
       @Override
       public DoubleMatrix2D[] evaluate(final DoubleMatrix1D x) {
 
-        DoubleMatrix2D[] gamma = hFunc.evaluate(x);
+        final DoubleMatrix2D[] gamma = hFunc.evaluate(x);
         return reshapeTensor(gamma);
       }
     };
   }
 
   /**
-   * Gamma is in the  form gamma^i_{j,k} =\partial^2y_j/\partial x_i \partial x_k, where i is the index of the matrix in the stack (3rd index of the tensor),
-   * and j,k are the individual matrix indices. We would like it in the form H^i_{j,k} =\partial^2y_i/\partial x_j \partial x_k, so that each matrix is a
-   *Hessian (for the dependent variable y_i), hence the reshaping below.
-   * @param gamma Rank 3 tensor
+   * Gamma is in the form gamma^i_{j,k} =\partial^2y_j/\partial x_i \partial x_k, where i is the index of the matrix in the stack (3rd index of the tensor), and
+   * j,k are the individual matrix indices. We would like it in the form H^i_{j,k} =\partial^2y_i/\partial x_j \partial x_k, so that each matrix is a Hessian
+   * (for the dependent variable y_i), hence the reshaping below.
+   * 
+   * @param gamma
+   *          Rank 3 tensor
    * @return Reshaped rank 3 tensor
    */
   private DoubleMatrix2D[] reshapeTensor(final DoubleMatrix2D[] gamma) {
     final int m = gamma.length;
     final int n = gamma[0].getNumberOfRows();
     ArgumentChecker.isTrue(gamma[0].getNumberOfColumns() == m, "tenor wrong size. Seond index is {}, should be {}", gamma[0].getNumberOfColumns(), m);
-    DoubleMatrix2D[] res = new DoubleMatrix2D[n];
+    final DoubleMatrix2D[] res = new DoubleMatrix2D[n];
     for (int i = 0; i < n; i++) {
-      double[][] temp = new double[m][m];
+      final double[][] temp = new double[m][m];
       for (int j = 0; j < m; j++) {
-        DoubleMatrix2D gammaJ = gamma[j];
+        final DoubleMatrix2D gammaJ = gamma[j];
         for (int k = j; k < m; k++) {
           temp[j][k] = gammaJ.getEntry(i, k);
         }
@@ -142,7 +147,7 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
           }
           xData[j] = oldValueJ;
         }
-        DoubleMatrix2D[] mres = new DoubleMatrix2D[m];
+        final DoubleMatrix2D[] mres = new DoubleMatrix2D[m];
         for (i = 0; i < m; i++) {
           for (j = 0; j < n; j++) {
             for (k = 0; k < j; k++) {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -14,9 +14,7 @@ import com.opengamma.analytics.financial.model.option.definition.StandardOptionD
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * The Jarrow-Rudd option pricing formula extends the Black-Scholes-Merton
- * model for non-normal skewness and kurtosis in the underlying price
- * distribution.
+ * The Jarrow-Rudd option pricing formula extends the Black-Scholes-Merton model for non-normal skewness and kurtosis in the underlying price distribution.
  */
 public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionDefinition, SkewKurtosisOptionDataBundle> {
   private static final AnalyticOptionModel<OptionDefinition, StandardOptionDataBundle> BSM = new BlackScholesMertonModel();
@@ -47,7 +45,8 @@ public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionD
         final double d2 = getD2(getD1(s, k, t, sigma, b), sigma, t);
         final double sigmaT = sigma * Math.sqrt(t);
         final double a = getA(d2, k, sigmaT);
-        final double call = bsmCall + getLambda1(sigma, t, skew) * getQ3(s, k, sigmaT, t, r, a, d2) + getLambda2(sigma, t, kurtosis) * getQ4(s, k, sigmaT, t, r, a, d2);
+        final double call = bsmCall + getLambda1(sigma, t, skew) * getQ3(s, k, sigmaT, t, r, a, d2)
+            + getLambda2(sigma, t, kurtosis) * getQ4(s, k, sigmaT, t, r, a, d2);
         if (!definition.isCall()) {
           return call - s * Math.exp((b - r) * t) + k * Math.exp(-r * t);
         }

@@ -42,7 +42,8 @@ public abstract class AbstractPortfolioDailyPnLFunction extends AbstractFunction
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPortfolioDailyPnLFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     BigDecimal currentSum = BigDecimal.ZERO;
     ValueProperties currentProperties = null;
     for (final ComputedValue value : inputs.getAllValues()) {
@@ -91,7 +92,8 @@ public abstract class AbstractPortfolioDailyPnLFunction extends AbstractFunction
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     ValueProperties currentProperties = null;
     for (final ValueSpecification input : inputs.keySet()) {
       currentProperties = SumUtils.addProperties(currentProperties, input.getProperties());

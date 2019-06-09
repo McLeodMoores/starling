@@ -42,8 +42,8 @@ import com.opengamma.util.JodaBeanSerialization;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Loads in a file containing either a single JodaXML or FudgeXML encoded config and updates the config master.
- * Can be provided with a hint type if the JodaXML messages don't contain a type attribute on the bean element.
+ * Loads in a file containing either a single JodaXML or FudgeXML encoded config and updates the config master. Can be provided with a hint type if the JodaXML
+ * messages don't contain a type attribute on the bean element.
  */
 public class SingleConfigLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger(SingleConfigLoader.class);
@@ -58,7 +58,8 @@ public class SingleConfigLoader {
   private static final String DEFAULT_HTS_RATING_NAME = "DEFAULT_TSS_CONFIG";
   private static final String DEFAULT_CURRENCY_MATRIX_NAME = "BloombergLiveData";
 
-  public SingleConfigLoader(final SecurityMaster securityMaster, final ConfigMaster configMaster, final ConfigSource configSource, final ConventionMaster conventionMaster, final MarketDataSnapshotMaster marketDataSnapshotMaster, final boolean doNotUpdateExisting) {
+  public SingleConfigLoader(final SecurityMaster securityMaster, final ConfigMaster configMaster, final ConfigSource configSource,
+      final ConventionMaster conventionMaster, final MarketDataSnapshotMaster marketDataSnapshotMaster, final boolean doNotUpdateExisting) {
     _securityMaster = securityMaster;
     _configMaster = configMaster;
     _configSource = configSource;
@@ -115,7 +116,8 @@ public class SingleConfigLoader {
         if (match == null) {
           match = doc;
         } else {
-          LOGGER.warn("Found more than one matching market data snapshot for {} with type {}, changing first one", snapshot.getName(), snapshot.getBasisViewName());
+          LOGGER.warn("Found more than one matching market data snapshot for {} with type {}, changing first one", snapshot.getName(),
+              snapshot.getBasisViewName());
         }
       }
     }
@@ -143,28 +145,28 @@ public class SingleConfigLoader {
       addOrUpdateSecurity((ManageableSecurity) config);
     } else if (config instanceof CurrencyPairs) {
       final ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof HistoricalTimeSeriesRating) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof CurrencyMatrix) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof Bean) {
       final ConfigItem<T> item = ConfigItem.of(config);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
@@ -184,28 +186,28 @@ public class SingleConfigLoader {
       addOrUpdateSecurity((ManageableSecurity) config);
     } else if (config instanceof CurrencyPairs) {
       final ConfigItem<?> item = ConfigItem.of(config, CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof HistoricalTimeSeriesRating) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_HTS_RATING_NAME);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof CurrencyMatrix) {
       final ConfigItem<?> item = ConfigItem.of(config, DEFAULT_CURRENCY_MATRIX_NAME, CurrencyMatrix.class);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
       }
     } else if (config instanceof Bean) {
       final ConfigItem<?> item = ConfigItem.of(config);
-      if (_doNotUpdateExisting  && configExists(item)) {
+      if (_doNotUpdateExisting && configExists(item)) {
         LOGGER.info("Existing config present, skipping");
       } else {
         ConfigMasterUtils.storeByName(_configMaster, item);
@@ -231,7 +233,7 @@ public class SingleConfigLoader {
     } else {
       item = ConfigItem.of(config);
     }
-    if (_doNotUpdateExisting  && configExists(item)) {
+    if (_doNotUpdateExisting && configExists(item)) {
       LOGGER.info("Existing config present, skipping");
     } else {
       ConfigMasterUtils.storeByName(_configMaster, item);

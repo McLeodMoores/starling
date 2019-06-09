@@ -55,8 +55,9 @@ public class FFTModelGreeks {
    *          Tolerance - smaller values give higher accuracy
    * @return an array of arrays where is first array is the strikes, the second the prices, the first the derivatives of price wrt the first parameter etc
    */
-  //TODO this is cut and paste from FFTPricer - the calculation of the sample size and spacing should be extracted
-  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final double lowestStrike,
+  // TODO this is cut and paste from FFTPricer - the calculation of the sample size and spacing should be extracted
+  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall,
+      final MartingaleCharacteristicExponent ce, final double lowestStrike,
       final double highestStrike, final int minStrikesDisplayed, final double limitSigma, final double alpha, final double tol) {
 
     Validate.notNull(ce, "characteristic exponent");
@@ -129,7 +130,8 @@ public class FFTModelGreeks {
    *          The actual number of samples. Need n &gt;= 2m-1
    * @return an array of arrays where is first array is the strikes, the second the prices, the first the derivatives of price wrt the first parameter etc
    */
-  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,
+  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall,
+      final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,
       final int nStrikesAboveATM, final double alpha, final double delta, final int n, final int m) {
 
     Validate.notNull(ce, "characteristic exponent");
@@ -173,8 +175,9 @@ public class FFTModelGreeks {
     return res;
   }
 
-  private ComplexNumber[][] getPaddedArrays(final double alpha, final double delta, final int n, final int m, final Function1D<ComplexNumber, ComplexNumber[]> ajointFunc, final int halfN) {
-    //TODO this is a bit of a fudge
+  private ComplexNumber[][] getPaddedArrays(final double alpha, final double delta, final int n, final int m,
+      final Function1D<ComplexNumber, ComplexNumber[]> ajointFunc, final int halfN) {
+    // TODO this is a bit of a fudge
     final int size = ajointFunc.evaluate(MINUS_I).length;
 
     final ComplexNumber[][] z = new ComplexNumber[size][n];
@@ -213,7 +216,7 @@ public class FFTModelGreeks {
       for (int j = 1; j < size; j++) {
         final ComplexNumber temp = multiply(v, f[j]);
         z[j][offset + i] = temp;
-        z[j][offset - i] = ComplexMathUtils.conjugate(temp); //TODO the FFT should take care of this
+        z[j][offset - i] = ComplexMathUtils.conjugate(temp); // TODO the FFT should take care of this
       }
     }
     return z;

@@ -16,8 +16,8 @@ import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithB
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculator of the value gamma, second order derivative of present value with respect to the futures rate,
- * for InterestRateFutureOptions in the Black world.
+ * Calculator of the value gamma, second order derivative of present value with respect to the futures rate, for InterestRateFutureOptions in the Black world.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -30,6 +30,7 @@ public class PresentValueBlackGammaCalculator extends InstrumentDerivativeVisito
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBlackGammaCalculator getInstance() {
@@ -43,9 +44,11 @@ public class PresentValueBlackGammaCalculator extends InstrumentDerivativeVisito
   }
 
   /** Calculator for margined interest rate future option securities */
-  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION_SEC = InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION_SEC =
+      InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
   /** Calculation for bond future option securities with premium */
-  private static final BondFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_BOND_FUTURE_OPTION_SEC = BondFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final BondFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_BOND_FUTURE_OPTION_SEC = BondFutureOptionPremiumSecurityBlackSurfaceMethod
+      .getInstance();
 
   @Override
   public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction transaction, final YieldCurveBundle curves) {
@@ -69,12 +72,15 @@ public class PresentValueBlackGammaCalculator extends InstrumentDerivativeVisito
     ArgumentChecker.notNull(option, "option");
     if (curves instanceof YieldCurveWithBlackCubeBundle) {
       final InterestRateFutureOptionPremiumSecurity underlyingOption = option.getUnderlyingOption();
-      final InterestRateFutureOptionMarginSecurity underlyingMarginedOption = new InterestRateFutureOptionMarginSecurity(underlyingOption.getUnderlyingFuture(), underlyingOption.getExpirationTime(),
+      final InterestRateFutureOptionMarginSecurity underlyingMarginedOption = new InterestRateFutureOptionMarginSecurity(underlyingOption.getUnderlyingFuture(),
+          underlyingOption.getExpirationTime(),
           underlyingOption.getStrike(), underlyingOption.isCall());
-      final InterestRateFutureOptionMarginTransaction margined = new InterestRateFutureOptionMarginTransaction(underlyingMarginedOption, option.getQuantity(), option.getTradePrice());
+      final InterestRateFutureOptionMarginTransaction margined = new InterestRateFutureOptionMarginTransaction(underlyingMarginedOption, option.getQuantity(),
+          option.getTradePrice());
       return MARGINED_IR_FUTURE_OPTION_SEC.optionPriceGamma(margined.getUnderlyingSecurity(), (YieldCurveWithBlackCubeBundle) curves);
     }
-    throw new UnsupportedOperationException("The PresentValueBlackCalculator visitor visitInterestRateFutureOptionPremiumTransaction requires a YieldCurveWithBlackCubeBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueBlackCalculator visitor visitInterestRateFutureOptionPremiumTransaction requires a YieldCurveWithBlackCubeBundle as data.");
   }
 
   @Override

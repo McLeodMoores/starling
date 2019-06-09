@@ -30,7 +30,8 @@ public class SimpleFutureDataBundleDeprecated {
     _marketPrice = null;
   }
 
-  public SimpleFutureDataBundleDeprecated(final YieldAndDiscountCurve fundingCurve, final Double marketPrice, final Double spotValue, final Double dividendYield, final Double costOfCarry) {
+  public SimpleFutureDataBundleDeprecated(final YieldAndDiscountCurve fundingCurve, final Double marketPrice, final Double spotValue,
+      final Double dividendYield, final Double costOfCarry) {
     _fundingCurve = fundingCurve;
     _marketPrice = marketPrice;
     _spotValue = spotValue;
@@ -54,11 +55,11 @@ public class SimpleFutureDataBundleDeprecated {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_costOfCarry == null) ? 0 : _costOfCarry.hashCode());
-    result = prime * result + ((_dividendYield == null) ? 0 : _dividendYield.hashCode());
+    result = prime * result + (_costOfCarry == null ? 0 : _costOfCarry.hashCode());
+    result = prime * result + (_dividendYield == null ? 0 : _dividendYield.hashCode());
     result = prime * result + _fundingCurve.hashCode();
-    result = prime * result + ((_marketPrice == null) ? 0 : _marketPrice.hashCode());
-    result = prime * result + ((_spotValue == null) ? 0 : _spotValue.hashCode());
+    result = prime * result + (_marketPrice == null ? 0 : _marketPrice.hashCode());
+    result = prime * result + (_spotValue == null ? 0 : _spotValue.hashCode());
     return result;
   }
 

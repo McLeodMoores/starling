@@ -75,11 +75,15 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
   /**
    * Creates an instance.
    *
-   * @param bloombergConnector the Bloomberg connector, not null
-   * @param referenceDataProvider the reference data provider, not null
-   * @param resolver the resolver, not null
+   * @param bloombergConnector
+   *          the Bloomberg connector, not null
+   * @param referenceDataProvider
+   *          the reference data provider, not null
+   * @param resolver
+   *          the resolver, not null
    */
-  public BloombergEntitlementChecker(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider, final DistributionSpecificationResolver resolver) {
+  public BloombergEntitlementChecker(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider,
+      final DistributionSpecificationResolver resolver) {
     super(bloombergConnector, BloombergConstants.AUTH_SVC_NAME);
     ArgumentChecker.notNull(referenceDataProvider, "referenceDataProvider");
     ArgumentChecker.notNull(resolver, "resolver");
@@ -101,7 +105,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
     return LOGGER;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications) {
     final Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
@@ -118,7 +122,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
     return isEntitled(user, distributionSpecification);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public boolean isEntitled(final UserPrincipal user, final DistributionSpecification distributionSpec) {
     final Identity userIdentity = getUserIdentity(user);
     if (userIdentity == null) {
@@ -189,13 +193,13 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
     return (Identity) cachedUserIdentity.getObjectValue();
   }
 
-
   @SuppressWarnings("unchecked")
   private Set<Integer> getEids(final DistributionSpecification distributionSpec) {
     net.sf.ehcache.Element cachedEids = _eidCache.get(distributionSpec);
     if (cachedEids == null) {
       final String lookupKey = BloombergDomainIdentifierResolver.toBloombergKey(distributionSpec.getMarketDataId());
-      final Set<String> fields = Sets.newHashSet(BloombergConstants.FIELD_ID_BBG_UNIQUE, // TODO, this is necessary because otherwise the request would not get any real fields
+      final Set<String> fields = Sets.newHashSet(BloombergConstants.FIELD_ID_BBG_UNIQUE, // TODO, this is necessary because otherwise the request would not get
+                                                                                         // any real fields
           BloombergConstants.FIELD_EID_DATA);
       final ReferenceDataProviderGetRequest rdRequest = ReferenceDataProviderGetRequest.createGet(Collections.singleton(lookupKey), fields, true);
       final ReferenceDataProviderGetResult refData = _refDataProvider.getReferenceData(rdRequest);

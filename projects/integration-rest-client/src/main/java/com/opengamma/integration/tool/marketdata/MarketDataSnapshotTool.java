@@ -66,17 +66,18 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
 
   private static MarketDataSourceCli s_mktDataSourceCli = new MarketDataSourceCli();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new MarketDataSnapshotTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     s_context = getToolContext();
@@ -99,7 +100,8 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     }
     final Long marketDataTimeoutSeconds = getCommandLine().hasOption(TIMEOUT_OPTION) ? Long.parseLong(getCommandLine().getOptionValue(TIMEOUT_OPTION)) : null;
     final Long marketDataTimeoutMillis = marketDataTimeoutSeconds != null ? TimeUnit.SECONDS.toMillis(marketDataTimeoutSeconds) : null;
-    final MarketDataSnapshotSaver snapshotSaver = MarketDataSnapshotSaver.of(marketDataSnapshotter, viewProcessor, s_context.getConfigMaster(), marketDataSnapshotMaster, marketDataTimeoutMillis);
+    final MarketDataSnapshotSaver snapshotSaver = MarketDataSnapshotSaver.of(marketDataSnapshotter, viewProcessor, s_context.getConfigMaster(),
+        marketDataSnapshotMaster, marketDataTimeoutMillis);
 
     if (getCommandLine().hasOption(VIEW_PROCESS_ID_OPTION)) {
       final UniqueId viewProcessId = UniqueId.parse(getCommandLine().getOptionValue(VIEW_PROCESS_ID_OPTION));
@@ -156,7 +158,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     System.exit(1);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected Options createOptions(final boolean mandatoryConfig) {
     final Options options = super.createOptions(mandatoryConfig);
@@ -192,7 +194,8 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   }
 
   private static Option createSnapshotNameOption() {
-    final Option option = new Option(SNAPSHOT_NAME_OPTION, "snapshotName", true, "the name to use when persisting the snapshot. (defaults to '<view name>/<valuation time>' )");
+    final Option option = new Option(SNAPSHOT_NAME_OPTION, "snapshotName", true,
+        "the name to use when persisting the snapshot. (defaults to '<view name>/<valuation time>' )");
     option.setArgName("snapshot name");
     return option;
   }
@@ -210,7 +213,8 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   }
 
   private static Option createTimeoutOption() {
-    final Option option = new Option(TIMEOUT_OPTION, "timeout", true, "the timeout, in seconds, for market data to populate the snapshot (defaults to the engine default)");
+    final Option option = new Option(TIMEOUT_OPTION, "timeout", true,
+        "the timeout, in seconds, for market data to populate the snapshot (defaults to the engine default)");
     option.setArgName("seconds");
     return option;
   }

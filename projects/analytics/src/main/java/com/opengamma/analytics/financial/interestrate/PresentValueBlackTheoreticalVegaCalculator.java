@@ -13,7 +13,8 @@ import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithB
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * InstrumentDerivativeVisitor that calculates theoretical vega
+ * InstrumentDerivativeVisitor that calculates theoretical vega.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -21,12 +22,15 @@ public class PresentValueBlackTheoreticalVegaCalculator extends InstrumentDeriva
   /** A static instance */
   private static final PresentValueBlackTheoreticalVegaCalculator INSTANCE = new PresentValueBlackTheoreticalVegaCalculator();
   /** The margined interest rate future option calculator */
-  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION = InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION =
+      InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
   /** The interest rate future option with premium calculator */
-  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION =
+      InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
 
   /**
    * Gets an instance.
+   *
    * @return The instance
    */
   public static PresentValueBlackTheoreticalVegaCalculator getInstance() {

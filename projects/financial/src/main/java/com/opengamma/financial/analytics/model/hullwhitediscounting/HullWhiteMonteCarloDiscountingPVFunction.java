@@ -43,12 +43,13 @@ import cern.jet.random.engine.MersenneTwister64;
  */
 public class HullWhiteMonteCarloDiscountingPVFunction extends HullWhiteDiscountingFunction {
   /** The present value calculator */
-  private static final HullWhiteMonteCarloMethod CALCULATOR = new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister(MersenneTwister64.DEFAULT_SEED)),
-      125000);
+  private static final HullWhiteMonteCarloMethod CALCULATOR =
+      new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister(MersenneTwister64.DEFAULT_SEED)),
+          125000);
 
   /**
    * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public HullWhiteMonteCarloDiscountingPVFunction() {
     super(PRESENT_VALUE);

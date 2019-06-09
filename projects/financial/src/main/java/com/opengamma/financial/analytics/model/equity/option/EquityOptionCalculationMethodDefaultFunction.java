@@ -47,44 +47,45 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
 
   /** The value requirement names for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.VEGA_QUOTE_MATRIX,
-      ValueRequirementNames.VALUE_VEGA,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
-      ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-      ValueRequirementNames.FORWARD,
-      ValueRequirementNames.SPOT,
-      ValueRequirementNames.VALUE_DELTA,
-      ValueRequirementNames.VALUE_GAMMA,
-      ValueRequirementNames.VALUE_VOMMA,
-      ValueRequirementNames.VALUE_VANNA,
-      ValueRequirementNames.VALUE_RHO,
-      ValueRequirementNames.VALUE_CARRY_RHO,
-      ValueRequirementNames.VALUE_THETA,
-      ValueRequirementNames.VALUE_DUAL_DELTA,
-      ValueRequirementNames.DELTA,
-      ValueRequirementNames.GAMMA,
-      ValueRequirementNames.VOMMA,
-      ValueRequirementNames.VANNA,
-      ValueRequirementNames.RHO,
-      ValueRequirementNames.CARRY_RHO,
-      ValueRequirementNames.THETA,
-      ValueRequirementNames.DUAL_DELTA,
-      ValueRequirementNames.VEGA,
-      ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
-      ValueRequirementNames.POSITION_DELTA,
-      ValueRequirementNames.POSITION_GAMMA,
-      ValueRequirementNames.POSITION_RHO,
-      ValueRequirementNames.POSITION_THETA,
-      ValueRequirementNames.POSITION_VEGA,
-      ValueRequirementNames.POSITION_WEIGHTED_VEGA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.SPOT,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_VOMMA,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.VALUE_RHO,
+                ValueRequirementNames.VALUE_CARRY_RHO,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.VALUE_DUAL_DELTA,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.VOMMA,
+                ValueRequirementNames.VANNA,
+                ValueRequirementNames.RHO,
+                ValueRequirementNames.CARRY_RHO,
+                ValueRequirementNames.THETA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
+                ValueRequirementNames.POSITION_DELTA,
+                ValueRequirementNames.POSITION_GAMMA,
+                ValueRequirementNames.POSITION_RHO,
+                ValueRequirementNames.POSITION_THETA,
+                ValueRequirementNames.POSITION_VEGA,
+                ValueRequirementNames.POSITION_WEIGHTED_VEGA
   };
 
   public EquityOptionCalculationMethodDefaultFunction(final String priority,
       final String equityOptionMethod, final String equityIndexOptionMethod,
       final String equityIndexFutureOptionMethod, final String equityBarrierOptionMethod) {
     super(FinancialSecurityTypes.EQUITY_OPTION_SECURITY.or(FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY)
-        .or(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY).or(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY), ValuePropertyNames.CALCULATION_METHOD,
+        .or(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY).or(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY),
+        ValuePropertyNames.CALCULATION_METHOD,
         true, VALUE_REQUIREMENTS);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(equityOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_OPTION_SECURITY);
@@ -101,7 +102,8 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
       final String equityOptionMethod, final String equityIndexOptionMethod,
       final String equityIndexFutureOptionMethod) {
     super(FinancialSecurityTypes.EQUITY_OPTION_SECURITY.or(FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY)
-        .or(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY).or(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY), ValuePropertyNames.CALCULATION_METHOD,
+        .or(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY).or(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY),
+        ValuePropertyNames.CALCULATION_METHOD,
         true, VALUE_REQUIREMENTS);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(equityOptionMethod, "No CalculationMethod provided for " + FinancialSecurityTypes.EQUITY_OPTION_SECURITY);
@@ -116,12 +118,15 @@ public class EquityOptionCalculationMethodDefaultFunction extends StaticDefaultP
   /**
    * All Equity Option types to be priced with the same CalculationMethod
    *
-   * @param priority Default priority
-   * @param calculationMethod The single calculation method to be used for all Equity Options. e.g. BjerksundStenslandMethod. See CalculationPropertyNamesAndValues for more.
+   * @param priority
+   *          Default priority
+   * @param calculationMethod
+   *          The single calculation method to be used for all Equity Options. e.g. BjerksundStenslandMethod. See CalculationPropertyNamesAndValues for more.
    */
   public EquityOptionCalculationMethodDefaultFunction(final String priority, final String calculationMethod) {
     super(FinancialSecurityTypes.EQUITY_OPTION_SECURITY.or(FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY)
-        .or(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY).or(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY), ValuePropertyNames.CALCULATION_METHOD,
+        .or(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY).or(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY),
+        ValuePropertyNames.CALCULATION_METHOD,
         true, VALUE_REQUIREMENTS);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(calculationMethod, "No CalculationMethod provided");

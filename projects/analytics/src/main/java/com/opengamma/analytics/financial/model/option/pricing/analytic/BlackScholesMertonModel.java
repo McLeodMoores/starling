@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 
 /**
  * Generalized Black-Scholes-Merton option pricing.
- * 
+ *
  * Depending on the data supplied, the model is:
  * <ul>
  * <li>$b=r$ Black-Scholes stock option pricing model
@@ -33,13 +33,18 @@ public class BlackScholesMertonModel extends AnalyticOptionModel<OptionDefinitio
 
   /**
    * Returns a visitor that calculates the greeks analytically.
-   * @param pricingFunction The pricing function, not null
-   * @param data The data, not null
-   * @param definition The option definition, not null
+   * 
+   * @param pricingFunction
+   *          The pricing function, not null
+   * @param data
+   *          The data, not null
+   * @param definition
+   *          The option definition, not null
    * @return A visitor that calculates BSM greeks analytically.
    */
   @Override
-  public GreekVisitor<Double> getGreekVisitor(final Function1D<StandardOptionDataBundle, Double> pricingFunction, final StandardOptionDataBundle data, final OptionDefinition definition) {
+  public GreekVisitor<Double> getGreekVisitor(final Function1D<StandardOptionDataBundle, Double> pricingFunction, final StandardOptionDataBundle data,
+      final OptionDefinition definition) {
     Validate.notNull(pricingFunction);
     Validate.notNull(data);
     Validate.notNull(definition);
@@ -97,11 +102,15 @@ public class BlackScholesMertonModel extends AnalyticOptionModel<OptionDefinitio
     private final double _price;
 
     /**
-     * @param data The data, not null
-     * @param pricingFunction The pricing function, not null
-     * @param definition The option definition, not null
+     * @param data
+     *          The data, not null
+     * @param pricingFunction
+     *          The pricing function, not null
+     * @param definition
+     *          The option definition, not null
      */
-    public BlackScholesMertonGreekVisitor(final StandardOptionDataBundle data, final Function1D<StandardOptionDataBundle, Double> pricingFunction, final OptionDefinition definition) {
+    public BlackScholesMertonGreekVisitor(final StandardOptionDataBundle data, final Function1D<StandardOptionDataBundle, Double> pricingFunction,
+        final OptionDefinition definition) {
       super(pricingFunction, data, definition);
       _s = data.getSpot();
       _k = definition.getStrike();
@@ -233,8 +242,9 @@ public class BlackScholesMertonModel extends AnalyticOptionModel<OptionDefinitio
     @Override
     public Double visitTheta() {
       final int sign = _isCall ? 1 : -1;
-      final double value = -_s * _df * NORMAL.getPDF(_d1) * _sigma / (2 * Math.sqrt(_t)) - sign * (_b - _r) * _s * _df * NORMAL.getCDF(sign * _d1) - sign * _r * _k * Math.exp(-_r * _t)
-          * NORMAL.getCDF(sign * _d2);
+      final double value = -_s * _df * NORMAL.getPDF(_d1) * _sigma / (2 * Math.sqrt(_t)) - sign * (_b - _r) * _s * _df * NORMAL.getCDF(sign * _d1)
+          - sign * _r * _k * Math.exp(-_r * _t)
+              * NORMAL.getCDF(sign * _d2);
       return value;
     }
 
@@ -246,7 +256,8 @@ public class BlackScholesMertonModel extends AnalyticOptionModel<OptionDefinitio
 
     @Override
     public Double visitVarianceUltima() {
-      final double value = _s * _df * Math.sqrt(_t) / (8 * Math.pow(_sigma, 5)) * NORMAL.getPDF(_d1) * ((_d1 * _d2 - 1) * (_d1 * _d2 - 3) - (_d1 * _d1 + _d2 * _d2));
+      final double value = _s * _df * Math.sqrt(_t) / (8 * Math.pow(_sigma, 5)) * NORMAL.getPDF(_d1)
+          * ((_d1 * _d2 - 1) * (_d1 * _d2 - 3) - (_d1 * _d1 + _d2 * _d2));
       return value;
     }
 

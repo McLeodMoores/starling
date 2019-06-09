@@ -44,7 +44,9 @@ public class DependencyGraphTraceBuilder {
 
   /**
    * Builds the dependency graph trace with the configured params.
-   * @param properties the properties to use
+   *
+   * @param properties
+   *          the properties to use
    * @return the built trace object
    */
   public DependencyGraphBuildTrace build(final DependencyGraphTraceBuilderProperties properties) {
@@ -57,7 +59,8 @@ public class DependencyGraphTraceBuilder {
     context.setViewCalculationConfiguration(calcConfig);
     context.setComputationTargetResolver(context.getRawComputationTargetResolver().atVersionCorrection(properties.getResolutionTime()));
     builder.setCompilationContext(context);
-    final Collection<ResolutionRule> rules = _builderContext.getFunctionResolver().compile(properties.getValuationTime() != null ? properties.getValuationTime() : Instant.now())
+    final Collection<ResolutionRule> rules = _builderContext.getFunctionResolver()
+        .compile(properties.getValuationTime() != null ? properties.getValuationTime() : Instant.now())
         .getAllResolutionRules();
     // TODO: allow transformation rules
     final DefaultCompiledFunctionResolver functions = new DefaultCompiledFunctionResolver(context, rules);
@@ -69,10 +72,11 @@ public class DependencyGraphTraceBuilder {
     final MarketDataProviderResolver resolver = _builderContext.getMarketDataProviderResolver();
     List<MarketDataSpecification> marketData = properties.getMarketData();
     if (marketData == null || marketData.isEmpty()) {
-      marketData = Collections.<MarketDataSpecification>singletonList(MarketData.live());
+      marketData = Collections.<MarketDataSpecification> singletonList(MarketData.live());
     }
 
-    final MarketDataAvailabilityProvider availabilityProvider = new SnapshottingViewExecutionDataProvider(marketDataUser, marketData, resolver).getAvailabilityProvider();
+    final MarketDataAvailabilityProvider availabilityProvider = new SnapshottingViewExecutionDataProvider(marketDataUser, marketData, resolver)
+        .getAvailabilityProvider();
     builder.setMarketDataAvailabilityProvider(availabilityProvider);
     final ResolutionFailureAccumulator resolutionFailureAccumulator = new ResolutionFailureAccumulator();
     builder.setResolutionFailureListener(resolutionFailureAccumulator);

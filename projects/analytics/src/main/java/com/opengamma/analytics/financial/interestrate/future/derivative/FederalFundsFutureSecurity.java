@@ -25,8 +25,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
    */
   private final IndexON _index;
   /**
-   * The accrual interest of the period already fixed. Interest (fixing rate * accrual fraction) for a notional of 1.
-   * For a future without fixing, it will be 0.
+   * The accrual interest of the period already fixed. Interest (fixing rate * accrual fraction) for a notional of 1. For a future without fixing, it will be 0.
    */
   private final double _accruedInterest;
   /**
@@ -60,21 +59,33 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Constructor from all the details.
-   * @param index The OIS-like index on which the future fixes.
-   * @param accruedInterest The accrual interest of the period already fixed. Interest (fixing rate * accrual fraction) for a notional of 1.
-   * @param fixingPeriodTime The times of the fixing periods not yet fixed. There is one date more than period.
-   * @param lastTradingTime The last trading time of the futures.
-   * @param fixingPeriodAccrualFactor The accrual factors (or year fractions) associated to the fixing periods not yet fixed in the Index day count convention.
-   * @param fixingTotalAccrualFactor The total accrual factor for all fixing periods (including the one that have fixed already).
-   * @param notional The future notional.
-   * @param paymentAccrualFactor The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
-   * @param name The future name.
-   * @param oisCurveName The OIS forward curve name.
+   *
+   * @param index
+   *          The OIS-like index on which the future fixes.
+   * @param accruedInterest
+   *          The accrual interest of the period already fixed. Interest (fixing rate * accrual fraction) for a notional of 1.
+   * @param fixingPeriodTime
+   *          The times of the fixing periods not yet fixed. There is one date more than period.
+   * @param lastTradingTime
+   *          The last trading time of the futures.
+   * @param fixingPeriodAccrualFactor
+   *          The accrual factors (or year fractions) associated to the fixing periods not yet fixed in the Index day count convention.
+   * @param fixingTotalAccrualFactor
+   *          The total accrual factor for all fixing periods (including the one that have fixed already).
+   * @param notional
+   *          The future notional.
+   * @param paymentAccrualFactor
+   *          The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
+   * @param name
+   *          The future name.
+   * @param oisCurveName
+   *          The OIS forward curve name.
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
   public FederalFundsFutureSecurity(final IndexON index, final double accruedInterest, final double[] fixingPeriodTime, final double lastTradingTime,
-      final double[] fixingPeriodAccrualFactor, final double fixingTotalAccrualFactor, final double notional, final double paymentAccrualFactor, final String name,
+      final double[] fixingPeriodAccrualFactor, final double fixingTotalAccrualFactor, final double notional, final double paymentAccrualFactor,
+      final String name,
       final String oisCurveName) {
     super(lastTradingTime);
     ArgumentChecker.notNull(index, "Index overnight");
@@ -95,18 +106,29 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Constructor from all the details.
-   * @param index The OIS-like index on which the future fixes.
-   * @param accruedInterest The accrual interest of the period already fixed. Interest (fixing rate * accrual fraction) for a notional of 1.
-   * @param fixingPeriodTime The times of the fixing periods not yet fixed. There is one date more than period.
-   * @param lastTradingTime The last trading time of the futures.
-   * @param fixingPeriodAccrualFactor The accrual factors (or year fractions) associated to the fixing periods not yet fixed in the Index day count convention.
-   * @param fixingTotalAccrualFactor The total accrual factor for all fixing periods (including the one that have fixed already).
-   * @param notional The future notional.
-   * @param paymentAccrualFactor The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
-   * @param name The future name.
+   *
+   * @param index
+   *          The OIS-like index on which the future fixes.
+   * @param accruedInterest
+   *          The accrual interest of the period already fixed. Interest (fixing rate * accrual fraction) for a notional of 1.
+   * @param fixingPeriodTime
+   *          The times of the fixing periods not yet fixed. There is one date more than period.
+   * @param lastTradingTime
+   *          The last trading time of the futures.
+   * @param fixingPeriodAccrualFactor
+   *          The accrual factors (or year fractions) associated to the fixing periods not yet fixed in the Index day count convention.
+   * @param fixingTotalAccrualFactor
+   *          The total accrual factor for all fixing periods (including the one that have fixed already).
+   * @param notional
+   *          The future notional.
+   * @param paymentAccrualFactor
+   *          The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
+   * @param name
+   *          The future name.
    */
   public FederalFundsFutureSecurity(final IndexON index, final double accruedInterest, final double[] fixingPeriodTime, final double lastTradingTime,
-      final double[] fixingPeriodAccrualFactor, final double fixingTotalAccrualFactor, final double notional, final double paymentAccrualFactor, final String name) {
+      final double[] fixingPeriodAccrualFactor, final double fixingTotalAccrualFactor, final double notional, final double paymentAccrualFactor,
+      final String name) {
     super(lastTradingTime);
     ArgumentChecker.notNull(index, "Index overnight");
     ArgumentChecker.notNull(fixingPeriodTime, "Fixing period time");
@@ -126,6 +148,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the OIS-like index on which the future fixes.
+   *
    * @return The index.
    */
   public IndexON getIndex() {
@@ -134,6 +157,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the accrual interest of the period already fixed. Interest (fixing rate * accrual fraction) for a notional of 1.
+   *
    * @return The accrual interest of the period already fixed.
    */
   public double getAccruedInterest() {
@@ -142,6 +166,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the times of the fixing periods not yet fixed.
+   *
    * @return The times.
    */
   public double[] getFixingPeriodTime() {
@@ -150,6 +175,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the accrual factors (or year fractions) associated to the fixing periods not yet fixed in the Index day count convention.
+   *
    * @return The accrual factors.
    */
   public double[] getFixingPeriodAccrualFactor() {
@@ -158,6 +184,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the total accrual factor for all fixing periods (including the one that have fixed already).
+   *
    * @return The accrual factor.
    */
   public double getFixingTotalAccrualFactor() {
@@ -166,6 +193,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the future notional.
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -174,6 +202,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
+   *
    * @return The payment accrual factor.
    */
   public double getPaymentAccrualFactor() {
@@ -182,6 +211,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the future name.
+   *
    * @return The future name.
    */
   public String getName() {
@@ -190,7 +220,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the OIS curve name.
-   * 
+   *
    * @return The curve name.
    * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
@@ -204,6 +234,7 @@ public class FederalFundsFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the future currency.
+   *
    * @return The currency.
    */
   @Override

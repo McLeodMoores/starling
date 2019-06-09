@@ -70,7 +70,8 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
     final FutureSecurity security = (FutureSecurity) position.getSecurity();
     final Currency currency = security.getCurrency();
@@ -98,7 +99,7 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
     final double pv = (Double) pvObject;
     final Schedule scheduleCalculator = getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
-    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
+    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     DateDoubleTimeSeries<?> pnlSeries = samplingFunction.getSampledTimeSeries(dbTimeSeries.getTimeSeries(), schedule);
     pnlSeries = DIFFERENCE.evaluate(pnlSeries);
     pnlSeries = pnlSeries.multiply(pv);
@@ -164,7 +165,8 @@ public class SimpleFuturePnLFunction extends AbstractFunction.NonCompiledInvoker
       return null;
     }
     requirements.add(HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries,
-        MarketDataRequirementNames.MARKET_VALUE, DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()), true, DateConstraint.VALUATION_TIME, true));
+        MarketDataRequirementNames.MARKET_VALUE, DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()), true, DateConstraint.VALUATION_TIME,
+        true));
     return requirements;
   }
 

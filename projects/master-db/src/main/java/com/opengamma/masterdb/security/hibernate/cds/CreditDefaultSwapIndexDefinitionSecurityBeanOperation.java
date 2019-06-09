@@ -27,7 +27,8 @@ import com.opengamma.util.time.Tenor;
 /**
  *
  */
-public final class CreditDefaultSwapIndexDefinitionSecurityBeanOperation extends AbstractSecurityBeanOperation<CreditDefaultSwapIndexDefinitionSecurity, CreditDefaultSwapIndexDefinitionSecurityBean> {
+public final class CreditDefaultSwapIndexDefinitionSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<CreditDefaultSwapIndexDefinitionSecurity, CreditDefaultSwapIndexDefinitionSecurityBean> {
 
   /**
    * Singleton
@@ -35,11 +36,13 @@ public final class CreditDefaultSwapIndexDefinitionSecurityBeanOperation extends
   public static final CreditDefaultSwapIndexDefinitionSecurityBeanOperation INSTANCE = new CreditDefaultSwapIndexDefinitionSecurityBeanOperation();
 
   private CreditDefaultSwapIndexDefinitionSecurityBeanOperation() {
-    super(CreditDefaultSwapIndexDefinitionSecurity.SECURITY_TYPE, CreditDefaultSwapIndexDefinitionSecurity.class, CreditDefaultSwapIndexDefinitionSecurityBean.class);
+    super(CreditDefaultSwapIndexDefinitionSecurity.SECURITY_TYPE, CreditDefaultSwapIndexDefinitionSecurity.class,
+        CreditDefaultSwapIndexDefinitionSecurityBean.class);
   }
 
   @Override
-  public CreditDefaultSwapIndexDefinitionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CreditDefaultSwapIndexDefinitionSecurity security) {
+  public CreditDefaultSwapIndexDefinitionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final CreditDefaultSwapIndexDefinitionSecurity security) {
 
     final CreditDefaultSwapIndexDefinitionSecurityBean bean = new CreditDefaultSwapIndexDefinitionSecurityBean();
     bean.setVersion(security.getVersion());

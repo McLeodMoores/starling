@@ -30,7 +30,8 @@ public class DoubleCurrencyLabelledMatrix2D extends LabelledMatrix2D<Double, Cur
     super(xKeys, xLabels, yKeys, yLabels, values);
   }
 
-  public DoubleCurrencyLabelledMatrix2D(final Double[] xKeys, final Object[] xLabels, final String xTitle, final Currency[] yKeys, final Object[] yLabels, final String yTitle, final double[][] values, final String valuesTitle) {
+  public DoubleCurrencyLabelledMatrix2D(final Double[] xKeys, final Object[] xLabels, final String xTitle, final Currency[] yKeys, final Object[] yLabels,
+      final String yTitle, final double[][] values, final String valuesTitle) {
     super(xKeys, xLabels, xTitle, yKeys, yLabels, yTitle, values, valuesTitle);
   }
 
@@ -50,22 +51,25 @@ public class DoubleCurrencyLabelledMatrix2D extends LabelledMatrix2D<Double, Cur
   }
 
   @Override
-  public DoubleCurrencyLabelledMatrix2D getMatrix(final Double[] xKeys, final Object[] xLabels, final String xTitle, final Currency[] yKeys, final Object[] yLabels, final String yTitle, final double[][] values, final String valuesTitle) {
+  public DoubleCurrencyLabelledMatrix2D getMatrix(final Double[] xKeys, final Object[] xLabels, final String xTitle, final Currency[] yKeys,
+      final Object[] yLabels, final String yTitle, final double[][] values, final String valuesTitle) {
     return new DoubleCurrencyLabelledMatrix2D(xKeys, xLabels, xTitle, yKeys, yLabels, yTitle, values, valuesTitle);
   }
 
   @Override
-  public DoubleCurrencyLabelledMatrix2D getMatrix(final Double[] xKeys, final Object[] xLabels, final Currency[] yKeys, final Object[] yLabels, final double[][] values) {
+  public DoubleCurrencyLabelledMatrix2D getMatrix(final Double[] xKeys, final Object[] xLabels, final Currency[] yKeys, final Object[] yLabels,
+      final double[][] values) {
     return new DoubleCurrencyLabelledMatrix2D(xKeys, xLabels, yKeys, yLabels, values);
   }
 
   /**
    * Adds a matrix to this one and returns a new matrix.
    *
-   * In this implementation, the labels are used in place of the numeric keys to aggregate in the first dimension, and
-   * the result matrix will contain the lowest-valued numeric key as its key for that label.
+   * In this implementation, the labels are used in place of the numeric keys to aggregate in the first dimension, and the result matrix will contain the
+   * lowest-valued numeric key as its key for that label.
    *
-   * @param other  the matrix to add, not null
+   * @param other
+   *          the matrix to add, not null
    * @return the sum of the matrices, not null
    */
   public DoubleCurrencyLabelledMatrix2D addUsingDoubleLabels(final DoubleCurrencyLabelledMatrix2D other) {

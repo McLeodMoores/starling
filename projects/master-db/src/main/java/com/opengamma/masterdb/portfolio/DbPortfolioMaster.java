@@ -60,14 +60,14 @@ import com.opengamma.util.tuple.LongObjectPair;
  * <p>
  * This is a full implementation of the portfolio master using an SQL database. Full details of the API are in {@link PortfolioMaster}.
  * <p>
- * The SQL is stored externally in {@code DbPortfolioMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific overrides, such as
- * {@code DbPortfolioMaster-MySpecialDB.elsql}.
+ * The SQL is stored externally in {@code DbPortfolioMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific
+ * overrides, such as {@code DbPortfolioMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
 public class DbPortfolioMaster
-extends AbstractDocumentDbMaster<PortfolioDocument>
-implements PortfolioMaster {
+    extends AbstractDocumentDbMaster<PortfolioDocument>
+    implements PortfolioMaster {
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(DbPortfolioMaster.class);
@@ -93,14 +93,15 @@ implements PortfolioMaster {
   /**
    * Creates an instance.
    *
-   * @param dbConnector the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbPortfolioMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
     setElSqlBundle(ElSqlBundle.of(dbConnector.getDialect().getElSqlConfig(), DbPortfolioMaster.class));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PortfolioSearchResult search(final PortfolioSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -150,28 +151,28 @@ implements PortfolioMaster {
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
 
     if (request.isIncludePositions()) {
-      final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
+      final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
       doSearch(request.getPagingRequest(), sql, args, new PortfolioDocumentExtractor(true, true), result);
     } else {
-      final String[] sql = {getElSqlBundle().getSql("SearchNoPositions", args), getElSqlBundle().getSql("SearchCount", args) };
+      final String[] sql = { getElSqlBundle().getSql("SearchNoPositions", args), getElSqlBundle().getSql("SearchCount", args) };
       doSearch(request.getPagingRequest(), sql, args, new PortfolioDocumentExtractor(false, true), result);
     }
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PortfolioDocument get(final UniqueId uniqueId) {
     return doGet(uniqueId, new PortfolioDocumentExtractor(true, true), "Portfolio");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PortfolioDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return doGetByOidInstants(objectId, versionCorrection, new PortfolioDocumentExtractor(true, true), "Portfolio");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public PortfolioHistoryResult history(final PortfolioHistoryRequest request) {
     return doHistory(request, new PortfolioHistoryResult(), new PortfolioDocumentExtractor(true, true));
@@ -187,11 +188,12 @@ implements PortfolioMaster {
     return args;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Inserts a new document.
    *
-   * @param document the document, not null
+   * @param document
+   *          the document, not null
    * @return the new document, not null
    */
   @Override
@@ -253,18 +255,30 @@ implements PortfolioMaster {
   /**
    * Recursively create the arguments to insert into the tree existing nodes.
    *
-   * @param portfolioUid the portfolio unique identifier, not null
-   * @param parentNodeUid the parent node unique identifier, not null
-   * @param node the root node, not null
-   * @param update true if updating portfolio, false if adding new portfolio
-   * @param portfolioId the portfolio id, not null
-   * @param portfolioOid the portfolio oid, not null
-   * @param parentNodeId the parent node id, null if root node
-   * @param parentNodeOid the parent node oid, null if root node
-   * @param counter the counter to create the node id, use {@code getAndIncrement}, not null
-   * @param depth the depth of the node in the portfolio
-   * @param argsList the list of arguments to build, not null
-   * @param posList the list of arguments to for inserting positions, not null
+   * @param portfolioUid
+   *          the portfolio unique identifier, not null
+   * @param parentNodeUid
+   *          the parent node unique identifier, not null
+   * @param node
+   *          the root node, not null
+   * @param update
+   *          true if updating portfolio, false if adding new portfolio
+   * @param portfolioId
+   *          the portfolio id, not null
+   * @param portfolioOid
+   *          the portfolio oid, not null
+   * @param parentNodeId
+   *          the parent node id, null if root node
+   * @param parentNodeOid
+   *          the parent node oid, null if root node
+   * @param counter
+   *          the counter to create the node id, use {@code getAndIncrement}, not null
+   * @param depth
+   *          the depth of the node in the portfolio
+   * @param argsList
+   *          the list of arguments to build, not null
+   * @param posList
+   *          the list of arguments to for inserting positions, not null
    */
   protected void insertBuildArgs(
       final UniqueId portfolioUid, final UniqueId parentNodeUid,
@@ -309,7 +323,7 @@ implements PortfolioMaster {
     treeArgs.addValue("tree_right", counter.getAndIncrement());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ManageablePortfolioNode getNode(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -324,9 +338,12 @@ implements PortfolioMaster {
   /**
    * Gets a node by searching for the latest version of an object identifier.
    *
-   * @param uniqueId the unique identifier, not null
-   * @param versionAsOf the instant to fetch, not null
-   * @param correctedTo the instant to fetch, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param versionAsOf
+   *          the instant to fetch, not null
+   * @param correctedTo
+   *          the instant to fetch, not null
    * @return the node, null if not found
    */
   protected ManageablePortfolioNode getNodeByInstants(final UniqueId uniqueId, final Instant versionAsOf, final Instant correctedTo) {
@@ -349,7 +366,8 @@ implements PortfolioMaster {
   /**
    * Gets a node by identifier.
    *
-   * @param uniqueId the unique identifier, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @return the node, null if not found
    */
   protected ManageablePortfolioNode getNodeById(final UniqueId uniqueId) {
@@ -366,7 +384,7 @@ implements PortfolioMaster {
     return docs.get(0).getPortfolio().getRootNode(); // SQL loads desired node in place of the root node
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a PortfolioDocument.
    */
@@ -377,7 +395,7 @@ implements PortfolioMaster {
     private long _lastNodeId = -1;
     private ManageablePortfolio _portfolio;
     private ManageablePortfolioNode _node;
-    private Set<ObjectId> _nodePositionIds; //Should always === _node.getPositionIds(), but has fast contains
+    private Set<ObjectId> _nodePositionIds; // Should always === _node.getPositionIds(), but has fast contains
     private final List<PortfolioDocument> _documents = new ArrayList<>();
     private final Stack<LongObjectPair<ManageablePortfolioNode>> _nodes = new Stack<>();
 
@@ -447,7 +465,7 @@ implements PortfolioMaster {
       final long treeRight = rs.getLong("TREE_RIGHT");
       final String name = StringUtils.defaultString(rs.getString("NODE_NAME"));
       _node = new ManageablePortfolioNode(name);
-      _nodePositionIds = new HashSet<>(); //To maintain invariant this becomes is empty
+      _nodePositionIds = new HashSet<>(); // To maintain invariant this becomes is empty
       _node.setUniqueId(createUniqueId(nodeOid, nodeId));
       _node.setPortfolioId(_portfolio.getUniqueId());
       if (_nodes.size() == 0) {

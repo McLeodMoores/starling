@@ -104,8 +104,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
    * @param configMaster
    *          the config master, not null
    * @param liveMarketDataProviderFactory
-   *          the live market data provider factory, Either this or
-   *          marketDataSpecificationRepository must be set
+   *          the live market data provider factory, Either this or marketDataSpecificationRepository must be set
    * @param marketDataSpecificationRepository
    *          the market data specification repository
    * @param configSource
@@ -122,10 +121,12 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
    */
   @Deprecated
   public WebMarketDataSnapshotsResource(final MarketDataSnapshotMaster marketSnapshotMaster, final ConfigMaster configMaster,
-      final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository, final ConfigSource configSource,
+      final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
+      final ConfigSource configSource,
       final ComputationTargetResolver targetResolver, final ViewProcessor viewProcessor, final HistoricalTimeSeriesSource htsSource,
       final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
-    super(marketSnapshotMaster, configMaster, liveMarketDataProviderFactory, marketDataSpecificationRepository, configSource, targetResolver, viewProcessor, htsSource, volatilityCubeDefinitionSource);
+    super(marketSnapshotMaster, configMaster, liveMarketDataProviderFactory, marketDataSpecificationRepository, configSource, targetResolver, viewProcessor,
+        htsSource, volatilityCubeDefinitionSource);
   }
 
   /**
@@ -136,8 +137,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
    * @param configMaster
    *          the config master, not null
    * @param liveMarketDataProviderFactory
-   *          the live market data provider factory, Either this or
-   *          marketDataSpecificationRepository must be set
+   *          the live market data provider factory, Either this or marketDataSpecificationRepository must be set
    * @param configSource
    *          the config source, not null
    * @param targetResolver
@@ -157,7 +157,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
         htsSource, volatilityCubeDefinitionSource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.MARKET_DATA_SNAPSHOT)
@@ -196,7 +196,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{snapshotId}")
   public WebMarketDataSnapshotResource findSnapshot(@Subscribe @PathParam("snapshotId") final String idStr) {
     data().setUriSnapshotId(idStr);
@@ -216,9 +216,10 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     return new WebMarketDataSnapshotResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -245,8 +246,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
   }
 
   private List<String> getTimeSeriesResolverKeys() {
-    final ConfigSearchRequest<HistoricalTimeSeriesRating> request =
-        new ConfigSearchRequest<>(HistoricalTimeSeriesRating.class);
+    final ConfigSearchRequest<HistoricalTimeSeriesRating> request = new ConfigSearchRequest<>(HistoricalTimeSeriesRating.class);
     final List<String> keyNames = Lists.newArrayList();
     for (final ConfigDocument doc : ConfigSearchIterator.iterable(data().getConfigMaster(), request)) {
       keyNames.add(doc.getName());
@@ -282,8 +282,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     return viewNames;
   }
 
-
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -330,7 +329,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
         out.put("selectedLiveDataSources", liveDataSources);
       }
 
-      //include other inputs
+      // include other inputs
       final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
       searchRequest.setName(trimmedName);
       out.put("searchRequest", searchRequest);
@@ -399,14 +398,17 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
   private MarketDataSnapshotDocument createSnapshot(final String name, final String viewDefinitionName, final Instant valuationInstant,
       final List<MarketDataSpecification> marketDataSpecs) throws InterruptedException {
     final MarketDataSnapshotSaver saver = MarketDataSnapshotSaver.of(data().getComputationTargetResolver(), data().getHistoricalTimeSeriesSource(),
-        data().getViewProcessor(), data().getConfigMaster(), data().getMarketDataSnapshotMaster(), data().getVolatilityCubeDefinitionSource(), Mode.STRUCTURED, null);
+        data().getViewProcessor(), data().getConfigMaster(), data().getMarketDataSnapshotMaster(), data().getVolatilityCubeDefinitionSource(), Mode.STRUCTURED,
+        null);
     return saver.createSnapshot(name, viewDefinitionName, valuationInstant, marketDataSpecs);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for snapshots.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data) {

@@ -22,8 +22,9 @@ import com.opengamma.util.SingletonFactoryBean;
 /**
  * Creates FunctionExclusionGroups appropriate for the {@link DemoStandardFunctionConfiguration} functions.
  * <p>
- * The implementation created will look for the {@link OpenGammaFunctionExclusions} marker interface and use the returned string as a key. Keys are ordered with a numbering from large positive
- * integers downwards. If the key string starts with a number, that number is used, otherwise they are given a unique negative number.
+ * The implementation created will look for the {@link OpenGammaFunctionExclusions} marker interface and use the returned string as a key. Keys are ordered with
+ * a numbering from large positive integers downwards. If the key string starts with a number, that number is used, otherwise they are given a unique negative
+ * number.
  */
 public class DemoFunctionExclusionGroupsFactoryBean extends SingletonFactoryBean<FunctionExclusionGroups> {
 

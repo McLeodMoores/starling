@@ -77,7 +77,7 @@ public class TempTargetRepositoryComponentFactory extends AbstractComponentFacto
   @PropertyDefinition
   private CacheManager _cacheManager;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void registerSource(final ComponentRepository repo, final TempTargetSource instance) {
     final ComponentInfo info = new ComponentInfo(TempTargetSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);

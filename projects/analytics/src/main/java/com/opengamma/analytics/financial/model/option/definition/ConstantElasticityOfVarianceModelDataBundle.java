@@ -11,12 +11,13 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * 
+ *
  */
 public class ConstantElasticityOfVarianceModelDataBundle extends StandardOptionDataBundle {
   private final double _elasticity;
 
-  public ConstantElasticityOfVarianceModelDataBundle(final YieldAndDiscountCurve discountCurve, final double b, final VolatilitySurface volatilitySurface, final double spot, final ZonedDateTime date,
+  public ConstantElasticityOfVarianceModelDataBundle(final YieldAndDiscountCurve discountCurve, final double b, final VolatilitySurface volatilitySurface,
+      final double spot, final ZonedDateTime date,
       final double elasticity) {
     super(discountCurve, b, volatilitySurface, spot, date);
     _elasticity = elasticity;
@@ -66,7 +67,7 @@ public class ConstantElasticityOfVarianceModelDataBundle extends StandardOptionD
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_elasticity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

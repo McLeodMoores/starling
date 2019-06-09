@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.sabrcap;
@@ -18,7 +18,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
  */
-public final class PresentValueSABRCapRightExtrapolationCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<SABRCapProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueSABRCapRightExtrapolationCalculator
+extends InstrumentDerivativeVisitorSameMethodAdapter<SABRCapProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The cut-off strike. The smile is extrapolated above that level.
@@ -36,8 +37,11 @@ public final class PresentValueSABRCapRightExtrapolationCalculator extends Instr
 
   /**
    * Constructor.
-   * @param cutOffStrike The cut-off strike.
-   * @param mu The tail thickness parameter.
+   *
+   * @param cutOffStrike
+   *          The cut-off strike.
+   * @param mu
+   *          The tail thickness parameter.
    */
   public PresentValueSABRCapRightExtrapolationCalculator(final double cutOffStrike, final double mu) {
     _mu = mu;
@@ -50,14 +54,14 @@ public final class PresentValueSABRCapRightExtrapolationCalculator extends Instr
     return derivative.accept(this, sabr);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MultipleCurrencyAmount visitCapFloorIbor(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
     return _methodExtraCap.presentValue(cap, sabr);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyAmount visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRCapProviderInterface sabr) {

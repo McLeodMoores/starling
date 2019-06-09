@@ -35,6 +35,7 @@ public class MarketQuoteHullWhiteCalculator extends InstrumentDerivativeVisitorS
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static MarketQuoteHullWhiteCalculator getInstance() {
@@ -46,14 +47,15 @@ public class MarketQuoteHullWhiteCalculator extends InstrumentDerivativeVisitorS
    */
   private static final SwapFuturesPriceDeliverableSecurityHullWhiteMethod METHOD_SWAP_FUT = SwapFuturesPriceDeliverableSecurityHullWhiteMethod.getInstance();
   private static final InterestRateFutureSecurityHullWhiteMethod METHOD_STIRFUT = InterestRateFutureSecurityHullWhiteMethod.getInstance();
-  private static final InterestRateFutureOptionMarginSecurityHullWhiteMethod METHOD_OPT_STIRFUT_MARG = InterestRateFutureOptionMarginSecurityHullWhiteMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityHullWhiteMethod METHOD_OPT_STIRFUT_MARG = InterestRateFutureOptionMarginSecurityHullWhiteMethod
+      .getInstance();
 
   @Override
   public Double visit(final InstrumentDerivative derivative, final HullWhiteOneFactorProviderInterface multicurves) {
     return derivative.accept(MarketQuoteDiscountingCalculator.getInstance(), multicurves.getMulticurveProvider());
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity futures, final HullWhiteOneFactorProviderInterface hullWhite) {
@@ -66,12 +68,14 @@ public class MarketQuoteHullWhiteCalculator extends InstrumentDerivativeVisitorS
   }
 
   @Override
-  public Double visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public Double visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_SWAP_FUT.price(futures, hullWhite);
   }
 
   @Override
-  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity option, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity option,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_OPT_STIRFUT_MARG.price(option, hullWhite);
   }
 

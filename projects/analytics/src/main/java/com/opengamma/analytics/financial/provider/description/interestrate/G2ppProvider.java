@@ -35,10 +35,15 @@ public class G2ppProvider implements G2ppProviderInterface {
   private final Currency _ccyG2pp;
 
   /**
-   * Constructor from exiting multicurveProvider and G2++ parameters. The given provider and parameters are used for the new provider (the same maps are used, not copied).
-   * @param multicurves The multi-curves provider, not null
-   * @param parameters The G2++ parameters, not null
-   * @param ccyG2pp The currency for which the G2++ arameters are valid (G2++ on the discounting curve), not null
+   * Constructor from exiting multicurveProvider and G2++ parameters. The given provider and parameters are used for the new provider (the same maps are used,
+   * not copied).
+   *
+   * @param multicurves
+   *          The multi-curves provider, not null
+   * @param parameters
+   *          The G2++ parameters, not null
+   * @param ccyG2pp
+   *          The currency for which the G2++ arameters are valid (G2++ on the discounting curve), not null
    */
   public G2ppProvider(final MulticurveProviderInterface multicurves, final G2ppPiecewiseConstantParameters parameters, final Currency ccyG2pp) {
     ArgumentChecker.notNull(multicurves, "multicurves");

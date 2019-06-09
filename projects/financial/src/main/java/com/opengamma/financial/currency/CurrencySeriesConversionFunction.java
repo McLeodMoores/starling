@@ -50,7 +50,8 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CurrencySeriesConversionFunction.class);
 
-  private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY).or(ComputationTargetType.TRADE);
+  private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY)
+      .or(ComputationTargetType.TRADE);
 
   private final Set<String> _valueNames;
   private boolean _allowViewDefaultCurrency; // = false;
@@ -85,7 +86,8 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
     return new ValueRequirement(desiredValue.getValueName(), targetSpec, properties.get());
   }
 
-  private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue, final String forceCurrency) {
+  private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue,
+      final String forceCurrency) {
     return new ValueRequirement(desiredValue.getValueName(), targetSpec, desiredValue.getConstraints().copy().withoutAny(ValuePropertyNames.CURRENCY).with(
         ValuePropertyNames.CURRENCY, forceCurrency).withOptional(CURRENCY_INJECTION_PROPERTY).get());
   }
@@ -103,12 +105,14 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   }
 
   @VisibleForTesting
-  /* package */ TenorLabelledLocalDateDoubleTimeSeriesMatrix1D convertLabelledMatrix(final LabelledObjectMatrix1D<Tenor, LocalDateDoubleTimeSeries, Period> values, final DoubleTimeSeries<LocalDate> conversionRates) {
+  /* package */ TenorLabelledLocalDateDoubleTimeSeriesMatrix1D convertLabelledMatrix(
+      final LabelledObjectMatrix1D<Tenor, LocalDateDoubleTimeSeries, Period> values, final DoubleTimeSeries<LocalDate> conversionRates) {
     final LocalDateDoubleTimeSeries[] convertedValues = new LocalDateDoubleTimeSeries[values.size()];
     for (int i = 0; i < values.size(); i++) {
       convertedValues[i] = (LocalDateDoubleTimeSeries) convertTimeSeries(values.getValues()[i], conversionRates);
     }
-    return new TenorLabelledLocalDateDoubleTimeSeriesMatrix1D(values.getKeys(), values.getLabels(), values.getLabelsTitle(), convertedValues, values.getValuesTitle());
+    return new TenorLabelledLocalDateDoubleTimeSeriesMatrix1D(values.getKeys(), values.getLabels(), values.getLabelsTitle(), convertedValues,
+        values.getValuesTitle());
   }
 
   protected DoubleTimeSeries<LocalDate> convertTimeSeries(final DoubleTimeSeries<LocalDate> values, final double conversionRate) {
@@ -147,7 +151,8 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
 
   @SuppressWarnings("unchecked")
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     ComputedValue inputValue = null;
     DoubleTimeSeries<LocalDate> exchangeRates = null;
     Double exchangeRate = null;
@@ -232,7 +237,8 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Map.Entry<ValueSpecification, ValueRequirement> input = inputs.entrySet().iterator().next();
     if (input.getValue().getConstraints().getValues(CURRENCY_INJECTION_PROPERTY) == null) {
       // Resolved output is the input with the currency wild-carded, and the function ID the same (this is so that after composition the node might
@@ -257,7 +263,8 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
+  public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+      final Set<ValueSpecification> inputs,
       final Set<ValueSpecification> outputs) {
     LOGGER.debug("FX requirements for {} -> {}", inputs, outputs);
     final String inputCurrency = getCurrency(inputs);

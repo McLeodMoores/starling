@@ -44,12 +44,11 @@ import com.opengamma.util.tuple.Pair;
  */
 public class BlackDiscountingPV01SwaptionFunction extends BlackDiscountingSwaptionFunction {
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivityBlackSwaptionCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityBlackSwaptionCalculator.getInstance());
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public BlackDiscountingPV01SwaptionFunction() {
     super(PV01);
@@ -106,7 +105,8 @@ public class BlackDiscountingPV01SwaptionFunction extends BlackDiscountingSwapti
       }
 
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         Set<String> curveNames = null;
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueSpecification key = entry.getKey();

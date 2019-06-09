@@ -30,7 +30,7 @@ import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWit
 import com.opengamma.util.CompareUtils;
 
 /**
- * 
+ *
  */
 public class SABRConjugateGradientLeastSquareFitter extends LeastSquareSmileFitter {
   private static final int N_PARAMETERS = 4;
@@ -51,12 +51,15 @@ public class SABRConjugateGradientLeastSquareFitter extends LeastSquareSmileFitt
   }
 
   @Override
-  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] initialFitParameters, final BitSet fixed) {
-    throw new UnsupportedOperationException("Cannot calculate SABR parameters using conjugate gradient method without error estimates for the black volatilities");
+  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data,
+      final double[] initialFitParameters, final BitSet fixed) {
+    throw new UnsupportedOperationException(
+        "Cannot calculate SABR parameters using conjugate gradient method without error estimates for the black volatilities");
   }
 
   @Override
-  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors, final double[] initialFitParameters,
+  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors,
+      final double[] initialFitParameters,
       final BitSet fixed) {
     testData(options, data, errors, initialFitParameters, fixed, N_PARAMETERS);
     final int n = options.length;
@@ -80,7 +83,8 @@ public class SABRConjugateGradientLeastSquareFitter extends LeastSquareSmileFitt
         double chiSqr = 0;
         final SABRFormulaData sabrFormulaData = new SABRFormulaData(alpha, beta, rho, nu);
         for (int i = 0; i < n; i++) {
-          chiSqr += FunctionUtils.square((data[i].getBlackVolatility() - _formula.getVolatilityFunction(options[i], forward).evaluate(sabrFormulaData)) / errors[i]);
+          chiSqr += FunctionUtils
+              .square((data[i].getBlackVolatility() - _formula.getVolatilityFunction(options[i], forward).evaluate(sabrFormulaData)) / errors[i]);
         }
         return chiSqr;
       }
@@ -95,5 +99,5 @@ public class SABRConjugateGradientLeastSquareFitter extends LeastSquareSmileFitt
     // return new LeastSquareResults(chiSquare, res, new DoubleMatrix2D(new double[N_PARAMETERS][N_PARAMETERS]));
   }
 
-  //TODO add method that recovers ATM vol
+  // TODO add method that recovers ATM vol
 }

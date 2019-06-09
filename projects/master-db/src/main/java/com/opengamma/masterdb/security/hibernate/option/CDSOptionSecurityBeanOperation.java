@@ -37,7 +37,8 @@ public final class CDSOptionSecurityBeanOperation extends AbstractSecurityBeanOp
   }
 
   @Override
-  public CreditDefaultSwapOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CreditDefaultSwapOptionSecurity security) {
+  public CreditDefaultSwapOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final CreditDefaultSwapOptionSecurity security) {
     final CreditDefaultSwapOptionSecurityBean bean = new CreditDefaultSwapOptionSecurityBean();
 
     bean.setBuy(security.isBuy());
@@ -66,7 +67,6 @@ public final class CDSOptionSecurityBeanOperation extends AbstractSecurityBeanOp
     final Currency currency = currencyBeanToCurrency(bean.getCurrency());
     final ExerciseType exerciseType = bean.getExerciseType().accept(new ExerciseTypeVisitorImpl());
     final ExternalId underlying = externalIdBeanToExternalId(bean.getUnderlying());
-
 
     final CreditDefaultSwapOptionSecurity security = new CreditDefaultSwapOptionSecurity(buy, protectionBuyer, protectionSeller,
         startDate, maturityDate, currency, bean.getNotional(), bean.getStrike(), bean.getKnockOut(), bean.getPayer(), exerciseType, underlying);

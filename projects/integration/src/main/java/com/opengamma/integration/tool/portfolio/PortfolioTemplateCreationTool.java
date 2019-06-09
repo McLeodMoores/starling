@@ -33,20 +33,22 @@ public class PortfolioTemplateCreationTool {
 
   /** The list of security types - needs to be updated whenever a new sec type is added to the system */
   private static final String[] SECURITY_TYPES = {
-    "CorporateBond", "GovernmentBond", "MunicipalBond",
-    "CapFloorCMSSpread", "CapFloor",
-    "Cash",
-    "CDS", "LegacyFixedRecoveryCDS", "LegacyRecoveryLockCDS", "LegacyVanillaCDS", "StandardFixedRecoveryCDS", "StandardRecoveryLockCDS", "StandardVanillaCDS",
-    "ContinuousZeroDeposit", "PeriodicZeroDeposit", "SimpleZeroDeposit",
-    "Equity", "EquityVarianceSwap",
-    "AgricultureForward", "CommodityForward", "EnergyForward", "MetalForward",
-    "FRA",
-    "AgricultureFuture", "BondFuture", "CommodityFuture", "EnergyFuture", "EquityFuture", "EquityIndexDividendFuture", "Future", "FXFuture",
-    "IndexFuture", "InterestRateFuture", "MetalFuture", "StockFuture",
-    "FXForward", "NonDeliverableFXForward",
-    "BondFutureOption", "CommodityFutureOption", "EquityBarrierOption", "EquityIndexDividendFutureOption", "EquityIndexFutureOption", "EquityIndexOption", "EquityOption", "FXBarrierOption",
-    "FXDigitalOption", "FXOption", "IRFutureOption", "NonDeliverableFXDigitalOption", "NonDeliverableFXOption",
-    "ForwardSwap", "Swap"
+                "CorporateBond", "GovernmentBond", "MunicipalBond",
+                "CapFloorCMSSpread", "CapFloor",
+                "Cash",
+                "CDS", "LegacyFixedRecoveryCDS", "LegacyRecoveryLockCDS", "LegacyVanillaCDS", "StandardFixedRecoveryCDS", "StandardRecoveryLockCDS",
+                "StandardVanillaCDS",
+                "ContinuousZeroDeposit", "PeriodicZeroDeposit", "SimpleZeroDeposit",
+                "Equity", "EquityVarianceSwap",
+                "AgricultureForward", "CommodityForward", "EnergyForward", "MetalForward",
+                "FRA",
+                "AgricultureFuture", "BondFuture", "CommodityFuture", "EnergyFuture", "EquityFuture", "EquityIndexDividendFuture", "Future", "FXFuture",
+                "IndexFuture", "InterestRateFuture", "MetalFuture", "StockFuture",
+                "FXForward", "NonDeliverableFXForward",
+                "BondFutureOption", "CommodityFutureOption", "EquityBarrierOption", "EquityIndexDividendFutureOption", "EquityIndexFutureOption",
+                "EquityIndexOption", "EquityOption", "FXBarrierOption",
+                "FXDigitalOption", "FXOption", "IRFutureOption", "NonDeliverableFXDigitalOption", "NonDeliverableFXOption",
+                "ForwardSwap", "Swap"
   };
 
   /**
@@ -54,22 +56,25 @@ public class PortfolioTemplateCreationTool {
    */
   private CommandLine _commandLine;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the arguments, not null
+   * @param args
+   *          the arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
 
     new PortfolioTemplateCreationTool().doRun(args);
     System.exit(0);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the test portfolio into the position master.
-   * @param args  the arguments to run with, not null
+   *
+   * @param args
+   *          the arguments to run with, not null
    */
   protected void doRun(final String[] args) {
     final Options options = createOptions();
@@ -89,7 +94,7 @@ public class PortfolioTemplateCreationTool {
 
     final String[] securityTypes = getCommandLine().getOptionValues(SECURITY_TYPE_OPT)[0].equals("all")
         ? SECURITY_TYPES
-        : getCommandLine().getOptionValues(SECURITY_TYPE_OPT);
+            : getCommandLine().getOptionValues(SECURITY_TYPE_OPT);
 
     // Create portfolio writers to write header rows
     for (final String securityType : securityTypes) {

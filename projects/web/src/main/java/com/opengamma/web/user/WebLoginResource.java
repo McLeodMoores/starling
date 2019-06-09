@@ -70,7 +70,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   public WebLoginResource() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getGreen(
@@ -108,7 +108,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
     return getFreemarker(servletContext).build(ftlFile, out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Produces(MediaType.TEXT_HTML)
   public Response loginGreen(
@@ -175,12 +175,11 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   /**
    * Finds the IP address of the user.
    * <p>
-   * This is a generally impossible task.
-   * We prefer a specific 'X_OPENGAMMA_CLIENT_IP' header containing a single IP address.
-   * If not found, we rely on the generic 'X-FORWARDED-FOR' header.
-   * If not found, we rely on the remote host of the servlet request.
+   * This is a generally impossible task. We prefer a specific 'X_OPENGAMMA_CLIENT_IP' header containing a single IP address. If not found, we rely on the
+   * generic 'X-FORWARDED-FOR' header. If not found, we rely on the remote host of the servlet request.
    *
-   * @param request  the servlet request, not null
+   * @param request
+   *          the servlet request, not null
    * @return the IP address, not null
    */
   private static String findIpAddress(final HttpServletRequest request) {
@@ -203,7 +202,8 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   /**
    * Ensures that the IP address is non-local.
    *
-   * @param remoteIp  the remote IP address, may be null
+   * @param remoteIp
+   *          the remote IP address, may be null
    * @return the non-local IP address, not null
    */
   private static String ensureIpAddressNonLoopback(final String remoteIp) {
@@ -241,18 +241,20 @@ public class WebLoginResource extends AbstractSingletonWebResource {
     }
   }
 
-  private Response displayError(final ServletContext servletContext, final UriInfo uriInfo, final String username, final String ftlFile, final String errorCode) {
+  private Response displayError(final ServletContext servletContext, final UriInfo uriInfo, final String username, final String ftlFile,
+      final String errorCode) {
     final FlexiBean out = createRootData(uriInfo);
     out.put("username", username);
     out.put("err_invalidLogin", errorCode);
     return Response.ok(getFreemarker(servletContext).build(ftlFile, out)).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this page.
    *
-   * @param uriInfo  the uriInfo, not null
+   * @param uriInfo
+   *          the uriInfo, not null
    * @return the URI, not null
    */
   public static URI uri(final UriInfo uriInfo) {

@@ -17,7 +17,8 @@ public class LateResolutionFailureNode extends AbstractFailureWithRequirementsNo
 
   private static final String NAME = "LateResolutionFailure";
 
-  public LateResolutionFailureNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> satisfied) {
+  public LateResolutionFailureNode(final Object parent, final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
+      final Map<ValueSpecification, ValueRequirement> satisfied) {
     super(parent, valueRequirement, function, desiredOutput, satisfied, "Satisfied");
   }
 

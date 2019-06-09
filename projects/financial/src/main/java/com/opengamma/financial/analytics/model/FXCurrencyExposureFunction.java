@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model;
@@ -43,8 +43,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Produces FX currency exposures for all instruments except FX. This is not done via a {@link ValueRenamingFunction}
- * because the logic to produce currency exposure should eventually be moved into the analytics library.
+ * Produces FX currency exposures for all instruments except FX. This is not done via a {@link ValueRenamingFunction} because the logic to produce currency
+ * exposure should eventually be moved into the analytics library.
  */
 public class FXCurrencyExposureFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -103,7 +103,8 @@ public class FXCurrencyExposureFunction extends AbstractFunction.NonCompiledInvo
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() != 1) {
       return null;
     }

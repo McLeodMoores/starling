@@ -22,12 +22,13 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Definition of a Standard CDS i.e. with the features of CDS contracts post the Big Bang in 2009
- *@deprecated this will be deleted
+ * 
+ * @deprecated this will be deleted
  */
 @Deprecated
 public abstract class StandardCreditDefaultSwapDefinition extends CreditDefaultSwapDefinition {
 
-  //----------------------------------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // TODO : Need to add the test file for this object
   // TODO : Check hashCode (and need to fix this) and equals methods
@@ -57,21 +58,28 @@ public abstract class StandardCreditDefaultSwapDefinition extends CreditDefaultS
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
-  //Ctor for the Standard CDS contract
+  // Ctor for the Standard CDS contract
 
-  public StandardCreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller, final LegalEntity referenceEntity,
-      final Currency currency, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate,
-      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final PeriodFrequency couponFrequency, final DayCount daycountFractionConvention,
-      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate, final boolean adjustMaturityDate, final double notional,
-      final double recoveryRate, final boolean includeAccruedPremium, final boolean protectionStart, final double quotedSpread, final double premiumLegCoupon, final double upfrontAmount,
+  public StandardCreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller,
+      final LegalEntity referenceEntity,
+      final Currency currency, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar,
+      final ZonedDateTime startDate,
+      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final PeriodFrequency couponFrequency,
+      final DayCount daycountFractionConvention,
+      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
+      final boolean adjustMaturityDate, final double notional,
+      final double recoveryRate, final boolean includeAccruedPremium, final boolean protectionStart, final double quotedSpread, final double premiumLegCoupon,
+      final double upfrontAmount,
       final ZonedDateTime cashSettlementDate, final boolean adjustCashSettlementDate) {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 
     // Call the ctor for the superclass (corresponding to the CDS characteristics common to all types of CDS)
 
-    super(buySellProtection, protectionBuyer, protectionSeller, referenceEntity, currency, debtSeniority, restructuringClause, calendar, startDate, effectiveDate, maturityDate, stubType,
-        couponFrequency, daycountFractionConvention, businessdayAdjustmentConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional, recoveryRate, includeAccruedPremium,
+    super(buySellProtection, protectionBuyer, protectionSeller, referenceEntity, currency, debtSeniority, restructuringClause, calendar, startDate,
+        effectiveDate, maturityDate, stubType,
+        couponFrequency, daycountFractionConvention, businessdayAdjustmentConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional,
+        recoveryRate, includeAccruedPremium,
         protectionStart);
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -85,8 +93,10 @@ public abstract class StandardCreditDefaultSwapDefinition extends CreditDefaultS
     // Check the validity of the input cash settlement date
     ArgumentChecker.notNull(cashSettlementDate, "Cash settlement date");
     ArgumentChecker.isTrue(!startDate.isAfter(cashSettlementDate), "Start date {} must be on or before cash settlement date {}", startDate, cashSettlementDate);
-    ArgumentChecker.isTrue(!effectiveDate.isAfter(cashSettlementDate), "Effective date {} must be on or before cash settlement date {}", effectiveDate, cashSettlementDate);
-    ArgumentChecker.isTrue(!cashSettlementDate.isAfter(maturityDate), "Cash settlement date {} must be on or before maturity date {}", cashSettlementDate, maturityDate);
+    ArgumentChecker.isTrue(!effectiveDate.isAfter(cashSettlementDate), "Effective date {} must be on or before cash settlement date {}", effectiveDate,
+        cashSettlementDate);
+    ArgumentChecker.isTrue(!cashSettlementDate.isAfter(maturityDate), "Cash settlement date {} must be on or before maturity date {}", cashSettlementDate,
+        maturityDate);
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 

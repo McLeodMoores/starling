@@ -38,9 +38,11 @@ public class BondFutureOptionBlackPV01Function extends BondFutureOptionBlackCurv
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data, final MultiCurveCalculationConfig curveCalculationConfig,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data,
+      final MultiCurveCalculationConfig curveCalculationConfig,
       final ValueSpecification spec, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues, final BondFutureOptionSecurity security) {
-    final String curveName = Iterables.getOnlyElement(desiredValues).getConstraint(ValuePropertyNames.CURVE) + "_" + FinancialSecurityUtils.getCurrency(security);
+    final String curveName = Iterables.getOnlyElement(desiredValues).getConstraint(ValuePropertyNames.CURVE) + "_"
+        + FinancialSecurityUtils.getCurrency(security);
     final Map<String, Double> pv01 = CALCULATOR.visit(bondFutureOption, data);
     if (!pv01.containsKey(curveName)) {
       throw new OpenGammaRuntimeException("Could not get PV01 for " + curveName);

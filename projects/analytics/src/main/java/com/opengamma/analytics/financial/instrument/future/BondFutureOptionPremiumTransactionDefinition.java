@@ -42,10 +42,15 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * Constructor of the future option transaction from details.
-   * @param underlyingOption The underlying option future security.
-   * @param quantity The quantity of the transaction. Can be positive or negative.
-   * @param premiumDate The transaction date.
-   * @param premiumAmount The transaction premium amount.
+   *
+   * @param underlyingOption
+   *          The underlying option future security.
+   * @param quantity
+   *          The quantity of the transaction. Can be positive or negative.
+   * @param premiumDate
+   *          The transaction date.
+   * @param premiumAmount
+   *          The transaction premium amount.
    */
   public BondFutureOptionPremiumTransactionDefinition(final BondFutureOptionPremiumSecurityDefinition underlyingOption, final int quantity,
       final ZonedDateTime premiumDate, final double premiumAmount) {
@@ -60,13 +65,19 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * Builder of the future option transaction from the trade price.
-   * @param underlyingOption The underlying option future security.
-   * @param quantity The quantity of the transaction. Can be positive or negative.
-   * @param premiumDate The transaction date.
-   * @param tradePrice The transaction price.
+   *
+   * @param underlyingOption
+   *          The underlying option future security.
+   * @param quantity
+   *          The quantity of the transaction. Can be positive or negative.
+   * @param premiumDate
+   *          The transaction date.
+   * @param tradePrice
+   *          The transaction price.
    * @return The option.
    */
-  public static BondFutureOptionPremiumTransactionDefinition fromTradePrice(final BondFutureOptionPremiumSecurityDefinition underlyingOption, final int quantity,
+  public static BondFutureOptionPremiumTransactionDefinition fromTradePrice(final BondFutureOptionPremiumSecurityDefinition underlyingOption,
+      final int quantity,
       final ZonedDateTime premiumDate, final double tradePrice) {
     ArgumentChecker.notNull(underlyingOption, "underlying option");
     final double premiumAmount = tradePrice * underlyingOption.getUnderlyingFuture().getNotional() * quantity;
@@ -75,6 +86,7 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * Gets the underlying option future security.
+   *
    * @return The underlying.
    */
   public BondFutureOptionPremiumSecurityDefinition getUnderlyingOption() {
@@ -83,6 +95,7 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * Gets the quantity of the transaction. Can be positive or negative.
+   *
    * @return The quantity of the transaction.
    */
   public int getQuantity() {
@@ -91,6 +104,7 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * Gets the transaction price.
+   *
    * @return The transaction price.
    */
   public double getTradePrice() {
@@ -99,6 +113,7 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * Gets the premium.
+   *
    * @return The premium.
    */
   public PaymentFixedDefinition getPremium() {
@@ -107,6 +122,7 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * The future option currency.
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -115,6 +131,7 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -162,7 +179,7 @@ public class BondFutureOptionPremiumTransactionDefinition implements InstrumentD
     result = prime * result + _quantity;
     long temp;
     temp = Double.doubleToLongBits(_tradePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingOption.hashCode();
     return result;
   }

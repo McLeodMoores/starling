@@ -184,7 +184,8 @@ public class FXDigitalCallSpreadBlackDeltaPnLFunction extends AbstractFunction {
     // FunctionInvoker
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final Position position = target.getPosition();
       final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
       final ValueRequirement desiredValue = desiredValues.iterator().next();

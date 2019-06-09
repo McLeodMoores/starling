@@ -65,7 +65,8 @@ public class FXOptionBlackVolatilitySurfaceConstantSpreadThetaFunction extends F
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -118,7 +119,8 @@ public class FXOptionBlackVolatilitySurfaceConstantSpreadThetaFunction extends F
       throw new OpenGammaRuntimeException("Could not get spot requirement");
     }
     final double spot = (Double) spotObject;
-    final ValueRequirement fxVolatilitySurfaceRequirement = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final ValueRequirement fxVolatilitySurfaceRequirement = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName,
+        leftExtrapolatorName, rightExtrapolatorName);
     final Object volatilitySurfaceObject = inputs.getValue(fxVolatilitySurfaceRequirement);
     if (volatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + fxVolatilitySurfaceRequirement);

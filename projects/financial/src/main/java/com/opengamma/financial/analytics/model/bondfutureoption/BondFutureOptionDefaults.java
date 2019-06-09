@@ -32,13 +32,13 @@ import com.opengamma.util.tuple.Pairs;
 public class BondFutureOptionDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.VALUE_VEGA,
-      ValueRequirementNames.VALUE_DELTA,
-      ValueRequirementNames.PV01,
-      ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-      ValueRequirementNames.VALUE_GAMMA,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
   };
   private final HashMap<String, Pair<String, String>> _currencyCurveConfigAndSurfaceNames;
 
@@ -73,7 +73,8 @@ public class BondFutureOptionDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
       LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");

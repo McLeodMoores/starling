@@ -71,6 +71,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Base class functions that calculate analytic values for interest rate future options using the SABR model.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -86,7 +87,8 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
   /**
-   * @param valueRequirementNames The value requirement names, not null or empty
+   * @param valueRequirementNames
+   *          The value requirement names, not null or empty
    */
   public IRFutureOptionSABRFunction(final String... valueRequirementNames) {
     ArgumentChecker.notEmpty(valueRequirementNames, "value requirement names");
@@ -98,8 +100,9 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
-    return new InterestRateFutureOptionTradeConverterDeprecated(new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
-        context.getComputationTargetResolver().getVersionCorrection()));
+    return new InterestRateFutureOptionTradeConverterDeprecated(
+        new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
+            context.getComputationTargetResolver().getVersionCorrection()));
   }
 
   private InterestRateFutureOptionTradeConverterDeprecated getConverter(final FunctionCompilationContext context) {
@@ -107,8 +110,9 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    return new InterestRateFutureOptionTradeConverterDeprecated(new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
-        context.getComputationTargetResolver().getVersionCorrection()));
+    return new InterestRateFutureOptionTradeConverterDeprecated(
+        new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource,
+            context.getComputationTargetResolver().getVersionCorrection()));
   }
 
   protected ConfigDBCurveCalculationConfigSource getCurveCalculationConfigSource() {
@@ -128,7 +132,7 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues)
-    throws AsynchronousExecution {
+      throws AsynchronousExecution {
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -153,7 +157,8 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
       throw new OpenGammaRuntimeException("Could not get daycount");
     }
     final SABRInterestRateDataBundle data = new SABRInterestRateDataBundle(getModelParameters(inputs, dayCount), curves);
-    final InstrumentDefinition<InstrumentDerivative> irFutureOptionDefinition = (InstrumentDefinition<InstrumentDerivative>) getConverter(executionContext).convert(trade);
+    final InstrumentDefinition<InstrumentDerivative> irFutureOptionDefinition = (InstrumentDefinition<InstrumentDerivative>) getConverter(executionContext)
+        .convert(trade);
     final InstrumentDerivative irFutureOption = _dataConverter.convert(trade.getSecurity(), irFutureOptionDefinition, now, curveNames, timeSeries);
     return getResult(executionContext, desiredValues, inputs, target, irFutureOption, data);
   }
@@ -169,10 +174,12 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     if (!(security instanceof IRFutureOptionSecurity)) {
       return false;
     }
-    // REVIEW Andrew 2012-01-17 -- This shouldn't be necessary; the securities in the master should be logically correct and not refer to incorrect or missing underlyings
+    // REVIEW Andrew 2012-01-17 -- This shouldn't be necessary; the securities in the master should be logically correct and not refer to incorrect or missing
+    // underlyings
     final ExternalId identifier = ((IRFutureOptionSecurity) security).getUnderlyingId();
     final ComputationTargetRequirement underlyingTarget = new ComputationTargetRequirement(ComputationTargetType.SECURITY, identifier);
-    final ComputationTargetSpecification underlyingSpecification = context.getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(underlyingTarget);
+    final ComputationTargetSpecification underlyingSpecification = context.getComputationTargetResolver().getSpecificationResolver()
+        .getTargetSpecification(underlyingTarget);
     if (underlyingSpecification == null) {
       LOGGER.error("Loader error: " + security.getName() + " - cannot resolve underlying identifier " + identifier);
       return false;
@@ -227,7 +234,8 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     final Currency currency = FinancialSecurityUtils.getCurrency(trade.getSecurity());
     final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.addAll(getCurveRequirement(trade, curveCalculationConfig));
-    final ValueRequirement surfaceRequirement = SABRFittingPropertyUtils.getSurfaceRequirement(desiredValue, surfaceName, currency, InstrumentTypeProperties.IR_FUTURE_OPTION);
+    final ValueRequirement surfaceRequirement = SABRFittingPropertyUtils.getSurfaceRequirement(desiredValue, surfaceName, currency,
+        InstrumentTypeProperties.IR_FUTURE_OPTION);
     if (surfaceRequirement == null) {
       return null;
     }
@@ -241,11 +249,13 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String surfaceName = null;
     boolean curvePropertiesSet = false;
     boolean surfacePropertiesSet = false;
-    ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, SmileFittingPropertyNamesAndValues.SABR).with(ValuePropertyNames.CURRENCY,
+    ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, SmileFittingPropertyNamesAndValues.SABR).with(
+        ValuePropertyNames.CURRENCY,
         FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode());
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification value = entry.getKey();
@@ -281,15 +291,22 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
   }
 
   /**
-   * @param context The function execution context
-   * @param desiredValues The desired values
-   * @param inputs The function inputs
-   * @param target The computation target
-   * @param irFutureOption The derivative form of the interest rate future option
-   * @param data The SABR parameter surfaces and yield curve data
+   * @param context
+   *          The function execution context
+   * @param desiredValues
+   *          The desired values
+   * @param inputs
+   *          The function inputs
+   * @param target
+   *          The computation target
+   * @param irFutureOption
+   *          The derivative form of the interest rate future option
+   * @param data
+   *          The SABR parameter surfaces and yield curve data
    * @return The results
    */
-  protected abstract Set<ComputedValue> getResult(FunctionExecutionContext context, Set<ValueRequirement> desiredValues, FunctionInputs inputs, ComputationTarget target,
+  protected abstract Set<ComputedValue> getResult(FunctionExecutionContext context, Set<ValueRequirement> desiredValues, FunctionInputs inputs,
+      ComputationTarget target,
       InstrumentDerivative irFutureOption, SABRInterestRateDataBundle data);
 
   /**

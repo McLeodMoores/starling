@@ -42,14 +42,14 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Describes an interest inflation indexed bond issue. Only the coupon (trough the interest)is indexed on a price index, the nominal is paid at the end
  * (maturity) without any indexation.
- * 
+ *
  * @param <N>
  *          Type of fixed payment.
  * @param <C>
  *          Type of inflation coupon.
  */
 public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinition, C extends CouponInflationDefinition> extends BondSecurityDefinition<N, C>
-    implements InstrumentDefinitionWithData<BondSecurity<? extends Payment, ? extends Coupon>, DoubleTimeSeries<ZonedDateTime>> {
+implements InstrumentDefinitionWithData<BondSecurity<? extends Payment, ? extends Coupon>, DoubleTimeSeries<ZonedDateTime>> {
 
   /**
    * The default ex-coupon number of days.
@@ -82,7 +82,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Constructor of the Interest inflation indexed bond. The repo type is empty and the legal entity contains only the issuer name.
-   * 
+   *
    * @param nominal
    *          The nominal annuity.
    * @param coupon
@@ -112,7 +112,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Constructor of the Interest inflation indexed bond. The repo type is empty.
-   * 
+   *
    * @param nominal
    *          The nominal annuity.
    * @param coupon
@@ -151,7 +151,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Constructor of the Interest inflation indexed bond. The legal entity contains only the issuer name.
-   * 
+   *
    * @param nominal
    *          The nominal annuity.
    * @param coupon
@@ -183,7 +183,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Constructor of the Interest inflation indexed bond.
-   * 
+   *
    * @param nominal
    *          The nominal annuity.
    * @param coupon
@@ -226,7 +226,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
   /**
    * Builder of Inflation capital index bond from financial details. The notional and the coupon reference index are monthly index (no interpolation). The legal
    * entity contains only the issuer name.
-   * 
+   *
    * @param priceIndex
    *          The price index associated to the bond.
    * @param monthLag
@@ -267,7 +267,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Builder of Inflation capital index bond from financial details. The notional and the coupon reference index are monthly index (no interpolation).
-   * 
+   *
    * @param priceIndex
    *          The price index associated to the bond.
    * @param monthLag
@@ -304,7 +304,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
       final DayCount dayCount, final YieldConvention yieldConvention, final boolean isEOM, final LegalEntity issuer) {
     // Nominal construction
     final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {
-        new PaymentFixedDefinition(priceIndex.getCurrency(), businessDay.adjustDate(calendar, maturityDate), notional) };
+                  new PaymentFixedDefinition(priceIndex.getCurrency(), businessDay.adjustDate(calendar, maturityDate), notional) };
 
     final AnnuityDefinition<PaymentFixedDefinition> nominalAnnuity = new AnnuityDefinition<>(nominalPayment, calendar);
     // Coupon construction
@@ -325,7 +325,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
   /**
    * Builder of Inflation capital index bond from financial details. The first coupon date is provided to cope with short or long first coupons. The legal
    * entity contains only the issuer name. The notional and the coupon reference index are monthly index (no interpolation).
-   * 
+   *
    * @param priceIndex
    *          The price index associated to the bond.
    * @param monthLag
@@ -369,7 +369,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
   /**
    * Builder of Inflation capital index bond from financial details. The first coupon date is provided to cope with short or long first coupons. The notional
    * and the coupon reference index are monthly index (no interpolation).
-   * 
+   *
    * @param priceIndex
    *          The price index associated to the bond.
    * @param monthLag
@@ -408,7 +408,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
       final Calendar calendar, final DayCount dayCount, final YieldConvention yieldConvention, final boolean isEOM, final LegalEntity issuer) {
     // Nominal construction
     final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {
-        new PaymentFixedDefinition(priceIndex.getCurrency(), businessDay.adjustDate(calendar, maturityDate), notional) };
+                  new PaymentFixedDefinition(priceIndex.getCurrency(), businessDay.adjustDate(calendar, maturityDate), notional) };
 
     final AnnuityDefinition<PaymentFixedDefinition> nominalAnnuity = new AnnuityDefinition<>(nominalPayment, calendar);
     // Coupon construction
@@ -431,7 +431,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
   /**
    * Builder of Inflation capital index bond from financial details. The notional and the coupon reference index are interpolated index. The coupon dates are
    * computed from the maturity and have a short first coupon if required. The legal entity contains only the issuer name.
-   * 
+   *
    * @param priceIndex
    *          The price index associated to the bond.
    * @param monthLag
@@ -475,7 +475,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
   /**
    * Builder of Inflation capital index bond from financial details. The notional and the coupon reference index are interpolated index. The coupon dates are
    * computed from the maturity and have a short first coupon if required.
-   * 
+   *
    * @param priceIndex
    *          The price index associated to the bond.
    * @param monthLag
@@ -514,13 +514,14 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
       final Calendar calendar, final DayCount dayCount, final YieldConvention yieldConvention, final boolean isEOM, final LegalEntity issuer) {
     // Nominal construction
     final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {
-        new PaymentFixedDefinition(priceIndex.getCurrency(), businessDay.adjustDate(calendar, maturityDate), notional) };
+                  new PaymentFixedDefinition(priceIndex.getCurrency(), businessDay.adjustDate(calendar, maturityDate), notional) };
 
     final AnnuityDefinition<PaymentFixedDefinition> nominalAnnuity = new AnnuityDefinition<>(nominalPayment, calendar);
     // Coupon construction
     final ZonedDateTime[] paymentDatesUnadjusted = ScheduleCalculator.getUnadjustedDateSchedule(startDate, maturityDate, couponPeriod, true, true);
     final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(paymentDatesUnadjusted, businessDay, calendar, false);
-    final CouponInflationYearOnYearInterpolationWithMarginDefinition[] coupons = new CouponInflationYearOnYearInterpolationWithMarginDefinition[paymentDates.length];
+    final CouponInflationYearOnYearInterpolationWithMarginDefinition[] coupons =
+        new CouponInflationYearOnYearInterpolationWithMarginDefinition[paymentDates.length];
     coupons[0] = CouponInflationYearOnYearInterpolationWithMarginDefinition.from(realRate, startDate, paymentDates[0], notional, priceIndex, monthLag, monthLag,
         true);
     for (int loopcpn = 1; loopcpn < paymentDates.length; loopcpn++) {
@@ -534,7 +535,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Gets the bond yield convention.
-   * 
+   *
    * @return The yield convention.
    */
   public YieldConvention getYieldConvention() {
@@ -543,7 +544,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Gets the number of coupon per year field.
-   * 
+   *
    * @return The number of coupon per year.
    */
   public int getCouponPerYear() {
@@ -552,7 +553,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Gets the end-of-month flag.
-   * 
+   *
    * @return The end-of-month convention flag.
    */
   public boolean isEOM() {
@@ -561,7 +562,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Gets the coupon day count.
-   * 
+   *
    * @return The day count.
    */
   public DayCount getDayCount() {
@@ -570,7 +571,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Gets the lag in month between the index validity and the coupon dates.
-   * 
+   *
    * @return The lag.
    */
   public int getMonthLag() {
@@ -579,7 +580,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Gets the price index associated to the bond.
-   * 
+   *
    * @return The price index.
    */
   public IndexPrice getPriceIndex() {
@@ -664,7 +665,7 @@ public class BondInterestIndexedSecurityDefinition<N extends PaymentFixedDefinit
 
   /**
    * Return the relative (not multiplied by the notional) accrued interest rate at a given date.
-   * 
+   *
    * @param date
    *          The date.
    * @return The accrued interest.

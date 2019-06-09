@@ -13,22 +13,29 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Class describing a yield curve bundle with Black term structure volatility for Forex options.
+ * 
  * @deprecated Parent class is deprecated
  */
 @Deprecated
 public class YieldCurveWithBlackForexTermStructureBundle extends ForexOptionDataBundle<BlackForexTermStructureParameters> {
 
-  public static YieldCurveWithBlackForexTermStructureBundle from(final YieldCurveBundle ycBundle, final BlackForexTermStructureParameters termStructure, final Pair<Currency, Currency> currencyPair) {
+  public static YieldCurveWithBlackForexTermStructureBundle from(final YieldCurveBundle ycBundle, final BlackForexTermStructureParameters termStructure,
+      final Pair<Currency, Currency> currencyPair) {
     return new YieldCurveWithBlackForexTermStructureBundle(ycBundle, termStructure, currencyPair);
   }
 
   /**
    * Constructor from the smile parameters and the curves.
-   * @param ycBundle The curves bundle.
-   * @param termStructure The term structure parameters.
-   * @param currencyPair The currency pair for which the smile is valid.
+   * 
+   * @param ycBundle
+   *          The curves bundle.
+   * @param termStructure
+   *          The term structure parameters.
+   * @param currencyPair
+   *          The currency pair for which the smile is valid.
    */
-  public YieldCurveWithBlackForexTermStructureBundle(final YieldCurveBundle ycBundle, final BlackForexTermStructureParameters termStructure, final Pair<Currency, Currency> currencyPair) {
+  public YieldCurveWithBlackForexTermStructureBundle(final YieldCurveBundle ycBundle, final BlackForexTermStructureParameters termStructure,
+      final Pair<Currency, Currency> currencyPair) {
     super(ycBundle, termStructure, currencyPair);
   }
 

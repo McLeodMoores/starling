@@ -18,7 +18,8 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.Bjerksund
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the greeks of a commodity future option using the Barone-Adesi Whaley model {@link com.opengamma.analytics.financial.model.option.pricing.analytic.BaroneAdesiWhaleyModel}.
+ * Calculates the greeks of a commodity future option using the Barone-Adesi Whaley model
+ * {@link com.opengamma.analytics.financial.model.option.pricing.analytic.BaroneAdesiWhaleyModel}.
  * <p>
  * The greeks returned are delta, dual-delta, rho, carry rho, theta and vega.
  */
@@ -46,7 +47,7 @@ public final class EqyOptBjerksundStenslandGreekCalculator extends InstrumentDer
     final double k = option.getStrike();
     final double t = option.getTimeToExpiry();
     final double r = data.getDiscountCurve().getInterestRate(t);
-    final double b = r; //TODO
+    final double b = r; // TODO
     final double volatility = data.getVolatilitySurface().getVolatility(t, k);
     final boolean isCall = option.isCall();
     final double[] greeks = MODEL.getPriceAdjoint(s, k, r, b, t, volatility, isCall);
@@ -89,9 +90,13 @@ public final class EqyOptBjerksundStenslandGreekCalculator extends InstrumentDer
 
   /**
    * If MARKET_VALUE is available, volatility implied by Bjerksund-Stensland model is used.
-   * @param option Equity option
-   * @param data Market data
-   * @param impliedVol The implied volatility
+   * 
+   * @param option
+   *          Equity option
+   * @param data
+   *          Market data
+   * @param impliedVol
+   *          The implied volatility
    * @return Greeks
    */
   public GreekResultCollection getGreeksDirectEquityOption(final EquityOption option, final StaticReplicationDataBundle data, final double impliedVol) {
@@ -149,7 +154,7 @@ public final class EqyOptBjerksundStenslandGreekCalculator extends InstrumentDer
     final double k = option.getStrike();
     final double t = option.getExpiry();
     final double r = data.getDiscountCurve().getInterestRate(t);
-    final double b = r; //TODO
+    final double b = r; // TODO
     final double volatility = data.getVolatilitySurface().getVolatility(t, k);
     final boolean isCall = option.isCall();
     final double[] greeks = MODEL.getPriceAdjoint(s, k, r, b, t, volatility, isCall);

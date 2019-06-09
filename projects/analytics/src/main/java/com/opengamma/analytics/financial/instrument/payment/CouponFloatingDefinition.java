@@ -26,15 +26,24 @@ public abstract class CouponFloatingDefinition extends CouponDefinition implemen
 
   /**
    * Floating coupon constructor from all details.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
    */
-  public CouponFloatingDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+  public CouponFloatingDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
       final double accrualFactor, final double notional, final ZonedDateTime fixingDate) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional);
     ArgumentChecker.notNull(fixingDate, "fixing date");
@@ -44,6 +53,7 @@ public abstract class CouponFloatingDefinition extends CouponDefinition implemen
 
   /**
    * Gets the fixing date.
+   *
    * @return The fixing date.
    */
   public ZonedDateTime getFixingDate() {

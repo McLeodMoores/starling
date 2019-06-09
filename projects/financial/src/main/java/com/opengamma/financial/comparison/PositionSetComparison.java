@@ -25,8 +25,7 @@ import com.opengamma.util.tuple.Pair;
 public class PositionSetComparison {
 
   /**
-   * Positions that exist in both but have been amended. Each element of the collection
-   * is a pair of the initial position and the amended position.
+   * Positions that exist in both but have been amended. Each element of the collection is a pair of the initial position and the amended position.
    */
   private final Collection<Pair<Position, Position>> _diff;
 
@@ -45,7 +44,8 @@ public class PositionSetComparison {
    */
   private final Collection<Position> _intersection;
 
-  protected PositionSetComparison(final Collection<Pair<Position, Position>> diff, final Collection<Position> left, final Collection<Position> right, final Collection<Position> intersection) {
+  protected PositionSetComparison(final Collection<Pair<Position, Position>> diff, final Collection<Position> left, final Collection<Position> right,
+      final Collection<Position> intersection) {
     _diff = Collections.unmodifiableCollection(diff);
     _left = Collections.unmodifiableCollection(left);
     _right = Collections.unmodifiableCollection(right);
@@ -77,7 +77,7 @@ public class PositionSetComparison {
 
   /**
    * Returns true if both sets of positions contained identical values.
-   * 
+   *
    * @return true if the positions were identical
    */
   public boolean isEqual() {

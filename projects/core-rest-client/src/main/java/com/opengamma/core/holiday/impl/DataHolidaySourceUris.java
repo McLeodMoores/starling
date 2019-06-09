@@ -46,9 +46,12 @@ public class DataHolidaySourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param objectId  the object identifier, may be null
-   * @param vc  the version-correction, null means latest
+   * @param baseUri
+   *          the base URI, not null
+   * @param objectId
+   *          the object identifier, may be null
+   * @param vc
+   *          the version-correction, null means latest
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final ObjectId objectId, final VersionCorrection vc) {
@@ -63,8 +66,10 @@ public class DataHolidaySourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param currency  the currency, not null
+   * @param baseUri
+   *          the base URI, not null
+   * @param currency
+   *          the currency, not null
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final Currency currency) {
@@ -76,9 +81,12 @@ public class DataHolidaySourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param holidayType  the holiday type, not null
-   * @param regionOrExchangeIds  the ids, not null
+   * @param baseUri
+   *          the base URI, not null
+   * @param holidayType
+   *          the holiday type, not null
+   * @param regionOrExchangeIds
+   *          the ids, not null
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
@@ -88,19 +96,25 @@ public class DataHolidaySourceUris {
         .build();
   }
   // deprecated
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param date  the date, not null
-   * @param holidayType  the holiday type, not null
-   * @param currency  the currency, may be null
-   * @param regionOrExchangeIds  the ids, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param date
+   *          the date, not null
+   * @param holidayType
+   *          the holiday type, not null
+   * @param currency
+   *          the currency, may be null
+   * @param regionOrExchangeIds
+   *          the ids, may be null
    * @return the URI, not null
    */
-  public static URI uriSearchCheck(final URI baseUri, final LocalDate date, final HolidayType holidayType, final Currency currency, final ExternalIdBundle regionOrExchangeIds) {
+  public static URI uriSearchCheck(final URI baseUri, final LocalDate date, final HolidayType holidayType, final Currency currency,
+      final ExternalIdBundle regionOrExchangeIds) {
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("holidaySearches/check")
         .queryParam("date", ArgumentChecker.notNull(date, "date").toString())
         .queryParam("holidayType", ArgumentChecker.notNull(holidayType, "holidayType").name());

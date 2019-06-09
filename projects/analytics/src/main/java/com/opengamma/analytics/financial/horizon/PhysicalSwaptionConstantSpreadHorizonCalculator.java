@@ -23,7 +23,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  *
  */
 @Deprecated
-public class PhysicalSwaptionConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<SwaptionPhysicalFixedIborDefinition, YieldCurveWithBlackSwaptionBundle, Void> {
+public class PhysicalSwaptionConstantSpreadHorizonCalculator
+    implements HorizonCalculatorDeprecated<SwaptionPhysicalFixedIborDefinition, YieldCurveWithBlackSwaptionBundle, Void> {
   /** Rolls down swaption data (curves and surface) */
   private static final ConstantSpreadSwaptionBlackRolldown SWAPTION_ROLLDOWN = ConstantSpreadSwaptionBlackRolldown.getInstance();
 

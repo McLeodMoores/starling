@@ -19,6 +19,7 @@ public class CostOfCarryPresentValueFuturesFunction extends CostOfCarryFuturesFu
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
   public CostOfCarryPresentValueFuturesFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
-    super(ValueRequirementNames.PRESENT_VALUE, CostOfCarryFuturesCalculator.PresentValueCalculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
+    super(ValueRequirementNames.PRESENT_VALUE, CostOfCarryFuturesCalculator.PresentValueCalculator.getInstance(), closingPriceField, costOfCarryField,
+        resolutionKey);
   }
 }

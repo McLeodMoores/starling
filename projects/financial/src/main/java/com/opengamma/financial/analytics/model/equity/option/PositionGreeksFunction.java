@@ -101,7 +101,8 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     // inputs provide the properties of the required security greek. These we pass through to the position
     final ValueSpecification secGreekSpec = inputs.keySet().iterator().next();
     if (secGreekSpec.getValueName() != getSecurityReqName()) {

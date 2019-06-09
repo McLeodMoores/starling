@@ -66,14 +66,14 @@ public class StandardVanillaPresentValueCDSFunction extends StandardVanillaCDSFu
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
 
     final double pv = presentValue(definition, yieldCurve, hazardCurve, analytic);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, target.toSpecification(), properties);
@@ -81,21 +81,21 @@ public class StandardVanillaPresentValueCDSFunction extends StandardVanillaCDSFu
   }
 
   public static double presentValue(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve,
-                              final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic) {
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic) {
     double pv;
     if (definition instanceof LegacyCreditDefaultSwapDefinition) {
       pv = PRICER.pv(analytic, yieldCurve, hazardCurve, ((LegacyCreditDefaultSwapDefinition) definition).getParSpread() * 1e-4) * definition.getNotional();
     } else if (definition instanceof StandardCreditDefaultSwapDefinition) {
       pv = POINTS_UP_FRONT_CONVERTER.quotedSpreadToPUF(analytic,
-                                                       ((StandardCreditDefaultSwapDefinition) definition).getPremiumLegCoupon(),
-                                                       yieldCurve,
-                                                       ((StandardCreditDefaultSwapDefinition) definition).getQuotedSpread() * 1e-4) * definition.getNotional();
+          ((StandardCreditDefaultSwapDefinition) definition).getPremiumLegCoupon(),
+          yieldCurve,
+          ((StandardCreditDefaultSwapDefinition) definition).getQuotedSpread() * 1e-4) * definition.getNotional();
     } else {
       throw new OpenGammaRuntimeException("Unexpected cds type: " + definition.getClass().getSimpleName());
     }
 
     // SELL protection reverses directions of legs
-   return definition.getBuySellProtection() == BuySellProtection.SELL ? -pv : pv;
+    return definition.getBuySellProtection() == BuySellProtection.SELL ? -pv : pv;
   }
 
   @Override
@@ -110,8 +110,9 @@ public class StandardVanillaPresentValueCDSFunction extends StandardVanillaCDSFu
       return null;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
-    final String spreadCurveName = security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
+    final String spreadCurveName = security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId()
+        .getValue();
+    // TODO shouldn't need all of the yield curve properties
     final String hazardRateCurveCalculationMethod = Iterables.getOnlyElement(hazardRateCurveCalculationMethodNames);
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
@@ -127,13 +128,15 @@ public class StandardVanillaPresentValueCDSFunction extends StandardVanillaCDSFu
     if (creditSpreadCurveShifts != null) {
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueProperties.Builder propertiesBuilder = getCommonResultProperties();
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification spec = entry.getKey();
@@ -166,7 +169,7 @@ public class StandardVanillaPresentValueCDSFunction extends StandardVanillaCDSFu
         }
       }
     }
-    //propertiesBuilder.withoutAny(PROPERTY_CDS_PRICE_TYPE);
+    // propertiesBuilder.withoutAny(PROPERTY_CDS_PRICE_TYPE);
     if (labelResultWithCurrency()) {
       propertiesBuilder.with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
     }

@@ -141,7 +141,8 @@ public abstract class SimpleFutureFunction extends NonCompiledInvoker {
   private ValueRequirement getReferencePriceRequirement(final FunctionCompilationContext context, final FutureSecurity security) {
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final ExternalIdBundle idBundle = security.getExternalIdBundle();
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE, null);
     if (timeSeries == null) {
       LOGGER.warn("Failed to find time series for: " + idBundle.toString());
       return null;

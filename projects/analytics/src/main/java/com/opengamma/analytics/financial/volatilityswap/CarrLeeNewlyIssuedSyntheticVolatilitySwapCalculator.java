@@ -1,37 +1,47 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
-
-import cern.jet.math.Bessel;
 
 import com.google.common.primitives.Doubles;
 import com.opengamma.analytics.financial.model.volatility.BlackScholesFormulaRepository;
 import com.opengamma.util.ArgumentChecker;
 
+import cern.jet.math.Bessel;
+
 /**
- * "Realized Volatility and Variance: Options via Swaps", 
- * Peter Carr and Roger Lee, Oct. 26, 2007
+ * "Realized Volatility and Variance: Options via Swaps", Peter Carr and Roger Lee, Oct. 26, 2007
  */
 public class CarrLeeNewlyIssuedSyntheticVolatilitySwapCalculator {
   private static final double EPS = 1.e-12;
 
   /**
    * The respective strikes should be sorted in ascending order
-   * @param spot The spot of underlying
-   * @param putStrikes Strikes of put options
-   * @param callStrikes Strikes of call options
-   * @param timeToExpiry Time to expiry
-   * @param interestRate Interest rate
-   * @param dividend The dividend
-   * @param putVols Volatilities of put options
-   * @param strdVol Volatility of straddle
-   * @param callVols Volatilities of call options
+   * 
+   * @param spot
+   *          The spot of underlying
+   * @param putStrikes
+   *          Strikes of put options
+   * @param callStrikes
+   *          Strikes of call options
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param interestRate
+   *          Interest rate
+   * @param dividend
+   *          The dividend
+   * @param putVols
+   *          Volatilities of put options
+   * @param strdVol
+   *          Volatility of straddle
+   * @param callVols
+   *          Volatilities of call options
    * @return {@link VolatilitySwapCalculatorResult}
    */
-  public VolatilitySwapCalculatorResult evaluate(final double spot, final double[] putStrikes, final double[] callStrikes, final double timeToExpiry, final double interestRate, final double dividend,
+  public VolatilitySwapCalculatorResult evaluate(final double spot, final double[] putStrikes, final double[] callStrikes, final double timeToExpiry,
+      final double interestRate, final double dividend,
       final double[] putVols, final double strdVol, final double[] callVols) {
     ArgumentChecker.notNull(callStrikes, "callStrikes");
     ArgumentChecker.notNull(putStrikes, "putStrikes");
@@ -75,7 +85,7 @@ public class CarrLeeNewlyIssuedSyntheticVolatilitySwapCalculator {
     final double rate = interestRate - dividend;
     final double discount = Math.exp(-interestRate * timeToExpiry);
     final double forward = spot * Math.exp(rate * timeToExpiry);
-    ArgumentChecker.isTrue((callStrikes[0] > forward && putStrikes[nPuts - 1] < forward), "Max(putStrikes) < forward < Min(callStrikes) should hold");
+    ArgumentChecker.isTrue(callStrikes[0] > forward && putStrikes[nPuts - 1] < forward, "Max(putStrikes) < forward < Min(callStrikes) should hold");
 
     final double factor = 100. / Math.sqrt(timeToExpiry) * Math.sqrt(Math.PI * 0.5);
 
@@ -92,8 +102,9 @@ public class CarrLeeNewlyIssuedSyntheticVolatilitySwapCalculator {
 
     final double[] putPrices = new double[nPuts];
     final double[] callPrices = new double[nCalls];
-    final double straddlePrice = BlackScholesFormulaRepository.price(spot, forward, timeToExpiry, strdVol, interestRate, rate, true) + BlackScholesFormulaRepository.price(spot, forward,
-        timeToExpiry, strdVol, interestRate, rate, false);
+    final double straddlePrice = BlackScholesFormulaRepository.price(spot, forward, timeToExpiry, strdVol, interestRate, rate, true)
+        + BlackScholesFormulaRepository.price(spot, forward,
+            timeToExpiry, strdVol, interestRate, rate, false);
     for (int i = 0; i < nCalls; ++i) {
       callPrices[i] = BlackScholesFormulaRepository.price(spot, callStrikes[i], timeToExpiry, callVols[i], interestRate, rate, true);
     }
@@ -126,8 +137,10 @@ public class CarrLeeNewlyIssuedSyntheticVolatilitySwapCalculator {
   private double getCashAmount(final double callStrike, final double putStrike, final double forward, final double discount, final double factor) {
     final double m1 = Math.log(callStrike / forward);
     final double m2 = Math.log(putStrike / forward);
-    final double first = (callStrike - forward) * (Math.abs(Math.exp(0.5 * m2) * m2 * (Bessel.i0(0.5 * m2) - Bessel.i1(0.5 * m2))) - Math.abs(putStrike / forward - 1.));
-    final double second = (forward - putStrike) * (Math.abs(Math.exp(0.5 * m1) * m1 * (Bessel.i0(0.5 * m1) - Bessel.i1(0.5 * m1))) - Math.abs(callStrike / forward - 1.));
+    final double first = (callStrike - forward)
+        * (Math.abs(Math.exp(0.5 * m2) * m2 * (Bessel.i0(0.5 * m2) - Bessel.i1(0.5 * m2))) - Math.abs(putStrike / forward - 1.));
+    final double second = (forward - putStrike)
+        * (Math.abs(Math.exp(0.5 * m1) * m1 * (Bessel.i0(0.5 * m1) - Bessel.i1(0.5 * m1))) - Math.abs(callStrike / forward - 1.));
     return discount * factor * (first + second) / (callStrike - putStrike);
   }
 }

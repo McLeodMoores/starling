@@ -22,8 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- *  Definition of a generic Single Name Credit Default Swap contract (abstract class therefore different types of CDS will inherit from this)
- *@deprecated this will be deleted
+ * Definition of a generic Single Name Credit Default Swap contract (abstract class therefore different types of CDS will inherit from this)
+ * 
+ * @deprecated this will be deleted
  */
 @Deprecated
 public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDefinition {
@@ -113,7 +114,8 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
   // The trade notional (in the trade currency), convention is that this will always be a positive amount
   private final double _notional;
 
-  // The recovery rate to be used in the calculation of the CDS MtM (the recovery used in pricing can be different to the rate used to calibrate the hazard rates)
+  // The recovery rate to be used in the calculation of the CDS MtM (the recovery used in pricing can be different to the rate used to calibrate the hazard
+  // rates)
   private final double _recoveryRate;
 
   // Flag to determine whether the accrued coupons should be included in the CDS premium leg calculation
@@ -133,8 +135,8 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
   // Constructor for a CDS contract object
 
   /**
-   * Create a CDS object
-   * 
+   * Create a CDS object.
+   *
    * @param buySellProtection
    *          Are we buying or selling the credit protection
    * @param protectionBuyer
@@ -181,10 +183,13 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
    * @param protectionStart
    *          if true the protection is from the start of day
    */
-  public CreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller, final LegalEntity referenceEntity, final Currency currency,
-      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate, final ZonedDateTime effectiveDate,
+  public CreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller,
+      final LegalEntity referenceEntity, final Currency currency,
+      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate,
+      final ZonedDateTime effectiveDate,
       final ZonedDateTime maturityDate, final StubType stubType, final PeriodFrequency couponFrequency, final DayCount daycountFractionConvention,
-      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate, final boolean adjustMaturityDate, final double notional,
+      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
+      final boolean adjustMaturityDate, final double notional,
       final double recoveryRate, final boolean includeAccruedPremium, final boolean protectionStart) {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -508,11 +513,17 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
 
   @Override
   public String toString() {
-    return "CreditDefaultSwapDefinition{" + "_buySellProtection=" + _buySellProtection + ", _protectionBuyer=" + _protectionBuyer + ", _protectionSeller=" + _protectionSeller + ", _referenceEntity=" +
-        _referenceEntity + ", _currency=" + _currency + ", _debtSeniority=" + _debtSeniority + ", _restructuringClause=" + _restructuringClause + ", _calendar=" + _calendar + ", _startDate=" +
-        _startDate + ", _effectiveDate=" + _effectiveDate + ", _maturityDate=" + _maturityDate + ", _stubType=" + _stubType + ", _couponFrequency=" + _couponFrequency +
-        ", _daycountFractionConvention=" + _daycountFractionConvention + ", _businessdayAdjustmentConvention=" + _businessdayAdjustmentConvention + ", _immAdjustMaturityDate=" +
-        _immAdjustMaturityDate + ", _adjustEffectiveDate=" + _adjustEffectiveDate + ", _adjustMaturityDate=" + _adjustMaturityDate + ", _notional=" + _notional + ", _recoveryRate=" + _recoveryRate +
-        ", _includeAccruedPremium=" + _includeAccruedPremium + ", _protectionStart=" + _protectionStart + ", _creditKey='" + _creditKey + '\'' + ", _protectionOffset=" + _protectionOffset + '}';
+    return "CreditDefaultSwapDefinition{" + "_buySellProtection=" + _buySellProtection + ", _protectionBuyer=" + _protectionBuyer + ", _protectionSeller="
+        + _protectionSeller + ", _referenceEntity=" +
+        _referenceEntity + ", _currency=" + _currency + ", _debtSeniority=" + _debtSeniority + ", _restructuringClause=" + _restructuringClause + ", _calendar="
+        + _calendar + ", _startDate=" +
+        _startDate + ", _effectiveDate=" + _effectiveDate + ", _maturityDate=" + _maturityDate + ", _stubType=" + _stubType + ", _couponFrequency="
+        + _couponFrequency +
+        ", _daycountFractionConvention=" + _daycountFractionConvention + ", _businessdayAdjustmentConvention=" + _businessdayAdjustmentConvention
+        + ", _immAdjustMaturityDate=" +
+        _immAdjustMaturityDate + ", _adjustEffectiveDate=" + _adjustEffectiveDate + ", _adjustMaturityDate=" + _adjustMaturityDate + ", _notional=" + _notional
+        + ", _recoveryRate=" + _recoveryRate +
+        ", _includeAccruedPremium=" + _includeAccruedPremium + ", _protectionStart=" + _protectionStart + ", _creditKey='" + _creditKey + '\''
+        + ", _protectionOffset=" + _protectionOffset + '}';
   }
 }

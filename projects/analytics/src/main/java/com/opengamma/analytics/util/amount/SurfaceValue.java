@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.util.amount;
@@ -15,8 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Object to represent values linked to a surface (pair of doubles) for which the values can be added or multiplied by a constant.
- * Used for different sensitivities (SABR, FX,...). The objects stored as a HashMap(DoublesPair, Double).
+ * Object to represent values linked to a surface (pair of doubles) for which the values can be added or multiplied by a constant. Used for different
+ * sensitivities (SABR, FX,...). The objects stored as a HashMap(DoublesPair, Double).
  */
 public class SurfaceValue {
 
@@ -34,7 +34,9 @@ public class SurfaceValue {
 
   /**
    * Constructor from an existing map. The map is used in the new object.
-   * @param map The map.
+   *
+   * @param map
+   *          The map.
    */
   private SurfaceValue(final HashMap<DoublesPair, Double> map) {
     ArgumentChecker.notNull(map, "Map");
@@ -43,8 +45,11 @@ public class SurfaceValue {
 
   /**
    * Builder from on point.
-   * @param point The surface point.
-   * @param value The associated value.
+   *
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    * @return The surface value.
    */
   public static SurfaceValue from(final DoublesPair point, final Double value) {
@@ -56,7 +61,9 @@ public class SurfaceValue {
 
   /**
    * Builder from a map. A new map is created with the same values.
-   * @param map The map.
+   *
+   * @param map
+   *          The map.
    * @return The surface value.
    */
   public static SurfaceValue from(final Map<DoublesPair, Double> map) {
@@ -68,7 +75,9 @@ public class SurfaceValue {
 
   /**
    * Builder from a SurfaceValue. A new map is created with the same values.
-   * @param surface The SurfaceValue
+   *
+   * @param surface
+   *          The SurfaceValue
    * @return The surface value.
    */
   public static SurfaceValue from(final SurfaceValue surface) {
@@ -80,6 +89,7 @@ public class SurfaceValue {
 
   /**
    * Gets the underlying map.
+   *
    * @return The map.
    */
   public HashMap<DoublesPair, Double> getMap() {
@@ -87,10 +97,13 @@ public class SurfaceValue {
   }
 
   /**
-   * Add a value to the object. The existing object is modified. If the point is not in the existing points of the object, it is put in the map.
-   * If a point is already in the existing points of the object, the value is added to the existing value.
-   * @param point The surface point.
-   * @param value The associated value.
+   * Add a value to the object. The existing object is modified. If the point is not in the existing points of the object, it is put in the map. If a point is
+   * already in the existing points of the object, the value is added to the existing value.
+   *
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    */
   public void add(final DoublesPair point, final Double value) {
     ArgumentChecker.notNull(point, "Point");
@@ -103,6 +116,7 @@ public class SurfaceValue {
 
   /**
    * Gets the number of elements in the map.
+   *
    * @return The number of elements.
    */
   public int getNumberOfElements() {
@@ -110,10 +124,13 @@ public class SurfaceValue {
   }
 
   /**
-   * Create a new object containing the point of both initial objects. If a point is only on one surface, its value is the original value.
-   * If a point is on both surfaces, the values on that point are added.
-   * @param value1 The first surface value.
-   * @param value2 The second surface value.
+   * Create a new object containing the point of both initial objects. If a point is only on one surface, its value is the original value. If a point is on both
+   * surfaces, the values on that point are added.
+   *
+   * @param value1
+   *          The first surface value.
+   * @param value2
+   *          The second surface value.
    * @return The combined/sum surface value.
    */
   public static SurfaceValue plus(final SurfaceValue value1, final SurfaceValue value2) {
@@ -131,11 +148,15 @@ public class SurfaceValue {
   }
 
   /**
-   * Create a new object containing the point of the initial object and the new point. If the point is not in the existing points of the object, it is put in the map.
-   * If a point is already in the existing point of the object, the value is added to the existing value.
-   * @param surfaceValue The surface value.
-   * @param point The surface point.
-   * @param value The associated value.
+   * Create a new object containing the point of the initial object and the new point. If the point is not in the existing points of the object, it is put in
+   * the map. If a point is already in the existing point of the object, the value is added to the existing value.
+   *
+   * @param surfaceValue
+   *          The surface value.
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    * @return The combined/sum surface value.
    */
   public static SurfaceValue plus(final SurfaceValue surfaceValue, final DoublesPair point, final Double value) {
@@ -152,8 +173,11 @@ public class SurfaceValue {
 
   /**
    * Create a new object containing the point of the initial object with the all values multiplied by a given factor.
-   * @param surfaceValue The surface value.
-   * @param factor The multiplicative factor.
+   *
+   * @param surfaceValue
+   *          The surface value.
+   * @param factor
+   *          The multiplicative factor.
    * @return The multiplied surface.
    */
   public static SurfaceValue multiplyBy(final SurfaceValue surfaceValue, final double factor) {
@@ -167,9 +191,13 @@ public class SurfaceValue {
 
   /**
    * Compare two objects with a given tolerance. Return "true" if all the values are within the tolerance.
-   * @param value1 The first object.
-   * @param value2 The second object.
-   * @param tolerance The tolerance.
+   *
+   * @param value1
+   *          The first object.
+   * @param value2
+   *          The second object.
+   * @param tolerance
+   *          The tolerance.
    * @return The comparison flag.
    */
   public static boolean compare(final SurfaceValue value1, final SurfaceValue value2, final double tolerance) {
@@ -200,6 +228,7 @@ public class SurfaceValue {
 
   /**
    * Collapse the object to a single value. The points on which the amounts occur are ignored and the values summed.
+   *
    * @return The value.
    */
   public double toSingleValue() {

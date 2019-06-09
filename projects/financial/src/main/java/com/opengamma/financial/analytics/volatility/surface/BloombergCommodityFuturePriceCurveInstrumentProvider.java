@@ -21,12 +21,13 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  Provider of commodity Future Instrument ID's.
+ * Provider of commodity Future Instrument ID's.
  */
 public class BloombergCommodityFuturePriceCurveInstrumentProvider implements FuturePriceCurveInstrumentProvider<Number> {
 
   /**
    * Gets the expiryRules.
+   * 
    * @return the expiryRules
    */
   public static Map<String, ExchangeTradedInstrumentExpiryCalculator> getExpiryRules() {
@@ -36,12 +37,12 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
   private static final Map<String, ExchangeTradedInstrumentExpiryCalculator> EXPIRY_RULES;
   static {
     EXPIRY_RULES = Maps.newHashMap();
-    EXPIRY_RULES.put("BO", SoybeanFutureExpiryCalculator.getInstance());        // Soy oil
-    EXPIRY_RULES.put("BZ", BrentCrudeFutureExpiryCalculator.getInstance());    // Brent Crude -- temp for 2 character code in surface name
-    EXPIRY_RULES.put("BZA", BrentCrudeFutureExpiryCalculator.getInstance());    // Brent Crude
-    EXPIRY_RULES.put("GC", GoldFutureExpiryCalculator.getInstance());           // Gold
-    EXPIRY_RULES.put("LC", LiveCattleFutureExpiryCalculator.getInstance());     // Live Cattle
-    EXPIRY_RULES.put("S ", SoybeanFutureExpiryCalculator.getInstance());        // Soy
+    EXPIRY_RULES.put("BO", SoybeanFutureExpiryCalculator.getInstance()); // Soy oil
+    EXPIRY_RULES.put("BZ", BrentCrudeFutureExpiryCalculator.getInstance()); // Brent Crude -- temp for 2 character code in surface name
+    EXPIRY_RULES.put("BZA", BrentCrudeFutureExpiryCalculator.getInstance()); // Brent Crude
+    EXPIRY_RULES.put("GC", GoldFutureExpiryCalculator.getInstance()); // Gold
+    EXPIRY_RULES.put("LC", LiveCattleFutureExpiryCalculator.getInstance()); // Live Cattle
+    EXPIRY_RULES.put("S ", SoybeanFutureExpiryCalculator.getInstance()); // Soy
   }
 
   private final String _futurePrefix;
@@ -50,12 +51,17 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
   private final String _tickerScheme;
 
   /**
-   * @param futurePrefix Two character string representing future type. e.g. S  , AA etc.
-   * @param postfix Generally, "Comdty"
-   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_VALUE
-   * @param tickerScheme Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
+   * @param futurePrefix
+   *          Two character string representing future type. e.g. S , AA etc.
+   * @param postfix
+   *          Generally, "Comdty"
+   * @param dataFieldName
+   *          Expecting MarketDataRequirementNames.MARKET_VALUE
+   * @param tickerScheme
+   *          Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
    */
-  public BloombergCommodityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, final String tickerScheme) {
+  public BloombergCommodityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName,
+      final String tickerScheme) {
     Validate.notNull(futurePrefix, "future option prefix");
     Validate.notNull(postfix, "postfix");
     Validate.notNull(dataFieldName, "data field name");
@@ -66,10 +72,15 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
     _tickerScheme = tickerScheme;
   }
 
-  /** If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme
-   * @param futurePrefix Two character string representing future type. e.g. S  , AA etc.
-   * @param postfix Generally, "Comdty"
-   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_PRICE
+  /**
+   * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme
+   * 
+   * @param futurePrefix
+   *          Two character string representing future type. e.g. S , AA etc.
+   * @param postfix
+   *          Generally, "Comdty"
+   * @param dataFieldName
+   *          Expecting MarketDataRequirementNames.MARKET_PRICE
    */
   public BloombergCommodityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName) {
     Validate.notNull(futurePrefix, "future option prefix");
@@ -88,13 +99,17 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
 
   @Override
   /**
-   * Provides an ExternalID for Bloomberg ticker,
-   * given a reference date and an integer offset, the n'th subsequent option <p>
-   * The format is prefix + postfix <p>
+   * Provides an ExternalID for Bloomberg ticker, given a reference date and an integer offset, the n'th subsequent option
+   * <p>
+   * The format is prefix + postfix
+   * <p>
    * e.g. S U3 Comdty
    * <p>
-   * @param futureOptionNumber n'th future following curve date, not null
-   * @param curveDate date of future validity; valuation date, not null
+   * 
+   * @param futureOptionNumber
+   *          n'th future following curve date, not null
+   * @param curveDate
+   *          date of future validity; valuation date, not null
    * @return the id of the Bloomberg ticker
    */
   public ExternalId getInstrument(final Number futureNumber, final LocalDate curveDate) {
@@ -144,15 +159,16 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
     }
     final BloombergCommodityFuturePriceCurveInstrumentProvider other = (BloombergCommodityFuturePriceCurveInstrumentProvider) obj;
     return getFuturePrefix().equals(other.getFuturePrefix()) &&
-           getPostfix().equals(other.getPostfix()) &&
-           getDataFieldName().equals(other.getDataFieldName());
+        getPostfix().equals(other.getPostfix()) &&
+        getDataFieldName().equals(other.getDataFieldName());
   }
 
   @Override
   public ExchangeTradedInstrumentExpiryCalculator getExpiryRuleCalculator() {
     final ExchangeTradedInstrumentExpiryCalculator expiryRule = EXPIRY_RULES.get(getFuturePrefix());
     if (expiryRule == null) {
-      throw new OpenGammaRuntimeException("No expiry rule has been setup for " + getFuturePrefix() + ". Determine week and day pattern and add to EXPIRY_RULES.");
+      throw new OpenGammaRuntimeException(
+          "No expiry rule has been setup for " + getFuturePrefix() + ". Determine week and day pattern and add to EXPIRY_RULES.");
     }
     return expiryRule;
   }

@@ -33,11 +33,9 @@ import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Get the single fixed rate that makes the PV of the instrument zero. For
- * fixed-float swaps this is the swap rate, for FRAs it is the forward etc. For
- * instruments that cannot PV to zero, e.g. bonds, a single payment of -1.0 is
- * assumed at zero (i.e. the bond must PV to 1.0)
- * 
+ * Get the single fixed rate that makes the PV of the instrument zero. For fixed-float swaps this is the swap rate, for FRAs it is the forward etc. For
+ * instruments that cannot PV to zero, e.g. bonds, a single payment of -1.0 is assumed at zero (i.e. the bond must PV to 1.0)
+ *
  * @deprecated Use the par rate calculators that reference
  *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
  */
@@ -51,6 +49,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParRateCalculator getInstance() {
@@ -77,7 +76,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
   private static final InterestRateFutureTransactionDiscountingMethod METHOD_IRFUT_TRANSACTION = InterestRateFutureTransactionDiscountingMethod.getInstance();
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IRFUT_SECURITY = InterestRateFutureSecurityDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   // TODO: review
   @Override
@@ -104,7 +103,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
     return METHOD_DEPOSIT_ZERO.parRate(deposit, curves);
   }
 
-  //     -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public Double visitForwardRateAgreement(final ForwardRateAgreement fra, final YieldCurveBundle curves) {
@@ -119,13 +118,15 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
   @Override
   public Double visitCouponIborSpread(final CouponIborSpread payment, final YieldCurveBundle data) {
     final YieldAndDiscountCurve curve = data.getCurve(payment.getForwardCurveName());
-    return (curve.getDiscountFactor(payment.getFixingPeriodStartTime()) / curve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1.0) / payment.getFixingAccrualFactor();
+    return (curve.getDiscountFactor(payment.getFixingPeriodStartTime()) / curve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1.0)
+        / payment.getFixingAccrualFactor();
   }
 
   @Override
   public Double visitCouponIborGearing(final CouponIborGearing payment, final YieldCurveBundle data) {
     final YieldAndDiscountCurve curve = data.getCurve(payment.getForwardCurveName());
-    return (curve.getDiscountFactor(payment.getFixingPeriodStartTime()) / curve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1.0) / payment.getFixingAccrualFactor();
+    return (curve.getDiscountFactor(payment.getFixingPeriodStartTime()) / curve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1.0)
+        / payment.getFixingAccrualFactor();
   }
 
   @Override
@@ -138,12 +139,15 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
     return visitCouponIborSpread(payment.toCoupon(), data);
   }
 
-  //     -----     Swap     -----
+  // ----- Swap -----
 
   /**
    * Computes the par rate of a swap with one fixed leg.
-   * @param swap The Fixed coupon swap.
-   * @param curves The curves.
+   * 
+   * @param swap
+   *          The Fixed coupon swap.
+   * @param curves
+   *          The curves.
    * @return The par swap rate. If the fixed leg has been set up with some fixed payments these are ignored for the purposes of finding the swap rate
    */
   @Override
@@ -155,10 +159,15 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
 
   /**
    * Computes the swap convention-modified par rate for a fixed coupon swap.
-   * <P>Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * @param swap The swap.
-   * @param dayCount The day count convention to modify the swap rate.
-   * @param curves The curves.
+   * <P>
+   * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
+   * 
+   * @param swap
+   *          The swap.
+   * @param dayCount
+   *          The day count convention to modify the swap rate.
+   * @param curves
+   *          The curves.
    * @return The modified rate.
    */
   public Double visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final DayCount dayCount, final YieldCurveBundle curves) {
@@ -168,11 +177,17 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
 
   /**
    * Computes the swap convention-modified par rate for a fixed coupon swap.
-   * <P>Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * @param swap The swap.
-   * @param dayCount The day count convention to modify the swap rate.
-   * @param curves The curves.
-   * @param calendar The calendar
+   * <P>
+   * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
+   * 
+   * @param swap
+   *          The swap.
+   * @param dayCount
+   *          The day count convention to modify the swap rate.
+   * @param curves
+   *          The curves.
+   * @param calendar
+   *          The calendar
    * @return The modified rate.
    */
   public Double visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final DayCount dayCount, final YieldCurveBundle curves, final Calendar calendar) {
@@ -182,10 +197,15 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
 
   /**
    * Computes the swap convention-modified par rate for a fixed coupon swap with a PVBP externally provided.
-   * <P>Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * @param swap The swap.
-   * @param pvbp The present value of a basis point.
-   * @param curves The curves.
+   * <P>
+   * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
+   * 
+   * @param swap
+   *          The swap.
+   * @param pvbp
+   *          The present value of a basis point.
+   * @param curves
+   *          The curves.
    * @return The modified rate.
    */
   public Double visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final double pvbp, final YieldCurveBundle curves) {
@@ -193,11 +213,10 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
     return -pvSecond / pvbp;
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   /**
-   * {@inheritDoc}
-   * Compute the future rate (1-price) without convexity adjustment.
+   * {@inheritDoc} Compute the future rate (1-price) without convexity adjustment.
    */
   @Override
   public Double visitInterestRateFutureTransaction(final InterestRateFutureTransaction future, final YieldCurveBundle curves) {
@@ -205,8 +224,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
   }
 
   /**
-   * {@inheritDoc}
-   * Compute the future rate (1-price) without convexity adjustment.
+   * {@inheritDoc} Compute the future rate (1-price) without convexity adjustment.
    */
   @Override
   public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity future, final YieldCurveBundle curves) {
@@ -216,22 +234,25 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
   // TODO: review
   @Override
   public Double visitForexForward(final ForexForward fx, final YieldCurveBundle curves) {
-    //TODO this is not a par rate, it is a forward FX rate
+    // TODO this is not a par rate, it is a forward FX rate
     final YieldAndDiscountCurve curve1 = curves.getCurve(fx.getPaymentCurrency1().getFundingCurveName());
     final YieldAndDiscountCurve curve2 = curves.getCurve(fx.getPaymentCurrency2().getFundingCurveName());
     final double t = fx.getPaymentTime();
     return fx.getSpotForexRate() * curve2.getDiscountFactor(t) / curve1.getDiscountFactor(t);
   }
 
-  //     -----     Forex     ------: see ForwardRateForexCalculator
+  // ----- Forex ------: see ForwardRateForexCalculator
 
-  //     -----     Bond     -----
+  // ----- Bond -----
 
   // TODO: review
   /**
    * This gives you the bond coupon, for a given yield curve, that renders the bond par (present value of all cash flows equal to 1.0)
-   * @param bond the bond
-   * @param curves the input curves
+   * 
+   * @param bond
+   *          the bond
+   * @param curves
+   *          the input curves
    * @return the par rate
    */
   @Override

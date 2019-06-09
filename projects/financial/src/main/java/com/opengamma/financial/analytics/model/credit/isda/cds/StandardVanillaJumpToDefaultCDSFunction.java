@@ -40,6 +40,7 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Produces the jump to default for single-name CDS.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -56,15 +57,15 @@ public class StandardVanillaJumpToDefaultCDSFunction extends StandardVanillaCDSF
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic,
-                                                final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic,
+      final Tenor[] tenors) {
     final double coupon = getCoupon(definition);
     final double lossGivenDefault = definition.getNotional() * CALCULATOR.valueOnDefault(analytic, yieldCurve, hazardCurve, coupon);
     final double valueOnDefault = definition.getBuySellProtection() == BuySellProtection.BUY ? lossGivenDefault : -lossGivenDefault;
@@ -82,7 +83,7 @@ public class StandardVanillaJumpToDefaultCDSFunction extends StandardVanillaCDSF
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String spreadCurveName = security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(
         context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
+    // TODO shouldn't need all of the yield curve properties
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
     final String yieldCurveCalculationMethod = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_METHOD);
@@ -97,7 +98,8 @@ public class StandardVanillaJumpToDefaultCDSFunction extends StandardVanillaCDSF
     if (creditSpreadCurveShifts != null) {
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

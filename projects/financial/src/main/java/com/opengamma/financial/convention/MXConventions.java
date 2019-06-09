@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard versions of MXN instruments
- * 
+ *
  * @deprecated {@link ConventionBundle} is deprecated. Use a
  *             {@link com.opengamma.core.convention.Convention} instead.
  */
@@ -64,7 +64,8 @@ public class MXConventions {
       final ExternalId tullettImpliedDeposit = tullettPrebonSecurityId("LMIDPMXNSPT" + (i < 10 ? "0" : "") + i + "M");
       final ExternalId simpleImpliedDeposit = simpleNameSecurityId(impliedDepositName);
       utils.addConventionBundle(ExternalIdBundle.of(bbgDeposit, simpleDeposit), depositName, dc, following, Period.ofMonths(i), 0, false, mx);
-      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, dc, following, Period.ofMonths(i), 0, false, mx);
+      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, dc, following, Period.ofMonths(i), 0,
+          false, mx);
     }
 
     for (int i = 1; i < 2; i++) {

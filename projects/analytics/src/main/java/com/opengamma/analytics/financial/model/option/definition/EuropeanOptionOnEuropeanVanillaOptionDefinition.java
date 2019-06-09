@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.BlackScho
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
+ *
  */
 public class EuropeanOptionOnEuropeanVanillaOptionDefinition extends OptionDefinition {
   private static final BlackScholesMertonModel UNDERLYING_MODEL = new BlackScholesMertonModel();
@@ -29,12 +29,14 @@ public class EuropeanOptionOnEuropeanVanillaOptionDefinition extends OptionDefin
   };
   private final EuropeanVanillaOptionDefinition _underlyingOption;
 
-  public EuropeanOptionOnEuropeanVanillaOptionDefinition(final double strike, final Expiry expiry, final boolean isCall, final double underlyingStrike, final Expiry underlyingExpiry,
+  public EuropeanOptionOnEuropeanVanillaOptionDefinition(final double strike, final Expiry expiry, final boolean isCall, final double underlyingStrike,
+      final Expiry underlyingExpiry,
       final boolean isUnderlyingCall) {
     this(strike, expiry, isCall, new EuropeanVanillaOptionDefinition(underlyingStrike, underlyingExpiry, isUnderlyingCall));
   }
 
-  public EuropeanOptionOnEuropeanVanillaOptionDefinition(final double strike, final Expiry expiry, final boolean isCall, final EuropeanVanillaOptionDefinition underlyingOption) {
+  public EuropeanOptionOnEuropeanVanillaOptionDefinition(final double strike, final Expiry expiry, final boolean isCall,
+      final EuropeanVanillaOptionDefinition underlyingOption) {
     super(strike, expiry, isCall);
     Validate.notNull(underlyingOption, "underlying definition");
     if (expiry.getExpiry().isAfter(underlyingOption.getExpiry().getExpiry())) {
@@ -61,7 +63,7 @@ public class EuropeanOptionOnEuropeanVanillaOptionDefinition extends OptionDefin
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_underlyingOption == null) ? 0 : _underlyingOption.hashCode());
+    result = prime * result + (_underlyingOption == null ? 0 : _underlyingOption.hashCode());
     return result;
   }
 

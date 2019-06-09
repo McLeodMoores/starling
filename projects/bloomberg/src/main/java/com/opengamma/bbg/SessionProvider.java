@@ -26,8 +26,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.OpenGammaClock;
 
 /**
- * Supplies a Bloomberg session and service, creating the connection and managaing reconnection if necessary. The main purpose of this class is to throttle the rate of attempts to reconnect. If
- * Bloomberg is down and a connection is attempted every time a request is made the Bloomberg API runs out of memory, possibly due to an unconstrained thread pool.
+ * Supplies a Bloomberg session and service, creating the connection and managaing reconnection if necessary. The main purpose of this class is to throttle the
+ * rate of attempts to reconnect. If Bloomberg is down and a connection is attempted every time a request is made the Bloomberg API runs out of memory, possibly
+ * due to an unconstrained thread pool.
  * <p>
  * This class creates a session on demand but if connection fails it won't retry until a delay has elapsed to avoid overwhelming the Bloomberg API.
  */
@@ -54,44 +55,58 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
   private final EventHandler _eventHandler;
 
   /**
-   * @param connector Bloomberg connection details
-   * @param serviceName Name of the service to open
+   * @param connector
+   *          Bloomberg connection details
+   * @param serviceName
+   *          Name of the service to open
    */
   public SessionProvider(final BloombergConnector connector, final String serviceName) {
     this(connector, serviceName, null);
   }
 
   /**
-   * @param connector Bloomberg connection details
-   * @param serviceName Name of the service to open
-   * @param eventHandler the event handler of bloomberg session. if null session is synchronous
+   * @param connector
+   *          Bloomberg connection details
+   * @param serviceName
+   *          Name of the service to open
+   * @param eventHandler
+   *          the event handler of bloomberg session. if null session is synchronous
    */
   public SessionProvider(final BloombergConnector connector, final String serviceName, final EventHandler eventHandler) {
     this(connector, Collections.singletonList(ArgumentChecker.notNull(serviceName, "serviceName")), eventHandler);
   }
 
   /**
-   * @param connector Bloomberg connection details
-   * @param serviceNames List of service names to open, not null.
+   * @param connector
+   *          Bloomberg connection details
+   * @param serviceNames
+   *          List of service names to open, not null.
    */
   public SessionProvider(final BloombergConnector connector, final Iterable<String> serviceNames) {
     this(connector, serviceNames, null);
   }
 
   /**
-   * @param connector Bloomberg connection details
-   * @param serviceNames List of service names to open, not null.
-   * @param eventHandler the event handler of bloomberg session. if null session is synchronous
+   * @param connector
+   *          Bloomberg connection details
+   * @param serviceNames
+   *          List of service names to open, not null.
+   * @param eventHandler
+   *          the event handler of bloomberg session. if null session is synchronous
    */
   public SessionProvider(final BloombergConnector connector, final Iterable<String> serviceNames, final EventHandler eventHandler) {
     this(connector, DEFAULT_RETRY_DELAY, serviceNames, eventHandler);
   }
 
   /**
-   * @param connector Bloomberg connection details
-   * @param retryDelay Time to wait between unsuccessful connection attempts
-   * @param serviceNames List of service names to open, not null.
-   * @param eventHandler the event handler of bloomberg session. if null session is synchronous
+   * @param connector
+   *          Bloomberg connection details
+   * @param retryDelay
+   *          Time to wait between unsuccessful connection attempts
+   * @param serviceNames
+   *          List of service names to open, not null.
+   * @param eventHandler
+   *          the event handler of bloomberg session. if null session is synchronous
    */
   public SessionProvider(final BloombergConnector connector, final long retryDelay, final Iterable<String> serviceNames, final EventHandler eventHandler) {
     ArgumentChecker.notNull(connector, "connector");
@@ -111,7 +126,8 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
    * Returns a session, creating it if necessary. If this method is called after the provider is closed a new session will be created.
    *
    * @return The session, not null
-   * @throws ConnectionUnavailableException If no connection is available
+   * @throws ConnectionUnavailableException
+   *           If no connection is available
    */
   public Session getSession() {
     final Session newSession;
@@ -177,8 +193,10 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
 
   /**
    * @return The service, not null
-   * @param serviceName the service name, not null
-   * @throws ConnectionUnavailableException If no connection is available
+   * @param serviceName
+   *          the service name, not null
+   * @throws ConnectionUnavailableException
+   *           If no connection is available
    */
   public Service getService(final String serviceName) {
     ArgumentChecker.notNull(serviceName, "serviceName");
@@ -233,8 +251,9 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
   }
 
   /**
-   * Tests if the provider is running, that is a call has been made to {@link #start}. This does not mean that there is a connection to Bloomberg - use {@link #isConnected} to test for that. If this
-   * returns false it will mean there is no active connection and none will be made by calls to {@link #getSession}.
+   * Tests if the provider is running, that is a call has been made to {@link #start}. This does not mean that there is a connection to Bloomberg - use
+   * {@link #isConnected} to test for that. If this returns false it will mean there is no active connection and none will be made by calls to
+   * {@link #getSession}.
    *
    * @return true if the provider is started, false otherwise.
    */
@@ -260,7 +279,8 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
   @Override
   public void bloombergAvailable() {
     // If the session is already invalid the next call to {@link #getSession} will try and connect if we set the timestamp to the epoch.
-    // If the session is connected (for example we triggered the notify) then we'll be set for immediate reconnection - this recovers from temporary network problems
+    // If the session is connected (for example we triggered the notify) then we'll be set for immediate reconnection - this recovers from temporary network
+    // problems
     Instant lastRetry;
     do {
       lastRetry = _lastRetry.get();
@@ -274,6 +294,7 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
 
   /**
    * Gets the connector.
+   * 
    * @return the connector
    */
   public BloombergConnector getConnector() {

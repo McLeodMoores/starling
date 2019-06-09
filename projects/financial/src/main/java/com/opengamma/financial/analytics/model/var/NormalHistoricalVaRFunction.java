@@ -52,7 +52,8 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
   public static final String DEFAULT_PNL_CONTRIBUTIONS = "Delta";
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Object pnlSeriesObj = inputs.getValue(ValueRequirementNames.PNL_SERIES);
     if (pnlSeriesObj == null) {
       throw new OpenGammaRuntimeException("Could not get P&L series for " + target);
@@ -154,7 +155,7 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
     final ValueProperties.Builder properties = ValueProperties.builder()
         .with(ValuePropertyNames.SCHEDULE_CALCULATOR, scheduleCalculatorName.iterator().next())
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName.iterator().next())
-        .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, pnlContributionName); //TODO
+        .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, pnlContributionName); // TODO
     if (desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY) == null) {
       properties.with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriodName.iterator().next());
     }
@@ -180,7 +181,8 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final String currency = input.getProperty(ValuePropertyNames.CURRENCY);
     if (currency == null) {
@@ -194,7 +196,8 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
     return Sets.newHashSet(varSpecification, stddevSpecification);
   }
 
-  private ValueProperties getResultProperties(final ValueProperties priceTsProperties, final String currency, final String aggregationStyle, final String pnlContribution) {
+  private ValueProperties getResultProperties(final ValueProperties priceTsProperties, final String currency, final String aggregationStyle,
+      final String pnlContribution) {
     final ValueProperties.Builder properties = createValueProperties()
         .with(ValuePropertyNames.CURRENCY, currency)
         .withAny(ValuePropertyNames.SAMPLING_PERIOD)
@@ -235,15 +238,15 @@ public class NormalHistoricalVaRFunction extends AbstractFunction.NonCompiledInv
     if (stdDevCalculatorNames == null || stdDevCalculatorNames.isEmpty() || stdDevCalculatorNames.size() != 1) {
       throw new OpenGammaRuntimeException("Missing or non-unique standard deviation calculator name: " + stdDevCalculatorNames);
     }
-    final DoubleTimeSeriesStatisticsCalculator meanCalculator =
-        new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(meanCalculatorNames.iterator().next()));
-    final DoubleTimeSeriesStatisticsCalculator stdDevCalculator =
-        new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(stdDevCalculatorNames.iterator().next()));
+    final DoubleTimeSeriesStatisticsCalculator meanCalculator = new DoubleTimeSeriesStatisticsCalculator(
+        StatisticsCalculatorFactory.getCalculator(meanCalculatorNames.iterator().next()));
+    final DoubleTimeSeriesStatisticsCalculator stdDevCalculator = new DoubleTimeSeriesStatisticsCalculator(
+        StatisticsCalculatorFactory.getCalculator(stdDevCalculatorNames.iterator().next()));
     return new NormalLinearVaRCalculator<>(meanCalculator, stdDevCalculator);
   }
 
   private ValueProperties.Builder copyOptional(final ValueProperties origProps, final ValueProperties.Builder propBuilder) {
-    for (final String prop: origProps.getProperties()) {
+    for (final String prop : origProps.getProperties()) {
       if (origProps.isOptional(prop)) {
         propBuilder.withOptional(prop).with(prop, origProps.getSingleValue(prop));
       }

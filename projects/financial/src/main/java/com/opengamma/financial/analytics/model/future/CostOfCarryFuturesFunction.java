@@ -63,21 +63,22 @@ public abstract class CostOfCarryFuturesFunction<T> extends FuturesFunction<T> {
   protected ValueProperties.Builder createValueProperties(final ComputationTarget target) {
     final Currency ccy = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
     final ValueProperties.Builder properties = createValueProperties()
-      .with(ValuePropertyNames.CURRENCY, ccy.getCode())
-      .with(ValuePropertyNames.CALCULATION_METHOD, CALCULATION_METHOD_NAME);
+        .with(ValuePropertyNames.CURRENCY, ccy.getCode())
+        .with(ValuePropertyNames.CALCULATION_METHOD, CALCULATION_METHOD_NAME);
     return properties;
   }
 
   @Override
   protected SimpleFutureDataBundle getFutureDataBundle(final FutureSecurity security, final FunctionInputs inputs,
-    final HistoricalTimeSeriesBundle timeSeriesBundle, final ValueRequirement desiredValue) {
+      final HistoricalTimeSeriesBundle timeSeriesBundle, final ValueRequirement desiredValue) {
     final Double spotUnderlyer = getSpot(inputs);
     final Double costOfCarry = getCostOfCarry(security, inputs);
     return new SimpleFutureDataBundle(null, null, spotUnderlyer, null, costOfCarry);
   }
 
   private ValueRequirement getCostOfCarryRequirement(final FutureSecurity security) {
-    return new ValueRequirement(MarketDataRequirementNames.COST_OF_CARRY, ComputationTargetType.PRIMITIVE, getSpotAssetId(security)); // [PLAT-2286] Is this PRIMITIVE or SECURITY?
+    return new ValueRequirement(MarketDataRequirementNames.COST_OF_CARRY, ComputationTargetType.PRIMITIVE, getSpotAssetId(security)); // [PLAT-2286] Is this
+    // PRIMITIVE or SECURITY?
   }
 
   private Double getCostOfCarry(final FutureSecurity security, final FunctionInputs inputs) {

@@ -34,17 +34,18 @@ public class ViewStatusTool extends AbstractTool<ToolContext> {
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusTool.class);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ViewStatusTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final ViewStatusOption option = ViewStatusOption.getViewStatusReporterOption(getCommandLine(), getToolContext());
@@ -92,7 +93,8 @@ public class ViewStatusTool extends AbstractTool<ToolContext> {
 
   private UniqueId createReferencePortfolio() {
     final ToolContext toolContext = getToolContext();
-    final BloombergReferencePortfolioMaker portfolioMaker = new BloombergReferencePortfolioMaker(toolContext.getPortfolioMaster(), toolContext.getPositionMaster(), toolContext.getSecurityMaster());
+    final BloombergReferencePortfolioMaker portfolioMaker = new BloombergReferencePortfolioMaker(toolContext.getPortfolioMaster(),
+        toolContext.getPositionMaster(), toolContext.getSecurityMaster());
     portfolioMaker.run();
     return findPortfolioId(BloombergReferencePortfolioMaker.PORTFOLIO_NAME);
   }

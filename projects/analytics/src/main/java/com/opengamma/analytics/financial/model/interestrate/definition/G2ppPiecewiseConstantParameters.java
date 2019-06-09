@@ -5,17 +5,17 @@
  */
 package com.opengamma.analytics.financial.model.interestrate.definition;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Arrays;
 
 import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.util.ArgumentChecker;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * Parameters related to the G2++ model (equivalent to Hull-White two factors) with piecewise constant volatility.
- * Reference: Brigo D. anf Mercurio F. Interest Rate Models: Theory and practice. 2001 - Section 4.2.
+ * Parameters related to the G2++ model (equivalent to Hull-White two factors) with piecewise constant volatility. Reference: Brigo D. anf Mercurio F. Interest
+ * Rate Models: Theory and practice. 2001 - Section 4.2.
  */
 public class G2ppPiecewiseConstantParameters {
 
@@ -24,13 +24,13 @@ public class G2ppPiecewiseConstantParameters {
    */
   private final double[] _meanReversion;
   /**
-   * The volatility parameters. The volatility is constant between the volatility times. Volatility in t is _volatility[i] for t between _volatilityTime[i] and _volatilityTime[i+1].
-   * There are two volatility list, one for each factor.
+   * The volatility parameters. The volatility is constant between the volatility times. Volatility in t is _volatility[i] for t between _volatilityTime[i] and
+   * _volatilityTime[i+1]. There are two volatility list, one for each factor.
    */
   private final DoubleArrayList[] _volatility = new DoubleArrayList[2];
   /**
-   * The times separating the constant volatility periods. The time should be sorted by increasing order. The first time is 0 and the last time is 1000 (represents infinity).
-   * The extra time are added in the constructor.
+   * The times separating the constant volatility periods. The time should be sorted by increasing order. The first time is 0 and the last time is 1000
+   * (represents infinity). The extra time are added in the constructor.
    */
   private final DoubleArrayList _volatilityTime;
   /**
@@ -44,10 +44,15 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Constructor from the model parameters.
-   * @param meanReversion The mean reversion speed (2) parameters.
-   * @param volatility The volatility parameters. There are two volatility list, one for each factor.
-   * @param volatilityTime The times separating the constant volatility periods.
-   * @param correlation The model correlation.
+   * 
+   * @param meanReversion
+   *          The mean reversion speed (2) parameters.
+   * @param volatility
+   *          The volatility parameters. There are two volatility list, one for each factor.
+   * @param volatilityTime
+   *          The times separating the constant volatility periods.
+   * @param correlation
+   *          The model correlation.
    */
   public G2ppPiecewiseConstantParameters(final double[] meanReversion, final double[][] volatility, final double[] volatilityTime, final double correlation) {
     ArgumentChecker.notNull(meanReversion, "mean reversion");
@@ -56,7 +61,8 @@ public class G2ppPiecewiseConstantParameters {
     ArgumentChecker.isTrue(meanReversion.length == 2, "Two mean reversions required");
     ArgumentChecker.isTrue(volatility.length == 2, "Two volatility arrays required");
     ArgumentChecker.isTrue(volatility[0].length == volatility[1].length, "Volatility length");
-    ArgumentChecker.isTrue(volatility[0].length == volatilityTime.length + 1, "Number of times incorrect; had {}, need {}", volatilityTime.length + 1, volatility[0].length);
+    ArgumentChecker.isTrue(volatility[0].length == volatilityTime.length + 1, "Number of times incorrect; had {}, need {}", volatilityTime.length + 1,
+        volatility[0].length);
     _meanReversion = meanReversion;
     _volatility[0] = new DoubleArrayList(volatility[0]);
     _volatility[1] = new DoubleArrayList(volatility[1]);
@@ -71,6 +77,7 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Gets the mean reversion speed parameters.
+   * 
    * @return The mean reversion speed parameters.
    */
   public double[] getMeanReversion() {
@@ -79,6 +86,7 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Gets the volatility parameters.
+   * 
    * @return The volatility parameters.
    */
   public DoubleArrayList[] getVolatility() {
@@ -87,7 +95,9 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Sets the volatility parameters.
-   * @param volatility The volatility parameters.
+   * 
+   * @param volatility
+   *          The volatility parameters.
    */
   public void setVolatility(final double[][] volatility) {
     ArgumentChecker.isTrue(volatility.length == 2, "Two volatility arrays required");
@@ -99,6 +109,7 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Gets the correlation.
+   * 
    * @return The correlation
    */
   public double getCorrelation() {
@@ -107,6 +118,7 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Gets the times separating the constant volatility periods.
+   * 
    * @return The times.
    */
   public double[] getVolatilityTime() {
@@ -115,15 +127,18 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Gets the last volatility of the volatility list.
+   * 
    * @return The last volatility.
    */
   public double[] getLastVolatilities() {
-    return new double[] {_volatility[0].get(_volatility[0].size() - 1), _volatility[1].get(_volatility[1].size() - 1)};
+    return new double[] { _volatility[0].get(_volatility[0].size() - 1), _volatility[1].get(_volatility[1].size() - 1) };
   }
 
   /**
    * Sets the last volatilities of the volatility lists.
-   * @param volatility The replacing volatility.
+   * 
+   * @param volatility
+   *          The replacing volatility.
    */
   public void setLastVolatilities(final double[] volatility) {
     ArgumentChecker.isTrue(volatility.length == 2, "Two volatilities required");
@@ -133,8 +148,11 @@ public class G2ppPiecewiseConstantParameters {
 
   /**
    * Add an extra volatilities and volatility time at the end of the lists.
-   * @param volatility The volatilities. Array of dimension 2.
-   * @param volatilityTime The times separating the constant volatility periods. Must be larger than the previous one.
+   * 
+   * @param volatility
+   *          The volatilities. Array of dimension 2.
+   * @param volatilityTime
+   *          The times separating the constant volatility periods. Must be larger than the previous one.
    */
   public void addVolatility(final double[] volatility, final double volatilityTime) {
     ArgumentChecker.isTrue(volatility.length == 2, "Two volatilities required");
@@ -151,7 +169,7 @@ public class G2ppPiecewiseConstantParameters {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_correlation);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_meanReversion);
     result = prime * result + Arrays.hashCode(_volatility);
     result = prime * result + _volatilityTime.hashCode();

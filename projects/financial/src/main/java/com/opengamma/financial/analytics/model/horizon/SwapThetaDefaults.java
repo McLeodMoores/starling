@@ -36,12 +36,12 @@ public class SwapThetaDefaults extends InterestRateInstrumentDefaultPropertiesFu
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ThetaPropertyNamesAndValues.PROPERTY_DAYS_TO_MOVE_FORWARD.equals(propertyName)) {
       return Collections.singleton(_defaultNumberOfDays);
     }
     return super.getDefaultValue(context, target, desiredValue, propertyName);
   }
-
 
 }

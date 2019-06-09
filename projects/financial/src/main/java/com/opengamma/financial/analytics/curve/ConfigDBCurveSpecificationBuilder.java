@@ -175,7 +175,8 @@ public class ConfigDBCurveSpecificationBuilder implements CurveSpecificationBuil
   //   * @param curveDefinition The curve definition
   //   * @return The curve specification
   //   */
-  //  private AbstractCurveSpecification getSpreadCurveSpecification(final Instant valuationTime, final LocalDate curveDate, final SpreadCurveDefinition curveDefinition) {
+  // private AbstractCurveSpecification getSpreadCurveSpecification(final Instant valuationTime, final LocalDate curveDate, final SpreadCurveDefinition
+  // curveDefinition) {
   //    final AbstractCurveDefinition firstDefinition = _definitionSource.getDefinition(curveDefinition.getFirstCurve());
   //    final AbstractCurveDefinition secondDefinition = _definitionSource.getDefinition(curveDefinition.getSecondCurve());
   //    final AbstractCurveSpecification firstSpecification = buildSpecification(valuationTime, curveDate, firstDefinition);

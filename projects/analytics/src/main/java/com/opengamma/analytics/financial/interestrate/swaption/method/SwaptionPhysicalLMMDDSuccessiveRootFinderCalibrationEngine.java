@@ -20,6 +20,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Specific calibration engine for the LMM model with swaption.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -32,7 +33,9 @@ public class SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationEngine extends 
 
   /**
    * Constructor of the calibration engine.
-   * @param calibrationObjective The calibration objective.
+   *
+   * @param calibrationObjective
+   *          The calibration objective.
    */
   public SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationEngine(final SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective calibrationObjective) {
     super(calibrationObjective);
@@ -41,6 +44,7 @@ public class SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationEngine extends 
 
   /**
    * Gets the instrument index.
+   *
    * @return The instrument index.
    */
   public List<Integer> getInstrumentIndex() {
@@ -56,7 +60,8 @@ public class SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationEngine extends 
     getBasket().add(instrument);
     getMethod().add(method);
     getCalibrationPrice().add(0.0);
-    _instrumentIndex.add(Arrays.binarySearch(((SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective) getCalibrationObjective()).getLMMParameters().getIborTime(),
+    _instrumentIndex
+    .add(Arrays.binarySearch(((SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective) getCalibrationObjective()).getLMMParameters().getIborTime(),
         swaption.getUnderlyingSwap().getSecondLeg().getNthPayment(swaption.getUnderlyingSwap().getSecondLeg().getNumberOfPayments() - 1).getPaymentTime()));
   }
 
@@ -65,7 +70,8 @@ public class SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationEngine extends 
     computeCalibrationPrice(curves);
     getCalibrationObjective().setCurves(curves);
     final int nbInstruments = getBasket().size();
-    final SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective objective = (SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective) getCalibrationObjective();
+    final SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective objective =
+        (SwaptionPhysicalLMMDDSuccessiveRootFinderCalibrationObjective) getCalibrationObjective();
     final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(objective.getFunctionValueAccuracy(), objective.getVariableAbsoluteAccuracy());
     final BracketRoot bracketer = new BracketRoot();
     for (int loopins = 0; loopins < nbInstruments; loopins++) {

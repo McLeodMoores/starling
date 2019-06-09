@@ -22,6 +22,7 @@ public final class PositionThetaSTIRFutureOptionCalculator extends InstrumentDer
 
   /**
    * Gets the singleton of the calculator.
+   * 
    * @return the calculator.
    */
   public static PositionThetaSTIRFutureOptionCalculator getInstance() {
@@ -37,10 +38,12 @@ public final class PositionThetaSTIRFutureOptionCalculator extends InstrumentDer
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionBlackSmileMethod METHOD_STIR = InterestRateFutureOptionMarginTransactionBlackSmileMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSmileMethod METHOD_STIR = InterestRateFutureOptionMarginTransactionBlackSmileMethod
+      .getInstance();
 
   @Override
-  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction option, final BlackSTIRFuturesProviderInterface data) {
+  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction option,
+      final BlackSTIRFuturesProviderInterface data) {
     return METHOD_STIR.presentValueTheta(option, data);
   }
 }

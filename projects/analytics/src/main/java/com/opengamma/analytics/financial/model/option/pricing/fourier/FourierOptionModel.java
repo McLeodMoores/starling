@@ -23,7 +23,7 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.E
 import com.opengamma.analytics.math.integration.Integrator1D;
 
 /**
- * 
+ *
  */
 public class FourierOptionModel implements OptionModel<EuropeanVanillaOptionDefinition, BlackOptionDataBundle> {
   private static final Logger LOGGER = LoggerFactory.getLogger(FourierOptionModel.class);
@@ -48,11 +48,13 @@ public class FourierOptionModel implements OptionModel<EuropeanVanillaOptionDefi
     this(characteristicExponent, integrator, DEFAULT_ALPHA, DEFAULT_LIMIT_TOLERANCE, DEFAULT_USE_VARIANCE_REDUCTION);
   }
 
-  public FourierOptionModel(final MartingaleCharacteristicExponent characteristicExponent, final Integrator1D<Double, Double> integrator, final boolean useVarianceReduction) {
+  public FourierOptionModel(final MartingaleCharacteristicExponent characteristicExponent, final Integrator1D<Double, Double> integrator,
+      final boolean useVarianceReduction) {
     this(characteristicExponent, integrator, DEFAULT_ALPHA, DEFAULT_LIMIT_TOLERANCE, useVarianceReduction);
   }
 
-  public FourierOptionModel(final MartingaleCharacteristicExponent characteristicExponent, final double alpha, final double limitTolerance, final boolean useVarianceReduction) {
+  public FourierOptionModel(final MartingaleCharacteristicExponent characteristicExponent, final double alpha, final double limitTolerance,
+      final boolean useVarianceReduction) {
     Validate.notNull(characteristicExponent, "characteristic exponent");
     Validate.isTrue(alpha != 0 && alpha != -1, "alpha cannot be equal to -1 or 0");
     Validate.isTrue(limitTolerance > 0, "limit tolerance > 0");
@@ -77,7 +79,8 @@ public class FourierOptionModel implements OptionModel<EuropeanVanillaOptionDefi
   }
 
   @Override
-  public GreekResultCollection getGreeks(final EuropeanVanillaOptionDefinition definition, final BlackOptionDataBundle dataBundle, final Set<Greek> requiredGreeks) {
+  public GreekResultCollection getGreeks(final EuropeanVanillaOptionDefinition definition, final BlackOptionDataBundle dataBundle,
+      final Set<Greek> requiredGreeks) {
     Validate.notNull(definition, "definition");
     Validate.notNull(dataBundle, "data bundle");
     Validate.notNull(requiredGreeks, "required greeks");

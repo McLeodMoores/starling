@@ -21,7 +21,8 @@ import com.opengamma.masterdb.security.hibernate.OperationContext;
 /**
  * EquityIndexOptionSecurityBeanOperation
  */
-public final class EquityIndexFutureOptionSecurityBeanOperation  extends AbstractSecurityBeanOperation<EquityIndexFutureOptionSecurity, EquityIndexFutureOptionSecurityBean> {
+public final class EquityIndexFutureOptionSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<EquityIndexFutureOptionSecurity, EquityIndexFutureOptionSecurityBean> {
 
   /**
    * Singleton

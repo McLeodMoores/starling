@@ -22,8 +22,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Abstract reference data provider decorator that caches permanent invalid field errors.
  * <p>
- * It is strongly recommended to always decorate the underlying provider with a permanent
- * invalid field error caching provider. This avoids excess queries to Bloomberg.
+ * It is strongly recommended to always decorate the underlying provider with a permanent invalid field error caching provider. This avoids excess queries to
+ * Bloomberg.
  */
 public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends AbstractReferenceDataProvider {
   // See BBG-72
@@ -36,14 +36,15 @@ public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends A
   /**
    * Creates an instance.
    *
-   * @param underlying  the underlying provider, not null
+   * @param underlying
+   *          the underlying provider, not null
    */
   protected AbstractInvalidFieldCachingReferenceDataProvider(final ReferenceDataProvider underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
     _underlying = underlying;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the underlying provider.
    *
@@ -53,7 +54,7 @@ public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends A
     return _underlying;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
     // this implementation always caches and ignore the use-cache flag in the request
@@ -90,11 +91,14 @@ public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends A
   /**
    * Examines and groups the request using the known invalid fields.
    *
-   * @param request  the request, not null
-   * @param invalidFieldsByIdentifier  the invalid fields, keyed by identifier, not null
+   * @param request
+   *          the request, not null
+   * @param invalidFieldsByIdentifier
+   *          the invalid fields, keyed by identifier, not null
    * @return the map of field-set to identifier-set, not null
    */
-  protected Map<Set<String>, Set<String>> buildUnderlyingRequestGroups(final ReferenceDataProviderGetRequest request, final Map<String, Set<String>> invalidFieldsByIdentifier) {
+  protected Map<Set<String>, Set<String>> buildUnderlyingRequestGroups(final ReferenceDataProviderGetRequest request,
+      final Map<String, Set<String>> invalidFieldsByIdentifier) {
     final Map<Set<String>, Set<String>> result = Maps.newHashMap();
     for (final String identifier : request.getIdentifiers()) {
       // select known invalid fields for the identifier
@@ -122,8 +126,10 @@ public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends A
   /**
    * Checks the reference data and adds any extra permanent errors to the cache.
    *
-   * @param refData  the reference data to check, not null
-   * @param invalidFields  the previously cached invalid fields for the identifier, may be null
+   * @param refData
+   *          the reference data to check, not null
+   * @param invalidFields
+   *          the previously cached invalid fields for the identifier, may be null
    */
   protected void checkAndSaveInvalidFields(final ReferenceData refData, final Set<String> invalidFields) {
     // find all the new invalid fields
@@ -143,13 +149,14 @@ public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends A
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Finds the fields which previously failed for the specified identifiers.
    * <p>
    * This loads from the cache.
    *
-   * @param identifiers  the identifiers to find errors for, not null
+   * @param identifiers
+   *          the identifiers to find errors for, not null
    * @return the map of invalid fields keyed by identifier, not null
    */
   protected abstract Map<String, Set<String>> loadInvalidFields(Set<String> identifiers);
@@ -159,21 +166,24 @@ public abstract class AbstractInvalidFieldCachingReferenceDataProvider extends A
    * <p>
    * This stores into the cache.
    *
-   * @param identifier  the identifier to save errors for, not null
-   * @param invalidFields  the invalid fields, not null
+   * @param identifier
+   *          the identifier to save errors for, not null
+   * @param invalidFields
+   *          the invalid fields, not null
    */
   protected abstract void saveInvalidFields(String identifier, Set<String> invalidFields);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks whether the specified error is permanent or not.
    *
-   * @param error  the error object, not null
+   * @param error
+   *          the error object, not null
    * @return true if error is permanent
    */
   protected boolean isPermanent(final ReferenceDataError error) {
     return error.isFieldBased() && "BAD_FLD".equals(error.getCategory()) &&
-          "NOT_APPLICABLE_TO_REF_DATA".equals(error.getSubcategory());
+        "NOT_APPLICABLE_TO_REF_DATA".equals(error.getSubcategory());
   }
 
 }

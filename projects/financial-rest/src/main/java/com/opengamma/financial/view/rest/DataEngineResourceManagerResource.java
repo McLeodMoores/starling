@@ -35,7 +35,8 @@ import com.opengamma.util.rest.AbstractDataResource;
 /**
  * RESTful resource for a {@link EngineResourceManager}
  *
- * @param <T>  the type of resource
+ * @param <T>
+ *          the type of resource
  */
 public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifiable> extends AbstractDataResource {
 
@@ -71,7 +72,7 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
     return referenceResource;
   }
 
-  /*package*/ void referenceReleased(final long uniqueId) {
+  /* package */ void referenceReleased(final long uniqueId) {
     _activeReferences.remove(uniqueId);
   }
 
@@ -79,7 +80,7 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
     return _baseUri;
   }
 
-  /*package*/ URI manageReference(final EngineResourceReference<? extends T> reference) {
+  /* package */ URI manageReference(final EngineResourceReference<? extends T> reference) {
     final long referenceId = _nextReferenceId.getAndIncrement();
     final DataEngineResourceReferenceResource<T> referenceResource = createReferenceResource(referenceId, reference);
     _activeReferences.put(referenceId, referenceResource);
@@ -91,7 +92,8 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
   /**
    * Releases and discards any references that have not received a heartbeat since the given time.
    *
-   * @param oldestHeartbeatTime  the oldest permitted heartbeat time, not null
+   * @param oldestHeartbeatTime
+   *          the oldest permitted heartbeat time, not null
    */
   public void releaseExpiredReferences(final Instant oldestHeartbeatTime) {
     ArgumentChecker.notNull(oldestHeartbeatTime, "oldestHeartbeatTime");
@@ -102,7 +104,7 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
       if (referenceResource.getLastHeartbeat().isBefore(oldestHeartbeatTime)) {
         // Notifies the manager which removes it from the map
         LOGGER.warn("Releasing reference {} which has not received a heartbeat since {}, which exceeds the oldest allowed heartbeat of {}",
-            new Object[] {entry.getKey(), referenceResource.getLastHeartbeat(), oldestHeartbeatTime});
+            new Object[] { entry.getKey(), referenceResource.getLastHeartbeat(), oldestHeartbeatTime });
         referenceResource.release();
       }
     }
@@ -124,10 +126,13 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
 
     /**
      * Sets the scheduler.
-     * @param scheduler  the scheduler, not null
+     * 
+     * @param scheduler
+     *          the scheduler, not null
      */
     public void setScheduler(final ScheduledExecutorService scheduler) {
-      scheduler.scheduleWithFixedDelay(this, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS, TimeUnit.MILLISECONDS);
+      scheduler.scheduleWithFixedDelay(this, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS,
+          TimeUnit.MILLISECONDS);
     }
 
   }

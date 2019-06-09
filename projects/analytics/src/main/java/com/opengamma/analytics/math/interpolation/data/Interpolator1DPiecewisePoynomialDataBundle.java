@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.interpolation.PiecewisePolynomialResultsWith
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Data bundle for PiecewisePolynomialInterpolator1D
+ * Data bundle for PiecewisePolynomialInterpolator1D.
  */
 public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1DDataBundle {
 
@@ -20,9 +20,12 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   private final Interpolator1DDataBundle _underlyingData;
 
   /**
-   * Constructor where coefficients for interpolant and its node sensitivity are computed
-   * @param underlyingData Contains sorted data (x,y)
-   * @param method {@link PiecewisePolynomialInterpolator}
+   * Constructor where coefficients for interpolant and its node sensitivity are computed.
+   *
+   * @param underlyingData
+   *          Contains sorted data (x,y)
+   * @param method
+   *          {@link PiecewisePolynomialInterpolator}
    */
   public Interpolator1DPiecewisePoynomialDataBundle(final Interpolator1DDataBundle underlyingData, final PiecewisePolynomialInterpolator method) {
     ArgumentChecker.notNull(underlyingData, "underlying data");
@@ -33,12 +36,17 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   }
 
   /**
-   * @param underlyingData Contains sorted data (x,y)
-   * @param method  {@link PiecewisePolynomialInterpolator}
-   * @param leftCond  Condition on left endpoint
-   * @param rightCond  Condition on right endpoint
+   * @param underlyingData
+   *          Contains sorted data (x,y)
+   * @param method
+   *          {@link PiecewisePolynomialInterpolator}
+   * @param leftCond
+   *          Condition on left endpoint
+   * @param rightCond
+   *          Condition on right endpoint
    */
-  public Interpolator1DPiecewisePoynomialDataBundle(final Interpolator1DDataBundle underlyingData, final PiecewisePolynomialInterpolator method, final double leftCond, final double rightCond) {
+  public Interpolator1DPiecewisePoynomialDataBundle(final Interpolator1DDataBundle underlyingData, final PiecewisePolynomialInterpolator method,
+      final double leftCond, final double rightCond) {
     ArgumentChecker.notNull(underlyingData, "underlying data");
     ArgumentChecker.notNull(method, "method");
 
@@ -54,7 +62,8 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   }
 
   /**
-   * Access PiecewisePolynomialResultsWithSensitivity
+   * Access PiecewisePolynomialResultsWithSensitivity.
+   *
    * @return PiecewisePolynomialResultsWithSensitivity
    */
   public PiecewisePolynomialResultsWithSensitivity getPiecewisePolynomialResultsWithSensitivity() {
@@ -63,6 +72,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
 
   /**
    * Get x values of breakpoints, which are different from "keys" for certain interpolations
+   *
    * @return X values of breakpoints
    */
   public double[] getBreakpointsX() {
@@ -71,6 +81,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
 
   /**
    * Get y values of breakpoints, which are different from "values" for certain interpolations
+   *
    * @return Y values of breakpoints
    */
   public double[] getBreakPointsY() {

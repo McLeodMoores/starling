@@ -24,6 +24,7 @@ import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues
 
 /**
  * The function calculating the Black volatility sensitivity to each point to which the option is sensitive..
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -38,7 +39,8 @@ public class FXDigitalCallSpreadBlackVegaPointFunction extends FXDigitalCallSpre
       final Set<ValueRequirement> desiredValues, final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final String spreadName = Iterables.getOnlyElement(desiredValues).getConstraint(CalculationPropertyNamesAndValues.PROPERTY_CALL_SPREAD_VALUE);
     final double spread = Double.parseDouble(spreadName);
-    final PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator calculator = new PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator(spread);
+    final PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator calculator =
+        new PresentValueBlackVolatilitySensitivityCallSpreadBlackForexCalculator(spread);
     final PresentValueForexBlackVolatilitySensitivity result = fxDigital.accept(calculator, data);
     return Collections.singleton(new ComputedValue(spec, result));
   }

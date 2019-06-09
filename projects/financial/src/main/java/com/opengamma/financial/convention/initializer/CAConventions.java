@@ -5,7 +5,6 @@
  */
 package com.opengamma.financial.convention.initializer;
 
-
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.DEPOSIT_ON;
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.FIXED_LEG;
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.IRS_IBOR_LEG;
@@ -71,7 +70,7 @@ public class CAConventions extends ConventionMasterInitializer {
   protected CAConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
 
@@ -99,7 +98,8 @@ public class CAConventions extends ConventionMasterInitializer {
 
     // CDOR Legs
     final String cdor3M6MLegConventionName = getConventionName(CCY, TENOR_STR_3M + TENOR_STR_6M, CDOR_CMP_LEG);
-    final CompoundingIborLegConvention cdor3M6MLegConvention = createCompoundingIborLegConvention(cdor3M6MLegConventionName, cdorConventionId, TENOR_STR_3M, Tenor.THREE_MONTHS,
+    final CompoundingIborLegConvention cdor3M6MLegConvention = createCompoundingIborLegConvention(cdor3M6MLegConventionName, cdorConventionId, TENOR_STR_3M,
+        Tenor.THREE_MONTHS,
         TENOR_STR_6M, Tenor.SIX_MONTHS);
 
     // Overnight Legs
@@ -164,7 +164,7 @@ public class CAConventions extends ConventionMasterInitializer {
   }
 
   protected CompoundingIborLegConvention createCompoundingIborLegConvention(final String cdorLegConventionName, final ExternalId cdorConventionId,
-      final String resetTenorString, final Tenor resetTenor, final String paymentTenorString,  final Tenor paymentTenor) {
+      final String resetTenorString, final Tenor resetTenor, final String paymentTenorString, final Tenor paymentTenor) {
     return new CompoundingIborLegConvention(cdorLegConventionName, getIds(CCY, resetTenorString + paymentTenorString, CDOR_CMP_LEG), cdorConventionId,
         paymentTenor, CompoundingType.FLAT_COMPOUNDING, resetTenor, StubType.SHORT_START, 0, true, StubType.SHORT_START, false, 0);
   }

@@ -42,15 +42,15 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Calculates the PV01 of a bond or bond future for all curves to which the instruments are sensitive.
  */
-public class BondAndBondFuturePV01Function extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> {
+public class BondAndBondFuturePV01Function
+extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> {
   /** The PV01 calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityIssuerCalculator.getInstance());
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01} and sets the
-   * calculator to {@link PV01CurveParametersCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PV01} and sets the calculator to
+   * {@link PV01CurveParametersCalculator}.
    */
   public BondAndBondFuturePV01Function() {
     super(PV01, CALCULATOR);

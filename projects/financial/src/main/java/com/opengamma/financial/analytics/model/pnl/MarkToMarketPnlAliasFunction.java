@@ -19,7 +19,8 @@ import com.opengamma.financial.value.ValueRenamingFunction;
 public class MarkToMarketPnlAliasFunction extends ValueRenamingFunction {
 
   public MarkToMarketPnlAliasFunction(final String aliasedValueRequirementName, final String tradeTypeConstraint) {
-    super(Collections.singleton(ValueRequirementNames.MTM_PNL), aliasedValueRequirementName, ComputationTargetType.TRADE.or(ComputationTargetType.POSITION).or(ComputationTargetType.PORTFOLIO_NODE),
+    super(Collections.singleton(ValueRequirementNames.MTM_PNL), aliasedValueRequirementName,
+        ComputationTargetType.TRADE.or(ComputationTargetType.POSITION).or(ComputationTargetType.PORTFOLIO_NODE),
         ValueProperties.with(PnLFunctionUtils.PNL_TRADE_TYPE_CONSTRAINT, tradeTypeConstraint).get());
     if (!tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_ALL)
         && !tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_OPEN)

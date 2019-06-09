@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bond;
@@ -20,7 +20,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class BondZSpreadPresentValueSensitivityFromMarketCleanPriceFunction extends BondZSpreadPresentValueSensitivityFunction {
 
@@ -40,11 +40,13 @@ public class BondZSpreadPresentValueSensitivityFromMarketCleanPriceFunction exte
     }
     final String riskFreeCurveName = riskFreeCurves.iterator().next();
     final String curveName = curves.iterator().next();
-    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName), getCleanPriceRequirement(target, desiredValue));
+    return Sets.newHashSet(getCurveRequirement(target, riskFreeCurveName), getCurveRequirement(target, curveName),
+        getCleanPriceRequirement(target, desiredValue));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> input : inputs.entrySet()) {
       if (ValueRequirementNames.YIELD_CURVE.equals(input.getKey().getValueName())) {

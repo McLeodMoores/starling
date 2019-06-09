@@ -16,12 +16,13 @@ import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionPh
 
 /**
  * Interpolates, for interest rate instruments using Black model, and returns the implied volatility required.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
 public final class BlackPriceCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
 
-  /** The method unique instance.*/
+  /** The method unique instance. */
   private static final BlackPriceCalculator INSTANCE = new BlackPriceCalculator();
 
   /** @return the unique instance of the class. */
@@ -36,9 +37,11 @@ public final class BlackPriceCalculator extends InstrumentDerivativeVisitorAdapt
   /** The physical swaption pricer */
   private static final SwaptionPhysicalFixedIborBlackMethod SWAPTION_PHYSICAL = SwaptionPhysicalFixedIborBlackMethod.getInstance();
   /** The margined interest rate future option pricer */
-  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION_SECURITY = InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION_SECURITY =
+      InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
   /** The premium interest rate future option pricer */
-  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION_SECURITY = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION_SECURITY =
+      InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
 
   @Override
   public Double visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final YieldCurveBundle curves) {
@@ -61,7 +64,8 @@ public final class BlackPriceCalculator extends InstrumentDerivativeVisitorAdapt
   }
 
   @Override
-  public Double visitInterestRateFutureOptionPremiumTransaction(final InterestRateFutureOptionPremiumTransaction irFutureOption, final YieldCurveBundle curves) {
+  public Double visitInterestRateFutureOptionPremiumTransaction(final InterestRateFutureOptionPremiumTransaction irFutureOption,
+      final YieldCurveBundle curves) {
     return PREMIUM_IR_FUTURE_OPTION_SECURITY.optionPrice(irFutureOption.getUnderlyingOption(), curves);
   }
 }

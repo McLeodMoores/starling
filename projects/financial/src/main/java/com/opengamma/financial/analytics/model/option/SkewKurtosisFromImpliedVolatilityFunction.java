@@ -45,7 +45,8 @@ public class SkewKurtosisFromImpliedVolatilityFunction extends AbstractFunction.
   private static final Function2D<Double, Double> KURTOSIS_CALCULATOR = new LognormalPearsonKurtosisFromVolatilityCalculator();
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
     final ZonedDateTime now = ZonedDateTime.now(Clock.systemUTC());
     final Expiry expiry = option.getExpiry();

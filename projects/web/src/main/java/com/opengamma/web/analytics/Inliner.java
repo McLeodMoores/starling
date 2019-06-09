@@ -38,7 +38,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
         (LocalDateLabelledMatrix1D.class.isAssignableFrom(type) &&
             LOCAL_DATE_LABELLED_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()) ||
             TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class.isAssignableFrom(type) &&
-            TENOR_LABELLED_TIME_SERIES_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()));
+                TENOR_LABELLED_TIME_SERIES_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()));
   }
 
   public static List<ColumnMeta> columnMeta(final Object value) {
@@ -64,7 +64,8 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
   private static List<ColumnMeta> getTenorLabelledLocalDateDoubleTimeSeriesMatrix1DColumnMeta(final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D matrix) {
     final List<ColumnMeta> meta = Lists.newArrayListWithCapacity(matrix.size());
-    meta.add(new ColumnMeta(matrix.getKeys()[0], matrix.getKeys()[0].toString(), LocalDateDoubleTimeSeries.class, TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class));
+    meta.add(new ColumnMeta(matrix.getKeys()[0], matrix.getKeys()[0].toString(), LocalDateDoubleTimeSeries.class,
+        TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class));
     for (int i = 1; i < matrix.size(); i++) {
       meta.add(new ColumnMeta(matrix.getKeys()[i], matrix.getKeys()[i].toString(), LocalDateDoubleTimeSeries.class, null));
     }
@@ -73,7 +74,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 }
 
-//-------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 /* package */ class ColumnMeta implements Comparable<ColumnMeta> {
 
   private final Comparable<Object> _key;
@@ -90,7 +91,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
     _underlyingType = underlyingType;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /* package */ Comparable<Object> getKey() {
     return _key;
   }
@@ -107,7 +108,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
     return _underlyingType;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public int compareTo(final ColumnMeta meta) {
     if (!meta._key.getClass().equals(_key.getClass())) {

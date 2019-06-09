@@ -35,18 +35,21 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present value of the instrument is zero.
- * The notion of "spread" will depend of each instrument.
+ * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present
+ * value of the instrument is zero. The notion of "spread" will depend of each instrument.
  */
-public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<InflationProviderInterface, InflationSensitivity> {
+public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator
+extends InstrumentDerivativeVisitorAdapter<InflationProviderInterface, InflationSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator INSTANCE = new ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator();
+  private static final ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator INSTANCE =
+      new ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator();
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator getInstance() {
@@ -57,7 +60,8 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
    * The methods and calculators (specific for inflation).
    */
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingInflationCalculator PVISC = PresentValueCurveSensitivityDiscountingInflationCalculator.getInstance();
+  private static final PresentValueCurveSensitivityDiscountingInflationCalculator PVISC = PresentValueCurveSensitivityDiscountingInflationCalculator
+      .getInstance();
 
   /**
    * The methods and calculators.
@@ -65,22 +69,26 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
   private static final PresentValueDiscountingCalculator PVMC = PresentValueDiscountingCalculator.getInstance();
   private static final PresentValueCurveSensitivityDiscountingCalculator PVCSMC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
   private static final PresentValueMarketQuoteSensitivityDiscountingCalculator PVMQSMC = PresentValueMarketQuoteSensitivityDiscountingCalculator.getInstance();
-  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator PVMQSCSMC = PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator PVMQSCSMC =
+      PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator.getInstance();
   private static final CashDiscountingMethod METHOD_DEPOSIT = CashDiscountingMethod.getInstance();
   private static final DepositIborDiscountingMethod METHOD_DEPOSIT_IBOR = DepositIborDiscountingMethod.getInstance();
   private static final ForwardRateAgreementDiscountingProviderMethod METHOD_FRA = ForwardRateAgreementDiscountingProviderMethod.getInstance();
   private static final ForexSwapDiscountingMethod METHOD_FOREX_SWAP = ForexSwapDiscountingMethod.getInstance();
 
-  //-----    Swaps     -----
+  // ----- Swaps -----
 
   /**
-  * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero.
-  * It is computed as the opposite of the present value of the swap in currency of the first leg divided by the present value of a basis point
-  * of the first leg (as computed by the PresentValueBasisPointCalculator).
-  * @param swap The swap.
-  * @param inflation The inflation curves and multi-curves provider.
-  * @return The par spread sensitivity.
-  */
+   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the opposite of the
+   * present value of the swap in currency of the first leg divided by the present value of a basis point of the first leg (as computed by the
+   * PresentValueBasisPointCalculator).
+   *
+   * @param swap
+   *          The swap.
+   * @param inflation
+   *          The inflation curves and multi-curves provider.
+   * @return The par spread sensitivity.
+   */
   @Override
   public InflationSensitivity visitSwap(final Swap<?, ?> swap, final InflationProviderInterface inflation) {
     ArgumentChecker.notNull(inflation, "Market");
@@ -94,7 +102,8 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
       final double tenor = cpn.getPaymentAccrualFactors().length;
       final double notional = ((CouponInflation) swap.getSecondLeg().getNthPayment(0)).getNotional();
       final double intermediateVariable = 1 / tenor * Math.pow(pvInflationLeg / discountFactor / notional + 1, 1 / tenor - 1);
-      final InflationSensitivity pvcis = swap.getSecondLeg().accept(PVISC, inflation).getSensitivity(swap.getSecondLeg().getCurrency()).multipliedBy(1 / discountFactor / notional);
+      final InflationSensitivity pvcis = swap.getSecondLeg().accept(PVISC, inflation).getSensitivity(swap.getSecondLeg().getCurrency())
+          .multipliedBy(1 / discountFactor / notional);
       final InflationSensitivity modifiedpvcis = pvcis.multipliedBy(intermediateVariable);
       return InflationSensitivity.ofPriceIndex(modifiedpvcis.getPriceCurveSensitivities());
     }
@@ -115,7 +124,7 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
     return visitSwap(swap, inflation);
   }
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public InflationSensitivity visitCash(final Cash deposit, final InflationProviderInterface inflation) {
@@ -129,7 +138,7 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
     return InflationSensitivity.of(METHOD_DEPOSIT_IBOR.parSpreadCurveSensitivity(deposit, inflation.getMulticurveProvider()), sensitivityPriceCurve);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public InflationSensitivity visitForwardRateAgreement(final ForwardRateAgreement fra, final InflationProviderInterface inflation) {
@@ -137,12 +146,15 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalcu
     return InflationSensitivity.of(METHOD_FRA.parSpreadCurveSensitivity(fra, inflation.getMulticurveProvider()), sensitivityPriceCurve);
   }
 
-  //     -----     Forex     -----
+  // ----- Forex -----
 
   /**
    * The par spread is the spread that should be added to the forex forward points to have a zero value.
-   * @param fx The forex swap.
-   * @param inflation The inflation provider.
+   *
+   * @param fx
+   *          The forex swap.
+   * @param inflation
+   *          The inflation provider.
    * @return The spread.
    */
   @Override

@@ -73,7 +73,8 @@ public class CapFloorSecurityConverter extends FinancialSecurityVisitorAdapter<I
     final IborIndex index = new IborIndex(currency, iborTenor, iborIndexConvention.getSettlementDays(), iborIndexConvention.getDayCount(),
         iborIndexConvention.getBusinessDayConvention(), iborIndexConvention.isIsEOM(), iborIndexConvention.getName());
     if (isIbor) { // Cap/floor on Ibor
-      return AnnuityCapFloorIborDefinition.from(startDate, endDate, notional, index, capFloorSecurity.getDayCount(), tenorPayment, capFloorSecurity.isPayer(), capFloorSecurity.getStrike(),
+      return AnnuityCapFloorIborDefinition.from(startDate, endDate, notional, index, capFloorSecurity.getDayCount(), tenorPayment, capFloorSecurity.isPayer(),
+          capFloorSecurity.getStrike(),
           capFloorSecurity.isCap(), calendar);
     }
     // Cap/floor on CMS
@@ -81,7 +82,8 @@ public class CapFloorSecurityConverter extends FinancialSecurityVisitorAdapter<I
     final SwapIndexConvention swapIndexConvention = _conventionSource.getSingle(ExternalId.of(SCHEME_NAME, swapIndexConventionName), SwapIndexConvention.class);
     final SwapConvention swapConvention = _conventionSource.getSingle(swapIndexConvention.getSwapConvention(), SwapConvention.class);
     final IndexSwap swapIndex = getSwapIndex(swapConvention, iborIndex);
-    return AnnuityCapFloorCMSDefinition.from(startDate, endDate, notional, swapIndex, tenorPayment, capFloorSecurity.getDayCount(), capFloorSecurity.isPayer(), capFloorSecurity.getStrike(),
+    return AnnuityCapFloorCMSDefinition.from(startDate, endDate, notional, swapIndex, tenorPayment, capFloorSecurity.getDayCount(), capFloorSecurity.isPayer(),
+        capFloorSecurity.getStrike(),
         capFloorSecurity.isCap(), calendar);
   }
 

@@ -18,6 +18,7 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 
 /**
  * Calculator of decision schedule for different instruments. Used in particular for Monte Carlo pricing.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.montecarlo.provider.DecisionScheduleCalculator}
  */
 @Deprecated
@@ -35,6 +36,7 @@ public class DecisionScheduleCalculator extends InstrumentDerivativeVisitorAdapt
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static DecisionScheduleCalculator getInstance() {
@@ -49,7 +51,7 @@ public class DecisionScheduleCalculator extends InstrumentDerivativeVisitorAdapt
 
   @Override
   public DecisionSchedule visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final YieldCurveBundle curves) {
-    final double[] decisionTime = new double[] {swaption.getTimeToExpiry() };
+    final double[] decisionTime = new double[] { swaption.getTimeToExpiry() };
     final AnnuityPaymentFixed cfe = swaption.getUnderlyingSwap().accept(CFEC, curves);
     final double[][] impactTime = new double[1][cfe.getNumberOfPayments()];
     final double[][] impactAmount = new double[1][cfe.getNumberOfPayments()];
@@ -63,7 +65,7 @@ public class DecisionScheduleCalculator extends InstrumentDerivativeVisitorAdapt
 
   @Override
   public DecisionSchedule visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final YieldCurveBundle curves) {
-    final double[] decisionTime = new double[] {swaption.getTimeToExpiry() };
+    final double[] decisionTime = new double[] { swaption.getTimeToExpiry() };
     final AnnuityPaymentFixed cfeIbor = swaption.getUnderlyingSwap().getSecondLeg().accept(CFEC, curves);
     final int nbCfeIbor = cfeIbor.getNumberOfPayments();
     final int nbCpnFixed = swaption.getUnderlyingSwap().getFixedLeg().getNumberOfPayments();
@@ -86,18 +88,19 @@ public class DecisionScheduleCalculator extends InstrumentDerivativeVisitorAdapt
 
   @Override
   public DecisionSchedule visitCapFloorIbor(final CapFloorIbor payment, final YieldCurveBundle curves) {
-    final double[] decisionTime = new double[] {payment.getFixingTime() };
+    final double[] decisionTime = new double[] { payment.getFixingTime() };
     final double fixingStartTime = payment.getFixingPeriodStartTime();
     final double fixingEndTime = payment.getFixingPeriodEndTime();
     final double paymentTime = payment.getPaymentTime();
     final double[][] impactTime = new double[1][];
-    impactTime[0] = new double[] {fixingStartTime, fixingEndTime, paymentTime };
+    impactTime[0] = new double[] { fixingStartTime, fixingEndTime, paymentTime };
     final double[][] impactAmount = new double[1][];
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(payment.getForwardCurveName());
     final YieldAndDiscountCurve discountingCurve = curves.getCurve(payment.getFundingCurveName());
-    final double beta = forwardCurve.getDiscountFactor(fixingStartTime) / forwardCurve.getDiscountFactor(fixingEndTime) * discountingCurve.getDiscountFactor(fixingEndTime)
+    final double beta = forwardCurve.getDiscountFactor(fixingStartTime) / forwardCurve.getDiscountFactor(fixingEndTime)
+        * discountingCurve.getDiscountFactor(fixingEndTime)
         / discountingCurve.getDiscountFactor(fixingStartTime);
-    impactAmount[0] = new double[] {beta, -1.0, 1.0 };
+    impactAmount[0] = new double[] { beta, -1.0, 1.0 };
     final DecisionSchedule decision = new DecisionSchedule(decisionTime, impactTime, impactAmount);
     return decision;
   }

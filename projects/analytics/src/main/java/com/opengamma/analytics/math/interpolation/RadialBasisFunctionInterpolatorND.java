@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -18,10 +18,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class RadialBasisFunctionInterpolatorND extends InterpolatorND {
-  //TODO R White 14/07/2011 These are only used by getDataBundle, the actual interpolate method used the information in the RadialBasisFunctionInterpolatorDataBundle
+  // TODO R White 14/07/2011 These are only used by getDataBundle, the actual interpolate method used the information in the
+  // RadialBasisFunctionInterpolatorDataBundle
   // should remove them altogether and just pass in the information in the getDataBundle method
   private final Function1D<Double, Double> _basisFunction;
   private final boolean _useNormalized;
@@ -35,7 +36,8 @@ public class RadialBasisFunctionInterpolatorND extends InterpolatorND {
   @Override
   public Double interpolate(final InterpolatorNDDataBundle data, final double[] x) {
     validateInput(data, x);
-    ArgumentChecker.isTrue(data instanceof RadialBasisFunctionInterpolatorDataBundle, "RadialBasisFunctionInterpolatorND needs a RadialBasisFunctionInterpolatorDataBundle");
+    ArgumentChecker.isTrue(data instanceof RadialBasisFunctionInterpolatorDataBundle,
+        "RadialBasisFunctionInterpolatorND needs a RadialBasisFunctionInterpolatorDataBundle");
     final RadialBasisFunctionInterpolatorDataBundle radialData = (RadialBasisFunctionInterpolatorDataBundle) data;
     final List<Pair<double[], Double>> rawData = radialData.getData();
     final double[] w = radialData.getWeights();
@@ -59,7 +61,8 @@ public class RadialBasisFunctionInterpolatorND extends InterpolatorND {
   public Map<double[], Double> getNodeSensitivitiesForValue(final InterpolatorNDDataBundle data, final double[] x) {
     ArgumentChecker.notNull(data, "data");
     ArgumentChecker.notNull(x, "x array");
-    ArgumentChecker.isTrue(data instanceof RadialBasisFunctionInterpolatorDataBundle, "RadialBasisFunctionInterpolatorNDSensitivityCalculator needs a RadialBasisFunctionInterpolatorDataBundle");
+    ArgumentChecker.isTrue(data instanceof RadialBasisFunctionInterpolatorDataBundle,
+        "RadialBasisFunctionInterpolatorNDSensitivityCalculator needs a RadialBasisFunctionInterpolatorDataBundle");
     final RadialBasisFunctionInterpolatorDataBundle radialData = (RadialBasisFunctionInterpolatorDataBundle) data;
     final List<Pair<double[], Double>> rawData = radialData.getData();
     final Function1D<Double, Double> basisFunction = radialData.getBasisFunction();
@@ -99,6 +102,7 @@ public class RadialBasisFunctionInterpolatorND extends InterpolatorND {
     return res;
 
   }
+
   @Override
   public RadialBasisFunctionInterpolatorDataBundle getDataBundle(final double[] x, final double[] y, final double[] z, final double[] values) {
     return new RadialBasisFunctionInterpolatorDataBundle(transformData(x, y, z, values), _basisFunction, _useNormalized);

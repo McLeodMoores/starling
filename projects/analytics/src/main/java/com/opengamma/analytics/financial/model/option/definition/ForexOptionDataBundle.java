@@ -19,8 +19,7 @@ import com.opengamma.util.tuple.Pair;
 /**
  * @param <T>
  *          The type of the volatility model
- * @deprecated Use
- *             {@link com.opengamma.analytics.financial.provider.description.forex.BlackForexFlatProviderInterface}
+ * @deprecated Use {@link com.opengamma.analytics.financial.provider.description.forex.BlackForexFlatProviderInterface}
  */
 @Deprecated
 public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extends YieldCurveBundle {
@@ -41,7 +40,8 @@ public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extend
     final Currency firstCurrency = currencyPair.getFirst();
     final Currency secondCurrency = currencyPair.getSecond();
     final FXMatrix fxMatrix = curves.getFxRates();
-    ArgumentChecker.isTrue(fxMatrix.containsPair(firstCurrency, secondCurrency), "FX matrix does not contain rates for {} and {}", firstCurrency, secondCurrency);
+    ArgumentChecker.isTrue(fxMatrix.containsPair(firstCurrency, secondCurrency), "FX matrix does not contain rates for {} and {}", firstCurrency,
+        secondCurrency);
     ArgumentChecker.isTrue(currencies.contains(firstCurrency), "Curve currency map does not contain currency {}; have {}", firstCurrency, currencies);
     ArgumentChecker.isTrue(currencies.contains(secondCurrency), "Curve currency map does not contain currency {}, have {}", secondCurrency, currencies);
     _volatilityModel = volatilityModel;
@@ -50,6 +50,7 @@ public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extend
 
   /**
    * Create a copy of the bundle.
+   *
    * @return The bundle.
    */
   @Override
@@ -57,6 +58,7 @@ public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extend
 
   /**
    * Gets the underlying volatility model.
+   *
    * @return The underlying volatility model
    */
   public T getVolatilityModel() {
@@ -65,6 +67,7 @@ public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extend
 
   /**
    * Returns the currency pair for which the Forex volatility data is valid.
+   *
    * @return The pair.
    */
   public Pair<Currency, Currency> getCurrencyPair() {
@@ -73,8 +76,11 @@ public abstract class ForexOptionDataBundle<T extends VolatilityModel<?>> extend
 
   /**
    * Check that two given currencies are compatible with the data currency pair.
-   * @param ccy1 One currency.
-   * @param ccy2 The other currency.
+   *
+   * @param ccy1
+   *          One currency.
+   * @param ccy2
+   *          The other currency.
    * @return True if the currencies match the pair (in any order) and False otherwise.
    */
   public boolean checkCurrencies(final Currency ccy1, final Currency ccy2) {

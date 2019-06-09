@@ -36,18 +36,29 @@ public class MultipleYieldCurveFinderDataBundle {
 
   /**
    * Private constructor from all the stored data. No check is performed; they are done in the public methods.
-   * @param derivatives The list of instruments used in the calibration.
-   * @param marketValues The market value of the instruments.
-   * @param knownCurves The curves already calibrated.
-   * @param unknownCurveNodePoints The node points of the new curves to calibrate.
-   * @param unknownCurveInterpolators The interpolators of the new curves to calibrate.
-   * @param useFiniteDifferenceByDefault Flag for using the finite difference computation of the Jacobian.
-   * @param fxMatrix The FX Matrix with the required exchange rates.
-   * @param totalNodes The total number of nodes.
-   * @param names The names of the curves used for matrix evaluation.
+   * 
+   * @param derivatives
+   *          The list of instruments used in the calibration.
+   * @param marketValues
+   *          The market value of the instruments.
+   * @param knownCurves
+   *          The curves already calibrated.
+   * @param unknownCurveNodePoints
+   *          The node points of the new curves to calibrate.
+   * @param unknownCurveInterpolators
+   *          The interpolators of the new curves to calibrate.
+   * @param useFiniteDifferenceByDefault
+   *          Flag for using the finite difference computation of the Jacobian.
+   * @param fxMatrix
+   *          The FX Matrix with the required exchange rates.
+   * @param totalNodes
+   *          The total number of nodes.
+   * @param names
+   *          The names of the curves used for matrix evaluation.
    */
   private MultipleYieldCurveFinderDataBundle(final List<InstrumentDerivative> derivatives, final double[] marketValues, final YieldCurveBundle knownCurves,
-      final LinkedHashMap<String, double[]> unknownCurveNodePoints, final LinkedHashMap<String, Interpolator1D> unknownCurveInterpolators, final boolean useFiniteDifferenceByDefault,
+      final LinkedHashMap<String, double[]> unknownCurveNodePoints, final LinkedHashMap<String, Interpolator1D> unknownCurveInterpolators,
+      final boolean useFiniteDifferenceByDefault,
       final FXMatrix fxMatrix, final int totalNodes, final List<String> names) {
     _derivatives = derivatives;
     _marketValues = marketValues;
@@ -61,7 +72,8 @@ public class MultipleYieldCurveFinderDataBundle {
   }
 
   public MultipleYieldCurveFinderDataBundle(final List<InstrumentDerivative> derivatives, final double[] marketValues, final YieldCurveBundle knownCurves,
-      final LinkedHashMap<String, double[]> unknownCurveNodePoints, final LinkedHashMap<String, Interpolator1D> unknownCurveInterpolators, final boolean useFiniteDifferenceByDefault,
+      final LinkedHashMap<String, double[]> unknownCurveNodePoints, final LinkedHashMap<String, Interpolator1D> unknownCurveInterpolators,
+      final boolean useFiniteDifferenceByDefault,
       final FXMatrix fxMatrix) {
     ArgumentChecker.notNull(derivatives, "derivatives");
     ArgumentChecker.noNulls(derivatives, "derivatives");
@@ -70,7 +82,8 @@ public class MultipleYieldCurveFinderDataBundle {
     ArgumentChecker.notNull(unknownCurveInterpolators, "unknown curve interpolators");
     ArgumentChecker.notEmpty(unknownCurveNodePoints, "unknown curve node points");
     ArgumentChecker.notEmpty(unknownCurveInterpolators, "unknown curve interpolators");
-    ArgumentChecker.isTrue(derivatives.size() == marketValues.length, "marketValues wrong length; must be one par rate per derivative (have {} values for {} derivatives",
+    ArgumentChecker.isTrue(derivatives.size() == marketValues.length,
+        "marketValues wrong length; must be one par rate per derivative (have {} values for {} derivatives",
         marketValues.length, derivatives.size());
     ArgumentChecker.notNull(fxMatrix, "FX matrix");
     if (knownCurves != null) {
@@ -117,19 +130,29 @@ public class MultipleYieldCurveFinderDataBundle {
   }
 
   /**
-   * Create a MultipleYieldCurveFinderDataBundle where the number of nodes and the list of curve names correspond to all the curves (known curves and curves still to be calibrated).
-   * This constructor is used to compute the extended Jacobian matrix when curves are calibrated in several blocks.
-   * @param derivatives The list of instruments used in the calibration.
-   * @param marketValues The market value of the instruments.
-   * @param knownCurves The curves already calibrated.
-   * @param unknownCurveNodePoints The node points of the new curves to calibrate.
-   * @param unknownCurveInterpolators The interpolators of the new curves to calibrate.
-   * @param useFiniteDifferenceByDefault Flag for using the finite difference computation of the Jacobian.
-   * @param fxMatrix The FX Matrix with the required exchange rates.
+   * Create a MultipleYieldCurveFinderDataBundle where the number of nodes and the list of curve names correspond to all the curves (known curves and curves
+   * still to be calibrated). This constructor is used to compute the extended Jacobian matrix when curves are calibrated in several blocks.
+   * 
+   * @param derivatives
+   *          The list of instruments used in the calibration.
+   * @param marketValues
+   *          The market value of the instruments.
+   * @param knownCurves
+   *          The curves already calibrated.
+   * @param unknownCurveNodePoints
+   *          The node points of the new curves to calibrate.
+   * @param unknownCurveInterpolators
+   *          The interpolators of the new curves to calibrate.
+   * @param useFiniteDifferenceByDefault
+   *          Flag for using the finite difference computation of the Jacobian.
+   * @param fxMatrix
+   *          The FX Matrix with the required exchange rates.
    * @return The data bundle.
    */
-  public static MultipleYieldCurveFinderDataBundle withAllCurves(final List<InstrumentDerivative> derivatives, final double[] marketValues, final YieldCurveBundle knownCurves,
-      final LinkedHashMap<String, double[]> unknownCurveNodePoints, final LinkedHashMap<String, Interpolator1D> unknownCurveInterpolators, final boolean useFiniteDifferenceByDefault,
+  public static MultipleYieldCurveFinderDataBundle withAllCurves(final List<InstrumentDerivative> derivatives, final double[] marketValues,
+      final YieldCurveBundle knownCurves,
+      final LinkedHashMap<String, double[]> unknownCurveNodePoints, final LinkedHashMap<String, Interpolator1D> unknownCurveInterpolators,
+      final boolean useFiniteDifferenceByDefault,
       final FXMatrix fxMatrix) {
     // Argument checker: start
     ArgumentChecker.notNull(derivatives, "derivatives");
@@ -139,7 +162,8 @@ public class MultipleYieldCurveFinderDataBundle {
     ArgumentChecker.notNull(unknownCurveInterpolators, "unknown curve interpolators");
     ArgumentChecker.notEmpty(unknownCurveNodePoints, "unknown curve node points");
     ArgumentChecker.notEmpty(unknownCurveInterpolators, "unknown curve interpolators");
-    ArgumentChecker.isTrue(derivatives.size() == marketValues.length, "marketValues wrong length; must be one par rate per derivative (have {} values for {} derivatives",
+    ArgumentChecker.isTrue(derivatives.size() == marketValues.length,
+        "marketValues wrong length; must be one par rate per derivative (have {} values for {} derivatives",
         marketValues.length, derivatives.size());
     ArgumentChecker.notNull(fxMatrix, "FX matrix");
     if (knownCurves != null) {
@@ -179,7 +203,8 @@ public class MultipleYieldCurveFinderDataBundle {
       ArgumentChecker.notNull(entry2.getValue(), "interpolator for " + name1);
       names.add(name1);
     }
-    return new MultipleYieldCurveFinderDataBundle(derivatives, marketValues, knownCurves, unknownCurveNodePoints, unknownCurveInterpolators, useFiniteDifferenceByDefault,
+    return new MultipleYieldCurveFinderDataBundle(derivatives, marketValues, knownCurves, unknownCurveNodePoints, unknownCurveInterpolators,
+        useFiniteDifferenceByDefault,
         fxMatrix, nbNodes, names);
   }
 
@@ -263,7 +288,7 @@ public class MultipleYieldCurveFinderDataBundle {
     final int prime = 31;
     int result = 1;
     result = prime * result + _derivatives.hashCode();
-    result = prime * result + ((_knownCurves == null) ? 0 : _knownCurves.hashCode());
+    result = prime * result + (_knownCurves == null ? 0 : _knownCurves.hashCode());
     result = prime * result + Arrays.hashCode(_marketValues);
     result = prime * result + _unknownCurveInterpolators.hashCode();
     result = prime * result + _unknownCurveNodePoints.hashCode();

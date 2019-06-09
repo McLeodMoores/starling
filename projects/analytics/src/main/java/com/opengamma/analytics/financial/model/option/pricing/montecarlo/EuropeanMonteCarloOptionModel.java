@@ -16,11 +16,12 @@ import com.opengamma.analytics.math.function.Function2D;
 import com.opengamma.analytics.math.random.RandomNumberGenerator;
 
 /**
- * 
+ *
  */
 public class EuropeanMonteCarloOptionModel extends MonteCarloOptionModel<OptionDefinition, StandardOptionDataBundle> {
 
-  public EuropeanMonteCarloOptionModel(final int n, final int steps, final StochasticProcess<OptionDefinition, StandardOptionDataBundle> process, final RandomNumberGenerator generator) {
+  public EuropeanMonteCarloOptionModel(final int n, final int steps, final StochasticProcess<OptionDefinition, StandardOptionDataBundle> process,
+      final RandomNumberGenerator generator) {
     super(n, steps, process, generator);
   }
 

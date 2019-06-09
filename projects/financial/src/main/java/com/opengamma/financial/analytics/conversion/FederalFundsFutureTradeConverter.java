@@ -32,24 +32,31 @@ public class FederalFundsFutureTradeConverter implements TradeConverter {
   private final FederalFundsFutureSecurityConverter _securityConverter;
 
   /**
-   * @param securitySource The security source, not null.
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
+   * @param securitySource
+   *          The security source, not null.
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
    */
-  public FederalFundsFutureTradeConverter(final SecuritySource securitySource, final HolidaySource holidaySource, final ConventionSource conventionSource, final RegionSource regionSource) {
+  public FederalFundsFutureTradeConverter(final SecuritySource securitySource, final HolidaySource holidaySource, final ConventionSource conventionSource,
+      final RegionSource regionSource) {
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(conventionSource, "convention source");
     ArgumentChecker.notNull(regionSource, "region source");
     _securityConverter = new FederalFundsFutureSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
   }
 
-  public InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]> convert(final Trade trade) { //CSIGNORE
+  @Override
+  public InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]> convert(final Trade trade) { // CSIGNORE
     ArgumentChecker.notNull(trade, "trade");
     final Security security = trade.getSecurity();
     if (security instanceof FederalFundsFutureSecurity) {
-      final FederalFundsFutureSecurityDefinition securityDefinition = (FederalFundsFutureSecurityDefinition) ((FederalFundsFutureSecurity) security).accept(_securityConverter);
-      Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium. 
+      final FederalFundsFutureSecurityDefinition securityDefinition = (FederalFundsFutureSecurityDefinition) ((FederalFundsFutureSecurity) security)
+          .accept(_securityConverter);
+      final Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium.
       if (tradePrice == null) {
         throw new OpenGammaRuntimeException("Trade premium should not be null.");
       }

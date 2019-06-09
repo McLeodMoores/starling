@@ -23,7 +23,8 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Populates {@link EquityOptionFunction}, including {@link EquityVanillaBarrierOptionBlackFunction}, with defaults appropriate for pricing using an interpolated Black lognormal volatility surface.
+ * Populates {@link EquityOptionFunction}, including {@link EquityVanillaBarrierOptionBlackFunction}, with defaults appropriate for pricing using an
+ * interpolated Black lognormal volatility surface.
  */
 public abstract class EquityOptionSurfaceCalculationMethodDefaults extends StaticDefaultPropertyFunction {
   /** Map of id name to surface calculation method */
@@ -33,38 +34,38 @@ public abstract class EquityOptionSurfaceCalculationMethodDefaults extends Stati
 
   /** The value requirement names for which these defaults apply */
   private static final String[] VALUE_NAMES = new String[] {
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.VEGA_QUOTE_MATRIX,
-      ValueRequirementNames.VALUE_VEGA,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
-      ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-      ValueRequirementNames.FORWARD,
-      ValueRequirementNames.SPOT,
-      ValueRequirementNames.VALUE_DELTA,
-      ValueRequirementNames.VALUE_GAMMA,
-      ValueRequirementNames.VALUE_VOMMA,
-      ValueRequirementNames.VALUE_VANNA,
-      ValueRequirementNames.VALUE_RHO,
-      ValueRequirementNames.VALUE_CARRY_RHO,
-      ValueRequirementNames.VALUE_THETA,
-      ValueRequirementNames.VALUE_DUAL_DELTA,
-      ValueRequirementNames.DELTA,
-      ValueRequirementNames.GAMMA,
-      ValueRequirementNames.VOMMA,
-      ValueRequirementNames.VANNA,
-      ValueRequirementNames.RHO,
-      ValueRequirementNames.CARRY_RHO,
-      ValueRequirementNames.THETA,
-      ValueRequirementNames.DUAL_DELTA,
-      ValueRequirementNames.VEGA,
-      ValueRequirementNames.BARRIER_DISTANCE,
-      ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
-      ValueRequirementNames.POSITION_DELTA,
-      ValueRequirementNames.POSITION_GAMMA,
-      ValueRequirementNames.POSITION_RHO,
-      ValueRequirementNames.POSITION_THETA,
-      ValueRequirementNames.POSITION_VEGA,
-      ValueRequirementNames.POSITION_WEIGHTED_VEGA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.SPOT,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_VOMMA,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.VALUE_RHO,
+                ValueRequirementNames.VALUE_CARRY_RHO,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.VALUE_DUAL_DELTA,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.VOMMA,
+                ValueRequirementNames.VANNA,
+                ValueRequirementNames.RHO,
+                ValueRequirementNames.CARRY_RHO,
+                ValueRequirementNames.THETA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.BARRIER_DISTANCE,
+                ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
+                ValueRequirementNames.POSITION_DELTA,
+                ValueRequirementNames.POSITION_GAMMA,
+                ValueRequirementNames.POSITION_RHO,
+                ValueRequirementNames.POSITION_THETA,
+                ValueRequirementNames.POSITION_VEGA,
+                ValueRequirementNames.POSITION_WEIGHTED_VEGA
   };
 
   /**

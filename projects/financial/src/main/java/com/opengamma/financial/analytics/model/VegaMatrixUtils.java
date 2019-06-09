@@ -28,8 +28,7 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Contains utility methods that vega output from the analytics libraries into objects that
- * can be transported and displayed by the engine.
+ * Contains utility methods that vega output from the analytics libraries into objects that can be transported and displayed by the engine.
  */
 public class VegaMatrixUtils {
   private static final DecimalFormat FX_OPTION_FORMATTER = new DecimalFormat("##");
@@ -38,7 +37,7 @@ public class VegaMatrixUtils {
 
   /**
    * Returns a bucketed FX option vega matrix with delta / expiry axes.
-   * 
+   *
    * @param vegas
    *          The vegas, not null
    * @return A labelled vega matrix.
@@ -71,7 +70,9 @@ public class VegaMatrixUtils {
 
   /**
    * Returns a bucketed FX option vega matrix with the same axes as the volatility quotes (i.e. ATM, risk-reversal and butterfly quotes)
-   * @param vegas The vegas, not null
+   * 
+   * @param vegas
+   *          The vegas, not null
    * @return A labelled vega matrix
    */
   public static DoubleLabelledMatrix2D getVegaFXQuoteMatrix(final PresentValueForexBlackVolatilityQuoteSensitivityDataBundle vegas) {
@@ -90,9 +91,11 @@ public class VegaMatrixUtils {
     columnValues[0] = 0.;
     final int n = (nDelta - 1) / 2;
     for (int i = 0; i < n; i++) {
-      columnLabels[1 + i] = "RR " + FX_OPTION_FORMATTER.format(delta[i] * 100) + " " + vegas.getCurrencyPair().getFirst() + "/" + vegas.getCurrencyPair().getSecond();
+      columnLabels[1 + i] = "RR " + FX_OPTION_FORMATTER.format(delta[i] * 100) + " " + vegas.getCurrencyPair().getFirst() + "/"
+          + vegas.getCurrencyPair().getSecond();
       columnValues[1 + i] = 1. + i;
-      columnLabels[n + 1 + i] = "B " + FX_OPTION_FORMATTER.format(delta[i] * 100) + " " + vegas.getCurrencyPair().getFirst() + "/" + vegas.getCurrencyPair().getSecond();
+      columnLabels[n + 1 + i] = "B " + FX_OPTION_FORMATTER.format(delta[i] * 100) + " " + vegas.getCurrencyPair().getFirst() + "/"
+          + vegas.getCurrencyPair().getSecond();
       columnValues[n + 1 + i] = n + 1. + i;
     }
     for (int j = 0; j < nExpiries; j++) {
@@ -109,9 +112,13 @@ public class VegaMatrixUtils {
 
   /**
    * Returns a bucketed interest rate future option vega matrix with strike / expiry axes.
-   * @param definition The volatility surface, not null
-   * @param matrix The vega matrix, not null
-   * @param expiryValues The expiries, not null
+   * 
+   * @param definition
+   *          The volatility surface, not null
+   * @param matrix
+   *          The vega matrix, not null
+   * @param expiryValues
+   *          The expiries, not null
    * @return A labelled vega matrix.
    */
   public static DoubleLabelledMatrix2D getVegaIRFutureOptionQuoteMatrix(final VolatilitySurfaceDefinition<?, ?> definition, final DoubleMatrix2D matrix,
@@ -147,11 +154,15 @@ public class VegaMatrixUtils {
 
   /**
    * Returns a bucketed swaption vega cube with swaption expiry / swap maturity / distance from ATM axes.
-   * @param fittedPoints The points in the swaption volatility cube, not null
-   * @param matrices a map from swaption expiry to vega matrix, not null
+   * 
+   * @param fittedPoints
+   *          The points in the swaption volatility cube, not null
+   * @param matrices
+   *          a map from swaption expiry to vega matrix, not null
    * @return A labelled vega cube
    */
-  public static DoubleLabelledMatrix3D getVegaSwaptionCubeQuoteMatrix(final Map<Pair<Tenor, Tenor>, Double[]> fittedPoints, final Map<Double, DoubleMatrix2D> matrices) {
+  public static DoubleLabelledMatrix3D getVegaSwaptionCubeQuoteMatrix(final Map<Pair<Tenor, Tenor>, Double[]> fittedPoints,
+      final Map<Double, DoubleMatrix2D> matrices) {
     ArgumentChecker.notNull(fittedPoints, "fitted points");
     ArgumentChecker.notNull(matrices, "matrices");
     final List<Double> xKeysList = new ArrayList<>();
@@ -194,7 +205,9 @@ public class VegaMatrixUtils {
 
   /**
    * Returns a bucketed swaption atm vega matrix with swaption expiry / swap maturity axes.
-   * @param vegas a map from swaption expiry, maturity to vega, not null
+   * 
+   * @param vegas
+   *          a map from swaption expiry, maturity to vega, not null
    * @return A labelled vega matrix
    */
   public static DoubleLabelledMatrix2D getVegaSwaptionMatrix(final PresentValueBlackSwaptionSensitivity vegas) {
@@ -251,12 +264,10 @@ public class VegaMatrixUtils {
     return (int) Math.ceil(expiry) + "Y";
   }
 
-  private static double getTime(final Tenor tenor) { //TODO this should be moved into a utils class
+  private static double getTime(final Tenor tenor) { // TODO this should be moved into a utils class
     final Period period = tenor.getPeriod();
     final double months = period.toTotalMonths();
     return months / 12.;
   }
-
-
 
 }

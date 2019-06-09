@@ -60,7 +60,8 @@ public class BlackVolatilitySurfaceUtils {
     return uniqueStrikes;
   }
 
-  public static Pair<double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes, final VolatilitySurfaceData<Object, Object> volatilitySurface) {
+  public static Pair<double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes,
+      final VolatilitySurfaceData<Object, Object> volatilitySurface) {
     final int nExpiries = expiries.length;
     final int nStrikes = strikes.length;
     final double[][] fullStrikes = new double[nExpiries][];
@@ -84,7 +85,8 @@ public class BlackVolatilitySurfaceUtils {
     return Pairs.of(fullStrikes, fullValues);
   }
 
-  public static Triple<double[], double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes, final VolatilitySurfaceData<Object, Object> volatilitySurface,
+  public static Triple<double[], double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes,
+      final VolatilitySurfaceData<Object, Object> volatilitySurface,
       final int minNumberOfStrikes) {
     final int nExpiries = expiries.length;
     final int nStrikes = strikes.length;
@@ -135,7 +137,8 @@ public class BlackVolatilitySurfaceUtils {
     return Triple.of(getArrayOfDoubles(expiries), strikes, values);
   }
 
-  public static SmileSurfaceDataBundle getDataFromStandardQuotes(final ForwardCurve forwardCurve, final VolatilitySurfaceData<Object, Object> volatilitySurface) {
+  public static SmileSurfaceDataBundle getDataFromStandardQuotes(final ForwardCurve forwardCurve,
+      final VolatilitySurfaceData<Object, Object> volatilitySurface) {
     final double[] uniqueExpiries = getUniqueExpiries(volatilitySurface);
     final double[] uniqueStrikes = getUniqueStrikes(volatilitySurface);
     final Pair<double[][], double[][]> strikesAndValues = getStrikesAndValues(uniqueExpiries, uniqueStrikes, volatilitySurface);
@@ -197,7 +200,7 @@ public class BlackVolatilitySurfaceUtils {
         strangle[i] = strangleList.toDoubleArray();
       }
     }
-    final boolean isCallData = true; //TODO this shouldn't be hard-coded
+    final boolean isCallData = true; // TODO this shouldn't be hard-coded
     return new ForexSmileDeltaSurfaceDataBundle(forwardCurve, expiries, deltas, atms, riskReversals, strangle, isCallData);
   }
 
@@ -225,7 +228,7 @@ public class BlackVolatilitySurfaceUtils {
 
   private static double[] getArrayOfDoubles(final Object[] arrayOfObject) {
     final double[] expiries;
-    //TODO there is sometimes a problem with Fudge, where a Double[] is transported as Object[]. Needs to be fixed
+    // TODO there is sometimes a problem with Fudge, where a Double[] is transported as Object[]. Needs to be fixed
     final Object[] xData = arrayOfObject;
     final int n = xData.length;
     expiries = new double[n];

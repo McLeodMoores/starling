@@ -112,7 +112,8 @@ public class EquityOptionBlackVegaMatrixFunction extends EquityOptionBlackFuncti
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = super.getResults(context, target, inputs);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String bbgTicker = EquitySecurityUtils.getIndexOrEquityNameFromUnderlying(security);

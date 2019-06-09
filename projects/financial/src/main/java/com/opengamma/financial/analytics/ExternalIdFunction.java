@@ -34,12 +34,13 @@ import com.opengamma.id.ExternalScheme;
  *
  */
 public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
-  /** The attribute property name */
+  /** The attribute property name. */
   public static final String EXTERNAL_SCHEME_NAME = "ExternalScheme";
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternalIdFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ValueProperties constraints = desiredValue.getConstraints();
     final String schemeName = constraints.getSingleValue(EXTERNAL_SCHEME_NAME);

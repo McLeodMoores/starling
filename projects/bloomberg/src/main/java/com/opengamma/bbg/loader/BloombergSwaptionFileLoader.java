@@ -37,6 +37,7 @@ public class BloombergSwaptionFileLoader {
   /* package */static final String CONTEXT_CONFIGURATION_PATH = "/com/opengamma/bbg/loader/bloomberg-security-loader-context.xml";
   private static final int NAME_FIELD = 0;
   private static final int BUID_FIELD = 8;
+
   private static BloombergReferenceDataProvider getBloombergSecurityFileLoader() {
     final ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(CONTEXT_CONFIGURATION_PATH);
     context.start();
@@ -46,9 +47,11 @@ public class BloombergSwaptionFileLoader {
 
   /**
    * Little util to parse swaption tickers into a csv for further analysis.
-   * @param args command line params
+   * 
+   * @param args
+   *          command line params
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     CSVReader csvReader = null;
     CSVWriter csvWriter = null;
     try {
@@ -57,7 +60,8 @@ public class BloombergSwaptionFileLoader {
       String[] line;
       final Pattern pattern = Pattern.compile("^(\\w\\w\\w).*?(\\d+)(M|Y)(\\d+)(M|Y)\\s*?(PY|RC)\\s*?(.*)$");
       final BloombergReferenceDataProvider rawBbgRefDataProvider = getBloombergSecurityFileLoader();
-      final MongoDBValueCachingReferenceDataProvider bbgRefDataProvider = MongoCachedReferenceData.makeMongoProvider(rawBbgRefDataProvider, BloombergSwaptionFileLoader.class);
+      final MongoDBValueCachingReferenceDataProvider bbgRefDataProvider = MongoCachedReferenceData.makeMongoProvider(rawBbgRefDataProvider,
+          BloombergSwaptionFileLoader.class);
       while ((line = csvReader.readNext()) != null) {
         final String name = line[NAME_FIELD];
         final Matcher matcher = pattern.matcher(name);
@@ -72,7 +76,7 @@ public class BloombergSwaptionFileLoader {
 
           final String buid = "/buid/" + line[BUID_FIELD];
           final String value = bbgRefDataProvider.getReferenceDataValue(buid, "TICKER");
-          csvWriter.writeNext(new String[] {name, ccy, swapTenorSize, swapTenorUnit, optionTenorSize, optionTenorUnit, payReceive, distanceATM, value });
+          csvWriter.writeNext(new String[] { name, ccy, swapTenorSize, swapTenorUnit, optionTenorSize, optionTenorUnit, payReceive, distanceATM, value });
         } else {
           LOGGER.error("Couldn't parse " + name + " field");
         }

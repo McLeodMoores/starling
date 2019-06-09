@@ -88,7 +88,8 @@ public final class ZSpreadCalculator {
     return sum;
   }
 
-  public Map<String, List<DoublesPair>> calculatePriceSensitivityToCurve(final Annuity<? extends Payment> annuity, final YieldCurveBundle curves, final double zSpread) {
+  public Map<String, List<DoublesPair>> calculatePriceSensitivityToCurve(final Annuity<? extends Payment> annuity, final YieldCurveBundle curves,
+      final double zSpread) {
     ArgumentChecker.notNull(annuity, "annuity");
     ArgumentChecker.notNull(curves, "curves");
 
@@ -109,7 +110,8 @@ public final class ZSpreadCalculator {
     return result;
   }
 
-  public Map<String, List<DoublesPair>> calculateZSpreadSensitivityToCurve(final Annuity<? extends Payment> annuity, final YieldCurveBundle curves, final double zSpread) {
+  public Map<String, List<DoublesPair>> calculateZSpreadSensitivityToCurve(final Annuity<? extends Payment> annuity, final YieldCurveBundle curves,
+      final double zSpread) {
     ArgumentChecker.notNull(annuity, "annuity");
     ArgumentChecker.notNull(curves, "curves");
 

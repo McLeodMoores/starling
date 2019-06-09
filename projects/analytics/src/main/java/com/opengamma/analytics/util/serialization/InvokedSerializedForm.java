@@ -17,9 +17,10 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Substitution representation of an inner class that is created as an invocation on the containing class. Call with an object instance if a specific instance is needed for the invocation. If the
- * method is static or the containing object has no state pass the containing class. If an instance is passed, care must be taken in its serialized form such that it does not include the contained
- * form (e.g. as an attribute) - doing so will create a loop in the graph which may prevent {@link #readReplace} from executing correctly.
+ * Substitution representation of an inner class that is created as an invocation on the containing class. Call with an object instance if a specific instance
+ * is needed for the invocation. If the method is static or the containing object has no state pass the containing class. If an instance is passed, care must be
+ * taken in its serialized form such that it does not include the contained form (e.g. as an attribute) - doing so will create a loop in the graph which may
+ * prevent {@link #readReplace} from executing correctly.
  */
 public final class InvokedSerializedForm implements Serializable {
 
@@ -30,7 +31,7 @@ public final class InvokedSerializedForm implements Serializable {
 
   private static final Object[] EMPTY_ARRAY = new Object[0];
 
-  private static final String[] METHOD_PREFIXES = new String[] {"as", "get", "to", "from", "with" };
+  private static final String[] METHOD_PREFIXES = new String[] { "as", "get", "to", "from", "with" };
 
   private static final Map<Class<?>, Class<?>> PRIMITIVES = createPrimitiveMap();
 
@@ -111,7 +112,7 @@ public final class InvokedSerializedForm implements Serializable {
         }
       }
       try {
-        if ((_replacementInstance == null) && !Modifier.isStatic(method.getModifiers())) {
+        if (_replacementInstance == null && !Modifier.isStatic(method.getModifiers())) {
           _replacementInstance = getOuterClass().newInstance();
         }
         if (!Modifier.isPublic(method.getModifiers())) {
@@ -135,7 +136,7 @@ public final class InvokedSerializedForm implements Serializable {
   }
 
   public Object readReplace() {
-    Class<?> clazz = (getOuterInstance() != null) ? getOuterInstance().getClass() : getOuterClass();
+    Class<?> clazz = getOuterInstance() != null ? getOuterInstance().getClass() : getOuterClass();
     do {
       final Method[] methods = clazz.getDeclaredMethods();
       if (Character.isUpperCase(getMethod().charAt(0))) {

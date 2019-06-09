@@ -35,13 +35,15 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Bond related figures computed from the yield curves.
+ *
  * @deprecated This class uses deprecated analytics functions.
  */
 @Deprecated
 public abstract class BondFromCurvesFunction extends BondFunction<YieldCurveBundle> {
 
   @Override
-  protected Set<ComputedValue> calculate(final ZonedDateTime date, final BondSecurity bondSecurity, final YieldCurveBundle data, final ComputationTarget target, final FunctionInputs inputs,
+  protected Set<ComputedValue> calculate(final ZonedDateTime date, final BondSecurity bondSecurity, final YieldCurveBundle data, final ComputationTarget target,
+      final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String riskFreeCurveName = desiredValue.getConstraint(PROPERTY_RISK_FREE_CURVE);
@@ -67,8 +69,8 @@ public abstract class BondFromCurvesFunction extends BondFunction<YieldCurveBund
     final ValueProperties riskFreeCurveProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURVE, riskFreeCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, riskFreeConfig).get();
-    final ValueRequirement riskFreeCurveRequirement =
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), riskFreeCurveProperties);
+    final ValueRequirement riskFreeCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        riskFreeCurveProperties);
     final Object riskFreeCurveObject = inputs.getValue(riskFreeCurveRequirement);
     if (riskFreeCurveObject == null) {
       throw new OpenGammaRuntimeException("Risk free curve was null");
@@ -78,15 +80,15 @@ public abstract class BondFromCurvesFunction extends BondFunction<YieldCurveBund
     final ValueProperties creditCurveProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURVE, creditCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, creditConfig).get();
-    final ValueRequirement creditCurveRequirement =
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), creditCurveProperties);
+    final ValueRequirement creditCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        creditCurveProperties);
     final Object creditCurveObject = inputs.getValue(creditCurveRequirement);
     if (creditCurveObject == null) {
       throw new OpenGammaRuntimeException("Credit curve was null");
     }
     final YieldAndDiscountCurve creditCurve = (YieldAndDiscountCurve) creditCurveObject;
     final YieldAndDiscountCurve riskFreeCurve = (YieldAndDiscountCurve) riskFreeCurveObject;
-    return new YieldCurveBundle(new String[] {creditCurveName, riskFreeCurveName }, new YieldAndDiscountCurve[] {creditCurve, riskFreeCurve });
+    return new YieldCurveBundle(new String[] { creditCurveName, riskFreeCurveName }, new YieldAndDiscountCurve[] { creditCurve, riskFreeCurve });
   }
 
   @Override
@@ -118,14 +120,15 @@ public abstract class BondFromCurvesFunction extends BondFunction<YieldCurveBund
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, riskFreeCurveConfig)
         .withOptional(PROPERTY_RISK_FREE_CURVE).with(PROPERTY_RISK_FREE_CURVE, riskFreeCurveName)
         .withOptional(PROPERTY_RISK_FREE_CURVE_CONFIG).with(PROPERTY_RISK_FREE_CURVE_CONFIG, riskFreeCurveConfig).get();
-    final ValueRequirement riskFreeCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), riskFreeCurveProperties);
+    final ValueRequirement riskFreeCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        riskFreeCurveProperties);
     final ValueProperties creditCurveProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURVE, creditCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, creditCurveConfig)
         .withOptional(PROPERTY_CREDIT_CURVE).with(PROPERTY_CREDIT_CURVE, creditCurveName)
         .withOptional(PROPERTY_CREDIT_CURVE_CONFIG).with(PROPERTY_CREDIT_CURVE_CONFIG, creditCurveConfig).get();
-    final ValueRequirement creditCurveRequirement =
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), creditCurveProperties);
+    final ValueRequirement creditCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        creditCurveProperties);
     return Sets.newHashSet(riskFreeCurveRequirement, creditCurveRequirement);
   }
 
@@ -136,7 +139,8 @@ public abstract class BondFromCurvesFunction extends BondFunction<YieldCurveBund
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String riskFreeCurveName = null;
     String creditCurveName = null;
     String riskFreeCurveConfig = null;
@@ -177,18 +181,21 @@ public abstract class BondFromCurvesFunction extends BondFunction<YieldCurveBund
 
   /**
    * Gets the calculator of the desired value.
+   *
    * @return The calculator
    */
   protected abstract InstrumentDerivativeVisitor<YieldCurveBundle, Double> getCalculator();
 
   /**
    * Gets the value requirement name.
+   *
    * @return The value requirement name
    */
   protected abstract String getValueRequirementName();
 
   /**
    * Gets the result properties.
+   *
    * @return The result properties
    */
   protected ValueProperties.Builder getResultProperties() {
@@ -202,11 +209,17 @@ public abstract class BondFromCurvesFunction extends BondFunction<YieldCurveBund
 
   /**
    * Gets the result properties.
-   * @param riskFreeCurveName The risk-free curve name
-   * @param creditCurveName The credit curve name
-   * @param riskFreeCurveConfig The risk-free curve calculation configuration name
-   * @param creditCurveConfig The credit curve calculation configuration name
-   * @param target The target
+   *
+   * @param riskFreeCurveName
+   *          The risk-free curve name
+   * @param creditCurveName
+   *          The credit curve name
+   * @param riskFreeCurveConfig
+   *          The risk-free curve calculation configuration name
+   * @param creditCurveConfig
+   *          The credit curve calculation configuration name
+   * @param target
+   *          The target
    * @return The result properties
    */
   protected ValueProperties.Builder getResultProperties(final String riskFreeCurveName, final String creditCurveName, final String riskFreeCurveConfig,

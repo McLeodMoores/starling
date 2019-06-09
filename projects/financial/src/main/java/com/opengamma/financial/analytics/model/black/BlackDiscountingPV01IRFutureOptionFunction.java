@@ -43,12 +43,11 @@ import com.opengamma.util.tuple.Pair;
  */
 public class BlackDiscountingPV01IRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator.getInstance());
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public BlackDiscountingPV01IRFutureOptionFunction() {
     super(PV01);
@@ -105,7 +104,8 @@ public class BlackDiscountingPV01IRFutureOptionFunction extends BlackDiscounting
       }
 
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         Set<String> curveNames = null;
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueSpecification key = entry.getKey();

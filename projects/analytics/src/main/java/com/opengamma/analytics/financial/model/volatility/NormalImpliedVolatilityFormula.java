@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility;
@@ -35,9 +35,13 @@ public class NormalImpliedVolatilityFormula {
 
   /**
    * Computes the implied volatility from the price in a normally distributed asset price world.
-   * @param data The model data. The data volatility, if not zero, is used as a starting point for the volatility search.
-   * @param option The option.
-   * @param optionPrice The option price.
+   *
+   * @param data
+   *          The model data. The data volatility, if not zero, is used as a starting point for the volatility search.
+   * @param option
+   *          The option.
+   * @param optionPrice
+   *          The option price.
    * @return The implied volatility.
    */
   public double getImpliedVolatility(final NormalFunctionData data, final EuropeanVanillaOption option, final double optionPrice) {
@@ -46,15 +50,16 @@ public class NormalImpliedVolatilityFormula {
     final double f = data.getForward();
     final double k = option.getStrike();
     final double intrinsicPrice = numeraire * Math.max(0, (isCall ? 1 : -1) * (f - k));
-    Validate.isTrue(optionPrice > intrinsicPrice || CompareUtils.closeEquals(optionPrice, intrinsicPrice, 1e-6), "option price (" + optionPrice + ") less than intrinsic value (" + intrinsicPrice
+    Validate.isTrue(optionPrice > intrinsicPrice || CompareUtils.closeEquals(optionPrice, intrinsicPrice, 1e-6),
+        "option price (" + optionPrice + ") less than intrinsic value (" + intrinsicPrice
         + ")");
     if (Double.doubleToLongBits(optionPrice) == Double.doubleToLongBits(intrinsicPrice)) {
       return 0.0;
     }
-    double sigma = (Math.abs(data.getNormalVolatility()) < 1E-10 ? 0.3 * f : data.getNormalVolatility());
+    double sigma = Math.abs(data.getNormalVolatility()) < 1E-10 ? 0.3 * f : data.getNormalVolatility();
     NormalFunctionData newData = new NormalFunctionData(f, numeraire, sigma);
     final double maxChange = 0.5 * f;
-    double[] priceDerivative = new double[3];
+    final double[] priceDerivative = new double[3];
     double price = NORMAL_PRICE_FUNCTION.getPriceAdjoint(option, newData, priceDerivative);
     double vega = priceDerivative[1];
     double change = (price - optionPrice) / vega;
@@ -79,7 +84,7 @@ public class NormalImpliedVolatilityFormula {
         final BracketRoot bracketer = new BracketRoot();
         final BisectionSingleRootFinder rootFinder = new BisectionSingleRootFinder(EPS);
         final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-          @SuppressWarnings({"synthetic-access" })
+          @SuppressWarnings({ "synthetic-access" })
           @Override
           public Double evaluate(final Double volatility) {
             final NormalFunctionData myData = new NormalFunctionData(data.getForward(), data.getNumeraire(), volatility);

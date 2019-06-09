@@ -56,7 +56,8 @@ public class EquityBetaAggregationFunction implements AggregationFunction<String
   private final HistoricalTimeSeriesSource _htsSource;
   private final SecuritySource _secSource;
 
-  public EquityBetaAggregationFunction(final SecuritySource secSource, final HistoricalTimeSeriesSource htsSource, final boolean useAttributes, final boolean includeEmptyCategories) {
+  public EquityBetaAggregationFunction(final SecuritySource secSource, final HistoricalTimeSeriesSource htsSource, final boolean useAttributes,
+      final boolean includeEmptyCategories) {
     _secSource = secSource;
     _htsSource = htsSource;
     _useAttributes = useAttributes;
@@ -83,7 +84,7 @@ public class EquityBetaAggregationFunction implements AggregationFunction<String
     return classifyPositionWithTS(position);
   }
 
-  /*package*/ Double getEquityBeta(final Security security) {
+  /* package */ Double getEquityBeta(final Security security) {
     if (_caching && security != null && security.getUniqueId() != null) {
       if (_equityBetaCache.containsKey(security.getUniqueId())) {
         return _equityBetaCache.get(security.getUniqueId());
@@ -101,13 +102,13 @@ public class EquityBetaAggregationFunction implements AggregationFunction<String
     return null;
   }
 
-  /*package*/ String classifyPositionWithTS(final Position position) {
+  /* package */ String classifyPositionWithTS(final Position position) {
     final Security sec = resolveSecurity(position);
     final Double beta = getEquityBeta(sec);
     return classifyEquityBeta(beta);
   }
 
-  /*package*/ Security resolveSecurity(final Position position) {
+  /* package */ Security resolveSecurity(final Position position) {
     try {
       Security sec = position.getSecurityLink().getTarget();
       if (sec == null) {
@@ -127,7 +128,7 @@ public class EquityBetaAggregationFunction implements AggregationFunction<String
     }
   }
 
-  /*package*/ String classifyEquityBeta(final Double beta) {
+  /* package */ String classifyEquityBeta(final Double beta) {
     if (beta != null) {
       if (beta < 0.5) {
         return LESS_THAN_0_5;

@@ -78,17 +78,18 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
   @PropertyDefinition(validate = "notNull")
   private String _jmsMarketDataAvailabilityTopic;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected StandardLiveDataServer initServer(final ComponentRepository repo) {
     // real server
     final JmsByteArrayMessageSender jmsSender = new JmsByteArrayMessageSender(getJmsMarketDataAvailabilityTopic(),
-                                                                        getJmsConnector().getJmsTemplateTopic());
+        getJmsConnector().getJmsTemplateTopic());
     final FudgeMessageSender availabilityNotificationSender = new ByteArrayFudgeMessageSender(jmsSender);
     final BloombergConnector bloombergConnector = getBloombergConnector();
     final ReferenceDataProvider referenceDataProvider = getReferenceDataProvider();
     final CacheManager cacheManager = getCacheManager();
-    final BloombergLiveDataServer realServer = createBloombergLiveDataServer(bloombergConnector, referenceDataProvider, cacheManager, availabilityNotificationSender);
+    final BloombergLiveDataServer realServer = createBloombergLiveDataServer(bloombergConnector, referenceDataProvider, cacheManager,
+        availabilityNotificationSender);
     if (getSubscriptionTickerLimit() != null) {
       realServer.setSubscriptionLimit(getSubscriptionTickerLimit());
     }
@@ -118,9 +119,9 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
     final FakeSubscriptionSelector selector = new UnionFakeSubscriptionSelector(selectorVolatility, selectorWeak);
 
     final CombiningBloombergLiveDataServer combinedServer = new CombiningBloombergLiveDataServer(fakeServer,
-                                                                                           realServer,
-                                                                                           selector,
-                                                                                           getCacheManager());
+        realServer,
+        selector,
+        getCacheManager());
     combinedServer.setDistributionSpecificationResolver(distSpecResolver);
     combinedServer.setEntitlementChecker(entitlementChecker);
     combinedServer.setMarketDataSenderFactory(senderFactory);
@@ -130,24 +131,31 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
 
   /**
    * Creates the {@link BloombergLiveDataServer} instance to use.
-   * @param bloombergConnector the connector
-   * @param referenceDataProvider the reference data provider
-   * @param cacheManager the cache manager
-   * @param availabilityNotificationSender the availability notification sender
+   *
+   * @param bloombergConnector
+   *          the connector
+   * @param referenceDataProvider
+   *          the reference data provider
+   * @param cacheManager
+   *          the cache manager
+   * @param availabilityNotificationSender
+   *          the availability notification sender
    * @return the Bloomberg live data server, not null
    */
-  protected BloombergLiveDataServer createBloombergLiveDataServer(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager,
+  protected BloombergLiveDataServer createBloombergLiveDataServer(final BloombergConnector bloombergConnector,
+      final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager,
       final FudgeMessageSender availabilityNotificationSender) {
     return new BloombergLiveDataServer(bloombergConnector,
-                                       referenceDataProvider,
-                                       cacheManager,
-                                       availabilityNotificationSender);
+        referenceDataProvider,
+        cacheManager,
+        availabilityNotificationSender);
   }
 
   /**
    * Creates the {@link FakeSubscriptionBloombergLiveDataServer} instance to use.
    *
-   * @param realServer  the {@link BloombergLiveDataServer} instance, not null
+   * @param realServer
+   *          the {@link BloombergLiveDataServer} instance, not null
    * @return the fake Bloomberg live data server, not null
    */
   protected FakeSubscriptionBloombergLiveDataServer createFakeBloombergLiveDataServer(final BloombergLiveDataServer realServer) {
@@ -157,7 +165,8 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
   /**
    * Creates the entitlement checker.
    *
-   * @param distSpecResolver  the resolver, not null
+   * @param distSpecResolver
+   *          the resolver, not null
    * @return the entitlemnet checker, not null
    */
   protected abstract LiveDataEntitlementChecker initEntitlementChecker(DistributionSpecificationResolver distSpecResolver);

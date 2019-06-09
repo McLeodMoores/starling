@@ -46,7 +46,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final double WORKING_DAYS_PER_YEAR = 252; //TODO this should not be hard-coded
+  private static final double WORKING_DAYS_PER_YEAR = 252; // TODO this should not be hard-coded
   private final String _resolutionKey;
 
   public SharpeRatioFunction(final String resolutionKey) {
@@ -66,7 +66,8 @@ public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledIn
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueProperties constraints = desiredValue.getConstraints();
     final HistoricalTimeSeries benchmarkTSObject = (HistoricalTimeSeries) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
-    final Object assetPnLObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec)); //TODO replace with return series when portfolio weights are in
+    final Object assetPnLObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.PNL_SERIES, targetSpec)); // TODO replace with return series when
+                                                                                                                       // portfolio weights are in
     if (assetPnLObject == null) {
       throw new OpenGammaRuntimeException("Asset P&L series was null");
     }
@@ -120,7 +121,8 @@ public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledIn
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM"));
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE,
+        _resolutionKey);
     if (timeSeries == null) {
       return null;
     }
@@ -171,10 +173,10 @@ public abstract class SharpeRatioFunction extends AbstractFunction.NonCompiledIn
     if (stdDevCalculatorNames == null || stdDevCalculatorNames.isEmpty() || stdDevCalculatorNames.size() != 1) {
       throw new OpenGammaRuntimeException("Missing or non-unique standard deviation calculator name: " + stdDevCalculatorNames);
     }
-    final DoubleTimeSeriesStatisticsCalculator excessReturnCalculator =
-        new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(excessReturnCalculatorNames.iterator().next()));
-    final DoubleTimeSeriesStatisticsCalculator stdDevCalculator =
-        new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(stdDevCalculatorNames.iterator().next()));
+    final DoubleTimeSeriesStatisticsCalculator excessReturnCalculator = new DoubleTimeSeriesStatisticsCalculator(
+        StatisticsCalculatorFactory.getCalculator(excessReturnCalculatorNames.iterator().next()));
+    final DoubleTimeSeriesStatisticsCalculator stdDevCalculator = new DoubleTimeSeriesStatisticsCalculator(
+        StatisticsCalculatorFactory.getCalculator(stdDevCalculatorNames.iterator().next()));
     return new SharpeRatioCalculator(WORKING_DAYS_PER_YEAR, excessReturnCalculator, stdDevCalculator);
   }
 }

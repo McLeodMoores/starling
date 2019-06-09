@@ -107,7 +107,8 @@ public class FXDigitalOptionSecurity extends FinancialSecurity {
    * @param isLong
    *          true if the option is long, false if it is short
    */
-  public FXDigitalOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Currency paymentCurrency, final Expiry expiry,
+  public FXDigitalOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount,
+      final Currency paymentCurrency, final Expiry expiry,
       final ZonedDateTime settlementDate, final boolean isLong) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
@@ -120,13 +121,13 @@ public class FXDigitalOptionSecurity extends FinancialSecurity {
     setLongShort(LongShort.ofLong(isLong));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFXDigitalOptionSecurity(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the long/short type is long.
    *

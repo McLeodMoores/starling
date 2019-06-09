@@ -31,7 +31,8 @@ public final class CapFloorInflationYearOnYearInterpolationBlackNormalSmileMetho
   /**
    * The method unique instance.
    */
-  private static final CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod INSTANCE = new CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod();
+  private static final CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod INSTANCE =
+      new CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod();
 
   /**
    * Private constructor.
@@ -41,6 +42,7 @@ public final class CapFloorInflationYearOnYearInterpolationBlackNormalSmileMetho
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod getInstance() {
@@ -54,8 +56,11 @@ public final class CapFloorInflationYearOnYearInterpolationBlackNormalSmileMetho
 
   /**
    * Computes the net amount.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount netAmount(final CapFloorInflationYearOnYearInterpolation cap, final BlackSmileCapInflationYearOnYearProviderInterface black) {
@@ -79,11 +84,15 @@ public final class CapFloorInflationYearOnYearInterpolationBlackNormalSmileMetho
 
   /**
    * Computes the present value.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final CapFloorInflationYearOnYearInterpolation cap, final BlackSmileCapInflationYearOnYearProviderInterface black) {
+  public MultipleCurrencyAmount presentValue(final CapFloorInflationYearOnYearInterpolation cap,
+      final BlackSmileCapInflationYearOnYearProviderInterface black) {
     final MultipleCurrencyAmount nonDiscountedPresentValue = netAmount(cap, black);
     final double df = black.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     return nonDiscountedPresentValue.multipliedBy(df);
@@ -91,8 +100,11 @@ public final class CapFloorInflationYearOnYearInterpolationBlackNormalSmileMetho
 
   /**
    * Computes the present value.
-   * @param instrument The instrument.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument, final BlackSmileCapInflationYearOnYearProviderInterface black) {
@@ -101,13 +113,17 @@ public final class CapFloorInflationYearOnYearInterpolationBlackNormalSmileMetho
   }
 
   /**
-   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model.
-   * No smile impact is taken into account; equivalent to a sticky strike smile description.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model. No smile impact is taken into account; equivalent to a sticky
+   * strike smile description.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CapFloorInflationYearOnYearInterpolation cap, final BlackSmileCapInflationYearOnYearProviderInterface black) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CapFloorInflationYearOnYearInterpolation cap,
+      final BlackSmileCapInflationYearOnYearProviderInterface black) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(black, "Black provider");
     final InflationProviderInterface inflation = black.getInflationProvider();

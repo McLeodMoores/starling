@@ -52,7 +52,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
   /**
    * Returns a configuration populated with curve building functions.
    *
-   * @param configMaster The config master
+   * @param configMaster
+   *          The config master
    * @return A populated configuration
    */
   public static FunctionConfigurationSource providers(final ConfigMaster configMaster) {
@@ -76,7 +77,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
   /**
    * Returns a configuration populated with functions that supply model parameters (e.g. G2++ parameters).
    *
-   * @param configMaster The config master
+   * @param configMaster
+   *          The config master
    * @return A populated configuration
    */
   public static FunctionConfigurationSource parameterProviders(final ConfigMaster configMaster) {
@@ -120,7 +122,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Sets the absolute tolerance.
      *
-     * @param absoluteTolerance The absolute tolerance
+     * @param absoluteTolerance
+     *          The absolute tolerance
      */
     public void setAbsoluteTolerance(final double absoluteTolerance) {
       _absoluteTolerance = absoluteTolerance;
@@ -138,7 +141,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Sets the relative tolerance.
      *
-     * @param relativeTolerance The relative tolerance.
+     * @param relativeTolerance
+     *          The relative tolerance.
      */
     public void setRelativeTolerance(final double relativeTolerance) {
       _relativeTolerance = relativeTolerance;
@@ -156,7 +160,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Sets the maximum number of iterations
      *
-     * @param maxIterations The maximum number of iterations
+     * @param maxIterations
+     *          The maximum number of iterations
      */
     public void setMaximumIterations(final int maxIterations) {
       _maxIterations = maxIterations;
@@ -178,7 +183,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Adds default values for absolute tolerance, relative tolerance and the maximum number of iterations for all curve building functions
      *
-     * @param functions The list of function configurations.
+     * @param functions
+     *          The list of function configurations.
      */
     protected void addCurveDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[3];
@@ -199,7 +205,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Sets the config master.
      *
-     * @param configMaster The config master, not null
+     * @param configMaster
+     *          The config master, not null
      */
     public void setConfigMaster(final ConfigMaster configMaster) {
       ArgumentChecker.notNull(configMaster, "config master");
@@ -218,11 +225,15 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Adds all interpolated curve building functions.
      *
-     * @param functions The list of functions
-     * @param curveTypeConfigClasses The type of curves in a construction configuration
-     * @param curveConfigName The curve construction configuration name
+     * @param functions
+     *          The list of functions
+     * @param curveTypeConfigClasses
+     *          The type of curves in a construction configuration
+     * @param curveConfigName
+     *          The curve construction configuration name
      */
-    protected void addInterpolatedCurveBuildingFunctions(final List<FunctionConfiguration> functions, final Set<Class<? extends CurveTypeConfiguration>> curveTypeConfigClasses,
+    protected void addInterpolatedCurveBuildingFunctions(final List<FunctionConfiguration> functions,
+        final Set<Class<? extends CurveTypeConfiguration>> curveTypeConfigClasses,
         final String curveConfigName) {
       if (curveTypeConfigClasses.contains(InflationCurveTypeConfiguration.class)) {
         functions.add(functionConfiguration(InflationProviderDiscountingFunction.class, curveConfigName));
@@ -243,8 +254,10 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Adds a function that constructs yield curves using the ISDA methodology.
      *
-     * @param functions The list of functions
-     * @param curveConfigName The curve configuration name
+     * @param functions
+     *          The list of functions
+     * @param curveConfigName
+     *          The curve configuration name
      */
     protected void addCurveBuildingFunctions(final List<FunctionConfiguration> functions, final String curveConfigName) {
       functions.add(functionConfiguration(ISDACompliantCurveFunction.class, curveConfigName));
@@ -255,7 +268,7 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       final ConfigSearchRequest<CurveDefinition> searchRequest = new ConfigSearchRequest<>();
       searchRequest.setVersionCorrection(getVersionCorrection());
-      final Class<?>[] curveConstructionConfigurationClasses = new Class[] {CurveConstructionConfiguration.class };
+      final Class<?>[] curveConstructionConfigurationClasses = new Class[] { CurveConstructionConfiguration.class };
       for (final Class<?> klass : curveConstructionConfigurationClasses) {
         searchRequest.setType(klass);
         for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
@@ -263,8 +276,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
           final CurveConstructionConfiguration config = ((ConfigItem<CurveConstructionConfiguration>) configDocument.getConfig()).getValue();
 
           /*
-           * We need the CurveTypeConfigurations of the curves contained within the CurveConstructionConfiguration to
-           * decided whether we want to add the curve building function for this CurveConstructionConfiguration.
+           * We need the CurveTypeConfigurations of the curves contained within the CurveConstructionConfiguration to decided whether we want to add the curve
+           * building function for this CurveConstructionConfiguration.
            */
           final Set<Class<? extends CurveTypeConfiguration>> allCurveTypeConfigs = extractCurveTypeConfigurationClasses(config);
 
@@ -289,7 +302,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
      * <p>
      * This allows us to decide whether we want a function to be supported based on the contained CurveTypeConfigurations.
      *
-     * @param config the CurveConstructionConfiguration to retrieve the curve types from.
+     * @param config
+     *          the CurveConstructionConfiguration to retrieve the curve types from.
      * @return a Set of CurveTypeConfigurations.
      */
     private static Set<Class<? extends CurveTypeConfiguration>> extractCurveTypeConfigurationClasses(final CurveConstructionConfiguration config) {
@@ -315,7 +329,8 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Sets the config master
      *
-     * @param configMaster The config master, not null
+     * @param configMaster
+     *          The config master, not null
      */
     public void setConfigMaster(final ConfigMaster configMaster) {
       ArgumentChecker.notNull(configMaster, "config master");

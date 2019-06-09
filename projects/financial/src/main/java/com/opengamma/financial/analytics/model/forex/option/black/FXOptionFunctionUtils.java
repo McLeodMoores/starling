@@ -49,6 +49,7 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Contains utility methods for pricing FX options.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -56,15 +57,21 @@ public class FXOptionFunctionUtils {
 
   /**
    * Builds the market data bundle for FX options.
-   * @param now The valuation time
-   * @param inputs The function inputs
-   * @param target The computation target
-   * @param desiredValues The desired values
+   * 
+   * @param now
+   *          The valuation time
+   * @param inputs
+   *          The function inputs
+   * @param target
+   *          The computation target
+   * @param desiredValues
+   *          The desired values
    * @return The FX option market data bundle
    * @deprecated The data bundle is deprecated
    */
   @Deprecated
-  public static ForexOptionDataBundle<?> buildMarketBundle(final ZonedDateTime now, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public static ForexOptionDataBundle<?> buildMarketBundle(final ZonedDateTime now, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final Currency putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor());
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
@@ -104,11 +111,11 @@ public class FXOptionFunctionUtils {
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
       ccy1 = putCurrency;
       ccy2 = callCurrency;
-      curves = new YieldAndDiscountCurve[] {putFundingCurve, callFundingCurve};
-      allCurveNames = new String[] {fullPutCurveName, fullCallCurveName};
+      curves = new YieldAndDiscountCurve[] { putFundingCurve, callFundingCurve };
+      allCurveNames = new String[] { fullPutCurveName, fullCallCurveName };
     } else {
-      curves = new YieldAndDiscountCurve[] {callFundingCurve, putFundingCurve};
-      allCurveNames = new String[] {fullCallCurveName, fullPutCurveName};
+      curves = new YieldAndDiscountCurve[] { callFundingCurve, putFundingCurve };
+      allCurveNames = new String[] { fullCallCurveName, fullPutCurveName };
       ccy1 = callCurrency;
       ccy2 = putCurrency;
       spot = 1. / spot;
@@ -131,8 +138,10 @@ public class FXOptionFunctionUtils {
     return flatData;
   }
 
-  public static YieldAndDiscountCurve getCurveForCurrency(final FunctionInputs inputs, final Currency currency, final String curveName, final String curveCalculationConfig) {
-    final ValueRequirement curveRequirement = YieldCurveFunctionUtils.getCurveRequirement(ComputationTargetSpecification.of(currency), curveName, curveCalculationConfig);
+  public static YieldAndDiscountCurve getCurveForCurrency(final FunctionInputs inputs, final Currency currency, final String curveName,
+      final String curveCalculationConfig) {
+    final ValueRequirement curveRequirement = YieldCurveFunctionUtils.getCurveRequirement(ComputationTargetSpecification.of(currency), curveName,
+        curveCalculationConfig);
     final Object curveObject = inputs.getValue(curveRequirement);
     if (curveObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + curveName + " curve");
@@ -160,7 +169,8 @@ public class FXOptionFunctionUtils {
         .with(InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME, rightExtrapolatorName)
         .get();
     final UnorderedCurrencyPair currenciesTarget = UnorderedCurrencyPair.of(putCurrency, callCurrency);
-    return new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currenciesTarget), surfaceProperties);
+    return new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA,
+        ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currenciesTarget), surfaceProperties);
   }
 
   public static String getResultCurrency(final ComputationTarget target, final CurrencyPair baseQuotePair) {

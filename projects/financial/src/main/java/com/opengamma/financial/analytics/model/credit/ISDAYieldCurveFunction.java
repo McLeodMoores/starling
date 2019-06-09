@@ -55,7 +55,8 @@ public class ISDAYieldCurveFunction extends AbstractFunction.NonCompiledInvoker 
   private static final DayCount ACT_365 = DayCounts.ACT_365;
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues)
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues)
       throws AsynchronousExecution {
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -84,7 +85,7 @@ public class ISDAYieldCurveFunction extends AbstractFunction.NonCompiledInvoker 
 
     for (final FixedIncomeStripWithSecurity strip : yieldCurveSpec.getStrips()) {
       final String securityType = strip.getSecurity().getSecurityType();
-      if (!(securityType.equals(CashSecurity.SECURITY_TYPE) || securityType.equals(SwapSecurity.SECURITY_TYPE)/* || securityType.equals(specObject)*/)) {
+      if (!(securityType.equals(CashSecurity.SECURITY_TYPE) || securityType.equals(SwapSecurity.SECURITY_TYPE)/* || securityType.equals(specObject) */)) {
         throw new OpenGammaRuntimeException("ISDA curves should only use Libor and swap rates");
       }
       final Double marketValue = yieldCurveData.getDataPoint(strip.getSecurityIdentifier());
@@ -94,7 +95,7 @@ public class ISDAYieldCurveFunction extends AbstractFunction.NonCompiledInvoker 
       final FinancialSecurity financialSecurity = (FinancialSecurity) strip.getSecurity();
       instruments[k] = securityType.equals(CashSecurity.SECURITY_TYPE) ? ISDAInstrumentTypes.MoneyMarket : ISDAInstrumentTypes.Swap;
       if (financialSecurity instanceof SwapSecurity) {
-        SwapSecurity swap = (SwapSecurity) financialSecurity;
+        final SwapSecurity swap = (SwapSecurity) financialSecurity;
         if (swap.getPayLeg() instanceof FixedInterestRateLeg) {
           fixDCC = swap.getPayLeg().getDayCount();
           paymentTenor = ((SimpleFrequency) swap.getPayLeg().getFrequency()).toPeriodFrequency().getPeriod();
@@ -111,11 +112,14 @@ public class ISDAYieldCurveFunction extends AbstractFunction.NonCompiledInvoker 
       tenors[k] = strip.getResolvedTenor().getPeriod();
       k++;
     }
-    //TODO: Check spot date logic
-    final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(now.toLocalDate(), now.toLocalDate().minusDays(offset), instruments, tenors, marketDataForCurve, cashDCC,
+    // TODO: Check spot date logic
+    final ISDACompliantYieldCurve yieldCurve = ISDACompliantYieldCurveBuild.build(now.toLocalDate(), now.toLocalDate().minusDays(offset), instruments, tenors,
+        marketDataForCurve, cashDCC,
         fixDCC, paymentTenor, ACT_365, floatBadDayConv);
-    final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName).with(ISDAFunctionConstants.ISDA_CURVE_OFFSET, offsetString)
-        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).with(ValuePropertyNames.CURVE_CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
+    final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName)
+        .with(ISDAFunctionConstants.ISDA_CURVE_OFFSET, offsetString)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
+        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
         .with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_APPROX).get();
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, yieldCurve));
@@ -171,7 +175,8 @@ public class ISDAYieldCurveFunction extends AbstractFunction.NonCompiledInvoker 
     }
     final String curveName = Iterables.getOnlyElement(curveNames);
     final String curveCalculationConfig = Iterables.getOnlyElement(curveCalculationConfigs);
-    final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName).with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
+    final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName)
+        .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
         .withOptional(ValuePropertyNames.CURVE_CALCULATION_CONFIG).get();
     final ValueProperties curveTSProperties = ValueProperties.builder().with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).get();
     final Set<ValueRequirement> requirements = new HashSet<>();

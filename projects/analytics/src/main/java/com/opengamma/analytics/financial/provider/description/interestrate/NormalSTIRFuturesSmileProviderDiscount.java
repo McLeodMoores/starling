@@ -9,17 +9,21 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * Implementation of a provider of normal volatility (Bachelier model) smile for options on STIR futures. The volatility is time to expiration/strike/delay dependent.
- * The "delay" is the time between expiration of the option and last trading date of the underlying futures.
+ * Implementation of a provider of normal volatility (Bachelier model) smile for options on STIR futures. The volatility is time to expiration/strike/delay
+ * dependent. The "delay" is the time between expiration of the option and last trading date of the underlying futures.
  */
 public class NormalSTIRFuturesSmileProviderDiscount extends NormalSTIRFuturesSmileProvider {
 
   /**
-   * @param multicurveProvider The multi-curves provider.
-   * @param parameters The normal volatility parameters.
-   * @param index The cap/floor index.
+   * @param multicurveProvider
+   *          The multi-curves provider.
+   * @param parameters
+   *          The normal volatility parameters.
+   * @param index
+   *          The cap/floor index.
    */
-  public NormalSTIRFuturesSmileProviderDiscount(final MulticurveProviderDiscount multicurveProvider, final Surface<Double, Double, Double> parameters, final IborIndex index) {
+  public NormalSTIRFuturesSmileProviderDiscount(final MulticurveProviderDiscount multicurveProvider, final Surface<Double, Double, Double> parameters,
+      final IborIndex index) {
     super(multicurveProvider, parameters, index);
   }
 

@@ -33,9 +33,9 @@ public class CappedPowerOptionModelFunction extends StandardOptionDataAnalyticOp
   protected OptionDefinition getOptionDefinition(final EquityOptionSecurity option) {
     //REVIEW yomi 03-06-2011 Elaine needs to confirm what this test should be
     /*
-    final CappedPoweredPayoffStyle payoff = (CappedPoweredPayoffStyle) option.getPayoffStyle();
-    return new CappedPowerOptionDefinition(option.getStrike(), option.getExpiry(), payoff.getPower(), payoff.getCap(), option.getOptionType() == OptionType.CALL);
-    */
+     * final CappedPoweredPayoffStyle payoff = (CappedPoweredPayoffStyle) option.getPayoffStyle(); return new CappedPowerOptionDefinition(option.getStrike(),
+     * option.getExpiry(), payoff.getPower(), payoff.getCap(), option.getOptionType() == OptionType.CALL);
+     */
     throw new UnsupportedOperationException();
   }
 
@@ -49,7 +49,7 @@ public class CappedPowerOptionModelFunction extends StandardOptionDataAnalyticOp
     //REVIEW yomi 03-06-2011 Elaine needs to confirm what this test should be
     /*
     return (target.getSecurity() instanceof OptionSecurity && ((OptionSecurity) target.getSecurity()).getPayoffStyle() instanceof CappedPoweredPayoffStyle);
-    */
+     */
     return true;
   }
 

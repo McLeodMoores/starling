@@ -54,16 +54,22 @@ public class WebPortfoliosResource extends AbstractWebPortfolioResource {
 
   /**
    * Creates the resource.
-   * @param portfolioMaster  the portfolio master, not null
-   * @param positionMaster  the position master, not null
-   * @param securitySource  the security source, not null
-   * @param executor  the executor service, not null
+   * 
+   * @param portfolioMaster
+   *          the portfolio master, not null
+   * @param positionMaster
+   *          the position master, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param executor
+   *          the executor service, not null
    */
-  public WebPortfoliosResource(final PortfolioMaster portfolioMaster, final PositionMaster positionMaster, final SecuritySource securitySource, final ExecutorService executor) {
+  public WebPortfoliosResource(final PortfolioMaster portfolioMaster, final PositionMaster positionMaster, final SecuritySource securitySource,
+      final ExecutorService executor) {
     super(portfolioMaster, positionMaster, securitySource, executor);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.PORTFOLIO)
@@ -108,8 +114,8 @@ public class WebPortfoliosResource extends AbstractWebPortfolioResource {
     searchRequest.setPagingRequest(pr);
     searchRequest.setSortOrder(sort);
     searchRequest.setName(StringUtils.trimToNull(name));
-    searchRequest.setDepth(1);  // see PLAT-1733, also, depth is set to 1 for knowing # of childNodes for UI tree
-    searchRequest.setIncludePositions(true);  // initially false because of PLAT-2012, now true for portfolio tree
+    searchRequest.setDepth(1); // see PLAT-1733, also, depth is set to 1 for knowing # of childNodes for UI tree
+    searchRequest.setIncludePositions(true); // initially false because of PLAT-2012, now true for portfolio tree
     if (BooleanUtils.isTrue(includeHidden)) {
       searchRequest.setVisibility(DocumentVisibility.HIDDEN);
     }
@@ -129,7 +135,7 @@ public class WebPortfoliosResource extends AbstractWebPortfolioResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -161,7 +167,7 @@ public class WebPortfoliosResource extends AbstractWebPortfolioResource {
     return Response.created(uri).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{portfolioId}")
   public WebPortfolioResource findPortfolio(@Subscribe @PathParam("portfolioId") final String idStr) {
     data().setUriPortfolioId(idStr);
@@ -183,9 +189,10 @@ public class WebPortfoliosResource extends AbstractWebPortfolioResource {
     return new WebPortfolioResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -196,10 +203,12 @@ public class WebPortfoliosResource extends AbstractWebPortfolioResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for portfolios.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {

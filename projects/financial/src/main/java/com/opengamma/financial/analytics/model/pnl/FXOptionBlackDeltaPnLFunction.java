@@ -183,7 +183,8 @@ public class FXOptionBlackDeltaPnLFunction extends AbstractFunction {
     // FunctionInvoker
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final Position position = target.getPosition();
       final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
       final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -198,7 +199,8 @@ public class FXOptionBlackDeltaPnLFunction extends AbstractFunction {
       final TimeSeriesSamplingFunction sampling = TimeSeriesSamplingFunctionFactory.getFunction(samplingFunction);
       final Currency putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor());
       final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
-      final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+      final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext)
+          .getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
       final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(putCurrency, callCurrency);
       final Currency currencyNonBase = currencyPair.getCounter(); // The non-base currency
       final double delta = mca.getAmount(currencyNonBase);

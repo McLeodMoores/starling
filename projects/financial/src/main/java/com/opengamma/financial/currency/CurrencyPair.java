@@ -48,14 +48,15 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   /**
    * An OG-Engine type so an instance can be used as a target in a dependency graph.
    */
-  public static final PrimitiveComputationTargetType<CurrencyPair> TYPE = PrimitiveComputationTargetType.of(ComputationTargetType.of(CurrencyPair.class), CurrencyPair.class,
+  public static final PrimitiveComputationTargetType<CurrencyPair> TYPE = PrimitiveComputationTargetType.of(ComputationTargetType.of(CurrencyPair.class),
+      CurrencyPair.class,
       new AbstractPrimitiveResolver<CurrencyPair>(OBJECT_SCHEME) {
-        @Override
-        protected CurrencyPair resolveObject(final String identifier) {
-          return parse(identifier);
-        }
-      }
-  );
+    @Override
+    protected CurrencyPair resolveObject(final String identifier) {
+      return parse(identifier);
+    }
+  }
+      );
 
   /**
    * The base currency of the pair.

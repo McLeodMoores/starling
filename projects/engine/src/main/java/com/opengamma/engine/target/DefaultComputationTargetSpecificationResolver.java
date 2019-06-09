@@ -184,7 +184,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
   }
 
-  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
+  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD =
+      new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
     @Override
     public SpecificationResolver execute(final SpecificationResolver a, final SpecificationResolver b) {
       return new FoldedSpecificationResolver(a, b);
@@ -220,7 +221,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
         return null;
       }
 
-      private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification = new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
+      private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification =
+          new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
 
         @Override
         public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {

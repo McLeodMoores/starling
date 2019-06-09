@@ -36,9 +36,10 @@ public class ISDACDSSecurityConverter extends FinancialSecurityVisitorAdapter<In
   }
 
   /**
-   * Convert a CDS security in to an ISDA definition object
+   * Convert a CDS security in to an ISDA definition object.
    *
-   * @param cds The CDS security to convert
+   * @param cds
+   *          The CDS security to convert
    * @return An ISDA definition object for the CDS, suitable for use by the ISDA pricer
    */
   @Override
@@ -47,15 +48,16 @@ public class ISDACDSSecurityConverter extends FinancialSecurityVisitorAdapter<In
     // TODO: Does convention name matter? ISDA code never uses it
     final Calendar calendar = CalendarUtils.getCalendar(_holidaySource, cds.getCurrency());
     final Convention convention = new Convention(
-      cds.getSettlementDays(), cds.getDayCount(), cds.getBusinessDayConvention(), calendar, cds.getName() + "_convention"); // TODO: Is convention name important?
+        cds.getSettlementDays(), cds.getDayCount(), cds.getBusinessDayConvention(), calendar, cds.getName() + "_convention"); // TODO: Is convention name
+                                                                                                                              // important?
 
     final ISDACDSPremiumDefinition premiumPayments = ISDACDSPremiumDefinition.from(
-      cds.getStartDate(), cds.getMaturity(), cds.getPremiumFrequency(),
-      convention, cds.getStubType(), PROTECT_START,
-      cds.getNotional(), cds.getSpread(), cds.getCurrency(), calendar);
+        cds.getStartDate(), cds.getMaturity(), cds.getPremiumFrequency(),
+        convention, cds.getStubType(), PROTECT_START,
+        cds.getNotional(), cds.getSpread(), cds.getCurrency(), calendar);
 
     return new ISDACDSDefinition(cds.getStartDate(), cds.getMaturity(), premiumPayments,
-      cds.getNotional(), cds.getSpread(), cds.getRecoveryRate(), ACCRUAL_ON_DEFAULT,
-      PAY_ON_DEFAULT, PROTECT_START, cds.getPremiumFrequency(), convention, cds.getStubType());
+        cds.getNotional(), cds.getSpread(), cds.getRecoveryRate(), ACCRUAL_ON_DEFAULT,
+        PAY_ON_DEFAULT, PROTECT_START, cds.getPremiumFrequency(), convention, cds.getStubType());
   }
 }

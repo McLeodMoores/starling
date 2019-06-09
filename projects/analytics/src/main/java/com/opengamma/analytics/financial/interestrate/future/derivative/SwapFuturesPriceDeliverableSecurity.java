@@ -33,12 +33,18 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Constructor.
-   * @param lastTradingTime The futures last trading time.
-   * @param deliveryTime The delivery time.
-   * @param underlyingSwap The futures underlying swap.
-   * @param notional The notional of the future (also called face value or contract value).
+   *
+   * @param lastTradingTime
+   *          The futures last trading time.
+   * @param deliveryTime
+   *          The delivery time.
+   * @param underlyingSwap
+   *          The futures underlying swap.
+   * @param notional
+   *          The notional of the future (also called face value or contract value).
    */
-  public SwapFuturesPriceDeliverableSecurity(final double lastTradingTime, final double deliveryTime, final SwapFixedCoupon<? extends Coupon> underlyingSwap, final double notional) {
+  public SwapFuturesPriceDeliverableSecurity(final double lastTradingTime, final double deliveryTime, final SwapFixedCoupon<? extends Coupon> underlyingSwap,
+      final double notional) {
     super(lastTradingTime);
     ArgumentChecker.notNull(underlyingSwap, "Underlying swap");
     _deliveryTime = deliveryTime;
@@ -48,6 +54,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the delivery time.
+   *
    * @return The time.
    */
   public double getDeliveryTime() {
@@ -56,6 +63,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the futures underlying swap.
+   *
    * @return The underlying swap.
    */
   public SwapFixedCoupon<? extends Coupon> getUnderlyingSwap() {
@@ -64,6 +72,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the notional of the future (also called face value or contract value).
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -72,6 +81,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the futures currency.
+   *
    * @return The currency.
    */
   @Override

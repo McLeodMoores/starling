@@ -27,7 +27,8 @@ public class VolatilitySurfaceSpecification {
   private final ExerciseType _exerciseType;
   private final boolean _useUnderlyingSecurityForExpiry;
 
-  public VolatilitySurfaceSpecification(final String name, final UniqueIdentifiable target, final String surfaceQuoteType, final SurfaceInstrumentProvider<?, ?> surfaceInstrumentProvider) {
+  public VolatilitySurfaceSpecification(final String name, final UniqueIdentifiable target, final String surfaceQuoteType,
+      final SurfaceInstrumentProvider<?, ?> surfaceInstrumentProvider) {
     this(name, target, surfaceQuoteType, SurfaceAndCubePropertyNames.VOLATILITY_QUOTE, new EuropeanExerciseType(), surfaceInstrumentProvider);
   }
 

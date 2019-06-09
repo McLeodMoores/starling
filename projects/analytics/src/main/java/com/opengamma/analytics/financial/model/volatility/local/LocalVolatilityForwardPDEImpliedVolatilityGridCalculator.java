@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public class LocalVolatilityForwardPDEImpliedVolatilityGridCalculator implements PDELocalVolatilityCalculator<Interpolator1DDataBundle> {
   private final LocalVolatilityForwardPDECalculator _pdeCalculator;
@@ -29,7 +29,8 @@ public class LocalVolatilityForwardPDEImpliedVolatilityGridCalculator implements
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     final PDETerminalResults1D pdeGrid = _pdeCalculator.runPDESolver(localVolatility, option);
     final PDEGrid1D grid = pdeGrid.getGrid();
@@ -47,7 +48,7 @@ public class LocalVolatilityForwardPDEImpliedVolatilityGridCalculator implements
         impliedVols[count] = BlackFormulaRepository.impliedVolatility(modifiedPrices[i], 1, moneynesses[i], expiry, isCall);
         strikes[count] = forward * moneynesses[i];
         count++;
-      } catch (Exception e) {
+      } catch (final Exception e) {
       }
     }
     strikes = Arrays.copyOfRange(strikes, 0, count);
@@ -56,7 +57,8 @@ public class LocalVolatilityForwardPDEImpliedVolatilityGridCalculator implements
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     return getResult(LocalVolatilitySurfaceConverter.toMoneynessSurface(localVolatility, forwardCurve), forwardCurve, option, discountingCurve);
   }

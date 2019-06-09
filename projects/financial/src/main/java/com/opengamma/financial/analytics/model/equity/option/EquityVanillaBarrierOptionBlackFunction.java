@@ -208,7 +208,8 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
         isCall = true;
         if (barrierOption.getOptionType().equals(OptionType.PUT)) {
           throw new OpenGammaRuntimeException(
-              "ONE_LOOK / Vanilla Barriers do not apply to an UP type of Barrier with OptionType.CALL. Confirm that the intended samplingFrequency is ONE_LOOK");
+              "ONE_LOOK / Vanilla Barriers do not apply to an UP type of Barrier with OptionType.CALL. Confirm that the intended "
+                  + "samplingFrequency is ONE_LOOK");
         }
         if (barrier < strike) {
           throw new OpenGammaRuntimeException("Encountered an UP / CALL type of BarrierOption where barrier, " + barrier + ", is below strike, " + strike);
@@ -221,7 +222,8 @@ public abstract class EquityVanillaBarrierOptionBlackFunction extends EquityOpti
         isCall = false;
         if (barrierOption.getOptionType().equals(OptionType.CALL)) {
           throw new OpenGammaRuntimeException(
-              "ONE_LOOK / Vanilla Barriers do not apply to a DOWN type of Barrier with OptionType.PUT. Confirm that the intended samplingFrequency is ONE_LOOK");
+              "ONE_LOOK / Vanilla Barriers do not apply to a DOWN type of Barrier with OptionType.PUT. Confirm that the intended "
+                  + "samplingFrequency is ONE_LOOK");
         }
         if (barrier > strike) {
           throw new OpenGammaRuntimeException("Encountered a DOWN / PUT type of BarrierOption where barrier, " + barrier + ", is above strike, " + strike);

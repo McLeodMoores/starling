@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pairs;
 public class InterestRateFutureOptionHestonDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionHestonDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.PRESENT_VALUE,
   };
   private final HashMap<String, Pair<String, String>> _currencyCurveConfigAndSurfaceNames;
 
@@ -67,7 +67,8 @@ public class InterestRateFutureOptionHestonDefaults extends DefaultPropertyFunct
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
       LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");

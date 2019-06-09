@@ -44,9 +44,13 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
 
   /**
    * Constructor specifying strike range and number of strikes
-   * @param lowestPutDelta The delta for put with lowest strike
-   * @param highestCallDelta The delta for call with highest strike
-   * @param numPoints The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
+   * 
+   * @param lowestPutDelta
+   *          The delta for put with lowest strike
+   * @param highestCallDelta
+   *          The delta for call with highest strike
+   * @param numPoints
+   *          The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
    */
   public CarrLeeFXVolatilitySwapCalculator(final double lowestPutDelta, final double highestCallDelta, final int numPoints) {
     ArgumentChecker.isTrue(lowestPutDelta < 0. && lowestPutDelta > -1., "-1 < lowestPutDelta < 0 should be true");
@@ -60,8 +64,11 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
 
   /**
    * Constructor specifying number of strikes and strike range by strike values
-   * @param numPoints The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
-   * @param strikeRange {minimum strike, maximum strike}
+   * 
+   * @param numPoints
+   *          The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
+   * @param strikeRange
+   *          {minimum strike, maximum strike}
    */
   public CarrLeeFXVolatilitySwapCalculator(final int numPoints, final double[] strikeRange) {
     ArgumentChecker.isTrue(numPoints > 2, "numPoints should be greater than 2");
@@ -136,7 +143,8 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
           foreignRate, putVols, callVols, data.getRealizedVariance()).withStrikes(putStrikes, callStrikes);
     }
     final double strdVol = data.getVolatilityData().getVolatility(Triple.of(timeToExpiry, forward, forward));
-    return NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate, putVols, strdVol, callVols).withStrikes(putStrikes, callStrikes);
+    return NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate, putVols, strdVol, callVols).withStrikes(putStrikes,
+        callStrikes);
   }
 
   private double[] getStrikeRange(final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward, final double reference) {
@@ -151,7 +159,8 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     return res;
   }
 
-  private double findStrike(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward, final boolean isCall) {
+  private double findStrike(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward,
+      final boolean isCall) {
     final Function1D<Double, Double> func = getDeltaDifference(delta, timeToExpiry, smile, forward, isCall);
     final Function1D<Double, Double> funcDiff = getDeltaDifferenceDiff(timeToExpiry, smile, forward);
     final NewtonRaphsonSingleRootFinder rtFinder = new NewtonRaphsonSingleRootFinder(1.e-12);
@@ -160,7 +169,8 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     return strike;
   }
 
-  private Function1D<Double, Double> getDeltaDifference(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward,
+  private Function1D<Double, Double> getDeltaDifference(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile,
+      final double forward,
       final boolean isCall) {
     final double rootT = Math.sqrt(timeToExpiry);
     return new Function1D<Double, Double>() {

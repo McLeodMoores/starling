@@ -23,6 +23,7 @@ public final class GammaBlackBondFuturesCalculator extends InstrumentDerivativeV
 
   /**
    * Returns the singleton of the calculator.
+   *
    * @return the calculator.
    */
   public static GammaBlackBondFuturesCalculator getInstance() {
@@ -36,7 +37,8 @@ public final class GammaBlackBondFuturesCalculator extends InstrumentDerivativeV
   }
 
   /** The method used to compute the future option price */
-  private static final BondFuturesOptionMarginSecurityBlackBondFuturesMethod METHOD_FUTURE_OPTION = BondFuturesOptionMarginSecurityBlackBondFuturesMethod.getInstance();
+  private static final BondFuturesOptionMarginSecurityBlackBondFuturesMethod METHOD_FUTURE_OPTION = BondFuturesOptionMarginSecurityBlackBondFuturesMethod
+      .getInstance();
 
   @Override
   public Double visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity option, final BlackBondFuturesProviderInterface data) {

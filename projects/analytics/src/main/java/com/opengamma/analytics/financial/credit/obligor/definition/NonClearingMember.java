@@ -14,6 +14,7 @@ import com.opengamma.analytics.financial.credit.obligor.Sector;
 
 /**
  * Class to define a Non Clearing Member (an extension of the Obligor class) i.e. an Obligor who does not clear trades through a CCP
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -37,7 +38,8 @@ public class NonClearingMember extends Obligor {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 
-    super(obligorTicker, obligorShortName, obligorREDCode, compositeRating, impliedRating, moodysCreditRating, standardAndPoorsCreditRating, fitchCreditRating, hasDefaulted, sector, region, country);
+    super(obligorTicker, obligorShortName, obligorREDCode, compositeRating, impliedRating, moodysCreditRating, standardAndPoorsCreditRating, fitchCreditRating,
+        hasDefaulted, sector, region, country);
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
   }

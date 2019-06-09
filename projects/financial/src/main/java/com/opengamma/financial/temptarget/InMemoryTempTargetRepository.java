@@ -14,8 +14,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdSupplier;
 
 /**
- * In-memory implementation of {@link TempTargetRepository}. This is for testing/debugging purposes only. It is not suitable for production use or large views as data will never be flushed from
- * memory.
+ * In-memory implementation of {@link TempTargetRepository}. This is for testing/debugging purposes only. It is not suitable for production use or large views
+ * as data will never be flushed from memory.
  */
 public class InMemoryTempTargetRepository implements TempTargetRepository {
 

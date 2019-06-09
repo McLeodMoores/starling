@@ -13,13 +13,13 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
-* Function computing the error of valuation produce by an array representing the curve parameters.
-*/
+ * Function computing the error of valuation produce by an array representing the curve parameters.
+ */
 public class InflationIssuerDiscountFinderFunction extends Function1D<DoubleMatrix1D, DoubleMatrix1D> {
 
   /**
-  * The instrument value calculator.
-  */
+   * The instrument value calculator.
+   */
   private final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, Double> _calculator;
 
   /**
@@ -29,10 +29,14 @@ public class InflationIssuerDiscountFinderFunction extends Function1D<DoubleMatr
 
   /**
    * Constructor
-   * @param inflationCalculator The instrument value calculator.
-   * @param data The data required for curve building.
+   * 
+   * @param inflationCalculator
+   *          The instrument value calculator.
+   * @param data
+   *          The data required for curve building.
    */
-  public InflationIssuerDiscountFinderFunction(final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, Double> inflationCalculator, final InflationIssuerDiscountBuildingData data) {
+  public InflationIssuerDiscountFinderFunction(final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, Double> inflationCalculator,
+      final InflationIssuerDiscountBuildingData data) {
     ArgumentChecker.notNull(inflationCalculator, "Calculator");
     ArgumentChecker.notNull(data, "Data");
     _calculator = inflationCalculator;

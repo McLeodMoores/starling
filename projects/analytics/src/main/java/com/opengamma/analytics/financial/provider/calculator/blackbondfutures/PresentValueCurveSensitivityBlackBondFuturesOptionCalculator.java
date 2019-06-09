@@ -15,15 +15,17 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
  * Calculator of the present value as a multiple currency amount.
  */
 public final class PresentValueCurveSensitivityBlackBondFuturesOptionCalculator extends
-    InstrumentDerivativeVisitorAdapter<BlackBondFuturesProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+InstrumentDerivativeVisitorAdapter<BlackBondFuturesProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueCurveSensitivityBlackBondFuturesOptionCalculator INSTANCE = new PresentValueCurveSensitivityBlackBondFuturesOptionCalculator();
+  private static final PresentValueCurveSensitivityBlackBondFuturesOptionCalculator INSTANCE =
+      new PresentValueCurveSensitivityBlackBondFuturesOptionCalculator();
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackBondFuturesOptionCalculator getInstance() {
@@ -41,10 +43,11 @@ public final class PresentValueCurveSensitivityBlackBondFuturesOptionCalculator 
    */
   private static final FuturesTransactionBlackBondFuturesMethod METHOD_FUT = new FuturesTransactionBlackBondFuturesMethod();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction futures, final BlackBondFuturesProviderInterface black) {
+  public MultipleCurrencyMulticurveSensitivity visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction futures,
+      final BlackBondFuturesProviderInterface black) {
     return METHOD_FUT.presentValueCurveSensitivity(futures, black);
   }
 

@@ -58,7 +58,8 @@ public abstract class AbstractComponentTool {
   /**
    * Initializes the tool statically.
    *
-   * @param logbackResource the logback resource location, not null
+   * @param logbackResource
+   *          the logback resource location, not null
    * @return true if successful
    */
   public static final boolean init(final String logbackResource) {
@@ -74,15 +75,15 @@ public abstract class AbstractComponentTool {
   protected AbstractComponentTool() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   protected static String getSystemDefaultLogbackConfiguration() {
     return System.getProperty("logback.configurationFile");
   }
 
   /**
-   * Returns the name of the default logback configuration file if none is explicitly specified. This will be {@link #TOOL_LOGBACK_XML} unless the global {@code logback.configurationFile property} has
-   * been set.
+   * Returns the name of the default logback configuration file if none is explicitly specified. This will be {@link #TOOL_LOGBACK_XML} unless the global
+   * {@code logback.configurationFile property} has been set.
    *
    * @return the logback configuration file resource address, not null
    */
@@ -102,7 +103,8 @@ public abstract class AbstractComponentTool {
    * l/logback - the logback configuration, default tool-logback.xml<br>
    * h/help - prints the help tool<br>
    *
-   * @param args the command-line arguments, not null
+   * @param args
+   *          the command-line arguments, not null
    * @return true if successful, false otherwise
    */
   public boolean initAndRun(final String[] args) {
@@ -117,8 +119,10 @@ public abstract class AbstractComponentTool {
    * l/logback - the logback configuration, default tool-logback.xml<br>
    * h/help - prints the help tool<br>
    *
-   * @param args the command-line arguments, not null
-   * @param defaultLogbackResource the default logback resource, null to use tool-logback.xml as the default
+   * @param args
+   *          the command-line arguments, not null
+   * @param defaultLogbackResource
+   *          the default logback resource, null to use tool-logback.xml as the default
    * @return true if successful, false otherwise
    */
   public boolean initAndRun(final String[] args, final String defaultLogbackResource) {
@@ -174,8 +178,10 @@ public abstract class AbstractComponentTool {
    * <p>
    * This will catch unhandled exceptions, and will convert checked exceptions to unchecked.
    *
-   * @param remoteComponentFactory  the remote component factory, not null
-   * @throws RuntimeException if an error occurs
+   * @param remoteComponentFactory
+   *          the remote component factory, not null
+   * @throws RuntimeException
+   *           if an error occurs
    */
   public final void run(final RemoteComponentFactory remoteComponentFactory) {
     _remoteComponentFactory = remoteComponentFactory;
@@ -188,15 +194,16 @@ public abstract class AbstractComponentTool {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Override in subclasses to implement the tool.
    *
-   * @throws Exception if an error occurs
+   * @throws Exception
+   *           if an error occurs
    */
   protected abstract void doRun() throws Exception;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the remote component factory.
    *
@@ -215,7 +222,7 @@ public abstract class AbstractComponentTool {
     return _commandLine;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the command line options.
    * <p>
@@ -259,7 +266,7 @@ public abstract class AbstractComponentTool {
     formatter.printHelp("java " + getEntryPointClass().getName(), options, true);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private String resolveComponentServerUri(String componentServerUri) {
     componentServerUri = componentServerUri.trim();
     if (componentServerUri.contains("/")) {

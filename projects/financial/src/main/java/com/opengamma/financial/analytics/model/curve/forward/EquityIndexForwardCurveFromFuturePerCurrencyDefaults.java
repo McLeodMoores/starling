@@ -31,7 +31,7 @@ public class EquityIndexForwardCurveFromFuturePerCurrencyDefaults extends Defaul
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityIndexForwardCurveFromFuturePerCurrencyDefaults.class);
   /** Value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD_CURVE
+                ValueRequirementNames.FORWARD_CURVE
   };
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
@@ -41,8 +41,10 @@ public class EquityIndexForwardCurveFromFuturePerCurrencyDefaults extends Defaul
   private final Map<String, String> _forwardCurveCalculationMethods;
 
   /**
-   * @param priority The priority, not null
-   * @param perCurrencyConfig The default values of forward curve name, forward curve calculation method per currency
+   * @param priority
+   *          The priority, not null
+   * @param perCurrencyConfig
+   *          The default values of forward curve name, forward curve calculation method per currency
    */
   public EquityIndexForwardCurveFromFuturePerCurrencyDefaults(final String priority, final String... perCurrencyConfig) {
     super(ComputationTargetType.CURRENCY, true);
@@ -75,7 +77,8 @@ public class EquityIndexForwardCurveFromFuturePerCurrencyDefaults extends Defaul
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = target.getUniqueId().getValue();
     final String forwardCurveName = _forwardCurveNames.get(currency);
     if (forwardCurveName == null) {

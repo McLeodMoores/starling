@@ -69,7 +69,8 @@ public abstract class StandardVanillaIR01CDSFunction extends StandardVanillaCDSF
     if (creditSpreadCurveShifts != null) {
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

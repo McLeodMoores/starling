@@ -66,7 +66,8 @@ final class CurveCalculationConfigBuilders {
       if (instrumentExposures != null) {
         for (final Map.Entry<String, CurveInstrumentConfig> entry : instrumentExposures.entrySet()) {
           message.add(INSTRUMENT_EXPOSURES_CURVE_NAME_FIELD, entry.getKey());
-          message.add(INSTRUMENT_EXPOSURES_FOR_CURVE_FIELD, FudgeSerializer.addClassHeader(serializer.objectToFudgeMsg(entry.getValue()), entry.getValue().getClass()));
+          message.add(INSTRUMENT_EXPOSURES_FOR_CURVE_FIELD,
+              FudgeSerializer.addClassHeader(serializer.objectToFudgeMsg(entry.getValue()), entry.getValue().getClass()));
         }
       }
       if (object.getExogenousConfigData() != null) {

@@ -1,17 +1,18 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 /**
- * 
+ *
  */
 public class FlexibleLatticeSpecification extends LatticeSpecification {
 
   @Override
-  public double[] getParameters(final double spot, final double strike, final double timeToExpiry, final double volatility, final double interestRate, final int nSteps, final double dt) {
+  public double[] getParameters(final double spot, final double strike, final double timeToExpiry, final double volatility, final double interestRate,
+      final int nSteps, final double dt) {
     final double rootDt = Math.sqrt(dt);
     final double sigRootDt = volatility * rootDt;
 
@@ -25,6 +26,6 @@ public class FlexibleLatticeSpecification extends LatticeSpecification {
     final double downFactor = mod / cf;
     final double upProbability = (Math.exp(interestRate * dt) - downFactor) / (upFactor - downFactor);
 
-    return new double[] {upFactor, downFactor, upProbability, 1. - upProbability };
+    return new double[] { upFactor, downFactor, upProbability, 1. - upProbability };
   }
 }

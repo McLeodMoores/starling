@@ -11,6 +11,7 @@ import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTerm
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
+
 // CSOFF
 /**
  * @deprecated {@link SmileDeltaTermStructureDataBundle} is deprecated
@@ -18,7 +19,8 @@ import com.opengamma.util.tuple.Pair;
 @Deprecated
 public class FXVolatilityUtils {
 
-  public static double getVolatility(final SmileDeltaTermStructureDataBundle data, final Currency ccy1, final Currency ccy2, final double time, final double strike, final double forward) {
+  public static double getVolatility(final SmileDeltaTermStructureDataBundle data, final Currency ccy1, final Currency ccy2, final double time,
+      final double strike, final double forward) {
     ArgumentChecker.notNull(ccy1, "ccy1");
     ArgumentChecker.notNull(ccy2, "ccy2");
     ArgumentChecker.notNull(data, "data");
@@ -30,10 +32,12 @@ public class FXVolatilityUtils {
     if (ccy2 == currencyPair.getFirst() && ccy1 == currencyPair.getSecond()) {
       return smile.getVolatility(time, 1.0 / strike, 1.0 / forward);
     }
-    throw new IllegalArgumentException("Currencies not compatible with smile data; asked for " + ccy1 + " and " + ccy2 + ", have " + data.getCurrencyMap().values());
+    throw new IllegalArgumentException(
+        "Currencies not compatible with smile data; asked for " + ccy1 + " and " + ccy2 + ", have " + data.getCurrencyMap().values());
   }
 
-  public static VolatilityAndBucketedSensitivities getVolatilityAndSensitivities(final SmileDeltaTermStructureDataBundle data, final Currency ccy1, final Currency ccy2,
+  public static VolatilityAndBucketedSensitivities getVolatilityAndSensitivities(final SmileDeltaTermStructureDataBundle data, final Currency ccy1,
+      final Currency ccy2,
       final double time, final double strike, final double forward) {
     ArgumentChecker.notNull(ccy1, "ccy1");
     ArgumentChecker.notNull(ccy2, "ccy2");
@@ -46,6 +50,7 @@ public class FXVolatilityUtils {
     if (ccy2 == currencyPair.getFirst() && ccy1 == currencyPair.getSecond()) {
       return smile.getVolatilityAndSensitivities(time, 1.0 / strike, 1.0 / forward);
     }
-    throw new IllegalArgumentException("Currencies not compatible with smile data; asked for " + ccy1 + " and " + ccy2 + ", have " + data.getCurrencyMap().values());
+    throw new IllegalArgumentException(
+        "Currencies not compatible with smile data; asked for " + ccy1 + " and " + ccy2 + ", have " + data.getCurrencyMap().values());
   }
 }

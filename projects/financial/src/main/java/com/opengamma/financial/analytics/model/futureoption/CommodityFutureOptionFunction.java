@@ -26,7 +26,8 @@ import com.opengamma.util.money.Currency;
 public abstract class CommodityFutureOptionFunction extends FutureOptionFunction {
 
   /**
-   * @param valueRequirementNames The value requirement names
+   * @param valueRequirementNames
+   *          The value requirement names
    */
   public CommodityFutureOptionFunction(final String... valueRequirementNames) {
     super(valueRequirementNames);
@@ -43,7 +44,8 @@ public abstract class CommodityFutureOptionFunction extends FutureOptionFunction
     final ExternalId currencyId = ExternalId.of(Currency.OBJECT_SCHEME, FinancialSecurityUtils.getCurrency(security).getCode());
     final String fullSurfaceName = CommodityFutureOptionUtils.getSurfaceName(security, surfaceName);
     final String fullForwardCurveName = CommodityFutureOptionUtils.getSurfaceName(security, forwardCurveName);
-    final ValueRequirement requirement = BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, ValueProperties.none(), surfaceName, forwardCurveName,
+    final ValueRequirement requirement = BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, ValueProperties.none(), surfaceName,
+        forwardCurveName,
         InstrumentTypeProperties.COMMODITY_FUTURE_OPTION, ComputationTargetType.CURRENCY, currencyId);
     final ValueProperties.Builder properties = requirement.getConstraints().copy();
     properties.withoutAny(ValuePropertyNames.SURFACE).with(ValuePropertyNames.SURFACE, fullSurfaceName);
@@ -52,7 +54,8 @@ public abstract class CommodityFutureOptionFunction extends FutureOptionFunction
   }
 
   @Override
-  protected ValueRequirement getForwardCurveRequirement(final FinancialSecurity security, final String forwardCurveName, final String forwardCurveCalculationMethod) {
+  protected ValueRequirement getForwardCurveRequirement(final FinancialSecurity security, final String forwardCurveName,
+      final String forwardCurveCalculationMethod) {
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     final String fullCurveName = CommodityFutureOptionUtils.getSurfaceName(security, forwardCurveName);
     final ValueProperties properties = ValueProperties.builder()

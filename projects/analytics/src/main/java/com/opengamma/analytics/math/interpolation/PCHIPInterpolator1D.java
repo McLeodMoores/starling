@@ -53,14 +53,16 @@ public class PCHIPInterpolator1D extends Interpolator1D {
 
   @Override
   public Interpolator1DDataBundle getDataBundle(final double[] x, final double[] y) {
-    //    final PiecewisePolynomialResult poly = BASE.interpolate(x, y);
-    return new Interpolator1DPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, y, true), new PiecewiseCubicHermiteSplineInterpolatorWithSensitivity());
+    // final PiecewisePolynomialResult poly = BASE.interpolate(x, y);
+    return new Interpolator1DPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, y, true),
+        new PiecewiseCubicHermiteSplineInterpolatorWithSensitivity());
   }
 
   @Override
   public Interpolator1DDataBundle getDataBundleFromSortedArrays(final double[] x, final double[] y) {
-    //    final PiecewisePolynomialResult poly = BASE.interpolate(x, y);
-    return new Interpolator1DPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, y, true), new PiecewiseCubicHermiteSplineInterpolatorWithSensitivity());
+    // final PiecewisePolynomialResult poly = BASE.interpolate(x, y);
+    return new Interpolator1DPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, y, true),
+        new PiecewiseCubicHermiteSplineInterpolatorWithSensitivity());
   }
 
 }

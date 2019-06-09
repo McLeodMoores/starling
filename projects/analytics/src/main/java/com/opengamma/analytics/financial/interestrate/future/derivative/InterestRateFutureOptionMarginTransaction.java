@@ -14,12 +14,17 @@ import com.opengamma.util.ArgumentChecker;
 public class InterestRateFutureOptionMarginTransaction extends FuturesTransaction<InterestRateFutureOptionMarginSecurity> {
 
   /**
-  * Constructor of the future option transaction from details.
-  * @param underlyingOption The underlying option future security.
-  * @param quantity The quantity of the transaction. Can be positive or negative.
-  * @param referencePrice The reference price.
-  */
-  public InterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginSecurity underlyingOption, final long quantity, final double referencePrice) {
+   * Constructor of the future option transaction from details.
+   *
+   * @param underlyingOption
+   *          The underlying option future security.
+   * @param quantity
+   *          The quantity of the transaction. Can be positive or negative.
+   * @param referencePrice
+   *          The reference price.
+   */
+  public InterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginSecurity underlyingOption, final long quantity,
+      final double referencePrice) {
     super(underlyingOption, quantity, referencePrice);
   }
 

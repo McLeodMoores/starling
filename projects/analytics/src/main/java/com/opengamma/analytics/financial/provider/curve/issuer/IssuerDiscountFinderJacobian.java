@@ -30,10 +30,14 @@ public class IssuerDiscountFinderJacobian extends Function1D<DoubleMatrix1D, Dou
 
   /**
    * Constructor.
-   * @param parameterSensitivityCalculator The instrument parameter sensitivity calculator.
-   * @param data The data required for curve building.
+   *
+   * @param parameterSensitivityCalculator
+   *          The instrument parameter sensitivity calculator.
+   * @param data
+   *          The data required for curve building.
    */
-  public IssuerDiscountFinderJacobian(final AbstractParameterSensitivityIssuerMatrixCalculator parameterSensitivityCalculator, final IssuerDiscountBuildingData data) {
+  public IssuerDiscountFinderJacobian(final AbstractParameterSensitivityIssuerMatrixCalculator parameterSensitivityCalculator,
+      final IssuerDiscountBuildingData data) {
     _parameterSensitivityCalculator = parameterSensitivityCalculator;
     _data = data;
   }

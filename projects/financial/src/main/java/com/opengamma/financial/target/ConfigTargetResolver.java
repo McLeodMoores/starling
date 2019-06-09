@@ -25,7 +25,8 @@ import com.opengamma.id.VersionCorrection;
 /**
  * Target resolver for configuration sourced objects.
  *
- * @param <T> type resolved by this resolver
+ * @param <T>
+ *          type resolved by this resolver
  */
 public class ConfigTargetResolver<T extends UniqueIdentifiable> implements Resolver<T> {
 
@@ -39,7 +40,8 @@ public class ConfigTargetResolver<T extends UniqueIdentifiable> implements Resol
     _underlying = new ConfigItemTargetResolver<>(type, configSource);
   }
 
-  public static <T extends UniqueIdentifiable> void initResolver(final DefaultComputationTargetResolver resolver, final Class<T> clazz, final ConfigSource configSource) {
+  public static <T extends UniqueIdentifiable> void initResolver(final DefaultComputationTargetResolver resolver, final Class<T> clazz,
+      final ConfigSource configSource) {
     resolver.addResolver(ComputationTargetType.of(clazz), new ConfigTargetResolver<>(clazz, configSource));
   }
 

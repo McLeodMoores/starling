@@ -14,9 +14,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an Year on Year inflation coupon.
- * The index for a given month is given in the yield curve and in the time series on the first of the month.
- * The pay-off is paymentYearFraction*((final index / start index - 1)+Margin) * notional if the notional is not paid and final index / start index * notional if the notional is paid.
+ * Class describing an Year on Year inflation coupon. The index for a given month is given in the yield curve and in the time series on the first of the month.
+ * The pay-off is paymentYearFraction*((final index / start index - 1)+Margin) * notional if the notional is not paid and final index / start index * notional
+ * if the notional is paid.
  */
 public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInflation implements CouponInflationWithMargin {
 
@@ -32,9 +32,9 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
   private final double[] _referenceStartTime;
 
   /**
-   * The time for which the index at the coupon start is paid by the standard corresponding  zero coupon.
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon start is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. The time can be negative (when the price index for the current and last month is not yet
+   * published).
    */
   private final double _naturalPaymentStartTime;
 
@@ -45,10 +45,9 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
   private final double[] _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * the natural payment date is equal to the payment date when the lag is the conventional one.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon end is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. the natural payment date is equal to the payment date when the lag is the conventional one. The
+   * time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double _naturalPaymentEndTime;
 
@@ -69,23 +68,39 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   /**
    * Inflation year on year coupon constructor.
-   * @param factor The additive factor (margin).
-   * @param currency The coupon currency.
-   * @param paymentTime The time to payment.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param referenceStartTime The reference time for the index at the coupon start.
-   * @param naturalPaymentStartTime The time for which the index at the coupon start is paid by the standard corresponding  zero coupon.
-   * @param referenceEndTime The reference time for the index at the coupon end.
-   * @param naturalPaymentEndTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
-   * @param weightStart The weight on the first month index in the interpolation of the index at the coupon start.
-   * @param weightEnd The weight on the first month index in the interpolation of the index at the coupon end.
+   * 
+   * @param factor
+   *          The additive factor (margin).
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The time to payment.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param referenceStartTime
+   *          The reference time for the index at the coupon start.
+   * @param naturalPaymentStartTime
+   *          The time for which the index at the coupon start is paid by the standard corresponding zero coupon.
+   * @param referenceEndTime
+   *          The reference time for the index at the coupon end.
+   * @param naturalPaymentEndTime
+   *          The time for which the index at the coupon end is paid by the standard corresponding zero coupon.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
+   * @param weightStart
+   *          The weight on the first month index in the interpolation of the index at the coupon start.
+   * @param weightEnd
+   *          The weight on the first month index in the interpolation of the index at the coupon end.
    */
-  public CouponInflationYearOnYearInterpolationWithMargin(final double factor, final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+  public CouponInflationYearOnYearInterpolationWithMargin(final double factor, final Currency currency, final double paymentTime,
+      final double paymentYearFraction, final double notional,
       final IndexPrice priceIndex,
-      final double[] referenceStartTime, final double naturalPaymentStartTime, final double[] referenceEndTime, final double naturalPaymentEndTime, final boolean payNotional,
+      final double[] referenceStartTime, final double naturalPaymentStartTime, final double[] referenceEndTime, final double naturalPaymentEndTime,
+      final boolean payNotional,
       final double weightStart, final double weightEnd) {
     super(currency, paymentTime, paymentYearFraction, notional, priceIndex);
     _factor = factor;
@@ -100,6 +115,7 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   /**
    * Gets the additive facor (margin).
+   * 
    * @return The facor.
    */
   @Override
@@ -109,6 +125,7 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   /**
    * Gets the reference time for the index at the coupon start.
+   * 
    * @return The reference time.
    */
   public double[] getReferenceStartTime() {
@@ -121,6 +138,7 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   /**
    * Gets the reference time for the index at the coupon end.
+   * 
    * @return The reference time.
    */
   public double[] getReferenceEndTime() {
@@ -133,6 +151,7 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   /**
    * Gets the weight on the first month index in the interpolation of the index at the coupon start.
+   * 
    * @return The weight.
    */
   public double getWeightStart() {
@@ -141,6 +160,7 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   /**
    * Gets the weight on the first month index in the interpolation of the index at the coupon end.
+   * 
    * @return The weight.
    */
   public double getWeightEnd() {
@@ -149,6 +169,7 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   /**
    * Gets the pay notional flag.
+   * 
    * @return The flag.
    */
   public boolean payNotional() {
@@ -157,7 +178,8 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   @Override
   public CouponInflationYearOnYearInterpolationWithMargin withNotional(final double notional) {
-    return new CouponInflationYearOnYearInterpolationWithMargin(_factor, getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _referenceStartTime,
+    return new CouponInflationYearOnYearInterpolationWithMargin(_factor, getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(),
+        _referenceStartTime,
         _naturalPaymentStartTime, _referenceEndTime, _naturalPaymentEndTime, _payNotional, _weightStart, _weightEnd);
   }
 
@@ -175,7 +197,8 @@ public class CouponInflationYearOnYearInterpolationWithMargin extends CouponInfl
 
   @Override
   public String toString() {
-    return "CouponInflationYearOnYearInterpolation [_referenceStartTime=" + Arrays.toString(_referenceStartTime) + ", _referenceEndTime=" + Arrays.toString(_referenceEndTime) + "]";
+    return "CouponInflationYearOnYearInterpolation [_referenceStartTime=" + Arrays.toString(_referenceStartTime) + ", _referenceEndTime="
+        + Arrays.toString(_referenceEndTime) + "]";
   }
 
   @Override

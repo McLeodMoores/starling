@@ -24,11 +24,12 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
   /**
    * The method unique instance.
    */
-  private static final SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod INSTANCE = new SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod();
+  private static final SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod INSTANCE =
+      new SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod();
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod getInstance() {
@@ -56,7 +57,7 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
 
   /**
    * Computes the present value of the Physical delivery swaption.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param hullWhite
@@ -102,7 +103,7 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
 
     /**
      * Constructor to the integrant function.
-     * 
+     *
      * @param discountedCashFlow
      *          The discounted cash flows.
      * @param alpha

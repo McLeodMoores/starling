@@ -20,8 +20,9 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 
 /**
- * Compute the spread to be added to the rate of the instrument for which the present value of the instrument is zero.
- * The "rate" can be a "rate" or a "yield" and will depend of each instrument.
+ * Compute the spread to be added to the rate of the instrument for which the present value of the instrument is zero. The "rate" can be a "rate" or a "yield"
+ * and will depend of each instrument.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -34,6 +35,7 @@ public final class ParSpreadRateCalculator extends InstrumentDerivativeVisitorAd
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParSpreadRateCalculator getInstance() {
@@ -54,7 +56,8 @@ public final class ParSpreadRateCalculator extends InstrumentDerivativeVisitorAd
   private static final CashDiscountingMethod METHOD_DEPOSIT = CashDiscountingMethod.getInstance();
   private static final DepositZeroDiscountingMethod METHOD_DEPOSIT_ZERO = DepositZeroDiscountingMethod.getInstance();
   private static final ForwardRateAgreementDiscountingMethod METHOD_FRA = ForwardRateAgreementDiscountingMethod.getInstance();
-  //  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION = InterestRateFutureTransactionDiscountingMethod.getInstance();
+  // private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION =
+  // InterestRateFutureTransactionDiscountingMethod.getInstance();
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IR_FUTURES_SECURITY = InterestRateFutureSecurityDiscountingMethod.getInstance();
 
   @Override
@@ -68,10 +71,13 @@ public final class ParSpreadRateCalculator extends InstrumentDerivativeVisitorAd
   }
 
   /**
-   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero.
-   * It is computed as the opposite of the present value of the swap divided by the present value of a basis point of the first leg (as computed by the PresentValueBasisPointCalculator).
-   * @param swap The swap.
-   * @param curves The yield curve bundle.
+   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the opposite of the
+   * present value of the swap divided by the present value of a basis point of the first leg (as computed by the PresentValueBasisPointCalculator).
+   * 
+   * @param swap
+   *          The swap.
+   * @param curves
+   *          The yield curve bundle.
    * @return The par spread.
    */
   @Override
@@ -88,8 +94,11 @@ public final class ParSpreadRateCalculator extends InstrumentDerivativeVisitorAd
 
   /**
    * For ForwardRateAgreement the ParSpread is the spread to be added to the fixed rate to obtain a present value of zero.
-   * @param fra The forward rate agreement.
-   * @param curves The yield curve bundle.
+   * 
+   * @param fra
+   *          The forward rate agreement.
+   * @param curves
+   *          The yield curve bundle.
    * @return The par spread.
    */
   @Override
@@ -101,8 +110,11 @@ public final class ParSpreadRateCalculator extends InstrumentDerivativeVisitorAd
 
   /**
    * For InterestRateFutures the ParSpread is the spread to be added to the reference price to obtain a present value of zero.
-   * @param future The futures.
-   * @param curves The yield curve bundle.
+   * 
+   * @param future
+   *          The futures.
+   * @param curves
+   *          The yield curve bundle.
    * @return The par spread.
    */
   @Override
@@ -110,14 +122,14 @@ public final class ParSpreadRateCalculator extends InstrumentDerivativeVisitorAd
     return -(METHOD_IR_FUTURES_SECURITY.price(future.getUnderlyingSecurity(), curves) - future.getReferencePrice());
   }
 
-  //  /**
-  //   * For InterestRateFutures the ParSpread is the spread to be added to the reference price to obtain a present value of zero.
-  //   * @param future The futures.
-  //   * @param curves The yield curve bundle.
-  //   * @return The par spread.
-  //   */
-  //  @Override
-  //  public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity future, final YieldCurveBundle curves) {
-  //    return -(METHOD_IR_FUTURES_SECURITY.presentValue(future, curves).getAmount());
-  //  }
+  // /**
+  // * For InterestRateFutures the ParSpread is the spread to be added to the reference price to obtain a present value of zero.
+  // * @param future The futures.
+  // * @param curves The yield curve bundle.
+  // * @return The par spread.
+  // */
+  // @Override
+  // public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity future, final YieldCurveBundle curves) {
+  // return -(METHOD_IR_FUTURES_SECURITY.presentValue(future, curves).getAmount());
+  // }
 }

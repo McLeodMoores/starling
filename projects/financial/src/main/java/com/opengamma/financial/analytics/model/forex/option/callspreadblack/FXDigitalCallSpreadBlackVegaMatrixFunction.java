@@ -27,6 +27,7 @@ import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues
 
 /**
  * The function calculating the Black volatility sensitivity to the matrix with volatility data.
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -43,8 +44,10 @@ public class FXDigitalCallSpreadBlackVegaMatrixFunction extends FXDigitalCallSpr
       final Set<ValueRequirement> desiredValues, final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final String spreadName = Iterables.getOnlyElement(desiredValues).getConstraint(CalculationPropertyNamesAndValues.PROPERTY_CALL_SPREAD_VALUE);
     final double spread = Double.parseDouble(spreadName);
-    final PresentValueBlackVolatilityNodeSensitivityCallSpreadBlackForexCalculator calculator = new PresentValueBlackVolatilityNodeSensitivityCallSpreadBlackForexCalculator(spread);
-    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle result = fxDigital.accept(calculator, (SmileDeltaTermStructureDataBundle) data.getVolatilityModel());
+    final PresentValueBlackVolatilityNodeSensitivityCallSpreadBlackForexCalculator calculator =
+        new PresentValueBlackVolatilityNodeSensitivityCallSpreadBlackForexCalculator(spread);
+    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle result = fxDigital.accept(calculator,
+        (SmileDeltaTermStructureDataBundle) data.getVolatilityModel());
     final double[] expiries = result.getExpiries().getData();
     final double[] delta = result.getDelta().getData();
     final double[][] vega = result.getVega().getData();

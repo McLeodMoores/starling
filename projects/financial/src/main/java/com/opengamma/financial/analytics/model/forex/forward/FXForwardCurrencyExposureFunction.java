@@ -34,7 +34,8 @@ public class FXForwardCurrencyExposureFunction extends FXForwardMultiValuedFunct
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> getResult(final Forex fxForward, final YieldCurveBundle data, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues,
       final FunctionInputs inputs, final ValueSpecification spec, final FunctionExecutionContext executionContext) {
     final MultipleCurrencyAmount result = fxForward.accept(CALCULATOR, data);
     return Collections.singleton(new ComputedValue(spec, result));

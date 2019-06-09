@@ -54,7 +54,8 @@ public class VolatilityWeightedFXForwardCurveNodeReturnSeriesFunction extends FX
     for (int i = 0; i < n; i++) {
       volWeightedDifferences[i] = differenceSeries.getValueAtIndexFast(i) * endDateWeightedVol / weightedVolSeries.getValueAtIndexFast(i);
     }
-    final LocalDateDoubleTimeSeries volWeightedDifferenceSeries = ImmutableLocalDateDoubleTimeSeries.of(weightedVolSeries.timesArrayFast(), volWeightedDifferences);
+    final LocalDateDoubleTimeSeries volWeightedDifferenceSeries = ImmutableLocalDateDoubleTimeSeries.of(weightedVolSeries.timesArrayFast(),
+        volWeightedDifferences);
     return volWeightedDifferenceSeries;
   }
 

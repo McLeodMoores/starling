@@ -25,41 +25,55 @@ public class BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider extends 
 
   /**
    * Uses the default scheme (BLOOMBERG_TICKER_WEAK)
-   * @param futureOptionPrefix the prefix to the resulting code, not null
-   * @param postfix the postfix to the resulting code, not null
-   * @param dataFieldName the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the exchange id, not null
+   * 
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code, not null
+   * @param postfix
+   *          the postfix to the resulting code, not null
+   * @param dataFieldName
+   *          the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the exchange id, not null
    */
-  public BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName);
   }
 
   /**
-   * @param futureOptionPrefix the prefix to the resulting code, not null
-   * @param postfix the postfix to the resulting code, not null
-   * @param dataFieldName the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the exchange id, not null
-   * @param schemeName the name of the Bloomberg ticker scheme, not null
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code, not null
+   * @param postfix
+   *          the postfix to the resulting code, not null
+   * @param dataFieldName
+   *          the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the exchange id, not null
+   * @param schemeName
+   *          the name of the Bloomberg ticker scheme, not null
    */
-  public BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName, final String schemeName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName, schemeName);
   }
 
-
   @Override
   /**
-   * {@inheritDoc}
-   * Provides ExternalID for Bloomberg ticker, e.g. EDZ3C 99.250 Comdty,
-   * given a reference date and an integer offset, the n'th subsequent option
+   * {@inheritDoc} Provides ExternalID for Bloomberg ticker, e.g. EDZ3C 99.250 Comdty, given a reference date and an integer offset, the n'th subsequent option
    * The format is futurePrefix + month + year + callPutFlag + strike + postfix
    *
-   * @param futureNumber n'th future following curve date, not null
-   * @param strike option's strike, expressed as price in %, e.g. 98.750, not null
-   * @param surfaceDate date of curve validity; valuation date, not null
+   * @param futureNumber
+   *          n'th future following curve date, not null
+   * @param strike
+   *          option's strike, expressed as price in %, e.g. 98.750, not null
+   * @param surfaceDate
+   *          date of curve validity; valuation date, not null
    */
   public ExternalId getInstrument(final Number futureOptionNumber, final Double strike, final LocalDate surfaceDate) {
     ArgumentChecker.notNull(futureOptionNumber, "futureOptionNumber");

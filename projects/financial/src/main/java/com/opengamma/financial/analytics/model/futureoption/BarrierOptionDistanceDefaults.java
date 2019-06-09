@@ -33,7 +33,7 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
    * Value requirement names for which these properties apply
    */
   private static final String[] VALUE_NAMES = new String[] {
-    ValueRequirementNames.BARRIER_DISTANCE
+                ValueRequirementNames.BARRIER_DISTANCE
   };
 
   /**
@@ -57,7 +57,8 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.BARRIER_DISTANCE_OUTPUT_FORMAT.equals(propertyName)) {
       return Collections.singleton(_barrierOutput);
     }

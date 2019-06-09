@@ -22,7 +22,9 @@ public class LabelledMatrix2DConverter implements ResultConverter<LabelledMatrix
     for (int i = 0; i < data.length; i++) {
       for (int j = 0; j < data[i].length; j++) {
         // valueName[xKey=xLabel][yKey=yLabel] -> data
-        returnValue.put(valueName + "[" + value.getXKeys()[j] + "=" + value.getXLabels()[j] + "]" + "[" + value.getYKeys()[i] + "=" + value.getYLabels()[i] + "]", data[i][j]);
+        returnValue.put(
+            valueName + "[" + value.getXKeys()[j] + "=" + value.getXLabels()[j] + "]" + "[" + value.getYKeys()[i] + "=" + value.getYLabels()[i] + "]",
+            data[i][j]);
       }
     }
     return returnValue;

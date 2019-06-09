@@ -16,9 +16,13 @@ public class InterestRateFutureTransaction extends FuturesTransaction<InterestRa
 
   /**
    * Constructor from tthe underlying and transaction details.
-   * @param underlying The underlying futures security.
-   * @param referencePrice The reference price (trading price or last margining price).
-   * @param quantity The number of contracts.
+   * 
+   * @param underlying
+   *          The underlying futures security.
+   * @param referencePrice
+   *          The reference price (trading price or last margining price).
+   * @param quantity
+   *          The number of contracts.
    */
   public InterestRateFutureTransaction(final InterestRateFutureSecurity underlying, final double referencePrice, final long quantity) {
     super(underlying, quantity, referencePrice);
@@ -26,46 +30,77 @@ public class InterestRateFutureTransaction extends FuturesTransaction<InterestRa
 
   /**
    * Constructor from all the details.
-   * @param lastTradingTime Future last trading time.
-   * @param iborIndex Ibor index associated to the future.
-   * @param fixingPeriodStartTime Fixing period of the reference Ibor starting time.
-   * @param fixingPeriodEndTime Fixing period of the reference Ibor end time.
-   * @param fixingPeriodAccrualFactor Fixing period of the reference Ibor accrual factor.
-   * @param referencePrice The reference price.
-   * @param notional Future notional.
-   * @param paymentAccrualFactor Future payment accrual factor.
-   * @param quantity The quantity.
-   * @param name Future name.
-   * @param discountingCurveName The discounting curve name.
-   * @param forwardCurveName The forward curve name.
+   * 
+   * @param lastTradingTime
+   *          Future last trading time.
+   * @param iborIndex
+   *          Ibor index associated to the future.
+   * @param fixingPeriodStartTime
+   *          Fixing period of the reference Ibor starting time.
+   * @param fixingPeriodEndTime
+   *          Fixing period of the reference Ibor end time.
+   * @param fixingPeriodAccrualFactor
+   *          Fixing period of the reference Ibor accrual factor.
+   * @param referencePrice
+   *          The reference price.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param quantity
+   *          The quantity.
+   * @param name
+   *          Future name.
+   * @param discountingCurveName
+   *          The discounting curve name.
+   * @param forwardCurveName
+   *          The forward curve name.
    * @deprecated Deprecated since 2.2.M12. Use the constructor that does not that curve names
    */
   @Deprecated
-  public InterestRateFutureTransaction(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime, final double fixingPeriodEndTime,
-      final double fixingPeriodAccrualFactor, final double referencePrice, final double notional, final double paymentAccrualFactor, final int quantity, final String name,
+  public InterestRateFutureTransaction(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime,
+      final double fixingPeriodEndTime,
+      final double fixingPeriodAccrualFactor, final double referencePrice, final double notional, final double paymentAccrualFactor, final int quantity,
+      final String name,
       final String discountingCurveName, final String forwardCurveName) {
-    super(new InterestRateFutureSecurity(lastTradingTime, iborIndex, fixingPeriodStartTime, fixingPeriodEndTime, fixingPeriodAccrualFactor, notional, paymentAccrualFactor, name,
+    super(new InterestRateFutureSecurity(lastTradingTime, iborIndex, fixingPeriodStartTime, fixingPeriodEndTime, fixingPeriodAccrualFactor, notional,
+        paymentAccrualFactor, name,
         discountingCurveName, forwardCurveName), quantity, referencePrice);
   }
 
   /**
    * Constructor from all the details.
-   * @param lastTradingTime Future last trading time.
-   * @param iborIndex Ibor index associated to the future.
-   * @param fixingPeriodStartTime Fixing period of the reference Ibor starting time.
-   * @param fixingPeriodEndTime Fixing period of the reference Ibor end time.
-   * @param fixingPeriodAccrualFactor Fixing period of the reference Ibor accrual factor.
-   * @param referencePrice The reference price.
-   * @param notional Future notional.
-   * @param paymentAccrualFactor Future payment accrual factor.
-   * @param quantity The quantity.
-   * @param name Future name.
+   * 
+   * @param lastTradingTime
+   *          Future last trading time.
+   * @param iborIndex
+   *          Ibor index associated to the future.
+   * @param fixingPeriodStartTime
+   *          Fixing period of the reference Ibor starting time.
+   * @param fixingPeriodEndTime
+   *          Fixing period of the reference Ibor end time.
+   * @param fixingPeriodAccrualFactor
+   *          Fixing period of the reference Ibor accrual factor.
+   * @param referencePrice
+   *          The reference price.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param quantity
+   *          The quantity.
+   * @param name
+   *          Future name.
    * @deprecated Deprecated since 2.2.M12. Use the constructor from the security.
    */
   @Deprecated
-  public InterestRateFutureTransaction(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime, final double fixingPeriodEndTime,
-      final double fixingPeriodAccrualFactor, final double referencePrice, final double notional, final double paymentAccrualFactor, final int quantity, final String name) {
-    super(new InterestRateFutureSecurity(lastTradingTime, iborIndex, fixingPeriodStartTime, fixingPeriodEndTime, fixingPeriodAccrualFactor, notional, paymentAccrualFactor, name),
+  public InterestRateFutureTransaction(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime,
+      final double fixingPeriodEndTime,
+      final double fixingPeriodAccrualFactor, final double referencePrice, final double notional, final double paymentAccrualFactor, final int quantity,
+      final String name) {
+    super(
+        new InterestRateFutureSecurity(lastTradingTime, iborIndex, fixingPeriodStartTime, fixingPeriodEndTime, fixingPeriodAccrualFactor, notional,
+            paymentAccrualFactor, name),
         quantity, referencePrice);
   }
 

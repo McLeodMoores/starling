@@ -22,10 +22,10 @@ import com.opengamma.analytics.financial.provider.description.forex.BlackForexSm
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
 /**
- * Calculates the sensitivity of the present value to the nodes of the curve(s) used in pricing. The underlying pricing
- * model is a Black model with smile.
+ * Calculates the sensitivity of the present value to the nodes of the curve(s) used in pricing. The underlying pricing model is a Black model with smile.
  */
-public final class PresentValueCurveSensitivityForexBlackSmileCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityForexBlackSmileCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -40,6 +40,7 @@ public final class PresentValueCurveSensitivityForexBlackSmileCalculator extends
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityForexBlackSmileCalculator getInstance() {
@@ -52,7 +53,8 @@ public final class PresentValueCurveSensitivityForexBlackSmileCalculator extends
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitForexNonDeliverableOption(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface marketData) {
+  public MultipleCurrencyMulticurveSensitivity visitForexNonDeliverableOption(final ForexNonDeliverableOption option,
+      final BlackForexSmileProviderInterface marketData) {
     return ForexNonDeliverableOptionBlackSmileMethod.getInstance().presentValueCurveSensitivity(option, marketData);
   }
 
@@ -62,7 +64,8 @@ public final class PresentValueCurveSensitivityForexBlackSmileCalculator extends
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option, final BlackForexSmileProviderInterface marketData) {
+  public MultipleCurrencyMulticurveSensitivity visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option,
+      final BlackForexSmileProviderInterface marketData) {
     return ForexOptionSingleBarrierBlackMethod.getInstance().presentValueCurveSensitivity(option, marketData);
   }
 

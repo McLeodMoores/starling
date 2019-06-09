@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -13,16 +13,21 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BasisFunctionGenerator {
 
   /**
    * Generates a set of b-splines with knots a fixed distance apart
-   * @param xa minimum value of the function domain
-   * @param xb maximum value of the function domain
-   * @param nKnots number of internal knots (minimum 2 - 1 at xa and 1 at xb)
-   * @param degree The order of the polynomial splines
+   * 
+   * @param xa
+   *          minimum value of the function domain
+   * @param xb
+   *          maximum value of the function domain
+   * @param nKnots
+   *          number of internal knots (minimum 2 - 1 at xa and 1 at xb)
+   * @param degree
+   *          The order of the polynomial splines
    * @return a List of functions
    */
   public List<Function1D<Double, Double>> generateSet(final double xa, final double xb, final int nKnots, final int degree) {
@@ -179,7 +184,7 @@ public class BasisFunctionGenerator {
 
         @Override
         public Double evaluate(final Double x) {
-          return (x >= knots[j] && x < knots[j + 1]) ? 1.0 : 0.0;
+          return x >= knots[j] && x < knots[j + 1] ? 1.0 : 0.0;
         }
       };
     }
@@ -190,7 +195,8 @@ public class BasisFunctionGenerator {
       public Double evaluate(final Double x) {
         final Function1D<Double, Double> fa = generate(knots, degree - 1, j);
         final Function1D<Double, Double> fb = generate(knots, degree - 1, j + 1);
-        return (x - knots[j]) / (knots[j + degree] - knots[j]) * fa.evaluate(x) + (knots[j + degree + 1] - x) / (knots[j + degree + 1] - knots[j + 1]) * fb.evaluate(x);
+        return (x - knots[j]) / (knots[j + degree] - knots[j]) * fa.evaluate(x)
+            + (knots[j + degree + 1] - x) / (knots[j + degree + 1] - knots[j + 1]) * fb.evaluate(x);
       }
 
     };

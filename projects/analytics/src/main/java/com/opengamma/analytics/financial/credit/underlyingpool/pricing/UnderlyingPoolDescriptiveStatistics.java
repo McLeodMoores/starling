@@ -21,6 +21,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class to compute basic statistics (e.g. average 5Y spread) for an underlying pool
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -113,7 +114,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Get the minimum spread of the obligors in the underlying pool for the given tenor
-  public double getUnderlyingPoolCreditSpreadMinimum(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadMinimum(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -131,7 +133,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Get the maximum spread of the obligors in the underlying pool for the given tenor
-  public double getUnderlyingPoolCreditSpreadMaximum(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadMaximum(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -149,7 +152,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the average (mean) spread of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadMean(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadMean(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -167,7 +171,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the median spread of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadMedian(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadMedian(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -185,7 +190,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the modal spread of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadMode(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadMode(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -203,7 +209,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the variance of the spread of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadVariance(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadVariance(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -221,7 +228,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the standard deviation of the spread of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadStandardDeviation(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadStandardDeviation(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -239,7 +247,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the skewness of the spread of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadSkewness(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadSkewness(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -257,7 +266,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the excess kurtosis of the spread of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadKurtosis(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadKurtosis(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");
@@ -275,7 +285,8 @@ public class UnderlyingPoolDescriptiveStatistics {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Calculate the q'th percentile of the spread distribution of the obligors in the underlying pool for a given tenor
-  public double getUnderlyingPoolCreditSpreadPercentile(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors, final double[][] creditSpreadTermStructures,
+  public double getUnderlyingPoolCreditSpreadPercentile(final UnderlyingPool underlyingPool, final CreditSpreadTenors[] creditSpreadTenors,
+      final double[][] creditSpreadTermStructures,
       final CreditSpreadTenors creditSpreadTenor, final double q) {
 
     ArgumentChecker.notNull(underlyingPool, "Underlying pool");

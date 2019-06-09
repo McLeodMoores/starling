@@ -41,7 +41,7 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
    */
   private final FudgeContext _fudgeContext;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builder-style RESTful resource for accessing available outputs from a portfolio
    */
@@ -57,7 +57,8 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
       this(provider, fudgeContext, instant, null, null);
     }
 
-    private Instance(final AvailableOutputsProvider provider, final FudgeContext fudgeContext, final Instant instant, final Integer maxNodes, final Integer maxPositions) {
+    private Instance(final AvailableOutputsProvider provider, final FudgeContext fudgeContext, final Instant instant, final Integer maxNodes,
+        final Integer maxPositions) {
       _provider = provider;
       _fudgeContext = fudgeContext;
       _instant = instant;
@@ -100,19 +101,21 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance.
    *
-   * @param provider  the provider, not null
-   * @param fudgeContext  the Fudge context, not null
+   * @param provider
+   *          the provider, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
    */
   public DataAvailablePortfolioOutputsResource(final AvailableOutputsProvider provider, final FudgeContext fudgeContext) {
     _provider = provider;
     _fudgeContext = fudgeContext;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private AvailableOutputsProvider getProvider() {
     return _provider;
   }
@@ -121,7 +124,7 @@ public class DataAvailablePortfolioOutputsResource extends AbstractDataResource 
     return _fudgeContext;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("now")
   public Instance now() {
     return new Instance(getProvider(), getFudgeContext(), null);

@@ -54,7 +54,8 @@ public class EquityIndexDividendFutureSecurity extends EquityFutureSecurity {
    * @param category
    *          the future category, not null
    */
-  public EquityIndexDividendFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
+  public EquityIndexDividendFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount,
       final ZonedDateTime settlementDate, final ExternalId underlyingIdentifier, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, settlementDate, underlyingIdentifier, category);
   }

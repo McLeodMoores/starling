@@ -27,13 +27,13 @@ public class FXOneLookBarrierOptionBlackDefaultPropertiesFunction extends Defaul
   private final String _barrierOverhedge;
 
   private static final String[] VALUE_NAMES = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX,
-    ValueRequirementNames.VALUE_VANNA,
-    ValueRequirementNames.VALUE_VOMMA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.VALUE_VOMMA
   };
 
   public FXOneLookBarrierOptionBlackDefaultPropertiesFunction(final String barrierOverhedge, final String callSpreadFullWidth) {
@@ -44,7 +44,6 @@ public class FXOneLookBarrierOptionBlackDefaultPropertiesFunction extends Defaul
     _callSpreadFullWidth = callSpreadFullWidth;
   }
 
-
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
     for (final String valueName : VALUE_NAMES) {
@@ -54,7 +53,8 @@ public class FXOneLookBarrierOptionBlackDefaultPropertiesFunction extends Defaul
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.BINARY_OVERHEDGE.equals(propertyName)) {
       return Collections.singleton(_barrierOverhedge);
     } else if (ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH.equals(propertyName)) {

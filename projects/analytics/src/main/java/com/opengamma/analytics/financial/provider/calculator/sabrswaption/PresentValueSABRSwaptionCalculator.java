@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.sabrswaption;
@@ -27,7 +27,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
  */
-public final class PresentValueSABRSwaptionCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueSABRSwaptionCalculator
+extends InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -36,6 +37,7 @@ public final class PresentValueSABRSwaptionCalculator extends InstrumentDerivati
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSABRSwaptionCalculator getInstance() {
@@ -61,7 +63,7 @@ public final class PresentValueSABRSwaptionCalculator extends InstrumentDerivati
     return derivative.accept(this, sabr);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MultipleCurrencyAmount visitCouponCMS(final CouponCMS payment, final SABRSwaptionProviderInterface sabr) {
@@ -78,13 +80,15 @@ public final class PresentValueSABRSwaptionCalculator extends InstrumentDerivati
     if (sabr.getSABRParameter() instanceof SABRInterestRateCorrelationParameters) {
       // TODO: improve correlation data handling
       final SABRInterestRateCorrelationParameters sabrCorrelation = (SABRInterestRateCorrelationParameters) sabr.getSABRParameter();
-      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), METHOD_CMS_CAP, METHOD_CMS_CPN);
+      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), METHOD_CMS_CAP,
+          METHOD_CMS_CPN);
       return method.presentValue(payment, sabr);
     }
-    throw new UnsupportedOperationException("The PresentValueSABRSwaptionCalculator visitor visitCapFloorCMSSpread requires a SABRInterestRateCorrelationParameters with correlation as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueSABRSwaptionCalculator visitor visitCapFloorCMSSpread requires a SABRInterestRateCorrelationParameters with correlation as data.");
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyAmount visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRSwaptionProviderInterface sabr) {
@@ -96,7 +100,7 @@ public final class PresentValueSABRSwaptionCalculator extends InstrumentDerivati
     return pv;
   }
 
-  // -----     Swaption     ------
+  // ----- Swaption ------
 
   @Override
   public MultipleCurrencyAmount visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabr) {

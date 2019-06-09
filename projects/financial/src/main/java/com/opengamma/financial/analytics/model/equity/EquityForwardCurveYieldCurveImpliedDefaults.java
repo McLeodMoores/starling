@@ -35,8 +35,8 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurveYieldCurveImpliedDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD_CURVE,
-    ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
+                ValueRequirementNames.FORWARD_CURVE,
+                ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
   };
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
@@ -47,11 +47,14 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
   private final String _dividendType;
   /** The possible schemes of the primitive target */
   /** The supported schemes */
-  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK,
+      ExternalSchemes.ACTIVFEED_TICKER);
 
   /**
-   * @param priority The priority, not null
-   * @param defaultArray The default values, not null: currency,
+   * @param priority
+   *          The priority, not null
+   * @param defaultArray
+   *          The default values, not null: currency,
    */
   public EquityForwardCurveYieldCurveImpliedDefaults(final String priority, final String... defaultArray) {
     super(ComputationTargetType.PRIMITIVE, true); // // [PLAT-2286]: change to correct type; should this be SECURITY?
@@ -88,14 +91,16 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
     // Properties specific to FORWARD_CURVE
     defaults.addValuePropertyName(ValueRequirementNames.FORWARD_CURVE, ValuePropertyNames.CURVE);
     defaults.addValuePropertyName(ValueRequirementNames.FORWARD_CURVE, ValuePropertyNames.DIVIDEND_TYPE);
-    //  Properties specific to STANDARD_VOLATILITY_SURFACE_DATA
+    // Properties specific to STANDARD_VOLATILITY_SURFACE_DATA
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.DISCOUNTING_CURVE_NAME);
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.FORWARD_CURVE_NAME);
-    defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
+    defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA,
+        ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     switch (propertyName) {
       case ValuePropertyNames.CURVE_CURRENCY:
         return Collections.singleton(_currency);
@@ -110,7 +115,7 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
       case ValuePropertyNames.FORWARD_CURVE_NAME:
         return Collections.singleton(_curveName);
       case ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD:
-        return  Collections.singleton(ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD);
+        return Collections.singleton(ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD);
       default:
         LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;

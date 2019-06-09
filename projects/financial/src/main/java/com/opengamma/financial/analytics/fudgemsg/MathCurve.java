@@ -51,7 +51,8 @@ final class MathCurve {
 
     @Override
     public ConstantDoublesCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      return ConstantDoublesCurve.from(message.getFieldValue(Double.class, message.getByName(Y_VALUE_FIELD_NAME)), message.getFieldValue(String.class, message.getByName(CURVE_NAME_FIELD_NAME)));
+      return ConstantDoublesCurve.from(message.getFieldValue(Double.class, message.getByName(Y_VALUE_FIELD_NAME)),
+          message.getFieldValue(String.class, message.getByName(CURVE_NAME_FIELD_NAME)));
     }
   }
 
@@ -92,7 +93,7 @@ final class MathCurve {
     private static final String CURVE_FUNCTION_FIELD_NAME = "function";
     private static final String CURVE_NAME_FIELD_NAME = "name";
 
-    @SuppressWarnings({"unchecked" })
+    @SuppressWarnings({ "unchecked" })
     @Override
     public FunctionalDoublesCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = deserializer.fieldValueToObject(String.class, message.getByName(CURVE_NAME_FIELD_NAME));
@@ -143,7 +144,7 @@ final class MathCurve {
    */
   @FudgeBuilderFor(NodalTenorDoubleCurve.class)
   public static final class NodalTenorDoubleCurveBuilder extends AbstractFudgeBuilder<NodalTenorDoubleCurve> {
-    //FIXME: Use the Tenor fudge builder
+    // FIXME: Use the Tenor fudge builder
     private static final String X_DATA_FIELD_NAME = "x data";
     private static final String Y_DATA_FIELD_NAME = "y data";
     private static final String CURVE_NAME_FIELD_NAME = "curve name";

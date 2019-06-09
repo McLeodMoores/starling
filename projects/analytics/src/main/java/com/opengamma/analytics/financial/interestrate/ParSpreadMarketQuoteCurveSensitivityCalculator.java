@@ -31,8 +31,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present value of the instrument is zero.
- * The notion of "spread" will depend of each instrument.
+ * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present
+ * value of the instrument is zero. The notion of "spread" will depend of each instrument.
+ * 
  * @deprecated This class uses deprecated pricing methods.
  */
 @Deprecated
@@ -45,6 +46,7 @@ public final class ParSpreadMarketQuoteCurveSensitivityCalculator extends Instru
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteCurveSensitivityCalculator getInstance() {
@@ -68,11 +70,12 @@ public final class ParSpreadMarketQuoteCurveSensitivityCalculator extends Instru
   private static final DepositZeroDiscountingMethod METHOD_DEPOSIT_ZERO = DepositZeroDiscountingMethod.getInstance();
   private static final BillTransactionDiscountingMethod METHOD_BILL_TRANSACTION = BillTransactionDiscountingMethod.getInstance();
   private static final ForwardRateAgreementDiscountingMethod METHOD_FRA = ForwardRateAgreementDiscountingMethod.getInstance();
-  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION = InterestRateFutureTransactionDiscountingMethod.getInstance();
+  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION = InterestRateFutureTransactionDiscountingMethod
+      .getInstance();
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IR_FUTURES_SECURITY = InterestRateFutureSecurityDiscountingMethod.getInstance();
   private static final ForexSwapDiscountingMethod METHOD_FX_SWAP = ForexSwapDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public InterestRateCurveSensitivity visitCash(final Cash deposit, final YieldCurveBundle curves) {
@@ -89,7 +92,7 @@ public final class ParSpreadMarketQuoteCurveSensitivityCalculator extends Instru
     return METHOD_DEPOSIT.parSpreadCurveSensitivity(deposit, curves);
   }
 
-  //     -----     Bill & bonds     -----
+  // ----- Bill & bonds -----
 
   @Override
   public InterestRateCurveSensitivity visitBillTransaction(final BillTransaction bill, final YieldCurveBundle curves) {

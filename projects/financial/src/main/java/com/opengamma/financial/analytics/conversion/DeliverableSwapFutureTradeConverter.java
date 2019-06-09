@@ -32,15 +32,13 @@ public class DeliverableSwapFutureTradeConverter implements TradeConverter {
 
   /**
    * Construct a deliverable swap future trade.
-   * 
+   *
    * @param securitySource
    *          the security source used to load the underlying swap.
    * @param swapConverter
-   *          the swap converter, only used if the underlying is a
-   *          {@link com.opengamma.financial.security.swap.SwapSecurity}.
+   *          the swap converter, only used if the underlying is a {@link com.opengamma.financial.security.swap.SwapSecurity}.
    * @param interestRateSwapConverter
-   *          the swap converter, only used if the underlying is a
-   *          {@link com.opengamma.financial.security.irs.InterestRateSwapSecurity}.
+   *          the swap converter, only used if the underlying is a {@link com.opengamma.financial.security.irs.InterestRateSwapSecurity}.
    */
   public DeliverableSwapFutureTradeConverter(final SecuritySource securitySource,
       final SwapSecurityConverter swapConverter,
@@ -55,7 +53,9 @@ public class DeliverableSwapFutureTradeConverter implements TradeConverter {
     ArgumentChecker.notNull(trade, "trade");
     final Security security = trade.getSecurity();
     if (security instanceof DeliverableSwapFutureSecurity) {
-      final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition = (SwapFuturesPriceDeliverableSecurityDefinition) ((DeliverableSwapFutureSecurity) security).accept(_securityConverter);
+      final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition =
+          (SwapFuturesPriceDeliverableSecurityDefinition) ((DeliverableSwapFutureSecurity) security)
+          .accept(_securityConverter);
       final Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium.
       if (tradePrice == null) {
         throw new OpenGammaRuntimeException("Trade premium should not be null.");

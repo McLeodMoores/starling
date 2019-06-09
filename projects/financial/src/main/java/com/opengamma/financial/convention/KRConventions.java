@@ -24,18 +24,19 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard versions of KRW instruments
- * 
- * @deprecated {@link ConventionBundle} is deprecated. Use a
- *             {@link com.opengamma.core.convention.Convention} instead.
+ *
+ * @deprecated {@link ConventionBundle} is deprecated. Use a {@link com.opengamma.core.convention.Convention} instead.
  */
 @Deprecated
 public class KRConventions {
   /** Month codes used by Bloomberg */
-  private static final char[] BBG_MONTH_CODES = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'};
+  private static final char[] BBG_MONTH_CODES = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
 
   /**
    * Adds conventions for deposits, implied deposits and cash.
-   * @param conventionMaster The convention master, not null
+   * 
+   * @param conventionMaster
+   *          The convention master, not null
    */
   public static synchronized void addFixedIncomeInstrumentConventions(final ConventionBundleMaster conventionMaster) {
     ArgumentChecker.notNull(conventionMaster, "convention master");
@@ -67,7 +68,8 @@ public class KRConventions {
       final ExternalId tullettImpliedDeposit = tullettPrebonSecurityId("AMIDPKRWSPT" + (i < 10 ? "0" : "") + i + "M");
       final ExternalId simpleImpliedDeposit = simpleNameSecurityId(impliedDepositName);
       utils.addConventionBundle(ExternalIdBundle.of(bbgDeposit, simpleDeposit), depositName, act360, following, Period.ofMonths(i), 0, false, kr);
-      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, act360, following, Period.ofMonths(i), 0, false, kr);
+      utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), impliedDepositName, act360, following, Period.ofMonths(i), 0,
+          false, kr);
     }
 
     for (int i = 1; i < 5; i++) {
@@ -75,7 +77,8 @@ public class KRConventions {
         final String depositName = "KRW IMPLIED DEPOSIT 1y";
         final ExternalId tullettImpliedDeposit = tullettPrebonSecurityId("AMIDPKRWSPT12M");
         final ExternalId simpleImpliedDeposit = simpleNameSecurityId(depositName);
-        utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), depositName, act360, following, Period.ofYears(1), 0, false, kr);
+        utils.addConventionBundle(ExternalIdBundle.of(tullettImpliedDeposit, simpleImpliedDeposit), depositName, act360, following, Period.ofYears(1), 0, false,
+            kr);
       }
       final String depositName = "KRW DEPOSIT " + i + "y";
       final ExternalId bbgDeposit = bloombergTickerSecurityId("KWDR" + i + " Curncy");
@@ -83,7 +86,8 @@ public class KRConventions {
       utils.addConventionBundle(ExternalIdBundle.of(bbgDeposit, simpleDeposit), depositName, act360, following, Period.ofYears(i), 0, false, kr);
     }
 
-    utils.addConventionBundle(ExternalIdBundle.of(bloombergTickerSecurityId("KWCDC Curncy"), bloombergTickerSecurityId("KWCDC Index"), simpleNameSecurityId("KRW SWAP FIXING 3m")),
+    utils.addConventionBundle(
+        ExternalIdBundle.of(bloombergTickerSecurityId("KWCDC Curncy"), bloombergTickerSecurityId("KWCDC Index"), simpleNameSecurityId("KRW SWAP FIXING 3m")),
         "KRW SWAP FIXING 3m", act365, modified, Period.ofMonths(3), 0, false, kr);
     utils.addConventionBundle(ExternalIdBundle.of(simpleNameSecurityId("KRW_SWAP")), "KRW_SWAP", act365, modified,
         quarterly, 2, kr, act365, modified, quarterly, 2, simpleNameSecurityId("KRW SWAP FIXING 3m"), kr, true);

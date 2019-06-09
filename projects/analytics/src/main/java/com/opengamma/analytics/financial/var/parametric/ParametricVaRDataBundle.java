@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.var.parametric;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.matrix.Matrix;
 
 /**
- * 
+ *
  */
 public class ParametricVaRDataBundle {
   private final List<String> _names;
@@ -36,7 +36,8 @@ public class ParametricVaRDataBundle {
     this(names, getEmptyExpectedReturnVector(sensitivities), sensitivities, covarianceMatrix, order);
   }
 
-  public ParametricVaRDataBundle(final List<String> names, final DoubleMatrix1D expectedReturn, final Matrix<?> sensitivities, final DoubleMatrix2D covarianceMatrix, final int order) {
+  public ParametricVaRDataBundle(final List<String> names, final DoubleMatrix1D expectedReturn, final Matrix<?> sensitivities,
+      final DoubleMatrix2D covarianceMatrix, final int order) {
     Validate.notNull(sensitivities, "sensitivities");
     Validate.notNull(covarianceMatrix, "covariance matrix");
     Validate.notNull(expectedReturn, "expected return");
@@ -98,7 +99,7 @@ public class ParametricVaRDataBundle {
     final int prime = 31;
     int result = 1;
     result = prime * result + _covarianceMatrix.hashCode();
-    result = prime * result + ((_names == null) ? 0 : _names.hashCode());
+    result = prime * result + (_names == null ? 0 : _names.hashCode());
     result = prime * result + _expectedReturn.hashCode();
     result = prime * result + _order;
     result = prime * result + _sensitivities.hashCode();

@@ -17,8 +17,8 @@ public class DoubleExponentialMeshing extends MeshingFunction {
   private final int _nPointsLower;
 
   /**
-   * creates a non-uniform set of points according by joining two ExponentialMeshing
-   * 
+   * creates a non-uniform set of points according by joining two ExponentialMeshing.
+   *
    * @param lowerBound
    *          The value of x_0
    * @param upperBound
@@ -34,7 +34,8 @@ public class DoubleExponentialMeshing extends MeshingFunction {
    *          Bunching parameter. lambda = 0 is uniform, lambda &gt; 0 gives a high density of points near centre and lambda &lt; 0 gives a high density of
    *          points near x_N
    */
-  public DoubleExponentialMeshing(final double lowerBound, final double upperBound, final double centre, final int nPoints, final double lambdaLower, final double lambdaUpper) {
+  public DoubleExponentialMeshing(final double lowerBound, final double upperBound, final double centre, final int nPoints, final double lambdaLower,
+      final double lambdaUpper) {
     super(nPoints);
     Validate.isTrue(centre > lowerBound, "need centre > lowerBound");
     Validate.isTrue(centre < upperBound, "need centre < upperBound");

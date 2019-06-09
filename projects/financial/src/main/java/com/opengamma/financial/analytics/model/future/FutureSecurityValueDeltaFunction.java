@@ -33,8 +33,9 @@ import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Calculates the Value (or Dollar) Delta of a FutureSecurity. The value delta is defined as the Delta (dV/dS) multiplied by the spot, S. As dS/dS == 1, ValueDelta = S, the spot value of the security.
- * ValueDelta can be roughly described as the delta hedge of the position expressed in currency value. It indicates how much currency must be used in order to delta hedge a position.
+ * Calculates the Value (or Dollar) Delta of a FutureSecurity. The value delta is defined as the Delta (dV/dS) multiplied by the spot, S. As dS/dS == 1,
+ * ValueDelta = S, the spot value of the security. ValueDelta can be roughly described as the delta hedge of the position expressed in currency value. It
+ * indicates how much currency must be used in order to delta hedge a position.
  */
 public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -46,7 +47,8 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
 
-    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
+    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURRENCY,
+        FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
 
     if (target.getSecurity() instanceof InterestRateFutureSecurity) {
       properties.withAny(ValuePropertyNames.SCALE);
@@ -70,7 +72,8 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final FutureSecurity security = (FutureSecurity) target.getSecurity();
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     ValueProperties.Builder properties = desiredValue.getConstraints().copy()

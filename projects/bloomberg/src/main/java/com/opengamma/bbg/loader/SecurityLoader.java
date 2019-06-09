@@ -62,11 +62,16 @@ public abstract class SecurityLoader {
   private final SecurityType _securityType;
 
   private final FudgeDeserializer _fudgeDeserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
+
   /**
    * Creates an instance.
-   * @param logger  the logger, not null
-   * @param referenceDataProvider  the referenceDataProvider, not null
-   * @param securityType  the security type, not null
+   *
+   * @param logger
+   *          the logger, not null
+   * @param referenceDataProvider
+   *          the referenceDataProvider, not null
+   * @param securityType
+   *          the security type, not null
    */
   protected SecurityLoader(final Logger logger, final ReferenceDataProvider referenceDataProvider, final SecurityType securityType) {
     ArgumentChecker.notNull(logger, "logger");
@@ -79,6 +84,7 @@ public abstract class SecurityLoader {
 
   /**
    * Gets the referenceDataProvider.
+   *
    * @return the referenceDataProvider
    */
   public ReferenceDataProvider getReferenceDataProvider() {
@@ -87,30 +93,36 @@ public abstract class SecurityLoader {
 
   /**
    * Gets the securityType.
+   *
    * @return the securityType
    */
   public SecurityType getSecurityType() {
     return _securityType;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses a security from the response.
-   * @param fieldData  the response, not null
+   *
+   * @param fieldData
+   *          the response, not null
    * @return the security, null if unable to create
    */
   protected abstract ManageableSecurity createSecurity(FudgeMsg fieldData);
 
   /**
    * Gets the fields to request from Bloomberg.
+   *
    * @return the set of fields, not null
    */
   protected abstract Set<String> getBloombergFields();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads a set of securities from Bloomberg specific keys.
-   * @param bloombergKeys  the Bloomberg specific keys, not altered, not null
+   *
+   * @param bloombergKeys
+   *          the Bloomberg specific keys, not altered, not null
    * @return the set of securities, not null
    */
   public Map<String, ManageableSecurity> loadSecurities(Set<String> bloombergKeys) {
@@ -164,7 +176,9 @@ public abstract class SecurityLoader {
 
   /**
    * Parses a date string.
-   * @param deliveryDateStr  the date string
+   *
+   * @param deliveryDateStr
+   *          the date string
    * @return the parsed ZonedDateTime, null if cannot parse
    */
   protected ZonedDateTime decodeDeliveryDate(final String deliveryDateStr) {
@@ -178,11 +192,14 @@ public abstract class SecurityLoader {
     return deliveryDate.atStartOfDay(ZoneOffset.UTC);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses the expiry field.
-   * @param expiryDate  the expiry string
-   * @param futureTradingHours the future trading hours
+   *
+   * @param expiryDate
+   *          the expiry string
+   * @param futureTradingHours
+   *          the future trading hours
    * @return the parsed expiry object, null if cannot parse
    */
   protected Expiry decodeExpiry(final String expiryDate, final String futureTradingHours) {
@@ -198,7 +215,7 @@ public abstract class SecurityLoader {
       _logger.warn("expiry not in mm/dd/yyyy format - {}", expiryDate);
       return null;
     }
-    //expects future trading hours in 07:00-21:00 OR 00:00-19:15 & 15:30-19:15 format
+    // expects future trading hours in 07:00-21:00 OR 00:00-19:15 & 15:30-19:15 format
     String splitTradingHours = null;
     if (futureTradingHours.contains("&")) {
       final String[] tokens = StringUtils.splitByWholeSeparator(futureTradingHours, "&");
@@ -233,7 +250,8 @@ public abstract class SecurityLoader {
     } catch (final NumberFormatException ex) {
       _logger.warn("Cannot parse futureTrading hours - {}", futureTradingHours);
     }
-    final ZonedDateTime utcDate = DateUtils.getUTCDate(expiryInLocalDate.getYear(), expiryInLocalDate.getMonthValue(), expiryInLocalDate.getDayOfMonth(), closeHr, closeMins);
+    final ZonedDateTime utcDate = DateUtils.getUTCDate(expiryInLocalDate.getYear(), expiryInLocalDate.getMonthValue(), expiryInLocalDate.getDayOfMonth(),
+        closeHr, closeMins);
     return new Expiry(utcDate, ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR);
   }
 
@@ -253,14 +271,18 @@ public abstract class SecurityLoader {
 
   /**
    * Parse the identifiers from the response.
-   * @param fieldData  the response, not null
-   * @param security  the security to populate, not null
+   *
+   * @param fieldData
+   *          the response, not null
+   * @param security
+   *          the security to populate, not null
    */
   protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security) {
     parseIdentifiers(fieldData, security, FIELD_FUT_FIRST_TRADE_DT, FIELD_FUT_LAST_TRADE_DT);
   }
 
-  protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security, final String firstTradeDateField, final String lastTradeDateField) {
+  protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security, final String firstTradeDateField,
+      final String lastTradeDateField) {
     final ExternalIdBundle identifierBundle = BloombergDataUtils.parseIdentifiers(fieldData, firstTradeDateField, lastTradeDateField).toBundle();
     security.setUniqueId(BloombergSecurityProvider.createUniqueId(identifierBundle.getValue(ExternalSchemes.BLOOMBERG_BUID)));
     security.setExternalIdBundle(identifierBundle);

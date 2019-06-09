@@ -51,7 +51,8 @@ public class MarketQuotePositionFunction extends AbstractFunction.NonCompiledInv
         throw new OpenGammaRuntimeException("Have different values for market quote in the same position");
       }
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.MARKET_QUOTE, target.toSpecification(), properties), marketQuote));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.MARKET_QUOTE, target.toSpecification(), properties), marketQuote));
   }
 
   @Override

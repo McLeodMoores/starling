@@ -24,7 +24,8 @@ public class PresentValueVolatilitySensitivityConverter implements ResultConvert
   }
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final PresentValueForexBlackVolatilitySensitivity value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec,
+      final PresentValueForexBlackVolatilitySensitivity value, final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     final HashMap<DoublesPair, Double> map = value.getVega().getMap();
     final int length = value.getVega().getMap().size();
@@ -44,7 +45,8 @@ public class PresentValueVolatilitySensitivityConverter implements ResultConvert
   }
 
   @Override
-  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final PresentValueForexBlackVolatilitySensitivity value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec,
+      final PresentValueForexBlackVolatilitySensitivity value) {
     return null;
   }
 

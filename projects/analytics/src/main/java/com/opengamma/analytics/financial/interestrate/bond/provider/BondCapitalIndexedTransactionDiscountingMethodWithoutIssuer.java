@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.provider.sensitivity.inflation.Multiple
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- *  Pricing method for inflation bond transaction. The price is computed by index estimation and discounting. (without issuer)
+ * Pricing method for inflation bond transaction. The price is computed by index estimation and discounting. (without issuer)
  */
 public final class BondCapitalIndexedTransactionDiscountingMethodWithoutIssuer {
 
@@ -27,6 +27,7 @@ public final class BondCapitalIndexedTransactionDiscountingMethodWithoutIssuer {
 
   /**
    * Return the class instance.
+   *
    * @return The instance.
    */
   public static BondCapitalIndexedTransactionDiscountingMethodWithoutIssuer getInstance() {
@@ -37,16 +38,21 @@ public final class BondCapitalIndexedTransactionDiscountingMethodWithoutIssuer {
    * The present value inflation calculator (for the different parts of the bond transaction).
    */
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingInflationCalculator PVCSIC = PresentValueCurveSensitivityDiscountingInflationCalculator.getInstance();
+  private static final PresentValueCurveSensitivityDiscountingInflationCalculator PVCSIC = PresentValueCurveSensitivityDiscountingInflationCalculator
+      .getInstance();
   /**
    * The method used for security computation.
    */
-  private static final BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer METHOD_SECURITY = new BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer();
+  private static final BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer METHOD_SECURITY =
+      new BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer();
 
   /**
    * Computes the present value of a capital indexed bound transaction by index estimation and discounting.
-   * @param bond The bond transaction.
-   * @param provider The provider.
+   *
+   * @param bond
+   *          The bond transaction.
+   * @param provider
+   *          The provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BondCapitalIndexedTransaction<?> bond, final InflationProviderInterface provider) {
@@ -58,12 +64,17 @@ public final class BondCapitalIndexedTransactionDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the security present value from a quoted clean real price.
-   * @param bond The bond transaction.
-   * @param provider The provider.
-   * @param cleanPriceReal The clean price.
+   *
+   * @param bond
+   *          The bond transaction.
+   * @param provider
+   *          The provider.
+   * @param cleanPriceReal
+   *          The clean price.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromCleanPriceReal(final BondCapitalIndexedTransaction<Coupon> bond, final InflationProviderInterface provider, final double cleanPriceReal) {
+  public MultipleCurrencyAmount presentValueFromCleanPriceReal(final BondCapitalIndexedTransaction<Coupon> bond, final InflationProviderInterface provider,
+      final double cleanPriceReal) {
     Validate.notNull(bond, "Coupon");
     Validate.notNull(provider, "Provider");
     final MultipleCurrencyAmount pvBond = METHOD_SECURITY.presentValueFromCleanPriceReal(bond.getBondTransaction(), provider, cleanPriceReal);
@@ -74,11 +85,15 @@ public final class BondCapitalIndexedTransactionDiscountingMethodWithoutIssuer {
 
   /**
    * Computes the present value of a capital indexed bound transaction by index estimation and discounting.
-   * @param bond The bond transaction.
-   * @param provider The provider.
+   *
+   * @param bond
+   *          The bond transaction.
+   * @param provider
+   *          The provider.
    * @return The present value.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final BondCapitalIndexedTransaction<?> bond, final InflationProviderInterface provider) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final BondCapitalIndexedTransaction<?> bond,
+      final InflationProviderInterface provider) {
     final MultipleCurrencyInflationSensitivity sensitivityBond = METHOD_SECURITY.presentValueCurveSensitivity(bond.getBondTransaction(), provider);
     final MultipleCurrencyInflationSensitivity sensitivitySettlement = bond.getBondTransaction().getSettlement().accept(PVCSIC, provider).multipliedBy(
         bond.getQuantity() * bond.getBondTransaction().getCoupon().getNthPayment(0).getNotional());

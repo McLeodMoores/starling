@@ -36,7 +36,8 @@ import com.opengamma.financial.security.equity.EquitySecurity;
 public class StandardEquityModelFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final EquitySecurity equity = (EquitySecurity) target.getSecurity();
     final double price = (Double) inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     final Set<ComputedValue> result = new HashSet<>();

@@ -41,7 +41,8 @@ public abstract class AbstractPortfolioPnLFunction extends AbstractFunction.NonC
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPortfolioPnLFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     BigDecimal currentSum = BigDecimal.ZERO;
     for (final ComputedValue input : inputs.getAllValues()) {
       currentSum = MoneyCalculationUtils.add(currentSum, new BigDecimal(String.valueOf(input.getValue())));
@@ -72,11 +73,13 @@ public abstract class AbstractPortfolioPnLFunction extends AbstractFunction.NonC
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURRENCY).get()));
+    return Collections.singleton(
+        new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURRENCY).get()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     Set<String> currencies = null;
     for (final ValueSpecification input : inputs.keySet()) {
       final Set<String> inputCurrencies = input.getProperties().getValues(ValuePropertyNames.CURRENCY);

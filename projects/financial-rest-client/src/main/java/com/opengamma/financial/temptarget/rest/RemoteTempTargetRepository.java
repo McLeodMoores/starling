@@ -18,8 +18,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.rest.UniformInterfaceException404NotFound;
 
 /**
- * Provides remote access to a {@link TempTargetRepository}. Repository use can be high during graph construction when it is used to collapse targets. A caching layer on top of this to match
- * previously registered targets will usually be beneficial.
+ * Provides remote access to a {@link TempTargetRepository}. Repository use can be high during graph construction when it is used to collapse targets. A caching
+ * layer on top of this to match previously registered targets will usually be beneficial.
  */
 public class RemoteTempTargetRepository extends RemoteTempTargetSource implements TempTargetRepository {
 
@@ -41,7 +41,8 @@ public class RemoteTempTargetRepository extends RemoteTempTargetSource implement
       final FudgeContext context = getFudgeContext();
       final FudgeSerializer fsc = new FudgeSerializer(context);
       final FudgeDeserializer fdc = new FudgeDeserializer(context);
-      final FudgeMsg response = accessRemote(uri).post(FudgeMsg.class, FudgeSerializer.addClassHeader(fsc.objectToFudgeMsg(target), target.getClass(), TempTarget.class));
+      final FudgeMsg response = accessRemote(uri).post(FudgeMsg.class,
+          FudgeSerializer.addClassHeader(fsc.objectToFudgeMsg(target), target.getClass(), TempTarget.class));
       return fdc.fudgeMsgToObject(UniqueId.class, response);
     } catch (final UniformInterfaceException404NotFound e) {
       return null;

@@ -19,7 +19,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Calculates the present value sensitivity to parallel curve movements.
  */
-public final class PresentValueParallelCurveSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, StringAmount> {
+public final class PresentValueParallelCurveSensitivityDiscountingCalculator
+    extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, StringAmount> {
   // TODO: This calculator is similar (equivalent?) to the PV01Calculator. Should they be merged?
 
   /**
@@ -29,6 +30,7 @@ public final class PresentValueParallelCurveSensitivityDiscountingCalculator ext
 
   /**
    * Returns the instance of the calculator.
+   * 
    * @return The instance.
    */
   public static PresentValueParallelCurveSensitivityDiscountingCalculator getInstance() {
@@ -46,7 +48,7 @@ public final class PresentValueParallelCurveSensitivityDiscountingCalculator ext
    */
   private static final PaymentFixedDiscountingMethod METHOD_PAYMENTFIXED = PaymentFixedDiscountingMethod.getInstance();
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public StringAmount visitFixedPayment(final PaymentFixed payment, final MulticurveProviderInterface multicurves) {
@@ -58,7 +60,7 @@ public final class PresentValueParallelCurveSensitivityDiscountingCalculator ext
     return visitFixedPayment(payment.toPaymentFixed(), multicurves);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public StringAmount visitGenericAnnuity(final Annuity<? extends Payment> annuity, final MulticurveProviderInterface multicurves) {

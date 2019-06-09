@@ -54,8 +54,10 @@ import com.opengamma.util.async.ResultCallback;
 /**
  * Runs an arbitrary execution sequence on a view definition to produce values for one or more targets. The job is encoded into a {@link ViewEvaluationTarget}.
  *
- * @param <TTarget> the computation target type
- * @param <TResultBuilder> the type of the result builder used throughout execution
+ * @param <TTarget>
+ *          the computation target type
+ * @param <TResultBuilder>
+ *          the type of the result builder used throughout execution
  */
 public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarget, TResultBuilder> extends AbstractFunction.NonCompiledInvoker {
 
@@ -143,7 +145,9 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
     final UniqueId viewClientId = viewClient.getUniqueId();
     LOGGER.info("Created view client {}, connecting to {}", viewClientId, viewId);
     viewClient.attachToViewProcess(viewId,
-        ExecutionOptions.of(viewEvaluation.getExecutionSequence().createSequence(executionContext), getDefaultCycleOptions(executionContext), getViewExecutionFlags(desiredValues)), true);
+        ExecutionOptions.of(viewEvaluation.getExecutionSequence().createSequence(executionContext), getDefaultCycleOptions(executionContext),
+            getViewExecutionFlags(desiredValues)),
+        true);
     final TResultBuilder resultBuilder = createResultBuilder(viewEvaluation, desiredValues);
     final AsynchronousOperation<Set<ComputedValue>> async = AsynchronousOperation.createSet();
     final AtomicReference<ResultCallback<Set<ComputedValue>>> asyncResult = new AtomicReference<>(async.getCallback());
@@ -256,7 +260,8 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
 
       @Override
       public void clientShutdown(final Exception e) {
-        // Normally we would have expected one of the other notifications or this in response to us calling "shutdown", so if the callback exists we report an error
+        // Normally we would have expected one of the other notifications or this in response to us calling "shutdown", so if the callback exists we report an
+        // error
         final ResultCallback<?> callback = asyncResult.getAndSet(null);
         if (callback != null) {
           LOGGER.error("View client shutdown for {}", viewClientId);
@@ -271,7 +276,7 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
     return async.getResult();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected ValueSpecification getResultSpec(final String calcConfigName, final ComputationTargetSpecification targetSpec) {
     final ValueProperties.Builder properties = createValueProperties().withoutAny(PROPERTY_CALC_CONFIG).with(PROPERTY_CALC_CONFIG, calcConfigName);
     return new ValueSpecification(_valueRequirementName, targetSpec, properties.get());

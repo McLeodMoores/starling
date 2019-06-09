@@ -62,16 +62,19 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
     final Set<ValueRequirement> requirements = new HashSet<>();
     final PortfolioNode node = target.getPortfolioNode();
     for (final Position position : node.getPositions()) {
-      requirements.add(new ValueRequirement(ValueRequirementNames.MERGED_OUTPUT, ComputationTargetType.POSITION, position.getUniqueId(), desiredValue.getConstraints()));
+      requirements.add(
+          new ValueRequirement(ValueRequirementNames.MERGED_OUTPUT, ComputationTargetType.POSITION, position.getUniqueId(), desiredValue.getConstraints()));
     }
     for (final PortfolioNode childNode : node.getChildNodes()) {
-      requirements.add(new ValueRequirement(ValueRequirementNames.MERGED_OUTPUT, ComputationTargetType.PORTFOLIO_NODE, childNode.getUniqueId(), desiredValue.getConstraints()));
+      requirements.add(new ValueRequirement(ValueRequirementNames.MERGED_OUTPUT, ComputationTargetType.PORTFOLIO_NODE, childNode.getUniqueId(),
+          desiredValue.getConstraints()));
     }
     return requirements;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueRequirement exampleInput = Iterables.getFirst(inputs.values(), null);
     if (exampleInput == null) {
       return null;
@@ -82,7 +85,8 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     // TODO jonathan 2014-01-13 -- as a proof-of-concept this supports aggregating very specific types. It should be
     // extended as required.
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
@@ -112,8 +116,8 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
           }
           inputValue = new DoubleCurrencyLabelledMatrix2D(
               inputMatrix.getKeys(), inputMatrix.getLabels(), inputMatrix.getLabelsTitle(),
-              new Currency[] {ccy}, new Currency[] {ccy}, ValuePropertyNames.CURRENCY,
-              new double[][] {inputMatrix.getValues()}, inputMatrix.getValuesTitle());
+              new Currency[] { ccy }, new Currency[] { ccy }, ValuePropertyNames.CURRENCY,
+              new double[][] { inputMatrix.getValues() }, inputMatrix.getValuesTitle());
         }
       }
       final String requirementDisplayName = ValueRequirementNames.MERGED_OUTPUT + " (" + mergedOutputName + ")";
@@ -122,7 +126,8 @@ public class MergedOutputLinearAggregationPortfolioNodeFunction extends Abstract
     if (value == null) {
       value = "";
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.MERGED_OUTPUT, target.toSpecification(), desiredValue.getConstraints()), value));
+    return Collections.singleton(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.MERGED_OUTPUT, target.toSpecification(), desiredValue.getConstraints()), value));
   }
 
   protected Object addValue(final Object previousSum, final Object currentValue, final String requirementDisplayName) {

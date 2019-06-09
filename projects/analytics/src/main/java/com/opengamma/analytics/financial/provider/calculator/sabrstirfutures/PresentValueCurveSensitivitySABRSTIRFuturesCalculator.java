@@ -14,7 +14,8 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueCurveSensitivitySABRSTIRFuturesCalculator extends InstrumentDerivativeVisitorAdapter<SABRSTIRFuturesProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivitySABRSTIRFuturesCalculator
+extends InstrumentDerivativeVisitorAdapter<SABRSTIRFuturesProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueCurveSensitivitySABRSTIRFuturesCalculator extends
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivitySABRSTIRFuturesCalculator getInstance() {
@@ -38,12 +40,14 @@ public final class PresentValueCurveSensitivitySABRSTIRFuturesCalculator extends
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionSABRMethod METHOD_STRIRFUT_MARGIN = InterestRateFutureOptionMarginTransactionSABRMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionSABRMethod METHOD_STRIRFUT_MARGIN =
+      InterestRateFutureOptionMarginTransactionSABRMethod.getInstance();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final SABRSTIRFuturesProviderInterface sabr) {
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final SABRSTIRFuturesProviderInterface sabr) {
     return METHOD_STRIRFUT_MARGIN.presentValueCurveSensitivity(futures, sabr);
   }
 

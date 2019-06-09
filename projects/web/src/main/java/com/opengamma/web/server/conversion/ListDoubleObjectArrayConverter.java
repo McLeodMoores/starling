@@ -17,7 +17,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public class ListDoubleObjectArrayConverter implements ResultConverter<List<Double[]>> {
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final List<Double[]> value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final List<Double[]> value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     final int rowCount = value.size();
     final int columnCount = value.get(0).length;

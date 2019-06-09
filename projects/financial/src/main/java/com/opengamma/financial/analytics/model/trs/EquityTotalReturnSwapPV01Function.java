@@ -90,7 +90,8 @@ public class EquityTotalReturnSwapPV01Function extends EquityTotalReturnSwapFunc
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final Set<String> curveNames = desiredValue.getConstraints().getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
           return null;

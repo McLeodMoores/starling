@@ -18,6 +18,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Jacobian matrix builder for multi-curves construction when the calculator returns an InterestRateCurveSensitivity object.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -35,10 +36,14 @@ public class MultipleYieldCurveFinderIRSJacobian extends Function1D<DoubleMatrix
 
   /**
    * Constructor.
-   * @param data The muti-curves data.
-   * @param calculator The sensitivity calculator.
+   * 
+   * @param data
+   *          The muti-curves data.
+   * @param calculator
+   *          The sensitivity calculator.
    */
-  public MultipleYieldCurveFinderIRSJacobian(final MultipleYieldCurveFinderDataBundle data, final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> calculator) {
+  public MultipleYieldCurveFinderIRSJacobian(final MultipleYieldCurveFinderDataBundle data,
+      final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> calculator) {
     Validate.notNull(data, "data");
     Validate.notNull(calculator, "calculator");
     _data = data;

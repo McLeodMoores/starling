@@ -64,11 +64,13 @@ public class BondAndBondFutureFunctionUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(BondAndBondFutureFunctionUtils.class);
 
   /**
-   * Gets any additional value requirements that are required for conversion from securities
-   * to analytics objects. For bond futures, the future price time series is required. For all
-   * other securities, an empty set is returned
-   * @param security The security, not null
-   * @param timeSeriesResolver The time series resolver, not null if the security is a bond future
+   * Gets any additional value requirements that are required for conversion from securities to analytics objects. For bond futures, the future price time
+   * series is required. For all other securities, an empty set is returned
+   * 
+   * @param security
+   *          The security, not null
+   * @param timeSeriesResolver
+   *          The time series resolver, not null if the security is a bond future
    * @return The set of requirements
    */
   public static Set<ValueRequirement> getConversionRequirements(final FinancialSecurity security, final HistoricalTimeSeriesResolver timeSeriesResolver) {
@@ -87,8 +89,10 @@ public class BondAndBondFutureFunctionUtils {
     }
     if (security instanceof InflationBondSecurity) {
       ArgumentChecker.notNull(timeSeriesResolver, "timeSeriesResolver");
-      final ExternalIdBundle externalIdBundle = ExternalIdBundle.of(ExternalId.parse(((InflationBondSecurity) security).attributes().get().get("ReferenceIndexId")));
-      final HistoricalTimeSeriesResolutionResult timeSeries = timeSeriesResolver.resolve(externalIdBundle, null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
+      final ExternalIdBundle externalIdBundle = ExternalIdBundle
+          .of(ExternalId.parse(((InflationBondSecurity) security).attributes().get().get("ReferenceIndexId")));
+      final HistoricalTimeSeriesResolutionResult timeSeries = timeSeriesResolver.resolve(externalIdBundle, null, null, null,
+          MarketDataRequirementNames.MARKET_VALUE, null);
       if (timeSeries == null) {
         LOGGER.error("Could not resolve time series for {}", externalIdBundle);
         return Collections.emptySet();
@@ -100,11 +104,14 @@ public class BondAndBondFutureFunctionUtils {
   }
 
   /**
-   * Converts a bond or bond future trade into the {@link InstrumentDefinition} form that is used in
-   * the analytics library.
-   * @param context The execution context, not null
-   * @param target The computation target, not null
-   * @param date The valuation date / time, not null
+   * Converts a bond or bond future trade into the {@link InstrumentDefinition} form that is used in the analytics library.
+   * 
+   * @param context
+   *          The execution context, not null
+   * @param target
+   *          The computation target, not null
+   * @param date
+   *          The valuation date / time, not null
    * @return The definition form of a bond or bond future security
    */
   public static InstrumentDefinition<?> getDefinition(final FunctionExecutionContext context, final ComputationTarget target, final ZonedDateTime date) {
@@ -135,15 +142,20 @@ public class BondAndBondFutureFunctionUtils {
   }
 
   /**
-   * Converts a bond or bond future trade into the {@link InstrumentDerivative} form that is used in
-   * pricing functions in the analytics library.
-   * @param context The execution context, not null
-   * @param target The computation target, not null
-   * @param date The valuation date / time, not null
-   * @param inputs The function inputs, not null if the security is a {@link BondFutureSecurity}
+   * Converts a bond or bond future trade into the {@link InstrumentDerivative} form that is used in pricing functions in the analytics library.
+   * 
+   * @param context
+   *          The execution context, not null
+   * @param target
+   *          The computation target, not null
+   * @param date
+   *          The valuation date / time, not null
+   * @param inputs
+   *          The function inputs, not null if the security is a {@link BondFutureSecurity}
    * @return The derivative form of the security
    */
-  public static InstrumentDerivative getBondOrBondFutureDerivative(final FunctionExecutionContext context, final ComputationTarget target, final ZonedDateTime date,
+  public static InstrumentDerivative getBondOrBondFutureDerivative(final FunctionExecutionContext context, final ComputationTarget target,
+      final ZonedDateTime date,
       final FunctionInputs inputs) {
     ArgumentChecker.notNull(target, "target");
     ArgumentChecker.isTrue(target.getType() == ComputationTargetType.TRADE, "Computation target must be a trade");
@@ -170,11 +182,14 @@ public class BondAndBondFutureFunctionUtils {
   }
 
   /**
-   * Converts a bond trade into the {@link InstrumentDerivative} form that is used in pricing
-   * functions in the the analytics library.
-   * @param context The execution context, not null
-   * @param target The computation target, not null
-   * @param date The valuation date / time, not null
+   * Converts a bond trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
+   * 
+   * @param context
+   *          The execution context, not null
+   * @param target
+   *          The computation target, not null
+   * @param date
+   *          The valuation date / time, not null
    * @return The derivative form of a bond security
    */
   private static InstrumentDerivative getBondDerivative(final FunctionExecutionContext context, final ComputationTarget target, final ZonedDateTime date) {
@@ -183,25 +198,32 @@ public class BondAndBondFutureFunctionUtils {
   }
 
   /**
-   * Converts a bond trade into the {@link InstrumentDerivative} form that is used in pricing
-   * functions in the the analytics library.
-   * @param context The execution context, not null
-   * @param target The computation target, not null
-   * @param date The valuation date / time, not null
+   * Converts a bond trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
+   * 
+   * @param context
+   *          The execution context, not null
+   * @param target
+   *          The computation target, not null
+   * @param date
+   *          The valuation date / time, not null
    * @return The derivative form of a bond security
    */
-  private static InstrumentDerivative getBondInflationDerivative(final FunctionExecutionContext context, final ComputationTarget target, final ZonedDateTime date,
+  private static InstrumentDerivative getBondInflationDerivative(final FunctionExecutionContext context, final ComputationTarget target,
+      final ZonedDateTime date,
       final ZonedDateTimeDoubleTimeSeries ts) {
     final InstrumentDefinition<?> definition = getDefinition(context, target, date);
     return ((BondCapitalIndexedTransactionDefinition<?>) definition).toDerivative(date, ts);
   }
 
   /**
-   * Converts a bill trade into the {@link InstrumentDerivative} form that is used in pricing
-   * functions in the the analytics library.
-   * @param context The execution context, not null
-   * @param target The computation target, not null
-   * @param date The valuation date / time, not null
+   * Converts a bill trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
+   * 
+   * @param context
+   *          The execution context, not null
+   * @param target
+   *          The computation target, not null
+   * @param date
+   *          The valuation date / time, not null
    * @return The derivative form of a bill security
    */
   private static InstrumentDerivative getBillDerivative(final FunctionExecutionContext context, final ComputationTarget target, final ZonedDateTime date) {
@@ -210,14 +232,19 @@ public class BondAndBondFutureFunctionUtils {
   }
 
   /**
-   * Converts a bond future trade into the {@link InstrumentDerivative} form that is used in pricing
-   * functions in the the analytics library.
-   * @param context The execution context, not null
-   * @param target The computation target, not null
-   * @param date The valuation date / time, not null
-   * @param futurePriceSeries The bond future price time series, not null
+   * Converts a bond future trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
+   * 
+   * @param context
+   *          The execution context, not null
+   * @param target
+   *          The computation target, not null
+   * @param date
+   *          The valuation date / time, not null
+   * @param futurePriceSeries
+   *          The bond future price time series, not null
    * @return The derivative form of a bond security
-   * @throws OpenGammaRuntimeException If the bond future price series is empty
+   * @throws OpenGammaRuntimeException
+   *           If the bond future price series is empty
    */
   private static InstrumentDerivative getBondFutureDerivative(final FunctionExecutionContext context, final ComputationTarget target, final ZonedDateTime date,
       final HistoricalTimeSeries futurePriceSeries) {

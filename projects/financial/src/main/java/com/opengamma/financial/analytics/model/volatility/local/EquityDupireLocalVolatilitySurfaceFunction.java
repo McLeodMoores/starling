@@ -107,7 +107,8 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   @Override
   protected ValueRequirement getVolatilitySurfaceRequirement(final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties equityProperties = getCurrencyPropertiesForVolatilitySurface(desiredValue);
-    final ValueProperties properties = BlackVolatilitySurfacePropertyUtils.addAllBlackSurfaceProperties(equityProperties, getInstrumentType(), desiredValue).get();
+    final ValueProperties properties = BlackVolatilitySurfacePropertyUtils.addAllBlackSurfaceProperties(equityProperties, getInstrumentType(), desiredValue)
+        .get();
     return new ValueRequirement(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(), properties);
   }
 

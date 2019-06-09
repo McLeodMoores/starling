@@ -21,6 +21,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Method to compute present value and present value sensitivity for Ibor coupon.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.payments.provider.CouponIborSpreadDiscountingMethod}
  */
 @Deprecated
@@ -33,6 +34,7 @@ public final class CouponIborSpreadDiscountingMethod implements PricingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponIborSpreadDiscountingMethod getInstance() {
@@ -47,8 +49,11 @@ public final class CouponIborSpreadDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the present value of a Ibor coupon with spread by discounting.
-   * @param coupon The coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value.
    */
   public CurrencyAmount presentValue(final CouponIborSpread coupon, final YieldCurveBundle curves) {
@@ -56,7 +61,8 @@ public final class CouponIborSpreadDiscountingMethod implements PricingMethod {
     Validate.notNull(curves, "Curves");
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(coupon.getForwardCurveName());
     final YieldAndDiscountCurve discountingCurve = curves.getCurve(coupon.getFundingCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1) / coupon.getFixingAccrualFactor();
+    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime())
+        - 1) / coupon.getFixingAccrualFactor();
     final double df = discountingCurve.getDiscountFactor(coupon.getPaymentTime());
     final double value = (coupon.getNotional() * coupon.getPaymentYearFraction() * forward + coupon.getSpreadAmount()) * df;
     return CurrencyAmount.of(coupon.getCurrency(), value);
@@ -70,8 +76,11 @@ public final class CouponIborSpreadDiscountingMethod implements PricingMethod {
 
   /**
    * Computes the present value of the coupon without the spread part and with a positive notional.
-   * @param coupon The coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value.
    */
   public CurrencyAmount presentValueNoSpreadPositiveNotional(final CouponIborSpread coupon, final YieldCurveBundle curves) {
@@ -79,16 +88,20 @@ public final class CouponIborSpreadDiscountingMethod implements PricingMethod {
     Validate.notNull(curves, "Curves");
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(coupon.getForwardCurveName());
     final YieldAndDiscountCurve discountingCurve = curves.getCurve(coupon.getFundingCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1) / coupon.getFixingAccrualFactor();
+    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime())
+        - 1) / coupon.getFixingAccrualFactor();
     final double df = discountingCurve.getDiscountFactor(coupon.getPaymentTime());
-    final double value = (Math.abs(coupon.getNotional()) * coupon.getPaymentYearFraction() * forward) * df;
+    final double value = Math.abs(coupon.getNotional()) * coupon.getPaymentYearFraction() * forward * df;
     return CurrencyAmount.of(coupon.getCurrency(), value);
   }
 
   /**
    * Compute the present value sensitivity to rates of a Ibor coupon by discounting.
-   * @param coupon The coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final CouponIborSpread coupon, final YieldCurveBundle curves) {
@@ -120,21 +133,28 @@ public final class CouponIborSpreadDiscountingMethod implements PricingMethod {
 
   /**
    * Compute the par rate (Ibor forward) of a Ibor coupon by discounting. The par rate is the same with or without spread.
-   * @param coupon The coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The present value.
    */
   public double parRate(final CouponIborSpread coupon, final YieldCurveBundle curves) {
     Validate.notNull(coupon, "Coupon");
     Validate.notNull(curves, "Curves");
     final YieldAndDiscountCurve curve = curves.getCurve(coupon.getForwardCurveName());
-    return (curve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / curve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1.0) / coupon.getFixingAccrualFactor();
+    return (curve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / curve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1.0)
+        / coupon.getFixingAccrualFactor();
   }
 
   /**
    * Compute the par rate (Ibor forward) sensitivity to rates of a Ibor coupon by discounting.
-   * @param coupon The coupon.
-   * @param curves The yield curves. Should contain the discounting and forward curves associated.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param curves
+   *          The yield curves. Should contain the discounting and forward curves associated.
    * @return The par rate curve sensitivity.
    */
   public InterestRateCurveSensitivity parRateCurveSensitivity(final CouponIborSpread coupon, final YieldCurveBundle curves) {

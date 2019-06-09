@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity.portfoliotheory;
@@ -18,7 +18,7 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class TreynorRatioDefaultPropertiesFunction extends DefaultPropertyFunction {
   private final String _samplingPeriodName;
@@ -29,7 +29,7 @@ public class TreynorRatioDefaultPropertiesFunction extends DefaultPropertyFuncti
   private final String _excessReturnCalculatorName;
   private final String _covarianceCalculatorName;
   private final String _varianceCalculatorName;
-  
+
   public TreynorRatioDefaultPropertiesFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName,
       final String returnCalculatorName, final String stdDevCalculatorName, final String excessReturnCalculatorName, final String covarianceCalculatorName,
       final String varianceCalculatorName, final ComputationTargetType type) {
@@ -63,9 +63,10 @@ public class TreynorRatioDefaultPropertiesFunction extends DefaultPropertyFuncti
     defaults.addValuePropertyName(ValueRequirementNames.TREYNOR_RATIO, ValuePropertyNames.COVARIANCE_CALCULATOR);
     defaults.addValuePropertyName(ValueRequirementNames.TREYNOR_RATIO, ValuePropertyNames.VARIANCE_CALCULATOR);
   }
-  
+
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SAMPLING_PERIOD.equals(propertyName)) {
       return Collections.singleton(_samplingPeriodName);
     }

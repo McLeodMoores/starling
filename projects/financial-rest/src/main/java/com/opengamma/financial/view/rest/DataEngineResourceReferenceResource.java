@@ -20,13 +20,14 @@ import com.opengamma.util.rest.AbstractDataResource;
 /**
  * RESTful resource for a {@link EngineResourceReference}
  *
- * @param <T>  the type of resource
+ * @param <T>
+ *          the type of resource
  */
 public abstract class DataEngineResourceReferenceResource<T extends UniqueIdentifiable> extends AbstractDataResource {
 
-  //CSOFF: just constants
+  // CSOFF: just constants
   public static final String PATH_RESOURCE = "resource";
-  //CSON: just constants
+  // CSON: just constants
 
   private final DataEngineResourceManagerResource<T> _manager;
   private final long _referenceId;
@@ -34,7 +35,8 @@ public abstract class DataEngineResourceReferenceResource<T extends UniqueIdenti
 
   private volatile Instant _lastHeartbeat = Instant.now();
 
-  protected DataEngineResourceReferenceResource(final DataEngineResourceManagerResource<T> manager, final long referenceId, final EngineResourceReference<? extends T> resourceReference) {
+  protected DataEngineResourceReferenceResource(final DataEngineResourceManagerResource<T> manager, final long referenceId,
+      final EngineResourceReference<? extends T> resourceReference) {
     _manager = manager;
     _referenceId = referenceId;
     _resourceReference = resourceReference;
@@ -60,7 +62,7 @@ public abstract class DataEngineResourceReferenceResource<T extends UniqueIdenti
 
   protected abstract Object getResourceResource(T resource);
 
-  /*package*/ Instant getLastHeartbeat() {
+  /* package */ Instant getLastHeartbeat() {
     return _lastHeartbeat;
   }
 

@@ -26,6 +26,7 @@ public class SwaptionBlackForwardThetaCalculator extends InstrumentDerivativeVis
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static SwaptionBlackForwardThetaCalculator getInstance() {
@@ -43,7 +44,8 @@ public class SwaptionBlackForwardThetaCalculator extends InstrumentDerivativeVis
   /** Cash-settled swaption methods */
   private static final SwaptionCashFixedIborBlackMethod CASH_SWAPTION = SwaptionCashFixedIborBlackMethod.getInstance();
   /** Physical fixed compounded / overnight compounded methods */
-  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION = SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
+  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION =
+      SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
 
   @Override
   public Double visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final YieldCurveBundle curves) {
@@ -53,7 +55,8 @@ public class SwaptionBlackForwardThetaCalculator extends InstrumentDerivativeVis
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return CASH_SWAPTION.forwardThetaTheoretical(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardThetaCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The SwaptionBlackForwardThetaCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
@@ -64,7 +67,8 @@ public class SwaptionBlackForwardThetaCalculator extends InstrumentDerivativeVis
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return PHYSICAL_SWAPTION.driftlessThetaTheoretical(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackForwardThetaCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The SwaptionBlackForwardThetaCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override

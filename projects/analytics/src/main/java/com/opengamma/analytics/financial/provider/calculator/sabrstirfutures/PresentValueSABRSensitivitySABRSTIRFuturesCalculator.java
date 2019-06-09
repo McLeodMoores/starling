@@ -14,7 +14,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRS
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueSABRSensitivitySABRSTIRFuturesCalculator extends InstrumentDerivativeVisitorAdapter<SABRSTIRFuturesProviderInterface, PresentValueSABRSensitivityDataBundle> {
+public final class PresentValueSABRSensitivitySABRSTIRFuturesCalculator
+    extends InstrumentDerivativeVisitorAdapter<SABRSTIRFuturesProviderInterface, PresentValueSABRSensitivityDataBundle> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueSABRSensitivitySABRSTIRFuturesCalculator extends 
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueSABRSensitivitySABRSTIRFuturesCalculator getInstance() {
@@ -38,12 +40,14 @@ public final class PresentValueSABRSensitivitySABRSTIRFuturesCalculator extends 
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionSABRMethod METHOD_STRIRFUT_MARGIN = InterestRateFutureOptionMarginTransactionSABRMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionSABRMethod METHOD_STRIRFUT_MARGIN = InterestRateFutureOptionMarginTransactionSABRMethod
+      .getInstance();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public PresentValueSABRSensitivityDataBundle visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final SABRSTIRFuturesProviderInterface sabr) {
+  public PresentValueSABRSensitivityDataBundle visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final SABRSTIRFuturesProviderInterface sabr) {
     return METHOD_STRIRFUT_MARGIN.presentValueSABRSensitivity(futures, sabr);
   }
 

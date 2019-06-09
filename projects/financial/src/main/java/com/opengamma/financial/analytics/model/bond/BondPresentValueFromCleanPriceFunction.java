@@ -44,6 +44,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Bond present value from a quoted clean price.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -55,7 +56,8 @@ public class BondPresentValueFromCleanPriceFunction extends BondFromPriceFunctio
   private static final BondTransactionDiscountingMethod CALCULATOR = BondTransactionDiscountingMethod.getInstance();
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ZonedDateTime date = ZonedDateTime.now(executionContext.getValuationClock());
     if (desiredValues.size() != 1) {
       throw new OpenGammaRuntimeException("This function " + getShortName() + " only provides a single output");
@@ -76,7 +78,8 @@ public class BondPresentValueFromCleanPriceFunction extends BondFromPriceFunctio
     final ValueProperties.Builder properties = getResultProperties(riskFreeCurveName, creditCurveName, currency);
     final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, target.toSpecification(), properties.get());
     final YieldAndDiscountCurve riskFreeCurve = (YieldAndDiscountCurve) riskFreeCurveObject;
-    final YieldCurveBundle data = new YieldCurveBundle(new String[] {riskFreeCurveName, riskFreeCurveName }, new YieldAndDiscountCurve[] {riskFreeCurve, riskFreeCurve });
+    final YieldCurveBundle data = new YieldCurveBundle(new String[] { riskFreeCurveName, riskFreeCurveName },
+        new YieldAndDiscountCurve[] { riskFreeCurve, riskFreeCurve });
     return Sets.newHashSet(new ComputedValue(resultSpec, getValue(executionContext, date, riskFreeCurveName, creditCurveName, target, data, cleanPrice)));
   }
 
@@ -101,7 +104,8 @@ public class BondPresentValueFromCleanPriceFunction extends BondFromPriceFunctio
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> input : inputs.entrySet()) {
       if (ValueRequirementNames.YIELD_CURVE.equals(input.getKey().getValueName())) {
@@ -126,7 +130,8 @@ public class BondPresentValueFromCleanPriceFunction extends BondFromPriceFunctio
   @Override
   protected ValueRequirement getCleanPriceRequirement(final ComputationTarget target, final ValueRequirement desiredValue) {
     final Trade trade = target.getTrade();
-    return new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, trade.getSecurity().getUniqueId(), ValueProperties.builder().get());
+    return new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, trade.getSecurity().getUniqueId(),
+        ValueProperties.builder().get());
   }
 
   @Override
@@ -172,7 +177,8 @@ public class BondPresentValueFromCleanPriceFunction extends BondFromPriceFunctio
   }
 
   @Override
-  protected double getValue(final FunctionExecutionContext context, final ZonedDateTime date, final String riskFreeCurveName, final String creditCurveName, final ComputationTarget target,
+  protected double getValue(final FunctionExecutionContext context, final ZonedDateTime date, final String riskFreeCurveName, final String creditCurveName,
+      final ComputationTarget target,
       final YieldCurveBundle data, final double price) {
     final Trade trade = target.getTrade();
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(context);

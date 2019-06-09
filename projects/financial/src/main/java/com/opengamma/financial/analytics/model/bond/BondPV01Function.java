@@ -30,16 +30,17 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.bond.BondSecurity;
 
-
 /**
  * Calculates the PV01 for bonds.
+ * 
  * @deprecated This function uses deprecated functionality.
  */
 @Deprecated
 public abstract class BondPV01Function extends BondFromCurvesFunction {
 
   @Override
-  protected Set<ComputedValue> calculate(final ZonedDateTime date, final BondSecurity bondSecurity, final YieldCurveBundle data, final ComputationTarget target, final FunctionInputs inputs,
+  protected Set<ComputedValue> calculate(final ZonedDateTime date, final BondSecurity bondSecurity, final YieldCurveBundle data, final ComputationTarget target,
+      final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String riskFreeCurveName = desiredValue.getConstraint(PROPERTY_RISK_FREE_CURVE);
@@ -72,7 +73,8 @@ public abstract class BondPV01Function extends BondFromCurvesFunction {
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = super.getResults(context, target, inputs);
     final Set<ValueSpecification> resultsWithCurve = new HashSet<>();
     final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();

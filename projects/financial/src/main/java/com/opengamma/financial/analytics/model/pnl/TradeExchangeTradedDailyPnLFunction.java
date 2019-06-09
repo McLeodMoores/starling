@@ -32,9 +32,12 @@ public class TradeExchangeTradedDailyPnLFunction extends AbstractTradeOrDailyPos
   private static final int MAX_DAYS_OLD = 7;
 
   /**
-   * @param resolutionKey the resolution key, not-null
-   * @param markDataField the mark to market data field name, not-null
-   * @param costOfCarryField the cost of carry field name, not-null
+   * @param resolutionKey
+   *          the resolution key, not-null
+   * @param markDataField
+   *          the mark to market data field name, not-null
+   * @param costOfCarryField
+   *          the cost of carry field name, not-null
    */
   public TradeExchangeTradedDailyPnLFunction(final String resolutionKey, final String markDataField, final String costOfCarryField) {
     super(resolutionKey, markDataField, costOfCarryField);
@@ -46,7 +49,8 @@ public class TradeExchangeTradedDailyPnLFunction extends AbstractTradeOrDailyPos
       return false;
     }
     final Security security = target.getTrade().getSecurity();
-    if (security instanceof FXForwardSecurity || security instanceof FXOptionSecurity || security instanceof FXBarrierOptionSecurity || security instanceof FXDigitalOptionSecurity) {
+    if (security instanceof FXForwardSecurity || security instanceof FXOptionSecurity || security instanceof FXBarrierOptionSecurity
+        || security instanceof FXDigitalOptionSecurity) {
       return false;
     }
     return FinancialSecurityUtils.isExchangeTraded(security) || security instanceof BondSecurity;
@@ -78,7 +82,8 @@ public class TradeExchangeTradedDailyPnLFunction extends AbstractTradeOrDailyPos
   }
 
   @Override
-  protected LocalDate checkAvailableData(final LocalDate originalTradeDate, final HistoricalTimeSeries markToMarketSeries, final Security security, final String markDataField, final String resolutionKey) {
+  protected LocalDate checkAvailableData(final LocalDate originalTradeDate, final HistoricalTimeSeries markToMarketSeries, final Security security,
+      final String markDataField, final String resolutionKey) {
     if (markToMarketSeries.getTimeSeries().isEmpty() || markToMarketSeries.getTimeSeries().getLatestValue() == null) {
       throw new NullPointerException("Could not get mark to market value for security " +
           security.getExternalIdBundle() + " for " + markDataField + " using " + resolutionKey + " for " + MAX_DAYS_OLD + " back from " + originalTradeDate);

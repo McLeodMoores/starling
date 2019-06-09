@@ -31,9 +31,8 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class DataHistoricalTimeSeriesSourceUris {
 
   /**
-   * Builds a URI of the form <code>{path}/hts/{id}</code>. If the unique id is
-   * versioned, a query of the form <code>version={versionString}</code> is
-   * added to the URI.
+   * Builds a URI of the form <code>{path}/hts/{id}</code>. If the unique id is versioned, a query of the form <code>version={versionString}</code> is added to
+   * the URI.
    *
    * @param baseUri
    *          the base URI, not null
@@ -51,9 +50,8 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   /**
-   * Builds a URI of the form <code>{path}/htsMeta/externalIdBundle/{id}</code>.
-   * If the unique id is versioned, a query <code>version={versionString}</code>
-   * is added to the URI.
+   * Builds a URI of the form <code>{path}/htsMeta/externalIdBundle/{id}</code>. If the unique id is versioned, a query <code>version={versionString}</code> is
+   * added to the URI.
    *
    * @param baseUri
    *          the base URI, not null
@@ -117,10 +115,12 @@ public class DataHistoricalTimeSeriesSourceUris {
   }
 
   /**
-   * Workaround for {@link UriBuilder#queryParam} that will not escape strings that contain valid escaped sequences. For example, "%3FFoo" will be left as-is since "%3F" is a valid escape whereas
-   * "%3GFoo" will be escaped to "%253GFoo". If the string contains a "%" then we will escape it in advance and the builder will leave it alone. Otherwise we'll let the builder deal with the string.
+   * Workaround for {@link UriBuilder#queryParam} that will not escape strings that contain valid escaped sequences. For example, "%3FFoo" will be left as-is
+   * since "%3F" is a valid escape whereas "%3GFoo" will be escaped to "%253GFoo". If the string contains a "%" then we will escape it in advance and the
+   * builder will leave it alone. Otherwise we'll let the builder deal with the string.
    *
-   * @param bundle the identifiers to convert
+   * @param bundle
+   *          the identifiers to convert
    * @return the array of, possibly encoded, identifier strings
    */
   private static Object[] identifiers(final ExternalIdBundle bundle) {
@@ -134,7 +134,7 @@ public class DataHistoricalTimeSeriesSourceUris {
           array[i] = URLEncoder.encode(array[i], "UTF-8").replace('+', ' ');
         }
       }
-    } catch (final UnsupportedEncodingException e) {  // CSIGNORE
+    } catch (final UnsupportedEncodingException e) { // CSIGNORE
       throw new OpenGammaRuntimeException("Caught", e);
     }
     return array;
@@ -241,7 +241,8 @@ public class DataHistoricalTimeSeriesSourceUris {
    * @return the URI, not null
    */
   public static URI uriSearchSingle(
-      final URI baseUri, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+      final URI baseUri, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider,
+      final String dataField,
       final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final Integer maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("htsSearches/single");

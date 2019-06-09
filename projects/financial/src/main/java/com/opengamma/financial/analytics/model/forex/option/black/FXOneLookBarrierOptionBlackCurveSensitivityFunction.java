@@ -26,8 +26,10 @@ public class FXOneLookBarrierOptionBlackCurveSensitivityFunction extends FXOneLo
     super(ValueRequirementNames.FX_CURVE_SENSITIVITIES);
   }
 
-  private static final PresentValueCurveSensitivityBlackSmileForexCalculator SMILE_CALCULATOR = PresentValueCurveSensitivityBlackSmileForexCalculator.getInstance();
-  private static final PresentValueCurveSensitivityBlackTermStructureForexCalculator FLAT_CALCULATOR = PresentValueCurveSensitivityBlackTermStructureForexCalculator.getInstance();
+  private static final PresentValueCurveSensitivityBlackSmileForexCalculator SMILE_CALCULATOR = PresentValueCurveSensitivityBlackSmileForexCalculator
+      .getInstance();
+  private static final PresentValueCurveSensitivityBlackTermStructureForexCalculator FLAT_CALCULATOR =
+      PresentValueCurveSensitivityBlackTermStructureForexCalculator.getInstance();
 
   @Override
   protected Object computeValues(final Set<ForexOptionVanilla> vanillaOptions, final ForexOptionDataBundle<?> market) {

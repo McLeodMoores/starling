@@ -9,8 +9,6 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cern.jet.random.engine.MersenneTwister;
-
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponIborRatchet;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponIborRatchet.RatchetIborCalibrationType;
 import com.opengamma.analytics.financial.interestrate.method.SuccessiveRootFinderCalibrationEngine;
@@ -28,8 +26,11 @@ import com.opengamma.analytics.financial.montecarlo.HullWhiteMonteCarloMethod;
 import com.opengamma.analytics.math.random.NormalRandomNumberGenerator;
 import com.opengamma.util.money.CurrencyAmount;
 
+import cern.jet.random.engine.MersenneTwister;
+
 /**
  * Present value calculator for interest rate instruments using a Hull-White one factor model calibrated to SABR prices.
+ * 
  * @deprecated {@link PresentValueCalculator} is deprecated
  */
 @Deprecated
@@ -70,17 +71,19 @@ public class PresentValueSABRHullWhiteMonteCarloCalculator extends PresentValueC
 
   @Override
   /**
-   * The calculator is for test purposes only! It calibrates a Hull-White on a swaption priced with SABR and then price the same swaption in the Hull-White model by Monte Carlo.
-   * Do not use this calculator in production.
+   * The calculator is for test purposes only! It calibrates a Hull-White on a swaption priced with SABR and then price the same swaption in the Hull-White
+   * model by Monte Carlo. Do not use this calculator in production.
    */
   public Double visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final YieldCurveBundle curves) {
     LOGGER.warn("This calculator should be used for test purposes only, not in production!");
     Validate.notNull(swaption);
     Validate.notNull(curves);
     if (!(curves instanceof SABRInterestRateDataBundle)) {
-      throw new UnsupportedOperationException("The PresentValueSABRHullWhiteMonteCarloCalculator visitor visitSwaptionPhysicalFixedIbor requires a SABRInterestRateDataBundle as data.");
+      throw new UnsupportedOperationException(
+          "The PresentValueSABRHullWhiteMonteCarloCalculator visitor visitSwaptionPhysicalFixedIbor requires a SABRInterestRateDataBundle as data.");
     }
-    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(DEFAULT_MEAN_REVERSION, new double[] {0.01}, new double[0]);
+    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(DEFAULT_MEAN_REVERSION,
+        new double[] { 0.01 }, new double[0]);
     final SwaptionPhysicalHullWhiteCalibrationObjective objective = new SwaptionPhysicalHullWhiteCalibrationObjective(hwParameters);
     final SuccessiveRootFinderCalibrationEngine calibrationEngine = new SwaptionPhysicalHullWhiteSuccessiveRootFinderCalibrationEngine(objective);
     // Calibration instruments
@@ -90,7 +93,8 @@ public class PresentValueSABRHullWhiteMonteCarloCalculator extends PresentValueC
     final HullWhiteOneFactorPiecewiseConstantDataBundle hwBundle = new HullWhiteOneFactorPiecewiseConstantDataBundle(hwParameters, curves);
     // Pricing
     final HullWhiteMonteCarloMethod methodMC = new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister()), DEFAULT_NB_PATH);
-    final CurrencyAmount pvMC = methodMC.presentValue(swaption, swaption.getCurrency(), swaption.getUnderlyingSwap().getFirstLeg().getDiscountCurve(), hwBundle);
+    final CurrencyAmount pvMC = methodMC.presentValue(swaption, swaption.getCurrency(), swaption.getUnderlyingSwap().getFirstLeg().getDiscountCurve(),
+        hwBundle);
     return pvMC.getAmount();
   }
 
@@ -99,14 +103,16 @@ public class PresentValueSABRHullWhiteMonteCarloCalculator extends PresentValueC
     Validate.notNull(annuity);
     Validate.notNull(curves);
     if (!(curves instanceof SABRInterestRateDataBundle)) {
-      throw new UnsupportedOperationException("The PresentValueSABRHullWhiteMonteCarloCalculator visitor visitSwaptionPhysicalFixedIbor requires a SABRInterestRateDataBundle as data.");
+      throw new UnsupportedOperationException(
+          "The PresentValueSABRHullWhiteMonteCarloCalculator visitor visitSwaptionPhysicalFixedIbor requires a SABRInterestRateDataBundle as data.");
     }
-    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(DEFAULT_MEAN_REVERSION, new double[] {0.01}, new double[0]);
+    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(DEFAULT_MEAN_REVERSION,
+        new double[] { 0.01 }, new double[0]);
     final CapFloorHullWhiteCalibrationObjective objective = new CapFloorHullWhiteCalibrationObjective(hwParameters);
     final SuccessiveRootFinderCalibrationEngine calibrationEngine = new CapFloorHullWhiteSuccessiveRootFinderCalibrationEngine(objective);
     // Calibration instruments
     final InstrumentDerivative[] calibrationBasket = annuity.calibrationBasket(RatchetIborCalibrationType.FORWARD_COUPON, curves);
-    //TODO: set a way to chose the calibration type.
+    // TODO: set a way to chose the calibration type.
     calibrationEngine.addInstrument(calibrationBasket, METHOD_CAP_SABR);
     // Calibration
     calibrationEngine.calibrate(curves);

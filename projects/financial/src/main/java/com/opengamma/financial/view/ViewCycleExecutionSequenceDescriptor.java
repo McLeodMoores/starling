@@ -9,10 +9,12 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.view.execution.ViewCycleExecutionSequence;
 
 /**
- * Abstraction of a {@link ViewCycleExecutionSequence} that can be used as part of an evaluation target. Construction of the actual execution sequence is deferred until graph execution time as it may
- * depend on the valuation time or other runtime parameters that can't be captured at graph build time or shared between view processes.
+ * Abstraction of a {@link ViewCycleExecutionSequence} that can be used as part of an evaluation target. Construction of the actual execution sequence is
+ * deferred until graph execution time as it may depend on the valuation time or other runtime parameters that can't be captured at graph build time or shared
+ * between view processes.
  * <p>
- * Implementations must include an {@code equals} method such that two sequence descriptors are equal if they will produce equal sequences for the same execution context
+ * Implementations must include an {@code equals} method such that two sequence descriptors are equal if they will produce equal sequences for the same
+ * execution context
  */
 public interface ViewCycleExecutionSequenceDescriptor {
 

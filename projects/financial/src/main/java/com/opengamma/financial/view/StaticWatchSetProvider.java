@@ -36,7 +36,9 @@ public class StaticWatchSetProvider implements WatchSetProvider {
   /**
    * Creates a new provider. This is intended to be called from Spring configuration.
    *
-   * @param map the map of object identifiers (either strings or {@link ObjectId} instances) to watch identifiers (either strings, {@code ObjectId} instances, or collections of either)
+   * @param map
+   *          the map of object identifiers (either strings or {@link ObjectId} instances) to watch identifiers (either strings, {@code ObjectId} instances, or
+   *          collections of either)
    */
   @SuppressWarnings("rawtypes")
   public StaticWatchSetProvider(final Map map) {

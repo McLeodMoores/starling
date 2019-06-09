@@ -46,12 +46,13 @@ public class DbCreateTool extends AbstractDbTool<DbToolContext> {
   }
 
   private static Option createIncludeSchemaGroupOption() {
-    final Option schemaGroupOption = new Option(SCHEMA_NAME_FILTER, "schema-name", false, "a schema group name to include; includes all schemas if none specified");
+    final Option schemaGroupOption = new Option(SCHEMA_NAME_FILTER, "schema-name", false,
+        "a schema group name to include; includes all schemas if none specified");
     schemaGroupOption.setArgs(Option.UNLIMITED_VALUES);
     return schemaGroupOption;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun(final boolean write, final File outputFile) throws Exception {
     final boolean dropExisting = getCommandLine().hasOption(DROP_EXISTING_OPTION);
@@ -75,13 +76,14 @@ public class DbCreateTool extends AbstractDbTool<DbToolContext> {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the arguments, not null
+   * @param args
+   *          the arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     final boolean success = new DbCreateTool().initAndRun(args, DbToolContext.class);
     System.exit(success ? 0 : 1);
   }

@@ -46,23 +46,38 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Constructor from all details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param fundingCurveName Name of the funding curve.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param index The Ibor index.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param fixingPeriodStartTime Time (in years) up to the start of the fixing period.
-   * @param fixingPeriodEndTime Time (in years) up to the end of the fixing period.
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
-   * @param rate The FRA rate.
-   * @param forwardCurveName Name of the forward (or estimation) curve.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param fundingCurveName
+   *          Name of the funding curve.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param index
+   *          The Ibor index.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param fixingPeriodStartTime
+   *          Time (in years) up to the start of the fixing period.
+   * @param fixingPeriodEndTime
+   *          Time (in years) up to the end of the fixing period.
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
+   * @param rate
+   *          The FRA rate.
+   * @param forwardCurveName
+   *          Name of the forward (or estimation) curve.
    * @deprecated Use the constructor that does not take yield curve names
    */
   @Deprecated
-  public ForwardRateAgreement(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction, final double notional, final IborIndex index,
-      final double fixingTime, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction, final double rate, final String forwardCurveName) {
+  public ForwardRateAgreement(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction,
+      final double notional, final IborIndex index,
+      final double fixingTime, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction, final double rate,
+      final String forwardCurveName) {
     super(currency, paymentTime, fundingCurveName, paymentYearFraction, notional, fixingTime);
     ArgumentChecker.notNull(forwardCurveName, "forward curve name");
     ArgumentChecker.notNull(index, "index");
@@ -79,16 +94,27 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Constructor from all details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param index The Ibor index.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param fixingPeriodStartTime Time (in years) up to the start of the fixing period.
-   * @param fixingPeriodEndTime Time (in years) up to the end of the fixing period.
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
-   * @param rate The FRA rate.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param index
+   *          The Ibor index.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param fixingPeriodStartTime
+   *          Time (in years) up to the start of the fixing period.
+   * @param fixingPeriodEndTime
+   *          Time (in years) up to the end of the fixing period.
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
+   * @param rate
+   *          The FRA rate.
    */
   public ForwardRateAgreement(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IborIndex index,
       final double fixingTime, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction, final double rate) {
@@ -107,6 +133,7 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Gets the Ibor index.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -115,6 +142,7 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Gets the fixing period start time.
+   * 
    * @return The fixing period start time.
    */
   public double getFixingPeriodStartTime() {
@@ -123,6 +151,7 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Gets the fixing period end time.
+   * 
    * @return The fixing period start time.
    */
   public double getFixingPeriodEndTime() {
@@ -131,6 +160,7 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Gets the fixing Year Fraction.
+   * 
    * @return The fixing Year Fraction.
    */
   public double getFixingYearFraction() {
@@ -139,6 +169,7 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Gets the FRA rate.
+   * 
    * @return The rate.
    */
   public double getRate() {
@@ -147,7 +178,7 @@ public class ForwardRateAgreement extends CouponFloating {
 
   /**
    * Gets the forward curve name.
-   * 
+   *
    * @return The name.
    * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
@@ -163,10 +194,12 @@ public class ForwardRateAgreement extends CouponFloating {
   @Override
   public ForwardRateAgreement withNotional(final double notional) {
     if (_forwardCurveName == null) {
-      return new ForwardRateAgreement(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, _index, getFixingTime(), _fixingPeriodStartTime, _fixingPeriodEndTime,
+      return new ForwardRateAgreement(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, _index, getFixingTime(), _fixingPeriodStartTime,
+          _fixingPeriodEndTime,
           _fixingYearFraction, _rate);
     }
-    return new ForwardRateAgreement(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, _index, getFixingTime(), _fixingPeriodStartTime, _fixingPeriodEndTime,
+    return new ForwardRateAgreement(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, _index, getFixingTime(),
+        _fixingPeriodStartTime, _fixingPeriodEndTime,
         _fixingYearFraction, _rate, _forwardCurveName);
   }
 

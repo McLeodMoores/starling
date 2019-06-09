@@ -75,31 +75,47 @@ public class IssuerDiscountBuildingRepository {
 
   /**
    * Constructor.
-   * @param toleranceAbs The absolute tolerance for the root finder.
-   * @param toleranceRel The relative tolerance for the root finder.
-   * @param stepMaximum The maximum number of step for the root finder.
+   *
+   * @param toleranceAbs
+   *          The absolute tolerance for the root finder.
+   * @param toleranceRel
+   *          The relative tolerance for the root finder.
+   * @param stepMaximum
+   *          The maximum number of step for the root finder.
    */
   public IssuerDiscountBuildingRepository(final double toleranceAbs, final double toleranceRel, final int stepMaximum) {
     _toleranceAbs = toleranceAbs;
     _toleranceRel = toleranceRel;
     _stepMaximum = stepMaximum;
-    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum, DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
+    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum,
+        DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
     // TODO: make the root finder flexible.
     // TODO: create a way to select the SensitivityMatrixMulticurve calculator (with underlying curve or not)
   }
 
   /**
    * Build a unit of curves.
-   * @param instruments The instruments used for the unit calibration.
-   * @param initGuess The initial parameters guess.
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param issuerMap The issuer curves names map.
-   * @param generatorsMap The generators map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
+   *
+   * @param instruments
+   *          The instruments used for the unit calibration.
+   * @param initGuess
+   *          The initial parameters guess.
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param issuerMap
+   *          The issuer curves names map.
+   * @param generatorsMap
+   *          The generators map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
    * @return The new curves and the calibrated parameters.
    */
   private IssuerProviderDiscount makeUnit(final InstrumentDerivative[] instruments,
@@ -112,13 +128,13 @@ public class IssuerDiscountBuildingRepository {
       final LinkedHashMap<String, GeneratorYDCurve> generatorsMap,
       final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, Double> calculator,
       final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
-    final GeneratorIssuerProviderDiscount generator =
-        new GeneratorIssuerProviderDiscount(knownData, discountingMap, forwardIborMap, forwardONMap, issuerMap, generatorsMap);
+    final GeneratorIssuerProviderDiscount generator = new GeneratorIssuerProviderDiscount(knownData, discountingMap, forwardIborMap, forwardONMap, issuerMap,
+        generatorsMap);
     final IssuerDiscountBuildingData data = new IssuerDiscountBuildingData(instruments, generator);
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new IssuerDiscountFinderFunction(calculator, data);
     // TODO: Create a way to select the SensitivityMatrixMulticurve calculator (with underlying curve or not)
-    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator =
-        new IssuerDiscountFinderJacobian(new ParameterSensitivityIssuerMatrixCalculator(sensitivityCalculator), data);
+    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new IssuerDiscountFinderJacobian(
+        new ParameterSensitivityIssuerMatrixCalculator(sensitivityCalculator), data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
     final IssuerProviderDiscount newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
     return newCurves;
@@ -126,20 +142,25 @@ public class IssuerDiscountBuildingRepository {
 
   /**
    * Construct the CurveBuildingBlock associated to all the curve built so far and updates the CurveBuildingBlockBundle.
-   * @param instruments The instruments used for the block calibration.
-   * @param multicurves The known curves including the current unit.
-   * @param currentCurvesList The list of current curves
-   * @param blockBundle  the curve building block bundle
-   * @param sensitivityCalculator The parameter sensitivity calculator for the value on which the calibration is done
-  (usually ParSpreadMarketQuoteDiscountingProviderCalculator (recommended) or converted present value).
-   * The Jacobian matrix is the transition matrix between the curve parameters and the par spread.
+   *
+   * @param instruments
+   *          The instruments used for the block calibration.
+   * @param multicurves
+   *          The known curves including the current unit.
+   * @param currentCurvesList
+   *          The list of current curves
+   * @param blockBundle
+   *          the curve building block bundle
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator for the value on which the calibration is done (usually ParSpreadMarketQuoteDiscountingProviderCalculator
+   *          (recommended) or converted present value). The Jacobian matrix is the transition matrix between the curve parameters and the par spread.
    */
   private static void updateBlockBundle(final InstrumentDerivative[] instruments, final IssuerProviderDiscount multicurves,
       final List<String> currentCurvesList, final CurveBuildingBlockBundle blockBundle,
       final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
     // Sensitivity calculator
-    final ParameterSensitivityIssuerUnderlyingMatrixCalculator parameterSensitivityCalculator =
-        new ParameterSensitivityIssuerUnderlyingMatrixCalculator(sensitivityCalculator);
+    final ParameterSensitivityIssuerUnderlyingMatrixCalculator parameterSensitivityCalculator = new ParameterSensitivityIssuerUnderlyingMatrixCalculator(
+        sensitivityCalculator);
     int loopc;
     final LinkedHashMap<String, Pair<Integer, Integer>> mapBlockOut = new LinkedHashMap<>();
     // Curve names manipulation
@@ -151,8 +172,8 @@ public class IssuerDiscountBuildingRepository {
     beforeCurveName.removeAll(currentCurves);
     final LinkedHashSet<String> allCurveName = new LinkedHashSet<>(beforeCurveName);
     allCurveName.addAll(currentCurves); // Manipulation to ensure that the new curves are at the end.
-    //Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from  beforeCurveName.
-    //Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
+    // Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from beforeCurveName.
+    // Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
     for (final String name : beforeCurveNameCopy) {
       if (!blockBundle.getData().containsKey(name)) {
         beforeCurveName.remove(name);
@@ -267,15 +288,23 @@ public class IssuerDiscountBuildingRepository {
 
   /**
    * Build a block of curves.
-   * @param curveBundles The bundles of curve data used in construction.
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param issuerMap The issuer curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended)
-   * or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
+   *
+   * @param curveBundles
+   *          The bundles of curve data used in construction.
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param issuerMap
+   *          The issuer curves names map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
    * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlckBundle with the relevant inverse Jacobian Matrix.
    */
   public Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(
@@ -293,16 +322,25 @@ public class IssuerDiscountBuildingRepository {
 
   /**
    * Build a block of curves.
-   * @param curveBundles The bundles of curve data used in construction.
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param knownBlockBundle The already build CurveBuildingBlockBundle.
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param issuerMap The issuer curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
-   * (recommended) or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
+   *
+   * @param curveBundles
+   *          The bundles of curve data used in construction.
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param knownBlockBundle
+   *          The already build CurveBuildingBlockBundle.
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param issuerMap
+   *          The issuer curves names map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
    * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlckBundle with the relevant inverse Jacobian Matrix.
    */
   public Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(

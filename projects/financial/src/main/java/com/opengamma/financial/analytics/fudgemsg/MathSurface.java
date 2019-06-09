@@ -27,7 +27,7 @@ final class MathSurface {
   }
 
   /**
-   * Fudge builder for {@code ConstantDoublesSurface}
+   * Fudge builder for {@code ConstantDoublesSurface}.
    */
   @FudgeBuilderFor(ConstantDoublesSurface.class)
   public static final class ConstantDoublesSurfaceBuilder extends AbstractFudgeBuilder<ConstantDoublesSurface> {
@@ -36,7 +36,8 @@ final class MathSurface {
 
     @Override
     public ConstantDoublesSurface buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      return ConstantDoublesSurface.from(message.getFieldValue(Double.class, message.getByName(Z_VALUE_FIELD_NAME)), message.getFieldValue(String.class, message.getByName(SURFACE_NAME_FIELD_NAME)));
+      return ConstantDoublesSurface.from(message.getFieldValue(Double.class, message.getByName(Z_VALUE_FIELD_NAME)),
+          message.getFieldValue(String.class, message.getByName(SURFACE_NAME_FIELD_NAME)));
     }
 
     @Override
@@ -48,7 +49,7 @@ final class MathSurface {
   }
 
   /**
-   * Fudge builder for {@code InterpolatedDoublesSurface}
+   * Fudge builder for {@code InterpolatedDoublesSurface}.
    */
   @FudgeBuilderFor(InterpolatedDoublesSurface.class)
   public static final class InterpolatedDoublesSurfaceBuilder extends AbstractFudgeBuilder<InterpolatedDoublesSurface> {

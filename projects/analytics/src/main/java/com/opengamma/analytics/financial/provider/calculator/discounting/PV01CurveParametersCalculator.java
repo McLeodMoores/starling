@@ -19,10 +19,14 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Returns the change in present value of an instrument due to a parallel move of all the curve's parameters, scaled so that the move is one basis point (0.0001).
- * @param <T> The type of the multi-curve provider
+ * Returns the change in present value of an instrument due to a parallel move of all the curve's parameters, scaled so that the move is one basis point
+ * (0.0001).
+ *
+ * @param <T>
+ *          The type of the multi-curve provider
  */
-public final class PV01CurveParametersCalculator<T extends ParameterProviderInterface> extends InstrumentDerivativeVisitorSameMethodAdapter<T, ReferenceAmount<Pair<String, Currency>>> {
+public final class PV01CurveParametersCalculator<T extends ParameterProviderInterface>
+extends InstrumentDerivativeVisitorSameMethodAdapter<T, ReferenceAmount<Pair<String, Currency>>> {
 
   /**
    * The size of the scaling: 1 basis point.
@@ -35,7 +39,9 @@ public final class PV01CurveParametersCalculator<T extends ParameterProviderInte
 
   /**
    * Constructs a PV01 calculator that uses a particular sensitivity calculator.
-   * @param curveSensitivityCalculator The curve sensitivity calculator, not null
+   *
+   * @param curveSensitivityCalculator
+   *          The curve sensitivity calculator, not null
    */
   public PV01CurveParametersCalculator(final InstrumentDerivativeVisitor<T, MultipleCurrencyMulticurveSensitivity> curveSensitivityCalculator) {
     ArgumentChecker.notNull(curveSensitivityCalculator, "curve sensitivity calculator");
@@ -43,9 +49,13 @@ public final class PV01CurveParametersCalculator<T extends ParameterProviderInte
   }
 
   /**
-   * Calculates the change in present value of an instrument due to a parallel move of each yield curve the instrument is sensitive to, scaled so that the move is 1bp.
-   * @param ird The instrument, not null
-   * @param multicurves The multi-curves provider, not null
+   * Calculates the change in present value of an instrument due to a parallel move of each yield curve the instrument is sensitive to, scaled so that the move
+   * is 1bp.
+   *
+   * @param ird
+   *          The instrument, not null
+   * @param multicurves
+   *          The multi-curves provider, not null
    * @return The scale sensitivity for each curve/currency.
    */
   @Override

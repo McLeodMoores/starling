@@ -44,7 +44,8 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
    */
   private final int _paymentLag;
   /**
-   * In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the requested period.
+   * In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the requested
+   * period.
    */
   private final boolean _stubShort;
   /**
@@ -62,14 +63,23 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Constructor from all details. The stub is short and date constructed from the end.
-   * @param name The generator name.
-   * @param indexIbor The Ibor index. Not null.
-   * @param indexON The ON index. Not null.
-   * @param businessDayConvention The business day convention for the payments (used for both legs).
-   * @param endOfMonth The flag indicating if the end-of-month rule is used (used for both legs).
-   * @param spotLag The index spot lag in days between trade and settlement date (usually 2 or 0).
-   * @param iborCalendar The holiday calendar for the ibor index.
-   * @param overnightCalendar The holiday calendar for the overnight index.
+   * 
+   * @param name
+   *          The generator name.
+   * @param indexIbor
+   *          The Ibor index. Not null.
+   * @param indexON
+   *          The ON index. Not null.
+   * @param businessDayConvention
+   *          The business day convention for the payments (used for both legs).
+   * @param endOfMonth
+   *          The flag indicating if the end-of-month rule is used (used for both legs).
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param iborCalendar
+   *          The holiday calendar for the ibor index.
+   * @param overnightCalendar
+   *          The holiday calendar for the overnight index.
    */
   public GeneratorSwapIborON(final String name, final IborIndex indexIbor, final IndexON indexON, final BusinessDayConvention businessDayConvention,
       final boolean endOfMonth, final int spotLag, final Calendar iborCalendar, final Calendar overnightCalendar) {
@@ -93,15 +103,25 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Constructor from all details. The stub is short and date constructed from the end.
-   * @param name The generator name.
-   * @param indexIbor The Ibor index. Not null.
-   * @param indexON The ON index. Not null.
-   * @param businessDayConvention The business day convention for the payments (used for both legs).
-   * @param endOfMonth The flag indicating if the end-of-month rule is used (used for both legs).
-   * @param spotLag The index spot lag in days between trade and settlement date (usually 2 or 0).
-   * @param paymentLag The lag in days between the last ON fixing date and the coupon payment.
-   * @param iborCalendar The holiday calendar for the ibor index.
-   * @param overnightCalendar The holiday calendar for the overnight index.
+   * 
+   * @param name
+   *          The generator name.
+   * @param indexIbor
+   *          The Ibor index. Not null.
+   * @param indexON
+   *          The ON index. Not null.
+   * @param businessDayConvention
+   *          The business day convention for the payments (used for both legs).
+   * @param endOfMonth
+   *          The flag indicating if the end-of-month rule is used (used for both legs).
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param paymentLag
+   *          The lag in days between the last ON fixing date and the coupon payment.
+   * @param iborCalendar
+   *          The holiday calendar for the ibor index.
+   * @param overnightCalendar
+   *          The holiday calendar for the overnight index.
    */
   public GeneratorSwapIborON(final String name, final IborIndex indexIbor, final IndexON indexON, final BusinessDayConvention businessDayConvention,
       final boolean endOfMonth, final int spotLag, final int paymentLag, final Calendar iborCalendar, final Calendar overnightCalendar) {
@@ -125,6 +145,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the Ibor index.
+   * 
    * @return The index.
    */
   public IborIndex getIndexIbor() {
@@ -133,6 +154,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the ON index.
+   * 
    * @return The index.
    */
   public IndexON getIndexON() {
@@ -141,6 +163,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the business day convention for the payments (used for both legs).
+   * 
    * @return The business day convention.
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -149,6 +172,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the flag indicating if the end-of-month rule is used (used for both legs).
+   * 
    * @return The flag indicating if the end-of-month rule is used.
    */
   public boolean isEndOfMonth() {
@@ -157,6 +181,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the flag indicating if the remaining interval is shorter (true) or longer (false) than the requested period.
+   * 
    * @return The flag.
    */
   public boolean isStubShort() {
@@ -165,6 +190,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the flag indicating if dates in the schedule are be computed from the end date (true) or from the start date (false).
+   * 
    * @return The flag.
    */
   public boolean isFromEnd() {
@@ -173,6 +199,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the spot lag in days between trade and settlement date (usually 2 or 0).
+   * 
    * @return The spot lag.
    */
   public int getSpotLag() {
@@ -181,6 +208,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the lag in days between the last ON fixing date and the coupon payment.
+   * 
    * @return The payment lag.
    */
   public int getPaymentLag() {
@@ -189,6 +217,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the calendar associated to the Ibor index.
+   * 
    * @return The calendar.
    */
   public Calendar getIborCalendar() {
@@ -197,6 +226,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
 
   /**
    * Gets the calendar associated to the overnight index.
+   * 
    * @return The calendar.
    */
   public Calendar getOvernightCalendar() {
@@ -216,7 +246,7 @@ public class GeneratorSwapIborON extends GeneratorInstrument<GeneratorAttributeI
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_businessDayConvention == null) ? 0 : _businessDayConvention.hashCode());
+    result = prime * result + (_businessDayConvention == null ? 0 : _businessDayConvention.hashCode());
     result = prime * result + (_endOfMonth ? 1231 : 1237);
     result = prime * result + (_fromEnd ? 1231 : 1237);
     result = prime * result + _indexIbor.hashCode();

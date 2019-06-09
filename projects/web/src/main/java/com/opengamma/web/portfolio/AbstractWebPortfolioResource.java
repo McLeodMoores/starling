@@ -54,12 +54,17 @@ public abstract class AbstractWebPortfolioResource
   /**
    * Creates the resource.
    *
-   * @param portfolioMaster  the portfolio master, not null
-   * @param positionMaster  the position master, not null
-   * @param securitySource  the security source, not null
-   * @param executor  the executor service, not null
+   * @param portfolioMaster
+   *          the portfolio master, not null
+   * @param positionMaster
+   *          the position master, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param executor
+   *          the executor service, not null
    */
-  protected AbstractWebPortfolioResource(final PortfolioMaster portfolioMaster, final PositionMaster positionMaster, final SecuritySource securitySource, final ExecutorService executor) {
+  protected AbstractWebPortfolioResource(final PortfolioMaster portfolioMaster, final PositionMaster positionMaster, final SecuritySource securitySource,
+      final ExecutorService executor) {
     super(new WebPortfoliosData());
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
     ArgumentChecker.notNull(positionMaster, "positionMaster");
@@ -73,14 +78,15 @@ public abstract class AbstractWebPortfolioResource
   /**
    * Creates the resource.
    *
-   * @param parent  the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebPortfolioResource(final AbstractWebPortfolioResource parent) {
     super(parent);
     _securityLinkResolver = parent._securityLinkResolver;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
    *
@@ -97,7 +103,7 @@ public abstract class AbstractWebPortfolioResource
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   protected void resolveSecurities(final Collection<ManageablePosition> positions) {
     final Collection<SecurityLink> securityLinks = new ArrayList<>(positions.size());
     for (final ManageablePosition position : positions) {

@@ -22,16 +22,16 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderInterface;
 
 /**
- * Calculates the sensitivity of the present value to the implied volatility used in pricing. The underlying pricing
- * model is a Black model without smile.
+ * Calculates the sensitivity of the present value to the implied volatility used in pricing. The underlying pricing model is a Black model without smile.
  */
 public final class PresentValueForexVolatilitySensitivityForexBlackSmileCalculator extends
-    InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, PresentValueForexBlackVolatilitySensitivity> {
+InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, PresentValueForexBlackVolatilitySensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueForexVolatilitySensitivityForexBlackSmileCalculator INSTANCE = new PresentValueForexVolatilitySensitivityForexBlackSmileCalculator();
+  private static final PresentValueForexVolatilitySensitivityForexBlackSmileCalculator INSTANCE =
+      new PresentValueForexVolatilitySensitivityForexBlackSmileCalculator();
 
   /**
    * Constructor.
@@ -41,6 +41,7 @@ public final class PresentValueForexVolatilitySensitivityForexBlackSmileCalculat
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueForexVolatilitySensitivityForexBlackSmileCalculator getInstance() {
@@ -48,22 +49,26 @@ public final class PresentValueForexVolatilitySensitivityForexBlackSmileCalculat
   }
 
   @Override
-  public PresentValueForexBlackVolatilitySensitivity visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface blackSmile) {
+  public PresentValueForexBlackVolatilitySensitivity visitForexOptionVanilla(final ForexOptionVanilla option,
+      final BlackForexSmileProviderInterface blackSmile) {
     return ForexOptionVanillaBlackSmileMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 
   @Override
-  public PresentValueForexBlackVolatilitySensitivity visitForexNonDeliverableOption(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface blackSmile) {
+  public PresentValueForexBlackVolatilitySensitivity visitForexNonDeliverableOption(final ForexNonDeliverableOption option,
+      final BlackForexSmileProviderInterface blackSmile) {
     return ForexNonDeliverableOptionBlackSmileMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 
   @Override
-  public PresentValueForexBlackVolatilitySensitivity visitForexOptionDigital(final ForexOptionDigital option, final BlackForexSmileProviderInterface blackSmile) {
+  public PresentValueForexBlackVolatilitySensitivity visitForexOptionDigital(final ForexOptionDigital option,
+      final BlackForexSmileProviderInterface blackSmile) {
     return ForexOptionDigitalBlackSmileMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 
   @Override
-  public PresentValueForexBlackVolatilitySensitivity visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option, final BlackForexSmileProviderInterface blackSmile) {
+  public PresentValueForexBlackVolatilitySensitivity visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option,
+      final BlackForexSmileProviderInterface blackSmile) {
     return ForexOptionSingleBarrierBlackMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 

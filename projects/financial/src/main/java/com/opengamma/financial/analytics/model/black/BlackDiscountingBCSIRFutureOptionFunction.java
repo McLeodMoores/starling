@@ -32,23 +32,19 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the sensitivities of an interest rate future option to the bundle of curves used
- * in pricing. The Black method is used.
+ * Calculates the sensitivities of an interest rate future option to the bundle of curves used in pricing. The Black method is used.
  */
 public class BlackDiscountingBCSIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
       PresentValueCurveSensitivityBlackSTIRFutureOptionCalculator.getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<BlackSTIRFuturesProviderInterface> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final ParameterSensitivityParameterCalculator<BlackSTIRFuturesProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<BlackSTIRFuturesProviderInterface> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<BlackSTIRFuturesProviderInterface> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public BlackDiscountingBCSIRFutureOptionFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -67,7 +63,8 @@ public class BlackDiscountingBCSIRFutureOptionFunction extends BlackDiscountingI
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, blackData, blocks);
         for (final ValueRequirement desiredValue : desiredValues) {
-          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints().copy().get());
+          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(),
+              desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;

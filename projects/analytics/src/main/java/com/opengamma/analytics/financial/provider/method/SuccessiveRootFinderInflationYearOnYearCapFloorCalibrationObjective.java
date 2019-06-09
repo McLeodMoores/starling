@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator2D;
 import com.opengamma.util.money.Currency;
 
 /**
- * Specific objective function for cap floor year on year in price index model  model calibration.
+ * Specific objective function for cap floor year on year in price index model model calibration.
  */
 public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective extends SuccessiveRootFinderCalibrationObjectivewithInflation {
 
@@ -29,7 +29,7 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
    */
   private final InflationYearOnYearCapFloorParameters _inflationCapYearOnYearParameters;
   /**
-   * The currency for which the cap floor year on year in price index model  parameters are valid.
+   * The currency for which the cap floor year on year in price index model parameters are valid.
    */
   private final Currency _ccyInflationcapYearOnYear;
   /**
@@ -53,10 +53,13 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
   private final double[][] _volatilityInit;
 
   /**
-   * Constructor of the objective function with the  year on year cap/floor parameters. The parameters range and accuracy are set at some default value 
-   * (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
-   * @param parameters The Year on Year cap/floor parameters.
-   * @param ccy The currency for which the Hull-White parameters are valid.
+   * Constructor of the objective function with the year on year cap/floor parameters. The parameters range and accuracy are set at some default value (minimum:
+   * 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
+   * 
+   * @param parameters
+   *          The Year on Year cap/floor parameters.
+   * @param ccy
+   *          The currency for which the Hull-White parameters are valid.
    */
   public SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective(final InflationYearOnYearCapFloorParameters parameters, final Currency ccy) {
     super(new FXMatrix(ccy), ccy);
@@ -76,15 +79,19 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
 
   /**
    * Sets the year on year cap/floor curve bundle using the Hull-White parameters and a given set of curves.
-   * @param inflation The multi-curves provider.
+   * 
+   * @param inflation
+   *          The multi-curves provider.
    */
   @Override
   public void setInflation(final InflationProviderInterface inflation) {
-    _inflationCapYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(inflation, new BlackSmileCapInflationYearOnYearParameters(_inflationCapYearOnYearParameters));
+    _inflationCapYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(inflation,
+        new BlackSmileCapInflationYearOnYearParameters(_inflationCapYearOnYearParameters));
   }
 
   /**
    * Gets the inflation year on year cap/floor data.
+   * 
    * @return The inflation year on year cap/floor data.
    */
   public InflationYearOnYearCapFloorParameters getInflationCapYearOnYearParameters() {
@@ -93,6 +100,7 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
 
   /**
    * Sets the inflation year on year cap/floor curve bundle.
+   * 
    * @return The inflation year on year cap/floor curve bundle.
    */
   public BlackSmileCapInflationYearOnYearProvider getInflationCapYearOnYearProvider() {
@@ -106,6 +114,7 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
 
   /**
    * Gets the expiry index.
+   * 
    * @return The expiry index.
    */
   public int getExpiryIndex() {
@@ -114,14 +123,17 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
 
   /**
    * Sets the expiry index.
-   * @param index The expiry index.
+   * 
+   * @param index
+   *          The expiry index.
    */
   public void setExpiryIndex(final int index) {
     _expiryIndex = index;
   }
 
   /**
-   * Gets the strike  index.
+   * Gets the strike index.
+   * 
    * @return The strike index.
    */
   public int getStrikeIndex() {
@@ -129,8 +141,10 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
   }
 
   /**
-   * Sets the strike  index.
-   * @param index The strike index.
+   * Sets the strike index.
+   * 
+   * @param index
+   *          The strike index.
    */
   public void setStrikeIndex(final int index) {
     _strikeIndex = index;
@@ -143,11 +157,14 @@ public class SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective
     _inflationCapYearOnYearParameters.setVolatility(x, _expiryIndex, _strikeIndex);
     // creating the new volatility surface using the new volatility matrix
     final Interpolator2D interpolator = _inflationCapYearOnYearProvider.getBlackParameters().getVolatilitySurface().getInterpolator();
-    final BlackSmileCapInflationYearOnYearParameters blackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(_inflationCapYearOnYearParameters, interpolator);
-    final BlackSmileCapInflationYearOnYearProvider blackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(_inflationCapYearOnYearProvider.getInflationProvider(),
+    final BlackSmileCapInflationYearOnYearParameters blackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
+        _inflationCapYearOnYearParameters, interpolator);
+    final BlackSmileCapInflationYearOnYearProvider blackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(
+        _inflationCapYearOnYearProvider.getInflationProvider(),
         blackSmileCapInflationYearOnYearParameters);
 
-    return _inflationCapYearOnYearProvider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVIC, blackSmileCapInflationYearOnYearProvider), _ccyInflationcapYearOnYear).getAmount()
+    return _inflationCapYearOnYearProvider.getMulticurveProvider().getFxRates()
+        .convert(getInstrument().accept(PVIC, blackSmileCapInflationYearOnYearProvider), _ccyInflationcapYearOnYear).getAmount()
         - getPrice();
   }
 }

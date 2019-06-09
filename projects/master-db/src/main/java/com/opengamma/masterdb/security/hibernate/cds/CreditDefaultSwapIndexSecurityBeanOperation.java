@@ -25,7 +25,8 @@ import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 /**
  *
  */
-public final class CreditDefaultSwapIndexSecurityBeanOperation extends AbstractSecurityBeanOperation<CreditDefaultSwapIndexSecurity, CreditDefaultSwapIndexSecurityBean> {
+public final class CreditDefaultSwapIndexSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<CreditDefaultSwapIndexSecurity, CreditDefaultSwapIndexSecurityBean> {
 
   /**
    * Singleton
@@ -36,11 +37,10 @@ public final class CreditDefaultSwapIndexSecurityBeanOperation extends AbstractS
     super(CreditDefaultSwapIndexSecurity.SECURITY_TYPE, CreditDefaultSwapIndexSecurity.class, CreditDefaultSwapIndexSecurityBean.class);
   }
 
-
   @Override
   public CreditDefaultSwapIndexSecurityBean createBean(final OperationContext context,
-                                                       final HibernateSecurityMasterDao secMasterSession,
-                                                       final CreditDefaultSwapIndexSecurity security) {
+      final HibernateSecurityMasterDao secMasterSession,
+      final CreditDefaultSwapIndexSecurity security) {
 
     final CreditDefaultSwapIndexSecurityBean bean = new CreditDefaultSwapIndexSecurityBean();
 
@@ -72,7 +72,7 @@ public final class CreditDefaultSwapIndexSecurityBeanOperation extends AbstractS
 
   @Override
   public CreditDefaultSwapIndexSecurity createSecurity(final OperationContext context,
-                                                       final CreditDefaultSwapIndexSecurityBean bean) {
+      final CreditDefaultSwapIndexSecurityBean bean) {
 
     return new CreditDefaultSwapIndexSecurity(
         bean.getBuy(), externalIdBeanToExternalId(bean.getProtectionBuyer()), externalIdBeanToExternalId(bean.getProtectionSeller()),

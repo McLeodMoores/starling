@@ -21,16 +21,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link FXVolatilitySwapSecurity} classes to
- * {@link FXVolatilitySwapDefinition}, which is required for use in the
- * analytics library.
+ * Converts {@link FXVolatilitySwapSecurity} classes to {@link FXVolatilitySwapDefinition}, which is required for use in the analytics library.
  */
 public class VolatilitySwapSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** The holiday source */
   private final HolidaySource _holidaySource;
 
   /**
-   * @param holidaySource The holiday source, not null
+   * @param holidaySource
+   *          The holiday source, not null
    */
   public VolatilitySwapSecurityConverter(final HolidaySource holidaySource) {
     ArgumentChecker.notNull(holidaySource, "holidaySource");
@@ -63,7 +62,9 @@ public class VolatilitySwapSecurityConverter extends FinancialSecurityVisitorAda
       default:
         throw new UnsupportedOperationException("Cannot handle VolatilitySwapType " + volatilitySwapType);
     }
-    return new FXVolatilitySwapDefinition(currency, security.getBaseCurrency(), security.getCounterCurrency(), volStrike, volNotional, security.getFirstObservationDate(),
-        security.getLastObservationDate(), security.getSettlementDate(), security.getMaturityDate(), periodFrequency, security.getAnnualizationFactor(), calendar);
+    return new FXVolatilitySwapDefinition(currency, security.getBaseCurrency(), security.getCounterCurrency(), volStrike, volNotional,
+        security.getFirstObservationDate(),
+        security.getLastObservationDate(), security.getSettlementDate(), security.getMaturityDate(), periodFrequency, security.getAnnualizationFactor(),
+        calendar);
   }
 }

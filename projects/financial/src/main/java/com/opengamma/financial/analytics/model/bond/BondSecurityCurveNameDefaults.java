@@ -30,23 +30,23 @@ import com.opengamma.util.tuple.Pairs;
 public class BondSecurityCurveNameDefaults extends DefaultPropertyFunction {
 
   private static final String[] BOND_VALUE_NAMES = new String[] {
-    ValueRequirementNames.CLEAN_PRICE,
-    ValueRequirementNames.DIRTY_PRICE,
-    ValueRequirementNames.MACAULAY_DURATION,
-    ValueRequirementNames.MODIFIED_DURATION,
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.YTM,
-    ValueRequirementNames.Z_SPREAD,
-    ValueRequirementNames.PRESENT_VALUE_Z_SPREAD_SENSITIVITY,
-    ValueRequirementNames.CONVEXITY,
-    ValueRequirementNames.ACCRUED_INTEREST,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.DV01,
+                ValueRequirementNames.CLEAN_PRICE,
+                ValueRequirementNames.DIRTY_PRICE,
+                ValueRequirementNames.MACAULAY_DURATION,
+                ValueRequirementNames.MODIFIED_DURATION,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.YTM,
+                ValueRequirementNames.Z_SPREAD,
+                ValueRequirementNames.PRESENT_VALUE_Z_SPREAD_SENSITIVITY,
+                ValueRequirementNames.CONVEXITY,
+                ValueRequirementNames.ACCRUED_INTEREST,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.DV01,
   };
 
   private static final String[] BOND_FUTURE_VALUE_NAMES = new String[] {
-    ValueRequirementNames.GROSS_BASIS,
-    ValueRequirementNames.NET_BASIS
+                ValueRequirementNames.GROSS_BASIS,
+                ValueRequirementNames.NET_BASIS
   };
 
   private final Map<String, Pair<String, String>> _currencyAndRiskFreeCurveNames;
@@ -97,7 +97,8 @@ public class BondSecurityCurveNameDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (BondFunction.PROPERTY_CREDIT_CURVE.equals(propertyName)) {
       return Collections.singleton(_currencyAndCreditCurveNames.get(currency).getFirst());

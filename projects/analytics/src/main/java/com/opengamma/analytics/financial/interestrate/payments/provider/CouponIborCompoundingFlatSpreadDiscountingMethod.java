@@ -22,9 +22,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method to compute present value and present value sensitivity for Ibor compounding coupon with spread and compounding type "Flat Compounding".
- * The definition of "Flat Compounding" is available in the ISDA document:
- * Reference: Alternative compounding methods for over-the-counter derivative transactions (2009)
+ * Method to compute present value and present value sensitivity for Ibor compounding coupon with spread and compounding type "Flat Compounding". The definition
+ * of "Flat Compounding" is available in the ISDA document: Reference: Alternative compounding methods for over-the-counter derivative transactions (2009)
  */
 public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
 
@@ -35,6 +34,7 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CouponIborCompoundingFlatSpreadDiscountingMethod getInstance() {
@@ -49,8 +49,11 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
 
   /**
    * Compute the present value of a Ibor compounded coupon with compounding type "Flat Compounding" by discounting.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponIborCompoundingFlatSpread coupon, final MulticurveProviderInterface multicurve) {
@@ -58,11 +61,14 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
   }
 
   /**
-   * Compute the present value of a Ibor compounded coupon with compounding type "Flat Compounding" using the specified
-   * forward rate provider by discounting.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
-   * @param forwardRateProvider The forward rate provider.
+   * Compute the present value of a Ibor compounded coupon with compounding type "Flat Compounding" using the specified forward rate provider by discounting.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
+   * @param forwardRateProvider
+   *          The forward rate provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(
@@ -91,8 +97,11 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
 
   /**
    * Compute the sensitivity of the present value of a Ibor compounded coupon with compounding type "Flat Compounding" to the spread.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value.
    */
   public double presentValueSpreadSensitivity(final CouponIborCompoundingFlatSpread coupon, final MulticurveProviderInterface multicurve) {
@@ -130,11 +139,15 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Ibor compounded coupon with compounding type "Flat Compounding" by discounting.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborCompoundingFlatSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborCompoundingFlatSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurve, "Multi-curve provider");
     final int nbSubPeriod = coupon.getFixingTimes().length;

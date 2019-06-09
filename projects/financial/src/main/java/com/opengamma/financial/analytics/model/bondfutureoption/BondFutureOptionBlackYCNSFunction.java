@@ -47,7 +47,8 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public class BondFutureOptionBlackYCNSFunction extends BondFutureOptionBlackCurveSpecificFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackYCNSFunction.class);
-  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivityBlackCalculator.getInstance());
+  private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator
+      .using(PresentValueCurveSensitivityBlackCalculator.getInstance());
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
 
   public BondFutureOptionBlackYCNSFunction() {
@@ -55,11 +56,12 @@ public class BondFutureOptionBlackYCNSFunction extends BondFutureOptionBlackCurv
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data, final MultiCurveCalculationConfig curveCalculationConfig,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data,
+      final MultiCurveCalculationConfig curveCalculationConfig,
       final ValueSpecification spec, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues, final BondFutureOptionSecurity security) {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
-    final YieldCurveWithBlackCubeBundle fixedData = null; //TODO deal with fixed curves
+    final YieldCurveWithBlackCubeBundle fixedData = null; // TODO deal with fixed curves
     final Object curveSpecObject = inputs.getValue(ValueRequirementNames.YIELD_CURVE_SPEC);
     if (curveSpecObject == null) {
       throw new OpenGammaRuntimeException("Could not get curve specification for " + curveName);
@@ -122,8 +124,8 @@ public class BondFutureOptionBlackYCNSFunction extends BondFutureOptionBlackCurv
     if (curveCalculationMethod.equals(MultiYieldCurvePropertiesAndDefaults.PRESENT_VALUE_STRING)) {
       requirements.add(getCouponSensitivitiesRequirement(currency, curveCalculationConfigName));
     }
-    final Set<ValueRequirement> tsRequirements =
-        getDataConverter().getConversionTimeSeriesRequirements(trade.getSecurity(), getTradeConverter().convert(trade));
+    final Set<ValueRequirement> tsRequirements = getDataConverter().getConversionTimeSeriesRequirements(trade.getSecurity(),
+        getTradeConverter().convert(trade));
     if (tsRequirements == null) {
       return null;
     }

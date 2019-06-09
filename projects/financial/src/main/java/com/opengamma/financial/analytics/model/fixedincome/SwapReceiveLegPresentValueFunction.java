@@ -43,7 +43,8 @@ public class SwapReceiveLegPresentValueFunction extends InterestRateInstrumentFu
   }
 
   @Override
-  public Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle, final FinancialSecurity security, final ComputationTarget target,
+  public Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle, final FinancialSecurity security,
+      final ComputationTarget target,
       final String curveCalculationConfigName, final String currency) {
     if (!(derivative instanceof Swap<?, ?>)) {
       throw new OpenGammaRuntimeException("Expected a swap, have " + derivative.getClass());

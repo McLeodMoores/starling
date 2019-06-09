@@ -5,8 +5,6 @@
  */
 package com.opengamma.analytics.financial.provider.calculator.hullwhite;
 
-import cern.jet.random.engine.MersenneTwister;
-
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
 import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
@@ -21,10 +19,13 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+import cern.jet.random.engine.MersenneTwister;
+
 /**
  * Present value calculator for interest rate instruments using a Hull-White one factor model calibrated to SABR prices.
  */
-public final class PresentValueSABRHullWhiteMonteCarloCalculator extends InstrumentDerivativeVisitorAdapter<SABRSwaptionProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueSABRHullWhiteMonteCarloCalculator
+extends InstrumentDerivativeVisitorAdapter<SABRSwaptionProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -39,6 +40,7 @@ public final class PresentValueSABRHullWhiteMonteCarloCalculator extends Instrum
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSABRHullWhiteMonteCarloCalculator getInstance() {
@@ -60,16 +62,18 @@ public final class PresentValueSABRHullWhiteMonteCarloCalculator extends Instrum
 
   @Override
   /**
-   * The calculator is for test purposes only! It calibrates a Hull-White on a swaption priced with SABR and then price the same swaption in the Hull-White model by Monte Carlo.
-   * Do not use this calculator in production.
+   * The calculator is for test purposes only! It calibrates a Hull-White on a swaption priced with SABR and then price the same swaption in the Hull-White
+   * model by Monte Carlo. Do not use this calculator in production.
    */
   public MultipleCurrencyAmount visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final Currency ccy = swaption.getCurrency();
-    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(DEFAULT_MEAN_REVERSION, new double[] {0.01}, new double[0]);
+    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(DEFAULT_MEAN_REVERSION,
+        new double[] { 0.01 }, new double[0]);
     final SuccessiveRootFinderHullWhiteCalibrationObjective objective = new SuccessiveRootFinderHullWhiteCalibrationObjective(hwParameters, ccy);
-    final SuccessiveRootFinderHullWhiteCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderHullWhiteCalibrationEngine<>(objective);
+    final SuccessiveRootFinderHullWhiteCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine =
+        new SuccessiveRootFinderHullWhiteCalibrationEngine<>(objective);
     // Calibration instruments
     calibrationEngine.addInstrument(swaption, PVSSC);
     // Calibration

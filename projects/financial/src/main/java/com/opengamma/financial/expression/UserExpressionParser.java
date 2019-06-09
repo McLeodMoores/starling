@@ -23,15 +23,15 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Parses a string representation of a user expression into a {@link UserExpression}
- * object that can be evaluated.
+ * Parses a string representation of a user expression into a {@link UserExpression} object that can be evaluated.
  */
 public abstract class UserExpressionParser {
 
   private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<>();
 
   /**
-   * Returns the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing deep resolution of referenced entities.
+   * Returns the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing
+   * deep resolution of referenced entities.
    *
    * @return the thread's resolver
    */
@@ -40,21 +40,26 @@ public abstract class UserExpressionParser {
   }
 
   /**
-   * Sets the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing deep resolution of referenced entities.
+   * Sets the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing
+   * deep resolution of referenced entities.
    *
-   * @param resolver the thread's resolver
+   * @param resolver
+   *          the thread's resolver
    */
   public static void setResolver(final ComputationTargetResolver.AtVersionCorrection resolver) {
     RESOLVER.set(resolver);
   }
 
   /**
-   * Resolves an identifier as part of expression evaluation using the thread's resolver. The identifier may be the object already resolved, a unique identifier, an external identifier, or an external
-   * identifier bundle.
+   * Resolves an identifier as part of expression evaluation using the thread's resolver. The identifier may be the object already resolved, a unique
+   * identifier, an external identifier, or an external identifier bundle.
    *
-   * @param <T> the resolved type
-   * @param type the type to resolve to, not null
-   * @param id the identifier to resolve
+   * @param <T>
+   *          the resolved type
+   * @param type
+   *          the type to resolve to, not null
+   * @param id
+   *          the identifier to resolve
    * @return the resolved object or null if it could not be resolved
    */
   @SuppressWarnings("unchecked")
@@ -98,8 +103,10 @@ public abstract class UserExpressionParser {
   /**
    * Registers a constant that should be replaced at parse time.
    *
-   * @param name name of the constant
-   * @param value constant value
+   * @param name
+   *          name of the constant
+   * @param value
+   *          constant value
    */
   public abstract void setConstant(String name, Object value);
 
@@ -119,14 +126,20 @@ public abstract class UserExpressionParser {
   /**
    * Registers a synthetic property to pass to all evaluation contexts created.
    *
-   * @param <T> class of object to declare the synthetic property on, e.g. Security
-   * @param <S> class of the synthetic property, e.g. Currency
-   * @param object class of object to declare the synthetic property on, e.g. Security
-   * @param type class of synthetic property on, e.g. Currency
-   * @param name name of the property, e.g. currency
-   * @param method the function to supply the synthetic value
+   * @param <T>
+   *          class of object to declare the synthetic property on, e.g. Security
+   * @param <S>
+   *          class of the synthetic property, e.g. Currency
+   * @param object
+   *          class of object to declare the synthetic property on, e.g. Security
+   * @param type
+   *          class of synthetic property on, e.g. Currency
+   * @param name
+   *          name of the property, e.g. currency
+   * @param method
+   *          the function to supply the synthetic value
    */
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public <T, S> void setSynthetic(final Class<T> object, final Class<S> type, final String name, final Function<T, S> method) {
     Map synthetics = _synthetics.get(object);
     if (synthetics == null) {
@@ -136,7 +149,7 @@ public abstract class UserExpressionParser {
     synthetics.put(name, Pairs.of(type, method));
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   protected Pair<Class<?>, Function<Object, Object>> getSynthetic(final Object value, final String name) {
     Class clazz = value.getClass();
     do {

@@ -27,33 +27,52 @@ public class InterestRateFutureTransactionDefinition extends FuturesTransactionD
 
   /**
    * Constructor.
-   * @param underlying The underlying futures.
-   * @param quantity The quantity/number of contract.
-   * @param transactionDate The date at which the transaction was done.
-   * @param transactionPrice The price at which the transaction was done.
+   * 
+   * @param underlying
+   *          The underlying futures.
+   * @param quantity
+   *          The quantity/number of contract.
+   * @param transactionDate
+   *          The date at which the transaction was done.
+   * @param transactionPrice
+   *          The price at which the transaction was done.
    */
-  public InterestRateFutureTransactionDefinition(final InterestRateFutureSecurityDefinition underlying, final long quantity, final ZonedDateTime transactionDate,
+  public InterestRateFutureTransactionDefinition(final InterestRateFutureSecurityDefinition underlying, final long quantity,
+      final ZonedDateTime transactionDate,
       final double transactionPrice) {
     super(underlying, quantity, transactionDate, transactionPrice);
   }
 
   /**
-   * @param transactionDate The transaction date of the future, not null
-   * @param transactionPrice The transaction price
-   * @param quantity The quantity
-   * @param lastTradingDate The last trading date, not null
-   * @param fixingPeriodStartDate The start date of the Ibor fixing period, not null
-   * @param fixingPeriodEndDate The end date of the Ibor fixing period, not null. Must be after the fixing period start date
-   * @param iborIndex The Ibor index, not null
-   * @param notional  The notional
-   * @param paymentAccrualFactor The payment accrual factor, not negative or zero
-   * @param name The name, not null
-   * @param calendar The holiday calendar, not null
+   * @param transactionDate
+   *          The transaction date of the future, not null
+   * @param transactionPrice
+   *          The transaction price
+   * @param quantity
+   *          The quantity
+   * @param lastTradingDate
+   *          The last trading date, not null
+   * @param fixingPeriodStartDate
+   *          The start date of the Ibor fixing period, not null
+   * @param fixingPeriodEndDate
+   *          The end date of the Ibor fixing period, not null. Must be after the fixing period start date
+   * @param iborIndex
+   *          The Ibor index, not null
+   * @param notional
+   *          The notional
+   * @param paymentAccrualFactor
+   *          The payment accrual factor, not negative or zero
+   * @param name
+   *          The name, not null
+   * @param calendar
+   *          The holiday calendar, not null
    * @deprecated Deprecated since 2.2.0.M17. Use the constructor with underlying.
    */
   @Deprecated
-  public InterestRateFutureTransactionDefinition(final ZonedDateTime transactionDate, final double transactionPrice, final int quantity, final ZonedDateTime lastTradingDate,
-      final ZonedDateTime fixingPeriodStartDate, final ZonedDateTime fixingPeriodEndDate, final IborIndex iborIndex, final double notional, final double paymentAccrualFactor,
+  public InterestRateFutureTransactionDefinition(final ZonedDateTime transactionDate, final double transactionPrice, final int quantity,
+      final ZonedDateTime lastTradingDate,
+      final ZonedDateTime fixingPeriodStartDate, final ZonedDateTime fixingPeriodEndDate, final IborIndex iborIndex, final double notional,
+      final double paymentAccrualFactor,
       final String name, final Calendar calendar) {
     super(new InterestRateFutureSecurityDefinition(lastTradingDate, fixingPeriodStartDate, fixingPeriodEndDate, iborIndex, notional, paymentAccrualFactor,
         name, calendar), quantity, transactionDate, transactionPrice);
@@ -61,27 +80,39 @@ public class InterestRateFutureTransactionDefinition extends FuturesTransactionD
 
   /**
    * Build a interest rate futures transaction from the fixing period start date.
-   * @param transactionDate The date at which the transaction was done.
-   * @param transactionPrice The price at which the transaction was done.
-   * @param quantity The quantity/number of contract.
-   * @param fixingPeriodStartDate The start date of the fixing period.
-   * @param iborIndex The Ibor index associated to the future.
-   * @param notional Future notional.
-   * @param paymentAccrualFactor Future payment accrual factor.
-   * @param name The future name.
-   * @param calendar The holiday calendar for the ibor leg.
+   * 
+   * @param transactionDate
+   *          The date at which the transaction was done.
+   * @param transactionPrice
+   *          The price at which the transaction was done.
+   * @param quantity
+   *          The quantity/number of contract.
+   * @param fixingPeriodStartDate
+   *          The start date of the fixing period.
+   * @param iborIndex
+   *          The Ibor index associated to the future.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param name
+   *          The future name.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The interest rate futures.
    * @deprecated Deprecated since 2.2.0.M17. Use the constructor with underlying.
    */
   @Deprecated
-  public static InterestRateFutureTransactionDefinition fromFixingPeriodStartDate(final ZonedDateTime transactionDate, final double transactionPrice, final int quantity,
+  public static InterestRateFutureTransactionDefinition fromFixingPeriodStartDate(final ZonedDateTime transactionDate, final double transactionPrice,
+      final int quantity,
       final ZonedDateTime fixingPeriodStartDate, final IborIndex iborIndex, final double notional, final double paymentAccrualFactor, final String name,
       final Calendar calendar) {
     ArgumentChecker.notNull(fixingPeriodStartDate, "Fixing period start date");
     ArgumentChecker.notNull(iborIndex, "Ibor index");
     final ZonedDateTime lastTradingDate = ScheduleCalculator.getAdjustedDate(fixingPeriodStartDate, -iborIndex.getSpotLag(), calendar);
     final ZonedDateTime fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(fixingPeriodStartDate, iborIndex, calendar);
-    return new InterestRateFutureTransactionDefinition(transactionDate, transactionPrice, quantity, lastTradingDate, fixingPeriodStartDate, fixingPeriodEndDate, iborIndex, notional,
+    return new InterestRateFutureTransactionDefinition(transactionDate, transactionPrice, quantity, lastTradingDate, fixingPeriodStartDate, fixingPeriodEndDate,
+        iborIndex, notional,
         paymentAccrualFactor, name, calendar);
   }
 
@@ -94,7 +125,9 @@ public class InterestRateFutureTransactionDefinition extends FuturesTransactionD
 
   /**
    * {@inheritDoc}
-   * @param lastMarginPrice The price on which the last margining was done.
+   * 
+   * @param lastMarginPrice
+   *          The price on which the last margining was done.
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -122,12 +155,15 @@ public class InterestRateFutureTransactionDefinition extends FuturesTransactionD
 
   @Override
   public InstrumentDerivative toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
   }
 
   /**
    * {@inheritDoc}
-   * @param lastMarginPrice The price on which the last margining was done.
+   * 
+   * @param lastMarginPrice
+   *          The price on which the last margining was done.
    */
   @Override
   public InterestRateFutureTransaction toDerivative(final ZonedDateTime dateTime, final Double lastMarginPrice) {
@@ -139,12 +175,14 @@ public class InterestRateFutureTransactionDefinition extends FuturesTransactionD
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public InstrumentDerivative toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
   }
 
   @Override

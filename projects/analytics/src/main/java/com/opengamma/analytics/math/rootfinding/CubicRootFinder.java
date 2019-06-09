@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.number.ComplexNumber;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Class that calculates the roots of a cubic equation. 
+ * Class that calculates the roots of a cubic equation.
  * <p>
  * As the polynomial has real coefficients, the roots of the cubic can be found using the method described
  * <a href="http://mathworld.wolfram.com/CubicFormula.html">here</a>.
@@ -22,7 +22,9 @@ public class CubicRootFinder implements Polynomial1DRootFinder<ComplexNumber> {
 
   /**
    * {@inheritDoc}
-   * @throws IllegalArgumentException If the function is not cubic
+   *
+   * @throws IllegalArgumentException
+   *           If the function is not cubic
    */
   @Override
   public ComplexNumber[] getRoots(final RealPolynomialFunction1D function) {
@@ -42,14 +44,15 @@ public class CubicRootFinder implements Polynomial1DRootFinder<ComplexNumber> {
     if (rSq < qCb) {
       final double mult = -2 * Math.sqrt(q);
       final double theta = Math.acos(r / Math.sqrt(qCb));
-      return new ComplexNumber[] {new ComplexNumber(mult * Math.cos(theta / 3) - constant, 0), new ComplexNumber(mult * Math.cos((theta + TWO_PI) / 3) - constant, 0),
-        new ComplexNumber(mult * Math.cos((theta - TWO_PI) / 3) - constant, 0)};
+      return new ComplexNumber[] { new ComplexNumber(mult * Math.cos(theta / 3) - constant, 0),
+                    new ComplexNumber(mult * Math.cos((theta + TWO_PI) / 3) - constant, 0),
+                    new ComplexNumber(mult * Math.cos((theta - TWO_PI) / 3) - constant, 0) };
     }
     final double s = -Math.signum(r) * Math.cbrt(Math.abs(r) + Math.sqrt(rSq - qCb));
     final double t = CompareUtils.closeEquals(s, 0, 1e-16) ? 0 : q / s;
     final double sum = s + t;
     final double real = -0.5 * sum - constant;
     final double imaginary = Math.sqrt(3) * (s - t) / 2;
-    return new ComplexNumber[] {new ComplexNumber(sum - constant, 0), new ComplexNumber(real, imaginary), new ComplexNumber(real, -imaginary)};
+    return new ComplexNumber[] { new ComplexNumber(sum - constant, 0), new ComplexNumber(real, imaginary), new ComplexNumber(real, -imaginary) };
   }
 }

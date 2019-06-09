@@ -67,7 +67,7 @@ import com.opengamma.util.time.Tenor;
  *
  * @deprecated Deprecated
  */
-//TODO rename to make clear that these functions use the ISDA methodology (specifically, for effective dates)
+// TODO rename to make clear that these functions use the ISDA methodology (specifically, for effective dates)
 @Deprecated
 public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCompiledInvoker {
   private final String[] _valueRequirements;
@@ -88,16 +88,19 @@ public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCom
     final ZonedDateTime valuationTime = ZonedDateTime.now(executionContext.getValuationClock());
     final CreditDefaultSwapSecurity security = (CreditDefaultSwapSecurity) target.getSecurity();
     final CdsRecoveryRateIdentifier recoveryRateIdentifier = security.accept(new CreditSecurityToRecoveryRateVisitor(securitySource));
-    final Object recoveryRateObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId()));
+    final Object recoveryRateObject = inputs
+        .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {
       throw new OpenGammaRuntimeException("Could not get recovery rate with identifier " + recoveryRateIdentifier.getExternalId());
     }
     final double recoveryRate = (Double) recoveryRateObject;
-    final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(holidaySource, regionSource, legalEntitySource, recoveryRate, valuationTime);
+    final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(holidaySource, regionSource, legalEntitySource, recoveryRate,
+        valuationTime);
     final LegacyVanillaCreditDefaultSwapDefinition definition = (LegacyVanillaCreditDefaultSwapDefinition) security.accept(converter);
     final Object yieldCurveObject = inputs.getValue(ValueRequirementNames.YIELD_CURVE);
     if (yieldCurveObject == null) {
-      throw new OpenGammaRuntimeException("Could not get yield curve called " + desiredValue.getConstraint(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE));
+      throw new OpenGammaRuntimeException(
+          "Could not get yield curve called " + desiredValue.getConstraint(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE));
     }
     final Object spreadCurveObject = inputs.getValue(ValueRequirementNames.CREDIT_SPREAD_CURVE);
     if (spreadCurveObject == null) {
@@ -120,7 +123,8 @@ public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCom
         .with(definition.getBusinessDayAdjustmentConvention())
         .with(definition.getCalendar()).with(definition.getStubType())
         .withAccrualDCC(definition.getDayCountFractionConvention());
-    final CDSAnalytic pricingCDS = analyticFactory.makeCDS(definition.getEffectiveDate().toLocalDate(), definition.getStartDate().toLocalDate(), definition.getMaturityDate().toLocalDate());
+    final CDSAnalytic pricingCDS = analyticFactory.makeCDS(definition.getEffectiveDate().toLocalDate(), definition.getStartDate().toLocalDate(),
+        definition.getMaturityDate().toLocalDate());
     final ValueProperties properties = desiredValues.iterator().next().getConstraints().copy()
         .with(ValuePropertyNames.FUNCTION, getUniqueId())
         .get();
@@ -146,7 +150,7 @@ public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCom
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
-    //TODO add check for calculation method = ISDA
+    // TODO add check for calculation method = ISDA
     final Set<String> yieldCurveNames = constraints.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE);
     if (yieldCurveNames == null || yieldCurveNames.size() != 1) {
       return null;
@@ -180,13 +184,16 @@ public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCom
       }
       spreadCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement creditSpreadCurveRequirement = new ValueRequirement(ValueRequirementNames.CREDIT_SPREAD_CURVE, ComputationTargetSpecification.NULL, spreadCurveProperties.get());
-    final ValueRequirement recoveryRateRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, recoveryRateIdentifier.getExternalId());
+    final ValueRequirement creditSpreadCurveRequirement = new ValueRequirement(ValueRequirementNames.CREDIT_SPREAD_CURVE, ComputationTargetSpecification.NULL,
+        spreadCurveProperties.get());
+    final ValueRequirement recoveryRateRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE,
+        recoveryRateIdentifier.getExternalId());
     return Sets.newHashSet(yieldCurveRequirement, creditSpreadCurveRequirement, recoveryRateRequirement);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueProperties.Builder propertiesBuilder = getCommonResultProperties();
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification spec = entry.getKey();
@@ -195,9 +202,11 @@ public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCom
       if (spec.getValueName().equals(ValueRequirementNames.YIELD_CURVE)) {
         propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE));
         inputPropertiesBuilder.withoutAny(ValuePropertyNames.CURVE);
-        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_CONFIG, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
+        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_CONFIG,
+            inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
         inputPropertiesBuilder.withoutAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
-        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_METHOD, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_METHOD));
+        propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE_CALCULATION_METHOD,
+            inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE_CALCULATION_METHOD));
         inputPropertiesBuilder.withoutAny(ValuePropertyNames.CURVE_CALCULATION_METHOD);
       } else if (spec.getValueName().equals(ValueRequirementNames.CREDIT_SPREAD_CURVE)) {
         propertiesBuilder.with(CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_CURVE, inputPropertiesBuilder.get().getValues(ValuePropertyNames.CURVE));
@@ -222,15 +231,15 @@ public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCom
   }
 
   protected abstract Set<ComputedValue> getComputedValue(CreditDefaultSwapDefinition definition,
-                                                         ISDACompliantYieldCurve yieldCurve,
-                                                         ZonedDateTime[] times,
-                                                         double[] marketSpreads,
-                                                         ZonedDateTime valuationTime,
-                                                         ComputationTarget target,
-                                                         ValueProperties properties,
-                                                         FunctionInputs inputs,
-                                                         ISDACompliantCreditCurve hazardCurve, CDSAnalytic analytic,
-                                                         Tenor[] tenors);
+      ISDACompliantYieldCurve yieldCurve,
+      ZonedDateTime[] times,
+      double[] marketSpreads,
+      ZonedDateTime valuationTime,
+      ComputationTarget target,
+      ValueProperties properties,
+      FunctionInputs inputs,
+      ISDACompliantCreditCurve hazardCurve, CDSAnalytic analytic,
+      Tenor[] tenors);
 
   protected abstract ValueProperties.Builder getCommonResultProperties();
 

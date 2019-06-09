@@ -27,30 +27,31 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
-* Produces the basic Greeks for the American Analytic model. <p>
-* See {@link ListedEquityOptionBjerksundStenslandFunction}
-*/
+ * Produces the basic Greeks for the American Analytic model.
+ * <p>
+ * See {@link ListedEquityOptionBjerksundStenslandFunction}
+ */
 public class ListedEquityOptionBjerksundStenslandGreeksFunction extends ListedEquityOptionBjerksundStenslandFunction {
 
   /** Value requirement names */
   private static final String[] GREEK_NAMES = new String[] {
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.DUAL_DELTA,
-    ValueRequirementNames.RHO,
-    ValueRequirementNames.CARRY_RHO,
-    ValueRequirementNames.VEGA,
-    ValueRequirementNames.THETA,
-    ValueRequirementNames.GAMMA
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.RHO,
+                ValueRequirementNames.CARRY_RHO,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.THETA,
+                ValueRequirementNames.GAMMA
   };
   /** Equivalent greeks */
   private static final Greek[] GREEKS = new Greek[] {
-    Greek.DELTA,
-    Greek.DUAL_DELTA,
-    Greek.RHO,
-    Greek.CARRY_RHO,
-    Greek.VEGA,
-    Greek.THETA,
-    Greek.GAMMA
+                Greek.DELTA,
+                Greek.DUAL_DELTA,
+                Greek.RHO,
+                Greek.CARRY_RHO,
+                Greek.VEGA,
+                Greek.THETA,
+                Greek.GAMMA
   };
 
   /**
@@ -59,18 +60,19 @@ public class ListedEquityOptionBjerksundStenslandGreeksFunction extends ListedEq
   public ListedEquityOptionBjerksundStenslandGreeksFunction() {
     super(GREEK_NAMES);
   }
-  
+
   @Override
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     GreekResultCollection greeks;
     if (derivative instanceof EquityOption) {
       final EquityOption option = (EquityOption) derivative;
-      
-      final  Set<ComputedValue> obj = (new EquityOptionBjerksundStenslandImpliedVolFunction()).computeValues(derivative, market, inputs, desiredValues, targetSpec, resultProperties);
-      ArrayList<ComputedValue> nameList =  new ArrayList<>(obj);
-      ComputedValue value =   nameList.get(0);
-      Double impliedVol = (Double) value.getValue();
+
+      final Set<ComputedValue> obj = new EquityOptionBjerksundStenslandImpliedVolFunction().computeValues(derivative, market, inputs, desiredValues, targetSpec,
+          resultProperties);
+      final ArrayList<ComputedValue> nameList = new ArrayList<>(obj);
+      final ComputedValue value = nameList.get(0);
+      final Double impliedVol = (Double) value.getValue();
       greeks = EqyOptBjerksundStenslandGreekCalculator.getInstance().getGreeksDirectEquityOption(option, market, impliedVol);
     } else {
       greeks = derivative.accept(EqyOptBjerksundStenslandGreekCalculator.getInstance(), market);
@@ -85,7 +87,8 @@ public class ListedEquityOptionBjerksundStenslandGreeksFunction extends ListedEq
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> resultsWithCcy = super.getResults(context, target, inputs);
     return getResultsWithoutCurrency(resultsWithCcy);
   }

@@ -80,7 +80,8 @@ public class CreditDefaultSwapSecurityConverterDeprecated extends FinancialSecur
     final boolean protectionStart = security.isProtectionStart();
     final StubType stubType = security.getStubType().toAnalyticsType();
     final double coupon = security.getCoupon();
-    return new LegacyVanillaCreditDefaultSwapDefinition(buySellProtection, convert(DUMMY_OBLIGOR_A), convert(DUMMY_OBLIGOR_B), convert(DUMMY_OBLIGOR_C), currency,
+    return new LegacyVanillaCreditDefaultSwapDefinition(buySellProtection, convert(DUMMY_OBLIGOR_A), convert(DUMMY_OBLIGOR_B), convert(DUMMY_OBLIGOR_C),
+        currency,
         debtSeniority, restructuringClause, calendar, startDate, effectiveDate, maturityDate, stubType,
         couponFrequency, dayCount, businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate,
         amount, recoveryRate, includeAccruedPremium, protectionStart, coupon);
@@ -111,7 +112,8 @@ public class CreditDefaultSwapSecurityConverterDeprecated extends FinancialSecur
     final boolean protectionStart = security.isProtectionStart();
     final StubType stubType = security.getStubType().toAnalyticsType();
     final double parSpread = security.getParSpread();
-    return new LegacyVanillaCreditDefaultSwapDefinition(buySellProtection, convert(DUMMY_OBLIGOR_A), convert(DUMMY_OBLIGOR_B), convert(DUMMY_OBLIGOR_C), currency,
+    return new LegacyVanillaCreditDefaultSwapDefinition(buySellProtection, convert(DUMMY_OBLIGOR_A), convert(DUMMY_OBLIGOR_B), convert(DUMMY_OBLIGOR_C),
+        currency,
         debtSeniority, restructuringClause, calendar, startDate, effectiveDate, maturityDate, stubType,
         couponFrequency, dayCount, businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate,
         amount, recoveryRate, includeAccruedPremium, protectionStart, parSpread);
@@ -126,7 +128,5 @@ public class CreditDefaultSwapSecurityConverterDeprecated extends FinancialSecur
     }
     throw new OpenGammaRuntimeException("Can only handle PeriodFrequency and SimpleFrequency");
   }
-
-
 
 }

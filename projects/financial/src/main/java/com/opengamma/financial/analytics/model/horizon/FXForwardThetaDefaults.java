@@ -18,8 +18,7 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Sets the default number of days to move forward when calculating theta for
- * FX forwards and non-deliverable FX forwards.
+ * Sets the default number of days to move forward when calculating theta for FX forwards and non-deliverable FX forwards.
  */
 public class FXForwardThetaDefaults extends DefaultPropertyFunction {
   /** The priority */
@@ -28,8 +27,10 @@ public class FXForwardThetaDefaults extends DefaultPropertyFunction {
   private final String _defaultNumberOfDays;
 
   /**
-   * @param priority The priority
-   * @param defaultNumberOfDays The default number of days to move forward, not null
+   * @param priority
+   *          The priority
+   * @param defaultNumberOfDays
+   *          The default number of days to move forward, not null
    */
   public FXForwardThetaDefaults(final String priority, final String defaultNumberOfDays) {
     super(FinancialSecurityTypes.FX_FORWARD_SECURITY.or(FinancialSecurityTypes.NON_DELIVERABLE_FX_FORWARD_SECURITY), true);
@@ -44,7 +45,8 @@ public class FXForwardThetaDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ThetaPropertyNamesAndValues.PROPERTY_DAYS_TO_MOVE_FORWARD.equals(propertyName)) {
       return Collections.singleton(_defaultNumberOfDays);
     }

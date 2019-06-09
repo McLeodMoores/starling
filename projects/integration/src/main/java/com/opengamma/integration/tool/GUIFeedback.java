@@ -28,8 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Helper class for offering visual feedback while a script runs. Most scripts will be scheduled tasks that will write details to the console or a log and not require this. Some are intended to be
- * launched from a desktop environment (for example a link on the Windows Start Menu) which require a more sophisticated feedback mechanism.
+ * Helper class for offering visual feedback while a script runs. Most scripts will be scheduled tasks that will write details to the console or a log and not
+ * require this. Some are intended to be launched from a desktop environment (for example a link on the Windows Start Menu) which require a more sophisticated
+ * feedback mechanism.
  */
 public class GUIFeedback implements AutoCloseable {
 
@@ -228,10 +229,11 @@ public class GUIFeedback implements AutoCloseable {
   }
 
   /**
-   * Reports an informational message to the user about what is going on. Ideally, a new message should appear at least every 15 seconds (unless the progress bar is used) but no more often than every
-   * two seconds.
+   * Reports an informational message to the user about what is going on. Ideally, a new message should appear at least every 15 seconds (unless the progress
+   * bar is used) but no more often than every two seconds.
    *
-   * @param message the message to write, not null
+   * @param message
+   *          the message to write, not null
    */
   public static void say(final String message) {
     LOGGER.info("{}", message);
@@ -245,9 +247,11 @@ public class GUIFeedback implements AutoCloseable {
   }
 
   /**
-   * Reports a message to the user which will require acknowledgement. This should only happen as part of task completion (see {@link #done}) or in the case of an error.
+   * Reports a message to the user which will require acknowledgement. This should only happen as part of task completion (see {@link #done}) or in the case of
+   * an error.
    *
-   * @param message the message to write, not null
+   * @param message
+   *          the message to write, not null
    */
   public static void shout(final String message) {
     LOGGER.error("{}", message);
@@ -263,7 +267,8 @@ public class GUIFeedback implements AutoCloseable {
   /**
    * Reports an increase in the amount of work required.
    *
-   * @param count an arbitrary number of work units
+   * @param count
+   *          an arbitrary number of work units
    */
   public void workRequired(final int count) {
     if (ENABLED) {
@@ -281,7 +286,8 @@ public class GUIFeedback implements AutoCloseable {
   /**
    * Reports completion of an amount of work.
    *
-   * @param count the amount of arbitrary work units completed
+   * @param count
+   *          the amount of arbitrary work units completed
    */
   public void workCompleted(int count) {
     if (ENABLED) {
@@ -301,10 +307,11 @@ public class GUIFeedback implements AutoCloseable {
   }
 
   /**
-   * Reports completion of this feedback instance. This is the equivalent of calling {@link #close} but will display a message at the same time. If this is the primary instance the message will
-   * require acknowledgement. If this is a nested instance, the message is just displayed and this method returns.
+   * Reports completion of this feedback instance. This is the equivalent of calling {@link #close} but will display a message at the same time. If this is the
+   * primary instance the message will require acknowledgement. If this is a nested instance, the message is just displayed and this method returns.
    *
-   * @param message the message to display, not null
+   * @param message
+   *          the message to display, not null
    */
   public void done(final String message) {
     LOGGER.info("{}", message);

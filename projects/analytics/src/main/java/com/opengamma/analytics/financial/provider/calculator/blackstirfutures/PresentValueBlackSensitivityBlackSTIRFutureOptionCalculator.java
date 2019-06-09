@@ -14,7 +14,8 @@ import com.opengamma.analytics.util.amount.SurfaceValue;
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, SurfaceValue> {
+public final class PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator
+extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, SurfaceValue> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator e
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator getInstance() {
@@ -38,12 +40,14 @@ public final class PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator e
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionBlackSmileMethod METHOD_STIRFUT_MARGIN = InterestRateFutureOptionMarginTransactionBlackSmileMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSmileMethod METHOD_STIRFUT_MARGIN =
+      InterestRateFutureOptionMarginTransactionBlackSmileMethod.getInstance();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public SurfaceValue visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final BlackSTIRFuturesProviderInterface black) {
+  public SurfaceValue visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
     return METHOD_STIRFUT_MARGIN.presentValueBlackSensitivity(futures, black);
   }
 }

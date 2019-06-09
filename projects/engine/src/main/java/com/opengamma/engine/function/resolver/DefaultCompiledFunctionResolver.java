@@ -282,7 +282,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES =
+      new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
     public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
       if (a instanceof ChainedRuleBundle) {
@@ -351,7 +352,9 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     addRules(resolutionRules);
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> COMBINE_CHAIN_RULE_BUNDLE = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>
+  COMBINE_CHAIN_RULE_BUNDLE =
+  new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
     public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
       if (!(a instanceof ChainedRuleBundle)) {
@@ -362,7 +365,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     }
   };
 
-  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE = new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
+  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE =
+      new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
 
     @Override
     public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final DefaultCompiledFunctionResolver self) {

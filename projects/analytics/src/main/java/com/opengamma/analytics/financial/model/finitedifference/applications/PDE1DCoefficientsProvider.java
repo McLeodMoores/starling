@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -20,7 +20,7 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * 
+ *
  */
 public class PDE1DCoefficientsProvider {
 
@@ -33,12 +33,15 @@ public class PDE1DCoefficientsProvider {
   // ******************************************************************************************************************************
 
   /**
-   * Sets up a standard Black-Scholes PDE
-   *  $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2 s^2}{2} \frac{\partial^2 V}{\partial s^2} -(r-y)s \frac{\partial V}{\partial s} + rV = 0$$
-   *  where the 'time' term $\tau$ is time to maturity
-   * @param rate The rate, $r$
-   * @param yield The yield $y$ <b>Note</b> this is NOT the cost-of-carry $b$, they are related by $b=r-y$
-   * @param vol The volatility
+   * Sets up a standard Black-Scholes PDE $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2 s^2}{2} \frac{\partial^2 V}{\partial s^2} -(r-y)s \frac{\partial
+   * V}{\partial s} + rV = 0$$ where the 'time' term $\tau$ is time to maturity
+   * 
+   * @param rate
+   *          The rate, $r$
+   * @param yield
+   *          The yield $y$ <b>Note</b> this is NOT the cost-of-carry $b$, they are related by $b=r-y$
+   * @param vol
+   *          The volatility
    * @return a ConvectionDiffusionPDE1DStandardCofficients
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getBlackScholes(final double rate, final double yield, final double vol) {
@@ -62,19 +65,24 @@ public class PDE1DCoefficientsProvider {
       }
     };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), ConstantDoublesSurface.from(rate));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        ConstantDoublesSurface.from(rate));
   }
 
   /**
-   * Sets up a  Black-Scholes PDE with term structure of rates, yield and volatility
-   *  $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2 s^2}{2} \frac{\partial^2 V}{\partial s^2} -(r-y)s \frac{\partial V}{\partial s} + rV = 0$$
-   *  where the 'time' term $\tau$ is time to maturity
-   * @param rate The rate, $r$
-   * @param yield The yield (or cost-of-carry), $y$
-   * @param vol The volatility
+   * Sets up a Black-Scholes PDE with term structure of rates, yield and volatility $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2 s^2}{2} \frac{\partial^2
+   * V}{\partial s^2} -(r-y)s \frac{\partial V}{\partial s} + rV = 0$$ where the 'time' term $\tau$ is time to maturity
+   * 
+   * @param rate
+   *          The rate, $r$
+   * @param yield
+   *          The yield (or cost-of-carry), $y$
+   * @param vol
+   *          The volatility
    * @return a ConvectionDiffusionPDE1DStandardCofficients
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getBlackScholes(final Curve<Double, Double> rate, final Curve<Double, Double> yield, final Curve<Double, Double> vol) {
+  public ConvectionDiffusionPDE1DStandardCoefficients getBlackScholes(final Curve<Double, Double> rate, final Curve<Double, Double> yield,
+      final Curve<Double, Double> vol) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
       @Override
@@ -106,15 +114,20 @@ public class PDE1DCoefficientsProvider {
       }
     };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c));
   }
 
   /**
-   * Set up a Black-Scholes PDE where the space variable is the log of the spot $x=\ln(s)$
-   * $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2}{2} \frac{\partial^2 V}{\partial x^2} -(\frac{\sigma^2}{2}+r-y) \frac{\partial V}{\partial x} + rV = 0$$
-   * @param rate The rate, $r$
-   * @param yield The yield (or cost-of-carry), $y$
-   * @param vol  The volatility
+   * Set up a Black-Scholes PDE where the space variable is the log of the spot $x=\ln(s)$ $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2}{2}
+   * \frac{\partial^2 V}{\partial x^2} -(\frac{\sigma^2}{2}+r-y) \frac{\partial V}{\partial x} + rV = 0$$
+   * 
+   * @param rate
+   *          The rate, $r$
+   * @param yield
+   *          The yield (or cost-of-carry), $y$
+   * @param vol
+   *          The volatility
    * @return a ConvectionDiffusionPDE1DStandardCofficients
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getLogBlackScholes(final double rate, final double yield, final double vol) {
@@ -126,13 +139,16 @@ public class PDE1DCoefficientsProvider {
   }
 
   /**
-   * This models the CEV process - the forward follows the SDE $df = \sigma f^\beta dW$ where $f(t,T) = \mathbb{E^T}[s_T|\mathcal{F}_t]$ and
-   * is a Martingale. The corresponding PDE for the option price is
-   * $$\frac{\partial V}{\partial \tau} - \frac{(\sigma^*)^2 f^{2\beta}}{2} \frac{\partial^2 V}{\partial f^2} + rV = 0$$
-   * The term $r$ is yield to maturity - it can be set to zero and a discount factor applied to the option price instead.
-   * @param zeroRate The zero rate
-   * @param beta The beta
-   * @param vol The volatility
+   * This models the CEV process - the forward follows the SDE $df = \sigma f^\beta dW$ where $f(t,T) = \mathbb{E^T}[s_T|\mathcal{F}_t]$ and is a Martingale.
+   * The corresponding PDE for the option price is $$\frac{\partial V}{\partial \tau} - \frac{(\sigma^*)^2 f^{2\beta}}{2} \frac{\partial^2 V}{\partial f^2} + rV
+   * = 0$$ The term $r$ is yield to maturity - it can be set to zero and a discount factor applied to the option price instead.
+   * 
+   * @param zeroRate
+   *          The zero rate
+   * @param beta
+   *          The beta
+   * @param vol
+   *          The volatility
    * @return A ConvectionDiffusionPDE1DStandardCofficients
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getCEV(final double zeroRate, final double beta, final double vol) {
@@ -152,19 +168,25 @@ public class PDE1DCoefficientsProvider {
   }
 
   /**
-   * Classic (i.e. formulated in terms of constant instantaneous short rates) backwards PDE setup for option price under
-   * a local volatility. The state variables are time-to-maturity and (spot) value of the underlying<p>
-   * <b>Note</b> The local volatility is a function of calendar time, t, and spot, but since the time variable in this PDE is
-   * $\tau = T-t$ where $T$ is the expiry, we must specify $T$ is get the correct local volatility at a given $\tau$.
-   * @param rate The risk free rate (domestic risk free rate in FX case)
-   * @param yield The dividend yield (for equity) or foreign risk free (for FX)
-   * @param maturity the expiry (time-to-maturity)
-   * @param localVol A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and
-   * the value of the underlying at that time
-   * @return The ConvectionDiffusionPDE1DStandardCofficients  to run through a PDE solver that will give the time-zero option price as a
-   *  function of the time-zero value of the underlying
+   * Classic (i.e. formulated in terms of constant instantaneous short rates) backwards PDE setup for option price under a local volatility. The state variables
+   * are time-to-maturity and (spot) value of the underlying
+   * <p>
+   * <b>Note</b> The local volatility is a function of calendar time, t, and spot, but since the time variable in this PDE is $\tau = T-t$ where $T$ is the
+   * expiry, we must specify $T$ is get the correct local volatility at a given $\tau$.
+   * 
+   * @param rate
+   *          The risk free rate (domestic risk free rate in FX case)
+   * @param yield
+   *          The dividend yield (for equity) or foreign risk free (for FX)
+   * @param maturity
+   *          the expiry (time-to-maturity)
+   * @param localVol
+   *          A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and the value of the underlying at that time
+   * @return The ConvectionDiffusionPDE1DStandardCofficients to run through a PDE solver that will give the time-zero option price as a function of the
+   *         time-zero value of the underlying
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getBackwardsLocalVol(final double rate, final double yield, final double maturity, final LocalVolatilitySurfaceStrike localVol) {
+  public ConvectionDiffusionPDE1DStandardCoefficients getBackwardsLocalVol(final double rate, final double yield, final double maturity,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
       @Override
@@ -188,26 +210,29 @@ public class PDE1DCoefficientsProvider {
       }
     };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), ConstantDoublesSurface.from(rate));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        ConstantDoublesSurface.from(rate));
   }
 
   /**
-   * Backwards PDE setup for option price under a local volatility. The state variables are time-to-maturity and
-   * forward value of the underlying. <b>Note</b> the option price will be the forward (non-discounted) price. The PDE is
-   * $$
-   * \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,f_{\tau}\frac{f(0,t)}{f(0,T)}\right)^2f(t,T)^2\frac{\partial^2 V}{\partial f_{\tau}^2}=0\\
-   * \text{where} \quad f_{\tau} \equiv f(T-\tau,T)
-   * $$
-   * @param forwardCurve the time-zero forward curve, F(0,T), for the underlying
-   * @param maturity the time-to-maturity
-   * @param localVol A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and
-   * the value of the underlying at that time<p>
-   * <b> Note </b> Even though the PDE is expressed in terms of the forward rate, the local volatility MUST be specified in terms of
-   * the spot, hence the term $f_{\tau}\frac{f(0,t)}{f(0,T)} = s_{tau}$ in the local volatility arguments
-   * @return The data to run through a PDE solver that will give the time-zero forward option price as a function of the time-zero
-   * value of the underlying
+   * Backwards PDE setup for option price under a local volatility. The state variables are time-to-maturity and forward value of the underlying. <b>Note</b>
+   * the option price will be the forward (non-discounted) price. The PDE is $$ \frac{\partial V}{\partial \tau} -
+   * \frac{1}{2}\sigma\left(t,f_{\tau}\frac{f(0,t)}{f(0,T)}\right)^2f(t,T)^2\frac{\partial^2 V}{\partial f_{\tau}^2}=0\\ \text{where} \quad f_{\tau} \equiv
+   * f(T-\tau,T) $$
+   * 
+   * @param forwardCurve
+   *          the time-zero forward curve, F(0,T), for the underlying
+   * @param maturity
+   *          the time-to-maturity
+   * @param localVol
+   *          A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and the value of the underlying at that time
+   *          <p>
+   *          <b> Note </b> Even though the PDE is expressed in terms of the forward rate, the local volatility MUST be specified in terms of the spot, hence
+   *          the term $f_{\tau}\frac{f(0,t)}{f(0,T)} = s_{tau}$ in the local volatility arguments
+   * @return The data to run through a PDE solver that will give the time-zero forward option price as a function of the time-zero value of the underlying
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getBackwardsLocalVol(final ForwardCurve forwardCurve, final double maturity, final LocalVolatilitySurfaceStrike localVol) {
+  public ConvectionDiffusionPDE1DStandardCoefficients getBackwardsLocalVol(final ForwardCurve forwardCurve, final double maturity,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final double fT = forwardCurve.getForward(maturity);
 
@@ -229,17 +254,20 @@ public class PDE1DCoefficientsProvider {
   }
 
   /**
-   * Backwards PDE setup for option price under a local volatility. The state variables are time-to-maturity and
-   * value of the underlying. The PDE is
-   * @param instRiskFreeRate the instantaneous risk free rate, r_t
-   * @param instCostOfCarry the instantaneous cost-of-carry, b_t = r_t - q_t, where q_t is the (instantaneous) yield
-   * @param maturity the time-to-maturity
-   * @param localVol A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and
-   * the value of the underlying at that time
-   * @return The data to run through a PDE solver that will give the time-zero option price as a function of the time-zero
-   * value of the underlying
+   * Backwards PDE setup for option price under a local volatility. The state variables are time-to-maturity and value of the underlying. The PDE is
+   * 
+   * @param instRiskFreeRate
+   *          the instantaneous risk free rate, r_t
+   * @param instCostOfCarry
+   *          the instantaneous cost-of-carry, b_t = r_t - q_t, where q_t is the (instantaneous) yield
+   * @param maturity
+   *          the time-to-maturity
+   * @param localVol
+   *          A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and the value of the underlying at that time
+   * @return The data to run through a PDE solver that will give the time-zero option price as a function of the time-zero value of the underlying
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getBackwardsLocalVol(final Curve<Double, Double> instRiskFreeRate, final Curve<Double, Double> instCostOfCarry, final double maturity,
+  public ConvectionDiffusionPDE1DStandardCoefficients getBackwardsLocalVol(final Curve<Double, Double> instRiskFreeRate,
+      final Curve<Double, Double> instCostOfCarry, final double maturity,
       final LocalVolatilitySurfaceStrike localVol) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
@@ -280,17 +308,16 @@ public class PDE1DCoefficientsProvider {
   }
 
   /**
-   * Backwards PDE setup for option price under a local volatility parameterised by moneyness. The state variables are time-to-maturity and
-   * forward value of the underlying. <b>Note</b> the option price will be the forward (non-discounted) price. The PDE is
-   * $$
-   * \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,\frac{f_{\tau}}{f(0,T)}\right)^2f(t,T)^2\frac{\partial^2 V}{\partial f_{\tau}^2}=0\\
-   * \text{where} \quad f_{\tau} \equiv f(T-\tau,T)
-   * $$
-   * @param maturity the time-to-maturity
-   * @param localVol A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and
-   * the moneyness at that time
-   * @return The data to run through a PDE solver that will give the time-zero forward option price as a function of the time-zero
-   * value of the underlying
+   * Backwards PDE setup for option price under a local volatility parameterised by moneyness. The state variables are time-to-maturity and forward value of the
+   * underlying. <b>Note</b> the option price will be the forward (non-discounted) price. The PDE is $$ \frac{\partial V}{\partial \tau} -
+   * \frac{1}{2}\sigma\left(t,\frac{f_{\tau}}{f(0,T)}\right)^2f(t,T)^2\frac{\partial^2 V}{\partial f_{\tau}^2}=0\\ \text{where} \quad f_{\tau} \equiv
+   * f(T-\tau,T) $$
+   * 
+   * @param maturity
+   *          the time-to-maturity
+   * @param localVol
+   *          A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and the moneyness at that time
+   * @return The data to run through a PDE solver that will give the time-zero forward option price as a function of the time-zero value of the underlying
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getBackwardsLocalVol(final double maturity, final LocalVolatilitySurfaceMoneyness localVol) {
 
@@ -314,21 +341,24 @@ public class PDE1DCoefficientsProvider {
   }
 
   /**
-   * Backwards PDE setup for option price under a local volatility parameterised by spot. The state variables are time-to-maturity, $\tau$, and
-   * log-spot , $x = \log(s)$. <b>Note</b> the option price will be the forward (non-discounted) price. <P>The PDE is
-   * $$
-   * \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(T-\tau,e^x\right)^2\frac{\partial^2 V}{\partial x^2} +
-   * \left(\frac{1}{2}\sigma\left(T-\tau,e^x\right)^2 -r + y \right)\frac{\partial V}{\partial x} + rV=0\\
-   * \text{where} \quad x \equiv \log S
-   * $$
-   * @param rate The risk free rate (domestic risk free rate in FX case)
-   * @param yield The dividend yield (for equity) or foreign risk free (for FX)
-   * @param maturity the time-to-maturity
-   * @param localVol A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and spot
-   * @return The data to run through a PDE solver that will give the time-zero option price as a function of the time-zero
-   * value of the log-spot
+   * Backwards PDE setup for option price under a local volatility parameterised by spot. The state variables are time-to-maturity, $\tau$, and log-spot , $x =
+   * \log(s)$. <b>Note</b> the option price will be the forward (non-discounted) price.
+   * <P>
+   * The PDE is $$ \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(T-\tau,e^x\right)^2\frac{\partial^2 V}{\partial x^2} +
+   * \left(\frac{1}{2}\sigma\left(T-\tau,e^x\right)^2 -r + y \right)\frac{\partial V}{\partial x} + rV=0\\ \text{where} \quad x \equiv \log S $$
+   * 
+   * @param rate
+   *          The risk free rate (domestic risk free rate in FX case)
+   * @param yield
+   *          The dividend yield (for equity) or foreign risk free (for FX)
+   * @param maturity
+   *          the time-to-maturity
+   * @param localVol
+   *          A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and spot
+   * @return The data to run through a PDE solver that will give the time-zero option price as a function of the time-zero value of the log-spot
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getLogBackwardsLocalVol(final double rate, final double yield, final double maturity, final LocalVolatilitySurfaceStrike localVol) {
+  public ConvectionDiffusionPDE1DStandardCoefficients getLogBackwardsLocalVol(final double rate, final double yield, final double maturity,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
       @Override
@@ -357,21 +387,23 @@ public class PDE1DCoefficientsProvider {
       }
     };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), ConstantDoublesSurface.from(rate));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        ConstantDoublesSurface.from(rate));
   }
 
   /**
-   * Backwards PDE setup for option price under a local volatility parameterised by moneyness. The state variables are time-to-maturity, $\tau$, and
-   * log-forward value of the underlying, $x$. <b>Note</b> the option price will be the forward (non-discounted) price. <P>The PDE is
-   * $$
-   * \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,\frac{e^x}{f(0,T)}\right)^2\frac{\partial^2 V}{\partial x^2} +
-   * \frac{1}{2}\sigma\left(t,\frac{e^x}{f(0,T)}\right)^2\frac{\partial V}{\partial x}=0\\
-   * \text{where} \quad x \equiv \log f(T-\tau,T)
-   * $$
-   * @param maturity the time-to-maturity
-   * @param localVol A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and moneyness
-   * @return The data to run through a PDE solver that will give the time-zero <b>forward</b> option price as a function of the time-zero
-   * value of the log-forward
+   * Backwards PDE setup for option price under a local volatility parameterised by moneyness. The state variables are time-to-maturity, $\tau$, and log-forward
+   * value of the underlying, $x$. <b>Note</b> the option price will be the forward (non-discounted) price.
+   * <P>
+   * The PDE is $$ \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,\frac{e^x}{f(0,T)}\right)^2\frac{\partial^2 V}{\partial x^2} +
+   * \frac{1}{2}\sigma\left(t,\frac{e^x}{f(0,T)}\right)^2\frac{\partial V}{\partial x}=0\\ \text{where} \quad x \equiv \log f(T-\tau,T) $$
+   * 
+   * @param maturity
+   *          the time-to-maturity
+   * @param localVol
+   *          A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and moneyness
+   * @return The data to run through a PDE solver that will give the time-zero <b>forward</b> option price as a function of the time-zero value of the
+   *         log-forward
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getLogBackwardsLocalVol(final double maturity, final LocalVolatilitySurfaceMoneyness localVol) {
 
@@ -407,20 +439,23 @@ public class PDE1DCoefficientsProvider {
   }
 
   /**
-   * Backwards PDE setup for option price under a local volatility parameterised by spot. The state variables are time-to-maturity, $\tau$, and
-   * log-forward value of the underlying, $x$. <b>Note</b> the option price will be the forward (non-discounted) price. <P>The PDE is
-   * $$
-   * \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,\frac{e^xf(0,T-\tau)}{f(0,T)}\right)^2\frac{\partial^2 V}{\partial x^2} +
-   * \frac{1}{2}\sigma\left(t,\frac{e^xf(0,T-\tau)}{f(0,T)}\right)^2\frac{\partial V}{\partial x}=0\\
-   * \text{where} \quad x \equiv \log f(T-\tau,T)
-   * $$
-   * @param forwardCurve Forward Curve
-   * @param maturity the time-to-maturity
-   * @param localVol A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and spot
-   * @return The data to run through a PDE solver that will give the time-zero <b>forward</b> option price as a function of the time-zero
-   * value of the log of the forward
+   * Backwards PDE setup for option price under a local volatility parameterised by spot. The state variables are time-to-maturity, $\tau$, and log-forward
+   * value of the underlying, $x$. <b>Note</b> the option price will be the forward (non-discounted) price.
+   * <P>
+   * The PDE is $$ \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,\frac{e^xf(0,T-\tau)}{f(0,T)}\right)^2\frac{\partial^2 V}{\partial x^2} +
+   * \frac{1}{2}\sigma\left(t,\frac{e^xf(0,T-\tau)}{f(0,T)}\right)^2\frac{\partial V}{\partial x}=0\\ \text{where} \quad x \equiv \log f(T-\tau,T) $$
+   * 
+   * @param forwardCurve
+   *          Forward Curve
+   * @param maturity
+   *          the time-to-maturity
+   * @param localVol
+   *          A local volatility surface - gives the instantaneous (log-normal) volatility as a function of time and spot
+   * @return The data to run through a PDE solver that will give the time-zero <b>forward</b> option price as a function of the time-zero value of the log of
+   *         the forward
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getLogBackwardsLocalVol(final ForwardCurve forwardCurve, final double maturity, final LocalVolatilitySurfaceStrike localVol) {
+  public ConvectionDiffusionPDE1DStandardCoefficients getLogBackwardsLocalVol(final ForwardCurve forwardCurve, final double maturity,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final double f0T = forwardCurve.getForward(maturity);
 
@@ -463,14 +498,16 @@ public class PDE1DCoefficientsProvider {
   // ******************************************************************************************************************************
 
   /**
-   * Classic (i.e. formulated in terms of constant instantaneous short rates) forward PDE setup for option price under a BlackSholes framework.
-   * The state variables are time-to-maturity, $T$ and strike, $k$. The PDE is
-   * $$
-   * \frac{\partial V(T,k)}{\partial T} - \frac{1}{2}\sigma^2 k^2 \frac{\partial^2 V(T,k)}{\partial k^2} + k(r-y) \frac{\partial V(T,k)}{\partial k} +yV(T,k)=0
-   * $$
-   * @param rate $r$ The risk free rate (domestic risk free rate in FX case)
-   * @param yield $y$ The dividend yield (for equity) or foreign risk free (for FX)
-   * @param vol $\sigma$ The volatility
+   * Classic (i.e. formulated in terms of constant instantaneous short rates) forward PDE setup for option price under a BlackSholes framework. The state
+   * variables are time-to-maturity, $T$ and strike, $k$. The PDE is $$ \frac{\partial V(T,k)}{\partial T} - \frac{1}{2}\sigma^2 k^2 \frac{\partial^2
+   * V(T,k)}{\partial k^2} + k(r-y) \frac{\partial V(T,k)}{\partial k} +yV(T,k)=0 $$
+   * 
+   * @param rate
+   *          $r$ The risk free rate (domestic risk free rate in FX case)
+   * @param yield
+   *          $y$ The dividend yield (for equity) or foreign risk free (for FX)
+   * @param vol
+   *          $\sigma$ The volatility
    * @return The data to run through a PDE solver that will give the option price as a function of strike and expiry
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getForwardBlackSholes(final double rate, final double yield, final double vol) {
@@ -494,21 +531,25 @@ public class PDE1DCoefficientsProvider {
       }
     };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), ConstantDoublesSurface.from(yield));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        ConstantDoublesSurface.from(yield));
   }
 
   /**
-   * Classic (i.e. formulated in terms of constant instantaneous short rates) forwards  PDE setup for option price under a local volatility.
-   * The state variables are time-to-maturity, $T$ and strike, $k$. The PDE is
-   * $$
-   * \frac{\partial V(T,k)}{\partial T} - \frac{1}{2}\sigma(T,k)^2 k^2 \frac{\partial^2 V(T,k)}{\partial k^2} + k(r-y) \frac{\partial V(T,k)}{\partial k} +yV(T,k)=0
-   * $$
-   * @param rate $r$ The risk free rate (domestic risk free rate in FX case)
-   * @param yield $y$ The dividend yield (for equity) or foreign risk free (for FX)
-   * @param localVol $\sigma(T,k)$ The local volatility
+   * Classic (i.e. formulated in terms of constant instantaneous short rates) forwards PDE setup for option price under a local volatility. The state variables
+   * are time-to-maturity, $T$ and strike, $k$. The PDE is $$ \frac{\partial V(T,k)}{\partial T} - \frac{1}{2}\sigma(T,k)^2 k^2 \frac{\partial^2
+   * V(T,k)}{\partial k^2} + k(r-y) \frac{\partial V(T,k)}{\partial k} +yV(T,k)=0 $$
+   * 
+   * @param rate
+   *          $r$ The risk free rate (domestic risk free rate in FX case)
+   * @param yield
+   *          $y$ The dividend yield (for equity) or foreign risk free (for FX)
+   * @param localVol
+   *          $\sigma(T,k)$ The local volatility
    * @return The data to run through a PDE solver that will give the option price as a function of strike and expiry
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getForwardLocalVolatility(final double rate, final double yield, final LocalVolatilitySurfaceStrike localVol) {
+  public ConvectionDiffusionPDE1DStandardCoefficients getForwardLocalVolatility(final double rate, final double yield,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
       @Override
@@ -530,20 +571,19 @@ public class PDE1DCoefficientsProvider {
       }
     };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), ConstantDoublesSurface.from(yield));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        ConstantDoublesSurface.from(yield));
   }
 
   /**
-   * Set up for running forward PDE with local volatility parameterised by moneyness (i.e. m = strike/forward). The option
-   * prices will be in a normalised form, and will have to be multiplied by the discount factor AND the forward to recover
-   * the actual option price. The PDE is
-   * $$
-   * \frac{\partial V(T,m)}{\partial T} - \frac{1}{2}\sigma\left(T,m\right)^2 m^2 \frac{\partial^2 V(T,m)}{\partial m^2}=0\\
-   * \text{where}\quad m \equiv \frac{k}{f(0,T)}
-   * $$
-   * @param localVol A local volatility surface parametrised by expiry and moneyness (=strike/forward)
-   * @return The data to run through a PDE solver that will give the modified option price (the true option price is this
-   * multiplied by the discount factor AND the forward) as a function of expiry and <b>moneyness</b>
+   * Set up for running forward PDE with local volatility parameterised by moneyness (i.e. m = strike/forward). The option prices will be in a normalised form,
+   * and will have to be multiplied by the discount factor AND the forward to recover the actual option price. The PDE is $$ \frac{\partial V(T,m)}{\partial T}
+   * - \frac{1}{2}\sigma\left(T,m\right)^2 m^2 \frac{\partial^2 V(T,m)}{\partial m^2}=0\\ \text{where}\quad m \equiv \frac{k}{f(0,T)} $$
+   * 
+   * @param localVol
+   *          A local volatility surface parametrised by expiry and moneyness (=strike/forward)
+   * @return The data to run through a PDE solver that will give the modified option price (the true option price is this multiplied by the discount factor AND
+   *         the forward) as a function of expiry and <b>moneyness</b>
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getForwardLocalVol(final LocalVolatilitySurfaceMoneyness localVol) {
 
@@ -564,18 +604,20 @@ public class PDE1DCoefficientsProvider {
   }
 
   /**
-   * Set up for running forward PDE with local volatility parameterised by strike. The option
-   * prices will be in a normalised form, and will have to be multiplied by the discount factor AND the forward to recover
-   * the actual option price. <P> The PDE is
-   * $$
-   * \frac{\partial V(T,m)}{\partial T} - \frac{1}{2}\sigma\left(T,mf(0,T)\right)^2 m^2 \frac{\partial^2 V(T,m)}{\partial m^2}=0\\
-   * \text{where}\quad m \equiv \frac{k}{f(0,T)}
-   * $$ <p>
+   * Set up for running forward PDE with local volatility parameterised by strike. The option prices will be in a normalised form, and will have to be
+   * multiplied by the discount factor AND the forward to recover the actual option price.
+   * <P>
+   * The PDE is $$ \frac{\partial V(T,m)}{\partial T} - \frac{1}{2}\sigma\left(T,mf(0,T)\right)^2 m^2 \frac{\partial^2 V(T,m)}{\partial m^2}=0\\
+   * \text{where}\quad m \equiv \frac{k}{f(0,T)} $$
+   * <p>
    * <b>Note</b> The coordinates used in the PDE are expiry (T) and <b>moneyness</b> (m), hence the solution will be in these coordinates
-   * @param forwardCurve the forward curve
-   * @param localVol A local volatility surface
-   * @return The data to run through a PDE solver that will give the modified option price (the true option price is this
-   * multiplied by the discount factor AND the forward) as a function of expiry and <b>moneyness</b>
+   * 
+   * @param forwardCurve
+   *          the forward curve
+   * @param localVol
+   *          A local volatility surface
+   * @return The data to run through a PDE solver that will give the modified option price (the true option price is this multiplied by the discount factor AND
+   *         the forward) as a function of expiry and <b>moneyness</b>
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getForwardLocalVol(final ForwardCurve forwardCurve, final LocalVolatilitySurfaceStrike localVol) {
     final LocalVolatilitySurfaceMoneyness lvm = LocalVolatilitySurfaceConverter.toMoneynessSurface(localVol, forwardCurve);
@@ -587,15 +629,14 @@ public class PDE1DCoefficientsProvider {
   // ******************************************************************************************************************************
 
   /**
-   * The Fokker-Plank equation with a deterministic (time dependent) short-rate and a local volatility (i.e. a instantaneous volatility that is
-   * a function of time and spot). If the SDE for the underlying is $\frac{dS_t}{S_t}=r_t dt + \sigma(t,S_t)^2dW_t$, then the PDE for the transition
-   * density $P(t,S_t;T,S_T)$ is
-   * $$
-   *  \frac{\partial P}{\partial T} - \frac{1}{2}\frac{\partial^2[ \sigma(T,S)^2S^2P]}{\partial S^2} +
-   *   r_T \frac{\partial[ S^2 P]}{\partial S}
-   * $$
-   * @param shortRate Deterministic (time dependent) short-rate
-   * @param localVol Local Volatility
+   * The Fokker-Plank equation with a deterministic (time dependent) short-rate and a local volatility (i.e. a instantaneous volatility that is a function of
+   * time and spot). If the SDE for the underlying is $\frac{dS_t}{S_t}=r_t dt + \sigma(t,S_t)^2dW_t$, then the PDE for the transition density $P(t,S_t;T,S_T)$
+   * is $$ \frac{\partial P}{\partial T} - \frac{1}{2}\frac{\partial^2[ \sigma(T,S)^2S^2P]}{\partial S^2} + r_T \frac{\partial[ S^2 P]}{\partial S} $$
+   * 
+   * @param shortRate
+   *          Deterministic (time dependent) short-rate
+   * @param localVol
+   *          Local Volatility
    * @return Description of Fokker-Plank PDE
    */
   public ConvectionDiffusionPDE1DFullCoefficients getFokkerPlank(final Curve<Double, Double> shortRate, final LocalVolatilitySurfaceStrike localVol) {
@@ -622,21 +663,25 @@ public class PDE1DCoefficientsProvider {
       }
     };
 
-    return new ConvectionDiffusionPDE1DFullCoefficients(UNITY_SURFACE, UNITY_SURFACE, ZERO_SURFACE, FunctionalDoublesSurface.from(alpha), FunctionalDoublesSurface.from(beta));
+    return new ConvectionDiffusionPDE1DFullCoefficients(UNITY_SURFACE, UNITY_SURFACE, ZERO_SURFACE, FunctionalDoublesSurface.from(alpha),
+        FunctionalDoublesSurface.from(beta));
 
   }
 
   /**
-   * The Fokker-Plank equation with a deterministic (time dependent) short-rate and a local volatility (i.e. a instantaneous volatility that is
-   * a function of time and spot), but written in the form.<P>
-   * $$
-   * \frac{\partial P}{\partial t}+ a(t,x)\frac{\partial^2 P}{\partial x^2}+b(t,x)\frac{\partial P}{\partial x2}+c(t,x)V=0
-   * $$
-   * @param shortRate Deterministic (time dependent) short-rate
-   * @param localVol Local Volatility
+   * The Fokker-Plank equation with a deterministic (time dependent) short-rate and a local volatility (i.e. a instantaneous volatility that is a function of
+   * time and spot), but written in the form.
+   * <P>
+   * $$ \frac{\partial P}{\partial t}+ a(t,x)\frac{\partial^2 P}{\partial x^2}+b(t,x)\frac{\partial P}{\partial x2}+c(t,x)V=0 $$
+   * 
+   * @param shortRate
+   *          Deterministic (time dependent) short-rate
+   * @param localVol
+   *          Local Volatility
    * @return Description of Fokker-Plank PDE
    */
-  public ConvectionDiffusionPDE1DStandardCoefficients getFokkerPlankInStandardCoefficients(final Curve<Double, Double> shortRate, final LocalVolatilitySurfaceStrike localVol) {
+  public ConvectionDiffusionPDE1DStandardCoefficients getFokkerPlankInStandardCoefficients(final Curve<Double, Double> shortRate,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
       @Override
@@ -672,14 +717,15 @@ public class PDE1DCoefficientsProvider {
         final double lv1Div = getLocalVolFirstDiv(localVol, t, s);
         final double lv2Div = getLocalVolSecondDiv(localVol, t, s);
         final double lv = localVol.getVolatility(t, s);
-        final double temp1 = (lv + s * lv1Div);
+        final double temp1 = lv + s * lv1Div;
         final double temp2 = lv * s * (s * lv2Div + 2 * lv1Div);
 
         return shortRate.getYValue(t) - temp1 * temp1 - temp2;
       }
     };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c));
 
   }
 

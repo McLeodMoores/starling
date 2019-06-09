@@ -24,12 +24,10 @@ import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithB
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Present value calculator for interest rate instruments using Black model with
- * implied volatilities.
+ * Present value calculator for interest rate instruments using Black model with implied volatilities.
  *
  * @deprecated Use the present values calculators that reference
- *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface}
- *             e.g.
+ *             {@link com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface} e.g.
  *             {@link com.opengamma.analytics.financial.provider.calculator.blackswaption.PresentValueBlackSwaptionCalculator}
  */
 @Deprecated
@@ -60,17 +58,17 @@ public final class PresentValueBlackCalculator extends PresentValueCalculator {
   /** Cash fixed / ibor swaption calculator */
   private static final SwaptionCashFixedIborBlackMethod CASH_SWAPTION = SwaptionCashFixedIborBlackMethod.getInstance();
   /** Margined interest rate future option calculator */
-  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod
-      .getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_IR_FUTURE_OPTION =
+      InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
   /** Margined interest rate future option calculator */
-  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION = InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod
-      .getInstance();
+  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_IR_FUTURE_OPTION =
+      InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
   /** Bond future option with premium calculator */
   private static final BondFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_BOND_FUTURE_OPTION = BondFutureOptionPremiumTransactionBlackSurfaceMethod
       .getInstance();
   /** Physical fixed accrued / overnight swaption calculator */
-  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION = SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod
-      .getInstance();
+  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION =
+      SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
   /** Cash fixed accrued / overnight swaption calculator */
   private static final SwaptionCashFixedCompoundedONCompoundedBlackMethod CASH_COMPOUNDED_SWAPTION = SwaptionCashFixedCompoundedONCompoundedBlackMethod
       .getInstance();

@@ -112,7 +112,8 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
       ParSpreadInflationMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
 
   /**
-   * @param configurationName The configuration name, not null
+   * @param configurationName
+   *          The configuration name, not null
    */
   public InflationProviderDiscountingFunction(final String configurationName) {
     super(configurationName);
@@ -130,7 +131,6 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
     return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements,
         curveConstructionConfiguration, currencies);
   }
-
 
   @Override
   protected InstrumentDerivativeVisitor<InflationProviderInterface, Double> getCalculator() {
@@ -155,11 +155,16 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
     private final CurveConstructionConfiguration _curveConstructionConfiguration;
 
     /**
-     * @param earliestInvokation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvokation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
+     * @param earliestInvokation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvokation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
      */
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
         final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration) {
@@ -169,12 +174,18 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
     }
 
     /**
-     * @param earliestInvokation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvokation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
-     * @param currencies The set of currencies to which the curves produce sensitivities
+     * @param earliestInvokation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvokation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
+     * @param currencies
+     *          The set of currencies to which the curves produce sensitivities
      */
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation,
         final ZonedDateTime latestInvokation,
@@ -190,26 +201,28 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Pair<InflationProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now, final InflationDiscountBuildingRepository builder,
+    protected Pair<InflationProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now,
+        final InflationDiscountBuildingRepository builder,
         final InflationProviderInterface knownData, final FunctionExecutionContext context, final FXMatrix fx) {
       final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
       final ValueProperties curveConstructionProperties = ValueProperties.builder()
           .with(CURVE_CONSTRUCTION_CONFIG, _curveConstructionConfiguration.getName())
           .get();
-      final HistoricalTimeSeriesBundle timeSeries =
-          (HistoricalTimeSeriesBundle) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES,
+      final HistoricalTimeSeriesBundle timeSeries = (HistoricalTimeSeriesBundle) inputs
+          .getValue(new ValueRequirement(ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES,
               ComputationTargetSpecification.NULL, curveConstructionProperties));
       final int nGroups = _curveConstructionConfiguration.getCurveGroups().size();
       final MultiCurveBundle<GeneratorPriceIndexCurve>[] curveBundles = new MultiCurveBundle[nGroups];
       final LinkedHashMap<String, IndexPrice[]> inflationMap = new LinkedHashMap<>();
       // seasonal time step construction
-      final ZonedDateTime[] seasonalityDate = ScheduleCalculator.getUnadjustedDateSchedule(now.withDayOfMonth(1), now.withDayOfMonth(1).plusYears(50), Period.ofMonths(1), true, false);
+      final ZonedDateTime[] seasonalityDate = ScheduleCalculator.getUnadjustedDateSchedule(now.withDayOfMonth(1), now.withDayOfMonth(1).plusYears(50),
+          Period.ofMonths(1), true, false);
       final double[] seasonalStep = new double[seasonalityDate.length];
       for (int loopins = 0; loopins < seasonalityDate.length; loopins++) {
         seasonalStep[loopins] = TimeCalculator.getTimeBetween(now, seasonalityDate[loopins]);
       }
-      //TODO comparator to sort groups by order
+      // TODO comparator to sort groups by order
       int i = 0; // Implementation Note: loop on the groups
       for (final CurveGroupConfiguration group : _curveConstructionConfiguration.getCurveGroups()) { // Group - start
         int j = 0;
@@ -219,12 +232,12 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
           final List<IndexPrice> inflation = new ArrayList<>();
           final String curveName = entry.getKey();
           final ValueProperties properties = ValueProperties.builder().with(CURVE, curveName).get();
-          final CurveSpecification specification =
-              (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties));
-          final CurveDefinition definition =
-              (CurveDefinition) inputs.getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, properties));
-          final SnapshotDataBundle snapshot =
-              (SnapshotDataBundle) inputs.getValue(new ValueRequirement(CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties));
+          final CurveSpecification specification = (CurveSpecification) inputs
+              .getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties));
+          final CurveDefinition definition = (CurveDefinition) inputs
+              .getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, properties));
+          final SnapshotDataBundle snapshot = (SnapshotDataBundle) inputs
+              .getValue(new ValueRequirement(CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties));
           final int nNodes = specification.getNodes().size();
           final InstrumentDerivative[] derivativesForCurve = new InstrumentDerivative[nNodes];
           final double[] parameterGuessForCurves = new double[nNodes];
@@ -238,8 +251,10 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
                 snapshot, node.getIdentifier(), timeSeries, now, fx));
             // Construction of the first guess for the root finder
             final SwapFixedInflationZeroCouponDefinition swap = (SwapFixedInflationZeroCouponDefinition) definitionForNode;
-            final CouponInflationDefinition couponInflation = (CouponInflationDefinition) swap.getSecondLeg().getNthPayment(swap.getSecondLeg().getNumberOfPayments() - 1);
-            final CouponFixedCompoundingDefinition couponFix = (CouponFixedCompoundingDefinition) swap.getFirstLeg().getNthPayment(swap.getFirstLeg().getNumberOfPayments() - 1);
+            final CouponInflationDefinition couponInflation = (CouponInflationDefinition) swap.getSecondLeg()
+                .getNthPayment(swap.getSecondLeg().getNumberOfPayments() - 1);
+            final CouponFixedCompoundingDefinition couponFix = (CouponFixedCompoundingDefinition) swap.getFirstLeg()
+                .getNthPayment(swap.getFirstLeg().getNumberOfPayments() - 1);
             if (couponInflation instanceof CouponInflationZeroCouponInterpolationDefinition) {
               parameterGuessForCurves[k] = 100.0 * Math.pow(1 + marketData, couponFix.getPaymentAccrualFactors().length);
             } else {
@@ -252,12 +267,14 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
               final InflationCurveTypeConfiguration inflationConfiguration = (InflationCurveTypeConfiguration) type;
               final Security sec = securitySource.getSingle(inflationConfiguration.getPriceIndex().toBundle());
               if (sec == null) {
-                throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationConfiguration.getPriceIndex()
-                + " was null");
+                throw new OpenGammaRuntimeException(
+                    "CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationConfiguration.getPriceIndex()
+                    + " was null");
               }
               if (!(sec instanceof PriceIndex)) {
-                throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationConfiguration.getPriceIndex()
-                + " not of type PriceIndex");
+                throw new OpenGammaRuntimeException(
+                    "CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationConfiguration.getPriceIndex()
+                    + " not of type PriceIndex");
               }
               final PriceIndex indexSecurity = (PriceIndex) sec;
               inflation.add(new IndexPrice(indexSecurity.getName(), Currency.of(inflationConfiguration.getReference())));
@@ -278,7 +295,7 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
         final MultiCurveBundle<GeneratorPriceIndexCurve> groupBundle = new MultiCurveBundle<>(singleCurves);
         curveBundles[i++] = groupBundle;
       } // Group - end
-      //TODO this is only in here because the code in analytics doesn't use generics properly
+      // TODO this is only in here because the code in analytics doesn't use generics properly
       final CurveBuildingBlockBundle knownbundle = getKnownBundle(inputs);
       final Pair<InflationProviderDiscount, CurveBuildingBlockBundle> temp = builder.makeCurvesFromDerivatives(curveBundles,
           (InflationProviderDiscount) knownData, knownbundle, inflationMap, getCalculator(), getSensitivityCalculator());
@@ -289,7 +306,7 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
     @Override
     protected InflationProviderInterface getKnownData(final FunctionInputs inputs) {
       final FXMatrix fxMatrix = (FXMatrix) inputs.getValue(ValueRequirementNames.FX_MATRIX);
-      //TODO requires that the discounting curves are supplied externally
+      // TODO requires that the discounting curves are supplied externally
       InflationProviderDiscount knownData;
       if (getExogenousRequirements().isEmpty()) {
         knownData = new InflationProviderDiscount(fxMatrix);
@@ -301,7 +318,7 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
     }
 
     protected CurveBuildingBlockBundle getKnownBundle(final FunctionInputs inputs) {
-      //TODO requires that the discounting curves are supplied externally
+      // TODO requires that the discounting curves are supplied externally
       CurveBuildingBlockBundle knownBundle;
       if (getExogenousRequirements().isEmpty()) {
         knownBundle = new CurveBuildingBlockBundle();
@@ -312,7 +329,8 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       return getResults(context, target);
     }
 
@@ -342,7 +360,7 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
       final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(context);
       final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
-      return CurveNodeVisitorAdapter.<InstrumentDefinition<?>>builder()
+      return CurveNodeVisitorAdapter.<InstrumentDefinition<?>> builder()
           .cashNodeVisitor(new CashNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .fraNode(new FRANodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .fxForwardNode(new FXForwardNodeConverter(conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
@@ -350,7 +368,8 @@ MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingReposito
           .immSwapNode(new RollDateSwapNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .rateFutureNode(new RateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .swapNode(new SwapNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime, fx))
-          .zeroCouponInflationNode(new ZeroCouponInflationNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime, historicalData))
+          .zeroCouponInflationNode(new ZeroCouponInflationNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId,
+              valuationTime, historicalData))
           .create();
     }
 

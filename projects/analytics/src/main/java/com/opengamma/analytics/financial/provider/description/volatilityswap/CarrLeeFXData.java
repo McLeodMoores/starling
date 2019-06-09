@@ -23,7 +23,7 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Contains the information required to price FX volatility swaps using the Carr-Lee model.
  */
-//TODO make this a Bean when curve provider and volatility surface are beans.
+// TODO make this a Bean when curve provider and volatility surface are beans.
 public class CarrLeeFXData implements CarrLeeData<MulticurveProviderInterface, SmileDeltaTermStructureParameters> {
 
   /**
@@ -47,13 +47,17 @@ public class CarrLeeFXData implements CarrLeeData<MulticurveProviderInterface, S
   private final Pair<Currency, Currency> _currencyPair;
 
   /**
-   * Sets the realized variance to null. This constructor should not be used when attempting to
-   * price seasoned swaps.
-   * @param currencyPair The currency pair for which the data apply, not null
-   * @param volatilitySurface The volatility surface, not null
-   * @param curves The curves, not null
+   * Sets the realized variance to null. This constructor should not be used when attempting to price seasoned swaps.
+   * 
+   * @param currencyPair
+   *          The currency pair for which the data apply, not null
+   * @param volatilitySurface
+   *          The volatility surface, not null
+   * @param curves
+   *          The curves, not null
    */
-  public CarrLeeFXData(final Pair<Currency, Currency> currencyPair, final SmileDeltaTermStructureParameters volatilitySurface, final MulticurveProviderInterface curves) {
+  public CarrLeeFXData(final Pair<Currency, Currency> currencyPair, final SmileDeltaTermStructureParameters volatilitySurface,
+      final MulticurveProviderInterface curves) {
     ArgumentChecker.notNull(currencyPair, "currencyPair");
     ArgumentChecker.notNull(volatilitySurface, "volatilitySurface");
     ArgumentChecker.notNull(curves, "curves");
@@ -64,12 +68,17 @@ public class CarrLeeFXData implements CarrLeeData<MulticurveProviderInterface, S
   }
 
   /**
-   * @param currencyPair The currency pair for which the data apply, not null
-   * @param volatilitySurface The volatility surface, not null
-   * @param curves The curves, not null
-   * @param realizedVariance The realized variance, not null
+   * @param currencyPair
+   *          The currency pair for which the data apply, not null
+   * @param volatilitySurface
+   *          The volatility surface, not null
+   * @param curves
+   *          The curves, not null
+   * @param realizedVariance
+   *          The realized variance, not null
    */
-  public CarrLeeFXData(final Pair<Currency, Currency> currencyPair, final SmileDeltaTermStructureParameters volatilitySurface, final MulticurveProviderInterface curves,
+  public CarrLeeFXData(final Pair<Currency, Currency> currencyPair, final SmileDeltaTermStructureParameters volatilitySurface,
+      final MulticurveProviderInterface curves,
       final Double realizedVariance) {
     ArgumentChecker.notNull(currencyPair, "currencyPair");
     ArgumentChecker.notNull(volatilitySurface, "volatilitySurface");
@@ -114,11 +123,17 @@ public class CarrLeeFXData implements CarrLeeData<MulticurveProviderInterface, S
 
   /**
    * Returns volatility for a time, strike and forward. The volatility surface takes into account the currency order.
-   * @param ccy1 The first currency
-   * @param ccy2 The second currency
-   * @param time The time to expiry
-   * @param strike The strike
-   * @param forward The forward FX rate
+   * 
+   * @param ccy1
+   *          The first currency
+   * @param ccy2
+   *          The second currency
+   * @param time
+   *          The time to expiry
+   * @param strike
+   *          The strike
+   * @param forward
+   *          The forward FX rate
    * @return The volatility
    */
   public double getVolatility(final Currency ccy1, final Currency ccy2, final double time, final double strike, final double forward) {
@@ -132,13 +147,18 @@ public class CarrLeeFXData implements CarrLeeData<MulticurveProviderInterface, S
   }
 
   /**
-   * Returns the volatility and bucketed sensitivities for a time, strike and forward. The volatility surface takes into
-   * account the currency order.
-   * @param ccy1 The first currency
-   * @param ccy2 The second currency
-   * @param time The time to expiry
-   * @param strike The strike
-   * @param forward The forward
+   * Returns the volatility and bucketed sensitivities for a time, strike and forward. The volatility surface takes into account the currency order.
+   * 
+   * @param ccy1
+   *          The first currency
+   * @param ccy2
+   *          The second currency
+   * @param time
+   *          The time to expiry
+   * @param strike
+   *          The strike
+   * @param forward
+   *          The forward
    * @return The volatilty
    */
   public VolatilityAndBucketedSensitivities getVolatilityAndSensitivities(final Currency ccy1, final Currency ccy2, final double time,
@@ -164,6 +184,7 @@ public class CarrLeeFXData implements CarrLeeData<MulticurveProviderInterface, S
 
   /**
    * Gets the currency pair.
+   * 
    * @return the currency pair
    */
   public Pair<Currency, Currency> getCurrencyPair() {

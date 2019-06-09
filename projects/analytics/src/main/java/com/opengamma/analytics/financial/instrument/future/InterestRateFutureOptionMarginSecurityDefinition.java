@@ -38,12 +38,18 @@ public class InterestRateFutureOptionMarginSecurityDefinition extends FuturesSec
 
   /**
    * Constructor of the option future from the details.
-   * @param underlyingFuture The underlying future security.
-   * @param expirationDate The expiration date.
-   * @param strike The option strike.
-   * @param isCall The cap (true) / floor (false) flag.
+   *
+   * @param underlyingFuture
+   *          The underlying future security.
+   * @param expirationDate
+   *          The expiration date.
+   * @param strike
+   *          The option strike.
+   * @param isCall
+   *          The cap (true) / floor (false) flag.
    */
-  public InterestRateFutureOptionMarginSecurityDefinition(final InterestRateFutureSecurityDefinition underlyingFuture, final ZonedDateTime expirationDate, final double strike, final boolean isCall) {
+  public InterestRateFutureOptionMarginSecurityDefinition(final InterestRateFutureSecurityDefinition underlyingFuture, final ZonedDateTime expirationDate,
+      final double strike, final boolean isCall) {
     super(expirationDate);
     ArgumentChecker.notNull(underlyingFuture, "underlying future");
     ArgumentChecker.notNull(expirationDate, "expiration");
@@ -55,6 +61,7 @@ public class InterestRateFutureOptionMarginSecurityDefinition extends FuturesSec
 
   /**
    * Gets the underlying future security.
+   *
    * @return The underlying future security.
    */
   public InterestRateFutureSecurityDefinition getUnderlyingFuture() {
@@ -63,6 +70,7 @@ public class InterestRateFutureOptionMarginSecurityDefinition extends FuturesSec
 
   /**
    * Gets the expiration date.
+   *
    * @return The expiration date.
    */
   public ZonedDateTime getExpirationDate() {
@@ -71,6 +79,7 @@ public class InterestRateFutureOptionMarginSecurityDefinition extends FuturesSec
 
   /**
    * Gets the cap (true) / floor (false) flag.
+   *
    * @return The cap/floor flag.
    */
   public boolean isCall() {
@@ -79,6 +88,7 @@ public class InterestRateFutureOptionMarginSecurityDefinition extends FuturesSec
 
   /**
    * Gets the option strike.
+   *
    * @return The option strike.
    */
   public double getStrike() {
@@ -87,6 +97,7 @@ public class InterestRateFutureOptionMarginSecurityDefinition extends FuturesSec
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -129,7 +140,7 @@ public class InterestRateFutureOptionMarginSecurityDefinition extends FuturesSec
     result = prime * result + (_isCall ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingFuture.hashCode();
     return result;
   }

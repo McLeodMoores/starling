@@ -23,7 +23,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class PositionWeightFromNAVFunction extends AbstractFunction.NonCompiledInvoker {
   private final double _nav;
@@ -39,7 +39,8 @@ public class PositionWeightFromNAVFunction extends AbstractFunction.NonCompiledI
     final Object fairValueObj = inputs.getValue(ValueRequirementNames.FAIR_VALUE);
     if (fairValueObj != null) {
       final double fairValue = (Double) fairValueObj;
-      return Sets.newHashSet(new ComputedValue(new ValueSpecification(ValueRequirementNames.WEIGHT, target.toSpecification(), createValueProperties().get()), fairValue / _nav));
+      return Sets.newHashSet(
+          new ComputedValue(new ValueSpecification(ValueRequirementNames.WEIGHT, target.toSpecification(), createValueProperties().get()), fairValue / _nav));
     }
     return null;
   }

@@ -21,7 +21,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class InflationProviderDecoratedIssuer implements InflationProviderInterface {
 
@@ -40,11 +40,16 @@ public class InflationProviderDecoratedIssuer implements InflationProviderInterf
 
   /**
    * Constructor.
-   * @param inflationIssuerProvider The underlying inflation issuer provider on which the multi-curves provider is based, not null
-   * @param decoratedCurrency The currency for which the discounting curve will be replaced (decorated), not null
-   * @param decoratingIssuer The issuer for which the associated discounting curve will replace the currency discounting curve, not null
-    */
-  public InflationProviderDecoratedIssuer(final InflationIssuerProviderInterface inflationIssuerProvider, final Currency decoratedCurrency, final LegalEntity decoratingIssuer) {
+   *
+   * @param inflationIssuerProvider
+   *          The underlying inflation issuer provider on which the multi-curves provider is based, not null
+   * @param decoratedCurrency
+   *          The currency for which the discounting curve will be replaced (decorated), not null
+   * @param decoratingIssuer
+   *          The issuer for which the associated discounting curve will replace the currency discounting curve, not null
+   */
+  public InflationProviderDecoratedIssuer(final InflationIssuerProviderInterface inflationIssuerProvider, final Currency decoratedCurrency,
+      final LegalEntity decoratingIssuer) {
     ArgumentChecker.notNull(inflationIssuerProvider, "inflationIssuerProvider");
     ArgumentChecker.notNull(decoratedCurrency, "decoratedCurrency");
     ArgumentChecker.notNull(decoratingIssuer, "decoratingIssuer");

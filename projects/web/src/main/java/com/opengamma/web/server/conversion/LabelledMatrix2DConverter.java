@@ -18,7 +18,8 @@ import com.opengamma.financial.analytics.LabelledMatrix2D;
 public class LabelledMatrix2DConverter implements ResultConverter<LabelledMatrix2D> {
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix2D value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix2D value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     final int rowCount = value.getYKeys().length;
     final int columnCount = value.getXKeys().length;

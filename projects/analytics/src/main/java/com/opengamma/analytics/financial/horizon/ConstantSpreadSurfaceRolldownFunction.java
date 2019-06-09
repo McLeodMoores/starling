@@ -10,9 +10,10 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * Produces a {@link com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackCubeBundle} that has been shifted forward in time without slide.
- * That is, it moves in such a way that the volatility requested for the same maturity DATE will be equal
- * for the original market data bundle and the shifted one.
+ * Produces a {@link com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackCubeBundle} that has been shifted forward in time without
+ * slide. That is, it moves in such a way that the volatility requested for the same maturity DATE will be equal for the original market data bundle and the
+ * shifted one.
+ * 
  * @deprecated {@link com.opengamma.analytics.financial.model.option.definition.YieldCurveWithBlackCubeBundle} is deprecated
  */
 @Deprecated
@@ -22,6 +23,7 @@ public final class ConstantSpreadSurfaceRolldownFunction implements RolldownFunc
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static ConstantSpreadSurfaceRolldownFunction getInstance() {

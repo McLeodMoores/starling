@@ -35,31 +35,33 @@ public class SwaptionBlackDefaultPropertiesFunction extends DefaultPropertyFunct
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBlackDefaultPropertiesFunction.class);
   /** The value requirement names */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.FORWARD_DELTA,
-    ValueRequirementNames.GAMMA,
-    ValueRequirementNames.FORWARD_GAMMA,
-    ValueRequirementNames.THETA,
-    ValueRequirementNames.DRIFTLESS_THETA,
-    ValueRequirementNames.VEGA,
-    ValueRequirementNames.FORWARD_VEGA,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.GAMMA_PV01,
-    ValueRequirementNames.FORWARD
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.THETA,
+                ValueRequirementNames.DRIFTLESS_THETA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.GAMMA_PV01,
+                ValueRequirementNames.FORWARD
   };
   /** Map from currency to curve calculation configuration and surface names */
   private final Map<String, Pair<String, String>> _currencyCurveConfigAndSurfaceNames;
 
   /**
    * A list of (currency, curve calculation configuration name, surface name) triples.
-   * @param currencyCurveConfigAndSurfaceNames The names, not null
+   * 
+   * @param currencyCurveConfigAndSurfaceNames
+   *          The names, not null
    */
   public SwaptionBlackDefaultPropertiesFunction(final String... currencyCurveConfigAndSurfaceNames) {
     super(FinancialSecurityTypes.SWAPTION_SECURITY, true);
@@ -90,7 +92,8 @@ public class SwaptionBlackDefaultPropertiesFunction extends DefaultPropertyFunct
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
       LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");

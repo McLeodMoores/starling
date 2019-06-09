@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class PDEUtilityTools {
   private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = new DoubleQuadraticInterpolator1D();
@@ -53,15 +53,23 @@ public class PDEUtilityTools {
 
   /**
    * Take the terminal result for a forward PDE (i.e. forward option prices) and returns a map between strikes and implied volatilities
-   * @param forwardCurve The forward curve
-   * @param expiry The expiry of this option strip
-   * @param prices The results from the PDE solver
-   * @param minK The minimum strike to return
-   * @param maxK The maximum strike to return
-   * @param isCall true for call
+   * 
+   * @param forwardCurve
+   *          The forward curve
+   * @param expiry
+   *          The expiry of this option strip
+   * @param prices
+   *          The results from the PDE solver
+   * @param minK
+   *          The minimum strike to return
+   * @param maxK
+   *          The maximum strike to return
+   * @param isCall
+   *          true for call
    * @return A map between strikes and implied volatilities
    */
-  public static Map<Double, Double> priceToImpliedVol(final ForwardCurve forwardCurve, final double expiry, final PDETerminalResults1D prices, final double minK, final double maxK,
+  public static Map<Double, Double> priceToImpliedVol(final ForwardCurve forwardCurve, final double expiry, final PDETerminalResults1D prices,
+      final double minK, final double maxK,
       final boolean isCall) {
     final int n = prices.getNumberSpaceNodes();
     final Map<Double, Double> out = new HashMap<>(n);
@@ -82,18 +90,27 @@ public class PDEUtilityTools {
   }
 
   /**
-   * Takes the results from a forward PDE solve - grid of option prices by maturity and strike and returns a map between a DoublesPair (i.e. maturity and strike) and
-   * the Black implied volatility
-   * @param forwardCurve The forward
-   * @param prices The forward (i.e. not discounted) option prices
-   * @param minT Data before this time is ignored (not included in map)
-   * @param maxT Data after this time is ignored (not included in map)
-   * @param minK Strikes less than this are ignored (not included in map)
-   * @param maxK Strikes greater than this are ignored (not included in map)
-   * @param isCall true if call
+   * Takes the results from a forward PDE solve - grid of option prices by maturity and strike and returns a map between a DoublesPair (i.e. maturity and
+   * strike) and the Black implied volatility
+   * 
+   * @param forwardCurve
+   *          The forward
+   * @param prices
+   *          The forward (i.e. not discounted) option prices
+   * @param minT
+   *          Data before this time is ignored (not included in map)
+   * @param maxT
+   *          Data after this time is ignored (not included in map)
+   * @param minK
+   *          Strikes less than this are ignored (not included in map)
+   * @param maxK
+   *          Strikes greater than this are ignored (not included in map)
+   * @param isCall
+   *          true if call
    * @return The price to implied volatility map
    */
-  public static Map<DoublesPair, Double> priceToImpliedVol(final ForwardCurve forwardCurve, final PDEFullResults1D prices, final double minT, final double maxT, final double minK, final double maxK,
+  public static Map<DoublesPair, Double> priceToImpliedVol(final ForwardCurve forwardCurve, final PDEFullResults1D prices, final double minT, final double maxT,
+      final double minK, final double maxK,
       final boolean isCall) {
     final int xNodes = prices.getNumberSpaceNodes();
     final int tNodes = prices.getNumberTimeNodes();
@@ -156,15 +173,23 @@ public class PDEUtilityTools {
   }
 
   /**
-   * Takes the results from a forward PDE solve - grid of option prices by maturity and strike and returns a map between a DoublesPair (i.e. maturity and strike) and
-   * the Black implied volatility
-   * @param forwardCurve The forward
-   * @param discountCurve The discount curve
-   * @param prices The option prices
-   * @param minT Data before this time is ignored (not included in map)
-   * @param maxT Data after this time is ignored (not included in map)
-   * @param minK Strikes less than this are ignored (not included in map)
-   * @param maxK Strikes greater than this are ignored (not included in map)
+   * Takes the results from a forward PDE solve - grid of option prices by maturity and strike and returns a map between a DoublesPair (i.e. maturity and
+   * strike) and the Black implied volatility
+   * 
+   * @param forwardCurve
+   *          The forward
+   * @param discountCurve
+   *          The discount curve
+   * @param prices
+   *          The option prices
+   * @param minT
+   *          Data before this time is ignored (not included in map)
+   * @param maxT
+   *          Data after this time is ignored (not included in map)
+   * @param minK
+   *          Strikes less than this are ignored (not included in map)
+   * @param maxK
+   *          Strikes greater than this are ignored (not included in map)
    * @return The price to implied volatility map
    */
   public static Map<DoublesPair, Double> priceToImpliedVol(final ForwardCurve forwardCurve,
@@ -225,11 +250,13 @@ public class PDEUtilityTools {
     out.print("\n");
   }
 
-  public static void printSurface(final String name, final Surface<Double, Double, Double> surface, final double xMin, final double xMax, final double yMin, final double yMax) {
+  public static void printSurface(final String name, final Surface<Double, Double, Double> surface, final double xMin, final double xMax, final double yMin,
+      final double yMax) {
     printSurface(name, surface, xMin, xMax, yMin, yMax, 100, 100);
   }
 
-  public static void printSurface(final String name, final Surface<Double, Double, Double> surface, final double xMin, final double xMax, final double yMin, final double yMax, final int xSteps,
+  public static void printSurface(final String name, final Surface<Double, Double, Double> surface, final double xMin, final double xMax, final double yMin,
+      final double yMax, final int xSteps,
       final int ySteps) {
 
     Validate.isTrue(xMax > xMin, "need xMax > xMin");
@@ -240,17 +267,17 @@ public class PDEUtilityTools {
     final StringBuffer result = new StringBuffer(name);
     result.append("\n");
     for (int i = 0; i <= ySteps; i++) {
-      final double y = yMin + ((yMax - yMin) * i) / ySteps;
+      final double y = yMin + (yMax - yMin) * i / ySteps;
       result.append("\t");
       result.append(y);
     }
     result.append("\n");
 
     for (int j = 0; j <= xSteps; j++) {
-      final double t = xMin + ((xMax - xMin) * j) / xSteps;
+      final double t = xMin + (xMax - xMin) * j / xSteps;
       result.append(t);
       for (int i = 0; i <= ySteps; i++) {
-        final double k = yMin + ((yMax - yMin) * i) / ySteps;
+        final double k = yMin + (yMax - yMin) * i / ySteps;
         result.append("\t");
         result.append(surface.getZValue(t, k));
       }
@@ -263,20 +290,30 @@ public class PDEUtilityTools {
   /**
    * This form takes vectors of x (typically expiry) and y (typically strike)
    *
-   * @param name The name
-   * @param surface The surface
-   * @param x The x values
-   * @param y The y values
+   * @param name
+   *          The name
+   * @param surface
+   *          The surface
+   * @param x
+   *          The x values
+   * @param y
+   *          The y values
    */
 
   /**
-   * Prints out the values of the function f(x,y) where x takes the values x_1 to x_N and y takes the values y_1 to y_M, along with the x and y values, with x as the top row and
-   * y as the left column. This format can be used by the Excel 3D surface plotter.
-   * @param name Optional name for the output
-   * @param data The data
-   * @param x x-values
-   * @param y y-values
-   * @param out output
+   * Prints out the values of the function f(x,y) where x takes the values x_1 to x_N and y takes the values y_1 to y_M, along with the x and y values, with x
+   * as the top row and y as the left column. This format can be used by the Excel 3D surface plotter.
+   * 
+   * @param name
+   *          Optional name for the output
+   * @param data
+   *          The data
+   * @param x
+   *          x-values
+   * @param y
+   *          y-values
+   * @param out
+   *          output
    */
   public static void printSurface(final String name, final double[][] data, final double[] x, final double[] y, final PrintStream out) {
     ArgumentChecker.notNull(data, "null data");
@@ -305,10 +342,15 @@ public class PDEUtilityTools {
 
   /**
    * This form takes vectors of x (typically expiry) and y (typically strike)
-   * @param name The name of the surface
-   * @param surface The surface
-   * @param x Sample x values
-   * @param y Sample y values
+   * 
+   * @param name
+   *          The name of the surface
+   * @param surface
+   *          The surface
+   * @param x
+   *          Sample x values
+   * @param y
+   *          Sample y values
    */
   public static void printSurface(final String name, final Surface<Double, Double, Double> surface, final double[] x, final double[] y) {
     Validate.isTrue(x.length > 0, "The x-array was empty");
@@ -343,21 +385,22 @@ public class PDEUtilityTools {
     printSurface(name, dataBundle, tMin, tMax, kMin, kMax, 100, 100);
   }
 
-  public static void printSurface(final String name, final Map<Double, Interpolator1DDataBundle> dataBundle, final double tMin, final double tMax, final double kMin, final double kMax,
+  public static void printSurface(final String name, final Map<Double, Interpolator1DDataBundle> dataBundle, final double tMin, final double tMax,
+      final double kMin, final double kMax,
       final int xSteps, final int ySteps) {
 
     System.out.println(name);
     for (int i = 0; i <= ySteps; i++) {
-      final double k = kMin + ((kMax - kMin) * i) / ySteps;
+      final double k = kMin + (kMax - kMin) * i / ySteps;
       System.out.print("\t" + k);
     }
     System.out.print("\n");
 
     for (int j = 0; j <= xSteps; j++) {
-      final double t = tMin + ((tMax - tMin) * j) / xSteps;
+      final double t = tMin + (tMax - tMin) * j / xSteps;
       System.out.print(t);
       for (int i = 0; i <= ySteps; i++) {
-        final double k = kMin + ((kMax - kMin) * i) / ySteps;
+        final double k = kMin + (kMax - kMin) * i / ySteps;
         final DoublesPair tk = DoublesPair.of(t, k);
 
         System.out.print("\t" + GRID_INTERPOLATOR2D.interpolate(dataBundle, tk));

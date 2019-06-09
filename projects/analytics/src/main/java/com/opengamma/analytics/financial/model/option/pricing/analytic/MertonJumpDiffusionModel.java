@@ -44,7 +44,8 @@ public class MertonJumpDiffusionModel extends AnalyticOptionModel<OptionDefiniti
         double sigmaAdjusted = z;
         final double lambdaT = lambda * t;
         double mult = Math.exp(-lambdaT);
-        final StandardOptionDataBundle bsmData = new StandardOptionDataBundle(data.getInterestRateCurve(), data.getCostOfCarry(), new VolatilitySurface(ConstantDoublesSurface.from(sigmaAdjusted)),
+        final StandardOptionDataBundle bsmData = new StandardOptionDataBundle(data.getInterestRateCurve(), data.getCostOfCarry(),
+            new VolatilitySurface(ConstantDoublesSurface.from(sigmaAdjusted)),
             data.getSpot(), date);
         final Function1D<StandardOptionDataBundle, Double> bsmFunction = BSM.getPricingFunction(definition);
         double price = mult * bsmFunction.evaluate(bsmData);

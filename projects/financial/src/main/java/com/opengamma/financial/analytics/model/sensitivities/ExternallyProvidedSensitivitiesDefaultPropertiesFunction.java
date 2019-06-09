@@ -31,9 +31,9 @@ import com.opengamma.util.money.Currency;
 public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesDefaultPropertiesFunction.class);
   private static final String[] VALUE_NAMES = {
-      "Present Value",
-      "PV01",
-      "CS01",
+                "Present Value",
+                "PV01",
+                "CS01",
   "Yield Curve Node Sensitivities" };
   private final Map<String, String> _currencyAndCurveConfigNames;
 
@@ -76,7 +76,8 @@ public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends De
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if ("CurveCalculationConfig".equals(propertyName)) {
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
       final String configName = _currencyAndCurveConfigNames.get(currencyName);

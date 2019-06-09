@@ -38,8 +38,10 @@ public class ZeroDepositConverter extends FinancialSecurityVisitorAdapter<Instru
   private final HolidaySource _holidaySource;
 
   /**
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
    */
   public ZeroDepositConverter(final ConventionBundleSource conventionSource, final HolidaySource holidaySource) {
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -54,7 +56,8 @@ public class ZeroDepositConverter extends FinancialSecurityVisitorAdapter<Instru
     final Currency currency = security.getCurrency();
     final ZonedDateTime startDate = security.getStartDate();
     final ZonedDateTime endDate = security.getMaturityDate();
-    final ConventionBundle convention = _conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_ZERO_DEPOSIT"));
+    final ConventionBundle convention = _conventionSource
+        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_ZERO_DEPOSIT"));
     final DayCount daycount = convention.getDayCount();
     final InterestRate rate = new ContinuousInterestRate(security.getRate());
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, currency);
@@ -72,7 +75,8 @@ public class ZeroDepositConverter extends FinancialSecurityVisitorAdapter<Instru
     final Currency currency = security.getCurrency();
     final ZonedDateTime startDate = security.getStartDate();
     final ZonedDateTime endDate = security.getMaturityDate();
-    final ConventionBundle convention = _conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_ZERO_DEPOSIT"));
+    final ConventionBundle convention = _conventionSource
+        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_ZERO_DEPOSIT"));
     final DayCount daycount = convention.getDayCount();
     final InterestRate rate = new PeriodicInterestRate(security.getRate(), (int) security.getCompoundingPeriodsPerYear());
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, currency);

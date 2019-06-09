@@ -18,16 +18,25 @@ public class DigitalOptionFunction {
 
   /**
    * Compute <b>spot</b> price of cash-or-nothing option
-   * @param spot The spot
-   * @param strike The strike
-   * @param timeToExpiry The time to expiry
-   * @param lognormalVol The log-normal volatility
-   * @param interestRate The interest rate
-   * @param costOfCarry The cost-of-carry
-   * @param isCall True for calls, false for puts
+   * 
+   * @param spot
+   *          The spot
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param interestRate
+   *          The interest rate
+   * @param costOfCarry
+   *          The cost-of-carry
+   * @param isCall
+   *          True for calls, false for puts
    * @return The option price
    */
-  public static double price(final double spot, final double strike, final double timeToExpiry, final double lognormalVol, final double interestRate, final double costOfCarry, final boolean isCall) {
+  public static double price(final double spot, final double strike, final double timeToExpiry, final double lognormalVol, final double interestRate,
+      final double costOfCarry, final boolean isCall) {
     ArgumentChecker.isTrue(spot > 0.0, "negative/NaN spot; have {}", spot);
     ArgumentChecker.isTrue(strike > 0.0, "negative/NaN strike; have {}", strike);
     ArgumentChecker.isTrue(timeToExpiry > 0.0, "negative/NaN timeToExpiry; have {}", timeToExpiry);
@@ -42,13 +51,21 @@ public class DigitalOptionFunction {
 
   /**
    * Compute delta of cash-or-nothing option
-   * @param spot The spot
-   * @param strike The strike
-   * @param timeToExpiry The time to expiry
-   * @param lognormalVol The log-normal volatility
-   * @param interestRate The interest rate
-   * @param costOfCarry The cost-of-carry
-   * @param isCall True for calls, false for puts
+   * 
+   * @param spot
+   *          The spot
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param interestRate
+   *          The interest rate
+   * @param costOfCarry
+   *          The cost-of-carry
+   * @param isCall
+   *          True for calls, false for puts
    * @return The option price
    */
   public static double delta(final double spot, final double strike, final double timeToExpiry, final double lognormalVol, final double interestRate,
@@ -68,13 +85,21 @@ public class DigitalOptionFunction {
 
   /**
    * Compute gamma of cash-or-nothing option
-   * @param spot The spot
-   * @param strike The strike
-   * @param timeToExpiry The time to expiry
-   * @param lognormalVol The log-normal volatility
-   * @param interestRate The interest rate
-   * @param costOfCarry The cost-of-carry
-   * @param isCall True for calls, false for puts
+   * 
+   * @param spot
+   *          The spot
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param interestRate
+   *          The interest rate
+   * @param costOfCarry
+   *          The cost-of-carry
+   * @param isCall
+   *          True for calls, false for puts
    * @return The option price
    */
   public static double gamma(final double spot, final double strike, final double timeToExpiry, final double lognormalVol, final double interestRate,
@@ -94,13 +119,21 @@ public class DigitalOptionFunction {
 
   /**
    * Compute theta price of cash-or-nothing option
-   * @param spot The spot
-   * @param strike The strike
-   * @param timeToExpiry The time to expiry
-   * @param lognormalVol The log-normal volatility
-   * @param interestRate The interest rate
-   * @param costOfCarry The cost-of-carry
-   * @param isCall True for calls, false for puts
+   * 
+   * @param spot
+   *          The spot
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param interestRate
+   *          The interest rate
+   * @param costOfCarry
+   *          The cost-of-carry
+   * @param isCall
+   *          True for calls, false for puts
    * @return The option price
    */
   public static double theta(final double spot, final double strike, final double timeToExpiry, final double lognormalVol, final double interestRate,
@@ -114,17 +147,26 @@ public class DigitalOptionFunction {
 
     final double d = (Math.log(spot / strike) + (costOfCarry - 0.5 * lognormalVol * lognormalVol) * timeToExpiry) / lognormalVol / Math.sqrt(timeToExpiry);
     final double sign = isCall ? 1. : -1.;
-    final double div = 0.5 * (-Math.log(spot / strike) / Math.pow(timeToExpiry, 1.5) + (costOfCarry - 0.5 * lognormalVol * lognormalVol) / Math.pow(timeToExpiry, 0.5)) / lognormalVol;
-    return interestRate * Math.exp(-interestRate * timeToExpiry) * NORMAL.getCDF(sign * d) - sign * Math.exp(-interestRate * timeToExpiry) * NORMAL.getPDF(d) * div;
+    final double div = 0.5
+        * (-Math.log(spot / strike) / Math.pow(timeToExpiry, 1.5) + (costOfCarry - 0.5 * lognormalVol * lognormalVol) / Math.pow(timeToExpiry, 0.5))
+        / lognormalVol;
+    return interestRate * Math.exp(-interestRate * timeToExpiry) * NORMAL.getCDF(sign * d)
+        - sign * Math.exp(-interestRate * timeToExpiry) * NORMAL.getPDF(d) * div;
   }
 
   /**
    * Compute driftless (forward) theta price of cash-or-nothing option
-   * @param forward The forward
-   * @param strike The strike
-   * @param timeToExpiry The time to expiry
-   * @param lognormalVol The log-normal volatility
-   * @param isCall True for calls, false for puts
+   * 
+   * @param forward
+   *          The forward
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param isCall
+   *          True for calls, false for puts
    * @return The option price
    */
   public static double driftlessTheta(final double forward, final double strike, final double timeToExpiry, final double lognormalVol, final boolean isCall) {
@@ -142,13 +184,21 @@ public class DigitalOptionFunction {
 
   /**
    * Compute vega price of cash-or-nothing option
-   * @param spot The spot
-   * @param strike The strike
-   * @param timeToExpiry The time to expiry
-   * @param lognormalVol The log-normal volatility
-   * @param interestRate The interest rate
-   * @param costOfCarry The cost-of-carry
-   * @param isCall True for calls, false for puts
+   * 
+   * @param spot
+   *          The spot
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param interestRate
+   *          The interest rate
+   * @param costOfCarry
+   *          The cost-of-carry
+   * @param isCall
+   *          True for calls, false for puts
    * @return The option price
    */
   public static double vega(final double spot, final double strike, final double timeToExpiry, final double lognormalVol, final double interestRate,

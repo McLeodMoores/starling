@@ -18,9 +18,13 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * @param g2parameters The model parameters.
-   * @param u The start time.
-   * @param v The end time (one time).
+   * 
+   * @param g2parameters
+   *          The model parameters.
+   * @param u
+   *          The start time.
+   * @param v
+   *          The end time (one time).
    * @return The volatility.
    */
   public double[] volatilityMaturityPart(final G2ppPiecewiseConstantParameters g2parameters, final double u, final double v) {
@@ -35,9 +39,13 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * @param g2parameters The model parameters.
-   * @param u The start time.
-   * @param v The end times (array).
+   * 
+   * @param g2parameters
+   *          The model parameters.
+   * @param u
+   *          The start time.
+   * @param v
+   *          The end times (array).
    * @return The volatility. factor/time
    */
   public double[][] volatilityMaturityPart(final G2ppPiecewiseConstantParameters g2parameters, final double u, final double[] v) {
@@ -54,9 +62,13 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * @param g2parameters The model parameters.
-   * @param u The start time.
-   * @param v The end times (array of arrays).
+   * 
+   * @param g2parameters
+   *          The model parameters.
+   * @param u
+   *          The start time.
+   * @param v
+   *          The end times (array of arrays).
    * @return The volatility. factor/time
    */
   public double[][][] volatilityMaturityPart(final G2ppPiecewiseConstantParameters g2parameters, final double u, final double[][] v) {
@@ -77,9 +89,13 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The expiry time dependent part of the volatility.
-   * @param g2parameters The model parameters.
-   * @param theta0 The start expiry time.
-   * @param theta1 The end expiry time.
+   * 
+   * @param g2parameters
+   *          The model parameters.
+   * @param theta0
+   *          The start expiry time.
+   * @param theta1
+   *          The end expiry time.
    * @return The volatility.
    */
   public double[][] gamma(final G2ppPiecewiseConstantParameters g2parameters, final double theta0, final double theta1) {
@@ -111,7 +127,8 @@ public class G2ppPiecewiseConstantModel {
     }
     for (int loopindex = 0; loopindex < sLen - 1; loopindex++) {
       for (int loop = 0; loop < 2; loop++) {
-        gammaii[loop] += sigma[loop].get(indexStart - 1 + loopindex) * sigma[loop].get(indexStart - 1 + loopindex) * (exp2as[loop][loopindex + 1] - exp2as[loop][loopindex]);
+        gammaii[loop] += sigma[loop].get(indexStart - 1 + loopindex) * sigma[loop].get(indexStart - 1 + loopindex)
+            * (exp2as[loop][loopindex + 1] - exp2as[loop][loopindex]);
       }
       gamma12 += sigma[0].get(indexStart - 1 + loopindex) * sigma[1].get(indexStart - 1 + loopindex) * (expa0a1s[loopindex + 1] - expa0a1s[loopindex]);
     }
@@ -124,18 +141,26 @@ public class G2ppPiecewiseConstantModel {
   }
 
   /**
-   * Computes the swap rate for a given value of the standard normal random
-   * variables in the $P(.,\theta)$ numeraire.
-   * @param x The random variable values.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for each random variable for the swap fixed leg. Dimensions: cash flow - factor
-   * @param tau2Fixed The total zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for each random variable for the swap Ibor leg. Dimensions: cash flow - factor
-   * @param tau2Ibor The total zero-coupon bond volatilities for the swap Ibor leg.
+   * Computes the swap rate for a given value of the standard normal random variables in the $P(.,\theta)$ numeraire.
+   * 
+   * @param x
+   *          The random variable values.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for each random variable for the swap fixed leg. Dimensions: cash flow - factor
+   * @param tau2Fixed
+   *          The total zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for each random variable for the swap Ibor leg. Dimensions: cash flow - factor
+   * @param tau2Ibor
+   *          The total zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate.
    */
-  public double swapRate(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed, final double[] discountedCashFlowIbor,
+  public double swapRate(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed,
+      final double[] discountedCashFlowIbor,
       final double[][] alphaIbor, final double[] tau2Ibor) {
     double resultFixed = 0.0;
     double resultIbor = 0.0;
@@ -149,20 +174,28 @@ public class G2ppPiecewiseConstantModel {
   }
 
   /**
-   * Computes the swap rate and its first order derivatives with respect to the
-   * value of the standard normal random variables in the $P(.,\theta)$
-   * numeraire.
-   * @param x The random variable values.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg. Dimensions: cash flow - factor
-   * @param alphaFixed The zero-coupon bond volatilities for each random variable for the swap fixed leg.
-   * @param tau2Fixed The total zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
-   * @param tau2Ibor The total zero-coupon bond volatilities for the swap Ibor leg.
-   * @param d1 The array with the first order derivative. Will be changed by the method.
+   * Computes the swap rate and its first order derivatives with respect to the value of the standard normal random variables in the $P(.,\theta)$ numeraire.
+   * 
+   * @param x
+   *          The random variable values.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg. Dimensions: cash flow - factor
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for each random variable for the swap fixed leg.
+   * @param tau2Fixed
+   *          The total zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
+   * @param tau2Ibor
+   *          The total zero-coupon bond volatilities for the swap Ibor leg.
+   * @param d1
+   *          The array with the first order derivative. Will be changed by the method.
    * @return The swap rate first order derivatives.
    */
-  public double swapRate(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed, final double[] discountedCashFlowIbor,
+  public double swapRate(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed,
+      final double[] discountedCashFlowIbor,
       final double[][] alphaIbor, final double[] tau2Ibor, final double[] d1) {
     double f = 0.0;
     double g = 0.0;
@@ -190,21 +223,31 @@ public class G2ppPiecewiseConstantModel {
   }
 
   /**
-   * Computes the swap rate and its first and second order derivatives with
-   * respect to the value of the standard normal random variables in the
-   * $P(.,\theta)$ numeraire.
-   * @param x The random variable values.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg. Dimensions: cash flow - factor
-   * @param alphaFixed The zero-coupon bond volatilities for each random variable for the swap fixed leg.
-   * @param tau2Fixed The total zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
-   * @param tau2Ibor The total zero-coupon bond volatilities for the swap Ibor leg.
-   * @param d1 The array with the first order derivative. Will be changed by the method.
-   * @param d2 The array with the second order derivative. Will be changed by the method.
+   * Computes the swap rate and its first and second order derivatives with respect to the value of the standard normal random variables in the $P(.,\theta)$
+   * numeraire.
+   * 
+   * @param x
+   *          The random variable values.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg. Dimensions: cash flow - factor
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for each random variable for the swap fixed leg.
+   * @param tau2Fixed
+   *          The total zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
+   * @param tau2Ibor
+   *          The total zero-coupon bond volatilities for the swap Ibor leg.
+   * @param d1
+   *          The array with the first order derivative. Will be changed by the method.
+   * @param d2
+   *          The array with the second order derivative. Will be changed by the method.
    * @return The swap rate second order derivatives.
    */
-  public double swapRate(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed, final double[] discountedCashFlowIbor,
+  public double swapRate(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed,
+      final double[] discountedCashFlowIbor,
       final double[][] alphaIbor, final double[] tau2Ibor, final double[] d1, final double[][] d2) {
     double f = 0.0;
     double g = 0.0;
@@ -242,9 +285,10 @@ public class G2ppPiecewiseConstantModel {
     }
     for (int loopd1 = 0; loopd1 < 2; loopd1++) {
       for (int loopd2 = loopd1; loopd2 < 2; loopd2++) {
-        d2[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g - df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * d2g[loopd1][loopd2]) / (g * g) - 2 * dg[loopd1] * f * dg[loopd2] / (g * g * g);
-        //        d2[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g + df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * d2g[loopd1][loopd2]) / (g * g)
-        //        + 2 * dg[loopd1] * (df[loopd2] * g - f * dg[loopd2]) / (g * g * g);
+        d2[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g - df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * d2g[loopd1][loopd2]) / (g * g)
+            - 2 * dg[loopd1] * f * dg[loopd2] / (g * g * g);
+        // d2[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g + df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * d2g[loopd1][loopd2]) / (g * g)
+        // + 2 * dg[loopd1] * (df[loopd2] * g - f * dg[loopd2]) / (g * g * g);
       }
     }
     d2[1][0] = d2[0][1];
@@ -253,16 +297,25 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowIbor in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for each random variable for the swap fixed leg.
-   * @param tau2Fixed The total zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
-   * @param tau2Ibor The total zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for each random variable for the swap fixed leg.
+   * @param tau2Fixed
+   *          The total zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
+   * @param tau2Ibor
+   *          The total zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate derivative.
    */
-  public double[] swapRateDdcfi1(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed, final double[] discountedCashFlowIbor,
+  public double[] swapRateDdcfi1(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed,
+      final double[] discountedCashFlowIbor,
       final double[][] alphaIbor, final double[] tau2Ibor) {
     final int nbDcfi = discountedCashFlowIbor.length;
     final int nbDcff = discountedCashFlowFixed.length;
@@ -279,16 +332,25 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowFixed in the $P(.,\theta)$ numeraire.
-   * @param x The random variable value.
-   * @param discountedCashFlowFixed The discounted cash flows equivalent of the swap fixed leg.
-   * @param alphaFixed The zero-coupon bond volatilities for the swap fixed leg.
-   * @param tau2Fixed The total zero-coupon bond volatilities for the swap fixed leg.
-   * @param discountedCashFlowIbor The discounted cash flows equivalent of the swap Ibor leg.
-   * @param alphaIbor The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
-   * @param tau2Ibor The total zero-coupon bond volatilities for the swap Ibor leg.
+   * 
+   * @param x
+   *          The random variable value.
+   * @param discountedCashFlowFixed
+   *          The discounted cash flows equivalent of the swap fixed leg.
+   * @param alphaFixed
+   *          The zero-coupon bond volatilities for the swap fixed leg.
+   * @param tau2Fixed
+   *          The total zero-coupon bond volatilities for the swap fixed leg.
+   * @param discountedCashFlowIbor
+   *          The discounted cash flows equivalent of the swap Ibor leg.
+   * @param alphaIbor
+   *          The zero-coupon bond volatilities for each random variable for the swap Ibor leg.
+   * @param tau2Ibor
+   *          The total zero-coupon bond volatilities for the swap Ibor leg.
    * @return The swap rate derivative.
    */
-  public double[] swapRateDdcff1(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed, final double[] discountedCashFlowIbor,
+  public double[] swapRateDdcff1(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed,
+      final double[] discountedCashFlowIbor,
       final double[][] alphaIbor, final double[] tau2Ibor) {
     final int nbDcff = discountedCashFlowFixed.length;
     final int nbDcfi = discountedCashFlowIbor.length;
@@ -310,7 +372,8 @@ public class G2ppPiecewiseConstantModel {
     return swapRateDdcff1;
   }
 
-  public Pair<double[][][], double[][][]> swapRateDdcfDx2(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed, final double[] tau2Fixed,
+  public Pair<double[][][], double[][][]> swapRateDdcfDx2(final double[] x, final double[] discountedCashFlowFixed, final double[][] alphaFixed,
+      final double[] tau2Fixed,
       final double[] discountedCashFlowIbor, final double[][] alphaIbor, final double[] tau2Ibor) {
     final int nbDcff = discountedCashFlowFixed.length;
     final int nbDcfi = discountedCashFlowIbor.length;
@@ -357,7 +420,8 @@ public class G2ppPiecewiseConstantModel {
     final double[][] d2 = new double[2][2];
     for (int loopd1 = 0; loopd1 < 2; loopd1++) {
       for (int loopd2 = loopd1; loopd2 < 2; loopd2++) {
-        d2[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g - df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * d2g[loopd1][loopd2]) / (g * g) - 2 * dg[loopd1] * dg[loopd2] * f / (g * g * g);
+        d2[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g - df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * d2g[loopd1][loopd2]) / (g * g)
+            - 2 * dg[loopd1] * dg[loopd2] * f / (g * g * g);
       }
     }
     d2[1][0] = d2[0][1];
@@ -367,14 +431,15 @@ public class G2ppPiecewiseConstantModel {
     final double[][] testd2 = new double[2][2];
     for (int loopd1 = 0; loopd1 < 2; loopd1++) {
       for (int loopd2 = 0; loopd2 < 2; loopd2++) {
-        d2P[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g - df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * (d2g[loopd1][loopd2] + shift)) / (g * g) - 2 * dg[loopd1] * dg[loopd2] * f /
-            (g * g * g);
+        d2P[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g - df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * (d2g[loopd1][loopd2] + shift)) / (g * g)
+            - 2 * dg[loopd1] * dg[loopd2] * f /
+                (g * g * g);
         testd2[loopd1][loopd2] = (d2P[loopd1][loopd2] - d2[loopd1][loopd2]) / shift;
       }
     }
 
     // Test:end
-    //    double swapRate = -f / g;
+    // double swapRate = -f / g;
     // Backward sweep
     final double[][] fBar = new double[2][2];
     final double[][][] dfBar = new double[2][2][2];
@@ -468,13 +533,16 @@ public class G2ppPiecewiseConstantModel {
       factor311 += eta[0].getDouble(j) * eta[0].getDouble(j) * (Math.exp(a[0] * r[j + 1]) - Math.exp(a[0] * r[j])) *
           (2 - Math.exp(-a[0] * (v - r[j + 1])) - Math.exp(-a[0] * (v - r[j])));
       factor312 += eta[0].getDouble(j) * eta[1].getDouble(j) *
-          ((Math.exp(a[1] * r[j + 1]) - Math.exp(a[1] * r[j])) / a[1] - (Math.exp(-a[0] * (v - r[j + 1]) + a[1] * r[j + 1]) - Math.exp(-a[0] * (v - r[j]) + a[1] * r[j])) / (a[0] + a[1]));
+          ((Math.exp(a[1] * r[j + 1]) - Math.exp(a[1] * r[j])) / a[1]
+              - (Math.exp(-a[0] * (v - r[j + 1]) + a[1] * r[j + 1]) - Math.exp(-a[0] * (v - r[j]) + a[1] * r[j])) / (a[0] + a[1]));
       factor321 += eta[1].getDouble(j) * eta[0].getDouble(j) *
-          ((Math.exp(a[0] * r[j + 1]) - Math.exp(a[0] * r[j])) / a[0] - (Math.exp(-a[1] * (v - r[j + 1]) + a[0] * r[j + 1]) - Math.exp(-a[1] * (v - r[j]) + a[0] * r[j])) / (a[1] + a[0]));
+          ((Math.exp(a[0] * r[j + 1]) - Math.exp(a[0] * r[j])) / a[0]
+              - (Math.exp(-a[1] * (v - r[j + 1]) + a[0] * r[j + 1]) - Math.exp(-a[1] * (v - r[j]) + a[0] * r[j])) / (a[1] + a[0]));
       factor322 += eta[1].getDouble(j) * eta[1].getDouble(j) * (Math.exp(a[1] * r[j + 1]) - Math.exp(a[1] * r[j])) *
           (2 - Math.exp(-a[1] * (v - r[j + 1])) - Math.exp(-a[1] * (v - r[j])));
     }
-    double convexity = factor111 * factor21 * factor311 + factor112 * factor22 * factor312 + factor121 * factor21 * factor321 + factor122 * factor22 * factor322;
+    double convexity = factor111 * factor21 * factor311 + factor112 * factor22 * factor312 + factor121 * factor21 * factor321
+        + factor122 * factor22 * factor322;
     convexity = Math.exp(convexity);
     return convexity;
   }

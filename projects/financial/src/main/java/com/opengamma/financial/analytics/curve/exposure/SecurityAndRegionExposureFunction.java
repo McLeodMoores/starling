@@ -223,8 +223,7 @@ public class SecurityAndRegionExposureFunction implements ExposureFunction {
 
     @Override
     public List<ExternalId> visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
-      final CreditDefaultSwapSecurity underlyingCDS = (CreditDefaultSwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); // TODO
-                                                                                                                                                              // version
+      final CreditDefaultSwapSecurity underlyingCDS = (CreditDefaultSwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
       final ExternalId regionId = underlyingCDS.getRegionId();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + regionId.getValue()));

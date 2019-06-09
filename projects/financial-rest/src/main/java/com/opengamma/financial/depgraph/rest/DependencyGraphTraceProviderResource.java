@@ -36,11 +36,11 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * Expose a simple dependency graph building service over the network for debugging/diagnostic purposes. This is intended to be simple to access using hand written URLs - there is not currently a
- * corresponding programatic interface to the service this provides.
+ * Expose a simple dependency graph building service over the network for debugging/diagnostic purposes. This is intended to be simple to access using hand
+ * written URLs - there is not currently a corresponding programatic interface to the service this provides.
  * <p>
- * For example to find out why a graph building configuration can't satisfy a requirement, a URL such as "/value/Present Value/SECURITY/SecDb~1234" will return the failure trace (or the graph if
- * successful).
+ * For example to find out why a graph building configuration can't satisfy a requirement, a URL such as "/value/Present Value/SECURITY/SecDb~1234" will return
+ * the failure trace (or the graph if successful).
  */
 public final class DependencyGraphTraceProviderResource extends AbstractDataResource {
 
@@ -56,7 +56,8 @@ public final class DependencyGraphTraceProviderResource extends AbstractDataReso
     _properties = new DependencyGraphTraceBuilderProperties();
   }
 
-  private DependencyGraphTraceProviderResource(final DependencyGraphTraceProvider provider, final FudgeContext fudgeContext, final DependencyGraphTraceBuilderProperties properties) {
+  private DependencyGraphTraceProviderResource(final DependencyGraphTraceProvider provider, final FudgeContext fudgeContext,
+      final DependencyGraphTraceBuilderProperties properties) {
     _fudgeContext = fudgeContext;
     _provider = provider;
     _properties = properties;
@@ -97,7 +98,8 @@ public final class DependencyGraphTraceProviderResource extends AbstractDataReso
   }
 
   @Path("calculationConfigurationName/{calculationConfigurationName}")
-  public DependencyGraphTraceProviderResource setCalculationConfigurationName(@PathParam("calculationConfigurationName") final String calculationConfigurationName) {
+  public DependencyGraphTraceProviderResource setCalculationConfigurationName(
+      @PathParam("calculationConfigurationName") final String calculationConfigurationName) {
     final DependencyGraphTraceBuilderProperties properties = _properties.calculationConfigurationName(calculationConfigurationName);
     return new DependencyGraphTraceProviderResource(_provider, _fudgeContext, properties);
   }
@@ -110,19 +112,23 @@ public final class DependencyGraphTraceProviderResource extends AbstractDataReso
   }
 
   @Path("value/{valueName}/{targetType}/{targetId}")
-  public DependencyGraphTraceProviderResource setValueRequirementByUniqueId(@PathParam("valueName") final String valueName, @PathParam("targetType") final String targetType,
+  public DependencyGraphTraceProviderResource setValueRequirementByUniqueId(@PathParam("valueName") final String valueName,
+      @PathParam("targetType") final String targetType,
       @PathParam("targetId") final String targetId) {
     final UniqueId uniqueId = UniqueId.parse(targetId);
-    final ValueRequirement valueRequirement = toValueRequirement(valueName, new ComputationTargetSpecification(ComputationTargetType.parse(targetType), uniqueId));
+    final ValueRequirement valueRequirement = toValueRequirement(valueName,
+        new ComputationTargetSpecification(ComputationTargetType.parse(targetType), uniqueId));
     final DependencyGraphTraceBuilderProperties properties = _properties.addRequirement(valueRequirement);
     return new DependencyGraphTraceProviderResource(_provider, _fudgeContext, properties);
   }
 
   @Path("requirement/{valueName}/{targetType}/{targetId}")
-  public DependencyGraphTraceProviderResource setValueRequirementByExternalId(@PathParam("valueName") final String valueName, @PathParam("targetType") final String targetType,
+  public DependencyGraphTraceProviderResource setValueRequirementByExternalId(@PathParam("valueName") final String valueName,
+      @PathParam("targetType") final String targetType,
       @PathParam("targetId") final String targetId) {
     final ExternalId externalId = ExternalId.parse(targetId);
-    final ValueRequirement valueRequirement = toValueRequirement(valueName, new ComputationTargetRequirement(ComputationTargetType.parse(targetType), externalId));
+    final ValueRequirement valueRequirement = toValueRequirement(valueName,
+        new ComputationTargetRequirement(ComputationTargetType.parse(targetType), externalId));
     final DependencyGraphTraceBuilderProperties properties = _properties.addRequirement(valueRequirement);
     return new DependencyGraphTraceProviderResource(_provider, _fudgeContext, properties);
   }
@@ -149,7 +155,8 @@ public final class DependencyGraphTraceProviderResource extends AbstractDataReso
   }
 
   @Path("marketDataHistorical/{localDate}/{timeSeriesResolverKey}")
-  public DependencyGraphTraceProviderResource setMarketDataHistorical(@PathParam("localDate") final String localDateStr, @PathParam("timeSeriesResolverKey") final String timeSeriesResolverKey) {
+  public DependencyGraphTraceProviderResource setMarketDataHistorical(@PathParam("localDate") final String localDateStr,
+      @PathParam("timeSeriesResolverKey") final String timeSeriesResolverKey) {
     final LocalDate localDate = LocalDate.parse(localDateStr);
     final MarketDataSpecification marketData = MarketData.historical(localDate, timeSeriesResolverKey);
     final DependencyGraphTraceBuilderProperties properties = _properties.addMarketData(marketData);

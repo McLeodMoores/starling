@@ -31,15 +31,15 @@ public class BondPresentValueFromCleanPriceFunction extends BondFromCleanPriceAn
   private static final BondTransactionDiscountingMethod CALCULATOR = BondTransactionDiscountingMethod.getInstance();
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public BondPresentValueFromCleanPriceFunction() {
     super(PRESENT_VALUE);
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondFixedTransaction bond, final IssuerProvider issuerCurves, final double cleanPrice, final ValueSpecification spec) {
+  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondFixedTransaction bond, final IssuerProvider issuerCurves,
+      final double cleanPrice, final ValueSpecification spec) {
     final String expectedCurrency = spec.getProperty(CURRENCY);
     final MultipleCurrencyAmount pv = CALCULATOR.presentValueFromCleanPrice(bond, issuerCurves, cleanPrice);
     if (pv.size() != 1 || !expectedCurrency.equals(pv.getCurrencyAmounts()[0].getCurrency().getCode())) {

@@ -16,14 +16,14 @@ import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithB
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Present value sensitivity to volatility for interest rate instruments using
- * the Black formula.
- * 
+ * Present value sensitivity to volatility for interest rate instruments using the Black formula.
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated. Use classes like
  *             {@link com.opengamma.analytics.financial.provider.calculator.blackswaption.PresentValueBlackSensitivityBlackSwaptionCalculator}
  */
 @Deprecated
-public final class PresentValueBlackSwaptionSensitivityBlackCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, PresentValueBlackSwaptionSensitivity> {
+public final class PresentValueBlackSwaptionSensitivityBlackCalculator
+extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, PresentValueBlackSwaptionSensitivity> {
 
   /**
    * The method unique instance.
@@ -32,6 +32,7 @@ public final class PresentValueBlackSwaptionSensitivityBlackCalculator extends I
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static PresentValueBlackSwaptionSensitivityBlackCalculator getInstance() {
@@ -49,7 +50,8 @@ public final class PresentValueBlackSwaptionSensitivityBlackCalculator extends I
    */
   private static final SwaptionPhysicalFixedIborBlackMethod METHOD_SWAPTION_PHYSICAL = SwaptionPhysicalFixedIborBlackMethod.getInstance();
   private static final SwaptionCashFixedIborBlackMethod METHOD_SWAPTION_CASH = SwaptionCashFixedIborBlackMethod.getInstance();
-  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod METHOD_SWAPTION_PHYSICAL_COMPOUNDED = SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
+  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod METHOD_SWAPTION_PHYSICAL_COMPOUNDED =
+      SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
 
   @Override
   public PresentValueBlackSwaptionSensitivity visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final YieldCurveBundle curves) {
@@ -59,7 +61,9 @@ public final class PresentValueBlackSwaptionSensitivityBlackCalculator extends I
       final YieldCurveWithBlackSwaptionBundle curveBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return METHOD_SWAPTION_CASH.presentValueBlackSensitivity(swaption, curveBlack);
     }
-    throw new UnsupportedOperationException("The PresentValueBlackSwaptionSensitivityBlackSwaptionCalculator visitor visitSwaptionCashFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException(
+        "The PresentValueBlackSwaptionSensitivityBlackSwaptionCalculator visitor visitSwaptionCashFixedIbor requires a "
+            + "YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
@@ -71,11 +75,13 @@ public final class PresentValueBlackSwaptionSensitivityBlackCalculator extends I
       return METHOD_SWAPTION_PHYSICAL.presentValueBlackSensitivity(swaption, curveBlack);
     }
     throw new UnsupportedOperationException(
-        "The PresentValueBlackSwaptionSensitivityBlackSwaptionCalculator visitor visitSwaptionPhysicalFixedIbor requires a YieldCurveWithBlackSwaptionBundle as data.");
+        "The PresentValueBlackSwaptionSensitivityBlackSwaptionCalculator visitor visitSwaptionPhysicalFixedIbor requires a "
+            + "YieldCurveWithBlackSwaptionBundle as data.");
   }
 
   @Override
-  public PresentValueBlackSwaptionSensitivity visitSwaptionPhysicalFixedCompoundedONCompounded(final SwaptionPhysicalFixedCompoundedONCompounded swaption, final YieldCurveBundle curves) {
+  public PresentValueBlackSwaptionSensitivity visitSwaptionPhysicalFixedCompoundedONCompounded(final SwaptionPhysicalFixedCompoundedONCompounded swaption,
+      final YieldCurveBundle curves) {
     ArgumentChecker.notNull(swaption, "swaption");
     ArgumentChecker.notNull(curves, "curves");
     if (curves instanceof YieldCurveWithBlackSwaptionBundle) {
@@ -83,7 +89,8 @@ public final class PresentValueBlackSwaptionSensitivityBlackCalculator extends I
       return METHOD_SWAPTION_PHYSICAL_COMPOUNDED.presentValueBlackSensitivity(swaption, curveBlack);
     }
     throw new UnsupportedOperationException(
-        "The PresentValueBlackSwaptionSensitivityBlackSwaptionCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded requires a YieldCurveWithBlackSwaptionBundle as data.");
+        "The PresentValueBlackSwaptionSensitivityBlackSwaptionCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded requires a "
+            + "YieldCurveWithBlackSwaptionBundle as data.");
   }
 
 }

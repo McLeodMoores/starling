@@ -48,7 +48,8 @@ public class AgricultureForwardSecurity extends CommodityForwardSecurity {
    * @param category
    *          the category, not null
    */
-  public AgricultureForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount, final String category) {
+  public AgricultureForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount,
+      final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }
 

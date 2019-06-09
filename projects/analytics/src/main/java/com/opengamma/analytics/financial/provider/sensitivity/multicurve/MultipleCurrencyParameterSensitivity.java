@@ -24,13 +24,13 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Class containing the sensitivity of the present value to specific parameters or market quotes and methods for manipulating these data.
- * The vector of sensitivities is stored with reference to a curve name and currency pair, with the sensitivity amounts assumed to be in the currency of the pair.
+ * Class containing the sensitivity of the present value to specific parameters or market quotes and methods for manipulating these data. The vector of
+ * sensitivities is stored with reference to a curve name and currency pair, with the sensitivity amounts assumed to be in the currency of the pair.
  */
 public class MultipleCurrencyParameterSensitivity {
   /**
-   * The map containing the sensitivity. The map links a pair of curve name and currency to a vector of sensitivities (sensitivities to parameters/inputs).
-   * The sensitivity is expressed in the currency of the pair.
+   * The map containing the sensitivity. The map links a pair of curve name and currency to a vector of sensitivities (sensitivities to parameters/inputs). The
+   * sensitivity is expressed in the currency of the pair.
    */
   private final LinkedHashMap<Pair<String, Currency>, DoubleMatrix1D> _sensitivity;
 
@@ -43,7 +43,9 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Constructor taking a map. A new map is created.
-   * @param sensitivity The map with the sensitivities, not null. The map is copied.
+   *
+   * @param sensitivity
+   *          The map with the sensitivities, not null. The map is copied.
    */
   public MultipleCurrencyParameterSensitivity(final LinkedHashMap<Pair<String, Currency>, DoubleMatrix1D> sensitivity) {
     ArgumentChecker.notNull(sensitivity, "sensitivity");
@@ -52,7 +54,9 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Static constructor from a map. A new map is created.
-   * @param sensitivity A map of name / currency pairs to vector of sensitivities, not null
+   *
+   * @param sensitivity
+   *          A map of name / currency pairs to vector of sensitivities, not null
    * @return An new instance of ParameterSensitivity
    */
   public static MultipleCurrencyParameterSensitivity of(final LinkedHashMap<Pair<String, Currency>, DoubleMatrix1D> sensitivity) {
@@ -62,8 +66,11 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Constructor from a simple sensitivity and a currency.
-   * @param single The Simple parameter sensitivity
-   * @param ccy The currency.
+   *
+   * @param single
+   *          The Simple parameter sensitivity
+   * @param ccy
+   *          The currency.
    * @return The multiple currency sensitivity.
    */
   public static MultipleCurrencyParameterSensitivity of(final SimpleParameterSensitivity single, final Currency ccy) {
@@ -75,10 +82,13 @@ public class MultipleCurrencyParameterSensitivity {
   }
 
   /**
-   * Create a copy of the sensitivity and add a given named sensitivity to it. If the name / currency pair is in the map,
-   * the two sensitivity matrices are added. Otherwise, a new entry is put into the map.
-   * @param nameCcy The name and the currency, not null
-   * @param sensitivity The sensitivity to add, not null
+   * Create a copy of the sensitivity and add a given named sensitivity to it. If the name / currency pair is in the map, the two sensitivity matrices are
+   * added. Otherwise, a new entry is put into the map.
+   *
+   * @param nameCcy
+   *          The name and the currency, not null
+   * @param sensitivity
+   *          The sensitivity to add, not null
    * @return The total sensitivity.
    */
   public MultipleCurrencyParameterSensitivity plus(final Pair<String, Currency> nameCcy, final DoubleMatrix1D sensitivity) {
@@ -97,7 +107,9 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Create a copy of the sensitivity and add a given sensitivity to it.
-   * @param other The sensitivity to add.
+   *
+   * @param other
+   *          The sensitivity to add.
    * @return The total sensitivity.
    */
   public MultipleCurrencyParameterSensitivity plus(final MultipleCurrencyParameterSensitivity other) {
@@ -118,7 +130,9 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Create a copy of the object with all the sensitivities multiplied by a common factor.
-   * @param factor The factor.
+   *
+   * @param factor
+   *          The factor.
    * @return The multiplied sensitivity.
    */
   public MultipleCurrencyParameterSensitivity multipliedBy(final double factor) {
@@ -132,8 +146,11 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Create a new parameter sensitivity with the new sensitivity with all the values in a common currency.
-   * @param fxMatrix The matrix with relevant exchange rates, not null
-   * @param ccy The currency in which the sensitivity is converted, not null
+   *
+   * @param fxMatrix
+   *          The matrix with relevant exchange rates, not null
+   * @param ccy
+   *          The currency in which the sensitivity is converted, not null
    * @return The converted sensitivity.
    */
   public MultipleCurrencyParameterSensitivity converted(final FXMatrix fxMatrix, final Currency ccy) {
@@ -153,6 +170,7 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Returns the sensitivities wrapped in an unmodifiable map
+   *
    * @return The sensitivities
    */
   public Map<Pair<String, Currency>, DoubleMatrix1D> getSensitivities() {
@@ -180,7 +198,9 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Returns the sensitivity for a given name/currency pair.
-   * @param nameCcy The name and the currency, not null
+   *
+   * @param nameCcy
+   *          The name and the currency, not null
    * @return The sensitivity.
    */
   public DoubleMatrix1D getSensitivity(final Pair<String, Currency> nameCcy) {
@@ -190,8 +210,11 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Returns the sensitivity for a given name.
-   * @param name The name.
-   * @param ccy The currency.
+   *
+   * @param name
+   *          The name.
+   * @param ccy
+   *          The currency.
    * @return The sensitivity.
    */
   public DoubleMatrix1D getSensitivity(final String name, final Currency ccy) {
@@ -219,8 +242,11 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Returns the total sensitivity to all curves, in a given currency.
-   * @param fxMatrix The FX matrix will the exchange rates.
-   * @param ccy The currency for the conversion.
+   *
+   * @param fxMatrix
+   *          The FX matrix will the exchange rates.
+   * @param ccy
+   *          The currency for the conversion.
    * @return The sensitivity.
    */
   public double totalSensitivity(final FXMatrix fxMatrix, final Currency ccy) {
@@ -236,6 +262,7 @@ public class MultipleCurrencyParameterSensitivity {
 
   /**
    * Returns a set with all the curve names.
+   *
    * @return The set of names.
    */
   public Set<Pair<String, Currency>> getAllNamesCurrency() {

@@ -14,6 +14,7 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 // CSOFF
 /**
  * Calculator of the present value for Forex derivatives in the Black (Garman-Kohlhagen) world. A term structure of implied volatility is provided.
+ *
  * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
  */
 @Deprecated
@@ -22,14 +23,16 @@ public class PresentValueCurveSensitivityBlackTermStructureForexCalculator exten
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueCurveSensitivityBlackTermStructureForexCalculator s_instance = new PresentValueCurveSensitivityBlackTermStructureForexCalculator();
+  private static final PresentValueCurveSensitivityBlackTermStructureForexCalculator INSTANCE =
+      new PresentValueCurveSensitivityBlackTermStructureForexCalculator();
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackTermStructureForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

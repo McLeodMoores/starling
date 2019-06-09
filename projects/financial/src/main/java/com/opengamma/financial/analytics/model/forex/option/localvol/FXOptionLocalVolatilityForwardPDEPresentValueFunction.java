@@ -47,7 +47,8 @@ public class FXOptionLocalVolatilityForwardPDEPresentValueFunction extends Abstr
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final FXOptionSecurity fxOption = (FXOptionSecurity) target.getSecurity();
     final Currency putCurrency = fxOption.getPutCurrency();
     final Currency callCurrency = fxOption.getCallCurrency();
@@ -66,7 +67,8 @@ public class FXOptionLocalVolatilityForwardPDEPresentValueFunction extends Abstr
     }
     final double spotFX = (Double) spotObject;
     final Double price = (Double) priceObject;
-    final MultipleCurrencyAmount pvs = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(price, spotFX, putCurrency, callCurrency, putAmount, callAmount);
+    final MultipleCurrencyAmount pvs = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(price, spotFX, putCurrency, callCurrency,
+        putAmount, callAmount);
     final ValueProperties properties = getResultProperties(desiredValue);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.FX_PRESENT_VALUE, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, pvs));

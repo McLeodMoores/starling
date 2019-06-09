@@ -25,7 +25,8 @@ public class InterpolatedForwardCurveDefaults extends DefaultPropertyFunction {
   private final Set<String> _forwardCurveLeftExtrapolator;
   private final Set<String> _forwardCurveRightExtrapolator;
 
-  public InterpolatedForwardCurveDefaults(final String forwardCurveInterpolator, final String forwardCurveLeftExtrapolator, final String forwardCurveRightExtrapolator) {
+  public InterpolatedForwardCurveDefaults(final String forwardCurveInterpolator, final String forwardCurveLeftExtrapolator,
+      final String forwardCurveRightExtrapolator) {
     super(ComputationTargetType.ANYTHING, true); // // [PLAT-2286]: change to correct type
     ArgumentChecker.notNull(forwardCurveInterpolator, "forward curve interpolator");
     ArgumentChecker.notNull(forwardCurveLeftExtrapolator, "forward curve left extrapolator");
@@ -43,7 +44,8 @@ public class InterpolatedForwardCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     switch (propertyName) {
       case ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_INTERPOLATOR:
         return _forwardCurveInterpolator;

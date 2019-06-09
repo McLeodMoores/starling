@@ -69,7 +69,7 @@ public class GBConventions extends ConventionMasterInitializer {
   protected GBConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
     addConventions(master);
@@ -94,7 +94,8 @@ public class GBConventions extends ConventionMasterInitializer {
     final DepositConvention depositONConvention = new DepositConvention(
         depositONConventionName, getIds(Currency.GBP, DEPOSIT_ON), ACT_365, FOLLOWING, 0, false, Currency.GBP, GB);
     final String depositConventionName = getConventionName(Currency.GBP, DEPOSIT);
-    final DepositConvention depositConvention = new DepositConvention(depositConventionName, getIds(Currency.GBP, DEPOSIT), ACT_365, MODIFIED_FOLLOWING, 0, true, Currency.GBP, GB);
+    final DepositConvention depositConvention = new DepositConvention(depositConventionName, getIds(Currency.GBP, DEPOSIT), ACT_365, MODIFIED_FOLLOWING, 0,
+        true, Currency.GBP, GB);
 
     // Fixed legs
     final String oisFixedLegConventionName = getConventionName(Currency.GBP, TENOR_STR_1Y, PAY_LAG + FIXED_LEG);

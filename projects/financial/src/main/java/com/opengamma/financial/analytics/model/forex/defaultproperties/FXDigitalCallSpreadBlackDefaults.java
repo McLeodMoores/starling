@@ -23,17 +23,17 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class FXDigitalCallSpreadBlackDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.FX_CURRENCY_EXPOSURE,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_GAMMA_P,
-    ValueRequirementNames.VEGA_MATRIX,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX,
-    ValueRequirementNames.FX_CURVE_SENSITIVITIES,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.CALL_SPREAD_VALUE_VEGA,
-    ValueRequirementNames.VALUE_THETA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_CURRENCY_EXPOSURE,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_GAMMA_P,
+                ValueRequirementNames.VEGA_MATRIX,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.FX_CURVE_SENSITIVITIES,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.CALL_SPREAD_VALUE_VEGA,
+                ValueRequirementNames.VALUE_THETA
   };
   private final String _spread;
 
@@ -54,7 +54,8 @@ public class FXDigitalCallSpreadBlackDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (FXDigitalCallSpreadBlackFunction.PROPERTY_CALL_SPREAD_VALUE.equals(propertyName)) {
       return Collections.singleton(_spread);
     }

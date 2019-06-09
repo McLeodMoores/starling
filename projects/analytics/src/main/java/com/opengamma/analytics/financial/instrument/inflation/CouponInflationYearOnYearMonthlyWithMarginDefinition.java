@@ -21,9 +21,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- *  Class describing a Year on Year inflation coupon were the inflation figure are the one of the reference month and are not interpolated.
- * The index for a given month is given in the yield curve and in the time series on the first of the month.
- * The pay-off is paymentYearFraction*(Index_End / Index_Start - X)+ Margin with X=0 for notional payment and X=1 for no notional payment.
+ * Class describing a Year on Year inflation coupon were the inflation figure are the one of the reference month and are not interpolated. The index for a given
+ * month is given in the yield curve and in the time series on the first of the month. The pay-off is paymentYearFraction*(Index_End / Index_Start - X)+ Margin
+ * with X=0 for notional payment and X=1 for no notional payment.
  */
 public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends CouponInflationDefinition implements CouponInflationWithMargin {
 
@@ -38,7 +38,8 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
   private final ZonedDateTime _referenceStartDate;
 
   /**
-   * The reference date for the index at the coupon end. The first of the month. There is usually a difference of two or three month between the reference date and the payment date.
+   * The reference date for the index at the coupon end. The first of the month. There is usually a difference of two or three month between the reference date
+   * and the payment date.
    */
   private final ZonedDateTime _referenceEndDate;
   /**
@@ -46,32 +47,49 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
    */
   private final boolean _payNotional;
   /**
-   * The lag in month between the index validity and the coupon dates for the standard product (the one in exchange market and used for the calibration, this lag is in most cases 3 month).
+   * The lag in month between the index validity and the coupon dates for the standard product (the one in exchange market and used for the calibration, this
+   * lag is in most cases 3 month).
    */
   private final int _conventionalMonthLag;
 
   /**
-   * The lag in month between the index validity and the coupon dates for the actual product. (In most of the cases,lags are standard so _conventionalMonthLag=_monthLag)
+   * The lag in month between the index validity and the coupon dates for the actual product. (In most of the cases,lags are standard so
+   * _conventionalMonthLag=_monthLag)
    */
   private final int _monthLag;
 
   /**
    * Constructor for Year on Year inflation coupon.
-   * @param factor the additive factor
-   * @param currency The coupon currency.
-   * @param paymentDate The payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates for the actual product.
-   * @param referenceStartDate The reference date for the index at the coupon start.
-   * @param referenceEndDate The reference date for the index at the coupon end.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
+   * 
+   * @param factor
+   *          the additive factor
+   * @param currency
+   *          The coupon currency.
+   * @param paymentDate
+   *          The payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param referenceStartDate
+   *          The reference date for the index at the coupon start.
+   * @param referenceEndDate
+   *          The reference date for the index at the coupon end.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
    */
-  public CouponInflationYearOnYearMonthlyWithMarginDefinition(final double factor, final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+  public CouponInflationYearOnYearMonthlyWithMarginDefinition(final double factor, final Currency currency, final ZonedDateTime paymentDate,
+      final ZonedDateTime accrualStartDate,
       final ZonedDateTime accrualEndDate, final double paymentYearFraction, final double notional, final IndexPrice priceIndex, final int conventionalMonthLag,
       final int monthLag, final ZonedDateTime referenceStartDate, final ZonedDateTime referenceEndDate, final boolean payNotional) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional, priceIndex);
@@ -86,43 +104,66 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
   }
 
   /**
-   * Builder for inflation Year on Yearn based on an inflation lag and index publication. The fixing date is the publication lag after the last reference month. The month lag is the conventional one.
-   * @param factor the additive factor
-   * @param accrualStartDate Start date of the accrual period.
-   * @param paymentDate The payment date.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
+   * Builder for inflation Year on Yearn based on an inflation lag and index publication. The fixing date is the publication lag after the last reference month.
+   * The month lag is the conventional one.
+   * 
+   * @param factor
+   *          the additive factor
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param paymentDate
+   *          The payment date.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
    * @return The inflation zero-coupon.
    */
-  public static CouponInflationYearOnYearMonthlyWithMarginDefinition from(final double factor, final ZonedDateTime accrualStartDate, final ZonedDateTime paymentDate, final double notional,
+  public static CouponInflationYearOnYearMonthlyWithMarginDefinition from(final double factor, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime paymentDate, final double notional,
       final IndexPrice priceIndex, final int conventionalMonthLag, final boolean payNotional) {
     final ZonedDateTime referenceStartDate = accrualStartDate.minusMonths(conventionalMonthLag).with(TemporalAdjusters.lastDayOfMonth());
     final ZonedDateTime referenceEndDate = paymentDate.minusMonths(conventionalMonthLag).with(TemporalAdjusters.lastDayOfMonth());
 
-    return new CouponInflationYearOnYearMonthlyWithMarginDefinition(factor, priceIndex.getCurrency(), paymentDate, accrualStartDate, paymentDate, 1.0, notional, priceIndex, conventionalMonthLag,
+    return new CouponInflationYearOnYearMonthlyWithMarginDefinition(factor, priceIndex.getCurrency(), paymentDate, accrualStartDate, paymentDate, 1.0, notional,
+        priceIndex, conventionalMonthLag,
         conventionalMonthLag, referenceStartDate, referenceEndDate, payNotional);
   }
 
   /**
    * Builder for inflation Year on Yearn based on an inflation lag and index publication. The fixing date is the publication lag after the last reference month.
-   * @param factor the additive factor
-   * @param accrualStartDate Start date of the accrual period.
-   * @param paymentDate The payment date.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param conventionalMonthLag The lag in month between the index validity and the coupon dates for the standard product.
-   * @param monthLag The lag in month between the index validity and the coupon dates for the actual product.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
+   * 
+   * @param factor
+   *          the additive factor
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param paymentDate
+   *          The payment date.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param conventionalMonthLag
+   *          The lag in month between the index validity and the coupon dates for the standard product.
+   * @param monthLag
+   *          The lag in month between the index validity and the coupon dates for the actual product.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
    * @return The inflation zero-coupon.
    */
-  public static CouponInflationYearOnYearMonthlyWithMarginDefinition from(final double factor, final ZonedDateTime accrualStartDate, final ZonedDateTime paymentDate, final double notional,
+  public static CouponInflationYearOnYearMonthlyWithMarginDefinition from(final double factor, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime paymentDate, final double notional,
       final IndexPrice priceIndex, final int conventionalMonthLag, final int monthLag, final boolean payNotional) {
-    final ZonedDateTime referenceStartDate = accrualStartDate.minusMonths(conventionalMonthLag).with(TemporalAdjusters.lastDayOfMonth()).withHour(0).withMinute(0);
+    final ZonedDateTime referenceStartDate = accrualStartDate.minusMonths(conventionalMonthLag).with(TemporalAdjusters.lastDayOfMonth()).withHour(0)
+        .withMinute(0);
     final ZonedDateTime referenceEndDate = paymentDate.minusMonths(conventionalMonthLag).with(TemporalAdjusters.lastDayOfMonth()).withHour(0).withMinute(0);
 
-    return new CouponInflationYearOnYearMonthlyWithMarginDefinition(factor, priceIndex.getCurrency(), paymentDate, accrualStartDate, paymentDate, 1.0, notional, priceIndex, conventionalMonthLag,
+    return new CouponInflationYearOnYearMonthlyWithMarginDefinition(factor, priceIndex.getCurrency(), paymentDate, accrualStartDate, paymentDate, 1.0, notional,
+        priceIndex, conventionalMonthLag,
         monthLag, referenceStartDate, referenceEndDate, payNotional);
   }
 
@@ -133,6 +174,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
 
   /**
    * Gets the reference date for the index at the coupon start.
+   * 
    * @return The reference date for the index at the coupon start.
    */
   public ZonedDateTime getReferenceStartDate() {
@@ -141,6 +183,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
 
   /**
    * Gets the reference date for the index at the coupon end.
+   * 
    * @return The reference date for the index at the coupon end.
    */
   public ZonedDateTime getReferenceEndDate() {
@@ -149,6 +192,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
 
   /**
    * Gets the pay notional flag.
+   * 
    * @return The flag.
    */
   public boolean payNotional() {
@@ -157,6 +201,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
 
   /**
    * Gets the lag in month between the index validity and the coupon dates.
+   * 
    * @return The lag.
    */
   public int getConventionalMonthLag() {
@@ -165,6 +210,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
 
   /**
    * Gets the lag in month between the index validity and the coupon dates for the actual product.
+   * 
    * @return The lag.
    */
   public int getMonthLag() {
@@ -172,12 +218,14 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
   }
 
   @Override
-  public CouponInflationDefinition with(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double notional) {
+  public CouponInflationDefinition with(final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final double notional) {
     return from(_factor, accrualStartDate, paymentDate, notional, getPriceIndex(), _conventionalMonthLag, _monthLag, _payNotional);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -195,12 +243,14 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
     final double naturalPaymentEndTime = TimeCalculator.getTimeBetween(date, naturalPaymentEndDate);
     final ZonedDateTime naturalPaymentstartDate = naturalPaymentEndDate.minusMonths(12);
     final double naturalPaymentStartTime = TimeCalculator.getTimeBetween(date, naturalPaymentstartDate);
-    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), referenceStartTime, naturalPaymentStartTime,
+    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        referenceStartTime, naturalPaymentStartTime,
         referenceEndTime, naturalPaymentEndTime, _payNotional);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -218,7 +268,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
       final Double fixedEndIndex = priceIndexTimeSeries.getValue(getReferenceEndDate());
       if (fixedEndIndex != null) {
         final Double fixedStartIndex = priceIndexTimeSeries.getValue(getReferenceStartDate());
-        final Double fixedRate = (fixedEndIndex / fixedStartIndex - (payNotional() ? 0.0 : 1.0)) + _factor;
+        final Double fixedRate = fixedEndIndex / fixedStartIndex - (payNotional() ? 0.0 : 1.0) + _factor;
         return new CouponFixed(getCurrency(), paymentTime, discountingCurveName, getPaymentYearFraction(), getNotional(), fixedRate);
       }
     }
@@ -230,7 +280,8 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
     final double naturalPaymentEndTime = TimeCalculator.getTimeBetween(date, naturalPaymentEndDate);
     final ZonedDateTime naturalPaymentstartDate = naturalPaymentEndDate.minusMonths(12);
     final double naturalPaymentStartTime = TimeCalculator.getTimeBetween(date, naturalPaymentstartDate);
-    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), referenceStartTime, naturalPaymentStartTime,
+    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        referenceStartTime, naturalPaymentStartTime,
         referenceEndTime, naturalPaymentEndTime, _payNotional);
   }
 
@@ -246,7 +297,8 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
     final double naturalPaymentEndTime = TimeCalculator.getTimeBetween(date, naturalPaymentEndDate);
     final ZonedDateTime naturalPaymentstartDate = naturalPaymentEndDate.minusMonths(12);
     final double naturalPaymentStartTime = TimeCalculator.getTimeBetween(date, naturalPaymentstartDate);
-    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), referenceStartTime, naturalPaymentStartTime,
+    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        referenceStartTime, naturalPaymentStartTime,
         referenceEndTime, naturalPaymentEndTime, _payNotional);
   }
 
@@ -261,7 +313,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
       final Double fixedEndIndex = priceIndexTimeSeries.getValue(getReferenceEndDate());
       if (fixedEndIndex != null) {
         final Double fixedStartIndex = priceIndexTimeSeries.getValue(getReferenceStartDate());
-        final Double fixedRate = (fixedEndIndex / fixedStartIndex - (payNotional() ? 0.0 : 1.0)) + _factor;
+        final Double fixedRate = fixedEndIndex / fixedStartIndex - (payNotional() ? 0.0 : 1.0) + _factor;
         return new CouponFixed(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), fixedRate);
       }
     }
@@ -273,7 +325,8 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
     final double naturalPaymentEndTime = TimeCalculator.getTimeBetween(date, naturalPaymentEndDate);
     final ZonedDateTime naturalPaymentstartDate = naturalPaymentEndDate.minusMonths(12);
     final double naturalPaymentStartTime = TimeCalculator.getTimeBetween(date, naturalPaymentstartDate);
-    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(), referenceStartTime, naturalPaymentStartTime,
+    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPriceIndex(),
+        referenceStartTime, naturalPaymentStartTime,
         referenceEndTime, naturalPaymentEndTime, _payNotional);
   }
 
@@ -296,7 +349,7 @@ public class CouponInflationYearOnYearMonthlyWithMarginDefinition extends Coupon
     result = prime * result + _conventionalMonthLag;
     long temp;
     temp = Double.doubleToLongBits(_factor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _monthLag;
     result = prime * result + (_payNotional ? 1231 : 1237);
     result = prime * result + _referenceEndDate.hashCode();

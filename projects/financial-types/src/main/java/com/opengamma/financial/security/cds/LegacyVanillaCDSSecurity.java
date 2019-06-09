@@ -42,7 +42,7 @@ public class LegacyVanillaCDSSecurity extends LegacyCDSSecurity {
   private static final long serialVersionUID = 2L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "LEGACY_VANILLA_CDS";
   /**
@@ -55,7 +55,7 @@ public class LegacyVanillaCDSSecurity extends LegacyCDSSecurity {
     super(SECURITY_TYPE);
   }
 
-  public LegacyVanillaCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer, final ExternalId referenceEntity, // CSIGNORE
+  public LegacyVanillaCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer, final ExternalId referenceEntity,
       final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final ExternalId regionId, final ZonedDateTime startDate,
       final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final Frequency couponFrequency, final DayCount dayCount,
       final BusinessDayConvention businessDayConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,

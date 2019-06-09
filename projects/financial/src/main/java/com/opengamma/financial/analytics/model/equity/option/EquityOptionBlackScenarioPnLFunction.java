@@ -101,7 +101,8 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
       } else if (volShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
         additiveShift = false;
       } else {
-        LOGGER.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug(
+            "In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         additiveShift = false;
       }
       volSurfScen = market.getVolatilitySurface().withShift(shiftVol, additiveShift);
@@ -165,7 +166,8 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = inputs.keySet().iterator().next();
       if (getValueRequirementName().equals(input.getValueName())) {

@@ -15,6 +15,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Methods for the pricing of interest rate futures option with premium generic to all models.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -27,7 +28,9 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Constructor.
-   * @param securityMethod The method to price the underlying security.
+   * 
+   * @param securityMethod
+   *          The method to price the underlying security.
    */
   public InterestRateFutureOptionMarginTransactionMethod(final InterestRateFutureOptionMarginSecurityMethod securityMethod) {
     _securityMethod = securityMethod;
@@ -35,6 +38,7 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Gets the method to price the underlying security.
+   * 
    * @return The method.
    */
   public InterestRateFutureOptionMarginSecurityMethod getSecurityMethod() {
@@ -43,8 +47,11 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Compute the present value of a future transaction from a quoted price.
-   * @param option The future option.
-   * @param price The quoted price.
+   * 
+   * @param option
+   *          The future option.
+   * @param price
+   *          The quoted price.
    * @return The present value.
    */
   public CurrencyAmount presentValueFromPrice(final InterestRateFutureOptionMarginTransaction option, final double price) {
@@ -55,12 +62,17 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Computes the present value of a transaction from the future price and curve/volatility data.
-   * @param transaction The future option transaction.
-   * @param curves The yield curve bundle.
-   * @param priceFuture The price of the underlying future.
+   * 
+   * @param transaction
+   *          The future option transaction.
+   * @param curves
+   *          The yield curve bundle.
+   * @param priceFuture
+   *          The price of the underlying future.
    * @return The present value.
    */
-  public CurrencyAmount presentValueFromFuturePrice(final InterestRateFutureOptionMarginTransaction transaction, final YieldCurveBundle curves, final double priceFuture) {
+  public CurrencyAmount presentValueFromFuturePrice(final InterestRateFutureOptionMarginTransaction transaction, final YieldCurveBundle curves,
+      final double priceFuture) {
     final double priceSecurity = _securityMethod.optionPriceFromFuturePrice(transaction.getUnderlyingSecurity(), curves, priceFuture);
     final CurrencyAmount priceTransaction = presentValueFromPrice(transaction, priceSecurity);
     return priceTransaction;
@@ -68,7 +80,8 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   @Override
   public CurrencyAmount presentValue(final InstrumentDerivative instrument, final YieldCurveBundle curves) {
-    ArgumentChecker.isTrue(instrument instanceof InterestRateFutureOptionMarginTransaction, "The instrument should be a InterestRateFutureOptionMarginTransaction");
+    ArgumentChecker.isTrue(instrument instanceof InterestRateFutureOptionMarginTransaction,
+        "The instrument should be a InterestRateFutureOptionMarginTransaction");
     final InterestRateFutureOptionMarginTransaction transaction = (InterestRateFutureOptionMarginTransaction) instrument;
     final double priceSecurity = _securityMethod.optionPrice(transaction.getUnderlyingSecurity(), curves);
     final CurrencyAmount pvTransaction = presentValueFromPrice(transaction, priceSecurity);
@@ -77,8 +90,11 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Computes the present value curve sensitivity of a transaction.
-   * @param transaction The future option transaction.
-   * @param curves The yield curve bundle.
+   * 
+   * @param transaction
+   *          The future option transaction.
+   * @param curves
+   *          The yield curve bundle.
    * @return The present value curve sensitivity.
    */
   public InterestRateCurveSensitivity presentValueCurveSensitivity(final InterestRateFutureOptionMarginTransaction transaction, final YieldCurveBundle curves) {

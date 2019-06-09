@@ -25,7 +25,9 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
 
   /**
    * Constructor specifying base calculator
-   * @param cal Base calculator
+   *
+   * @param cal
+   *          Base calculator
    */
   public CarrLeeFXVolatilitySwapThetaCalculator(final CarrLeeFXVolatilitySwapCalculator cal) {
     ArgumentChecker.notNull(cal, "cal");
@@ -33,11 +35,15 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
   }
 
   /**
-   * Theta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes},
-   * i.e., assuming the fair value has been already calculated. For theta the bump amount is 1 working day.
-   * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap
-   * @param data The FX data for Carr-Lee
+   * Theta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, i.e., assuming the fair value
+   * has been already calculated. For theta the bump amount is 1 working day.
+   *
+   * @param result
+   *          {@link VolatilitySwapCalculatorResultWithStrikes}
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return theta
    */
   public Double getFXVolatilitySwapTheta(final VolatilitySwapCalculatorResultWithStrikes result, final FXVolatilitySwap swap, final CarrLeeFXData data) {
@@ -63,8 +69,10 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
 
     final double bumpedTimeToObservationStart = swap.getTimeToObservationStart() == 0. ? 0. : swap.getTimeToObservationStart() - timeBumpAmount;
 
-    final FXVolatilitySwap timeBumpedSwap = new FXVolatilitySwap(bumpedTimeToObservationStart, swap.getTimeToObservationEnd() - timeBumpAmount, swap.getObservationFrequency(),
-        swap.getTimeToMaturity() - timeBumpAmount, swap.getVolatilityStrike(), swap.getVolatilityNotional(), swap.getCurrency(), swap.getBaseCurrency(), swap.getCounterCurrency(), aFac);
+    final FXVolatilitySwap timeBumpedSwap = new FXVolatilitySwap(bumpedTimeToObservationStart, swap.getTimeToObservationEnd() - timeBumpAmount,
+        swap.getObservationFrequency(),
+        swap.getTimeToMaturity() - timeBumpAmount, swap.getVolatilityStrike(), swap.getVolatilityNotional(), swap.getCurrency(), swap.getBaseCurrency(),
+        swap.getCounterCurrency(), aFac);
     final VolatilitySwapCalculatorResult timeBumpedRes = _cal.visitFXVolatilitySwap(timeBumpedSwap, data);
     final double timeBumpedFV = timeBumpedRes.getFairValue();
 

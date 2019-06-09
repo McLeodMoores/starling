@@ -20,8 +20,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a deposit where the rate is expressed in a specific composition convention.
- * Used mainly for curve construction with rates directly provided (not calibrated).
+ * Class describing a deposit where the rate is expressed in a specific composition convention. Used mainly for curve construction with rates directly provided
+ * (not calibrated).
  */
 public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> {
 
@@ -64,16 +64,26 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Constructor from all details.
-   * @param currency The currency.
-   * @param startDate The start date.
-   * @param endDate The end date.
-   * @param notional The notional.
-   * @param paymentAccrualFactor The accrual factor (or year fraction).
-   * @param rate The interest rate and its composition type.
-   * @param calendar The holiday calendar.
-   * @param dayCount The day count.
+   * 
+   * @param currency
+   *          The currency.
+   * @param startDate
+   *          The start date.
+   * @param endDate
+   *          The end date.
+   * @param notional
+   *          The notional.
+   * @param paymentAccrualFactor
+   *          The accrual factor (or year fraction).
+   * @param rate
+   *          The interest rate and its composition type.
+   * @param calendar
+   *          The holiday calendar.
+   * @param dayCount
+   *          The day count.
    */
-  public DepositZeroDefinition(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final double notional, final double paymentAccrualFactor,
+  public DepositZeroDefinition(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final double notional,
+      final double paymentAccrualFactor,
       final InterestRate rate, final Calendar calendar, final DayCount dayCount) {
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(startDate, "Start date");
@@ -94,16 +104,25 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Builder. The day count is used to compute the accrual factor. The notional is 1.
-   * @param currency The currency.
-   * @param startDate The start date.
-   * @param endDate The end date.
-   * @param daycount The day count.
-   * @param rate The interest rate and its composition type.
-   * @param calendar The holiday calendar.
-   * @param dayCount The day count
+   * 
+   * @param currency
+   *          The currency.
+   * @param startDate
+   *          The start date.
+   * @param endDate
+   *          The end date.
+   * @param daycount
+   *          The day count.
+   * @param rate
+   *          The interest rate and its composition type.
+   * @param calendar
+   *          The holiday calendar.
+   * @param dayCount
+   *          The day count
    * @return The deposit.
    */
-  public static DepositZeroDefinition from(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final DayCount daycount, final InterestRate rate,
+  public static DepositZeroDefinition from(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final DayCount daycount,
+      final InterestRate rate,
       final Calendar calendar, final DayCount dayCount) {
     ArgumentChecker.notNull(daycount, "day count");
     return new DepositZeroDefinition(currency, startDate, endDate, 1.0, daycount.getDayCountFraction(startDate, endDate, calendar), rate, calendar, dayCount);
@@ -111,15 +130,23 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Builder. The day count is used to compute the accrual factor. The notional is 1.
-   * @param currency The currency.
-   * @param startDate The start date.
-   * @param endDate The end date.
-   * @param daycount The day count.
-   * @param rate The interest rate and its composition type.
-   * @param calendar The holiday calendar.
+   * 
+   * @param currency
+   *          The currency.
+   * @param startDate
+   *          The start date.
+   * @param endDate
+   *          The end date.
+   * @param daycount
+   *          The day count.
+   * @param rate
+   *          The interest rate and its composition type.
+   * @param calendar
+   *          The holiday calendar.
    * @return The deposit.
    */
-  public static DepositZeroDefinition withAdjustedRate(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final DayCount daycount, final InterestRate rate,
+  public static DepositZeroDefinition withAdjustedRate(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate,
+      final DayCount daycount, final InterestRate rate,
       final Calendar calendar) {
     ArgumentChecker.notNull(daycount, "day count");
     double adjustedRate;
@@ -129,11 +156,13 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
       adjustedRate = rate.getRate();
     }
     final InterestRate adjustedInterestRate = new PeriodicInterestRate(adjustedRate, 1);
-    return new DepositZeroDefinition(currency, startDate, endDate, 1.0, daycount.getDayCountFraction(startDate, endDate, calendar), adjustedInterestRate, calendar, daycount);
+    return new DepositZeroDefinition(currency, startDate, endDate, 1.0, daycount.getDayCountFraction(startDate, endDate, calendar), adjustedInterestRate,
+        calendar, daycount);
   }
 
   /**
    * Gets the deposit currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -142,6 +171,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the deposit start date
+   * 
    * @return The date.
    */
   public ZonedDateTime getStartDate() {
@@ -150,6 +180,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the deposit end date
+   * 
    * @return The date.
    */
   public ZonedDateTime getEndDate() {
@@ -158,6 +189,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the deposit notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -166,6 +198,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the accrual factor (or year fraction).
+   * 
    * @return The factor.
    */
   public double getPaymentAccrualFactor() {
@@ -174,6 +207,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the rate (figure and composition rule).
+   * 
    * @return The rate.
    */
   public InterestRate getRate() {
@@ -182,6 +216,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the interest rate amount.
+   * 
    * @return The amount.
    */
   public double getInterestAmount() {
@@ -195,6 +230,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -254,11 +290,11 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
     result = prime * result + _endDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_interestAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_paymentAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _rate.hashCode();
     result = prime * result + _startDate.hashCode();
     return result;

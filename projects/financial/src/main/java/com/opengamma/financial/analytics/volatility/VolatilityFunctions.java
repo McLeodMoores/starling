@@ -39,6 +39,7 @@ public class VolatilityFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Returns volatility cube functions.
+   * 
    * @return A list of volatility cube functions
    */
   protected FunctionConfigurationSource cubeFunctionConfiguration() {
@@ -47,15 +48,17 @@ public class VolatilityFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Returns an empty list
+   * 
    * @return An empty list
    */
   protected FunctionConfigurationSource fittedResultsFunctionConfiguration() {
     // TODO
-    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>emptyList()));
+    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration> emptyList()));
   }
 
   /**
    * Returns surface functions.
+   * 
    * @return A list of surface functions
    */
   protected FunctionConfigurationSource surfaceFunctionConfiguration() {
@@ -64,7 +67,8 @@ public class VolatilityFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), cubeFunctionConfiguration(), fittedResultsFunctionConfiguration(), surfaceFunctionConfiguration());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), cubeFunctionConfiguration(), fittedResultsFunctionConfiguration(),
+        surfaceFunctionConfiguration());
   }
 
 }

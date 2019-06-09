@@ -81,14 +81,15 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
   // if we had separate function instances, one for each one, so that the dependency graph can exploit the resultant parallelism.
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final FXOptionSecurity fxOption = (FXOptionSecurity) target.getSecurity();
     // Constraints have to be the same on all output values (except for the interpolator), so grab them from the first
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String surfaceName = desiredValue.getConstraint(SURFACE);
     final String surfaceType = desiredValue.getConstraint(PROPERTY_SURFACE_TYPE);
     final String xAxis = desiredValue.getConstraint(PROPERTY_X_AXIS);
-    final String yAxis = desiredValue.getConstraint(PROPERTY_Y_AXIS); //Review R White 12/03/2012 Not sure why integratedVariance is a property of the y axis
+    final String yAxis = desiredValue.getConstraint(PROPERTY_Y_AXIS); // Review R White 12/03/2012 Not sure why integratedVariance is a property of the y axis
     final String yAxisType = desiredValue.getConstraint(PROPERTY_Y_AXIS_TYPE);
     final String forwardCurveCalculationMethod = desiredValue.getConstraint(CURVE_CALCULATION_METHOD);
     final String forwardCurveName = desiredValue.getConstraint(CURVE);
@@ -109,7 +110,8 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     if (gridGreeksObject == null) {
       throw new OpenGammaRuntimeException("Grid greeks were null");
     }
-    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext)
+        .getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(fxOption.getPutCurrency(), fxOption.getCallCurrency());
     final double strike = getStrike(fxOption, currencyPair);
     final PDEResultCollection gridGreeks = (PDEResultCollection) gridGreeksObject;
@@ -137,7 +139,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final Set<ValueSpecification> results = new HashSet<>();
     final ValueProperties properties = createValueProperties()
-        .withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE) //TODO can be more specific?
+        .withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE) // TODO can be more specific?
         .with(ValuePropertyNames.CALCULATION_METHOD, LocalVolatilityPDEValuePropertyNames.LOCAL_VOLATILITY_METHOD)
         .withAny(SURFACE)
         .withAny(PROPERTY_SURFACE_TYPE)
@@ -245,13 +247,15 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     final String maxMoneyness = maxMoneynessNames.iterator().next();
     final String pdeDirection = pdeDirectionNames.iterator().next();
     final String surfaceName = surfaceNames.iterator().next();
-    final ValueRequirement greeksSpec = getGridGreeksRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h, forwardCurveName,
+    final ValueRequirement greeksSpec = getGridGreeksRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h,
+        forwardCurveName,
         theta, timeSteps, spaceSteps, timeGridBunching, spaceGridBunching, maxMoneyness, pdeDirection);
     return Collections.singleton(greeksSpec);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String surfaceName = null;
     String surfaceType = null;
     String xAxis = null;
@@ -401,16 +405,21 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
 
   }
 
-  private ValueRequirement getGridGreeksRequirement(final ComputationTarget target, final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
-      final String yAxisType, final String forwardCurveCalculationMethod, final String h, final String forwardCurveName, final String theta, final String timeSteps, final String spaceSteps,
+  private ValueRequirement getGridGreeksRequirement(final ComputationTarget target, final String surfaceName, final String surfaceType, final String xAxis,
+      final String yAxis,
+      final String yAxisType, final String forwardCurveCalculationMethod, final String h, final String forwardCurveName, final String theta,
+      final String timeSteps, final String spaceSteps,
       final String timeGridBunching, final String spaceGridBunching, final String maxMoneyness, final String pdeDirection) {
-    final ValueProperties properties = getGridGreekProperties(surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h, forwardCurveName, theta, timeSteps,
+    final ValueProperties properties = getGridGreekProperties(surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h,
+        forwardCurveName, theta, timeSteps,
         spaceSteps, timeGridBunching, spaceGridBunching, maxMoneyness, pdeDirection);
     return new ValueRequirement(ValueRequirementNames.LOCAL_VOLATILITY_PDE_GREEKS, target.toSpecification(), properties);
   }
 
-  private ValueProperties getGridGreekProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
-      final String forwardCurveCalculationMethod, final String h, final String forwardCurveName, final String theta, final String timeSteps, final String spaceSteps, final String timeGridBunching,
+  private ValueProperties getGridGreekProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
+      final String forwardCurveCalculationMethod, final String h, final String forwardCurveName, final String theta, final String timeSteps,
+      final String spaceSteps, final String timeGridBunching,
       final String spaceGridBunching, final String maxMoneyness, final String pdeDirection) {
     return ValueProperties.builder()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)
@@ -432,8 +441,10 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
         .get();
   }
 
-  private ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
-      final String forwardCurveCalculationMethod, final String h, final String forwardCurveName, final String theta, final String timeSteps, final String spaceSteps, final String timeGridBunching,
+  private ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
+      final String forwardCurveCalculationMethod, final String h, final String forwardCurveName, final String theta, final String timeSteps,
+      final String spaceSteps, final String timeGridBunching,
       final String spaceGridBunching, final String maxMoneyness, final String pdeDirection) {
     return createValueProperties()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)

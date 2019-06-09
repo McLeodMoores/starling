@@ -41,7 +41,8 @@ public class BondTenorFunction extends NonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final BondSecurity security = target.getValue(FinancialSecurityTypes.BOND_SECURITY);
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
     final ConventionBundleSource conventionSource = OpenGammaExecutionContext

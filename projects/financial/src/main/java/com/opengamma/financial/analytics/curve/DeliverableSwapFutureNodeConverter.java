@@ -123,10 +123,8 @@ public class DeliverableSwapFutureNodeConverter extends CurveNodeVisitorAdapter<
     final IborIndex iborIndex = new IborIndex(currency, indexTenor, spotLagIndex, dayCount, businessDayConvention, eom, indexConvention.getName());
     final GeneratorSwapFixedIbor generator = new GeneratorSwapFixedIbor("", fixedLegConvention.getPaymentTenor().getPeriod(), fixedLegConvention.getDayCount(),
         iborIndex, calendar);
-    final SwapFixedIborDefinition underlying = SwapFixedIborDefinition.from(deliveryDate, maturityTenor.getPeriod(), generator, notional, 0.0, false); // FIXME:
-                                                                                                                                                       // rate
-                                                                                                                                                       // of
-                                                                                                                                                       // underlying?
+    // FIXME rate of underlyimg?
+    final SwapFixedIborDefinition underlying = SwapFixedIborDefinition.from(deliveryDate, maturityTenor.getPeriod(), generator, notional, 0.0, false);
     final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition = new SwapFuturesPriceDeliverableSecurityDefinition(lastTradeDate, underlying,
         notional);
     return new SwapFuturesPriceDeliverableTransactionDefinition(securityDefinition, 1, _valuationTime, price);

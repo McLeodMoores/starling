@@ -20,8 +20,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class describing a multi-curves provider created from a issuer provider where the discounting curve
- * for one issuer replace (decorate) the discounting curve for one currency.
+ * Class describing a multi-curves provider created from a issuer provider where the discounting curve for one issuer replace (decorate) the discounting curve
+ * for one currency.
  */
 public class MulticurveProviderDiscountingDecoratedIssuer implements MulticurveProviderInterface {
 
@@ -40,11 +40,16 @@ public class MulticurveProviderDiscountingDecoratedIssuer implements MulticurveP
 
   /**
    * Constructor.
-   * @param issuerProvider The underlying issuer provider on which the multi-curves provider is based, not null
-   * @param decoratedCurrency The currency for which the discounting curve will be replaced (decorated), not null
-   * @param decoratingIssuer The issuer for which the associated discounting curve will replace the currency discounting curve, not null
+   *
+   * @param issuerProvider
+   *          The underlying issuer provider on which the multi-curves provider is based, not null
+   * @param decoratedCurrency
+   *          The currency for which the discounting curve will be replaced (decorated), not null
+   * @param decoratingIssuer
+   *          The issuer for which the associated discounting curve will replace the currency discounting curve, not null
    */
-  public MulticurveProviderDiscountingDecoratedIssuer(final IssuerProviderInterface issuerProvider, final Currency decoratedCurrency, final LegalEntity decoratingIssuer) {
+  public MulticurveProviderDiscountingDecoratedIssuer(final IssuerProviderInterface issuerProvider, final Currency decoratedCurrency,
+      final LegalEntity decoratingIssuer) {
     ArgumentChecker.notNull(issuerProvider, "issuerProvider");
     ArgumentChecker.notNull(decoratedCurrency, "decoratedCurrency");
     ArgumentChecker.notNull(decoratingIssuer, "decoratingIssuer");

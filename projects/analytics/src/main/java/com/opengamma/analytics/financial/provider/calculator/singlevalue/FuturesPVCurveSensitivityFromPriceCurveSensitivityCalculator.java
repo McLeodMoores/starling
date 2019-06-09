@@ -18,15 +18,18 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 /**
  * Computes the par rate for different instrument. The meaning of "par rate" is instrument dependent.
  */
-public final class FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveSensitivity, MultipleCurrencyMulticurveSensitivity> {
+public final class FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator
+extends InstrumentDerivativeVisitorAdapter<MulticurveSensitivity, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator INSTANCE = new FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator();
+  private static final FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator INSTANCE =
+      new FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator();
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator getInstance() {
@@ -39,42 +42,53 @@ public final class FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator 
   private FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator() {
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitFederalFundsFutureTransaction(final FederalFundsFutureTransaction futures, final MulticurveSensitivity priceSensitivity) {
+  public MultipleCurrencyMulticurveSensitivity visitFederalFundsFutureTransaction(final FederalFundsFutureTransaction futures,
+      final MulticurveSensitivity priceSensitivity) {
     return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(),
-        priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity() * futures.getUnderlyingSecurity().getPaymentAccrualFactor()));
+        priceSensitivity
+        .multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity() * futures.getUnderlyingSecurity().getPaymentAccrualFactor()));
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures, final MulticurveSensitivity priceSensitivity) {
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures,
+      final MulticurveSensitivity priceSensitivity) {
     return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(),
-        priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity() * futures.getUnderlyingSecurity().getPaymentAccrualFactor()));
+        priceSensitivity
+        .multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity() * futures.getUnderlyingSecurity().getPaymentAccrualFactor()));
   }
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitBondFuturesTransaction(final BondFuturesTransaction futures, final MulticurveSensitivity priceSensitivity) {
-    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(), priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity()));
+    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(),
+        priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity()));
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures, final MulticurveSensitivity priceSensitivity) {
-    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(), priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity()));
+  public MultipleCurrencyMulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures,
+      final MulticurveSensitivity priceSensitivity) {
+    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(),
+        priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getNotional() * futures.getQuantity()));
   }
 
-  //     -----     Futures options    -----
+  // ----- Futures options -----
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction futures, final MulticurveSensitivity priceSensitivity) {
-    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(), priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
-        * futures.getQuantity()));
+  public MultipleCurrencyMulticurveSensitivity visitBondFuturesOptionMarginTransaction(final BondFuturesOptionMarginTransaction futures,
+      final MulticurveSensitivity priceSensitivity) {
+    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(),
+        priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
+            * futures.getQuantity()));
   }
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final MulticurveSensitivity priceSensitivity) {
-    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(), priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
-        * futures.getQuantity() * futures.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor()));
+  public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final MulticurveSensitivity priceSensitivity) {
+    return MultipleCurrencyMulticurveSensitivity.of(futures.getCurrency(),
+        priceSensitivity.multipliedBy(futures.getUnderlyingSecurity().getUnderlyingFuture().getNotional()
+            * futures.getQuantity() * futures.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor()));
   }
 
 }

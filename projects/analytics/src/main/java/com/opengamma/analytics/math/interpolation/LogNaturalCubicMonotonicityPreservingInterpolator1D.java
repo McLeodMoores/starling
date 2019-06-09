@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -15,10 +15,10 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Find a interpolant F(x) = exp( f(x) ) where f(x) is a Natural cubic spline with Monotonicity cubic fileter. 
- * 
- * The natural cubic spline is determined by {@link LogNaturalSplineHelper}, where the tridiagonal algorithm is used to solve a linear system. 
- * Since {@link PiecewisePolynomialResultsWithSensitivity} in {@link Interpolator1DLogPiecewisePoynomialDataBundle} contains information on f(x) (NOT F(x)), 
+ * Find a interpolant F(x) = exp( f(x) ) where f(x) is a Natural cubic spline with Monotonicity cubic fileter.
+ *
+ * The natural cubic spline is determined by {@link LogNaturalSplineHelper}, where the tridiagonal algorithm is used to solve a linear system. Since
+ * {@link PiecewisePolynomialResultsWithSensitivity} in {@link Interpolator1DLogPiecewisePoynomialDataBundle} contains information on f(x) (NOT F(x)),
  * computation done by {@link PiecewisePolynomialWithSensitivityFunction1D} MUST be exponentiated.
  */
 public class LogNaturalCubicMonotonicityPreservingInterpolator1D extends PiecewisePolynomialInterpolator1D {
@@ -29,7 +29,7 @@ public class LogNaturalCubicMonotonicityPreservingInterpolator1D extends Piecewi
   private static final PiecewisePolynomialWithSensitivityFunction1D FUNC = new PiecewisePolynomialWithSensitivityFunction1D();
 
   /**
-   * 
+   *
    */
   public LogNaturalCubicMonotonicityPreservingInterpolator1D() {
     super(new MonotonicityPreservingCubicSplineInterpolator(new LogNaturalSplineHelper()));
@@ -82,7 +82,8 @@ public class LogNaturalCubicMonotonicityPreservingInterpolator1D extends Piecewi
       ArgumentChecker.isTrue(y[i] > 0., "y should be positive");
       logY[i] = Math.log(y[i]);
     }
-    return new Interpolator1DLogPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, logY, false), new MonotonicityPreservingCubicSplineInterpolator(new LogNaturalSplineHelper()));
+    return new Interpolator1DLogPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, logY, false),
+        new MonotonicityPreservingCubicSplineInterpolator(new LogNaturalSplineHelper()));
   }
 
   @Override
@@ -94,6 +95,7 @@ public class LogNaturalCubicMonotonicityPreservingInterpolator1D extends Piecewi
       ArgumentChecker.isTrue(y[i] > 0., "y should be positive");
       logY[i] = Math.log(y[i]);
     }
-    return new Interpolator1DLogPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, logY, true), new MonotonicityPreservingCubicSplineInterpolator(new LogNaturalSplineHelper()));
+    return new Interpolator1DLogPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(x, logY, true),
+        new MonotonicityPreservingCubicSplineInterpolator(new LogNaturalSplineHelper()));
   }
 }

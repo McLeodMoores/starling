@@ -42,7 +42,8 @@ public class BondFutureOptionBlackFromFuturePresentValueFunction extends BondFut
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data, final MultiCurveCalculationConfig curveCalculationConfig,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative bondFutureOption, final YieldCurveWithBlackCubeBundle data,
+      final MultiCurveCalculationConfig curveCalculationConfig,
       final ValueSpecification spec, final FunctionInputs inputs, final Set<ValueRequirement> desiredValue, final BondFutureOptionSecurity security) {
     final Object underlyingValue = inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     if (underlyingValue == null) {

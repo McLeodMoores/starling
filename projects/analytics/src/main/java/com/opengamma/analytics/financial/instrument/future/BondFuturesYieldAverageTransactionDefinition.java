@@ -18,7 +18,7 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.BondFutu
  * In particular used for AUD-SFE bond futures.
  */
 public class BondFuturesYieldAverageTransactionDefinition extends FuturesTransactionDefinition<BondFuturesYieldAverageSecurityDefinition>
-    implements InstrumentDefinitionWithData<BondFuturesYieldAverageTransaction, Double> {
+implements InstrumentDefinitionWithData<BondFuturesYieldAverageTransaction, Double> {
 
   /**
    * Constructor.
@@ -51,7 +51,8 @@ public class BondFuturesYieldAverageTransactionDefinition extends FuturesTransac
 
   @Override
   public BondFuturesYieldAverageTransaction toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of YieldAverageBondFuturesTransactionDefinition does not support the one argument method (without margin price data).");
+    throw new UnsupportedOperationException("The method toDerivative of YieldAverageBondFuturesTransactionDefinition does "
+        + "not support the one argument method (without margin price data).");
   }
 
   @Override

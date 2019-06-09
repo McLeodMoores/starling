@@ -30,9 +30,12 @@ public class InterpolatedYieldCurveDefaults extends DefaultPropertyFunction {
   private final String[] _applicableCurrencyNames;
 
   /**
-   * @param leftExtrapolatorName The left extrapolator name, not null
-   * @param rightExtrapolatorName The right extrapolator name, not null
-   * @param applicableCurrencyNames The applicable currency names, not null
+   * @param leftExtrapolatorName
+   *          The left extrapolator name, not null
+   * @param rightExtrapolatorName
+   *          The right extrapolator name, not null
+   * @param applicableCurrencyNames
+   *          The applicable currency names, not null
    */
   public InterpolatedYieldCurveDefaults(final String leftExtrapolatorName, final String rightExtrapolatorName,
       final String... applicableCurrencyNames) {
@@ -69,7 +72,8 @@ public class InterpolatedYieldCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_leftExtrapolatorName);
     }

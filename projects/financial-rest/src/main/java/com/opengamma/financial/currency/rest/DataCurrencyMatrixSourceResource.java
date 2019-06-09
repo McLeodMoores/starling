@@ -77,7 +77,8 @@ public class DataCurrencyMatrixSourceResource extends AbstractDataResource {
 
   @GET
   @Path("currencyMatrices/{objectId}/{versionCorrection}")
-  public Response getMatrixByObjectIdentifier(@PathParam("objectId") final String objectIdStr, @PathParam("versionCorrection") final String versionCorrectionStr) {
+  public Response getMatrixByObjectIdentifier(@PathParam("objectId") final String objectIdStr,
+      @PathParam("versionCorrection") final String versionCorrectionStr) {
     final ObjectId objectId = ObjectId.parse(objectIdStr);
     final VersionCorrection versionCorrection = VersionCorrection.parse(versionCorrectionStr);
     final CurrencyMatrix result = getCurrencyMatrixSource().get(objectId, versionCorrection);

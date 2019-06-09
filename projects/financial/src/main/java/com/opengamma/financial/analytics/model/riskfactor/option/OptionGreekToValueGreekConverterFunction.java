@@ -85,7 +85,8 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(getRequirementName(), target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURRENCY).get()));
+    return Collections
+        .singleton(new ValueSpecification(getRequirementName(), target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURRENCY).get()));
   }
 
   @Override
@@ -96,7 +97,8 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
     Underlying order;
     final Set<ValueRequirement> requirements = new HashSet<>();
     final String underlyingGreekRequirementName = AvailableValueGreeks.getGreekRequirementNameForValueGreekName(getRequirementName());
-    requirements.add(new ValueRequirement(underlyingGreekRequirementName, ComputationTargetType.SECURITY, security.getUniqueId(), getInputConstraint(desiredValue)));
+    requirements
+        .add(new ValueRequirement(underlyingGreekRequirementName, ComputationTargetType.SECURITY, security.getUniqueId(), getInputConstraint(desiredValue)));
     order = AvailableGreeks.getGreekForValueRequirementName(underlyingGreekRequirementName).getUnderlying();
     if (order == null) {
       throw new UnsupportedOperationException("No available order for configured value greek " + getRequirementName());
@@ -117,7 +119,8 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = new HashSet<>();
     final ValueProperties.Builder properties = createValueProperties();
     final String underlyingGreekRequirementName = AvailableValueGreeks.getGreekRequirementNameForValueGreekName(getRequirementName());
@@ -134,7 +137,8 @@ public class OptionGreekToValueGreekConverterFunction extends AbstractFunction.N
   // FunctionInvoker
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Position position = target.getPosition();
     final Security security = position.getSecurity();
     final GreekResultCollection greekResultCollection = new GreekResultCollection();

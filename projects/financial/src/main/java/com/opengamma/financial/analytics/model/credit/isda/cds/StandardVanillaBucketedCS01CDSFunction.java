@@ -59,15 +59,15 @@ public class StandardVanillaBucketedCS01CDSFunction extends StandardVanillaCS01C
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
-    //TODO: bump type
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+    // TODO: bump type
     final Double bump = Double.valueOf(Iterables.getOnlyElement(properties.getValues(CreditInstrumentPropertyNamesAndValues.PROPERTY_SPREAD_CURVE_BUMP)));
     final LocalDateLabelledMatrix1D cs01Matrix = getBucketedCS01(definition, yieldCurve, times, hazardCurve, analytic, bump * 1e-4, valuationDate, tenors);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BUCKETED_CS01, target.toSpecification(), properties);
@@ -75,10 +75,10 @@ public class StandardVanillaBucketedCS01CDSFunction extends StandardVanillaCS01C
   }
 
   public static LocalDateLabelledMatrix1D getBucketedCS01(final CreditDefaultSwapDefinition definition,
-                                                    final ISDACompliantYieldCurve yieldCurve,
-                                                    final ZonedDateTime[] times,
-                                                    final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final double bump,
-                                                    final ZonedDateTime valuationDate, final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final double bump,
+      final ZonedDateTime valuationDate, final Tenor[] tenors) {
     final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(definition.getRecoveryRate(), definition.getCouponFrequency().getPeriod())
         .with(definition.getBusinessDayAdjustmentConvention())
         .with(definition.getCalendar()).with(definition.getStubType())
@@ -117,8 +117,8 @@ public class StandardVanillaBucketedCS01CDSFunction extends StandardVanillaCS01C
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String spreadCurveName = security.accept(new CreditSecurityToIdentifierVisitor(
         OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
-    //TODO: remove hardcoding
+    // TODO shouldn't need all of the yield curve properties
+    // TODO: remove hardcoding
     final String hazardRateCurveCalculationMethod = "ISDA";
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
@@ -134,7 +134,8 @@ public class StandardVanillaBucketedCS01CDSFunction extends StandardVanillaCS01C
       final Set<String> creditSpreadCurveShiftTypes = constraints.getValues(PROPERTY_SPREAD_CURVE_SHIFT_TYPE);
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

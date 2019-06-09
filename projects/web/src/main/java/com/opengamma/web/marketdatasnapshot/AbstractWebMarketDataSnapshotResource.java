@@ -26,7 +26,7 @@ import com.opengamma.web.AbstractPerRequestWebResource;
  */
 @SuppressWarnings("deprecation")
 public abstract class AbstractWebMarketDataSnapshotResource
-extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
+    extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
 
   /**
    * HTML ftl directory
@@ -50,8 +50,7 @@ extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
    * @param configMaster
    *          the config master, not null
    * @param liveMarketDataProviderFactory
-   *          the live market data provider factory, Either this or
-   *          marketDataSpecificationRepository must be set
+   *          the live market data provider factory, Either this or marketDataSpecificationRepository must be set
    * @param marketDataSpecificationRepository
    *          the market data specification repository, not null
    * @param configSource
@@ -68,7 +67,8 @@ extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
    */
   @Deprecated
   protected AbstractWebMarketDataSnapshotResource(final MarketDataSnapshotMaster marketdataSnapshotMaster, final ConfigMaster configMaster,
-      final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository, final ConfigSource configSource,
+      final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
+      final ConfigSource configSource,
       final ComputationTargetResolver targetResolver, final ViewProcessor viewProcessor, final HistoricalTimeSeriesSource htsSource,
       final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
     super(new WebMarketDataSnapshotData());
@@ -78,7 +78,8 @@ extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
     ArgumentChecker.notNull(targetResolver, "targetResolver");
     ArgumentChecker.notNull(viewProcessor, "viewProcessor");
     ArgumentChecker.notNull(htsSource, "htsSource");
-    ArgumentChecker.isFalse(liveMarketDataProviderFactory == null && marketDataSpecificationRepository == null, "liveMarketDataProviderFactory or marketDataSpecificationRepository must be set");
+    ArgumentChecker.isFalse(liveMarketDataProviderFactory == null && marketDataSpecificationRepository == null,
+        "liveMarketDataProviderFactory or marketDataSpecificationRepository must be set");
     ArgumentChecker.notNull(volatilityCubeDefinitionSource, "volatilityCubeDefinitionSource");
 
     data().setMarketDataSnapshotMaster(marketdataSnapshotMaster);
@@ -101,8 +102,7 @@ extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
    * @param configMaster
    *          the config master, not null
    * @param liveMarketDataProviderFactory
-   *          the live market data provider factory, Either this or
-   *          marketDataSpecificationRepository must be set
+   *          the live market data provider factory, Either this or marketDataSpecificationRepository must be set
    * @param configSource
    *          the config source, not null
    * @param targetResolver
@@ -148,7 +148,7 @@ extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
    *
@@ -161,9 +161,10 @@ extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the fudgeContext.
+   * 
    * @return the fudgeContext
    */
   @Override

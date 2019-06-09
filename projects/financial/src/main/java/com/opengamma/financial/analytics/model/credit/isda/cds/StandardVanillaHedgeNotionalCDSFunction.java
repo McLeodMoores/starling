@@ -45,21 +45,21 @@ public class StandardVanillaHedgeNotionalCDSFunction extends StandardVanillaCDSF
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition,
-                                                final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times,
-                                                final double[] marketSpreads,
-                                                final ZonedDateTime valuationDate,
-                                                final ComputationTarget target,
-                                                final ValueProperties properties,
-                                                final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+      final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times,
+      final double[] marketSpreads,
+      final ZonedDateTime valuationDate,
+      final ComputationTarget target,
+      final ValueProperties properties,
+      final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
     final TenorLabelledMatrix1D hedgeNotional = getHedgeNotional(definition, yieldCurve, times, analytic, marketSpreads, tenors, valuationDate);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.HEDGE_NOTIONAL, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, hedgeNotional));
   }
 
   public static TenorLabelledMatrix1D getHedgeNotional(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve,
-                                                        final ZonedDateTime[] times, final CDSAnalytic analytic, final double[] spreads, final Tenor[] tenors, final ZonedDateTime valuationTime) {
+      final ZonedDateTime[] times, final CDSAnalytic analytic, final double[] spreads, final Tenor[] tenors, final ZonedDateTime valuationTime) {
     final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(definition.getRecoveryRate(), definition.getCouponFrequency().getPeriod())
         .with(definition.getBusinessDayAdjustmentConvention())
         .with(definition.getCalendar()).with(definition.getStubType())

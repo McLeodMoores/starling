@@ -33,7 +33,8 @@ public class IMMDateGenerator {
 
   public static ZonedDateTime getNextIMMDate(final ZonedDateTime date, final Tenor tenor) {
     // If 19th of month (IMM date - 1 day) we need to cycle to next IMM period, as effective date of trade on date t is t + 1
-    final ZonedDateTime dateWithTradeAdjustment = isIMMDate(date) && date.getDayOfMonth() == TWENTIETH - 1 ? ZonedDateTime.from(date).plusDays(1) : ZonedDateTime.from(date);
+    final ZonedDateTime dateWithTradeAdjustment = isIMMDate(date) && date.getDayOfMonth() == TWENTIETH - 1 ? ZonedDateTime.from(date).plusDays(1)
+        : ZonedDateTime.from(date);
     final ZonedDateTime nextIMMDate = ZonedDateTime.from(IMM_ADJUSTER.adjustInto(dateWithTradeAdjustment)).withDayOfMonth(TWENTIETH); // must be 20th
     return nextIMMDate.plus(tenor.getPeriod());
   }

@@ -55,7 +55,7 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
 
   private final GUIFeedback _feedback;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
@@ -67,7 +67,8 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
    *  -s,--start (yyyymmdd)                          Start date
    * </pre>
    *
-   * @param args the command line arguments
+   * @param args
+   *          the command line arguments
    */
   public static void main(final String[] args) { // CSIGNORE
     LOGGER.info("Updating time-series data from Bloomberg");
@@ -99,7 +100,7 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
     System.exit(1);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public BloombergHTSMasterUpdaterTool(final GUIFeedback feedback) {
     _feedback = feedback;
   }
@@ -124,8 +125,9 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
     }
     final AtomicInteger errors = new AtomicInteger();
     final AtomicInteger successes = new AtomicInteger();
-    final BloombergHTSMasterUpdater loader = new BloombergHTSMasterUpdater(historicalTimeSeriesMaster, historicalTimeSeriesProvider, new BloombergIdentifierProvider(
-        bloombergReferenceDataProvider)) {
+    final BloombergHTSMasterUpdater loader = new BloombergHTSMasterUpdater(historicalTimeSeriesMaster, historicalTimeSeriesProvider,
+        new BloombergIdentifierProvider(
+            bloombergReferenceDataProvider)) {
 
       private long _lastNotify;
       private int _toUpdate;
@@ -171,7 +173,8 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
       }
 
       @Override
-      protected Map<ExternalIdBundle, LocalDateDoubleTimeSeries> getTimeSeries(final String dataField, final LocalDate startDate, final LocalDate endDate, final String bbgDataProvider,
+      protected Map<ExternalIdBundle, LocalDateDoubleTimeSeries> getTimeSeries(final String dataField, final LocalDate startDate, final LocalDate endDate,
+          final String bbgDataProvider,
           final Set<ExternalIdBundle> identifierSet) {
         final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result = super.getTimeSeries(dataField, startDate, endDate, bbgDataProvider, identifierSet);
         if (_feedback != null) {
@@ -228,7 +231,7 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
     dataLoader.setReload(line.hasOption(RELOAD_OPTION));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected Options createOptions(final boolean mandatoryConfigResource) {
     final Options options = super.createOptions(mandatoryConfigResource);

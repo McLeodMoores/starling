@@ -21,8 +21,8 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method to compute the price for an interest rate future with discounting (like a forward).
- * No convexity adjustment is done.
+ * Method to compute the price for an interest rate future with discounting (like a forward). No convexity adjustment is done.
+ * 
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureSecurityDiscountingMethod}
  */
 @Deprecated
@@ -35,6 +35,7 @@ public final class InterestRateFutureSecurityDiscountingMethod extends InterestR
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static InterestRateFutureSecurityDiscountingMethod getInstance() {
@@ -49,15 +50,19 @@ public final class InterestRateFutureSecurityDiscountingMethod extends InterestR
 
   /**
    * Computes the price of a future from the curves using an estimation of the future rate without convexity adjustment.
-   * @param future The future.
-   * @param curves The yield curves. Should contain the forward curve associated.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The yield curves. Should contain the forward curve associated.
    * @return The price.
    */
   public double price(final InterestRateFutureSecurity future, final YieldCurveBundle curves) {
     Validate.notNull(future, "Future");
     Validate.notNull(curves, "Curves");
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(future.getForwardCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(future.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(future.getFixingPeriodEndTime()) - 1)
+    final double forward = (forwardCurve.getDiscountFactor(future.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(future.getFixingPeriodEndTime())
+        - 1)
         / future.getFixingPeriodAccrualFactor();
     final double price = 1.0 - forward;
     return price;
@@ -65,8 +70,11 @@ public final class InterestRateFutureSecurityDiscountingMethod extends InterestR
 
   /**
    * Compute the price sensitivity to rates of an interest rate future by discounting.
-   * @param future The future.
-   * @param curves The yield curves. Should contain the forward curve associated.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The yield curves. Should contain the forward curve associated.
    * @return The price rate sensitivity.
    */
   @Override
@@ -94,23 +102,30 @@ public final class InterestRateFutureSecurityDiscountingMethod extends InterestR
 
   /**
    * Computes the future rate (1-price) from the curves using an estimation of the future rate without convexity adjustment.
-   * @param future The future.
-   * @param curves The yield curves. Should contain the forward curve associated.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The yield curves. Should contain the forward curve associated.
    * @return The rate.
    */
   public double parRate(final InterestRateFutureSecurity future, final YieldCurveBundle curves) {
     Validate.notNull(future, "Future");
     Validate.notNull(curves, "Curves");
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(future.getForwardCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(future.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(future.getFixingPeriodEndTime()) - 1)
+    final double forward = (forwardCurve.getDiscountFactor(future.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(future.getFixingPeriodEndTime())
+        - 1)
         / future.getFixingPeriodAccrualFactor();
     return forward;
   }
 
   /**
    * Computes the future rate (1-price) curve sensitivity from the curves using an estimation of the future rate without convexity adjustment.
-   * @param future The future.
-   * @param curves The yield curves. Should contain the forward curve associated.
+   * 
+   * @param future
+   *          The future.
+   * @param curves
+   *          The yield curves. Should contain the forward curve associated.
    * @return The rate curve sensitivity.
    */
   public InterestRateCurveSensitivity parRateCurveSensitivity(final InterestRateFutureSecurity future, final YieldCurveBundle curves) {

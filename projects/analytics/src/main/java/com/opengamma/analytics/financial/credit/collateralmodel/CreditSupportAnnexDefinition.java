@@ -13,6 +13,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Class to define a CSA to an ISDA Master Agreement used to define the terms of a collateral agreement between two counterparties
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
@@ -30,7 +31,8 @@ public class CreditSupportAnnexDefinition {
   private final Obligor _counterpartyA;
   private final Obligor _counterpartyB;
 
-  // Specify the obligor designated as the Calculation Agent (can be one of the two counterparties) - calculates the collateral flowing between the two counterparties
+  // Specify the obligor designated as the Calculation Agent (can be one of the two counterparties) - calculates the collateral flowing between the two
+  // counterparties
   private final Obligor _calculationAgent;
 
   // The date when a request for collateral to be posted is made

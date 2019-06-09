@@ -32,12 +32,10 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Price CDS contracts according to the ISDA model using a hazard rate term structure.
  *
- * This is provided as a placeholder only and more work is required before the ISDA approximate
- * pricer can be used with a hazard rate term structure. In particular a hazard curve function
- * is required to fulfill the hazard curve requirement, which will require adding an extra method
- * in the pricing method class. For an example of how to do this see the version of
- * {@link ISDAApproxCDSPricingMethod#calculateUpfrontCharge} which takes a flat spread as input
- * for the hazard rate solver.
+ * This is provided as a placeholder only and more work is required before the ISDA approximate pricer can be used with a hazard rate term structure. In
+ * particular a hazard curve function is required to fulfill the hazard curve requirement, which will require adding an extra method in the pricing method
+ * class. For an example of how to do this see the version of {@link ISDAApproxCDSPricingMethod#calculateUpfrontCharge} which takes a flat spread as input for
+ * the hazard rate solver.
  *
  * For a complete ISDA pricing implementation use {@link ISDAApproxCDSPriceFlatSpreadFunction}.
  *
@@ -65,16 +63,16 @@ public class ISDAApproxCDSPriceHazardCurveFunction extends ISDAApproxCDSPriceFun
           ValueRequirementNames.YIELD_CURVE,
           ComputationTargetSpecification.of(cds.getCurrency()),
           ValueProperties
-          .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
-          .get()));
+              .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
+              .get()));
 
       requirements.add(new ValueRequirement(
           ValueRequirementNames.YIELD_CURVE,
           ComputationTargetSpecification.of(cds.getCurrency()),
           ValueProperties
-          .with(ValuePropertyNames.CURVE, "HAZARD_" + cds.getUnderlyingIssuer() + "_" + cds.getUnderlyingSeniority() + "_" + cds.getRestructuringClause())
-          .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
-          .get()));
+              .with(ValuePropertyNames.CURVE, "HAZARD_" + cds.getUnderlyingIssuer() + "_" + cds.getUnderlyingSeniority() + "_" + cds.getRestructuringClause())
+              .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
+              .get()));
 
       return requirements;
     }
@@ -82,7 +80,8 @@ public class ISDAApproxCDSPriceHazardCurveFunction extends ISDAApproxCDSPriceFun
   }
 
   @Override
-  public DoublesPair executeImpl(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public DoublesPair executeImpl(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     // Set up converter (could this be compiled?)
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
@@ -107,12 +106,13 @@ public class ISDAApproxCDSPriceHazardCurveFunction extends ISDAApproxCDSPriceFun
     final ISDACurve hazardRateCurve = (ISDACurve) inputs.getValue(new ValueRequirement(
         ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(cds.getCurrency()),
         ValueProperties
-        .with(ValuePropertyNames.CURVE, "HAZARD_" + cds.getUnderlyingIssuer() + "_" + cds.getUnderlyingSeniority() + "_" + cds.getRestructuringClause())
-        .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
-        .get()));
+            .with(ValuePropertyNames.CURVE, "HAZARD_" + cds.getUnderlyingIssuer() + "_" + cds.getUnderlyingSeniority() + "_" + cds.getRestructuringClause())
+            .with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME)
+            .get()));
 
     // Convert security in to format suitable for pricing
-    final ISDACDSDerivative cdsDerivative = cdsDefinition.toDerivative(pricingDate, stepinDate, settlementDate, discountCurve.getName(), hazardRateCurve.getName());
+    final ISDACDSDerivative cdsDerivative = cdsDefinition.toDerivative(pricingDate, stepinDate, settlementDate, discountCurve.getName(),
+        hazardRateCurve.getName());
 
     // Go price!
     final double dirtyPrice = ISDA_APPROX_METHOD.calculateUpfrontCharge(cdsDerivative, discountCurve, hazardRateCurve, false);
@@ -120,7 +120,5 @@ public class ISDAApproxCDSPriceHazardCurveFunction extends ISDAApproxCDSPriceFun
 
     return DoublesPair.of(cleanPrice, dirtyPrice);
   }
-
-
 
 }

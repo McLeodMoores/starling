@@ -33,9 +33,12 @@ import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Simple scenario Function returns the difference in PresentValue between defined Scenario and current market conditions. <p>
- * Price shift may be Additive or Relative. If Additive, the pnl is simply the provided price shift, scaled by unit notional and trade quantity. <p>
- * If Relative, the market value under shift, d = (1 + d ) * market_value, and pnl = scenario_value - market_value = d * market_value. <p>
+ * Simple scenario Function returns the difference in PresentValue between defined Scenario and current market conditions.
+ * <p>
+ * Price shift may be Additive or Relative. If Additive, the pnl is simply the provided price shift, scaled by unit notional and trade quantity.
+ * <p>
+ * If Relative, the market value under shift, d = (1 + d ) * market_value, and pnl = scenario_value - market_value = d * market_value.
+ * <p>
  * Shift to volatilities, if provided, clearly have no effect, and are ignored. The Function will still resolve.
  */
 public class MarkToMarketScenarioPnLFuturesFunction extends AbstractFunction.NonCompiledInvoker {
@@ -50,12 +53,14 @@ public class MarkToMarketScenarioPnLFuturesFunction extends AbstractFunction.Non
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     // Get security price (market value)
     final Trade trade = target.getTrade();
     final FutureSecurity security = (FutureSecurity) trade.getSecurity();
-    final double price = (Double) inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, security.getUniqueId()));
+    final double price = (Double) inputs
+        .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, security.getUniqueId()));
 
     // Get shift to price, if provided, and hence PNL
     final double pnl;
@@ -112,7 +117,8 @@ public class MarkToMarketScenarioPnLFuturesFunction extends AbstractFunction.Non
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     if (getValueRequirementName().equals(input.getValueName())) {
       return inputs.keySet();

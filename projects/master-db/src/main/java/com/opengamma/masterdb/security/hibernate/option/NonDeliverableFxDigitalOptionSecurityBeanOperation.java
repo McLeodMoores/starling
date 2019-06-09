@@ -22,7 +22,8 @@ import com.opengamma.util.time.Expiry;
 /**
  * FXOptionSecurityBeanOperation
  */
-public final class NonDeliverableFxDigitalOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<NonDeliverableFXDigitalOptionSecurity, NonDeliverableFXDigitalOptionSecurityBean> {
+public final class NonDeliverableFxDigitalOptionSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<NonDeliverableFXDigitalOptionSecurity, NonDeliverableFXDigitalOptionSecurityBean> {
 
   /**
    * Singleton
@@ -34,7 +35,8 @@ public final class NonDeliverableFxDigitalOptionSecurityBeanOperation extends Ab
   }
 
   @Override
-  public NonDeliverableFXDigitalOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final NonDeliverableFXDigitalOptionSecurity security) {
+  public NonDeliverableFXDigitalOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final NonDeliverableFXDigitalOptionSecurity security) {
     final NonDeliverableFXDigitalOptionSecurityBean bean = new NonDeliverableFXDigitalOptionSecurityBean();
     bean.setCallAmount(security.getCallAmount());
     bean.setPutAmount(security.getPutAmount());
@@ -57,9 +59,9 @@ public final class NonDeliverableFxDigitalOptionSecurityBeanOperation extends Ab
     final ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
     final boolean deliverInCallCurrency = bean.isDeliverInCallCurrency();
     final NonDeliverableFXDigitalOptionSecurity sec = new NonDeliverableFXDigitalOptionSecurity(putCurrency, callCurrency,
-                                                                                          bean.getPutAmount(), bean.getCallAmount(),
-                                                                                          paymentCurrency, expiry, settlementDate, bean.getIsLong(),
-                                                                                          deliverInCallCurrency);
+        bean.getPutAmount(), bean.getCallAmount(),
+        paymentCurrency, expiry, settlementDate, bean.getIsLong(),
+        deliverInCallCurrency);
     return sec;
   }
 

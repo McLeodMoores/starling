@@ -140,7 +140,8 @@ public final class SnapshotUtils {
     final MarketDataSnapshotHistoryResult historyResult = _snapshotMaster.history(new MarketDataSnapshotHistoryRequest(objectId));
     final List<VersionInfo> results = new ArrayList<>();
     for (final MarketDataSnapshotDocument doc : historyResult.getDocuments()) {
-      results.add(new VersionInfo(doc.getVersionFromInstant(), doc.getCorrectionFromInstant(), doc.getVersionToInstant(), doc.getCorrectionToInstant(), doc.getUniqueId()));
+      results.add(new VersionInfo(doc.getVersionFromInstant(), doc.getCorrectionFromInstant(), doc.getVersionToInstant(), doc.getCorrectionToInstant(),
+          doc.getUniqueId()));
     }
     return results;
   }

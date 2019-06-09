@@ -67,8 +67,10 @@ public class ISDACDXAsSingleNamePresentValueFunction extends ISDACDXAsSingleName
   }
 
   @Override
-  protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve, final ZonedDateTime[] times, final double[] marketSpreads,
-      final ZonedDateTime valuationDate, final ComputationTarget target, final ValueProperties properties, final FunctionInputs inputs, final ISDACompliantCreditCurve hazardCurve,
+  protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve,
+      final ZonedDateTime[] times, final double[] marketSpreads,
+      final ZonedDateTime valuationDate, final ComputationTarget target, final ValueProperties properties, final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve,
       final CDSAnalytic analytic, final Tenor[] tenors) {
     final Object hazardRateCurveObject = inputs.getValue(ValueRequirementNames.HAZARD_RATE_CURVE);
     if (hazardRateCurveObject == null) {
@@ -76,11 +78,13 @@ public class ISDACDXAsSingleNamePresentValueFunction extends ISDACDXAsSingleName
     }
     final ISDACompliantCreditCurve hazardRateCurve = (ISDACompliantCreditCurve) hazardRateCurveObject;
 
-    final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(definition.getRecoveryRate(), definition.getCouponFrequency().getPeriod()).with(definition.getBusinessDayAdjustmentConvention())
+    final CDSAnalyticFactory analyticFactory = new CDSAnalyticFactory(definition.getRecoveryRate(), definition.getCouponFrequency().getPeriod())
+        .with(definition.getBusinessDayAdjustmentConvention())
         .with(definition.getCalendar()).with(definition.getStubType()).withAccrualDCC(definition.getDayCountFractionConvention());
 
     double pv;
-    final CDSAnalytic pricingCDS = analyticFactory.makeCDS(valuationDate.toLocalDate(), definition.getEffectiveDate().toLocalDate(), definition.getMaturityDate().toLocalDate());
+    final CDSAnalytic pricingCDS = analyticFactory.makeCDS(valuationDate.toLocalDate(), definition.getEffectiveDate().toLocalDate(),
+        definition.getMaturityDate().toLocalDate());
     if (definition instanceof LegacyCreditDefaultSwapDefinition) {
       pv = PRICER.pv(pricingCDS, yieldCurve, hazardRateCurve, getCoupon(definition)) * definition.getNotional();
     } else if (definition instanceof StandardCreditDefaultSwapDefinition) {
@@ -109,27 +113,31 @@ public class ISDACDXAsSingleNamePresentValueFunction extends ISDACDXAsSingleName
       return null;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
-    final String spreadCurveName = "CDS_INDEX_" + security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
+    final String spreadCurveName = "CDS_INDEX_"
+        + security.accept(new CreditSecurityToIdentifierVisitor(OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId().getValue();
+    // TODO shouldn't need all of the yield curve properties
     final String hazardRateCurveCalculationMethod = Iterables.getOnlyElement(hazardRateCurveCalculationMethodNames);
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
     final String yieldCurveCalculationMethod = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_METHOD);
     final Set<String> creditSpreadCurveShifts = constraints.getValues(PROPERTY_SPREAD_CURVE_SHIFT);
     final ValueProperties.Builder hazardRateCurveProperties = ValueProperties.builder().with(ValuePropertyNames.CURVE, spreadCurveName)
-        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, hazardRateCurveCalculationMethod).with(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG, yieldCurveCalculationConfig)
+        .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, hazardRateCurveCalculationMethod)
+        .with(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG, yieldCurveCalculationConfig)
         .with(PROPERTY_YIELD_CURVE_CALCULATION_METHOD, yieldCurveCalculationMethod).with(PROPERTY_YIELD_CURVE, yieldCurveName);
     if (creditSpreadCurveShifts != null) {
       final Set<String> creditSpreadCurveShiftTypes = constraints.getValues(PROPERTY_SPREAD_CURVE_SHIFT_TYPE);
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueProperties.Builder propertiesBuilder = getCommonResultProperties();
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueSpecification spec = entry.getKey();

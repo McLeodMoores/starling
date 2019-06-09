@@ -58,11 +58,11 @@ public class MetalFutureSecurity extends CommodityFutureSecurity {
    *          the unit amount, not null
    * @param category
    *          the future category, not null
-   * @deprecated Use the constructor that takes the unit number and name and the
-   *             underlying id
+   * @deprecated Use the constructor that takes the unit number and name and the underlying id
    */
   @Deprecated
-  public MetalFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category) {
+  public MetalFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
 
@@ -84,7 +84,8 @@ public class MetalFutureSecurity extends CommodityFutureSecurity {
    * @deprecated Use the constructor that takes the unit number and name
    */
   @Deprecated
-  public MetalFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount, final String category, final ExternalId underlyingId) {
+  public MetalFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category, final ExternalId underlyingId) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setUnderlyingId(underlyingId);
   }
@@ -103,8 +104,7 @@ public class MetalFutureSecurity extends CommodityFutureSecurity {
    * @param category
    *          the future category, not null
    * @param unitNumber
-   *          the number of units of the commodity to be delivered (or cash
-   *          equivalent received)
+   *          the number of units of the commodity to be delivered (or cash equivalent received)
    * @param unitName
    *          the name of the underlying commodity
    * @param underlyingId
@@ -116,7 +116,7 @@ public class MetalFutureSecurity extends CommodityFutureSecurity {
     setUnderlyingId(underlyingId);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitMetalFutureSecurity(this);

@@ -51,13 +51,19 @@ public class ComplexChooserOptionDefinition extends OptionDefinition {
 
   /**
    *
-   * @param callStrike The strike of the potential call option
-   * @param putStrike The strike of the potential put option
-   * @param chooseDate The choice date (expiry) of the chooser option
-   * @param callExpiry The expiry date of the potential call option
-   * @param putExpiry The expiry date of the potential put option
+   * @param callStrike
+   *          The strike of the potential call option
+   * @param putStrike
+   *          The strike of the potential put option
+   * @param chooseDate
+   *          The choice date (expiry) of the chooser option
+   * @param callExpiry
+   *          The expiry date of the potential call option
+   * @param putExpiry
+   *          The expiry date of the potential put option
    */
-  public ComplexChooserOptionDefinition(final Expiry chooseDate, final double callStrike, final Expiry callExpiry, final double putStrike, final Expiry putExpiry) {
+  public ComplexChooserOptionDefinition(final Expiry chooseDate, final double callStrike, final Expiry callExpiry, final double putStrike,
+      final Expiry putExpiry) {
     super(null, chooseDate, null);
     Validate.notNull(callExpiry);
     Validate.notNull(putExpiry);

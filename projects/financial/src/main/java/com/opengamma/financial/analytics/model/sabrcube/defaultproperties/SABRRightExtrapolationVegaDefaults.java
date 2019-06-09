@@ -19,6 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Default function for SABR vega calculations.
+ *
  * @deprecated The functions for which these defaults apply are deprecated
  */
 @Deprecated
@@ -65,7 +66,8 @@ public class SABRRightExtrapolationVegaDefaults extends SABRRightExtrapolationDe
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_xLeftExtrapolator);
     }

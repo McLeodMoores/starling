@@ -59,14 +59,16 @@ public class MergedOutputPositionFunction extends AbstractFunction.NonCompiledIn
     final Set<ValueRequirement> requirements = new HashSet<>();
     for (final Pair<String, ValueProperties> requirement : mergedOutput.getPortfolioRequirements()) {
       final String valueName = requirement.getFirst();
-      final ValueProperties constraints = requirement.getSecond().copy().with(ValuePropertyNames.NAME, mergedOutputName).withOptional(ValuePropertyNames.NAME).get();
+      final ValueProperties constraints = requirement.getSecond().copy().with(ValuePropertyNames.NAME, mergedOutputName).withOptional(ValuePropertyNames.NAME)
+          .get();
       requirements.add(new ValueRequirement(valueName, target.toSpecification(), constraints));
     }
     return requirements;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 0) {
       return null;
     }

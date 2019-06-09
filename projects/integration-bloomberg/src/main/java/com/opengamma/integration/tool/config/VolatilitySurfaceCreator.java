@@ -243,9 +243,10 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
           + InstrumentTypeProperties.BOND_FUTURE_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(
-            tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
-            security.getTradingExchange());
+        final BloombergFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
+            new BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(
+                tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
+                security.getTradingExchange());
         createVolatilitySpecification(security.getCurrency().getUniqueId(), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingOptChainTicker, name, security.getCurrency().getUniqueId());
@@ -265,9 +266,10 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
           + InstrumentTypeProperties.COMMODITY_FUTURE_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(
-            tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
-            security.getTradingExchange());
+        final BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
+            new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(
+                tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_VOL, getSpot(underlyingOptChainTicker),
+                security.getTradingExchange());
         createVolatilitySpecification(security.getCurrency().getUniqueId(), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingOptChainTicker, name, security.getCurrency().getUniqueId());
@@ -286,8 +288,9 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       final String name = BBG_SURFACE_PREFIX + underlyingTicker + "_" + InstrumentTypeProperties.EQUITY_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(
-            tickerParser.getSymbol(), postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
+        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
+            new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(
+                tickerParser.getSymbol(), postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
         createVolatilitySpecification(UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingTicker, name, UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker));
@@ -306,8 +309,9 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
       final String name = BBG_SURFACE_PREFIX + prefix + "_" + InstrumentTypeProperties.EQUITY_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(
-            prefix, postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
+        final BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
+            new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(
+                prefix, postfix, FIELD_NAME_VOL, getSpot(underlyingTicker), security.getExchange());
         createVolatilitySpecification(UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker), name, surfaceInstrumentProvider);
       }
       createvolatilityDefinition(underlyingTicker, name, UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), underlyingTicker));
@@ -327,8 +331,9 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
           + InstrumentTypeProperties.IR_FUTURE_OPTION;
       if (!_knownVolSpecNames.contains(name)) {
         LOGGER.info("Creating VolatilitySurfaceSpecification \"{}\"", name);
-        final BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider = new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(
-            tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_PRICE, getSpot(underlyingTicker), security.getExchange());
+        final BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider surfaceInstrumentProvider =
+            new BloombergIRFutureOptionVolatilitySurfaceInstrumentProvider(
+                tickerParser.getSymbol(), tickerParser.getTypeName(), FIELD_NAME_PRICE, getSpot(underlyingTicker), security.getExchange());
         createVolatilitySpecification(security.getCurrency().getUniqueId(), name, surfaceInstrumentProvider, SurfaceAndCubePropertyNames.PRICE_QUOTE);
       }
       createvolatilityDefinition(underlyingTicker, name, security.getCurrency().getUniqueId());
@@ -450,7 +455,7 @@ public class VolatilitySurfaceCreator extends AbstractTool<IntegrationToolContex
 
     /**
      * From the available options determine axes for a volatility surface.
-     * 
+     *
      * @param options
      *          the available options as given by OPT_CHAIN (must be tickers)
      * @return x and y axes

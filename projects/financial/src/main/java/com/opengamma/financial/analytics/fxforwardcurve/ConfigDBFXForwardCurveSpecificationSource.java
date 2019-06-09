@@ -20,8 +20,10 @@ public class ConfigDBFXForwardCurveSpecificationSource implements FXForwardCurve
   private final ConfigSourceQuery<FXForwardCurveSpecification> _query;
 
   /**
-   * @param configSource the config source, not null
-   * @deprecated Use {@link #ConfigDBFXForwardCurveSpecificationSource(ConfigSource,VersionCorrection)}, {@link #ConfigDBFXForwardCurveSpecificationSource(ConfigSourceQuery)} or {@link #init} instead
+   * @param configSource
+   *          the config source, not null
+   * @deprecated Use {@link #ConfigDBFXForwardCurveSpecificationSource(ConfigSource,VersionCorrection)},
+   *             {@link #ConfigDBFXForwardCurveSpecificationSource(ConfigSourceQuery)} or {@link #init} instead
    */
   @Deprecated
   public ConfigDBFXForwardCurveSpecificationSource(final ConfigSource configSource) {

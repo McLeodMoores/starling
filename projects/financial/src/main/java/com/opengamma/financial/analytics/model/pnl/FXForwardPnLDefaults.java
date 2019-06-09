@@ -77,7 +77,8 @@ public class FXForwardPnLDefaults extends DefaultPropertyFunction {
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String requirementName : new String[] {ValueRequirementNames.PNL_SERIES, ValueRequirementNames.YIELD_CURVE_PNL_SERIES, ValueRequirementNames.YIELD_CURVE_HISTORICAL_TIME_SERIES}) {
+    for (final String requirementName : new String[] { ValueRequirementNames.PNL_SERIES, ValueRequirementNames.YIELD_CURVE_PNL_SERIES,
+                  ValueRequirementNames.YIELD_CURVE_HISTORICAL_TIME_SERIES }) {
       defaults.addValuePropertyName(requirementName, ValuePropertyNames.PAY_CURVE);
       defaults.addValuePropertyName(requirementName, ValuePropertyNames.RECEIVE_CURVE);
       defaults.addValuePropertyName(requirementName, ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG);
@@ -90,7 +91,8 @@ public class FXForwardPnLDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY.equals(propertyName)) {
       return Collections.singleton(_start);
     }

@@ -23,7 +23,8 @@ import com.opengamma.util.ArgumentChecker;
 
   private final List<ComputationTargetType> _target;
 
-  private static final ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean> CONSTRUCT = new ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean>() {
+  private static final ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean> CONSTRUCT =
+      new ComputationTargetTypeVisitor<List<ComputationTargetType>, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final List<ComputationTargetType> data) {
@@ -96,7 +97,8 @@ import com.opengamma.util.ArgumentChecker;
     return type.isCompatible(target);
   }
 
-  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_COMPATIBLE = new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_COMPATIBLE =
+      new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NestedComputationTargetType self) {
@@ -146,7 +148,8 @@ import com.opengamma.util.ArgumentChecker;
     return type.isCompatible(clazz);
   }
 
-  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_TARGET_TYPE = new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> IS_TARGET_TYPE =
+      new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NestedComputationTargetType self) {
@@ -255,7 +258,8 @@ import com.opengamma.util.ArgumentChecker;
     return sb.toString();
   }
 
-  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean> EQUALS =
+      new ComputationTargetTypeVisitor<NestedComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NestedComputationTargetType self) {

@@ -45,12 +45,11 @@ public class HullWhiteDiscountingPV01Function extends HullWhiteDiscountingFuncti
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteDiscountingPV01Function.class);
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivityHullWhiteCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityHullWhiteCalculator.getInstance());
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public HullWhiteDiscountingPV01Function() {
     super(PV01);

@@ -111,7 +111,8 @@ public class ForexSmileDeltaSurfaceDataBundle extends SmileSurfaceDataBundle {
     this(interpolator, forwards, expiries, deltas, atms, riskReversals, strangle, isCallData);
   }
 
-  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[] deltas, final double[] atms, final double[][] riskReversals,
+  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[] deltas, final double[] atms,
+      final double[][] riskReversals,
       final double[][] strangle, final boolean isCallData) {
     ArgumentChecker.notNull(deltas, "delta");
     ArgumentChecker.notNull(forwardCurve, "forward curve");
@@ -150,7 +151,8 @@ public class ForexSmileDeltaSurfaceDataBundle extends SmileSurfaceDataBundle {
     checkVolatilities(expiries, _vols);
   }
 
-  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[][] strikes, final double[][] vols, final boolean isCallData) {
+  public ForexSmileDeltaSurfaceDataBundle(final ForwardCurve forwardCurve, final double[] expiries, final double[][] strikes, final double[][] vols,
+      final boolean isCallData) {
     ArgumentChecker.notNull(forwardCurve, "forward curve");
     ArgumentChecker.notNull(expiries, "expiries");
     ArgumentChecker.notNull(strikes, "strikes");

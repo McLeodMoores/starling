@@ -121,7 +121,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
   private String _timeRightExtrapolator = LinearExtrapolator1dAdapter.NAME;
   private String _sabrModel = VolatilityFunctionFactory.HAGAN;
   private String _weightingFunction = WeightingFunctionFactory.SINE_WEIGHTING_FUNCTION_NAME;
-  private boolean _useExternalBeta /*= false*/;
+  private boolean _useExternalBeta /* = false */;
   private double _externalBeta = 0.5;
   private String _splineInterpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
   private String _splineLeftExtrapolator = LinearExtrapolator1dAdapter.NAME;
@@ -309,7 +309,8 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
     final String[] args = new String[getPerCurrencyPairInfo().size() * 4];
     int i = 0;
     for (final Map.Entry<Pair<String, String>, CurrencyPairInfo> e : getPerCurrencyPairInfo().entrySet()) {
-      args[i++] = e.getKey().getFirst().compareTo(e.getKey().getSecond()) < 0 ? e.getKey().getFirst() + e.getKey().getSecond() : e.getKey().getSecond() + e.getKey().getFirst();
+      args[i++] = e.getKey().getFirst().compareTo(e.getKey().getSecond()) < 0 ? e.getKey().getFirst() + e.getKey().getSecond()
+          : e.getKey().getSecond() + e.getKey().getFirst();
       args[i++] = e.getValue().getCurveName();
       args[i++] = e.getValue().getCurveCalculationMethod();
       args[i++] = e.getValue().getSurfaceName();
@@ -322,11 +323,14 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(BlackVolatilitySurfaceMixedLogNormalDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(), getTimeLeftExtrapolator(),
+    functions.add(functionConfiguration(BlackVolatilitySurfaceMixedLogNormalDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(),
+        getTimeInterpolator(), getTimeLeftExtrapolator(),
         getTimeRightExtrapolator(), getWeightingFunction()));
-    functions.add(functionConfiguration(BlackVolatilitySurfaceSABRDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(), getTimeLeftExtrapolator(),
+    functions.add(functionConfiguration(BlackVolatilitySurfaceSABRDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(),
+        getTimeLeftExtrapolator(),
         getTimeRightExtrapolator(), getSabrModel(), getWeightingFunction(), isUseExternalBeta() ? "true" : "false", Double.toString(getExternalBeta())));
-    functions.add(functionConfiguration(BlackVolatilitySurfaceSplineDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(), getTimeLeftExtrapolator(),
+    functions.add(functionConfiguration(BlackVolatilitySurfaceSplineDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(),
+        getTimeLeftExtrapolator(),
         getTimeRightExtrapolator(), getSplineInterpolator(), getSplineLeftExtrapolator(), getSplineRightExtrapolator(), getSplineExtrapolatorFailBehaviour()));
     if (!getPerCurrencyInfo().isEmpty()) {
       addCommodityBlackDefaults(functions);

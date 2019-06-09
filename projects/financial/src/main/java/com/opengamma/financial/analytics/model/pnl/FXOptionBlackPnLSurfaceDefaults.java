@@ -96,7 +96,8 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (InterpolatedDataProperties.X_INTERPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_interpolatorName);
     }

@@ -20,9 +20,9 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
 import com.opengamma.web.analytics.push.UpdateListener;
 
 /**
- * {@link AnalyticsView} that decorates another view and notifies a listener when any items are updated in the
- * underlying view. This class allows the underlying view to be protected by a lock without having to make an
- * external call to the listener whilst holding the lock.
+ * {@link AnalyticsView} that decorates another view and notifies a listener when any items are updated in the underlying view. This class allows the underlying
+ * view to be protected by a lock without having to make an external call to the listener whilst holding the lock.
+ * 
  * @see SimpleAnalyticsView
  */
 /* package */ class NotifyingAnalyticsView implements AnalyticsView {
@@ -69,9 +69,10 @@ import com.opengamma.web.analytics.push.UpdateListener;
   }
 
   @Override
-  public boolean createViewport(final int requestId, final GridType gridType, final int viewportId, final String callbackId, final String structureCallbackId, final ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId, final GridType gridType, final int viewportId, final String callbackId, final String structureCallbackId,
+      final ViewportDefinition viewportDefinition) {
     final boolean hasData = _delegate.createViewport(requestId, gridType, viewportId, callbackId, structureCallbackId, viewportDefinition);
-    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object>of("id", requestId, "message", callbackId);
+    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object> of("id", requestId, "message", callbackId);
     // TODO is this logic correct? just because the viewport doesn't contain data updated in the previous cycle it
     // doesn't mean it doesn't have any data.
     if (hasData) {
@@ -106,19 +107,19 @@ import com.opengamma.web.analytics.push.UpdateListener;
   @Override
   public void openDependencyGraph(final int requestId, final GridType gridType, final int graphId, final String callbackId, final int row, final int col) {
     _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, row, col);
-    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object>of("id", requestId, "message", callbackId);
+    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object> of("id", requestId, "message", callbackId);
     _listener.itemUpdated(callbackMap);
   }
 
   @Override
   public void openDependencyGraph(final int requestId,
-                                  final GridType gridType,
-                                  final int graphId,
-                                  final String callbackId,
-                                  final String calcConfigName,
-                                  final ValueRequirement valueRequirement) {
+      final GridType gridType,
+      final int graphId,
+      final String callbackId,
+      final String calcConfigName,
+      final ValueRequirement valueRequirement) {
     _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, calcConfigName, valueRequirement);
-    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object>of("id", requestId, "message", callbackId);
+    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object> of("id", requestId, "message", callbackId);
     _listener.itemUpdated(callbackMap);
   }
 
@@ -138,9 +139,10 @@ import com.opengamma.web.analytics.push.UpdateListener;
   }
 
   @Override
-  public boolean createViewport(final int requestId, final GridType gridType, final int graphId, final int viewportId, final String callbackId, final String structureCallbackId, final ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId, final GridType gridType, final int graphId, final int viewportId, final String callbackId,
+      final String structureCallbackId, final ViewportDefinition viewportDefinition) {
     final boolean hasData = _delegate.createViewport(requestId, gridType, graphId, viewportId, callbackId, structureCallbackId, viewportDefinition);
-    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object>of("id", requestId, "message", callbackId);
+    final ImmutableMap<String, Object> callbackMap = ImmutableMap.<String, Object> of("id", requestId, "message", callbackId);
     if (hasData) {
       _listener.itemsUpdated(ImmutableList.of(callbackMap, callbackId));
     } else {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.sensitivities;
@@ -35,7 +35,7 @@ import com.opengamma.master.security.RawSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class ExternallyProvidedSensitivitiesYieldCurveCS01Function extends AbstractFunction.NonCompiledInvoker {
   /** The value name for the credit sensitivities required by this function */
@@ -63,11 +63,11 @@ public class ExternallyProvidedSensitivitiesYieldCurveCS01Function extends Abstr
   private ValueProperties.Builder createCurrencyValueProperties(final ComputationTarget target) {
     final Security security = target.getPosition().getSecurity();
     if (FXUtils.isFXSecurity(security)) {
-      return createValueProperties(); //TODO what to do in this case?
+      return createValueProperties(); // TODO what to do in this case?
     }
     final Currency ccy = FinancialSecurityUtils.getCurrency(security);
     if (ccy == null) {
-      return createValueProperties(); //TODO is a problem for externally-provided securities 
+      return createValueProperties(); // TODO is a problem for externally-provided securities
     }
     final ValueProperties.Builder properties = createValueProperties();
     properties.with(ValuePropertyNames.CURRENCY, ccy.getCode());
@@ -90,7 +90,8 @@ public class ExternallyProvidedSensitivitiesYieldCurveCS01Function extends Abstr
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties valueProperties = createCurrencyValueProperties(target).get();
     final Set<ValueSpecification> results = Collections.singleton(new ValueSpecification(CS01_REQUIREMENT, targetSpec, valueProperties));
@@ -98,7 +99,8 @@ public class ExternallyProvidedSensitivitiesYieldCurveCS01Function extends Abstr
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ComputationTargetSpecification specification = target.toSpecification();
     final Object value = inputs.getValue(new ValueRequirement(CREDIT_REQUIREMENT, specification));
     if (!(value instanceof LabelledMatrix1D)) {

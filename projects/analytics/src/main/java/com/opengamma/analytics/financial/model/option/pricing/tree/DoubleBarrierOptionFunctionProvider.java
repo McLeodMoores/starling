@@ -34,7 +34,8 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
    * @param typeName
    *          the barrier type
    */
-  public DoubleBarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double lowerBarrier, final double upperBarrier,
+  public DoubleBarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double lowerBarrier,
+      final double upperBarrier,
       final BarrierTypes typeName) {
     super(strike, timeToExpiry, steps, isCall, lowerBarrier, BarrierOptionFunctionProvider.BarrierTypes.DownAndOut);
     ArgumentChecker.isTrue(upperBarrier > 0., "upperBarrier should be positive");
@@ -69,7 +70,8 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice, final double sumCashDiv,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values,
+      final double baseAssetPrice, final double sumCashDiv,
       final double downFactor, final double upOverDown, final int steps) {
     final int nStepsP = steps + 1;
 
@@ -99,14 +101,16 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability,
+      final double[] values,
       final double baseAssetPrice, final double sumCashDiv, final double downFactor, final double middleOverDown, final int steps) {
     final int nNodes = 2 * steps + 1;
 
     final double[] res = new double[nNodes];
     double assetPrice = baseAssetPrice * Math.pow(downFactor, steps);
     for (int j = 0; j < nNodes; ++j) {
-      res[j] = _checkerDouble.checkOut(assetPrice + sumCashDiv) ? 0. : discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]);
+      res[j] = _checkerDouble.checkOut(assetPrice + sumCashDiv) ? 0.
+          : discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]);
       assetPrice *= middleOverDown;
     }
     return res;
@@ -128,6 +132,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
 
   /**
    * Access lower barrier
+   * 
    * @return _barrier in superclass
    */
   public double getLowerBarrier() {
@@ -136,6 +141,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
 
   /**
    * Access upper barrier
+   * 
    * @return _upperBarrier
    */
   public double getUpperBarrier() {

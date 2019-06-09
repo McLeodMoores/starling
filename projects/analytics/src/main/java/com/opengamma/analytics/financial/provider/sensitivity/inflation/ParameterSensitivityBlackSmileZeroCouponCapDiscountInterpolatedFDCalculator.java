@@ -28,10 +28,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * *For an instrument, computes the sensitivity of a multiple currency amount (often the present value) to the parameters used in the curve including inflation curve.
- * The computation is done by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves.
- * The return format is MultipleCurrencyParameterSensitivity object.
- * This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is irrelevant.
+ * *For an instrument, computes the sensitivity of a multiple currency amount (often the present value) to the parameters used in the curve including inflation
+ * curve. The computation is done by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves.
+ * The return format is MultipleCurrencyParameterSensitivity object. This is a very inefficient way to compute the sensitivities. It should be used only for
+ * tests purposes or when speed is irrelevant.
  */
 public class ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCalculator {
 
@@ -46,8 +46,11 @@ public class ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCa
 
   /**
    * Constructor
-   * @param valueCalculator The value calculator.
-   * @param shift The shift used for finite difference.
+   * 
+   * @param valueCalculator
+   *          The value calculator.
+   * @param shift
+   *          The shift used for finite difference.
    */
   public ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCalculator(
       final InstrumentDerivativeVisitor<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyAmount> valueCalculator,
@@ -58,13 +61,17 @@ public class ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCa
   }
 
   /**
-   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves.
-   * Only the discounting and forward curves sensitivity is computed.
-   * @param instrument The instrument.
-   * @param black The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
+   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves. Only the discounting and forward curves
+   * sensitivity is computed.
+   * 
+   * @param instrument
+   *          The instrument.
+   * @param black
+   *          The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
    * @return The parameter sensitivity.
    */
-  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final BlackSmileCapInflationZeroCouponProviderDiscount black) {
+  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument,
+      final BlackSmileCapInflationZeroCouponProviderDiscount black) {
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();
     final MultipleCurrencyAmount pvInit = instrument.accept(_valueCalculator, black);
     final MultipleCurrencyAmount pvInitMinus = pvInit.multipliedBy(-1.0);
@@ -86,8 +93,10 @@ public class ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCa
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumped = curveInt.getYDataAsPrimitive().clone();
         yieldBumped[loopnode] += _shift;
-        final PriceIndexCurve dscBumped = new PriceIndexCurve(new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
-        final BlackSmileCapInflationZeroCouponProviderDiscount marketDscBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(black.getInflationProvider().withPriceIndex(index, dscBumped),
+        final PriceIndexCurve dscBumped = new PriceIndexCurve(
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
+        final BlackSmileCapInflationZeroCouponProviderDiscount marketDscBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(
+            black.getInflationProvider().withPriceIndex(index, dscBumped),
             black.getBlackParameters());
         final MultipleCurrencyAmount pvBumped = instrument.accept(_valueCalculator, marketDscBumped);
         final MultipleCurrencyAmount pvDiff = pvBumped.plus(pvInitMinus);
@@ -114,8 +123,10 @@ public class ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCa
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumped = curveInt.getYDataAsPrimitive().clone();
         yieldBumped[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumped = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
-        final BlackSmileCapInflationZeroCouponProviderDiscount marketDscBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(black.getInflationProvider().withDiscountFactor(ccy, dscBumped),
+        final YieldAndDiscountCurve dscBumped = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
+        final BlackSmileCapInflationZeroCouponProviderDiscount marketDscBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(
+            black.getInflationProvider().withDiscountFactor(ccy, dscBumped),
             black.getBlackParameters());
         final MultipleCurrencyAmount pvBumped = instrument.accept(_valueCalculator, marketDscBumped);
         final MultipleCurrencyAmount pvDiff = pvBumped.plus(pvInitMinus);
@@ -141,8 +152,10 @@ public class ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCa
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumped = curveInt.getYDataAsPrimitive().clone();
         yieldBumped[loopnode] += _shift;
-        final YieldAndDiscountCurve fwdBumped = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
-        final BlackSmileCapInflationZeroCouponProviderDiscount marketFwdBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(black.getInflationProvider().withForward(index, fwdBumped),
+        final YieldAndDiscountCurve fwdBumped = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
+        final BlackSmileCapInflationZeroCouponProviderDiscount marketFwdBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(
+            black.getInflationProvider().withForward(index, fwdBumped),
             black.getBlackParameters());
         final MultipleCurrencyAmount pvBumped = instrument.accept(_valueCalculator, marketFwdBumped);
         final MultipleCurrencyAmount pvDiff = pvBumped.plus(pvInitMinus);
@@ -168,8 +181,10 @@ public class ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCa
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumped = curveInt.getYDataAsPrimitive().clone();
         yieldBumped[loopnode] += _shift;
-        final YieldAndDiscountCurve fwdBumped = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
-        final BlackSmileCapInflationZeroCouponProviderDiscount marketFwdBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(black.getInflationProvider().withForward(index, fwdBumped),
+        final YieldAndDiscountCurve fwdBumped = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
+        final BlackSmileCapInflationZeroCouponProviderDiscount marketFwdBumped = new BlackSmileCapInflationZeroCouponProviderDiscount(
+            black.getInflationProvider().withForward(index, fwdBumped),
             black.getBlackParameters());
         final MultipleCurrencyAmount pvBumped = instrument.accept(_valueCalculator, marketFwdBumped);
         final MultipleCurrencyAmount pvDiff = pvBumped.plus(pvInitMinus);

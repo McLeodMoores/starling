@@ -42,7 +42,9 @@ public class DependencyGraphTraceBuilderProperties {
 
   /**
    * Copy constructor
-   * @param other instance to copy
+   * 
+   * @param other
+   *          instance to copy
    */
   private DependencyGraphTraceBuilderProperties(final DependencyGraphTraceBuilderProperties other) {
     _calculationConfigurationName = other.getCalculationConfigurationName();
@@ -96,7 +98,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param calculationConfigurationName calculation configuration name to set
+   * @param calculationConfigurationName
+   *          calculation configuration name to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties calculationConfigurationName(final String calculationConfigurationName) {
@@ -109,7 +112,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param resolutionTime resolution time to set
+   * @param resolutionTime
+   *          resolution time to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties resolutionTime(final VersionCorrection resolutionTime) {
@@ -122,7 +126,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param valuationTime valuation time to set
+   * @param valuationTime
+   *          valuation time to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties valuationTime(final Instant valuationTime) {
@@ -135,7 +140,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param defaultProperties default properties to set
+   * @param defaultProperties
+   *          default properties to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties defaultProperties(final ValueProperties defaultProperties) {
@@ -143,12 +149,13 @@ public class DependencyGraphTraceBuilderProperties {
       @Override
       public ValueProperties getDefaultProperties() {
         return defaultProperties;
-      };
+      }
     };
   }
 
   /**
-   * @param requirement requirement to add
+   * @param requirement
+   *          requirement to add
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties addRequirement(final ValueRequirement requirement) {
@@ -158,7 +165,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param requirements requirements to set
+   * @param requirements
+   *          requirements to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties requirements(final Collection<ValueRequirement> requirements) {
@@ -171,7 +179,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param marketData market data to set
+   * @param marketData
+   *          market data to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties marketData(final List<MarketDataSpecification> marketData) {
@@ -184,8 +193,10 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * Add a market data spec
-   * @param marketData a market data spec
+   * Add a market data spec.
+   * 
+   * @param marketData
+   *          a market data spec
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties addMarketData(final MarketDataSpecification marketData) {
@@ -196,8 +207,10 @@ public class DependencyGraphTraceBuilderProperties {
 
   @Override
   public String toString() {
-    return "DependencyGraphTraceBuilderProperties [getCalculationConfigurationName()=" + getCalculationConfigurationName() + ", getValuationTime()=" + getValuationTime() + ", getResolutionTime()=" +
-        getResolutionTime() + ", getDefaultProperties()=" + getDefaultProperties() + ", getRequirements()=" + getRequirements() + ", getMarketData()=" + getMarketData() + "]";
+    return "DependencyGraphTraceBuilderProperties [getCalculationConfigurationName()=" + getCalculationConfigurationName() + ", getValuationTime()="
+        + getValuationTime() + ", getResolutionTime()=" +
+        getResolutionTime() + ", getDefaultProperties()=" + getDefaultProperties() + ", getRequirements()=" + getRequirements() + ", getMarketData()="
+        + getMarketData() + "]";
   }
 
 }

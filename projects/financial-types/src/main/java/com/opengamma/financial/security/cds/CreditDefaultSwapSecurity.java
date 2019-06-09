@@ -29,7 +29,7 @@ import com.opengamma.id.ExternalId;
 
 /**
  * An abstract base class for credit securities.
- * 
+ *
  * @deprecated Use {@link com.opengamma.financial.security.credit.StandardCDSSecurity} or {@link com.opengamma.financial.security.credit.LegacyCDSSecurity}.
  */
 @Deprecated
@@ -61,12 +61,12 @@ public abstract class CreditDefaultSwapSecurity extends AbstractCreditDefaultSwa
     super(securityType);
   }
 
-  public CreditDefaultSwapSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer, final ExternalId referenceEntity, // CSIGNORE
-      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final ExternalId regionId, final ZonedDateTime startDate,
-      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final Frequency couponFrequency, final DayCount dayCount,
-      final BusinessDayConvention businessDayConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
-      final boolean adjustMaturityDate, final InterestRateNotional notional, final boolean includeAccruedPremium, final boolean protectionStart,
-      final String securityType) {
+  public CreditDefaultSwapSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer,
+      final ExternalId referenceEntity, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final ExternalId regionId,
+      final ZonedDateTime startDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType,
+      final Frequency couponFrequency, final DayCount dayCount, final BusinessDayConvention businessDayConvention, final boolean immAdjustMaturityDate,
+      final boolean adjustEffectiveDate, final boolean adjustMaturityDate, final InterestRateNotional notional, final boolean includeAccruedPremium,
+      final boolean protectionStart, final String securityType) {
     super(securityType, isBuy, protectionBuyer, protectionSeller, referenceEntity, startDate, effectiveDate, maturityDate, stubType, couponFrequency, dayCount,
         businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional, includeAccruedPremium, protectionStart);
     setDebtSeniority(debtSeniority);

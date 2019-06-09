@@ -115,7 +115,8 @@ public class NonDeliverableFXOptionSecurity extends FinancialSecurity {
    *          true to deliver the call currency, false to deliver in the put
    *          currency
    */
-  public NonDeliverableFXOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Expiry expiry,
+  public NonDeliverableFXOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount,
+      final Expiry expiry,
       final ZonedDateTime settlementDate, final boolean isLong, final ExerciseType exerciseType, final boolean deliveryInCallCurrency) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);

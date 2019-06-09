@@ -63,11 +63,11 @@ public class ExternallyProvidedSensitivitiesYieldCurvePV01Function extends Abstr
   private ValueProperties.Builder createCurrencyValueProperties(final ComputationTarget target) {
     final Security security = target.getPosition().getSecurity();
     if (FXUtils.isFXSecurity(security)) {
-      return createValueProperties(); //TODO what to do in this case?
+      return createValueProperties(); // TODO what to do in this case?
     }
     final Currency ccy = FinancialSecurityUtils.getCurrency(security);
     if (ccy == null) {
-      return createValueProperties(); //TODO a problem when using externally-provided securities
+      return createValueProperties(); // TODO a problem when using externally-provided securities
     }
     final ValueProperties.Builder properties = createValueProperties();
     properties.with(ValuePropertyNames.CURRENCY, ccy.getCode());
@@ -104,7 +104,8 @@ public class ExternallyProvidedSensitivitiesYieldCurvePV01Function extends Abstr
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     String curveName = null;
     String curveCurrencyName = null;
@@ -117,14 +118,16 @@ public class ExternallyProvidedSensitivitiesYieldCurvePV01Function extends Abstr
       }
     }
     assert curveName != null;
-    final ValueProperties valueProperties = createCurrencyValueProperties(target).with(ValuePropertyNames.CURVE, curveName).with(ValuePropertyNames.CURVE_CURRENCY, curveCurrencyName)
+    final ValueProperties valueProperties = createCurrencyValueProperties(target).with(ValuePropertyNames.CURVE, curveName)
+        .with(ValuePropertyNames.CURVE_CURRENCY, curveCurrencyName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfigName).get();
     final Set<ValueSpecification> results = Collections.singleton(new ValueSpecification(PV01_REQUIREMENT, targetSpec, valueProperties));
     return results;
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     final String curveCurrency = desiredValue.getConstraint(ValuePropertyNames.CURVE_CURRENCY);
@@ -136,7 +139,8 @@ public class ExternallyProvidedSensitivitiesYieldCurvePV01Function extends Abstr
     }
     final DoubleLabelledMatrix1D ycns = (DoubleLabelledMatrix1D) value;
     final double result = sum(ycns.getValues()) / 10000d;
-    final ValueProperties properties = createCurrencyValueProperties(target).with(ValuePropertyNames.CURVE, curveName).with(ValuePropertyNames.CURVE_CURRENCY, curveCurrency)
+    final ValueProperties properties = createCurrencyValueProperties(target).with(ValuePropertyNames.CURVE, curveName)
+        .with(ValuePropertyNames.CURVE_CURRENCY, curveCurrency)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig).get();
     final ComputedValue computedValue = new ComputedValue(new ValueSpecification(PV01_REQUIREMENT, specification, properties), result);
     return Collections.singleton(computedValue);

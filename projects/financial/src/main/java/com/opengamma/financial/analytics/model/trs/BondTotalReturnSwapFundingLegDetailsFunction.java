@@ -66,8 +66,7 @@ import com.opengamma.util.tuple.Pair;
 public class BondTotalReturnSwapFundingLegDetailsFunction extends BondTotalReturnSwapFunction {
 
   /**
-   * Sets the value requirement to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#FUNDING_LEG_DETAILS}.
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#FUNDING_LEG_DETAILS}.
    */
   public BondTotalReturnSwapFundingLegDetailsFunction() {
     super(FUNDING_LEG_DETAILS);
@@ -106,8 +105,10 @@ public class BondTotalReturnSwapFundingLegDetailsFunction extends BondTotalRetur
         final double[] spreads = definition.accept(AnnuitySpreadsVisitor.getInstance(), now);
         final double[] gearings = definition.accept(AnnuityGearingsVisitor.getInstance(), now);
         final Tenor[] indexTenors = definition.accept(AnnuityIndexTenorsVisitor.getInstance(), now);
-        final FloatingSwapLegDetails details = new FloatingSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), paymentFractions, fixingDates.getFirst(), fixingDates.getSecond(),
-            fixingYearFractions, forwardRates, fixedRates, paymentDates, paymentTimes, discountFactors, paymentAmounts, projectedAmounts, notionals, spreads, gearings, indexTenors);
+        final FloatingSwapLegDetails details = new FloatingSwapLegDetails(accrualDates.getFirst(), accrualDates.getSecond(), paymentFractions,
+            fixingDates.getFirst(), fixingDates.getSecond(),
+            fixingYearFractions, forwardRates, fixedRates, paymentDates, paymentTimes, discountFactors, paymentAmounts, projectedAmounts, notionals, spreads,
+            gearings, indexTenors);
         return Collections.singleton(new ComputedValue(spec, details));
       }
 

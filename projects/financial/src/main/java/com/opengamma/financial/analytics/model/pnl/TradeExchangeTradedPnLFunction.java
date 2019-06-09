@@ -30,9 +30,12 @@ import com.opengamma.financial.security.option.FXOptionSecurity;
 public class TradeExchangeTradedPnLFunction extends AbstractTradeOrDailyPositionPnLFunction {
 
   /**
-   * @param resolutionKey the resolution key, not-null
-   * @param mark2marketField the mark to market data field name, not-null
-   * @param costOfCarryField the cost of carry field name, not-null
+   * @param resolutionKey
+   *          the resolution key, not-null
+   * @param mark2marketField
+   *          the mark to market data field name, not-null
+   * @param costOfCarryField
+   *          the cost of carry field name, not-null
    */
   public TradeExchangeTradedPnLFunction(final String resolutionKey, final String mark2marketField, final String costOfCarryField) {
     super(resolutionKey, mark2marketField, costOfCarryField);
@@ -44,7 +47,8 @@ public class TradeExchangeTradedPnLFunction extends AbstractTradeOrDailyPosition
       return false;
     }
     final Security security = target.getTrade().getSecurity();
-    if (security instanceof FXForwardSecurity || security instanceof FXOptionSecurity || security instanceof FXBarrierOptionSecurity || security instanceof FXDigitalOptionSecurity) {
+    if (security instanceof FXForwardSecurity || security instanceof FXOptionSecurity || security instanceof FXBarrierOptionSecurity
+        || security instanceof FXDigitalOptionSecurity) {
       return false;
     }
     return FinancialSecurityUtils.isExchangeTraded(security) || security instanceof BondSecurity;
@@ -77,7 +81,7 @@ public class TradeExchangeTradedPnLFunction extends AbstractTradeOrDailyPosition
 
   @Override
   protected LocalDate checkAvailableData(final LocalDate originalTradeDate, final HistoricalTimeSeries markToMarketSeries, final Security security,
-                                         final String markDataField, final String resolutionKey) {
+      final String markDataField, final String resolutionKey) {
     if (markToMarketSeries.getTimeSeries().isEmpty() || markToMarketSeries.getTimeSeries().getValue(originalTradeDate) == null) {
       throw new NullPointerException("Could not get mark to market value for security " +
           security.getExternalIdBundle() + " for " + markDataField + " using " + resolutionKey + " for " + originalTradeDate);
@@ -89,6 +93,5 @@ public class TradeExchangeTradedPnLFunction extends AbstractTradeOrDailyPosition
   protected String getResultValueRequirementName() {
     return ValueRequirementNames.PNL;
   }
-
 
 }

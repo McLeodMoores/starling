@@ -86,21 +86,29 @@ public class DatabaseRestore {
   private final LegalEntityMaster _legalEntityMaster;
   private final ConventionMaster _conventionMaster;
 
-  public DatabaseRestore(final String dataDir, final SecurityMaster securityMaster, final PositionMaster positionMaster, final PortfolioMaster portfolioMaster, final ConfigMaster configMaster,
-      final HistoricalTimeSeriesMaster timeSeriesMaster, final HolidayMaster holidayMaster, final ExchangeMaster exchangeMaster, final MarketDataSnapshotMaster snapshotMaster, final LegalEntityMaster legalEntityMaster,
+  public DatabaseRestore(final String dataDir, final SecurityMaster securityMaster, final PositionMaster positionMaster, final PortfolioMaster portfolioMaster,
+      final ConfigMaster configMaster,
+      final HistoricalTimeSeriesMaster timeSeriesMaster, final HolidayMaster holidayMaster, final ExchangeMaster exchangeMaster,
+      final MarketDataSnapshotMaster snapshotMaster, final LegalEntityMaster legalEntityMaster,
       final ConventionMaster conventionMaster) {
-    this(new File(dataDir), securityMaster, positionMaster, portfolioMaster, configMaster, timeSeriesMaster, holidayMaster, exchangeMaster, snapshotMaster, legalEntityMaster, conventionMaster);
+    this(new File(dataDir), securityMaster, positionMaster, portfolioMaster, configMaster, timeSeriesMaster, holidayMaster, exchangeMaster, snapshotMaster,
+        legalEntityMaster, conventionMaster);
   }
 
-  public DatabaseRestore(final File dataDir, final SecurityMaster securityMaster, final PositionMaster positionMaster, final PortfolioMaster portfolioMaster, final ConfigMaster configMaster,
-      final HistoricalTimeSeriesMaster timeSeriesMaster, final HolidayMaster holidayMaster, final ExchangeMaster exchangeMaster, final MarketDataSnapshotMaster snapshotMaster, final LegalEntityMaster legalEntityMaster,
+  public DatabaseRestore(final File dataDir, final SecurityMaster securityMaster, final PositionMaster positionMaster, final PortfolioMaster portfolioMaster,
+      final ConfigMaster configMaster,
+      final HistoricalTimeSeriesMaster timeSeriesMaster, final HolidayMaster holidayMaster, final ExchangeMaster exchangeMaster,
+      final MarketDataSnapshotMaster snapshotMaster, final LegalEntityMaster legalEntityMaster,
       final ConventionMaster conventionMaster) {
-    this(new SubdirsRegressionIO(dataDir, new FudgeXMLFormat(), false), securityMaster, positionMaster, portfolioMaster, configMaster, timeSeriesMaster, holidayMaster, exchangeMaster,
+    this(new SubdirsRegressionIO(dataDir, new FudgeXMLFormat(), false), securityMaster, positionMaster, portfolioMaster, configMaster, timeSeriesMaster,
+        holidayMaster, exchangeMaster,
         snapshotMaster, legalEntityMaster, conventionMaster);
   }
 
-  public DatabaseRestore(final RegressionIO io, final SecurityMaster securityMaster, final PositionMaster positionMaster, final PortfolioMaster portfolioMaster, final ConfigMaster configMaster,
-      final HistoricalTimeSeriesMaster timeSeriesMaster, final HolidayMaster holidayMaster, final ExchangeMaster exchangeMaster, final MarketDataSnapshotMaster snapshotMaster, final LegalEntityMaster legalEntityMaster,
+  public DatabaseRestore(final RegressionIO io, final SecurityMaster securityMaster, final PositionMaster positionMaster, final PortfolioMaster portfolioMaster,
+      final ConfigMaster configMaster,
+      final HistoricalTimeSeriesMaster timeSeriesMaster, final HolidayMaster holidayMaster, final ExchangeMaster exchangeMaster,
+      final MarketDataSnapshotMaster snapshotMaster, final LegalEntityMaster legalEntityMaster,
       final ConventionMaster conventionMaster) {
     ArgumentChecker.notNull(io, "io");
     ArgumentChecker.notNull(securityMaster, "securityMaster");
@@ -111,7 +119,7 @@ public class DatabaseRestore {
     ArgumentChecker.notNull(holidayMaster, "holidayMaster");
     ArgumentChecker.notNull(exchangeMaster, "exchangeMaster");
     ArgumentChecker.notNull(snapshotMaster, "snapshotMaster");
-    //ArgumentChecker.notNull(legalEntityMaster, "legalEntityMaster");
+    // ArgumentChecker.notNull(legalEntityMaster, "legalEntityMaster");
     _io = io;
     _securityMaster = securityMaster;
     _positionMaster = positionMaster;
@@ -133,8 +141,10 @@ public class DatabaseRestore {
     final String dataDir = args[0];
     final String serverUrl = args[1];
     try (RemoteServer server = RemoteServer.create(serverUrl)) {
-      final DatabaseRestore databaseRestore = new DatabaseRestore(dataDir, server.getSecurityMaster(), server.getPositionMaster(), server.getPortfolioMaster(), server.getConfigMaster(),
-          server.getHistoricalTimeSeriesMaster(), server.getHolidayMaster(), server.getExchangeMaster(), server.getMarketDataSnapshotMaster(), server.getLegalEntityMaster(),
+      final DatabaseRestore databaseRestore = new DatabaseRestore(dataDir, server.getSecurityMaster(), server.getPositionMaster(), server.getPortfolioMaster(),
+          server.getConfigMaster(),
+          server.getHistoricalTimeSeriesMaster(), server.getHolidayMaster(), server.getExchangeMaster(), server.getMarketDataSnapshotMaster(),
+          server.getLegalEntityMaster(),
           server.getConventionMaster());
       databaseRestore.restoreDatabase();
     }
@@ -365,7 +375,7 @@ public class DatabaseRestore {
     }
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked" })
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   private <T extends UniqueIdentifiable> List<T> readAll(final String type) throws IOException {
     final List objects = new ArrayList(_io.readAll(type).values());
     // [PLAT-5410] The objects are sorted by unique ID to give a consistent load; this is probably hiding other faults

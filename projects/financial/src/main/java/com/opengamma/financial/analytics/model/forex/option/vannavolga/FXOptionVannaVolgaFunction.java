@@ -141,10 +141,12 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
     final ValueRequirement putFundingCurve = getCurveRequirement(ComputationTargetSpecification.of(putCurrency), putCurveName, putCurveCalculationConfig);
     final ValueRequirement callFundingCurve = getCurveRequirement(ComputationTargetSpecification.of(callCurrency), callCurveName, callCurveCalculationConfig);
-    final ValueRequirement fxVolatilitySurface = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final ValueRequirement fxVolatilitySurface = getSurfaceRequirement(surfaceName, putCurrency, callCurrency, interpolatorName, leftExtrapolatorName,
+        rightExtrapolatorName);
     final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(putCurrency, callCurrency);
     final ValueRequirement spotRequirement = ConventionBasedFXRateFunction.getSpotRateRequirement(currencyPair);
-    final ValueRequirement pairQuoteRequirement = new ValueRequirement(ValueRequirementNames.CURRENCY_PAIRS, ComputationTargetType.PRIMITIVE, currencyPair.getUniqueId());
+    final ValueRequirement pairQuoteRequirement = new ValueRequirement(ValueRequirementNames.CURRENCY_PAIRS, ComputationTargetType.PRIMITIVE,
+        currencyPair.getUniqueId());
     return Sets.newHashSet(putFundingCurve, callFundingCurve, fxVolatilitySurface, spotRequirement, pairQuoteRequirement);
   }
 
@@ -163,12 +165,13 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     final String fullPutCurveName = putCurveName + "_" + putCurrency.getCode();
     final String fullCallCurveName = callCurveName + "_" + callCurrency.getCode();
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
-      return new String[] {fullPutCurveName, fullCallCurveName };
+      return new String[] { fullPutCurveName, fullCallCurveName };
     }
-    return new String[] {fullCallCurveName, fullPutCurveName };
+    return new String[] { fullCallCurveName, fullPutCurveName };
   }
 
-  protected InstrumentDerivative getDerivative(final FinancialSecurity security, final String[] allCurveNames, final CurrencyPairs baseQuotePairs, final ZonedDateTime now) {
+  protected InstrumentDerivative getDerivative(final FinancialSecurity security, final String[] allCurveNames, final CurrencyPairs baseQuotePairs,
+      final ZonedDateTime now) {
     final InstrumentDefinition<?> definition = security.accept(new ForexSecurityConverter(baseQuotePairs));
     return definition.toDerivative(now, allCurveNames);
   }
@@ -191,7 +194,7 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     }
     final SmileDeltaParameters[] surface = new SmileDeltaParameters[allSmiles.getNumberExpiration()];
     final int atmIndex = (allSmiles.getNumberStrike() - 1) / 2;
-    final double[] deltas = {delta };
+    final double[] deltas = { delta };
     for (int i = 0; i < allSmiles.getNumberExpiration(); i++) {
       final SmileDeltaParameters parameters = allSmiles.getSmileForTime(i);
       final double timeToExpiration = parameters.getTimeToExpiry();
@@ -222,11 +225,11 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     if (baseQuotePair.getBase().equals(putCurrency)) { // To get Base/quote in market standard order.
       ccy1 = putCurrency;
       ccy2 = callCurrency;
-      curves = new YieldAndDiscountCurve[] {putFundingCurve, callFundingCurve };
+      curves = new YieldAndDiscountCurve[] { putFundingCurve, callFundingCurve };
       curveCurrency.put(allCurveNames[0], putCurrency);
       curveCurrency.put(allCurveNames[1], callCurrency);
     } else {
-      curves = new YieldAndDiscountCurve[] {callFundingCurve, putFundingCurve };
+      curves = new YieldAndDiscountCurve[] { callFundingCurve, putFundingCurve };
       ccy1 = callCurrency;
       ccy2 = putCurrency;
       curveCurrency.put(allCurveNames[1], putCurrency);

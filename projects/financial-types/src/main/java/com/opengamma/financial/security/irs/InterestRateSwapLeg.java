@@ -66,7 +66,6 @@ public abstract class InterestRateSwapLeg extends DirectBean {
   @PropertyDefinition(validate = "notNull")
   private RollConvention _rollConvention = RollConvention.NONE;
 
-
   /*
    * Maturity date parameters
    */
@@ -142,8 +141,10 @@ public abstract class InterestRateSwapLeg extends DirectBean {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T> the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   public abstract <T> T accept(InterestRateSwapLegVisitor<T> visitor);

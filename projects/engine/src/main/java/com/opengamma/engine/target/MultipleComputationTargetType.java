@@ -22,7 +22,8 @@ import com.opengamma.util.ArgumentChecker;
 
   private final Set<ComputationTargetType> _target;
 
-  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> CONSTRUCT = new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
+  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> CONSTRUCT =
+      new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Set<ComputationTargetType> data) {
@@ -216,7 +217,8 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> EQUALS =
+      new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final MultipleComputationTargetType self) {

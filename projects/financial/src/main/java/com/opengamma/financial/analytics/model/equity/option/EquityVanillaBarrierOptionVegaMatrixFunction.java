@@ -160,7 +160,8 @@ public class EquityVanillaBarrierOptionVegaMatrixFunction extends EquityVanillaB
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = super.getResults(context, target, inputs);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();

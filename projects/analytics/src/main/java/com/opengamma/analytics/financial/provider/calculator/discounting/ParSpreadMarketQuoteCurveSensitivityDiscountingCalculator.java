@@ -32,10 +32,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present value of the instrument is zero.
- * The notion of "spread" will depend of each instrument.
+ * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present
+ * value of the instrument is zero. The notion of "spread" will depend of each instrument.
  */
-public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
+public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
+extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -44,6 +45,7 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator getInstance() {
@@ -62,7 +64,8 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
   private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
   private static final PresentValueMarketQuoteSensitivityDiscountingCalculator PVMQSMC = PresentValueMarketQuoteSensitivityDiscountingCalculator.getInstance();
-  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator PVMQSCSMC = PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator PVMQSCSMC =
+      PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator.getInstance();
   private static final CashDiscountingMethod METHOD_DEPOSIT = CashDiscountingMethod.getInstance();
   private static final DepositIborDiscountingMethod METHOD_DEPOSIT_IBOR = DepositIborDiscountingMethod.getInstance();
   private static final ForwardRateAgreementDiscountingProviderMethod METHOD_FRA = ForwardRateAgreementDiscountingProviderMethod.getInstance();
@@ -71,7 +74,7 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
   private static final ForexDiscountingMethod METHOD_FOREX = ForexDiscountingMethod.getInstance();
   private static final FederalFundsFutureSecurityDiscountingMethod METHOD_FED_FUNDS = FederalFundsFutureSecurityDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public MulticurveSensitivity visitCash(final Cash deposit, final MulticurveProviderInterface multicurves) {
@@ -83,19 +86,22 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
     return METHOD_DEPOSIT_IBOR.parSpreadCurveSensitivity(deposit, multicurves);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MulticurveSensitivity visitForwardRateAgreement(final ForwardRateAgreement fra, final MulticurveProviderInterface multicurves) {
     return METHOD_FRA.parSpreadCurveSensitivity(fra, multicurves);
   }
 
-  //     -----     Swaps     -----
+  // ----- Swaps -----
 
   /**
    * For swaps, the par spread is the spread to be added to the first leg to have a present value of zero.
-   * @param swap The swap
-   * @param multicurves The multi-curve provider
+   *
+   * @param swap
+   *          The swap
+   * @param multicurves
+   *          The multi-curve provider
    * @return The spread.
    */
   @Override
@@ -116,7 +122,8 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
       final double paymentYearFraction = cpnFixed.getPaymentYearFraction();
 
       final double notional = ((CouponONCompounded) swap.getSecondLeg().getNthPayment(0)).getNotional();
-      final double intermediateVariable = (1 / paymentYearFraction) * Math.pow(pvONCompoundedLeg / discountFactor / notional, 1 / paymentYearFraction - 1) / (discountFactor * notional);
+      final double intermediateVariable = 1 / paymentYearFraction * Math.pow(pvONCompoundedLeg / discountFactor / notional, 1 / paymentYearFraction - 1)
+          / (discountFactor * notional);
       final MulticurveSensitivity modifiedpvcsFirstLeg = pvcsFirstLeg.multipliedBy(pvONCompoundedLeg * intermediateVariable / discountFactor);
       final MulticurveSensitivity modifiedpvcsSecondLeg = pvcsSecondLeg.multipliedBy(-intermediateVariable);
 
@@ -139,8 +146,11 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
 
   /**
    * For swaps, the par spread is the spread to be added to the first leg to have a present value of zero.
-   * @param swap The swap
-   * @param multicurves The multi-curve provider
+   *
+   * @param swap
+   *          The swap
+   * @param multicurves
+   *          The multi-curve provider
    * @return The spread.
    */
   @Override
@@ -157,7 +167,7 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
     return pvcs1.multipliedBy(-1.0 / pvmqs).plus(pvmqscs.multipliedBy(pv / (pvmqs * pvmqs)));
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public MulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures, final MulticurveProviderInterface multicurves) {
@@ -169,7 +179,7 @@ public final class ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator ext
     return METHOD_FED_FUNDS.priceCurveSensitivity(future.getUnderlyingSecurity(), multicurves);
   }
 
-  //     -----     Forex     -----
+  // ----- Forex -----
 
   @Override
   public MulticurveSensitivity visitForexSwap(final ForexSwap fx, final MulticurveProviderInterface multicurves) {

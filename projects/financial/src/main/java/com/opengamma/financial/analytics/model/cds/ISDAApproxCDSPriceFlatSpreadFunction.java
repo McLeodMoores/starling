@@ -54,8 +54,9 @@ public class ISDAApproxCDSPriceFlatSpreadFunction extends ISDAApproxCDSPriceFunc
 
     final Set<ValueRequirement> requirements = new HashSet<>();
 
-    requirements.add(new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(cds.getCurrency()), ValueProperties.with(ValuePropertyNames.CALCULATION_METHOD,
-        ISDAFunctionConstants.ISDA_METHOD_NAME).get()));
+    requirements.add(new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(cds.getCurrency()),
+        ValueProperties.with(ValuePropertyNames.CALCULATION_METHOD,
+            ISDAFunctionConstants.ISDA_METHOD_NAME).get()));
 
     // TODO: Are extra value properties needed here? (see ISDAApproxFlatSpreadFunction)
     requirements.add(new ValueRequirement(ValueRequirementNames.SPOT_RATE, target.toSpecification(), ValueProperties.none()));
@@ -64,7 +65,8 @@ public class ISDAApproxCDSPriceFlatSpreadFunction extends ISDAApproxCDSPriceFunc
   }
 
   @Override
-  public DoublesPair executeImpl(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public DoublesPair executeImpl(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     // Set up converter (could this be compiled?)
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
@@ -88,7 +90,8 @@ public class ISDAApproxCDSPriceFlatSpreadFunction extends ISDAApproxCDSPriceFunc
     final ISDACDSDerivative cdsDerivative = cdsDefinition.toDerivative(pricingDate, stepinDate, settlementDate, discountCurve.getName());
 
     // Go price!
-    final double dirtyPrice = ISDA_APPROX_METHOD.calculateUpfrontCharge(cdsDerivative, discountCurve, flatSpread, false, pricingDate, stepinDate, settlementDate, CALENDAR);
+    final double dirtyPrice = ISDA_APPROX_METHOD.calculateUpfrontCharge(cdsDerivative, discountCurve, flatSpread, false, pricingDate, stepinDate,
+        settlementDate, CALENDAR);
     final double cleanPrice = dirtyPrice - cdsDerivative.getAccruedInterest();
 
     return DoublesPair.of(cleanPrice, dirtyPrice);

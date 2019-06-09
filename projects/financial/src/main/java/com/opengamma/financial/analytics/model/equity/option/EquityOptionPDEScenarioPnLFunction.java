@@ -55,12 +55,12 @@ public class EquityOptionPDEScenarioPnLFunction extends EquityOptionPDEFunction 
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs, final Set<ValueRequirement> desiredValues,
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     // Compute present value under current market
     final double pvBase = derivative.accept(PV_CALCULATOR, market);
-
 
     // Form market scenario
     final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
@@ -101,7 +101,8 @@ public class EquityOptionPDEScenarioPnLFunction extends EquityOptionPDEFunction 
       } else if (volShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
         additiveShift = false;
       } else {
-        LOGGER.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug(
+            "In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         additiveShift = false;
       }
       volSurfScen = market.getVolatilitySurface().withShift(shiftVol, additiveShift);
@@ -165,7 +166,8 @@ public class EquityOptionPDEScenarioPnLFunction extends EquityOptionPDEFunction 
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = inputs.keySet().iterator().next();
       if (getValueRequirementName().equals(input.getValueName())) {

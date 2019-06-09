@@ -20,6 +20,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Specific calibration engine for the G2++ model with swaption.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -32,7 +33,9 @@ public class SwaptionPhysicalG2ppSuccessiveRootFinderCalibrationEngine extends S
 
   /**
    * Constructor of the calibration engine.
-   * @param calibrationObjective The calibration objective.
+   * 
+   * @param calibrationObjective
+   *          The calibration objective.
    */
   public SwaptionPhysicalG2ppSuccessiveRootFinderCalibrationEngine(final SuccessiveRootFinderCalibrationObjective calibrationObjective) {
     super(calibrationObjective);
@@ -40,8 +43,11 @@ public class SwaptionPhysicalG2ppSuccessiveRootFinderCalibrationEngine extends S
 
   /**
    * Add an instrument to the basket and the associated calculator.
-   * @param instrument An interest rate derivative.
-   * @param method A calculator.
+   * 
+   * @param instrument
+   *          An interest rate derivative.
+   * @param method
+   *          A calculator.
    */
   @Override
   public void addInstrument(final InstrumentDerivative instrument, final PricingMethod method) {
@@ -57,13 +63,15 @@ public class SwaptionPhysicalG2ppSuccessiveRootFinderCalibrationEngine extends S
     computeCalibrationPrice(curves);
     getCalibrationObjective().setCurves(curves);
     final int nbInstruments = getBasket().size();
-    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(getCalibrationObjective().getFunctionValueAccuracy(), getCalibrationObjective().getVariableAbsoluteAccuracy());
+    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(getCalibrationObjective().getFunctionValueAccuracy(),
+        getCalibrationObjective().getVariableAbsoluteAccuracy());
     final BracketRoot bracketer = new BracketRoot();
     for (int loopins = 0; loopins < nbInstruments; loopins++) {
       final InstrumentDerivative instrument = getBasket().get(loopins);
       getCalibrationObjective().setInstrument(instrument);
       getCalibrationObjective().setPrice(getCalibrationPrice().get(loopins));
-      final double[] range = bracketer.getBracketedPoints(getCalibrationObjective(), getCalibrationObjective().getMinimumParameter(), getCalibrationObjective().getMaximumParameter());
+      final double[] range = bracketer.getBracketedPoints(getCalibrationObjective(), getCalibrationObjective().getMinimumParameter(),
+          getCalibrationObjective().getMaximumParameter());
       rootFinder.getRoot(getCalibrationObjective(), range[0], range[1]);
       if (loopins < nbInstruments - 1) {
         ((SwaptionPhysicalG2ppCalibrationObjective) getCalibrationObjective()).setNextCalibrationTime(_calibrationTimes.get(loopins));

@@ -29,23 +29,29 @@ public class RawIRFutureOptionVolatilitySurfaceDataFunction extends RawVolatilit
   }
 
   @Override
-  protected VolatilitySurfaceDefinition<?, ?> getDefinition(final VolatilitySurfaceDefinitionSource definitionSource, final VersionCorrection versionCorrection, final ComputationTarget target,
+  protected VolatilitySurfaceDefinition<?, ?> getDefinition(final VolatilitySurfaceDefinitionSource definitionSource, final VersionCorrection versionCorrection,
+      final ComputationTarget target,
       final String definitionName) {
     final String fullDefinitionName = definitionName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceDefinition<?, ?> definition = definitionSource.getDefinition(fullDefinitionName, InstrumentTypeProperties.IR_FUTURE_OPTION, versionCorrection);
+    final VolatilitySurfaceDefinition<?, ?> definition = definitionSource.getDefinition(fullDefinitionName, InstrumentTypeProperties.IR_FUTURE_OPTION,
+        versionCorrection);
     if (definition == null) {
-      throw new OpenGammaRuntimeException("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + InstrumentTypeProperties.IR_FUTURE_OPTION);
+      throw new OpenGammaRuntimeException(
+          "Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + InstrumentTypeProperties.IR_FUTURE_OPTION);
     }
     return definition;
   }
 
   @Override
-  protected VolatilitySurfaceSpecification getSpecification(final VolatilitySurfaceSpecificationSource specificationSource, final VersionCorrection versionCorrection, final ComputationTarget target,
+  protected VolatilitySurfaceSpecification getSpecification(final VolatilitySurfaceSpecificationSource specificationSource,
+      final VersionCorrection versionCorrection, final ComputationTarget target,
       final String specificationName) {
     final String fullSpecificationName = specificationName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceSpecification specification = specificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.IR_FUTURE_OPTION, versionCorrection);
+    final VolatilitySurfaceSpecification specification = specificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.IR_FUTURE_OPTION,
+        versionCorrection);
     if (specification == null) {
-      throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + InstrumentTypeProperties.IR_FUTURE_OPTION);
+      throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type "
+          + InstrumentTypeProperties.IR_FUTURE_OPTION);
     }
     return specification;
   }

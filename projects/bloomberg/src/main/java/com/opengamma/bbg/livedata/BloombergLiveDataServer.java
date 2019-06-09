@@ -84,10 +84,14 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
   /**
    * Creates an instance.
    *
-   * @param bloombergConnector the connector, not null
-   * @param referenceDataProvider the reference data provider, not null
-   * @param cacheManager the cache manager, not null
-   * @param availabilityNotificationSender For sending notifications when Bloomberg data becomes available
+   * @param bloombergConnector
+   *          the connector, not null
+   * @param referenceDataProvider
+   *          the reference data provider, not null
+   * @param cacheManager
+   *          the cache manager, not null
+   * @param availabilityNotificationSender
+   *          For sending notifications when Bloomberg data becomes available
    */
   public BloombergLiveDataServer(final BloombergConnector bloombergConnector, final ReferenceDataProvider referenceDataProvider,
       final CacheManager cacheManager, final FudgeMessageSender availabilityNotificationSender) {
@@ -112,7 +116,7 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
     return serviceNames;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the Bloomberg connector.
    *
@@ -166,7 +170,7 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
 
   @Override
   protected void checkSubscribe(final Set<String> uniqueIds) {
-    //NOTE: need to do this here, rather than in doSubscribe, because otherwise we'd do the initial snapshot anyway.
+    // NOTE: need to do this here, rather than in doSubscribe, because otherwise we'd do the initial snapshot anyway.
     checkLimitRemaining(uniqueIds.size());
     super.checkSubscribe(uniqueIds);
   }
@@ -300,8 +304,9 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
             connect();
             startExpirationManager();
             reestablishSubscriptions();
-            final MarketDataAvailabilityNotification notification = new MarketDataAvailabilityNotification(ImmutableSet.of(ExternalSchemes.BLOOMBERG_BUID, ExternalSchemes.BLOOMBERG_BUID_WEAK,
-                ExternalSchemes.BLOOMBERG_TCM, ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK));
+            final MarketDataAvailabilityNotification notification = new MarketDataAvailabilityNotification(
+                ImmutableSet.of(ExternalSchemes.BLOOMBERG_BUID, ExternalSchemes.BLOOMBERG_BUID_WEAK,
+                    ExternalSchemes.BLOOMBERG_TCM, ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK));
             final FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
             LOGGER.info("Sending notification that Bloomberg is available: {}", notification);
             _availabilityNotificationSender.send(notification.toFudgeMsg(serializer));
@@ -316,7 +321,8 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
   /**
    * Starts the Bloomberg Server.
    *
-   * @param args Not needed
+   * @param args
+   *          Not needed
    */
   public static void main(final String[] args) { // CSIGNORE
     final String file = "/com/opengamma/bbg/livedata/bbg-livedata-context.xml";

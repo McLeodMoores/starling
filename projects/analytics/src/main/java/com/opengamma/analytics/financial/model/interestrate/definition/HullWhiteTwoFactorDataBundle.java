@@ -14,7 +14,7 @@ import com.opengamma.analytics.financial.model.volatility.curve.VolatilityCurve;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class HullWhiteTwoFactorDataBundle extends StandardDiscountBondModelDataBundle {
   private final double _reversionSpeed1;
@@ -24,8 +24,10 @@ public class HullWhiteTwoFactorDataBundle extends StandardDiscountBondModelDataB
   private final VolatilityCurve _volatilityCurve2;
   private final double _correlation;
 
-  public HullWhiteTwoFactorDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve volatilityCurve1, final VolatilityCurve volatilityCurve2, final ZonedDateTime date,
-      final double reversionSpeed1, final double reversionSpeed2, final double meanReversionLevel, final YieldAndDiscountCurve forwardRateCurve, final double correlation) {
+  public HullWhiteTwoFactorDataBundle(final YieldAndDiscountCurve shortRateCurve, final VolatilityCurve volatilityCurve1,
+      final VolatilityCurve volatilityCurve2, final ZonedDateTime date,
+      final double reversionSpeed1, final double reversionSpeed2, final double meanReversionLevel, final YieldAndDiscountCurve forwardRateCurve,
+      final double correlation) {
     super(shortRateCurve, volatilityCurve1, date);
     Validate.notNull(volatilityCurve2, "second volatility curve");
     Validate.notNull(forwardRateCurve, "forward rate curve");
@@ -78,15 +80,15 @@ public class HullWhiteTwoFactorDataBundle extends StandardDiscountBondModelDataB
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_correlation);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_forwardRateCurve == null) ? 0 : _forwardRateCurve.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_forwardRateCurve == null ? 0 : _forwardRateCurve.hashCode());
     temp = Double.doubleToLongBits(_meanReversionLevel);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_reversionSpeed1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_reversionSpeed2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_volatilityCurve2 == null) ? 0 : _volatilityCurve2.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_volatilityCurve2 == null ? 0 : _volatilityCurve2.hashCode());
     return result;
   }
 

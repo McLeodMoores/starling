@@ -23,12 +23,14 @@ public class ExplicitFiniteDifference2D implements ConvectionDiffusionPDESolver2
   }
 
   @Override
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax, final BoundaryCondition2D xLowerBoundary,
-      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary, final Cube<Double, Double, Double, Double> freeBoundary) {
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax,
+      final BoundaryCondition2D xLowerBoundary,
+      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary,
+      final Cube<Double, Double, Double, Double> freeBoundary) {
 
-    final double dt = tMax / (tSteps);
-    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / (xSteps);
-    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / (ySteps);
+    final double dt = tMax / tSteps;
+    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / xSteps;
+    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / ySteps;
     final double dtdx2 = dt / dx / dx;
     final double dtdx = dt / dx;
     final double dtdy2 = dt / dy / dy;

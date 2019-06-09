@@ -32,6 +32,7 @@ import com.opengamma.financial.currency.CurrencyPair;
 
 /**
  * The function to compute the forward driftless theta of Forex options in the Black model.
+ * 
  * @deprecated Use {@link BlackDiscountingForwardDriftlessThetaFXOptionFunction}
  */
 @Deprecated
@@ -57,8 +58,8 @@ public class FXOptionBlackForwardDriftlessThetaFunction extends FXOptionBlackMul
     if (scaleFactors.isEmpty()) {
       scale = DEFAULT_DAYS_PER_YEAR;
       resultProperties
-        .withoutAny(PROPERTY_DAYS_PER_YEAR)
-        .with(PROPERTY_DAYS_PER_YEAR, Double.toString(DEFAULT_DAYS_PER_YEAR));
+          .withoutAny(PROPERTY_DAYS_PER_YEAR)
+          .with(PROPERTY_DAYS_PER_YEAR, Double.toString(DEFAULT_DAYS_PER_YEAR));
     } else {
       scale = Double.parseDouble(scaleFactors.iterator().next());
     }
@@ -83,7 +84,8 @@ public class FXOptionBlackForwardDriftlessThetaFunction extends FXOptionBlackMul
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final Map.Entry<ValueSpecification, ValueRequirement> entry = Iterables.getOnlyElement(inputs.entrySet());
       if (ValueRequirementNames.FORWARD_DRIFTLESS_THETA.equals(entry.getKey().getValueName())) {
@@ -104,7 +106,7 @@ public class FXOptionBlackForwardDriftlessThetaFunction extends FXOptionBlackMul
       final String callCurve, final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
     return super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair,
         optionalProperties)
-        .withAny(PROPERTY_DAYS_PER_YEAR);
+            .withAny(PROPERTY_DAYS_PER_YEAR);
   }
 
   @Override

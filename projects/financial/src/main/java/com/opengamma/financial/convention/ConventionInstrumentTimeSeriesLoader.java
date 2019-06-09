@@ -23,8 +23,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoader;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Populates an historical time-series master with missing time-series for each
- * instrument referenced by the {@link InMemoryConventionBundleMaster}.
+ * Populates an historical time-series master with missing time-series for each instrument referenced by the {@link InMemoryConventionBundleMaster}.
  *
  * @deprecated This loaders uses {@link ConventionBundle}s, which are deprecated
  */
@@ -94,7 +93,7 @@ public class ConventionInstrumentTimeSeriesLoader {
     return _updateExisting;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public void run() {
     final Collection<ConventionBundle> conventions = getConventionMaster().getAll();
     final Set<ExternalId> externalIds = new HashSet<>();
@@ -135,7 +134,8 @@ public class ConventionInstrumentTimeSeriesLoader {
   private void ensureTimeseries(final ExternalId externalId) {
     LOGGER.info("Checking time-series for {}", externalId);
     try {
-      final HistoricalTimeSeries hts = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(ExternalIdBundle.of(externalId), getDataSource(), getDataProvider(), getDataField());
+      final HistoricalTimeSeries hts = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(ExternalIdBundle.of(externalId), getDataSource(),
+          getDataProvider(), getDataField());
       if (hts == null) {
         LOGGER.info("Adding time-series for {}", externalId);
         getHistoricalTimeSeriesLoader().loadTimeSeries(ImmutableSet.of(externalId), getDataProvider(), getDataField(), null, null);

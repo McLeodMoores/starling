@@ -31,18 +31,19 @@ public class InflationBondSecurity extends BondSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-  InflationBondSecurity() { //For builder
+  InflationBondSecurity() { // For builder
     super();
   }
 
   public InflationBondSecurity(final String issuerName, final String issuerType, final String issuerDomicile, final String market, final Currency currency,
       final YieldConvention yieldConvention, final Expiry lastTradeDate, final String couponType, final double couponRate, final Frequency couponFrequency,
       final DayCount dayCountConvention, final ZonedDateTime interestAccrualDate, final ZonedDateTime settlementDate, final ZonedDateTime firstCouponDate,
-      final Double issuancePrice, final double totalAmountIssued, final double minimumAmount, final double minimumIncrement, final double parAmount, final double redemptionValue) {
+      final Double issuancePrice, final double totalAmountIssued, final double minimumAmount, final double minimumIncrement, final double parAmount,
+      final double redemptionValue) {
     super(issuerName, issuerType, issuerDomicile, market, currency, yieldConvention, lastTradeDate, couponType, couponRate, couponFrequency,
-        dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
+        dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount,
+        redemptionValue);
   }
-
 
   @Override
   public <T> T accept(final FinancialSecurityVisitor<T> visitor) {

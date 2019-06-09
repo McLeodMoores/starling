@@ -27,8 +27,9 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Calculates the Value (or Dollar) Delta of an EquitySecurity. The value delta is defined as the Delta (dV/dS) multiplied by the spot, S. As dS/dS == 1, ValueDelta = S, the spot value of the
- * security. ValueDelta can be roughly described as the delta hedge of the position expressed in currency value. It indicates how much currency must be used in order to delta hedge a position.
+ * Calculates the Value (or Dollar) Delta of an EquitySecurity. The value delta is defined as the Delta (dV/dS) multiplied by the spot, S. As dS/dS == 1,
+ * ValueDelta = S, the spot value of the security. ValueDelta can be roughly described as the delta hedge of the position expressed in currency value. It
+ * indicates how much currency must be used in order to delta hedge a position.
  *
  * @author casey
  */
@@ -39,7 +40,8 @@ public class EquitySecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueProperties properties = desiredValue.getConstraints().copy()
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode())

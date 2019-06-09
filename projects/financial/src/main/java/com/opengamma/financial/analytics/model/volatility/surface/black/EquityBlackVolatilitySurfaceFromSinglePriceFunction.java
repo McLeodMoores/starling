@@ -73,8 +73,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
    */
   public static final String PROPERTY_IMPLIED_VOL_BACKUP = "ImpliedVolBackup";
   /**
-   * Selection of {@link PROPERTY_IMPLIED_VOL_BACKUP} which will throw an error
-   * if implied vol is undefined
+   * Selection of {@link PROPERTY_IMPLIED_VOL_BACKUP} which will throw an error if implied vol is undefined
    */
   public static final String NO_VOL_BACKUP = "None";
 
@@ -103,7 +102,8 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     return desiredValues.iterator().next().getConstraints();
   }
 
-  protected Set<ValueRequirement> getAddlRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+  protected Set<ValueRequirement> getAddlRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+      final ValueRequirement desiredValue) {
     return Collections.emptySet();
   }
 
@@ -130,7 +130,8 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
         .with(ValuePropertyNames.CURVE, discountingCurveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
         .get();
-    final ValueRequirement discountCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(ccy), fundingCurveProperties);
+    final ValueRequirement discountCurveRequirement = new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(ccy),
+        fundingCurveProperties);
     requirements.add(discountCurveRequirement);
 
     // 3. Forward Curve Requirement
@@ -154,7 +155,8 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     }
     if (security instanceof EquityIndexFutureOptionSecurity) {
       final SecuritySource securitySource = context.getSecuritySource();
-      final IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId), context.getComputationTargetResolver().getVersionCorrection());
+      final IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId),
+          context.getComputationTargetResolver().getVersionCorrection());
       if (future == null) {
         LOGGER.debug("Did not find anything in SecuritySource for ExternalId: {}", underlyingId);
         return null;
@@ -178,9 +180,11 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final BlackVolatilitySurface<?> blackVolSurf = getVolatilitySurface(executionContext, inputs, target, desiredValues);
-    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(), getResultProperties(desiredValues));
+    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE, target.toSpecification(),
+        getResultProperties(desiredValues));
     return Collections.singleton(new ComputedValue(spec, blackVolSurf));
   }
 
@@ -277,6 +281,5 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     }
     return (ForwardCurve) forwardCurveObject;
   }
-
 
 }

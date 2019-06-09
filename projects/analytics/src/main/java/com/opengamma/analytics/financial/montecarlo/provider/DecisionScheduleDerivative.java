@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.montecarlo.provider;
@@ -26,9 +26,13 @@ public class DecisionScheduleDerivative extends DecisionSchedule {
 
   /**
    * Constructor.
-   * @param decisionTime The time at which an exercise or fixing take place.
-   * @param impactTime The time impacting the value at each decision date.
-   * @param impactAmount The reference amounts at each impact times.
+   *
+   * @param decisionTime
+   *          The time at which an exercise or fixing take place.
+   * @param impactTime
+   *          The time impacting the value at each decision date.
+   * @param impactAmount
+   *          The reference amounts at each impact times.
    */
   public DecisionScheduleDerivative(final double[] decisionTime, final double[][] impactTime, final double[][] impactAmount) {
     super(decisionTime, impactTime, impactAmount);
@@ -37,18 +41,25 @@ public class DecisionScheduleDerivative extends DecisionSchedule {
 
   /**
    * Constructor.
-   * @param decisionTime The time at which an exercise or fixing take place.
-   * @param impactTime The time impacting the value at each decision date.
-   * @param impactAmount The reference amounts at each impact times.
-   * @param impactAmountDerivative Derivative of the cash flow equivalent for each decision time.
+   *
+   * @param decisionTime
+   *          The time at which an exercise or fixing take place.
+   * @param impactTime
+   *          The time impacting the value at each decision date.
+   * @param impactAmount
+   *          The reference amounts at each impact times.
+   * @param impactAmountDerivative
+   *          Derivative of the cash flow equivalent for each decision time.
    */
-  public DecisionScheduleDerivative(final double[] decisionTime, final double[][] impactTime, final double[][] impactAmount, final List<Map<Double, MulticurveSensitivity>> impactAmountDerivative) {
+  public DecisionScheduleDerivative(final double[] decisionTime, final double[][] impactTime, final double[][] impactAmount,
+      final List<Map<Double, MulticurveSensitivity>> impactAmountDerivative) {
     super(decisionTime, impactTime, impactAmount);
     _impactAmountDerivative = impactAmountDerivative;
   }
 
   /**
    * Gets the derivative of the cash flow equivalent for each decision time.
+   *
    * @return The derivative of the cash flow equivalent for each decision time.
    */
   public List<Map<Double, MulticurveSensitivity>> getImpactAmountDerivative() {

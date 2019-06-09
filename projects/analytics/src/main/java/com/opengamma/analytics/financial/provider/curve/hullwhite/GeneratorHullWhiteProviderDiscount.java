@@ -46,15 +46,22 @@ public class GeneratorHullWhiteProviderDiscount extends Function1D<DoubleMatrix1
   private final HullWhiteOneFactorProviderDiscount _knownData;
 
   /**
-   * Constructor
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param generatorsMap The generators map.
+   * Constructor.
+   * 
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param generatorsMap
+   *          The generators map.
    */
   public GeneratorHullWhiteProviderDiscount(final HullWhiteOneFactorProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
-      final LinkedHashMap<String, IborIndex[]> forwardIborMap, final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedHashMap<String, GeneratorYDCurve> generatorsMap) {
+      final LinkedHashMap<String, IborIndex[]> forwardIborMap, final LinkedHashMap<String, IndexON[]> forwardONMap,
+      final LinkedHashMap<String, GeneratorYDCurve> generatorsMap) {
     ArgumentChecker.notNull(discountingMap, "Discounting curves names map");
     ArgumentChecker.notNull(forwardIborMap, "Forward curves names map");
     ArgumentChecker.notNull(forwardONMap, "Forward curves names map");
@@ -67,6 +74,7 @@ public class GeneratorHullWhiteProviderDiscount extends Function1D<DoubleMatrix1
 
   /**
    * Gets the know curves.
+   * 
    * @return The known curves.
    */
   public HullWhiteOneFactorProviderDiscount getKnownData() {
@@ -75,6 +83,7 @@ public class GeneratorHullWhiteProviderDiscount extends Function1D<DoubleMatrix1
 
   /**
    * Gets the set of curves. The set order is the order in which they are build.
+   * 
    * @return The set.
    */
   public Set<String> getCurvesList() {

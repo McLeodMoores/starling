@@ -93,7 +93,8 @@ public class SecurityFXHistoricalTimeSeriesFunction extends AbstractFunction.Non
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final String desiredCurrency = desiredValue.getConstraint(ValuePropertyNames.CURRENCY);
     final Collection<Currency> currencies = FinancialSecurityUtils.getCurrencies(target.getSecurity(), _securitySource);

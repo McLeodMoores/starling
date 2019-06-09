@@ -14,70 +14,73 @@ import com.opengamma.util.CalculationMode;
  *
  */
 public class TimeSeriesReturnCalculatorFactory {
-  /** Label for continuous relative return calculator, strict mode */
+  /** Label for continuous relative return calculator, strict mode. */
   public static final String CONTINUOUS_RELATIVE_STRICT = "ContinuousRelativeReturnStrict";
-  /** Label for continuous return calculator, strict mode */
+  /** Label for continuous return calculator, strict mode. */
   public static final String CONTINUOUS_STRICT = "ContinuousReturnStrict";
-  /** Label for excess continuous return calculator, strict mode */
+  /** Label for excess continuous return calculator, strict mode. */
   public static final String EXCESS_CONTINUOUS_STRICT = "ExcessContinuousReturnStrict";
-  /** Label for excess simple return calculator, strict mode */
+  /** Label for excess simple return calculator, strict mode. */
   public static final String EXCESS_SIMPLE_NET_STRICT = "ExcessSimpleNetReturnStrict";
-  /** Label for simple gross return calculator, strict mode */
+  /** Label for simple gross return calculator, strict mode. */
   public static final String SIMPLE_GROSS_STRICT = "SimpleGrossReturnStrict";
-  /** Label for simple net return calculator, strict mode */
+  /** Label for simple net return calculator, strict mode. */
   public static final String SIMPLE_NET_STRICT = "SimpleNetReturnStrict";
-  /** Label for simple net relative return calculator, strict mode */
+  /** Label for simple net relative return calculator, strict mode. */
   public static final String SIMPLE_NET_RELATIVE_STRICT = "SimpleNetRelativeReturnStrict";
-  /** Label for continuous relative return calculator, lenient mode */
+  /** Label for continuous relative return calculator, lenient mode. */
   public static final String CONTINUOUS_RELATIVE_LENIENT = "ContinuousRelativeReturnLenient";
-  /** Label for continuous return calculator, lenient mode */
+  /** Label for continuous return calculator, lenient mode. */
   public static final String CONTINUOUS_LENIENT = "ContinuousReturnLenient";
-  /** Label for excess continuous return calculator, lenient mode */
+  /** Label for excess continuous return calculator, lenient mode. */
   public static final String EXCESS_CONTINUOUS_LENIENT = "ExcessContinuousReturnLenient";
-  /** Label for excess simple return calculator, lenient mode */
+  /** Label for excess simple return calculator, lenient mode. */
   public static final String EXCESS_SIMPLE_NET_LENIENT = "ExcessSimpleNetReturnLenient";
-  /** Label for simple gross return calculator, lenient mode */
+  /** Label for simple gross return calculator, lenient mode. */
   public static final String SIMPLE_GROSS_LENIENT = "SimpleGrossReturnLenient";
-  /** Label for simple net return calculator, lenient mode */
+  /** Label for simple net return calculator, lenient mode. */
   public static final String SIMPLE_NET_LENIENT = "SimpleNetReturnLenient";
-  /** Label for simple net relative return calculator, lenient mode */
+  /** Label for simple net relative return calculator, lenient mode. */
   public static final String SIMPLE_NET_RELATIVE_LENIENT = "SimpleNetRelativeReturnLenient";
-  /** Continuous relative return calculator, strict mode */
-  public static final ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator CONTINUOUS_RELATIVE_STRICT_CALCULATOR = new ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator(
+  /** Continuous relative return calculator, strict mode. */
+  public static final ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator CONTINUOUS_RELATIVE_STRICT_CALCULATOR =
+      new ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator(CalculationMode.STRICT);
+  /** Continuous return calculator, strict mode. */
+  public static final ContinuouslyCompoundedTimeSeriesReturnCalculator CONTINUOUS_STRICT_CALCULATOR = new ContinuouslyCompoundedTimeSeriesReturnCalculator(
       CalculationMode.STRICT);
-  /** Continuous return calculator, strict mode */
-  public static final ContinuouslyCompoundedTimeSeriesReturnCalculator CONTINUOUS_STRICT_CALCULATOR = new ContinuouslyCompoundedTimeSeriesReturnCalculator(CalculationMode.STRICT);
-  /** Continuous return calculator, strict mode */
-  public static final ExcessContinuouslyCompoundedTimeSeriesReturnCalculator EXCESS_CONTINUOUS_STRICT_CALCULATOR = new ExcessContinuouslyCompoundedTimeSeriesReturnCalculator(CalculationMode.STRICT);
-  /** Excess simple return calculator, strict mode */
-  public static final ExcessSimpleNetTimeSeriesReturnCalculator EXCESS_SIMPLE_NET_STRICT_CALCULATOR = new ExcessSimpleNetTimeSeriesReturnCalculator(CalculationMode.STRICT);
-  /** Simple gross return calculator, strict mode */
+  /** Continuous return calculator, strict mode. */
+  public static final ExcessContinuouslyCompoundedTimeSeriesReturnCalculator EXCESS_CONTINUOUS_STRICT_CALCULATOR =
+      new ExcessContinuouslyCompoundedTimeSeriesReturnCalculator(CalculationMode.STRICT);
+  /** Excess simple return calculator, strict mode. */
+  public static final ExcessSimpleNetTimeSeriesReturnCalculator EXCESS_SIMPLE_NET_STRICT_CALCULATOR = new ExcessSimpleNetTimeSeriesReturnCalculator(
+      CalculationMode.STRICT);
+  /** Simple gross return calculator, strict mode. */
   public static final SimpleGrossTimeSeriesReturnCalculator SIMPLE_GROSS_STRICT_CALCULATOR = new SimpleGrossTimeSeriesReturnCalculator(CalculationMode.STRICT);
-  /** Simple net return calculator, strict mode */
+  /** Simple net return calculator, strict mode. */
   public static final SimpleNetTimeSeriesReturnCalculator SIMPLE_NET_STRICT_CALCULATOR = new SimpleNetTimeSeriesReturnCalculator(CalculationMode.STRICT);
-  /** Simple net relative return calculator, strict mode */
-  public static final SimpleNetRelativeTimeSeriesReturnCalculator SIMPLE_NET_RELATIVE_STRICT_CALCULATOR = new SimpleNetRelativeTimeSeriesReturnCalculator(CalculationMode.STRICT);
-  /** Continuous relative return calculator, lenient mode */
-  public static final ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator CONTINUOUS_RELATIVE_LENIENT_CALCULATOR = new ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator(
+  /** Simple net relative return calculator, strict mode. */
+  public static final SimpleNetRelativeTimeSeriesReturnCalculator SIMPLE_NET_RELATIVE_STRICT_CALCULATOR = new SimpleNetRelativeTimeSeriesReturnCalculator(
+      CalculationMode.STRICT);
+  /** Continuous relative return calculator, lenient mode. */
+  public static final ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator CONTINUOUS_RELATIVE_LENIENT_CALCULATOR =
+      new ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator(CalculationMode.LENIENT);
+  /** Continuous return calculator, lenient mode. */
+  public static final ContinuouslyCompoundedTimeSeriesReturnCalculator CONTINUOUS_LENIENT_CALCULATOR = new ContinuouslyCompoundedTimeSeriesReturnCalculator(
       CalculationMode.LENIENT);
-  /** Continuous return calculator, lenient mode */
-  public static final ContinuouslyCompoundedTimeSeriesReturnCalculator CONTINUOUS_LENIENT_CALCULATOR =
-      new ContinuouslyCompoundedTimeSeriesReturnCalculator(CalculationMode.LENIENT);
-  /** Continuous return calculator, lenient mode */
+  /** Continuous return calculator, lenient mode. */
   public static final ExcessContinuouslyCompoundedTimeSeriesReturnCalculator EXCESS_CONTINUOUS_LENIENT_CALCULATOR =
       new ExcessContinuouslyCompoundedTimeSeriesReturnCalculator(CalculationMode.LENIENT);
-  /** Excess simple return calculator, lenient mode */
-  public static final ExcessSimpleNetTimeSeriesReturnCalculator EXCESS_SIMPLE_NET_LENIENT_CALCULATOR =
-      new ExcessSimpleNetTimeSeriesReturnCalculator(CalculationMode.LENIENT);
-  /** Simple gross return calculator, lenient mode */
-  public static final SimpleGrossTimeSeriesReturnCalculator SIMPLE_GROSS_LENIENT_CALCULATOR =
-      new SimpleGrossTimeSeriesReturnCalculator(CalculationMode.LENIENT);
-  /** Simple net return calculator, lenient mode */
-  public static final SimpleNetTimeSeriesReturnCalculator SIMPLE_NET_LENIENT_CALCULATOR =
-      new SimpleNetTimeSeriesReturnCalculator(CalculationMode.LENIENT);
-  /** Simple net relative return calculator, lenient mode */
-  public static final SimpleNetRelativeTimeSeriesReturnCalculator SIMPLE_NET_RELATIVE_LENIENT_CALCULATOR =
-      new SimpleNetRelativeTimeSeriesReturnCalculator(CalculationMode.LENIENT);
+  /** Excess simple return calculator, lenient mode. */
+  public static final ExcessSimpleNetTimeSeriesReturnCalculator EXCESS_SIMPLE_NET_LENIENT_CALCULATOR = new ExcessSimpleNetTimeSeriesReturnCalculator(
+      CalculationMode.LENIENT);
+  /** Simple gross return calculator, lenient mode. */
+  public static final SimpleGrossTimeSeriesReturnCalculator SIMPLE_GROSS_LENIENT_CALCULATOR = new SimpleGrossTimeSeriesReturnCalculator(
+      CalculationMode.LENIENT);
+  /** Simple net return calculator, lenient mode. */
+  public static final SimpleNetTimeSeriesReturnCalculator SIMPLE_NET_LENIENT_CALCULATOR = new SimpleNetTimeSeriesReturnCalculator(CalculationMode.LENIENT);
+  /** Simple net relative return calculator, lenient mode. */
+  public static final SimpleNetRelativeTimeSeriesReturnCalculator SIMPLE_NET_RELATIVE_LENIENT_CALCULATOR = new SimpleNetRelativeTimeSeriesReturnCalculator(
+      CalculationMode.LENIENT);
   private static final Map<String, TimeSeriesReturnCalculator> STRICT_INSTANCES;
   private static final Map<Class<?>, String> INSTANCE_STRICT_NAMES;
   private static final Map<String, TimeSeriesReturnCalculator> LENIENT_INSTANCES;

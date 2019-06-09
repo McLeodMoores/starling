@@ -62,13 +62,15 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Currency currency = target.getValue(PrimitiveComputationTargetType.CURRENCY);
     final Calendar calendar = new HolidaySourceCalendarAdapter(OpenGammaExecutionContext.getHolidaySource(executionContext), currency);
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.BOND_FUTURE_OPTION);
+    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName,
+        InstrumentTypeProperties.BOND_FUTURE_OPTION);
     if (specification == null) {
       throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName);
     }
@@ -97,8 +99,8 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_OPTION)
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, surfaceQuoteType)
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, surfaceQuoteUnits).get();
-    final Object volatilityDataObject =
-        inputs.getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
+    final Object volatilityDataObject = inputs
+        .getValue(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties));
     if (volatilityDataObject == null) {
       throw new OpenGammaRuntimeException("Could not get volatility surface data");
     }
@@ -111,8 +113,8 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
       return Collections.singleton(new ComputedValue(spec, getSurfaceFromVolatilityQuote(surfaceData, now, calendar)));
     } else if (surfaceQuoteUnits.equals(SurfaceAndCubePropertyNames.PRICE_QUOTE)) {
       final NodalDoublesCurve futuresPrices = getFuturePricesCurve(target, curveName, inputs);
-      final VolatilitySurfaceData<Double, Double> volSurface =
-          getSurfaceFromPriceQuote(specification, surfaceData, futuresPrices, now, surfaceQuoteType, calendar);
+      final VolatilitySurfaceData<Double, Double> volSurface = getSurfaceFromPriceQuote(specification, surfaceData, futuresPrices, now, surfaceQuoteType,
+          calendar);
       if (volSurface != null) {
         return Collections.singleton(new ComputedValue(spec, volSurface));
       }
@@ -130,7 +132,7 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
         createValueProperties().withAny(ValuePropertyNames.SURFACE)
-                               .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_OPTION).get()));
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_OPTION).get()));
   }
 
   @Override
@@ -142,8 +144,8 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
     }
     final String surfaceName = surfaceNames.iterator().next();
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
-    final VolatilitySurfaceSpecification specification =
-        _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.BOND_FUTURE_OPTION);
+    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName,
+        InstrumentTypeProperties.BOND_FUTURE_OPTION);
     if (specification == null) {
       LOGGER.error("Could not get volatility surface specification named {}", fullSpecificationName);
       return null;
@@ -234,7 +236,7 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
           try {
             final boolean isCall = y > callAboveStrike ? true : false;
             double volatility;
-            if (forward > 60) { //TODO quick hack to allow use of PX_SETTLE
+            if (forward > 60) { // TODO quick hack to allow use of PX_SETTLE
               volatility = getVolatility(surfaceQuoteType, y / 100.0, price / 100, forward / 100, optionExpiry, isCall);
             } else {
               volatility = getVolatility(surfaceQuoteType, y / 100.0, price, forward, optionExpiry, isCall);
@@ -245,9 +247,9 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
               volatilityValues.put(Pairs.of(optionExpiry, y / 100.), volatility);
             }
           } catch (final MathException e) {
-            LOGGER.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
+            LOGGER.info("Could not imply volatility for ({}, {}); error was {}", new Object[] { x, y, e.getMessage() });
           } catch (final IllegalArgumentException e) {
-            LOGGER.error("Could not imply volatility for future option number={}, strike={}; error was {}", new Object[] {x, y, e.getMessage() });
+            LOGGER.error("Could not imply volatility for future option number={}, strike={}; error was {}", new Object[] { x, y, e.getMessage() });
           }
         }
       }
@@ -263,8 +265,8 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
 
     final ValueRequirement futuresRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
         ValueProperties.builder()
-                       .with(ValuePropertyNames.CURVE, curveName)
-                       .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_PRICE).get());
+            .with(ValuePropertyNames.CURVE, curveName)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.BOND_FUTURE_PRICE).get());
     final Object futurePricesObject = inputs.getValue(futuresRequirement);
     if (futurePricesObject == null) {
       throw new OpenGammaRuntimeException("Could not get futures price data");
@@ -273,7 +275,8 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
     return futurePrices;
   }
 
-  private static double getVolatility(final String surfaceQuoteType, final double strike, final double price, final double forward, final double t, final boolean isCall) {
+  private static double getVolatility(final String surfaceQuoteType, final double strike, final double price, final double forward, final double t,
+      final boolean isCall) {
     if (surfaceQuoteType.equals(SurfaceAndCubeQuoteType.CALL_STRIKE)) {
       return BlackFormulaRepository.impliedVolatility(price, forward, strike, t, true);
     }

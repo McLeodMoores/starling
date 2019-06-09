@@ -22,8 +22,11 @@ import java.util.Map;
 public class Types {
   /**
    * Is the genericType of a certain class?
-   * @param clazz  the class
-   * @param pType  the parameterized type
+   * 
+   * @param clazz
+   *          the class
+   * @param pType
+   *          the parameterized type
    * @return true if the parameterized type is of the given class
    */
   public static boolean isA(final Class<?> clazz, final ParameterizedType pType) {
@@ -32,8 +35,11 @@ public class Types {
 
   /**
    * Gets the index-th type argument.
-   * @param pType  the parameterized type
-   * @param index  the index of the type argument
+   * 
+   * @param pType
+   *          the parameterized type
+   * @param index
+   *          the index of the type argument
    * @return the class of the index-th type argument
    */
   public static Class<?> getArgumentType(final ParameterizedType pType, final int index) {
@@ -110,8 +116,10 @@ public class Types {
   /**
    * See if the two methods are compatible, that is they have the same relative signature
    *
-   * @param method  the method
-   * @param intfMethod  the other method
+   * @param method
+   *          the method
+   * @param intfMethod
+   *          the other method
    * @return true, if methods have same relative signature
    */
   public static boolean isCompatible(final Method method, final Method intfMethod) {
@@ -139,8 +147,10 @@ public class Types {
   /**
    * Given a method and a root class, find the actual method declared in the root that implements the method.
    *
-   * @param clazz  the class
-   * @param intfMethod  the method
+   * @param clazz
+   *          the class
+   * @param intfMethod
+   *          the method
    * @return the implementing method
    */
   public static Method getImplementingMethod(final Class<?> clazz, final Method intfMethod) {
@@ -234,7 +244,8 @@ public class Types {
   /**
    * Returns the type argument from a parameterized type
    *
-   * @param genericType  the type
+   * @param genericType
+   *          the type
    * @return null if there is no type parameter
    */
   public static Class<?> getTypeArgument(final Type genericType) {
@@ -324,11 +335,12 @@ public class Types {
   }
 
   /**
-   * Finds an actual value of a type variable. The method looks in a class hierarchy for a class defining the variable
-   * and returns the value if present.
+   * Finds an actual value of a type variable. The method looks in a class hierarchy for a class defining the variable and returns the value if present.
    *
-   * @param root  the root class
-   * @param typeVariable  the type variable
+   * @param root
+   *          the root class
+   * @param typeVariable
+   *          the type variable
    * @return actual type of the type variable
    */
   public static Type resolveTypeVariable(final Class<?> root, final TypeVariable<?> typeVariable) {
@@ -351,8 +363,10 @@ public class Types {
   /**
    * Given a class and an interfaces, go through the class hierarchy to find the interface and return its type arguments.
    *
-   * @param classToSearch  class whose hierarchy to search
-   * @param interfaceToFind  interface being looked for
+   * @param classToSearch
+   *          class whose hierarchy to search
+   * @param interfaceToFind
+   *          interface being looked for
    * @return type arguments of the interface
    */
   public static Type[] getActualTypeArgumentsOfAnInterface(final Class<?> classToSearch, final Class<?> interfaceToFind) {
@@ -366,11 +380,13 @@ public class Types {
   private static final Type[] EMPTY_TYPE_ARRAY = {};
 
   /**
-   * Search for the given interface or class within the root's class/interface hierarchy.
-   * If the searched for class/interface is a generic return an array of real types that fill it out.
+   * Search for the given interface or class within the root's class/interface hierarchy. If the searched for class/interface is a generic return an array of
+   * real types that fill it out.
    *
-   * @param root  class whose hierarchy to search
-   * @param searchedFor  interface or class to search for
+   * @param root
+   *          class whose hierarchy to search
+   * @param searchedFor
+   *          interface or class to search for
    * @return array of real types that fill it out
    */
   public static Type[] findParameterizedTypes(final Class<?> root, final Class<?> searchedFor) {
@@ -450,7 +466,8 @@ public class Types {
     return recurseSuperclassForInterface(searchedForInterface, typeVarMap, genericSuper, superclass);
   }
 
-  private static Type[] recurseSuperclassForInterface(final Class<?> searchedForInterface, final Map<String, Type> typeVarMap, final Type genericSub, final Class<?> sub) {
+  private static Type[] recurseSuperclassForInterface(final Class<?> searchedForInterface, final Map<String, Type> typeVarMap, final Type genericSub,
+      final Class<?> sub) {
     if (genericSub instanceof ParameterizedType) {
       final ParameterizedType intfParam = (ParameterizedType) genericSub;
       final Type[] types = findInterfaceParameterizedTypes(sub, intfParam, searchedForInterface);

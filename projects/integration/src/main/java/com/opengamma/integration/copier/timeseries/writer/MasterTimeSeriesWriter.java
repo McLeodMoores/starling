@@ -74,7 +74,8 @@ public class MasterTimeSeriesWriter implements TimeSeriesWriter {
     }
 
     // TODO check if update could be used more often instead of correct
-    final ManageableHistoricalTimeSeries orig = _htsMaster.getTimeSeries(oId, VersionCorrection.LATEST, HistoricalTimeSeriesGetFilter.ofRange(series.getEarliestTime(), null, 1));
+    final ManageableHistoricalTimeSeries orig = _htsMaster.getTimeSeries(oId, VersionCorrection.LATEST,
+        HistoricalTimeSeriesGetFilter.ofRange(series.getEarliestTime(), null, 1));
     if (orig.getTimeSeries().isEmpty()) {
       _htsMaster.updateTimeSeriesDataPoints(oId, series);
     } else {

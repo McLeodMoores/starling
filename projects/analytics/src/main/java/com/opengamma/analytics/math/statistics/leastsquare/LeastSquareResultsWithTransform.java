@@ -14,8 +14,8 @@ import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 import com.opengamma.analytics.math.minimization.NonLinearParameterTransforms;
 
 /**
- * Container for the results of a least square (minimum chi-square) fit, where some model (with a set of parameters), is calibrated
- * to a data set, but the model parameters are first transformed to some fitting parameters (usually to impose some constants).
+ * Container for the results of a least square (minimum chi-square) fit, where some model (with a set of parameters), is calibrated to a data set, but the model
+ * parameters are first transformed to some fitting parameters (usually to impose some constants).
  */
 public class LeastSquareResultsWithTransform extends LeastSquareResults {
 
@@ -44,9 +44,10 @@ public class LeastSquareResultsWithTransform extends LeastSquareResults {
   }
 
   /**
-   * This a matrix where the i,jth element is the (infinitesimal) sensitivity of the ith fitting parameter to the jth data
-   * point (NOT the model point), when the fitting parameter are such that the chi-squared is minimised. So it is a type of (inverse)
-   * Jacobian, but should not be confused with the model jacobian (sensitivity of model data points, to parameters) or its inverse.
+   * This a matrix where the i,jth element is the (infinitesimal) sensitivity of the ith fitting parameter to the jth data point (NOT the model point), when the
+   * fitting parameter are such that the chi-squared is minimised. So it is a type of (inverse) Jacobian, but should not be confused with the model jacobian
+   * (sensitivity of model data points, to parameters) or its inverse.
+   * 
    * @return a matrix
    */
   public DoubleMatrix2D getModelParameterSensitivityToData() {
@@ -109,7 +110,8 @@ public class LeastSquareResultsWithTransform extends LeastSquareResults {
 
   @Override
   public String toString() {
-    return "LeastSquareResults [chiSq=" + getChiSq() + ", fit parameters=" + getFitParameters().toString() + ", model parameters= " + getModelParameters().toString() + ", covariance="
+    return "LeastSquareResults [chiSq=" + getChiSq() + ", fit parameters=" + getFitParameters().toString() + ", model parameters= "
+        + getModelParameters().toString() + ", covariance="
         + getCovariance().toString() + "]";
   }
 

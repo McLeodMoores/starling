@@ -22,11 +22,11 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Convert a three-leg basis swap node into an Instrument definition.
- * The dates of the swap are computed in the following way:
+ * Convert a three-leg basis swap node into an Instrument definition. The dates of the swap are computed in the following way:
  * <p>
  * - The spot date is computed from the valuation date adding the "Settlement Days" (i.e. the number of business days) of the convention.<br>
- * - The start date is computed from the spot date adding the "StartTenor" of the node and using the business-day-convention, calendar and EOM of the convention.<br>
+ * - The start date is computed from the spot date adding the "StartTenor" of the node and using the business-day-convention, calendar and EOM of the
+ * convention.<br>
  * - The end date is computed from the start date adding the "MaturityTenor" of the node and using Annuity constructor.<br>
  * The swap notional for each leg is 1.
  */
@@ -47,15 +47,23 @@ public class ThreeLegBasisSwapNodeConverter extends CurveNodeVisitorAdapter<Inst
   private final ZonedDateTime _valuationTime;
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The id of the market data, not null
-   * @param valuationTime The valuation time, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The id of the market data, not null
+   * @param valuationTime
+   *          The valuation time, not null
    */
-  public ThreeLegBasisSwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
+  public ThreeLegBasisSwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -81,11 +89,11 @@ public class ThreeLegBasisSwapNodeConverter extends CurveNodeVisitorAdapter<Inst
     final Period startTenor = threeLegBasisSwapNode.getStartTenor().getPeriod();
     final Period maturityTenor = threeLegBasisSwapNode.getMaturityTenor().getPeriod();
     final AnnuityDefinition<?>[] legs = new AnnuityDefinition[3];
-    legs[0] = NodeConverterUtils.getSwapLeg(spreadLegConvention, startTenor, maturityTenor, _securitySource, _regionSource, _holidaySource, _conventionSource, 
+    legs[0] = NodeConverterUtils.getSwapLeg(spreadLegConvention, startTenor, maturityTenor, _securitySource, _regionSource, _holidaySource, _conventionSource,
         _marketData, _dataId, _valuationTime, true, false, false, 1.0); // Spread leg
-    legs[1] = NodeConverterUtils.getSwapLeg(payLegConvention, startTenor, maturityTenor, _securitySource, _regionSource, _holidaySource, _conventionSource, 
+    legs[1] = NodeConverterUtils.getSwapLeg(payLegConvention, startTenor, maturityTenor, _securitySource, _regionSource, _holidaySource, _conventionSource,
         _marketData, _dataId, _valuationTime, true, false, false, 1.0); // Leg associated to the spread (same pay/receive)
-    legs[2] = NodeConverterUtils.getSwapLeg(receiveLegConvention, startTenor, maturityTenor, _securitySource, _regionSource, _holidaySource, _conventionSource, 
+    legs[2] = NodeConverterUtils.getSwapLeg(receiveLegConvention, startTenor, maturityTenor, _securitySource, _regionSource, _holidaySource, _conventionSource,
         _marketData, _dataId, _valuationTime, false, false, false, 1.0); // Other leg
     return new SwapMultilegDefinition(legs);
   }

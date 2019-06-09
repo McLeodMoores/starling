@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding.newton;
@@ -34,7 +34,8 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
   private final NewtonRootFinderMatrixUpdateFunction _updateFunction;
   private final MatrixAlgebra _algebra = new OGMatrixAlgebra();
 
-  public NewtonVectorRootFinder(final double absoluteTol, final double relativeTol, final int maxSteps, final NewtonRootFinderDirectionFunction directionFunction,
+  public NewtonVectorRootFinder(final double absoluteTol, final double relativeTol, final int maxSteps,
+      final NewtonRootFinderDirectionFunction directionFunction,
       final NewtonRootFinderMatrixInitializationFunction initializationFunction, final NewtonRootFinderMatrixUpdateFunction updateFunction) {
     ArgumentChecker.notNegative(absoluteTol, "absolute tolerance");
     ArgumentChecker.notNegative(relativeTol, "relative tolerance");
@@ -54,14 +55,18 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
   }
 
   /**
-   *@param function a vector function (i.e. vector to vector) 
-   *@param jacobianFunction calculates the Jacobian
-  * @param startPosition where to start the root finder for. Note if multiple roots exist which one if found (if at all) will depend on startPosition 
-  * @return the vector root of the collection of functions 
+   * @param function
+   *          a vector function (i.e. vector to vector)
+   * @param jacobianFunction
+   *          calculates the Jacobian
+   * @param startPosition
+   *          where to start the root finder for. Note if multiple roots exist which one if found (if at all) will depend on startPosition
+   * @return the vector root of the collection of functions
    */
 
   @SuppressWarnings("synthetic-access")
-  public DoubleMatrix1D getRoot(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction, final DoubleMatrix1D startPosition) {
+  public DoubleMatrix1D getRoot(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction,
+      final DoubleMatrix1D startPosition) {
     checkInputs(function, startPosition);
 
     final DataBundle data = new DataBundle();
@@ -82,7 +87,7 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
     int jacReconCount = 1;
     while (!isConverged(data)) {
       // Want to reset the Jacobian every so often even if backtracking is working
-      if ((jacReconCount) % FULL_RECALC_FREQ == 0) {
+      if (jacReconCount % FULL_RECALC_FREQ == 0) {
         estimate = _initializationFunction.getInitializedMatrix(jacobianFunction, data.getX());
         jacReconCount = 1;
       } else {
@@ -95,9 +100,9 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
         jacReconCount = 1;
         if (!getNextPosition(function, estimate, data)) {
           if (isConverged(data)) {
-            return data.getX(); //non-standard exit. Cannot find an improvement from this position, so provided we are close enough to the root, exit.
+            return data.getX(); // non-standard exit. Cannot find an improvement from this position, so provided we are close enough to the root, exit.
           }
-          String msg = "Failed to converge in backtracking, even after a Jacobian recalculation." + getErrorMessage(data, jacobianFunction);
+          final String msg = "Failed to converge in backtracking, even after a Jacobian recalculation." + getErrorMessage(data, jacobianFunction);
           LOGGER.info(msg);
           throw new MathException(msg);
         }
@@ -111,7 +116,7 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
   }
 
   private String getErrorMessage(final DataBundle data, final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction) {
-    String msg = "Final position:" + data.getX() + "\nlast deltaX:" + data.getDeltaX() + "\n function value:" + data.getY() + "\nJacobian: \n"
+    final String msg = "Final position:" + data.getX() + "\nlast deltaX:" + data.getDeltaX() + "\n function value:" + data.getY() + "\nJacobian: \n"
         + jacobianFunction.evaluate(data.getX());
     return msg;
   }
@@ -209,7 +214,7 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
         return false;
       }
     }
-    return (Math.sqrt(data.getG0()) < _absoluteTol);
+    return Math.sqrt(data.getG0()) < _absoluteTol;
   }
 
   private static class DataBundle {

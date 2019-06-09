@@ -57,7 +57,8 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   /**
    * Creates an instance.
    *
-   * @param underlying  the underlying provider, not null
+   * @param underlying
+   *          the underlying provider, not null
    */
   protected AbstractValueCachingReferenceDataProvider(final ReferenceDataProvider underlying) {
     this(underlying, OpenGammaFudgeContext.getInstance());
@@ -66,8 +67,10 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   /**
    * Creates an instance.
    *
-   * @param underlying  the underlying provider, not null
-   * @param fudgeContext  the Fudge context, not null
+   * @param underlying
+   *          the underlying provider, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
    */
   protected AbstractValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(underlying, "underlying");
@@ -76,7 +79,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
     _fudgeContext = fudgeContext;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the underlying provider.
    *
@@ -95,7 +98,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
     return _fudgeContext;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
     // if use-cache is false, then do not cache
@@ -205,11 +208,14 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   /**
    * Examines and groups the request using the known invalid fields.
    *
-   * @param request  the request, not null
-   * @param cachedResults  the cached results, keyed by identifier, not null
+   * @param request
+   *          the request, not null
+   * @param cachedResults
+   *          the cached results, keyed by identifier, not null
    * @return the map of field-set to identifier-set, not null
    */
-  protected Map<Set<String>, Set<String>> buildUnderlyingRequestGroups(final ReferenceDataProviderGetRequest request, final Map<String, ReferenceData> cachedResults) {
+  protected Map<Set<String>, Set<String>> buildUnderlyingRequestGroups(final ReferenceDataProviderGetRequest request,
+      final Map<String, ReferenceData> cachedResults) {
     final Map<Set<String>, Set<String>> result = Maps.newHashMap();
     for (final String identifier : request.getIdentifiers()) {
       // select known invalid fields for the identifier
@@ -248,11 +254,12 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
     return notAvailableFieldNames;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the field values from the cache.
    *
-   * @param identifiers  the identifiers to find errors for, not null
+   * @param identifiers
+   *          the identifiers to find errors for, not null
    * @return the map of reference data keyed by identifier, not null
    */
   protected abstract Map<String, ReferenceData> loadFieldValues(Set<String> identifiers);
@@ -260,15 +267,17 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   /**
    * Saves the field value into the cache.
    *
-   * @param result  the result to save, not null
+   * @param result
+   *          the result to save, not null
    */
   protected abstract void saveFieldValues(ReferenceData result);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Refreshes the cache.
    *
-   * @param identifiers  the identifiers, not null
+   * @param identifiers
+   *          the identifiers, not null
    */
   public void refresh(final Set<String> identifiers) {
     // TODO bulk queries

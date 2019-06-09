@@ -111,7 +111,8 @@ public class ViewRegressionTestTool {
       printUsage();
       return TestStatus.ERROR;
     }
-    if (!cl.hasOption(RESULT_IN) && !cl.hasOption(RESULT_OUT) && (!cl.hasOption(BASE_DIR) || !cl.hasOption(BASE_VERSION) || !cl.hasOption(BASE_PROPS) || !cl.hasOption(TEST_DIR) || !cl.hasOption(TEST_VERSION) || !cl.hasOption(TEST_PROPS))) {
+    if (!cl.hasOption(RESULT_IN) && !cl.hasOption(RESULT_OUT) && (!cl.hasOption(BASE_DIR) || !cl.hasOption(BASE_VERSION) || !cl.hasOption(BASE_PROPS)
+        || !cl.hasOption(TEST_DIR) || !cl.hasOption(TEST_VERSION) || !cl.hasOption(TEST_PROPS))) {
       printUsage();
       return TestStatus.ERROR;
     }
@@ -144,7 +145,6 @@ public class ViewRegressionTestTool {
             cl.getOptionValue(TEST_VERSION),
             cl.getOptionValue(TEST_PROPS));
       }
-
 
       final Map<Pair<String, String>, CalculationResults> results = test.run();
 
@@ -191,7 +191,7 @@ public class ViewRegressionTestTool {
           } else {
             regressionTestResults = new RegressionTestResults(cl.getOptionValue(TEST_VERSION),
                 cl.getOptionValue(TEST_VERSION),
-                Collections.<CalculationDifference>emptyList());
+                Collections.<CalculationDifference> emptyList());
           }
 
           try (Writer writer = new BufferedWriter(new FileWriter(cl.getOptionValue(REPORT_FILE,
@@ -213,17 +213,10 @@ public class ViewRegressionTestTool {
       ReportGenerator.generateReport(results, ReportGenerator.Format.TEXT, writer);
     }
     /*
-     * FudgeSerializer serializer = new
-     * FudgeSerializer(OpenGammaFudgeContext.getInstance()); try (FileWriter
-     * writer = new FileWriter(new
-     * File("/Users/chris/tmp/regression/results.xml"))) { FudgeXMLStreamWriter
-     * streamWriter = new
-     * FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(), writer);
-     * FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(streamWriter);
-     * MutableFudgeMsg msg = serializer.objectToFudgeMsg(results);
-     * FudgeSerializer.addClassHeader(msg, results.getClass());
-     * fudgeMsgWriter.writeMessage(msg); writer.append("\n");
-     * fudgeMsgWriter.flush(); }
+     * FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance()); try (FileWriter writer = new FileWriter(new
+     * File("/Users/chris/tmp/regression/results.xml"))) { FudgeXMLStreamWriter streamWriter = new FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(),
+     * writer); FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(streamWriter); MutableFudgeMsg msg = serializer.objectToFudgeMsg(results);
+     * FudgeSerializer.addClassHeader(msg, results.getClass()); fudgeMsgWriter.writeMessage(msg); writer.append("\n"); fudgeMsgWriter.flush(); }
      */
     return results.getStatus();
   }
@@ -235,18 +228,18 @@ public class ViewRegressionTestTool {
     final Option resultout = new Option(RESULT_OUT,
         "resultout",
         true,
-        "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
+        "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run "
+            + "regression test comparing two servers.");
     resultout.setRequired(false);
     options.addOption(resultout);
 
     final Option resultin = new Option(RESULT_IN,
         "resultin",
         true,
-        "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run regression test comparing two servers.");
+        "Flag indicationg whether and into what file, store the results of running singe server tests as opposed to run "
+            + "regression test comparing two servers.");
     resultin.setRequired(false);
     options.addOption(resultin);
-
-
 
     final Option projectNameOption = new Option(PROJECT_NAME,
         "projectname",
@@ -279,30 +272,30 @@ public class ViewRegressionTestTool {
         "basedir",
         true,
         "Installation directory for the base version of the server");
-    //baseDirOption.setRequired(true);
+    // baseDirOption.setRequired(true);
     options.addOption(baseDirOption);
 
     final Option newDirOption = new Option(TEST_DIR,
         "testdir",
         true,
         "Installation directory for the test version of the server");
-    //newDirOption.setRequired(true);
+    // newDirOption.setRequired(true);
     options.addOption(newDirOption);
 
     final Option baseVersionOption = new Option(BASE_VERSION, "baseversion", true, "Version of the base server");
-    //baseVersionOption.setRequired(true);
+    // baseVersionOption.setRequired(true);
     options.addOption(baseVersionOption);
 
     final Option newVersionOption = new Option(TEST_VERSION, "testversion", true, "Version of the test server");
-    //newVersionOption.setRequired(true);
+    // newVersionOption.setRequired(true);
     options.addOption(newVersionOption);
 
     final Option basePropsOption = new Option(BASE_PROPS, "baseprops", true, "The DB properties file for the base server");
-    //basePropsOption.setRequired(true);
+    // basePropsOption.setRequired(true);
     options.addOption(basePropsOption);
 
     final Option newPropsOption = new Option(TEST_PROPS, "testprops", true, "The DB properties file for the test server");
-    //newPropsOption.setRequired(true);
+    // newPropsOption.setRequired(true);
     options.addOption(newPropsOption);
 
     final Option helpOption = new Option(HELP, "help", true, "Print usage");

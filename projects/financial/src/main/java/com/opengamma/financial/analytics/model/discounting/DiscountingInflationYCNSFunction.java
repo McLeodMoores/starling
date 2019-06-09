@@ -55,8 +55,7 @@ public class DiscountingInflationYCNSFunction extends DiscountingInflationFuncti
   private static final Logger LOGGER = LoggerFactory.getLogger(DiscountingInflationYCNSFunction.class);
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
    */
   public DiscountingInflationYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);
@@ -76,8 +75,8 @@ public class DiscountingInflationYCNSFunction extends DiscountingInflationFuncti
         for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : entries.entrySet()) {
           if (curveName.equals(entry.getKey().getFirst())) {
             final ValueProperties properties = desiredValue.getConstraints().copy().with(CURVE, curveName).get();
-            final CurveSpecification curveSpecification =
-                (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.builder()
+            final CurveSpecification curveSpecification = (CurveSpecification) inputs
+                .getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.builder()
                     .with(CURVE, curveName).get()));
             final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
             final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
@@ -89,7 +88,8 @@ public class DiscountingInflationYCNSFunction extends DiscountingInflationFuncti
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {

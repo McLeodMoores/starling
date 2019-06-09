@@ -33,15 +33,15 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.util.money.Currency;
 
 /**
- * Base class for functions that calculate risk for swaptions, CMS and cap/floors
- * using SABR with right extrapolation.
+ * Base class for functions that calculate risk for swaptions, CMS and cap/floors using SABR with right extrapolation.
+ * 
  * @deprecated Use descendants of {@link RightExtrapolationSABRDiscountingFunction}
  */
 @Deprecated
 public abstract class SABRRightExtrapolationFunction extends SABRFunction {
-  /** Property name for the cutoff strike after which extrapolation is used */
+  /** Property name for the cutoff strike after which extrapolation is used. */
   public static final String PROPERTY_CUTOFF_STRIKE = "SABRExtrapolationCutoffStrike";
-  /** Property name for the tail thickness parameter */
+  /** Property name for the tail thickness parameter. */
   public static final String PROPERTY_TAIL_THICKNESS_PARAMETER = "SABRTailThicknessParameter";
 
   @Override
@@ -57,7 +57,8 @@ public abstract class SABRRightExtrapolationFunction extends SABRFunction {
         return false;
       }
       final InterestRateInstrumentType type = SwapSecurityUtils.getSwapType((SwapSecurity) security);
-      if ((type != InterestRateInstrumentType.SWAP_FIXED_CMS) && (type != InterestRateInstrumentType.SWAP_CMS_CMS) && (type != InterestRateInstrumentType.SWAP_IBOR_CMS)) {
+      if (type != InterestRateInstrumentType.SWAP_FIXED_CMS && type != InterestRateInstrumentType.SWAP_CMS_CMS
+          && type != InterestRateInstrumentType.SWAP_IBOR_CMS) {
         return false;
       }
     }

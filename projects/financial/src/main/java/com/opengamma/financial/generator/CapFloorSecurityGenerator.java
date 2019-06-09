@@ -27,19 +27,22 @@ public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurit
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CapFloorSecurityGenerator.class);
 
-  private static final DayCount[] DAY_COUNT = new DayCount[] {DayCounts.ACT_360, DayCounts.THIRTY_U_360 };
-  private static final Frequency[] FREQUENCY = new Frequency[] {SimpleFrequency.QUARTERLY, SimpleFrequency.SEMI_ANNUAL, SimpleFrequency.ANNUAL };
-  private static final Tenor[] TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(10), Tenor.ofYears(20) };
-  private static final Tenor[] IBOR_TENORS = new Tenor[] {Tenor.ONE_DAY, Tenor.TWO_DAYS, Tenor.THREE_DAYS, Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21),
-      Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.SEVEN_MONTHS, Tenor.EIGHT_MONTHS,
-      Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS};
+  private static final DayCount[] DAY_COUNT = new DayCount[] { DayCounts.ACT_360, DayCounts.THIRTY_U_360 };
+  private static final Frequency[] FREQUENCY = new Frequency[] { SimpleFrequency.QUARTERLY, SimpleFrequency.SEMI_ANNUAL, SimpleFrequency.ANNUAL };
+  private static final Tenor[] TENORS = new Tenor[] { Tenor.TWO_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(10), Tenor.ofYears(20) };
+  private static final Tenor[] IBOR_TENORS = new Tenor[] { Tenor.ONE_DAY, Tenor.TWO_DAYS, Tenor.THREE_DAYS, Tenor.ofDays(7), Tenor.ofDays(14), Tenor.ofDays(21),
+                Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.SEVEN_MONTHS,
+                Tenor.EIGHT_MONTHS,
+                Tenor.NINE_MONTHS, Tenor.TEN_MONTHS, Tenor.ELEVEN_MONTHS };
 
-  public static String createName(final boolean ibor, final boolean cap, final double strike, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final Frequency frequency,
+  public static String createName(final boolean ibor, final boolean cap, final double strike, final ZonedDateTime startDate, final ZonedDateTime maturityDate,
+      final Frequency frequency,
       final Currency currency, final double notional) {
     final StringBuilder sb = new StringBuilder();
     sb.append(ibor ? "Ibor " : "CMS ");
     sb.append(cap ? "cap " : "floor");
-    sb.append(" @ ").append(strike).append(" [").append(startDate.format(DATE_FORMATTER)).append(" - ").append(maturityDate.format(DATE_FORMATTER)).append("], ");
+    sb.append(" @ ").append(strike).append(" [").append(startDate.format(DATE_FORMATTER)).append(" - ").append(maturityDate.format(DATE_FORMATTER))
+        .append("], ");
     sb.append(frequency.getName()).append(", ").append(currency.getCode()).append(' ').append(NOTIONAL_FORMATTER.format(notional));
     return sb.toString();
   }
@@ -82,7 +85,8 @@ public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurit
     final double strike = 0.01 + (double) getRandom(6) / 200;
     final Frequency frequency = getRandom(FREQUENCY);
     final DayCount dayCount = getRandom(DAY_COUNT);
-    final CapFloorSecurity capFloor = new CapFloorSecurity(startDate, maturityDate, notional, underlyingIdentifier, strike, frequency, currency, dayCount, payer, cap, ibor);
+    final CapFloorSecurity capFloor = new CapFloorSecurity(startDate, maturityDate, notional, underlyingIdentifier, strike, frequency, currency, dayCount,
+        payer, cap, ibor);
     capFloor.setName(createName(ibor, cap, strike, startDate, maturityDate, frequency, currency, notional));
     return capFloor;
   }

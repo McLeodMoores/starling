@@ -57,20 +57,34 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
 
   /**
    * Constructor from all the coupon details.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param index The OIS-like index on which the coupon fixes.
-   * @param fixingPeriodStartDate The start date of the fixing period.
-   * @param fixingPeriodEndDate The end date of the fixing period.
-   * @param calendar The holiday calendar for the overnight index.
-   * @param spread The spread
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param index
+   *          The OIS-like index on which the coupon fixes.
+   * @param fixingPeriodStartDate
+   *          The start date of the fixing period.
+   * @param fixingPeriodEndDate
+   *          The end date of the fixing period.
+   * @param calendar
+   *          The holiday calendar for the overnight index.
+   * @param spread
+   *          The spread
    */
-  public CouponONSpreadDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
-      final double paymentYearFraction, final double notional, final IndexON index, final ZonedDateTime fixingPeriodStartDate, final ZonedDateTime fixingPeriodEndDate,
+  public CouponONSpreadDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
+      final double paymentYearFraction, final double notional, final IndexON index, final ZonedDateTime fixingPeriodStartDate,
+      final ZonedDateTime fixingPeriodEndDate,
       final Calendar calendar, final double spread) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional);
     ArgumentChecker.notNull(index, "CouponOISDefinition: index");
@@ -97,47 +111,70 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
   }
 
   /**
-   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the index.
-   * The payment date is adjusted by the publication lag and the settlement days.
-   * @param index The OIS index.
-   * @param settlementDate The coupon settlement date.
-   * @param tenor The coupon tenor.
-   * @param notional The notional.
-   * @param settlementDays The number of days between last fixing and the payment (also called spot lag).
-   * @param businessDayConvention The business day convention to compute the end date of the coupon.
-   * @param isEOM The end-of-month convention to compute the end date of the coupon.
-   * @param calendar The holiday calendar for the overnight index.
-   * @param spread The spread
+   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the
+   * index. The payment date is adjusted by the publication lag and the settlement days.
+   * 
+   * @param index
+   *          The OIS index.
+   * @param settlementDate
+   *          The coupon settlement date.
+   * @param tenor
+   *          The coupon tenor.
+   * @param notional
+   *          The notional.
+   * @param settlementDays
+   *          The number of days between last fixing and the payment (also called spot lag).
+   * @param businessDayConvention
+   *          The business day convention to compute the end date of the coupon.
+   * @param isEOM
+   *          The end-of-month convention to compute the end date of the coupon.
+   * @param calendar
+   *          The holiday calendar for the overnight index.
+   * @param spread
+   *          The spread
    * @return The OIS coupon.
    */
-  public static CouponONSpreadDefinition from(final IndexON index, final ZonedDateTime settlementDate, final Period tenor, final double notional, final int settlementDays,
+  public static CouponONSpreadDefinition from(final IndexON index, final ZonedDateTime settlementDate, final Period tenor, final double notional,
+      final int settlementDays,
       final BusinessDayConvention businessDayConvention, final boolean isEOM, final Calendar calendar, final double spread) {
     final ZonedDateTime fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(settlementDate, tenor, businessDayConvention, calendar, isEOM);
     return from(index, settlementDate, fixingPeriodEndDate, notional, settlementDays, calendar, spread);
   }
 
   /**
-   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the index.
-   * The payment date is adjusted by the publication lag and the settlement days.
-   * @param index The OIS index.
-   * @param settlementDate The coupon settlement date.
-   * @param fixingPeriodEndDate The last date of the fixing period. Interest accrues up to this date. If publicationLag==0, 1 day following publication. If lag==1, the publication date.
-   * @param notional The notional.
-   * @param settlementDays The number of days between last fixing date and the payment fate (also called payment lag).
-   * @param calendar The holiday calendar for the overnight index.
-   * @param spread The spread
+   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the
+   * index. The payment date is adjusted by the publication lag and the settlement days.
+   * 
+   * @param index
+   *          The OIS index.
+   * @param settlementDate
+   *          The coupon settlement date.
+   * @param fixingPeriodEndDate
+   *          The last date of the fixing period. Interest accrues up to this date. If publicationLag==0, 1 day following publication. If lag==1, the
+   *          publication date.
+   * @param notional
+   *          The notional.
+   * @param settlementDays
+   *          The number of days between last fixing date and the payment fate (also called payment lag).
+   * @param calendar
+   *          The holiday calendar for the overnight index.
+   * @param spread
+   *          The spread
    * @return The OIS coupon.
    */
-  public static CouponONSpreadDefinition from(final IndexON index, final ZonedDateTime settlementDate, final ZonedDateTime fixingPeriodEndDate, final double notional,
+  public static CouponONSpreadDefinition from(final IndexON index, final ZonedDateTime settlementDate, final ZonedDateTime fixingPeriodEndDate,
+      final double notional,
       final int settlementDays, final Calendar calendar, final double spread) {
     final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(fixingPeriodEndDate, -1 + index.getPublicationLag() + settlementDays, calendar);
     final double paymentYearFraction = index.getDayCount().getDayCountFraction(settlementDate, fixingPeriodEndDate, calendar);
-    return new CouponONSpreadDefinition(index.getCurrency(), paymentDate, settlementDate, fixingPeriodEndDate, paymentYearFraction, notional, index, settlementDate,
+    return new CouponONSpreadDefinition(index.getCurrency(), paymentDate, settlementDate, fixingPeriodEndDate, paymentYearFraction, notional, index,
+        settlementDate,
         fixingPeriodEndDate, calendar, spread);
   }
 
   /**
    * Gets the OIS index of the instrument.
+   * 
    * @return The index.
    */
   public IndexON getIndex() {
@@ -146,6 +183,7 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
 
   /**
    * Gets the dates of the fixing periods (start and end). There is one date more than period.
+   * 
    * @return The dates of the fixing periods.
    */
   public ZonedDateTime[] getFixingPeriodDate() {
@@ -154,6 +192,7 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
 
   /**
    * Gets the accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
+   * 
    * @return The accrual factors.
    */
   public Double[] getFixingPeriodAccrualFactor() {
@@ -162,6 +201,7 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
 
   /**
    * Gets the spread.
+   * 
    * @return The spread
    */
   public double getSpread() {
@@ -170,6 +210,7 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -180,6 +221,7 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -191,7 +233,8 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
   @Override
   public Coupon toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
-    final LocalDate firstPublicationDate = _fixingPeriodDate[_index.getPublicationLag()].toLocalDate(); // This is often one business day following the first fixing date
+    final LocalDate firstPublicationDate = _fixingPeriodDate[_index.getPublicationLag()].toLocalDate(); // This is often one business day following the first
+                                                                                                        // fixing date
     ArgumentChecker.isTrue(date.toLocalDate().isBefore(firstPublicationDate),
         "toDerivative method without time series as argument is only valid at dates where the first fixing has not yet been published.");
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
@@ -211,7 +254,8 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
     ArgumentChecker.notNull(valZdt, "valZdt - valuation date as ZonedDateTime");
     final LocalDate valDate = valZdt.toLocalDate();
     ArgumentChecker.isTrue(!valDate.isAfter(getPaymentDate().toLocalDate()), "valuation date is after payment date");
-    final LocalDate firstPublicationDate = _fixingPeriodDate[_index.getPublicationLag()].toLocalDate(); // This is often one business day following the first fixing date
+    final LocalDate firstPublicationDate = _fixingPeriodDate[_index.getPublicationLag()].toLocalDate(); // This is often one business day following the first
+                                                                                                        // fixing date
     if (valDate.isBefore(firstPublicationDate)) {
       return toDerivative(valZdt);
     }
@@ -227,7 +271,7 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
     // Accrue notional for fixings before today; up to and including yesterday
     int fixedPeriod = 0;
     double accruedNotional = getNotional();
-    while (valDate.isAfter(_fixingPeriodDate[fixedPeriod + _index.getPublicationLag()].toLocalDate()) && (fixedPeriod < _fixingPeriodDate.length - 1)) {
+    while (valDate.isAfter(_fixingPeriodDate[fixedPeriod + _index.getPublicationLag()].toLocalDate()) && fixedPeriod < _fixingPeriodDate.length - 1) {
 
       final LocalDate currentDate = _fixingPeriodDate[fixedPeriod].toLocalDate();
       Double fixedRate = indexFixingDateSeries.getValue(currentDate);
@@ -235,7 +279,8 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
       if (fixedRate == null) {
         final LocalDate latestDate = indexFixingDateSeries.getLatestTime();
         if (currentDate.isAfter(latestDate)) {
-          throw new OpenGammaRuntimeException("Could not get fixing value of index " + _index.getName() + " for date " + currentDate + ". The last data is available on " + latestDate);
+          throw new OpenGammaRuntimeException(
+              "Could not get fixing value of index " + _index.getName() + " for date " + currentDate + ". The last data is available on " + latestDate);
         }
         // Don't remove this until we've worked out what's going on with INR calendars
         for (int i = 0; i < 7; i++) {
@@ -279,7 +324,6 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
         / getPaymentYearFraction());
   }
 
-
   @Override
   public <U, V> V accept(final InstrumentDefinitionVisitor<U, V> visitor, final U data) {
     ArgumentChecker.notNull(visitor, "visitor");
@@ -300,7 +344,7 @@ public class CouponONSpreadDefinition extends CouponDefinition implements Instru
     result = prime * result + Arrays.hashCode(_fixingPeriodDate);
     result = prime * result + _index.hashCode();
     final long temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

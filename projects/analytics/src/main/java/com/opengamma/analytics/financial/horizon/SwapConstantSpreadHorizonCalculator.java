@@ -38,7 +38,8 @@ public class SwapConstantSpreadHorizonCalculator implements HorizonCalculatorDep
   @Override
   public MultipleCurrencyAmount getTheta(final SwapDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames, final YieldCurveBundle data,
       final int daysForward, final Calendar calendar) {
-    return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar, new ZonedDateTimeDoubleTimeSeries[] {EMPTY_SERIES, EMPTY_SERIES, EMPTY_SERIES});
+    return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar,
+        new ZonedDateTimeDoubleTimeSeries[] { EMPTY_SERIES, EMPTY_SERIES, EMPTY_SERIES });
   }
 
   @Override
@@ -75,9 +76,13 @@ public class SwapConstantSpreadHorizonCalculator implements HorizonCalculatorDep
   }
 
   /**
-   * Create a new time series with the same data up to tomorrow (tomorrow excluded) and with an extra data for tomorrow equal to the last value in the time series.
-   * @param fixingSeries The time series.
-   * @param tomorrow Tomorrow date.
+   * Create a new time series with the same data up to tomorrow (tomorrow excluded) and with an extra data for tomorrow equal to the last value in the time
+   * series.
+   * 
+   * @param fixingSeries
+   *          The time series.
+   * @param tomorrow
+   *          Tomorrow date.
    * @return The time series with added data.
    */
   private ZonedDateTimeDoubleTimeSeries[] getDateShiftedTimeSeries(final ZonedDateTimeDoubleTimeSeries[] fixingSeries, final ZonedDateTime tomorrow) {

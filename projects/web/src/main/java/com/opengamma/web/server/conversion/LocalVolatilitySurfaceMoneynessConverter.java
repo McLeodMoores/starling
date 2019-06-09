@@ -27,7 +27,8 @@ public class LocalVolatilitySurfaceMoneynessConverter implements ResultConverter
   private static final DecimalFormat LABEL_FORMAT = new DecimalFormat("##.##");
 
   @Override
-  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LocalVolatilitySurfaceMoneyness value, final ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LocalVolatilitySurfaceMoneyness value,
+      final ConversionMode mode) {
     final Map<String, Object> result = new HashMap<>();
     if (value.getSurface() instanceof InterpolatedDoublesSurface) {
       final InterpolatedDoublesSurface interpolated = (InterpolatedDoublesSurface) value.getSurface();
@@ -76,7 +77,7 @@ public class LocalVolatilitySurfaceMoneynessConverter implements ResultConverter
     } else if (value.getSurface() instanceof FunctionalDoublesSurface) {
       final FunctionalDoublesSurface functional = (FunctionalDoublesSurface) value.getSurface();
 
-      final double[] expiries = {0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3., 4., 5.};
+      final double[] expiries = { 0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3., 4., 5. };
       final int nX = expiries.length;
 
       result.put("xCount", nX);

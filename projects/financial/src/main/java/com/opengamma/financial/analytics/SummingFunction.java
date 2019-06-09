@@ -28,7 +28,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.property.UnitProperties;
 
 /**
- * Able to sum a particular requirement name from a set of underlying positions. If any values are not produced (because of missing market data or computation errors) a partial sum is produced.
+ * Able to sum a particular requirement name from a set of underlying positions. If any values are not produced (because of missing market data or computation
+ * errors) a partial sum is produced.
  */
 public class SummingFunction extends MissingInputsFunction {
 
@@ -115,7 +116,8 @@ public class SummingFunction extends MissingInputsFunction {
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       int positionCount = 0;
       // Result properties are anything that was common to the input requirements
       ValueProperties common = null;
@@ -153,7 +155,8 @@ public class SummingFunction extends MissingInputsFunction {
       }
       if (common == null) {
         // Can't have been any inputs - the sum will be zero with any properties the caller wants
-        return Collections.singleton(new ValueSpecification(getRequirementName(), target.toSpecification(), createValueProperties().with(POSITION_COUNT, "0").get()));
+        return Collections
+            .singleton(new ValueSpecification(getRequirementName(), target.toSpecification(), createValueProperties().with(POSITION_COUNT, "0").get()));
       }
       for (int i = 0; i < homogenousProperties.length; i++) {
         if (homogenousProperties[i] == Boolean.TRUE) {
@@ -167,7 +170,8 @@ public class SummingFunction extends MissingInputsFunction {
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final ValueRequirement desiredValue = desiredValues.iterator().next();
       Object value = null;
       for (final ComputedValue input : inputs.getAllValues()) {
@@ -184,7 +188,8 @@ public class SummingFunction extends MissingInputsFunction {
         // Can't have been any non-zero inputs - the sum is logical zero
         value = "";
       }
-      return Collections.singleton(new ComputedValue(new ValueSpecification(getRequirementName(), target.toSpecification(), desiredValue.getConstraints()), value));
+      return Collections
+          .singleton(new ComputedValue(new ValueSpecification(getRequirementName(), target.toSpecification(), desiredValue.getConstraints()), value));
     }
 
   }

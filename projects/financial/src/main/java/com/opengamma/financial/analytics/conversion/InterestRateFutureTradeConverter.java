@@ -31,9 +31,9 @@ public class InterestRateFutureTradeConverter implements TradeConverter {
   private final InterestRateFutureSecurityConverter _securityConverter;
 
   public InterestRateFutureTradeConverter(final SecuritySource securitySource,
-                                          final HolidaySource holidaySource,
-                                          final ConventionSource conventionSource,
-                                          final RegionSource regionSource) {
+      final HolidaySource holidaySource,
+      final ConventionSource conventionSource,
+      final RegionSource regionSource) {
     _securityConverter = new InterestRateFutureSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
   }
 
@@ -42,7 +42,8 @@ public class InterestRateFutureTradeConverter implements TradeConverter {
     ArgumentChecker.notNull(trade, "trade");
     final Security security = trade.getSecurity();
     if (security instanceof InterestRateFutureSecurity) {
-      final InterestRateFutureSecurityDefinition securityDefinition = (InterestRateFutureSecurityDefinition) ((InterestRateFutureSecurity) security).accept(_securityConverter);
+      final InterestRateFutureSecurityDefinition securityDefinition = (InterestRateFutureSecurityDefinition) ((InterestRateFutureSecurity) security)
+          .accept(_securityConverter);
       final Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium.
       if (tradePrice == null) {
         throw new OpenGammaRuntimeException("Trade premium should not be null.");

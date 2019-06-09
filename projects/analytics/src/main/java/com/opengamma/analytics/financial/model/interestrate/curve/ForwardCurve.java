@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ForwardCurve {
   private static final RungeKuttaIntegrator1D INTEGRATOR = new RungeKuttaIntegrator1D();
@@ -35,13 +35,15 @@ public class ForwardCurve {
   public ForwardCurve(final Curve<Double, Double> fwdCurve) {
     ArgumentChecker.notNull(fwdCurve, "curve");
     _fwdCurve = fwdCurve;
-    _drift = getDriftCurve(fwdCurve);  //TODO YieldAndDiscountCurve should have a getForwardRate method, which should be used here
+    _drift = getDriftCurve(fwdCurve); // TODO YieldAndDiscountCurve should have a getForwardRate method, which should be used here
     _spot = _fwdCurve.getYValue(0.0);
   }
 
   /**
    * Forward curve with zero drift (i.e. curve is constant)
-   * @param spot The spot rate
+   *
+   * @param spot
+   *          The spot rate
    */
   public ForwardCurve(final double spot) {
     _fwdCurve = ConstantDoublesCurve.from(spot);
@@ -51,8 +53,11 @@ public class ForwardCurve {
 
   /**
    * Forward curve with constant drift
-   * @param spot  The spot
-   * @param drift The drift
+   *
+   * @param spot
+   *          The spot
+   * @param drift
+   *          The drift
    */
   public ForwardCurve(final double spot, final double drift) {
     _drift = ConstantDoublesCurve.from(drift);
@@ -61,10 +66,12 @@ public class ForwardCurve {
   }
 
   /**
-   * Forward curve with functional drift.
-   * <b>Warning</b> This will be slow if you want access to the forward at many times
-   * @param spot The spot rate
-   * @param driftCurve The drift curve
+   * Forward curve with functional drift. <b>Warning</b> This will be slow if you want access to the forward at many times
+   *
+   * @param spot
+   *          The spot rate
+   * @param driftCurve
+   *          The drift curve
    */
   public ForwardCurve(final double spot, final Curve<Double, Double> driftCurve) {
     ArgumentChecker.notNull(driftCurve, "null driftCurve");
@@ -87,6 +94,7 @@ public class ForwardCurve {
 
   /**
    * Gets the drift.
+   *
    * @return the drift
    */
   public Curve<Double, Double> getDriftCurve() {
@@ -101,7 +109,8 @@ public class ForwardCurve {
     return _spot;
   }
 
-  protected static Curve<Double, Double> getForwardCurve(final double spot, final YieldAndDiscountCurve riskFreeCurve, final YieldAndDiscountCurve costOfCarryCurve) {
+  protected static Curve<Double, Double> getForwardCurve(final double spot, final YieldAndDiscountCurve riskFreeCurve,
+      final YieldAndDiscountCurve costOfCarryCurve) {
     ArgumentChecker.notNull(riskFreeCurve, "risk-free curve");
     ArgumentChecker.notNull(costOfCarryCurve, "cost-of-carry curve");
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
@@ -191,9 +200,10 @@ public class ForwardCurve {
   }
 
   /**
-   * Shift the forward curve by a fractional amount, shift, such that the new curve F'(T) = (1 + shift) * F(T), has
-   * an unchanged drift.
-   * @param shift The fractional shift amount, i.e. 0.1 will produce a curve 10% larger than the original
+   * Shift the forward curve by a fractional amount, shift, such that the new curve F'(T) = (1 + shift) * F(T), has an unchanged drift.
+   *
+   * @param shift
+   *          The fractional shift amount, i.e. 0.1 will produce a curve 10% larger than the original
    * @return The shifted curve
    */
   public ForwardCurve withFractionalShift(final double shift) {
@@ -217,7 +227,7 @@ public class ForwardCurve {
     result = prime * result + _fwdCurve.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_spot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

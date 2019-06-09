@@ -33,6 +33,7 @@ public final class CouponIborCompoundingDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CouponIborCompoundingDiscountingMethod getInstance() {
@@ -47,8 +48,11 @@ public final class CouponIborCompoundingDiscountingMethod {
 
   /**
    * Compute the present value of a Ibor compounded coupon by discounting.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponIborCompounding coupon, final MulticurveProviderInterface multicurve) {
@@ -69,8 +73,8 @@ public final class CouponIborCompoundingDiscountingMethod {
           coupon,
           coupon.getFixingPeriodStartTimes()[i],
           coupon.getFixingPeriodEndTimes()[i], coupon.getFixingPeriodAccrualFactors()[i]);
-      final double ratioForward = (1.0 + coupon.getPaymentAccrualFactors()[i]
-          * forwardRate);
+      final double ratioForward = 1.0 + coupon.getPaymentAccrualFactors()[i]
+          * forwardRate;
       notionalAccrued *= ratioForward;
     }
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
@@ -80,8 +84,11 @@ public final class CouponIborCompoundingDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Ibor compounded coupon by discounting.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value sensitivity.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborCompounding coupon, final MulticurveProviderInterface multicurve) {
@@ -115,7 +122,8 @@ public final class CouponIborCompoundingDiscountingMethod {
     final Map<String, List<ForwardSensitivity>> mapFwd = new HashMap<>();
     final List<ForwardSensitivity> listForward = new ArrayList<>();
     for (int i = 0; i < nbSubPeriod; i++) {
-      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i], coupon.getFixingPeriodAccrualFactors()[i],
+      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i],
+          coupon.getFixingPeriodAccrualFactors()[i],
           forwardBar[i]));
     }
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);

@@ -49,7 +49,7 @@ public class QuandlCurveNodeConverter extends CurveNodeConverter {
   /**
    * Given an {@link InstrumentDefinition} (the time-independent form used in the analytics library) and a valuation time, converts to the time-dependent
    * {@link InstrumentDerivative} form.
-   * 
+   *
    * @param node
    *          The curve node, not null
    * @param definition

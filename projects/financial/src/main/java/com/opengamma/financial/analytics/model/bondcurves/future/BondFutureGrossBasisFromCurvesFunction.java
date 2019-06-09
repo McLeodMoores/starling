@@ -35,15 +35,12 @@ import com.opengamma.financial.security.future.BondFutureSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Calculates the gross basis of all bonds in the deliverable basket using
- * the future price and issuer curves.
+ * Calculates the gross basis of all bonds in the deliverable basket using the future price and issuer curves.
  */
 public class BondFutureGrossBasisFromCurvesFunction extends BondAndBondFutureFromCurvesFunction<IssuerProviderInterface, Void> {
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#GROSS_BASIS} and
-   * the calculator to null.
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#GROSS_BASIS} and the calculator to null.
    */
   public BondFutureGrossBasisFromCurvesFunction() {
     super(GROSS_BASIS, null);
@@ -57,14 +54,16 @@ public class BondFutureGrossBasisFromCurvesFunction extends BondAndBondFutureFro
     final ValueProperties properties = desiredValue.getConstraints();
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
     final BondFutureSecurity security = (BondFutureSecurity) target.getTrade().getSecurity();
-    final BondFuturesTransaction transaction = (BondFuturesTransaction) BondAndBondFutureFunctionUtils.getBondOrBondFutureDerivative(executionContext, target, now, inputs);
+    final BondFuturesTransaction transaction = (BondFuturesTransaction) BondAndBondFutureFunctionUtils.getBondOrBondFutureDerivative(executionContext, target,
+        now, inputs);
     final IssuerProviderInterface issuerCurves = (IssuerProviderInterface) inputs.getValue(CURVE_BUNDLE);
     final ValueSpecification spec = new ValueSpecification(GROSS_BASIS, target.toSpecification(), properties);
-    final double[] grossBasis = BondFuturesSecurityDiscountingMethod.getInstance().grossBasisFromCurves(transaction.getUnderlyingSecurity(), issuerCurves, price);
+    final double[] grossBasis = BondFuturesSecurityDiscountingMethod.getInstance().grossBasisFromCurves(transaction.getUnderlyingSecurity(), issuerCurves,
+        price);
     final int n = grossBasis.length;
     final String[] keys = new String[n];
     for (int i = 0; i < n; i++) {
-      keys[i] = security.getBasket().get(i).getIdentifiers().getExternalIds().toString(); //TODO what label do we want here?
+      keys[i] = security.getBasket().get(i).getIdentifiers().getExternalIds().toString(); // TODO what label do we want here?
     }
     final StringLabelledMatrix1D result = new StringLabelledMatrix1D(keys, grossBasis);
     return Collections.singleton(new ComputedValue(spec, result));

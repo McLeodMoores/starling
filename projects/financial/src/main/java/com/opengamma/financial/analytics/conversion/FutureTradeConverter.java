@@ -19,8 +19,7 @@ import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Visits a Trade containing a {@link FutureSecurity} (OG-Financial)
- * Converts it to an {@link InstrumentDefinitionWithData} (OG-Analytics)
+ * Visits a Trade containing a {@link FutureSecurity} (OG-Financial) Converts it to an {@link InstrumentDefinitionWithData} (OG-Analytics)
  */
 public class FutureTradeConverter implements TradeConverter {
   /**
@@ -36,7 +35,9 @@ public class FutureTradeConverter implements TradeConverter {
 
   /**
    * Converts a futures Trade to a Definition
-   * @param trade The trade
+   *
+   * @param trade
+   *          The trade
    * @return EquityFutureDefinition
    */
   @Override
@@ -57,9 +58,13 @@ public class FutureTradeConverter implements TradeConverter {
 
   /**
    * Creates an OG-Analytics trade definition from the OG-Analytics security definition and the trade details (price and date).
-   * @param securityDefinition The security definition (OG-Analytics object).
-   * @param tradePrice The trade price.
-   * @param tradeDate The trade date.
+   *
+   * @param securityDefinition
+   *          The security definition (OG-Analytics object).
+   * @param tradePrice
+   *          The trade price.
+   * @param tradeDate
+   *          The trade date.
    * @return The tradeDefinition.
    */
   private static InstrumentDefinitionWithData<?, Double> securityToTrade(final InstrumentDefinitionWithData<?, Double> securityDefinition,
@@ -98,7 +103,8 @@ public class FutureTradeConverter implements TradeConverter {
 
       @Override
       public InstrumentDefinitionWithData<?, Double> visitIndexFutureDefinition(final IndexFutureDefinition futures) {
-        return new IndexFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(), futures.getUnitAmount(), futures.getUnderlying());
+        return new IndexFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(), futures.getUnitAmount(),
+            futures.getUnderlying());
       }
 
     };

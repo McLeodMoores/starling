@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.discounting;
@@ -12,10 +12,11 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 
 /**
- * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present value of the instrument is zero.
- * The notion of "spread" will depend of each instrument.
+ * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present
+ * value of the instrument is zero. The notion of "spread" will depend of each instrument.
  */
-public final class PresentValueBasisPointCurveSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
+public final class PresentValueBasisPointCurveSensitivityDiscountingCalculator
+extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -24,6 +25,7 @@ public final class PresentValueBasisPointCurveSensitivityDiscountingCalculator e
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBasisPointCurveSensitivityDiscountingCalculator getInstance() {

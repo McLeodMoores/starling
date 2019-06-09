@@ -13,15 +13,20 @@ import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithB
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * InstrumentDerivativeVisitor that calculates position delta, the delta of a Transaction, Trade or Position.<p>
+ * InstrumentDerivativeVisitor that calculates position delta, the delta of a Transaction, Trade or Position.
+ * <p>
  * See also {@link PresentValueBlackDeltaForSecurityCalculator}
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
 public class PresentValueBlackDeltaForTransactionCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
   private static final PresentValueBlackDeltaForTransactionCalculator INSTANCE = new PresentValueBlackDeltaForTransactionCalculator();
-  private static final BondFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_BOND_FUTURE_OPTION = BondFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
-  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod IR_FUTURE_OPTION = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
+  private static final BondFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_BOND_FUTURE_OPTION = BondFutureOptionPremiumTransactionBlackSurfaceMethod
+      .getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod IR_FUTURE_OPTION =
+      InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
+
   public static PresentValueBlackDeltaForTransactionCalculator getInstance() {
     return INSTANCE;
   }

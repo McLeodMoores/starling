@@ -29,8 +29,8 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.xml.FormattingXmlStreamWriter;
 
 /**
- * Implementation of I/O using an XML representation of the Fudge binary encoding. Note that this is simply a human readable form of the Fudge binary data - as a result it is not as efficient or
- * appear as natural as other XML representations which may be available.
+ * Implementation of I/O using an XML representation of the Fudge binary encoding. Note that this is simply a human readable form of the Fudge binary data - as
+ * a result it is not as efficient or appear as natural as other XML representations which may be available.
  */
 public class FudgeXMLFormat implements RegressionIO.Format {
 

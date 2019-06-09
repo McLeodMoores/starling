@@ -41,8 +41,8 @@ import com.opengamma.util.ArgumentChecker;
 public class SABRIRFutureOptionNLSSDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(SABRIRFutureOptionNLSSDefaults.class);
   private static final String[] VALUE_NAMES = new String[] {
-    ValueRequirementNames.SABR_SURFACES,
-    ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS};
+                ValueRequirementNames.SABR_SURFACES,
+                ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS };
   private final String _xInterpolatorName;
   private final String _yInterpolatorName;
   private final String _leftXExtrapolatorName;
@@ -118,7 +118,8 @@ public class SABRIRFutureOptionNLSSDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (X_INTERPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_xInterpolatorName);
     }
@@ -168,6 +169,6 @@ public class SABRIRFutureOptionNLSSDefaults extends DefaultPropertyFunction {
     return null;
   }
 
-  //TODO exclusion groups
+  // TODO exclusion groups
 
 }

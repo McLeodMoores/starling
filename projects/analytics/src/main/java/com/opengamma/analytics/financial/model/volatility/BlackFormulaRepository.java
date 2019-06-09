@@ -19,11 +19,10 @@ import com.opengamma.lang.annotation.ExternalFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This <b>SHOULD</b> be the repository for Black formulas - i.e. the price, common greeks (delta, gamma, vega) and implied volatility. Other
- * classes that have higher level abstractions (e.g. option data bundles) should call these functions.
- * As the numeraire (e.g. the zero bond p(0,T) in the T-forward measure) in the Black formula is just a multiplication factor,  all prices,
- * input/output, are <b>forward</b> prices, i.e. (spot price)/numeraire
- * NOTE THAT a "reference value" is returned if computation comes across an ambiguous expression
+ * This <b>SHOULD</b> be the repository for Black formulas - i.e. the price, common greeks (delta, gamma, vega) and implied volatility. Other classes that have
+ * higher level abstractions (e.g. option data bundles) should call these functions. As the numeraire (e.g. the zero bond p(0,T) in the T-forward measure) in
+ * the Black formula is just a multiplication factor, all prices, input/output, are <b>forward</b> prices, i.e. (spot price)/numeraire NOTE THAT a "reference
+ * value" is returned if computation comes across an ambiguous expression
  */
 public abstract class BlackFormulaRepository {
 
@@ -38,11 +37,17 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The <b>forward</b> price of an option using the Black formula
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
-   * @param isCall True for calls, false for puts
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param isCall
+   *          True for calls, false for puts
    * @return The <b>forward</b> price
    */
   @ExternalFunction
@@ -91,8 +96,11 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The PV of a single option
-   * @param data required data on the option
-   * @param lognormalVol The Black volatility
+   * 
+   * @param data
+   *          required data on the option
+   * @param lognormalVol
+   *          The Black volatility
    * @return option PV
    */
   public static double price(final SimpleOptionData data, final double lognormalVol) {
@@ -102,8 +110,11 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The PV of a strip of options all with the same Black volatility
-   * @param data array of required data on the option
-   * @param lognormalVol The Black volatility
+   * 
+   * @param data
+   *          array of required data on the option
+   * @param lognormalVol
+   *          The Black volatility
    * @return PV of option strip
    */
   public static double price(final SimpleOptionData[] data, final double lognormalVol) {
@@ -119,11 +130,17 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The forward (i.e. driftless) delta
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
-   * @param isCall true for call
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param isCall
+   *          true for call
    * @return The forward delta
    */
   @ExternalFunction
@@ -164,9 +181,11 @@ public abstract class BlackFormulaRepository {
     return sign * NORMAL.getCDF(sign * d1);
   }
 
-  public static double strikeForDelta(final double forward, final double forwardDelta, final double timeToExpiry, final double lognormalVol, final boolean isCall) {
+  public static double strikeForDelta(final double forward, final double forwardDelta, final double timeToExpiry, final double lognormalVol,
+      final boolean isCall) {
     ArgumentChecker.isTrue(forward >= 0.0, "negative/NaN forward; have {}", forward);
-    ArgumentChecker.isTrue(isCall && forwardDelta > 0 && forwardDelta < 1 || !isCall && forwardDelta > -1 && forwardDelta < 0, "delta out of range", forwardDelta);
+    ArgumentChecker.isTrue(isCall && forwardDelta > 0 && forwardDelta < 1 || !isCall && forwardDelta > -1 && forwardDelta < 0, "delta out of range",
+        forwardDelta);
     ArgumentChecker.isTrue(timeToExpiry >= 0.0, "negative/NaN timeToExpiry; have {}", timeToExpiry);
     ArgumentChecker.isTrue(lognormalVol >= 0.0, "negative/NaN lognormalVol; have {}", lognormalVol);
 
@@ -184,11 +203,17 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless dual delta (first derivative of option price with respect to strike)
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
-   * @param isCall true for call
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param isCall
+   *          true for call
    * @return The dual delta
    */
   @ExternalFunction
@@ -230,15 +255,19 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The simple delta.
-   * Note that this is not the standard delta one is accustomed to.
-   * The argument of the cumulative normal is simply d = Math.log(forward / strike) / sigmaRootT
+   * The simple delta. Note that this is not the standard delta one is accustomed to. The argument of the cumulative normal is simply d = Math.log(forward /
+   * strike) / sigmaRootT
    *
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
-   * @param isCall true for call
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param isCall
+   *          true for call
    * @return The forward delta
    */
   @ExternalFunction
@@ -280,12 +309,18 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The forward (i.e. driftless) gamma, 2nd order sensitivity of the forward option value to the forward. <p>
+   * The forward (i.e. driftless) gamma, 2nd order sensitivity of the forward option value to the forward.
+   * <p>
    * $\frac{\partial^2 FV}{\partial^2 f}$
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The forward gamma
    */
   @ExternalFunction
@@ -327,10 +362,15 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless dual gamma
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The dual gamma
    */
   @ExternalFunction
@@ -372,10 +412,15 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless cross gamma - the sensitity of the delta to the strike $\frac{\partial^2 V}{\partial f \partial K}$
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The dual gamma
    */
   @ExternalFunction
@@ -418,16 +463,23 @@ public abstract class BlackFormulaRepository {
   /**
    * The theta (non-forward), the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$
    *
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
-   * @param isCall true for call, false for put
-   * @param interestRate the interest rate
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param isCall
+   *          true for call, false for put
+   * @param interestRate
+   *          the interest rate
    * @return theta
    */
   @ExternalFunction
-  public static double theta(final double forward, final double strike, final double timeToExpiry, final double lognormalVol, final boolean isCall, final double interestRate) {
+  public static double theta(final double forward, final double strike, final double timeToExpiry, final double lognormalVol, final boolean isCall,
+      final double interestRate) {
     ArgumentChecker.isTrue(forward >= 0.0, "negative/NaN forward; have {}", forward);
     ArgumentChecker.isTrue(strike >= 0.0, "negative/NaN strike; have {}", strike);
     ArgumentChecker.isTrue(timeToExpiry >= 0.0, "negative/NaN timeToExpiry; have {}", timeToExpiry);
@@ -449,7 +501,7 @@ public abstract class BlackFormulaRepository {
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
-    //    final double b = 0; // for now set cost of carry to 0
+    // final double b = 0; // for now set cost of carry to 0
 
     final boolean bFwd = forward > LARGE;
     final boolean bStr = strike > LARGE;
@@ -490,18 +542,26 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The theta (non-forward), the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$
-   * This is consistent with {@link BlackScholesFormulaRepository}
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
-   * @param isCall true for call, false for put
-   * @param interestRate the interest rate
+   * The theta (non-forward), the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$ This is consistent with
+   * {@link BlackScholesFormulaRepository}
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
+   * @param isCall
+   *          true for call, false for put
+   * @param interestRate
+   *          the interest rate
    * @return theta
    */
   @ExternalFunction
-  public static double thetaMod(final double forward, final double strike, final double timeToExpiry, final double lognormalVol, final boolean isCall, final double interestRate) {
+  public static double thetaMod(final double forward, final double strike, final double timeToExpiry, final double lognormalVol, final boolean isCall,
+      final double interestRate) {
     ArgumentChecker.isTrue(forward >= 0.0, "negative/NaN forward; have {}", forward);
     ArgumentChecker.isTrue(strike >= 0.0, "negative/NaN strike; have {}", strike);
     ArgumentChecker.isTrue(timeToExpiry >= 0.0, "negative/NaN timeToExpiry; have {}", timeToExpiry);
@@ -558,10 +618,15 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The forward (i.e. driftless) theta
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The driftless theta
    */
   @ExternalFunction
@@ -592,7 +657,8 @@ public abstract class BlackFormulaRepository {
       }
       LOGGER.info("log(1)/0 ambiguous");
       if (rootT < SMALL) {
-        return forward < SMALL ? -NORMAL.getPDF(0.) * lognormalVol / 2. : lognormalVol < SMALL ? -forward * NORMAL.getPDF(0.) / 2. : -forward * NORMAL.getPDF(0.) * lognormalVol / 2. / rootT;
+        return forward < SMALL ? -NORMAL.getPDF(0.) * lognormalVol / 2.
+            : lognormalVol < SMALL ? -forward * NORMAL.getPDF(0.) / 2. : -forward * NORMAL.getPDF(0.) * lognormalVol / 2. / rootT;
       }
       if (lognormalVol < SMALL) {
         return bFwd ? -NORMAL.getPDF(0.) / 2. / rootT : -forward * NORMAL.getPDF(0.) * lognormalVol / 2. / rootT;
@@ -609,12 +675,17 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The forward vega of an option, i.e. the sensitivity of the option's forward price wrt the implied volatility (which is just the the spot vega
-   * divided by the the numeraire)
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * The forward vega of an option, i.e. the sensitivity of the option's forward price wrt the implied volatility (which is just the the spot vega divided by
+   * the the numeraire)
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The forward vega
    */
   @ExternalFunction
@@ -662,12 +733,18 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The driftless vanna of an option, i.e. second order derivative of the option value, once to the underlying forward and once to volatility.<p>
+   * The driftless vanna of an option, i.e. second order derivative of the option value, once to the underlying forward and once to volatility.
+   * <p>
    * $\frac{\partial^2 FV}{\partial f \partial \sigma}$
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The forward vanna
    */
   @ExternalFunction
@@ -714,10 +791,15 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless dual vanna of an option, i.e. second order derivative of the option value, once to the strike and once to volatility.
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The forward dual vanna
    */
   @ExternalFunction
@@ -764,10 +846,15 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless vomma (aka volga) of an option, i.e. second order derivative of the option forward price with respect to the implied volatility.
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The forward vomma
    */
   @ExternalFunction
@@ -818,10 +905,15 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless volga (aka vomma) of an option, i.e. second order derivative of the option forward price with respect to the implied volatility.
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param lognormalVol The log-normal volatility
+   * 
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param lognormalVol
+   *          The log-normal volatility
    * @return The forward vomma
    */
   @ExternalFunction
@@ -830,12 +922,18 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * Get the log-normal (Black) implied volatility of an  European option
-   * @param price The <b>forward</b> price - i.e. the market price divided by the numeraire (i.e. the zero bond p(0,T) for the T-forward measure)
-   * @param forward The forward value of the underlying
-   * @param strike The Strike
-   * @param timeToExpiry The time-to-expiry
-   * @param isCall true for call
+   * Get the log-normal (Black) implied volatility of an European option
+   * 
+   * @param price
+   *          The <b>forward</b> price - i.e. the market price divided by the numeraire (i.e. the zero bond p(0,T) for the T-forward measure)
+   * @param forward
+   *          The forward value of the underlying
+   * @param strike
+   *          The Strike
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param isCall
+   *          true for call
    * @return log-normal (Black) implied volatility
    */
   public static double impliedVolatility(final double price, final double forward, final double strike, final double timeToExpiry, final boolean isCall) {
@@ -850,14 +948,14 @@ public abstract class BlackFormulaRepository {
 
     final double intrinsicPrice = Math.max(0., (isCall ? 1 : -1) * (forward - strike));
 
-    final double targetPrice = price - intrinsicPrice; //Math.max(0., price - intrinsicPrice) should not used for least chi square
+    final double targetPrice = price - intrinsicPrice; // Math.max(0., price - intrinsicPrice) should not used for least chi square
     final double sigmaGuess = 0.3;
     return impliedVolatility(targetPrice, forward, strike, timeToExpiry, sigmaGuess);
   }
 
   /**
    * Get the log-normal (Black) implied volatility of an out-the-money European option starting from an initial guess
-   * 
+   *
    * @param otmPrice
    *          The <b>forward</b> price - i.e. the market price divided by the numeraire (i.e. the zero bond p(0,T) for the T-forward measure) <b>Note</b> This
    *          MUST be an OTM price - i.e. a call price for strike &gt;= forward and a put price otherwise
@@ -904,8 +1002,9 @@ public abstract class BlackFormulaRepository {
       lowerSigma = temp[0];
       upperSigma = temp[1];
     } catch (final MathException e) {
-      throw new IllegalArgumentException(e.toString() + " No implied Volatility for this price. [price: " + otmPrice + ", forward: " + forward + ", strike: " + strike + ", timeToExpiry: "
-          + timeToExpiry + ", " + (isCall ? "Call" : "put"));
+      throw new IllegalArgumentException(
+          e.toString() + " No implied Volatility for this price. [price: " + otmPrice + ", forward: " + forward + ", strike: " + strike + ", timeToExpiry: "
+              + timeToExpiry + ", " + (isCall ? "Call" : "put"));
     }
     double sigma = (lowerSigma + upperSigma) / 2.0;
     final double maxChange = 0.5;
@@ -969,11 +1068,14 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * Find the single volatility for a portfolio of European options such that the sum of Black prices of the options (with that volatility)
-   * equals the (market) price of the portfolio - this is the implied volatility of the portfolio. A concrete example is a cap (floor) which
-   * can be viewed as a portfolio of caplets (floorlets)
-   * @param data basic description of each option
-   * @param price The (market) price of the portfolio
+   * Find the single volatility for a portfolio of European options such that the sum of Black prices of the options (with that volatility) equals the (market)
+   * price of the portfolio - this is the implied volatility of the portfolio. A concrete example is a cap (floor) which can be viewed as a portfolio of caplets
+   * (floorlets)
+   * 
+   * @param data
+   *          basic description of each option
+   * @param price
+   *          The (market) price of the portfolio
    * @return The implied volatility of the portfolio
    */
   public static double impliedVolatility(final SimpleOptionData[] data, final double price) {
@@ -1045,11 +1147,17 @@ public abstract class BlackFormulaRepository {
 
   /**
    * Computes the implied strike from delta and volatility in the Black formula.
-   * @param delta The option delta
-   * @param isCall The call (true) / put (false) flag.
-   * @param forward The forward.
-   * @param time The time to expiration.
-   * @param volatility The volatility.
+   * 
+   * @param delta
+   *          The option delta
+   * @param isCall
+   *          The call (true) / put (false) flag.
+   * @param forward
+   *          The forward.
+   * @param time
+   *          The time to expiration.
+   * @param volatility
+   *          The volatility.
    * @return The strike.
    */
   @ExternalFunction
@@ -1064,16 +1172,24 @@ public abstract class BlackFormulaRepository {
 
   /**
    * Computes the implied strike and its derivatives from delta and volatility in the Black formula.
-   * @param delta The option delta
-   * @param isCall The call (true) / put (false) flag.
-   * @param forward The forward.
-   * @param time The time to expiration.
-   * @param volatility The volatility.
-   * @param derivatives The derivatives of the implied strike with respect to the input. The array is changed by the method.
-   * Derivatives with respect to: [0] delta, [1] forward, [2] time, [3] volatility.
+   * 
+   * @param delta
+   *          The option delta
+   * @param isCall
+   *          The call (true) / put (false) flag.
+   * @param forward
+   *          The forward.
+   * @param time
+   *          The time to expiration.
+   * @param volatility
+   *          The volatility.
+   * @param derivatives
+   *          The derivatives of the implied strike with respect to the input. The array is changed by the method. Derivatives with respect to: [0] delta, [1]
+   *          forward, [2] time, [3] volatility.
    * @return The strike.
    */
-  public static double impliedStrike(final double delta, final boolean isCall, final double forward, final double time, final double volatility, final double[] derivatives) {
+  public static double impliedStrike(final double delta, final boolean isCall, final double forward, final double time, final double volatility,
+      final double[] derivatives) {
     Validate.isTrue(delta > -1 && delta < 1, "Delta out of range");
     Validate.isTrue(isCall ^ delta < 0, "Delta incompatible with call/put: " + isCall + ", " + delta);
     Validate.isTrue(forward > 0, "Forward negative");
@@ -1099,32 +1215,33 @@ public abstract class BlackFormulaRepository {
     res[1] = vega(forward, strike, timeToExpiry, lognormalVol);
     return res;
 
-    //    final double rootT = Math.sqrt(timeToExpiry);
-    //    double sigmaRootT = lognormalVol * rootT;
-    //    final double[] res = new double[2];
+    // final double rootT = Math.sqrt(timeToExpiry);
+    // double sigmaRootT = lognormalVol * rootT;
+    // final double[] res = new double[2];
     //
-    //    if (Math.abs(forward - strike) < SMALL) {
-    //      res[0] = forward * (2 * NORMAL.getCDF(sigmaRootT / 2) - 1);
-    //      res[1] = forward * rootT * NORMAL.getPDF(sigmaRootT / 2);
-    //      return res;
-    //    }
+    // if (Math.abs(forward - strike) < SMALL) {
+    // res[0] = forward * (2 * NORMAL.getCDF(sigmaRootT / 2) - 1);
+    // res[1] = forward * rootT * NORMAL.getPDF(sigmaRootT / 2);
+    // return res;
+    // }
     //
-    //    final int sign = isCall ? 1 : -1;
+    // final int sign = isCall ? 1 : -1;
     //
-    //    if (sigmaRootT < SMALL || strike < SMALL) {
-    //      res[0] = Math.max(sign * (forward - strike), 0.0);
-    //      res[1] = 0.0;
-    //      return res;
-    //    }
+    // if (sigmaRootT < SMALL || strike < SMALL) {
+    // res[0] = Math.max(sign * (forward - strike), 0.0);
+    // res[1] = 0.0;
+    // return res;
+    // }
     //
-    //    final double d1 = Math.log(forward / strike) / sigmaRootT + 0.5 * sigmaRootT;
-    //    final double d2 = d1 - sigmaRootT;
-    //    res[0] = sign * (forward * NORMAL.getCDF(sign * d1) - strike * NORMAL.getCDF(sign * d2));
-    //    res[1] = forward * rootT * NORMAL.getPDF(d1);
-    //    return res;
+    // final double d1 = Math.log(forward / strike) / sigmaRootT + 0.5 * sigmaRootT;
+    // final double d2 = d1 - sigmaRootT;
+    // res[0] = sign * (forward * NORMAL.getCDF(sign * d1) - strike * NORMAL.getCDF(sign * d2));
+    // res[1] = forward * rootT * NORMAL.getPDF(d1);
+    // return res;
   }
 
-  private static double[] bracketRoot(final double forwardPrice, final double forward, final double strike, final double expiry, final boolean isCall, final double sigma, final double change) {
+  private static double[] bracketRoot(final double forwardPrice, final double forward, final double strike, final double expiry, final boolean isCall,
+      final double sigma, final double change) {
     final BracketRoot bracketer = new BracketRoot();
     final Function1D<Double, Double> func = new Function1D<Double, Double>() {
       @Override
@@ -1135,7 +1252,8 @@ public abstract class BlackFormulaRepository {
     return bracketer.getBracketedPoints(func, sigma - Math.abs(change), sigma + Math.abs(change), 0, Double.POSITIVE_INFINITY);
   }
 
-  private static double solveByBisection(final double forwardPrice, final double forward, final double strike, final double expiry, final boolean isCall, final double lowerSigma,
+  private static double solveByBisection(final double forwardPrice, final double forward, final double strike, final double expiry, final boolean isCall,
+      final double lowerSigma,
       final double upperSigma) {
 
     final BisectionSingleRootFinder rootFinder = new BisectionSingleRootFinder(VOL_TOL);

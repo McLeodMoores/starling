@@ -21,25 +21,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a Ratchet on Ibor coupon. The coupon payment depends on the
- * previous coupon ($C_{i-1}$), the current Ibor fixing ($L_i$). The pay-off is:
- * $$
- * \begin{equation*}
- * \alpha^M_i C_{i-1} + \beta^M_i L_i + \gamma^M_i
- * \end{equation*}
- * $$
- * subject to the floor :
- * $$
- * \begin{equation*}
- * \alpha^F_i C_{i-1} + \beta^F_i L_i + \gamma^F_i
- * \end{equation*}
- * $$
- * and the cap:
- * $$
- * \begin{equation*}
- * \alpha^C_i C_{i-1} + \beta^C_i L_i + \gamma^C_i
- * \end{equation*}
- * $$
+ * Class describing a Ratchet on Ibor coupon. The coupon payment depends on the previous coupon ($C_{i-1}$), the current Ibor fixing ($L_i$). The pay-off is: $$
+ * \begin{equation*} \alpha^M_i C_{i-1} + \beta^M_i L_i + \gamma^M_i \end{equation*} $$ subject to the floor : $$ \begin{equation*} \alpha^F_i C_{i-1} +
+ * \beta^F_i L_i + \gamma^F_i \end{equation*} $$ and the cap: $$ \begin{equation*} \alpha^C_i C_{i-1} + \beta^C_i L_i + \gamma^C_i \end{equation*} $$
  */
 public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
@@ -60,39 +44,54 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
    */
   private final double _fixingPeriodAccrualFactor;
   /**
-   * The coefficients of the main payment (before floor and cap). Array of length 3. The first coefficient is the previous coupon factor,
-   * the second is the Ibor factor and the third is the additive term.
+   * The coefficients of the main payment (before floor and cap). Array of length 3. The first coefficient is the previous coupon factor, the second is the Ibor
+   * factor and the third is the additive term.
    */
   private final double[] _mainCoefficients;
   /**
-   * The coefficients of the floor. Array of length 3. The first coefficient is the previous coupon factor,
-   * the second is the Ibor factor and the third is the additive term.
+   * The coefficients of the floor. Array of length 3. The first coefficient is the previous coupon factor, the second is the Ibor factor and the third is the
+   * additive term.
    */
   private final double[] _floorCoefficients;
   /**
-   * The coefficients of the cap. Array of length 3. The first coefficient is the previous coupon factor,
-   * the second is the Ibor factor and the third is the additive term.
+   * The coefficients of the cap. Array of length 3. The first coefficient is the previous coupon factor, the second is the Ibor factor and the third is the
+   * additive term.
    */
   private final double[] _capCoefficients;
 
   /**
    * Constructor from all the details.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param accrualFactor Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param fixingDate The coupon fixing date.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param mainCoefficients The coefficients of the main payment (before floor and cap). Array of length 3.
-   * @param floorCoefficients The coefficients of the floor. Array of length 3. The first coefficient is the previous coupon factor,
-   * the second is the Ibor factor and the third is the additive term.
-   * @param capCoefficients The coefficients of the cap. Array of length 3.
-   * @param calendar The holiday calendar for the ibor index.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param accrualFactor
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingDate
+   *          The coupon fixing date.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param mainCoefficients
+   *          The coefficients of the main payment (before floor and cap). Array of length 3.
+   * @param floorCoefficients
+   *          The coefficients of the floor. Array of length 3. The first coefficient is the previous coupon factor, the second is the Ibor factor and the third
+   *          is the additive term.
+   * @param capCoefficients
+   *          The coefficients of the cap. Array of length 3.
+   * @param calendar
+   *          The holiday calendar for the ibor index.
    */
-  public CouponIborRatchetDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualFactor,
-      final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double[] mainCoefficients, final double[] floorCoefficients, final double[] capCoefficients,
+  public CouponIborRatchetDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate, final double accrualFactor,
+      final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double[] mainCoefficients, final double[] floorCoefficients,
+      final double[] capCoefficients,
       final Calendar calendar) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate);
     ArgumentChecker.notNull(index, "index");
@@ -105,7 +104,8 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
     ArgumentChecker.isTrue(capCoefficients.length == 3, "Requires 3 cap coefficients");
     _index = index;
     _fixingPeriodStartDate = ScheduleCalculator.getAdjustedDate(fixingDate, _index.getSpotLag(), calendar);
-    _fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(_fixingPeriodStartDate, index.getTenor(), index.getBusinessDayConvention(), calendar, index.isEndOfMonth());
+    _fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(_fixingPeriodStartDate, index.getTenor(), index.getBusinessDayConvention(), calendar,
+        index.isEndOfMonth());
     _fixingPeriodAccrualFactor = index.getDayCount().getDayCountFraction(_fixingPeriodStartDate, _fixingPeriodEndDate, calendar);
     _mainCoefficients = mainCoefficients;
     _floorCoefficients = floorCoefficients;
@@ -114,6 +114,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the Ibor index of the instrument.
+   * 
    * @return The index.
    */
   public IborIndex getIndex() {
@@ -122,6 +123,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the start date of the fixing period.
+   * 
    * @return The start date of the fixing period.
    */
   public ZonedDateTime getFixingPeriodStartDate() {
@@ -130,6 +132,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the end date of the fixing period.
+   * 
    * @return The end date of the fixing period.
    */
   public ZonedDateTime getFixingPeriodEndDate() {
@@ -138,6 +141,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
+   * 
    * @return The accrual factor.
    */
   public double getFixingPeriodAccrualFactor() {
@@ -146,6 +150,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the coefficients of the main payment (before floor and cap).
+   * 
    * @return The coefficients of the main payment (before floor and cap).
    */
   public double[] getMainCoefficients() {
@@ -154,6 +159,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the coefficients of the floor.
+   * 
    * @return The coefficients of the floor.
    */
   public double[] getFloorCoefficients() {
@@ -162,6 +168,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * Gets the coefficients of the cap.
+   * 
    * @return The coefficients of the cap.
    */
   public double[] getCapCoefficients() {
@@ -216,13 +223,15 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public CouponIborRatchet toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()), "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
+    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()),
+        "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     ArgumentChecker.isTrue(yieldCurveNames.length > 1, "at least two curves required");
     ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date is after payment date");
@@ -232,25 +241,28 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
     final double fixingTime = TimeCalculator.getTimeBetween(date, getFixingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(date, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(date, getFixingPeriodEndDate());
-    return new CouponIborRatchet(getCurrency(), paymentTime, discountingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, fixingPeriodStartTime, fixingPeriodEndTime,
+    return new CouponIborRatchet(getCurrency(), paymentTime, discountingCurveName, getPaymentYearFraction(), getNotional(), fixingTime, fixingPeriodStartTime,
+        fixingPeriodEndTime,
         getFixingPeriodAccrualFactor(), forwardCurveName, getIndex(), _mainCoefficients, _floorCoefficients, _capCoefficients);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public Payment toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data, final String... yieldCurveNames) {
     return null;
-    //TODO: coupon with fixing!
+    // TODO: coupon with fixing!
   }
 
   @Override
   public CouponIborRatchet toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()), "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
+    ArgumentChecker.isTrue(!date.isAfter(getFixingDate()),
+        "Do not have any fixing data but are asking for a derivative after the fixing date " + getFixingDate() + " " + date);
     ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date is after payment date");
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
     final double fixingTime = TimeCalculator.getTimeBetween(date, getFixingDate());
@@ -263,7 +275,7 @@ public class CouponIborRatchetDefinition extends CouponFloatingDefinition {
   @Override
   public Payment toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data) {
     return null;
-    //TODO: coupon with fixing!
+    // TODO: coupon with fixing!
   }
 
 }

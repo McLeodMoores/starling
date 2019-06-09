@@ -29,9 +29,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
+
 // CSOFF
 /**
  * Pricing method for digital Forex option transactions with Black function and a volatility provider.
+ * 
  * @deprecated Use {@link ForexOptionDigitalBlackSmileMethod}
  */
 @Deprecated
@@ -44,6 +46,7 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static ForexOptionDigitalBlackMethod getInstance() {
@@ -61,8 +64,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the present value of the digital option with the Black function and a volatility from a volatility surface.
-   * @param optionForex The Forex option.
-   * @param smile The curve and smile data.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The curve and smile data.
    * @return The present value. The value is in the domestic currency (currency 2).
    */
   public MultipleCurrencyAmount presentValue(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile) {
@@ -80,8 +86,10 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
     if (optionForex.payDomestic()) {
       domesticCcy = optionForex.getUnderlyingForex().getCurrency2();
       foreignCcy = optionForex.getUnderlyingForex().getCurrency1();
-      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
-      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
       strike = optionForex.getStrike();
       amount = Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency2().getAmount());
       omega = optionForex.isCall() ? 1.0 : -1.0;
@@ -89,8 +97,10 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
       strike = 1.0 / optionForex.getStrike();
       domesticCcy = optionForex.getUnderlyingForex().getCurrency1();
       foreignCcy = optionForex.getUnderlyingForex().getCurrency2();
-      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
-      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
       amount = Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount());
       omega = optionForex.isCall() ? -1.0 : 1.0;
     }
@@ -112,9 +122,13 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the currency exposure of the digital option with the Black function and a volatility from a volatility surface. The exposure is computed in both option currencies.
-   * @param optionForex The Forex option.
-   * @param smile The curve and smile data.
+   * Computes the currency exposure of the digital option with the Black function and a volatility from a volatility surface. The exposure is computed in both
+   * option currencies.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The curve and smile data.
    * @return The currency exposure
    */
   public MultipleCurrencyAmount currencyExposure(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile) {
@@ -132,8 +146,10 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
     if (optionForex.payDomestic()) {
       domesticCcy = optionForex.getUnderlyingForex().getCurrency2();
       foreignCcy = optionForex.getUnderlyingForex().getCurrency1();
-      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
-      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
       strike = optionForex.getStrike();
       amount = Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency2().getAmount());
       omega = optionForex.isCall() ? 1.0 : -1.0;
@@ -141,8 +157,10 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
       strike = 1.0 / optionForex.getStrike();
       domesticCcy = optionForex.getUnderlyingForex().getCurrency1();
       foreignCcy = optionForex.getUnderlyingForex().getCurrency2();
-      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
-      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName()).getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfDomestic = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency1().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
+      dfForeign = smile.getCurve(optionForex.getUnderlyingForex().getPaymentCurrency2().getFundingCurveName())
+          .getDiscountFactor(optionForex.getUnderlyingForex().getPaymentTime());
       amount = Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount());
       omega = optionForex.isCall() ? -1.0 : 1.0;
     }
@@ -169,13 +187,17 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward (and on the curves) is not taken into account. It is the curve
-   * sensitivity in the Black model where the volatility is suppose to be constant for curve and forward changes.
-   * @param optionForex The Forex option.
-   * @param smile The smile data.
+   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward (and on the curves) is not taken into account.
+   * It is the curve sensitivity in the Black model where the volatility is suppose to be constant for curve and forward changes.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The smile data.
    * @return The curve sensitivity.
    */
-  public MultipleCurrencyInterestRateCurveSensitivity presentValueCurveSensitivity(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile) {
+  public MultipleCurrencyInterestRateCurveSensitivity presentValueCurveSensitivity(final ForexOptionDigital optionForex,
+      final SmileDeltaTermStructureDataBundle smile) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smile, "Smile");
     ArgumentChecker.isTrue(smile.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
@@ -238,8 +260,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Present value curve sensitivity with a generic instrument as argument.
-   * @param instrument A Digital Forex option.
-   * @param curves The volatility and curves description (SmileDeltaTermStructureDataBundle).
+   * 
+   * @param instrument
+   *          A Digital Forex option.
+   * @param curves
+   *          The volatility and curves description (SmileDeltaTermStructureDataBundle).
    * @return The curve sensitivity.
    */
   @Override
@@ -250,13 +275,17 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the volatility sensitivity of the digital option with the Black function and a volatility from a volatility surface. The sensitivity
-   * is computed with respect to the computed Black implied volatility and not with respect to the volatility surface input.
-   * @param optionForex The Forex option.
-   * @param smile The curve and smile data.
+   * Computes the volatility sensitivity of the digital option with the Black function and a volatility from a volatility surface. The sensitivity is computed
+   * with respect to the computed Black implied volatility and not with respect to the volatility surface input.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The curve and smile data.
    * @return The volatility sensitivity. The sensitivity figures are, like the present value, in the domestic currency (currency 2).
    */
-  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile) {
+  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionDigital optionForex,
+      final SmileDeltaTermStructureDataBundle smile) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smile, "Smile");
     ArgumentChecker.isTrue(smile.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
@@ -308,8 +337,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the implied Black volatility of the digital option.
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The implied volatility.
    */
   public double impliedVolatility(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -345,24 +377,32 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the present value volatility sensitivity with a generic instrument as argument.
-   * @param instrument A Digital Forex option.
-   * @param curves The volatility and curves description (SmileDeltaTermStructureDataBundle).
+   * 
+   * @param instrument
+   *          A Digital Forex option.
+   * @param curves
+   *          The volatility and curves description (SmileDeltaTermStructureDataBundle).
    * @return The volatility sensitivity. The sensitivity figures are, like the present value, in the domestic currency (currency 2).
    */
-  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final InstrumentDerivative instrument, final YieldCurveBundle curves) {
+  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final InstrumentDerivative instrument,
+      final YieldCurveBundle curves) {
     ArgumentChecker.isTrue(instrument instanceof ForexOptionDigital, "Digital Forex option");
     ArgumentChecker.isTrue(curves instanceof SmileDeltaTermStructureDataBundle, "Smile delta data bundle required");
     return presentValueBlackVolatilitySensitivity((ForexOptionDigital) instrument, (SmileDeltaTermStructureDataBundle) curves);
   }
 
   /**
-   * Computes the volatility sensitivity with respect to input data for a digital option with the Black function and a volatility from a volatility surface. The sensitivity
-   * is computed with respect to each node in the volatility surface.
-   * @param optionForex The Forex option.
-   * @param smile The curve and smile data.
+   * Computes the volatility sensitivity with respect to input data for a digital option with the Black function and a volatility from a volatility surface. The
+   * sensitivity is computed with respect to each node in the volatility surface.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The curve and smile data.
    * @return The volatility node sensitivity. The sensitivity figures are, like the present value, in the domestic currency (currency 2).
    */
-  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle presentValueBlackVolatilityNodeSensitivity(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile) {
+  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle presentValueBlackVolatilityNodeSensitivity(final ForexOptionDigital optionForex,
+      final SmileDeltaTermStructureDataBundle smile) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smile, "Smile");
     ArgumentChecker.isTrue(smile.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
@@ -394,7 +434,8 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
     final double dfForeign = smile.getCurve(foreignCurveName).getDiscountFactor(payTime);
     final double spot = smile.getFxRates().getFxRate(foreignCcy, domesticCcy);
     final double forward = spot * dfForeign / dfDomestic;
-    final VolatilityAndBucketedSensitivities volAndSensitivities = FXVolatilityUtils.getVolatilityAndSensitivities(smile, foreignCcy, domesticCcy, expiry, forward, forward);
+    final VolatilityAndBucketedSensitivities volAndSensitivities = FXVolatilityUtils.getVolatilityAndSensitivities(smile, foreignCcy, domesticCcy, expiry,
+        forward, forward);
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
     final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(), foreignCcy == smile.getCurrencyPair().getFirst() ? strike : 1.0 / strike);
     final double[][] vega = new double[volatilityModel.getNumberExpiration()][volatilityModel.getNumberStrike()];
@@ -403,15 +444,22 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
         vega[loopexp][loopstrike] = nodeWeight[loopexp][loopstrike] * pointSensitivity.getVega().getMap().get(point);
       }
     }
-    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingForex().getCurrency2(),
+    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingForex().getCurrency1(),
+        optionForex.getUnderlyingForex().getCurrency2(),
         new DoubleMatrix1D(volatilityModel.getTimeToExpiration()), new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
   }
 
   /**
-   * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency equivalent to the option up to the first order divided by the option notional.
-   * @param optionForex The Forex option.
-   * @param smile The curve and smile data.
-   * @param directQuote Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency equivalent to the option up to the first order
+   * divided by the option notional.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The curve and smile data.
+   * @param directQuote
+   *          Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x
+   *          foreign)
    * @return The delta.
    */
   public double deltaRelative(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile, final boolean directQuote) {
@@ -459,9 +507,14 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the delta of the Forex option. The delta is the first order derivative of the option present value to the spot fx rate.
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
-   * @param directQuote Flag indicating if the delta should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
+   * @param directQuote
+   *          Flag indicating if the delta should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x
+   *          foreign)
    * @return The delta.
    */
   public CurrencyAmount delta(final ForexOptionDigital optionForex, final YieldCurveBundle curves, final boolean directQuote) {
@@ -479,11 +532,15 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the relative gamma of the Forex option.
-   * The relative gamma is the second order derivative of the pv divided by the option notional.
-   * @param optionForex The Forex option.
-   * @param smile The curve and smile data.
-   * @param directQuote Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * Computes the relative gamma of the Forex option. The relative gamma is the second order derivative of the pv divided by the option notional.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The curve and smile data.
+   * @param directQuote
+   *          Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x
+   *          foreign)
    * @return The gamma.
    */
   public double gammaRelative(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile, final boolean directQuote) {
@@ -532,9 +589,14 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the gamma of the Forex option. The gamma is the second order derivative of the option present value to the spot fx rate.
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
-   * @param directQuote Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
+   * @param directQuote
+   *          Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x
+   *          foreign)
    * @return The gamma.
    */
   public CurrencyAmount gamma(final ForexOptionDigital optionForex, final YieldCurveBundle curves, final boolean directQuote) {
@@ -552,12 +614,17 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the relative gamma of the Forex option multiplied by the spot rate.
-   * The relative gamma is the second oder derivative of the pv relative to the option notional.
-   * The reason to multiply by the spot rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
-   * @param optionForex The Forex option.
-   * @param smile The curve and smile data.
-   * @param directQuote Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * Computes the relative gamma of the Forex option multiplied by the spot rate. The relative gamma is the second oder derivative of the pv relative to the
+   * option notional. The reason to multiply by the spot rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X
+   * to X(1+e)).
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param smile
+   *          The curve and smile data.
+   * @param directQuote
+   *          Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x
+   *          foreign)
    * @return The gamma.
    */
   public double gammaRelativeSpot(final ForexOptionDigital optionForex, final SmileDeltaTermStructureDataBundle smile, final boolean directQuote) {
@@ -605,11 +672,16 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the gamma of the Forex option multiplied by the spot rate. The gamma is the second order derivative of the pv.
-   * The reason to multiply by the spot rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
-   * @param directQuote Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * Computes the gamma of the Forex option multiplied by the spot rate. The gamma is the second order derivative of the pv. The reason to multiply by the spot
+   * rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
+   * @param directQuote
+   *          Flag indicating if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x
+   *          foreign)
    * @return The gamma.
    */
   public CurrencyAmount gammaSpot(final ForexOptionDigital optionForex, final YieldCurveBundle curves, final boolean directQuote) {
@@ -628,8 +700,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the theta (derivative with respect to the time). The theta is not scaled.
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The theta
    */
   public CurrencyAmount forwardTheta(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -674,8 +749,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the spot delta (first derivative with respect to spot).
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The spot delta
    */
   public double spotDeltaTheoretical(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -718,8 +796,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the forward delta (first derivative with respect to forward).
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The forward delta
    */
   public double forwardDeltaTheoretical(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -762,8 +843,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the spot gamma (second derivative with respect to spot).
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The spot gamma
    */
   public double spotGammaTheoretical(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -806,8 +890,11 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
 
   /**
    * Computes the forward gamma (second derivative with respect to forward).
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The forward gamma
    */
   public double forwardGammaTheoretical(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -845,13 +932,17 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
     final double expiry = optionForex.getExpirationTime();
     final double volatility = FXVolatilityUtils.getVolatility(smile, foreignCcy, domesticCcy, expiry, forward, forward);
     final double longSign = optionForex.isLong() ? 1.0 : -1.0;
-    return DigitalOptionFunction.gamma(spot, strike, expiry, volatility, rDomestic, rDomestic - rForeign, isCall) * longSign * dfDomestic / dfForeign / dfForeign;
+    return DigitalOptionFunction.gamma(spot, strike, expiry, volatility, rDomestic, rDomestic - rForeign, isCall) * longSign * dfDomestic / dfForeign
+        / dfForeign;
   }
 
   /**
    * Computes the forward vega (first derivative with respect to spot).
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The forward vega
    */
   public double forwardVegaTheoretical(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -893,10 +984,13 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the forward driftless theta (derivative with respect to the time). The theta is not scaled.
-   * Reference on driftless theta: The complete guide to Option Pricing Formula (2007), E. G. Haug, Mc Graw Hill, p. 67, equation (2.43)
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * Computes the forward driftless theta (derivative with respect to the time). The theta is not scaled. Reference on driftless theta: The complete guide to
+   * Option Pricing Formula (2007), E. G. Haug, Mc Graw Hill, p. 67, equation (2.43)
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The forward driftless theta
    */
   public double forwardDriftlessThetaTheoretical(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {
@@ -936,10 +1030,13 @@ public final class ForexOptionDigitalBlackMethod implements ForexPricingMethod {
   }
 
   /**
-   * Computes the spot theta (derivative with respect to the time). The theta is not scaled.
-   * Reference on theta: The complete guide to Option Pricing Formula (2007), E. G. Haug, Mc Graw Hill, p. 67, equation (2.43)
-   * @param optionForex The Forex option.
-   * @param curves The yield curve bundle.
+   * Computes the spot theta (derivative with respect to the time). The theta is not scaled. Reference on theta: The complete guide to Option Pricing Formula
+   * (2007), E. G. Haug, Mc Graw Hill, p. 67, equation (2.43)
+   * 
+   * @param optionForex
+   *          The Forex option.
+   * @param curves
+   *          The yield curve bundle.
    * @return The forward driftless theta
    */
   public double thetaTheoretical(final ForexOptionDigital optionForex, final YieldCurveBundle curves) {

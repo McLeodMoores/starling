@@ -40,7 +40,8 @@ public class InterestRateFutureOptionBlackForwardFunction extends InterestRateFu
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle curveBundle, final ValueSpecification spec,
+  protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOptionTransaction, final YieldCurveWithBlackCubeBundle curveBundle,
+      final ValueSpecification spec,
       final Set<ValueRequirement> desiredValues) {
     if (irFutureOptionTransaction instanceof InterestRateFutureOptionMarginTransaction) {
       final InstrumentDerivative irFutureOptionSecurity = ((InterestRateFutureOptionMarginTransaction) irFutureOptionTransaction).getUnderlyingSecurity();

@@ -13,8 +13,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a standard deposit. The notional amount is paid on the start time and received back on the end (maturity) time with interests.
- * The interest amount is computed based on a fixed rate and a accrual factor.
+ * Class describing a standard deposit. The notional amount is paid on the start time and received back on the end (maturity) time with interests. The interest
+ * amount is computed based on a fixed rate and a accrual factor.
  */
 public class Cash implements InstrumentDerivative {
 
@@ -57,28 +57,44 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * Constructor of a cash deposit.
-   * @param currency The currency
-   * @param startTime Time when the notional amount is borrowed (could be 0, i.e. now)
-   * @param endTime Time from now (in years) when the loan matures (is repaid)
-   * @param notional The notional of the loan
-   * @param rate The loan rate.
-   * @param accrualFactor The time (in years) between the start date and the end date in some day count convention.
-   * @param yieldCurveName Name of yield curve used to price loan
+   * 
+   * @param currency
+   *          The currency
+   * @param startTime
+   *          Time when the notional amount is borrowed (could be 0, i.e. now)
+   * @param endTime
+   *          Time from now (in years) when the loan matures (is repaid)
+   * @param notional
+   *          The notional of the loan
+   * @param rate
+   *          The loan rate.
+   * @param accrualFactor
+   *          The time (in years) between the start date and the end date in some day count convention.
+   * @param yieldCurveName
+   *          Name of yield curve used to price loan
    * @deprecated Use the constructor that does not take yield curve names.
    */
   @Deprecated
-  public Cash(final Currency currency, final double startTime, final double endTime, final double notional, final double rate, final double accrualFactor, final String yieldCurveName) {
+  public Cash(final Currency currency, final double startTime, final double endTime, final double notional, final double rate, final double accrualFactor,
+      final String yieldCurveName) {
     this(currency, startTime, endTime, notional, notional, rate, accrualFactor, yieldCurveName);
   }
 
   /**
    * Constructor of a cash deposit.
-   * @param currency The currency
-   * @param startTime Time when the notional amount is borrowed (could be 0, i.e. now)
-   * @param endTime Time from now (in years) when the loan matures (is repaid)
-   * @param notional The notional of the loan
-   * @param rate The loan rate.
-   * @param accrualFactor The time (in years) between the start date and the end date in some day count convention.
+   * 
+   * @param currency
+   *          The currency
+   * @param startTime
+   *          Time when the notional amount is borrowed (could be 0, i.e. now)
+   * @param endTime
+   *          Time from now (in years) when the loan matures (is repaid)
+   * @param notional
+   *          The notional of the loan
+   * @param rate
+   *          The loan rate.
+   * @param accrualFactor
+   *          The time (in years) between the start date and the end date in some day count convention.
    */
   public Cash(final Currency currency, final double startTime, final double endTime, final double notional, final double rate, final double accrualFactor) {
     this(currency, startTime, endTime, notional, notional, rate, accrualFactor);
@@ -86,24 +102,35 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * A cash loan
-   * @param currency The currency
-   * @param startTime Time when the notional amount is borrowed (could be 0, i.e. now)
-   * @param endTime Time from now (in years) when the loan matures (is repaid)
-   * @param notional The notional of the loan
-   * @param initialAmount The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
-   * @param rate The loan rate.
-   * @param accrualFactor The time (in years) between the start date and the end date in some day count convention.
-   * @param yieldCurveName Name of yield curve used to price loan
+   * 
+   * @param currency
+   *          The currency
+   * @param startTime
+   *          Time when the notional amount is borrowed (could be 0, i.e. now)
+   * @param endTime
+   *          Time from now (in years) when the loan matures (is repaid)
+   * @param notional
+   *          The notional of the loan
+   * @param initialAmount
+   *          The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
+   * @param rate
+   *          The loan rate.
+   * @param accrualFactor
+   *          The time (in years) between the start date and the end date in some day count convention.
+   * @param yieldCurveName
+   *          Name of yield curve used to price loan
    * @deprecated Use the constructor that does not take yield curve names.
    */
   @Deprecated
-  public Cash(final Currency currency, final double startTime, final double endTime, final double notional, final double initialAmount, final double rate, final double accrualFactor,
+  public Cash(final Currency currency, final double startTime, final double endTime, final double notional, final double initialAmount, final double rate,
+      final double accrualFactor,
       final String yieldCurveName) {
     ArgumentChecker.notNull(yieldCurveName, "yield curve name");
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.isTrue(startTime >= 0, "Start time should be positive or 0.");
-    ArgumentChecker.isTrue(accrualFactor >= 0, "Accrual factor should be positive or zero"); //REVIEW: Should the accrual factor be restricted to >0?
-    ArgumentChecker.isTrue(startTime <= endTime, "Start time must be less or equal to the end time"); //REVIEW: Should the time be restricted to startTime < endTime?
+    ArgumentChecker.isTrue(accrualFactor >= 0, "Accrual factor should be positive or zero"); // REVIEW: Should the accrual factor be restricted to >0?
+    ArgumentChecker.isTrue(startTime <= endTime, "Start time must be less or equal to the end time"); // REVIEW: Should the time be restricted to startTime <
+                                                                                                      // endTime?
     ArgumentChecker.isTrue(notional * initialAmount >= 0.0, "Notional and initial amount should have the same sign");
     _currency = currency;
     _endTime = endTime;
@@ -117,20 +144,30 @@ public class Cash implements InstrumentDerivative {
   }
 
   /**
-   * A cash loan
-   * @param currency The currency
-   * @param startTime Time when the notional amount is borrowed (could be 0, i.e. now)
-   * @param endTime Time from now (in years) when the loan matures (is repaid)
-   * @param notional The notional of the loan
-   * @param initialAmount The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
-   * @param rate The loan rate.
-   * @param accrualFactor The time (in years) between the start date and the end date in some day count convention.
+   * A cash loan.
+   * 
+   * @param currency
+   *          The currency
+   * @param startTime
+   *          Time when the notional amount is borrowed (could be 0, i.e. now)
+   * @param endTime
+   *          Time from now (in years) when the loan matures (is repaid)
+   * @param notional
+   *          The notional of the loan
+   * @param initialAmount
+   *          The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
+   * @param rate
+   *          The loan rate.
+   * @param accrualFactor
+   *          The time (in years) between the start date and the end date in some day count convention.
    */
-  public Cash(final Currency currency, final double startTime, final double endTime, final double notional, final double initialAmount, final double rate, final double accrualFactor) {
+  public Cash(final Currency currency, final double startTime, final double endTime, final double notional, final double initialAmount, final double rate,
+      final double accrualFactor) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.isTrue(startTime >= 0, "Start time should be positive or 0.");
     ArgumentChecker.isTrue(accrualFactor >= 0, "Accrual factor should be positive");
-    ArgumentChecker.isTrue(startTime <= endTime, "Start time must be less or equal to the end time"); //REVIEW: Should the time be restricted to startTime < endTime?
+    ArgumentChecker.isTrue(startTime <= endTime, "Start time must be less or equal to the end time"); // REVIEW: Should the time be restricted to startTime <
+                                                                                                      // endTime?
     ArgumentChecker.isTrue(notional * initialAmount >= 0.0, "Notional and initial amount should have the same sign");
     _currency = currency;
     _endTime = endTime;
@@ -181,6 +218,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * Gets the interest amount.
+   * 
    * @return The amount.
    */
   public double getInterestAmount() {
@@ -189,6 +227,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * Gets the initial amount.
+   * 
    * @return The amount.
    */
   public double getInitialAmount() {
@@ -209,7 +248,8 @@ public class Cash implements InstrumentDerivative {
 
   @Override
   public String toString() {
-    return "Cash " + _currency.toString() + "[" + _startTime + " - " + _endTime + "], r: " + _rate + ", notional: " + _notional + ", curve: " + _discountingCurveName;
+    return "Cash " + _currency.toString() + "[" + _startTime + " - " + _endTime + "], r: " + _rate + ", notional: " + _notional + ", curve: "
+        + _discountingCurveName;
   }
 
   @Override

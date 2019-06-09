@@ -33,7 +33,7 @@ public class ConstantSurfaceAdditiveShiftFunction implements SurfaceShiftFunctio
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
    *           in all cases
@@ -45,7 +45,7 @@ public class ConstantSurfaceAdditiveShiftFunction implements SurfaceShiftFunctio
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
    *           in all cases
@@ -57,7 +57,7 @@ public class ConstantSurfaceAdditiveShiftFunction implements SurfaceShiftFunctio
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
    *           in all cases
@@ -69,13 +69,14 @@ public class ConstantSurfaceAdditiveShiftFunction implements SurfaceShiftFunctio
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
    *           in all cases
    */
   @Override
-  public ConstantDoublesSurface evaluate(final ConstantDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift, final String newName) {
+  public ConstantDoublesSurface evaluate(final ConstantDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] shift,
+      final String newName) {
     throw new UnsupportedOperationException();
   }
 

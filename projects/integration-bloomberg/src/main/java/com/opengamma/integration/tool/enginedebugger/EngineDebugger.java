@@ -88,19 +88,21 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
   private List<LiveDataMetaDataProvider> _liveDataMetaDataProviders;
   private List<MarketDataSpecification> _marketDataSpecifications;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) {
     new EngineDebugger().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Initialize the contents of the frame.
+   * 
    * @wbp.parser.entryPoint
    */
   private void initialize() {
@@ -120,8 +122,8 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
     parametersPanel.add(viewSelectionPanel, Box.createHorizontalGlue());
 
     _valueRequirementField = new JTextField(DEFAULT_VALUE_REQUIREMENT);
-    //valueRequirementField.setMinimumSize(new Dimension(200, 24));
-    //valueRequirementField.setPreferredSize(new Dimension(700, 24));
+    // valueRequirementField.setMinimumSize(new Dimension(200, 24));
+    // valueRequirementField.setPreferredSize(new Dimension(700, 24));
     parametersPanel.add(_valueRequirementField, Box.createHorizontalGlue());
     _goButton = new JButton("Go");
     parametersPanel.add(_goButton, Box.createHorizontalGlue());
@@ -169,16 +171,14 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
       @Override
       public void actionPerformed(final ActionEvent e) {
         @SuppressWarnings("unchecked")
-        final
-        JComboBox<ViewEntry> cb = (JComboBox<ViewEntry>) e.getSource();
+        final JComboBox<ViewEntry> cb = (JComboBox<ViewEntry>) e.getSource();
         final ViewEntry viewEntry = (ViewEntry) cb.getSelectedItem();
         if (viewEntry != null) {
           SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
               @SuppressWarnings("unchecked")
-              final
-              ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) configSource.get(viewEntry.getUniqueId());
+              final ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) configSource.get(viewEntry.getUniqueId());
               if (configItem.getValue() != null) {
                 _portfolioTree.setModel(getPortfolioTreeModel(configItem.getValue().getPortfolioId(), getToolContext()));
               } else {
@@ -202,7 +202,8 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
     _marketDataButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        final MarketDataDialog marketDataDialog = new MarketDataDialog(_liveDataMetaDataProviders, getToolContext().getConfigMaster(), getToolContext().getMarketDataSnapshotMaster());
+        final MarketDataDialog marketDataDialog = new MarketDataDialog(_liveDataMetaDataProviders, getToolContext().getConfigMaster(),
+            getToolContext().getMarketDataSnapshotMaster());
         _marketDataSpecifications = marketDataDialog.showDialog();
       }
     });
@@ -263,7 +264,8 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
         final SwingWorker<ResolutionFailureTreeTableModel, Object> worker = new SwingWorker<ResolutionFailureTreeTableModel, Object>() {
           @Override
           protected ResolutionFailureTreeTableModel doInBackground() throws Exception {
-            final ResolutionFailureTreeTableModel failuresTreeTableModel = createResolutionFailureTreeTableModel(leafNode, _valueRequirementField.getText().trim());
+            final ResolutionFailureTreeTableModel failuresTreeTableModel = createResolutionFailureTreeTableModel(leafNode,
+                _valueRequirementField.getText().trim());
             return failuresTreeTableModel;
           }
 
@@ -301,6 +303,7 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
   private JTextField _valueRequirementField;
 
   private JTree _portfolioTree;
+
   @Override
   protected void doRun() throws Exception {
     initialize();

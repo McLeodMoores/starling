@@ -76,7 +76,8 @@ public class RemoteCompiledViewDefinitionWithGraphs implements CompiledViewDefin
 
   @Override
   public CompiledViewDefinitionWithGraphs withMarketDataManipulationSelections(final Map<String, DependencyGraph> newGraphsByConfig,
-      final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig, final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
+      final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig,
+      final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfig) {
     throw new UnsupportedOperationException("TODO: Implement this method over REST");
   }
 

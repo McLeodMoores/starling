@@ -14,8 +14,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a deposit where the rate is expressed in a specific composition convention.
- * Used mainly for curve construction with rates directly provided (not calibrated).
+ * Class describing a deposit where the rate is expressed in a specific composition convention. Used mainly for curve construction with rates directly provided
+ * (not calibrated).
  */
 public class DepositZero implements InstrumentDerivative {
 
@@ -58,19 +58,30 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Constructor from all details.
-   * @param currency The currency.
-   * @param startTime The start time.
-   * @param endTime The end time.
-   * @param initialAmount The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
-   * @param notional The notional.
-   * @param paymentAccrualFactor The accrual factor (or year fraction).
-   * @param rate The interest rate and its composition type.
-   * @param interestAmount  The interest amount to be paid at end date.
-   * @param discountingCurveName The discounting curve name.
+   * 
+   * @param currency
+   *          The currency.
+   * @param startTime
+   *          The start time.
+   * @param endTime
+   *          The end time.
+   * @param initialAmount
+   *          The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
+   * @param notional
+   *          The notional.
+   * @param paymentAccrualFactor
+   *          The accrual factor (or year fraction).
+   * @param rate
+   *          The interest rate and its composition type.
+   * @param interestAmount
+   *          The interest amount to be paid at end date.
+   * @param discountingCurveName
+   *          The discounting curve name.
    * @deprecated Use the constructor that does not take yield curve names.
    */
   @Deprecated
-  public DepositZero(final Currency currency, final double startTime, final double endTime, final double initialAmount, final double notional, final double paymentAccrualFactor,
+  public DepositZero(final Currency currency, final double startTime, final double endTime, final double initialAmount, final double notional,
+      final double paymentAccrualFactor,
       final InterestRate rate, final double interestAmount, final String discountingCurveName) {
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(rate, "Rate");
@@ -88,16 +99,26 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Constructor from all details.
-   * @param currency The currency.
-   * @param startTime The start time.
-   * @param endTime The end time.
-   * @param initialAmount The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
-   * @param notional The notional.
-   * @param paymentAccrualFactor The accrual factor (or year fraction).
-   * @param rate The interest rate and its composition type.
-   * @param interestAmount  The interest amount to be paid at end date.
+   * 
+   * @param currency
+   *          The currency.
+   * @param startTime
+   *          The start time.
+   * @param endTime
+   *          The end time.
+   * @param initialAmount
+   *          The initial amount. Usually is equal to the notional or 0 if the amount has been paid in the past. Should be of the same sign as notional.
+   * @param notional
+   *          The notional.
+   * @param paymentAccrualFactor
+   *          The accrual factor (or year fraction).
+   * @param rate
+   *          The interest rate and its composition type.
+   * @param interestAmount
+   *          The interest amount to be paid at end date.
    */
-  public DepositZero(final Currency currency, final double startTime, final double endTime, final double initialAmount, final double notional, final double paymentAccrualFactor,
+  public DepositZero(final Currency currency, final double startTime, final double endTime, final double initialAmount, final double notional,
+      final double paymentAccrualFactor,
       final InterestRate rate, final double interestAmount) {
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(rate, "Rate");
@@ -114,6 +135,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the deposit currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -122,6 +144,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the deposit start time.
+   * 
    * @return The time.
    */
   public double getStartTime() {
@@ -130,6 +153,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the deposit end time.
+   * 
    * @return The time.
    */
   public double getEndTime() {
@@ -138,6 +162,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the initial amount.
+   * 
    * @return The amount.
    */
   public double getInitialAmount() {
@@ -146,6 +171,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the deposit notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -154,6 +180,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the accrual factor (or year fraction).
+   * 
    * @return The factor.
    */
   public double getPaymentAccrualFactor() {
@@ -162,6 +189,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the rate (figure and composition rule).
+   * 
    * @return The rate.
    */
   public InterestRate getRate() {
@@ -170,6 +198,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the interest rate amount.
+   * 
    * @return The amount.
    */
   public double getInterestAmount() {
@@ -178,7 +207,7 @@ public class DepositZero implements InstrumentDerivative {
 
   /**
    * Gets the discounting curve name.
-   * 
+   *
    * @return The name.
    * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */

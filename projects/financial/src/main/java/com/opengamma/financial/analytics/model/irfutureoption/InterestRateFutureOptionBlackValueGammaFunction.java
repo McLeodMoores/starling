@@ -32,9 +32,9 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingValueGammaIRFutureOptionFunction;
 
 /**
- * Calculates the "ValueGamma" ({@link ValueRequirementNames#VALUE_GAMMA}) of an interest rate future option taking
- * the Black "Gamma" ({@link ValueRequirementNames#GAMMA}) as required input.
- * The underlying Futures price is computed from the futures curve.
+ * Calculates the "ValueGamma" ({@link ValueRequirementNames#VALUE_GAMMA}) of an interest rate future option taking the Black "Gamma"
+ * ({@link ValueRequirementNames#GAMMA}) as required input. The underlying Futures price is computed from the futures curve.
+ *
  * @deprecated Use {@link BlackDiscountingValueGammaIRFutureOptionFunction}
  */
 @Deprecated
@@ -42,16 +42,20 @@ public class InterestRateFutureOptionBlackValueGammaFunction extends InterestRat
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackValueGammaFunction.class);
   /** The margin transaction method */
-  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_TRANSANCTION_METHOD = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_TRANSANCTION_METHOD =
+      InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
   /** The margin security method */
-  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_SECURITY_METHOD = InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSurfaceMethod MARGINED_SECURITY_METHOD =
+      InterestRateFutureOptionMarginSecurityBlackSurfaceMethod.getInstance();
   /** The premium transaction method */
-  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_TRANSANCTION_METHOD = InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod PREMIUM_TRANSANCTION_METHOD =
+      InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod.getInstance();
   /** The premium security method */
-  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_SECURITY_METHOD = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod PREMIUM_SECURITY_METHOD =
+      InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_GAMMA}.
    */
   public InterestRateFutureOptionBlackValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA, true);
@@ -71,7 +75,8 @@ public class InterestRateFutureOptionBlackValueGammaFunction extends InterestRat
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final InstrumentDerivative derivative, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec, final Set<ValueRequirement> desiredValues) {
+  protected Set<ComputedValue> getResult(final InstrumentDerivative derivative, final YieldCurveWithBlackCubeBundle data, final ValueSpecification spec,
+      final Set<ValueRequirement> desiredValues) {
     // Get scaling and adjust properties to reflect
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Set<String> scaleValue = desiredValue.getConstraints().getValues(ValuePropertyNames.SCALE);

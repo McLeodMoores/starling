@@ -52,15 +52,18 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String dataField = desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
     final String resolutionKey = parseString(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY));
     final LocalDate startDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
-    final boolean includeStart = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
+    final boolean includeStart = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
     final LocalDate endDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY));
-    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
+    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
     final FXForwardCurveDefinition definition = (FXForwardCurveDefinition) inputs.getValue(ValueRequirementNames.FX_FORWARD_CURVE_DEFINITION);
     final FXForwardCurveSpecification specification = (FXForwardCurveSpecification) inputs.getValue(ValueRequirementNames.FX_FORWARD_CURVE_SPECIFICATION);
     final HistoricalTimeSeriesBundle bundle = new HistoricalTimeSeriesBundle();
@@ -68,7 +71,8 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
     final FXForwardCurveInstrumentProvider curveInstrumentProvider = specification.getCurveInstrumentProvider();
     for (final Tenor tenor : tenors) {
       final ExternalIdBundle id = ExternalIdBundle.of(curveInstrumentProvider.getInstrument(endDate, tenor));
-      final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
+      final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate,
+          includeEnd);
       if (timeSeries != null) {
         if (timeSeries.getTimeSeries().isEmpty()) {
           LOGGER.warn("Time series for {} is empty", id);
@@ -80,8 +84,8 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
       }
     }
     final ExternalIdBundle id = ExternalIdBundle.of(curveInstrumentProvider.getSpotInstrument());
-    final HistoricalTimeSeries timeSeries =
-        timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
+    final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate,
+        includeEnd);
     if (timeSeries != null) {
       if (timeSeries.getTimeSeries().isEmpty()) {
         LOGGER.warn("Time series for {} is empty", id);
@@ -104,14 +108,16 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),
         createValueProperties()
-        .withAny(ValuePropertyNames.CURVE)
-        .withAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
-        .withAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
-        .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
-        .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-        .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
-        .get()));
+            .withAny(ValuePropertyNames.CURVE)
+            .withAny(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY)
+            .withAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
+            .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
+            .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE,
+                HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+            .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
+            .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE,
+                HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+            .get()));
   }
 
   @Override
@@ -135,7 +141,7 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
-                 .with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
+          .with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
     if (values == null || values.isEmpty()) {

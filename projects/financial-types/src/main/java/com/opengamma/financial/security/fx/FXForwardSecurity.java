@@ -79,7 +79,8 @@ public class FXForwardSecurity extends FinancialSecurity {
     super(SECURITY_TYPE);
   }
 
-  public FXForwardSecurity(final Currency payCurrency, final double payAmount, final Currency receiveCurrency, final double receiveAmount, final ZonedDateTime forwardDate, final ExternalId region) {
+  public FXForwardSecurity(final Currency payCurrency, final double payAmount, final Currency receiveCurrency, final double receiveAmount,
+      final ZonedDateTime forwardDate, final ExternalId region) {
     super(SECURITY_TYPE);
     setPayCurrency(payCurrency);
     setPayAmount(payAmount);

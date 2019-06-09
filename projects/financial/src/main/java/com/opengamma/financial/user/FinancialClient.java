@@ -55,8 +55,10 @@ public class FinancialClient {
   /**
    * Creates an instance.
    *
-   * @param manager  the manager, not null
-   * @param clientName  the client name, not null
+   * @param manager
+   *          the manager, not null
+   * @param clientName
+   *          the client name, not null
    */
   public FinancialClient(final FinancialClientManager manager, final String clientName) {
     ArgumentChecker.notNull(manager, "manager");
@@ -69,11 +71,12 @@ public class FinancialClient {
     _positionMaster = new FinancialUserPositionMaster(this, services.getPositionMaster());
     _securityMaster = new FinancialUserSecurityMaster(this, services.getSecurityMaster());
     _configMaster = new FinancialUserConfigMaster(this, services.getConfigMaster());
-    _interpolatedYieldCurveDefinitionMaster = new FinancialUserInterpolatedYieldCurveDefinitionMaster(this, services.getInterpolatedYieldCurveDefinitionMaster());
+    _interpolatedYieldCurveDefinitionMaster = new FinancialUserInterpolatedYieldCurveDefinitionMaster(this,
+        services.getInterpolatedYieldCurveDefinitionMaster());
     _snapshotMaster = new FinancialUserSnapshotMaster(this, services.getSnapshotMaster());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the instant the client was last accessed.
    *
@@ -90,7 +93,7 @@ public class FinancialClient {
     _lastAccessed = Instant.now();
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * Gets the user name.
    *
@@ -118,7 +121,7 @@ public class FinancialClient {
     return _manager.getUserDataTracker();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the portfolio master.
    *
@@ -179,7 +182,7 @@ public class FinancialClient {
     return _snapshotMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return getClass().getSimpleName() + "[" + getUserName() + "/" + getClientName() + "]";

@@ -19,8 +19,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
 
 /**
- * Wraps another {@link AnalyticsView} and protects it from concurrent access. The methods that can mutate the state of
- * the underlying view are locked with a write lock, the getters are locked with a read lock.
+ * Wraps another {@link AnalyticsView} and protects it from concurrent access. The methods that can mutate the state of the underlying view are locked with a
+ * write lock, the getters are locked with a read lock.
+ * 
  * @see com.opengamma.web.analytics Package concurrency notes
  */
 /* package */ class LockingAnalyticsView implements AnalyticsView {
@@ -29,7 +30,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   private final ReadWriteLock _lock = new ReentrantReadWriteLock();
 
   /**
-   * @param delegate The delegate view (presumably not a thread safe implementation)
+   * @param delegate
+   *          The delegate view (presumably not a thread safe implementation)
    */
   /* package */ LockingAnalyticsView(final AnalyticsView delegate) {
     ArgumentChecker.notNull(delegate, "delegate");
@@ -87,7 +89,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public boolean createViewport(final int requestId, final GridType gridType, final int viewportId, final String callbackId, final String structureCallbackId, final ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId, final GridType gridType, final int viewportId, final String callbackId, final String structureCallbackId,
+      final ViewportDefinition viewportDefinition) {
     try {
       _lock.writeLock().lock();
       return _delegate.createViewport(requestId, gridType, viewportId, callbackId, structureCallbackId, viewportDefinition);
@@ -138,11 +141,11 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
 
   @Override
   public void openDependencyGraph(final int requestId,
-                                  final GridType gridType,
-                                  final int graphId,
-                                  final String callbackId,
-                                  final String calcConfigName,
-                                  final ValueRequirement valueRequirement) {
+      final GridType gridType,
+      final int graphId,
+      final String callbackId,
+      final String calcConfigName,
+      final ValueRequirement valueRequirement) {
     try {
       _lock.writeLock().lock();
       _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, calcConfigName, valueRequirement);
@@ -182,7 +185,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public boolean createViewport(final int requestId, final GridType gridType, final int graphId, final int viewportId, final String callbackId, final String structureCallbackId, final ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId, final GridType gridType, final int graphId, final int viewportId, final String callbackId,
+      final String structureCallbackId, final ViewportDefinition viewportDefinition) {
     try {
       _lock.writeLock().lock();
       return _delegate.createViewport(requestId, gridType, graphId, viewportId, callbackId, structureCallbackId, viewportDefinition);

@@ -83,7 +83,8 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
   }
 
   @Override
-  protected ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
+  protected ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
       final String forwardCurveCalculationMethod, final String forwardCurveName) {
     return createValueProperties()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)
@@ -108,7 +109,8 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
   }
 
   @Override
-  protected SmileSurfaceDataBundle getData(final FunctionInputs inputs, final ValueRequirement volDataRequirement, final ValueRequirement forwardCurveRequirement) {
+  protected SmileSurfaceDataBundle getData(final FunctionInputs inputs, final ValueRequirement volDataRequirement,
+      final ValueRequirement forwardCurveRequirement) {
     final Object volatilitySurfaceObject = inputs.getValue(volDataRequirement);
     if (volatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + volDataRequirement);
@@ -119,7 +121,8 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
     }
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
     @SuppressWarnings("unchecked")
-    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface = (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
+    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface =
+    (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
     final Tenor[] tenors = fxVolatilitySurface.getXs();
     Arrays.sort(tenors);
     final Pair<Number, FXVolQuoteType>[] quotes = fxVolatilitySurface.getYs();
@@ -161,7 +164,7 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
         strangle[i] = strangleList.toDoubleArray();
       }
     }
-    final boolean isCallData = true; //TODO this shouldn't be hard-coded
+    final boolean isCallData = true; // TODO this shouldn't be hard-coded
     return new ForexSmileDeltaSurfaceDataBundle(forwardCurve, expiries, deltas, atms, riskReversals, strangle, isCallData);
   }
 

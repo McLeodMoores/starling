@@ -48,9 +48,9 @@ public class ISDACDXAsSingleNameParSpreadFunction extends ISDACDXAsSingleNameFun
 
   @Override
   protected Set<ComputedValue> getComputedValue(final CreditDefaultSwapDefinition definition, final ISDACompliantYieldCurve yieldCurve,
-                                                final ZonedDateTime[] times, final double[] marketSpreads, final ZonedDateTime valuationDate,
-                                                final ComputationTarget target, final ValueProperties properties, final FunctionInputs inputs,
-                                                final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
+      final ZonedDateTime[] times, final double[] marketSpreads, final ZonedDateTime valuationDate,
+      final ComputationTarget target, final ValueProperties properties, final FunctionInputs inputs,
+      final ISDACompliantCreditCurve hazardCurve, final CDSAnalytic analytic, final Tenor[] tenors) {
     final double parSpread = StandardVanillaParSpreadCDSFunction.getParSpread(yieldCurve, hazardCurve, analytic);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PAR_SPREAD, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, parSpread));
@@ -67,7 +67,7 @@ public class ISDACDXAsSingleNameParSpreadFunction extends ISDACDXAsSingleNameFun
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String spreadCurveName = "CDS_INDEX_" + security.accept(new CreditSecurityToIdentifierVisitor(
         OpenGammaCompilationContext.getSecuritySource(context))).getUniqueId().getValue();
-    //TODO shouldn't need all of the yield curve properties
+    // TODO shouldn't need all of the yield curve properties
     final String yieldCurveName = desiredValue.getConstraint(PROPERTY_YIELD_CURVE);
     final String yieldCurveCalculationConfig = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_CONFIG);
     final String yieldCurveCalculationMethod = desiredValue.getConstraint(PROPERTY_YIELD_CURVE_CALCULATION_METHOD);
@@ -82,7 +82,8 @@ public class ISDACDXAsSingleNameParSpreadFunction extends ISDACDXAsSingleNameFun
       final Set<String> creditSpreadCurveShiftTypes = constraints.getValues(PROPERTY_SPREAD_CURVE_SHIFT_TYPE);
       hazardRateCurveProperties.with(PROPERTY_SPREAD_CURVE_SHIFT, creditSpreadCurveShifts).with(PROPERTY_SPREAD_CURVE_SHIFT_TYPE, creditSpreadCurveShiftTypes);
     }
-    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(), hazardRateCurveProperties.get());
+    final ValueRequirement hazardRateCurveRequirement = new ValueRequirement(ValueRequirementNames.HAZARD_RATE_CURVE, target.toSpecification(),
+        hazardRateCurveProperties.get());
     requirements.add(hazardRateCurveRequirement);
     return requirements;
   }

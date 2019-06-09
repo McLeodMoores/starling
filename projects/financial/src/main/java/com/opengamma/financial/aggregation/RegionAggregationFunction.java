@@ -59,16 +59,17 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
   private final ExchangeSource _exchangeSource;
   private final Comparator<Position> _comparator = new SimplePositionComparator();
 
-
   public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource) {
     this(secSource, regionSource, exchangeSource, false);
   }
 
-  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource, final boolean useAttributes) {
+  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource,
+      final boolean useAttributes) {
     this(secSource, regionSource, exchangeSource, useAttributes, true);
   }
 
-  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource, final boolean useAttributes, final boolean includeEmptyCategories) {
+  public RegionAggregationFunction(final SecuritySource secSource, final RegionSource regionSource, final ExchangeSource exchangeSource,
+      final boolean useAttributes, final boolean includeEmptyCategories) {
     _secSource = secSource;
     _regionSource = regionSource;
     _exchangeSource = exchangeSource;
@@ -162,8 +163,6 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
   public String getName() {
     return NAME;
   }
-
-
 
   @Override
   public Collection<String> getRequiredEntries() {

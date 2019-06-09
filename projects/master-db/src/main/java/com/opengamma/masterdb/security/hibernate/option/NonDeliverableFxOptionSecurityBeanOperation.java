@@ -24,7 +24,8 @@ import com.opengamma.util.time.Expiry;
 /**
  * NonDeliverableFXOptionSecurityBeanOperation
  */
-public final class NonDeliverableFxOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<NonDeliverableFXOptionSecurity, NonDeliverableFXOptionSecurityBean> {
+public final class NonDeliverableFxOptionSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<NonDeliverableFXOptionSecurity, NonDeliverableFXOptionSecurityBean> {
 
   /**
    * Singleton
@@ -36,7 +37,8 @@ public final class NonDeliverableFxOptionSecurityBeanOperation extends AbstractS
   }
 
   @Override
-  public NonDeliverableFXOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final NonDeliverableFXOptionSecurity security) {
+  public NonDeliverableFXOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final NonDeliverableFXOptionSecurity security) {
     final NonDeliverableFXOptionSecurityBean bean = new NonDeliverableFXOptionSecurityBean();
     bean.setCallAmount(security.getCallAmount());
     bean.setPutAmount(security.getPutAmount());
@@ -58,9 +60,8 @@ public final class NonDeliverableFxOptionSecurityBeanOperation extends AbstractS
     final Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
     final ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
     final boolean isDeliveryInCallCurrency = bean.getIsDeliveryInCallCurrency();
-    final NonDeliverableFXOptionSecurity sec =
-      new NonDeliverableFXOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), expiry,
-          settlementDate, bean.getIsLong(), exerciseType, isDeliveryInCallCurrency);
+    final NonDeliverableFXOptionSecurity sec = new NonDeliverableFXOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), expiry,
+        settlementDate, bean.getIsLong(), exerciseType, isDeliveryInCallCurrency);
     return sec;
   }
 

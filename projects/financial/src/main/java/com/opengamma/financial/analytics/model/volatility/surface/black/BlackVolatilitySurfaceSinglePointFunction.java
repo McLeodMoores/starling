@@ -51,7 +51,8 @@ import com.opengamma.util.time.ExpiryAccuracy;
 public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     // The Security itself is the ComputationTarget. From it, we get strike and expiry information to compute implied volatility
     // The types we're concerned about: EquityOptionSecurity, EquityIndexOptionSecurity, EquityIndexFutureOptionSecurity
@@ -140,7 +141,8 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
       return null;
     }
     final ValueRequirement forwardCurveRequirement = getForwardCurveRequirement(target, desiredValue);
-    final ValueRequirement optionPriceRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId());
+    final ValueRequirement optionPriceRequirement = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY,
+        target.getSecurity().getUniqueId());
     return Sets.newHashSet(forwardCurveRequirement, optionPriceRequirement);
   }
 

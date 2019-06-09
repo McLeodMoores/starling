@@ -20,13 +20,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * An implementation of ConventionBundle for use by the
- * InMemoryConventionBundleMaster. Note it is NOT immutable, because the master
- * needs to be able to assign UniqueIds to it retrospectively, and to be able to
- * update the bundle.
- * 
- * @deprecated Use individual implementations of
- *             {@link com.opengamma.core.convention.Convention}.
+ * An implementation of ConventionBundle for use by the InMemoryConventionBundleMaster. Note it is NOT immutable, because the master needs to be able to assign
+ * UniqueIds to it retrospectively, and to be able to update the bundle.
+ *
+ * @deprecated Use individual implementations of {@link com.opengamma.core.convention.Convention}.
  */
 @Deprecated
 public class ConventionBundleImpl implements ConventionBundle {
@@ -57,7 +54,7 @@ public class ConventionBundleImpl implements ConventionBundle {
   private Double _yearFraction;
   private Integer _publicationLag;
 
-  //Equity models
+  // Equity models
   private ExternalIdBundle _capmRiskFreeRate;
   private ExternalIdBundle _capmMarket;
 
@@ -87,22 +84,30 @@ public class ConventionBundleImpl implements ConventionBundle {
   private int _longSettlementDays;
   private Tenor _cutoffTenor;
 
-  //swaptions
+  // swaptions
   private boolean _isCashSettled;
 
-  //option expiries on exchanges
+  // option expiries on exchanges
   private String _optionExpiryCalculator;
 
   /**
    * Constructor to create a convention bundle for cash/general types
-   * @param initialBundle the bundle of ids associated with the type
-   * @param name the descriptive name of the type
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param frequency the frequency
-   * @param settlementDays the number of days to settle
+   * 
+   * @param initialBundle
+   *          the bundle of ids associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param frequency
+   *          the frequency
+   * @param settlementDays
+   *          the number of days to settle
    */
-  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention,
       final Frequency frequency, final int settlementDays) {
     _bundle = initialBundle;
     _name = name;
@@ -114,13 +119,20 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for generic cash (no frequency applicable)
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param settlementDays the number of days to settle
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param settlementDays
+   *          the number of days to settle
    */
-  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention,
       final int settlementDays) {
     _bundle = initialBundle;
     _name = name;
@@ -131,15 +143,24 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for cash/general (includes a period and region)
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param period the period
-   * @param settlementDays the number of days to settle
-   * @param region the ExternalId of the region associated with this type
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param period
+   *          the period
+   * @param settlementDays
+   *          the number of days to settle
+   * @param region
+   *          the ExternalId of the region associated with this type
    */
-  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention,
       final Period period, final int settlementDays, final ExternalId region) {
     _bundle = initialBundle;
     _name = name;
@@ -152,16 +173,26 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for cash/general where EOM is indicated
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param period the period
-   * @param settlementDays the number of days to settle
-   * @param isEOM whether the End-of-month convention is used in schedule generation
-   * @param region the ExternalId of the region associated with this type
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param period
+   *          the period
+   * @param settlementDays
+   *          the number of days to settle
+   * @param isEOM
+   *          whether the End-of-month convention is used in schedule generation
+   * @param region
+   *          the ExternalId of the region associated with this type
    */
-  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention,
       final Period period, final int settlementDays, final boolean isEOM, final ExternalId region) {
     _bundle = initialBundle;
     _name = name;
@@ -175,14 +206,22 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for *IBOR indices (e.g. floating reference rate for swaps)
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param settlementDays the number of days to settle
-   * @param isEOMConvention whether the End-of-month convention is used in schedule generation
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param settlementDays
+   *          the number of days to settle
+   * @param isEOMConvention
+   *          whether the End-of-month convention is used in schedule generation
    */
-  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention,
       final int settlementDays, final boolean isEOMConvention) {
     _bundle = initialBundle;
     _name = name;
@@ -194,15 +233,25 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for *IBOR indices (e.g. floating reference rate for swaps)
-   * @param bundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param period the tenor of the index (e.g. 3M)
-   * @param settlementDays the number of days to settle
-   * @param isEOM whether the End-of-month convention is used in schedule generation
-   * @param region the ExternalId of the region associated with this type
-   * @param publicationLag the lag in publication from start of the period to publication of the index (e.g. USD = 1, most 0)
+   * 
+   * @param bundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param period
+   *          the tenor of the index (e.g. 3M)
+   * @param settlementDays
+   *          the number of days to settle
+   * @param isEOM
+   *          whether the End-of-month convention is used in schedule generation
+   * @param region
+   *          the ExternalId of the region associated with this type
+   * @param publicationLag
+   *          the lag in publication from start of the period to publication of the index (e.g. USD = 1, most 0)
    */
   public ConventionBundleImpl(final ExternalIdBundle bundle, final String name, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
       final Period period, final int settlementDays, final boolean isEOM, final ExternalId region, final Integer publicationLag) {
@@ -219,15 +268,24 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for futures
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param frequency the frequency
-   * @param settlementDays the number of days to settle
-   * @param yearFraction the year fraction
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param frequency
+   *          the frequency
+   * @param settlementDays
+   *          the number of days to settle
+   * @param yearFraction
+   *          the year fraction
    */
-  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+  public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention,
       final Frequency frequency, final int settlementDays, final double yearFraction) {
     _bundle = initialBundle;
     _name = name;
@@ -240,19 +298,33 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Swaps and FRA without end-of-month (EOM) convention flag
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param swapFixedLegDayCount the day count convention of the fixed leg
-   * @param swapFixedLegBusinessDayConvention the business day convention of the fixed leg
-   * @param swapFixedLegFrequency the frequency of the fixed leg
-   * @param swapFixedLegSettlementDays the number of days to settle on the fixed leg
-   * @param swapFixedLegRegion the ExternalId referencing the region associated with the fixed leg
-   * @param swapFloatingLegDayCount the day count convention associated with the floating leg
-   * @param swapFloatingLegBusinessDayConvention the business day convention associated with the floating leg
-   * @param swapFloatingLegFrequency the frequency associated with the floating leg
-   * @param swapFloatingLegSettlementDays the number of days to settle on the floating leg
-   * @param swapFloatingLegInitialRate the initial rate of the floating leg
-   * @param swapFloatingLegRegion the ExternalId referencing the region associated with the floating leg
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param swapFixedLegDayCount
+   *          the day count convention of the fixed leg
+   * @param swapFixedLegBusinessDayConvention
+   *          the business day convention of the fixed leg
+   * @param swapFixedLegFrequency
+   *          the frequency of the fixed leg
+   * @param swapFixedLegSettlementDays
+   *          the number of days to settle on the fixed leg
+   * @param swapFixedLegRegion
+   *          the ExternalId referencing the region associated with the fixed leg
+   * @param swapFloatingLegDayCount
+   *          the day count convention associated with the floating leg
+   * @param swapFloatingLegBusinessDayConvention
+   *          the business day convention associated with the floating leg
+   * @param swapFloatingLegFrequency
+   *          the frequency associated with the floating leg
+   * @param swapFloatingLegSettlementDays
+   *          the number of days to settle on the floating leg
+   * @param swapFloatingLegInitialRate
+   *          the initial rate of the floating leg
+   * @param swapFloatingLegRegion
+   *          the ExternalId referencing the region associated with the floating leg
    */
   public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount swapFixedLegDayCount,
       final BusinessDayConvention swapFixedLegBusinessDayConvention, final Frequency swapFixedLegFrequency, final Integer swapFixedLegSettlementDays,
@@ -280,20 +352,35 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Swaps and FRA with end-of-month (EOM) convention flag
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param swapFixedLegDayCount the day count convention of the fixed leg
-   * @param swapFixedLegBusinessDayConvention the business day convention of the fixed leg
-   * @param swapFixedLegFrequency the frequency of the fixed leg
-   * @param swapFixedLegSettlementDays the number of days to settle on the fixed leg
-   * @param swapFixedLegRegion the ExternalId referencing the region associated with the fixed leg
-   * @param swapFloatingLegDayCount the day count convention associated with the floating leg
-   * @param swapFloatingLegBusinessDayConvention the business day convention associated with the floating leg
-   * @param swapFloatingLegFrequency the frequency associated with the floating leg
-   * @param swapFloatingLegSettlementDays the number of days to settle on the floating leg
-   * @param swapFloatingLegInitialRate the initial rate of the floating leg
-   * @param swapFloatingLegRegion the ExternalId referencing the region associated with the floating leg
-   * @param isEOM whether the swap or FRA should follow the end-of-month convention when calculating schedules
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param swapFixedLegDayCount
+   *          the day count convention of the fixed leg
+   * @param swapFixedLegBusinessDayConvention
+   *          the business day convention of the fixed leg
+   * @param swapFixedLegFrequency
+   *          the frequency of the fixed leg
+   * @param swapFixedLegSettlementDays
+   *          the number of days to settle on the fixed leg
+   * @param swapFixedLegRegion
+   *          the ExternalId referencing the region associated with the fixed leg
+   * @param swapFloatingLegDayCount
+   *          the day count convention associated with the floating leg
+   * @param swapFloatingLegBusinessDayConvention
+   *          the business day convention associated with the floating leg
+   * @param swapFloatingLegFrequency
+   *          the frequency associated with the floating leg
+   * @param swapFloatingLegSettlementDays
+   *          the number of days to settle on the floating leg
+   * @param swapFloatingLegInitialRate
+   *          the initial rate of the floating leg
+   * @param swapFloatingLegRegion
+   *          the ExternalId referencing the region associated with the floating leg
+   * @param isEOM
+   *          whether the swap or FRA should follow the end-of-month convention when calculating schedules
    */
   public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount swapFixedLegDayCount,
       final BusinessDayConvention swapFixedLegBusinessDayConvention, final Frequency swapFixedLegFrequency, final Integer swapFixedLegSettlementDays,
@@ -321,24 +408,39 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Swap Indices with end-of-month (EOM) convention flag and swap tenor.
-   * The payment frequency and compounding frequency of both legs is assumed to be the same, and the compounding
-   * type of both legs is assumed to be continuous.
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param swapFixedLegDayCount the day count convention of the fixed leg
-   * @param swapFixedLegBusinessDayConvention the business day convention of the fixed leg
-   * @param swapFixedLegFrequency the frequency of the fixed leg
-   * @param swapFixedLegSettlementDays the number of days to settle on the fixed leg
-   * @param swapFixedLegRegion the ExternalId referencing the region associated with the fixed leg
-   * @param swapFloatingLegDayCount the day count convention associated with the floating leg
-   * @param swapFloatingLegBusinessDayConvention the business day convention associated with the floating leg
-   * @param swapFloatingLegFrequency the frequency associated with the floating leg
-   * @param swapFloatingLegSettlementDays the number of days to settle on the floating leg
-   * @param swapFloatingLegInitialRate the initial rate of the floating leg
-   * @param swapFloatingLegRegion the ExternalId referencing the region associated with the floating leg
-   * @param isEOM whether the swap or FRA should follow the end-of-month convention when calculating schedules
-   * @param swapTenor the period of the swap (tenor)
+   * Constructor to create a convention bundle for Swap Indices with end-of-month (EOM) convention flag and swap tenor. The payment frequency and compounding
+   * frequency of both legs is assumed to be the same, and the compounding type of both legs is assumed to be continuous.
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param swapFixedLegDayCount
+   *          the day count convention of the fixed leg
+   * @param swapFixedLegBusinessDayConvention
+   *          the business day convention of the fixed leg
+   * @param swapFixedLegFrequency
+   *          the frequency of the fixed leg
+   * @param swapFixedLegSettlementDays
+   *          the number of days to settle on the fixed leg
+   * @param swapFixedLegRegion
+   *          the ExternalId referencing the region associated with the fixed leg
+   * @param swapFloatingLegDayCount
+   *          the day count convention associated with the floating leg
+   * @param swapFloatingLegBusinessDayConvention
+   *          the business day convention associated with the floating leg
+   * @param swapFloatingLegFrequency
+   *          the frequency associated with the floating leg
+   * @param swapFloatingLegSettlementDays
+   *          the number of days to settle on the floating leg
+   * @param swapFloatingLegInitialRate
+   *          the initial rate of the floating leg
+   * @param swapFloatingLegRegion
+   *          the ExternalId referencing the region associated with the floating leg
+   * @param isEOM
+   *          whether the swap or FRA should follow the end-of-month convention when calculating schedules
+   * @param swapTenor
+   *          the period of the swap (tenor)
    */
   public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount swapFixedLegDayCount,
       final BusinessDayConvention swapFixedLegBusinessDayConvention, final Frequency swapFixedLegFrequency, final Integer swapFixedLegSettlementDays,
@@ -367,26 +469,45 @@ public class ConventionBundleImpl implements ConventionBundle {
   }
 
   /**
-   * Constructor to create a convention bundle for Swap Indices with end-of-month (EOM) convention flag
-   * and the compounding frequency and type of the fixed and float legs.
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param swapFixedLegDayCount the day count convention of the fixed leg
-   * @param swapFixedLegBusinessDayConvention the business day convention of the fixed leg
-   * @param swapFixedLegPaymentFrequency the payment frequency of the fixed leg
-   * @param swapFixedLegSettlementDays the number of days to settle on the fixed leg
-   * @param swapFixedLegRegion the ExternalId referencing the region associated with the fixed leg
-   * @param swapFixedLegCompoundingFrequency the compounding frequency of the fixed leg
-   * @param swapFixedLegCompoundingType the compounding type of the fixed leg
-   * @param swapFloatingLegDayCount the day count convention associated with the floating leg
-   * @param swapFloatingLegBusinessDayConvention the business day convention associated with the floating leg
-   * @param swapFloatingLegPaymentFrequency the payment frequency associated with the floating leg
-   * @param swapFloatingLegSettlementDays the number of days to settle on the floating leg
-   * @param swapFloatingLegInitialRate the initial rate of the floating leg
-   * @param swapFloatingLegRegion the ExternalId referencing the region associated with the floating leg
-   * @param swapFloatingLegCompoundingFrequency the compounding frequency of the floating leg
-   * @param swapFloatingLegCompoundingType the compounding type of the floating leg
-   * @param isEOM whether the swap or FRA should follow the end-of-month convention when calculating schedules
+   * Constructor to create a convention bundle for Swap Indices with end-of-month (EOM) convention flag and the compounding frequency and type of the fixed and
+   * float legs.
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param swapFixedLegDayCount
+   *          the day count convention of the fixed leg
+   * @param swapFixedLegBusinessDayConvention
+   *          the business day convention of the fixed leg
+   * @param swapFixedLegPaymentFrequency
+   *          the payment frequency of the fixed leg
+   * @param swapFixedLegSettlementDays
+   *          the number of days to settle on the fixed leg
+   * @param swapFixedLegRegion
+   *          the ExternalId referencing the region associated with the fixed leg
+   * @param swapFixedLegCompoundingFrequency
+   *          the compounding frequency of the fixed leg
+   * @param swapFixedLegCompoundingType
+   *          the compounding type of the fixed leg
+   * @param swapFloatingLegDayCount
+   *          the day count convention associated with the floating leg
+   * @param swapFloatingLegBusinessDayConvention
+   *          the business day convention associated with the floating leg
+   * @param swapFloatingLegPaymentFrequency
+   *          the payment frequency associated with the floating leg
+   * @param swapFloatingLegSettlementDays
+   *          the number of days to settle on the floating leg
+   * @param swapFloatingLegInitialRate
+   *          the initial rate of the floating leg
+   * @param swapFloatingLegRegion
+   *          the ExternalId referencing the region associated with the floating leg
+   * @param swapFloatingLegCompoundingFrequency
+   *          the compounding frequency of the floating leg
+   * @param swapFloatingLegCompoundingType
+   *          the compounding type of the floating leg
+   * @param isEOM
+   *          whether the swap or FRA should follow the end-of-month convention when calculating schedules
    */
   public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount swapFixedLegDayCount,
       final BusinessDayConvention swapFixedLegBusinessDayConvention, final Frequency swapFixedLegPaymentFrequency, final Integer swapFixedLegSettlementDays,
@@ -420,21 +541,37 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for OIS Swaps with end-of-month (EOM) convention flag and publication lag
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param swapFixedLegDayCount the day count convention of the fixed leg
-   * @param swapFixedLegBusinessDayConvention the business day convention of the fixed leg
-   * @param swapFixedLegFrequency the frequency of the fixed leg
-   * @param swapFixedLegSettlementDays the number of days to settle on the fixed leg
-   * @param swapFixedLegRegion the ExternalId referencing the region associated with the fixed leg
-   * @param swapFloatingLegDayCount the day count convention associated with the floating leg
-   * @param swapFloatingLegBusinessDayConvention the business day convention associated with the floating leg
-   * @param swapFloatingLegFrequency the frequency associated with the floating leg
-   * @param swapFloatingLegSettlementDays the number of days to settle on the floating leg
-   * @param swapFloatingLegInitialRate the initial rate of the floating leg
-   * @param swapFloatingLegRegion the ExternalId referencing the region associated with the floating leg
-   * @param isEOM whether the swap or FRA should follow the end-of-month convention when calculating schedules
-   * @param publicationLag the lag in publication from start of the period to publication of the index (e.g. USD = 1, most 0)
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param swapFixedLegDayCount
+   *          the day count convention of the fixed leg
+   * @param swapFixedLegBusinessDayConvention
+   *          the business day convention of the fixed leg
+   * @param swapFixedLegFrequency
+   *          the frequency of the fixed leg
+   * @param swapFixedLegSettlementDays
+   *          the number of days to settle on the fixed leg
+   * @param swapFixedLegRegion
+   *          the ExternalId referencing the region associated with the fixed leg
+   * @param swapFloatingLegDayCount
+   *          the day count convention associated with the floating leg
+   * @param swapFloatingLegBusinessDayConvention
+   *          the business day convention associated with the floating leg
+   * @param swapFloatingLegFrequency
+   *          the frequency associated with the floating leg
+   * @param swapFloatingLegSettlementDays
+   *          the number of days to settle on the floating leg
+   * @param swapFloatingLegInitialRate
+   *          the initial rate of the floating leg
+   * @param swapFloatingLegRegion
+   *          the ExternalId referencing the region associated with the floating leg
+   * @param isEOM
+   *          whether the swap or FRA should follow the end-of-month convention when calculating schedules
+   * @param publicationLag
+   *          the lag in publication from start of the period to publication of the index (e.g. USD = 1, most 0)
    */
   public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount swapFixedLegDayCount,
       final BusinessDayConvention swapFixedLegBusinessDayConvention, final Frequency swapFixedLegFrequency, final Integer swapFixedLegSettlementDays,
@@ -464,20 +601,35 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Basis Swaps
-   * @param initialBundle the bundle of ExternalIds associated with the type
-   * @param name the descriptive name of the type
-   * @param basisSwapPayFloatingLegDayCount the day count convention of the pay floating leg
-   * @param basisSwapPayFloatingLegBusinessDayConvention the business day convention of the pay floating leg
-   * @param basisSwapPayFloatingLegFrequency the frequency of the pay floating leg
-   * @param basisSwapPayFloatingLegSettlementDays the number of days to settle on the pay floating leg
-   * @param basisSwapPayFloatingLegInitialRate the initial rate of the pay floating leg
-   * @param basisSwapPayFloatingLegRegion the ExternalId referencing the region associated with the pay floating leg
-   * @param basisSwapReceiveFloatingLegDayCount the day count convention associated with the receive floating leg
-   * @param basisSwapReceiveFloatingLegBusinessDayConvention the business day convention associated with the receive floating leg
-   * @param basisSwapReceiveFloatingLegFrequency the frequency associated with the receive floating leg
-   * @param basisSwapReceiveFloatingLegSettlementDays the number of days to settle on the receive floating leg
-   * @param basisSwapReceiveFloatingLegInitialRate the initial rate of the receive floating leg
-   * @param basisSwapReceiveFloatingLegRegion the ExternalId referencing the region associated with the receive floating leg
+   * 
+   * @param initialBundle
+   *          the bundle of ExternalIds associated with the type
+   * @param name
+   *          the descriptive name of the type
+   * @param basisSwapPayFloatingLegDayCount
+   *          the day count convention of the pay floating leg
+   * @param basisSwapPayFloatingLegBusinessDayConvention
+   *          the business day convention of the pay floating leg
+   * @param basisSwapPayFloatingLegFrequency
+   *          the frequency of the pay floating leg
+   * @param basisSwapPayFloatingLegSettlementDays
+   *          the number of days to settle on the pay floating leg
+   * @param basisSwapPayFloatingLegInitialRate
+   *          the initial rate of the pay floating leg
+   * @param basisSwapPayFloatingLegRegion
+   *          the ExternalId referencing the region associated with the pay floating leg
+   * @param basisSwapReceiveFloatingLegDayCount
+   *          the day count convention associated with the receive floating leg
+   * @param basisSwapReceiveFloatingLegBusinessDayConvention
+   *          the business day convention associated with the receive floating leg
+   * @param basisSwapReceiveFloatingLegFrequency
+   *          the frequency associated with the receive floating leg
+   * @param basisSwapReceiveFloatingLegSettlementDays
+   *          the number of days to settle on the receive floating leg
+   * @param basisSwapReceiveFloatingLegInitialRate
+   *          the initial rate of the receive floating leg
+   * @param basisSwapReceiveFloatingLegRegion
+   *          the ExternalId referencing the region associated with the receive floating leg
    */
   public ConventionBundleImpl(final ExternalIdBundle initialBundle, final String name, final DayCount basisSwapPayFloatingLegDayCount,
       final BusinessDayConvention basisSwapPayFloatingLegBusinessDayConvention, final Frequency basisSwapPayFloatingLegFrequency,
@@ -507,9 +659,13 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Equity CAPM
-   * @param name the descriptive name of the type
-   * @param capmRiskFreeRate the CAPM risk free rate
-   * @param capmMarket the CAPM market
+   * 
+   * @param name
+   *          the descriptive name of the type
+   * @param capmRiskFreeRate
+   *          the CAPM risk free rate
+   * @param capmMarket
+   *          the CAPM market
    */
   public ConventionBundleImpl(final String name, final ExternalIdBundle capmRiskFreeRate, final ExternalIdBundle capmMarket) {
     ArgumentChecker.notNull(name, "name");
@@ -522,12 +678,19 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Bonds
-   * @param name the descriptive name of the type
-   * @param isEOMConvention whether the end-of-month convention should be followed when calculating date schedules
-   * @param calculateScheduleFromMaturity whether to calculate the schedule from the maturity
-   * @param exDividendDays the number of ex dividend days
-   * @param settlementDays the number of days to settle
-   * @param rollToSettlement whether to roll to settlement
+   * 
+   * @param name
+   *          the descriptive name of the type
+   * @param isEOMConvention
+   *          whether the end-of-month convention should be followed when calculating date schedules
+   * @param calculateScheduleFromMaturity
+   *          whether to calculate the schedule from the maturity
+   * @param exDividendDays
+   *          the number of ex dividend days
+   * @param settlementDays
+   *          the number of days to settle
+   * @param rollToSettlement
+   *          whether to roll to settlement
    */
   public ConventionBundleImpl(final String name, final boolean isEOMConvention, final boolean calculateScheduleFromMaturity, final int exDividendDays,
       final int settlementDays, final boolean rollToSettlement) {
@@ -544,14 +707,23 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Bonds
-   * @param name the descriptive name of the type
-   * @param isEOMConvention whether the end-of-month convention should be followed when calculating date schedules
-   * @param calculateScheduleFromMaturity whether to calculate the schedule from the maturity
-   * @param exDividendDays the number of ex dividend days
-   * @param shortSettlementDays the number of days to settle for short bonds
-   * @param longSettlementDays the number of days to settle for long bonds
-   * @param rollToSettlement whether to roll to settlement
-   * @param cutoffTenor The cutoff tenor to decide whether a bond is long or short
+   * 
+   * @param name
+   *          the descriptive name of the type
+   * @param isEOMConvention
+   *          whether the end-of-month convention should be followed when calculating date schedules
+   * @param calculateScheduleFromMaturity
+   *          whether to calculate the schedule from the maturity
+   * @param exDividendDays
+   *          the number of ex dividend days
+   * @param shortSettlementDays
+   *          the number of days to settle for short bonds
+   * @param longSettlementDays
+   *          the number of days to settle for long bonds
+   * @param rollToSettlement
+   *          whether to roll to settlement
+   * @param cutoffTenor
+   *          The cutoff tenor to decide whether a bond is long or short
    */
   public ConventionBundleImpl(final String name, final boolean isEOMConvention, final boolean calculateScheduleFromMaturity, final int exDividendDays,
       final int shortSettlementDays, final int longSettlementDays, final boolean rollToSettlement, final Tenor cutoffTenor) {
@@ -571,14 +743,23 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Bond Future deliverables
-   * @param name the descriptive name of the type
-   * @param isEOMConvention whether the end-of-month convention should be followed when calculating date schedules
-   * @param calculateScheduleFromMaturity whether to calculate the schedule from the maturity
-   * @param exDividendDays the number of ex dividend days
-   * @param settlementDays the number of days to settle
-   * @param dayCount the day count convention
-   * @param businessDayConvention the business day convention
-   * @param yieldConvention the yield convention
+   * 
+   * @param name
+   *          the descriptive name of the type
+   * @param isEOMConvention
+   *          whether the end-of-month convention should be followed when calculating date schedules
+   * @param calculateScheduleFromMaturity
+   *          whether to calculate the schedule from the maturity
+   * @param exDividendDays
+   *          the number of ex dividend days
+   * @param settlementDays
+   *          the number of days to settle
+   * @param dayCount
+   *          the day count convention
+   * @param businessDayConvention
+   *          the business day convention
+   * @param yieldConvention
+   *          the yield convention
    */
   public ConventionBundleImpl(final String name, final boolean isEOMConvention, final boolean calculateScheduleFromMaturity, final int exDividendDays,
       final int settlementDays, final DayCount dayCount, final BusinessDayConvention businessDayConvention, final YieldConvention yieldConvention) {
@@ -600,8 +781,11 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Constructor to create a convention bundle for Swaptions
-   * @param name the descriptive name of the type
-   * @param isCashSettled whether the Swaption is cash settled
+   * 
+   * @param name
+   *          the descriptive name of the type
+   * @param isCashSettled
+   *          whether the Swaption is cash settled
    */
   public ConventionBundleImpl(final String name, final boolean isCashSettled) {
     ArgumentChecker.notNull(name, "name");
@@ -690,6 +874,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegDayCount field.
+   * 
    * @return the swapFixedLegDayCount
    */
   @Override
@@ -699,6 +884,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegBusinessDayConvention field.
+   * 
    * @return the swapFixedLegBusinessDayConvention
    */
   @Override
@@ -708,6 +894,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegFrequency field.
+   * 
    * @return the swapFixedLegFrequency
    */
   @Override
@@ -733,6 +920,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFixedLegSettlementDays field.
+   * 
    * @return the swapFixedLegSettlementDays
    */
   @Override
@@ -742,6 +930,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the region identifier for the fixed leg
+   * 
    * @return the region identifier for the fixed leg
    */
   @Override
@@ -751,6 +940,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegDayCount field.
+   * 
    * @return the swapFloatingLegDayCount
    */
   @Override
@@ -760,6 +950,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegBusinessDayConvention field.
+   * 
    * @return the swapFloatingLegBusinessDayConvention
    */
   @Override
@@ -769,6 +960,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegFrequency field.
+   * 
    * @return the swapFloatingLegFrequency
    */
   @Override
@@ -794,6 +986,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegSettlementDays field.
+   * 
    * @return the swapFloatingLegSettlementDays
    */
   @Override
@@ -803,6 +996,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the swapFloatingLegInitialRate field.
+   * 
    * @return the swapFloatingLegInitialRate
    */
   @Override
@@ -812,6 +1006,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the region identifier for the floating leg
+   * 
    * @return the region identifier for the floating leg
    */
   @Override
@@ -821,6 +1016,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the pointValue field.
+   * 
    * @return the pointValue
    */
   @Override
@@ -830,6 +1026,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the name of the risk free rate for CAPM
+   * 
    * @return the name
    */
   @Override
@@ -839,6 +1036,7 @@ public class ConventionBundleImpl implements ConventionBundle {
 
   /**
    * Gets the name of the market for CAPM
+   * 
    * @return the name
    */
   @Override

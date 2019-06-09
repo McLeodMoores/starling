@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -31,9 +31,11 @@ public class HistoricalTimeSeriesShiftFunction extends AbstractHistoricalTimeSer
   }
 
   @Override
-  protected HistoricalTimeSeries apply(final FunctionExecutionContext context, final OverrideOperation operation, final HistoricalTimeSeries value, final ValueSpecification valueSpec) {
+  protected HistoricalTimeSeries apply(final FunctionExecutionContext context, final OverrideOperation operation, final HistoricalTimeSeries value,
+      final ValueSpecification valueSpec) {
     final HistoricalTimeSeriesSource htsSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(context);
-    return applyOverride(context, operation, valueSpec.getProperty(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY), htsSource.getExternalIdBundle(value.getUniqueId()), value);
+    return applyOverride(context, operation, valueSpec.getProperty(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY),
+        htsSource.getExternalIdBundle(value.getUniqueId()), value);
   }
 
 }

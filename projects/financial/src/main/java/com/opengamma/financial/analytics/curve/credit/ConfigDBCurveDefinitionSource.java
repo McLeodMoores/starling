@@ -29,7 +29,8 @@ public class ConfigDBCurveDefinitionSource implements CurveDefinitionSource {
   private final ConfigSourceQuery<SpreadCurveDefinition> _querySpreadCurveDefinition;
 
   /**
-   * @param configSource The config source, not null
+   * @param configSource
+   *          The config source, not null
    * @deprecated Use {@link #ConfigDBCurveDefinitionSource(ConfigSource,VersionCorrection)} or {@link #init} instead
    */
   @Deprecated
@@ -47,7 +48,8 @@ public class ConfigDBCurveDefinitionSource implements CurveDefinitionSource {
   }
 
   public static ConfigDBCurveDefinitionSource init(final FunctionCompilationContext context, final FunctionDefinition function) {
-    final ConfigDBCurveDefinitionSource source = new ConfigDBCurveDefinitionSource(OpenGammaCompilationContext.getConfigSource(context), context.getFunctionInitializationVersionCorrection());
+    final ConfigDBCurveDefinitionSource source = new ConfigDBCurveDefinitionSource(OpenGammaCompilationContext.getConfigSource(context),
+        context.getFunctionInitializationVersionCorrection());
     source._queryInterpolatedCurveDefinition.reinitOnChange(context, function);
     source._queryCurveDefinition.reinitOnChange(context, function);
     source._queryConstantCurveDefinition.reinitOnChange(context, function);

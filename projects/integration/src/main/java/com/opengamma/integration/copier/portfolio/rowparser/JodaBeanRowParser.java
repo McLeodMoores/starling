@@ -74,7 +74,7 @@ public class JodaBeanRowParser extends RowParser {
    * Security properties to ignore when scanning
    */
   private static final String[] IGNORE_METAPROPERTIES = {
-      "securityType", "uniqueid", "objectid", "securitylink", "trades", "gicscode", "parentpositionid", "providerid", "deal", "requiredPermissions" };
+                "securityType", "uniqueid", "objectid", "securitylink", "trades", "gicscode", "parentpositionid", "providerid", "deal", "requiredPermissions" };
 
   /**
    * Column prefixes
@@ -100,12 +100,12 @@ public class JodaBeanRowParser extends RowParser {
   private final List<Class<?>> _underlyingSecurityClasses;
 
   /**
-   *  Map from column name to the field's Java type
+   * Map from column name to the field's Java type
    */
   private SortedMap<String, Class<?>> _columns = new TreeMap<>();
 
   static {
-    //Make refections available by calling AnnotationReflector.getDefaultReflector()
+    // Make refections available by calling AnnotationReflector.getDefaultReflector()
     OpenGammaFudgeContext.getInstance();
     // Register the automatic string converters with Joda Beans
     JodaBeanConverters.getInstance();
@@ -181,8 +181,10 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Creates a new row parser for the specified security type and tool context
-   * @param securityName  the type of the security for which a row parser is to be created
-   * @return              the RowParser class for the specified security type, or null if unable to identify a suitable parser
+   * 
+   * @param securityName
+   *          the type of the security for which a row parser is to be created
+   * @return the RowParser class for the specified security type, or null if unable to identify a suitable parser
    */
   public static JodaBeanRowParser newJodaBeanRowParser(final String securityName) {
     // Now using the JodaBean parser
@@ -210,7 +212,8 @@ public class JodaBeanRowParser extends RowParser {
       final ArrayList<ManageableSecurity> securities = new ArrayList<>();
       securities.add(security);
       for (final Class<?> underlyingClass : _underlyingSecurityClasses) {
-        final ManageableSecurity underlying = (ManageableSecurity) recursiveConstructBean(row, underlyingClass, UNDERLYING_PREFIX + underlyingClass.getSimpleName().toLowerCase() + ":");
+        final ManageableSecurity underlying = (ManageableSecurity) recursiveConstructBean(row, underlyingClass,
+            UNDERLYING_PREFIX + underlyingClass.getSimpleName().toLowerCase() + ":");
         if (underlying != null) {
           securities.add(underlying);
         } else {
@@ -310,12 +313,14 @@ public class JodaBeanRowParser extends RowParser {
   }
 
   /**
-   * Extract a map of column (field) names and types from the properties of the specified direct bean class.
-   * Appropriate member classes (such as swap legs) are recursively traversed and their columns also extracted
-   * and added to the map.
-   * @param clazz   The bean type from which to extract properties
-   * @param prefix  The class membership path traced from the top-level bean class to the current class
-   * @return        A map of the column names and their types
+   * Extract a map of column (field) names and types from the properties of the specified direct bean class. Appropriate member classes (such as swap legs) are
+   * recursively traversed and their columns also extracted and added to the map.
+   * 
+   * @param clazz
+   *          The bean type from which to extract properties
+   * @param prefix
+   *          The class membership path traced from the top-level bean class to the current class
+   * @return A map of the column names and their types
    */
   private SortedMap<String, Class<?>> recursiveGetColumnMap(final Class<?> clazz, final String prefix) {
 
@@ -352,12 +357,16 @@ public class JodaBeanRowParser extends RowParser {
   }
 
   /**
-   * Build a bean of the specified type by extracting property values from the supplied map of field names to
-   * values, using recursion to construct the member beans in the same manner.
-   * @param row     The map from property (or column, or field) names to values
-   * @param clazz   The bean type of which to construct an instance
-   * @param prefix  The class membership path traced from the top-level bean class to the current class
-   * @return        The constructed security bean
+   * Build a bean of the specified type by extracting property values from the supplied map of field names to values, using recursion to construct the member
+   * beans in the same manner.
+   * 
+   * @param row
+   *          The map from property (or column, or field) names to values
+   * @param clazz
+   *          The bean type of which to construct an instance
+   * @param prefix
+   *          The class membership path traced from the top-level bean class to the current class
+   * @return The constructed security bean
    */
   private Bean recursiveConstructBean(final Map<String, String> row, final Class<?> clazz, final String prefix) {
     try {
@@ -404,7 +413,8 @@ public class JodaBeanRowParser extends RowParser {
 
               builder.set(metaProperty.name(), SingleSheetPositionWriter.attributesToMap(rawValue));
             } else {
-              throw new OpenGammaRuntimeException("Property '" + prefix + metaProperty.name() + "' (" + metaProperty.propertyType() + ") cannot be populated from a string");
+              throw new OpenGammaRuntimeException(
+                  "Property '" + prefix + metaProperty.name() + "' (" + metaProperty.propertyType() + ") cannot be populated from a string");
             }
           }
         }
@@ -420,11 +430,13 @@ public class JodaBeanRowParser extends RowParser {
   }
 
   /**
-   * Extracts a map of column names to values from a supplied security bean's properties, using recursion to
-   * extract properties from any member beans.
-   * @param bean    The bean instance from which to extract property values
-   * @param prefix  The class membership path traced from the top-level bean class to the current class
-   * @return        A map of extracted column names and values
+   * Extracts a map of column names to values from a supplied security bean's properties, using recursion to extract properties from any member beans.
+   * 
+   * @param bean
+   *          The bean instance from which to extract property values
+   * @param prefix
+   *          The class membership path traced from the top-level bean class to the current class
+   * @return A map of extracted column names and values
    */
   private Map<String, String> recursiveConstructRow(final Bean bean, final String prefix) {
     final Map<String, String> result = new HashMap<>();
@@ -456,11 +468,11 @@ public class JodaBeanRowParser extends RowParser {
               result.put(prefix + metaProperty.name(), listToString((List<?>) metaProperty.get(bean)));
             } else if (Map.class.isAssignableFrom(metaProperty.propertyType()) && metaProperty.name().equalsIgnoreCase("attributes")) {
               @SuppressWarnings("unchecked")
-              final
-              Map<String, String> map = (Map<String, String>) metaProperty.get(bean);
+              final Map<String, String> map = (Map<String, String>) metaProperty.get(bean);
               result.put(prefix + metaProperty.name(), SingleSheetPositionWriter.attributesToString(map));
             } else {
-              throw new OpenGammaRuntimeException("Property '" + prefix + metaProperty.name() + "' (" + metaProperty.propertyType() + ") cannot be converted to a string");
+              throw new OpenGammaRuntimeException(
+                  "Property '" + prefix + metaProperty.name() + "' (" + metaProperty.propertyType() + ") cannot be converted to a string");
             }
           } else {
             LOGGER.info("No matching column found for property " + prefix + metaProperty.name());
@@ -474,7 +486,8 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Converts a list of objects to a |-separated string of their JodaConverted string representations.
    *
-   * @param list  the list to be converted, not null
+   * @param list
+   *          the list to be converted, not null
    * @return the |-separated string string, not null
    */
   private String listToString(final List<?> list) {
@@ -492,8 +505,10 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Converts a |-separated string to a list of objects using JodaConvert.
    *
-   * @param rawStr  the string to parse, not null
-   * @param cls  the class to convert to, not null
+   * @param rawStr
+   *          the string to parse, not null
+   * @param cls
+   *          the class to convert to, not null
    * @return the list of objects of the specified class, not null
    */
   private List<?> stringToList(final String rawStr, final Class<?> cls) {
@@ -505,10 +520,10 @@ public class JodaBeanRowParser extends RowParser {
   }
 
   /**
-   * Given a class name, look for the class in the list of packages specified by CLASS_PACKAGES and return it
-   * or throw exception if not found.
+   * Given a class name, look for the class in the list of packages specified by CLASS_PACKAGES and return it or throw exception if not found.
    *
-   * @param className  the class name to seek, not null
+   * @param className
+   *          the class name to seek, not null
    * @return the corresponding class, not null
    */
   private Class<? extends Bean> getClass(final String className) {
@@ -562,7 +577,8 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Given a bean class, find its subclasses.
    *
-   * @param beanClass  the bean class
+   * @param beanClass
+   *          the bean class
    * @return the collection of subclasses
    */
   private Collection<Class<?>> getSubClasses(final Class<? extends Bean> beanClass) {
@@ -581,8 +597,10 @@ public class JodaBeanRowParser extends RowParser {
 
   /**
    * Checks whether the supplied class has a registered Joda string converter
-   * @param clazz   the class to check
-   * @return        the answer
+   * 
+   * @param clazz
+   *          the class to check
+   * @return the answer
    */
   private boolean isConvertible(final Class<?> clazz) {
     try {
@@ -596,7 +614,8 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Determines whether the supplied class is a direct bean.
    *
-   * @param clazz  the class to check, not null
+   * @param clazz
+   *          the class to check, not null
    * @return true if it is a bean
    */
   private boolean isBean(final Class<?> clazz) {
@@ -606,7 +625,8 @@ public class JodaBeanRowParser extends RowParser {
   /**
    * Checks whether the specified meta-property is to be ignored when extracting fields.
    *
-   * @param mp  the meta-property to check, not null
+   * @param mp
+   *          the meta-property to check, not null
    * @return true if it is to be ignored
    */
   private boolean ignoreMetaProperty(final MetaProperty<?> mp) {

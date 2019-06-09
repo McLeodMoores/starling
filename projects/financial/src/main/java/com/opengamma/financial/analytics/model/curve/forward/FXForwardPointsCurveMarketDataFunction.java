@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.curve.forward;
@@ -44,7 +44,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class FXForwardPointsCurveMarketDataFunction extends AbstractFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardPointsCurveMarketDataFunction.class);
@@ -80,7 +80,8 @@ public class FXForwardPointsCurveMarketDataFunction extends AbstractFunction {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {

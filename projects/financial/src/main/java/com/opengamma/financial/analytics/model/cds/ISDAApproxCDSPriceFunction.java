@@ -40,7 +40,8 @@ public abstract class ISDAApproxCDSPriceFunction extends NonCompiledInvoker {
 
   protected abstract String getHazardRateStructure();
 
-  protected abstract DoublesPair executeImpl(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues);
+  protected abstract DoublesPair executeImpl(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target,
+      Set<ValueRequirement> desiredValues);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -76,7 +77,8 @@ public abstract class ISDAApproxCDSPriceFunction extends NonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     final CDSSecurity cds = (CDSSecurity) target.getSecurity();
     final ComputationTargetSpecification targetSpec = target.toSpecification();

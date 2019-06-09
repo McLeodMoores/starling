@@ -10,10 +10,9 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
-* PDE Data bundle representing PDEs of the type
-* $\frac{\partial f}{\partial t} + a(t,x)\frac{\partial^2}{\partial x^2}\left[ \alpha(t,x) f \right] +  b(t,x)\frac{\partial}{\partial x}\left[\beta(t,x) f \right] + c(t,x)f = 0$
-* , which includes the Fokker-Planck PDE.
-*/
+ * PDE Data bundle representing PDEs of the type $\frac{\partial f}{\partial t} + a(t,x)\frac{\partial^2}{\partial x^2}\left[ \alpha(t,x) f \right] +
+ * b(t,x)\frac{\partial}{\partial x}\left[\beta(t,x) f \right] + c(t,x)f = 0$ , which includes the Fokker-Planck PDE.
+ */
 public class ConvectionDiffusionPDE1DFullCoefficients implements ConvectionDiffusionPDE1DCoefficients {
 
   private final Surface<Double, Double, Double> _a;
@@ -23,13 +22,19 @@ public class ConvectionDiffusionPDE1DFullCoefficients implements ConvectionDiffu
   private final Surface<Double, Double, Double> _beta;
 
   /**
-   * PDE Data bundle representing PDEs of the type
-   * $\frac{\partial f}{\partial t} + a(t,x)\frac{\partial^2}{\partial x^2}\left[ \alpha(t,x) f \right] +  b(t,x)\frac{\partial}{\partial x}\left[\beta(t,x) f \right] + c(t,x)f = 0$
-   * @param a $a(t,x)$
-   * @param b $b(t,x)$
-   * @param c $c(t,x)$
-   * @param alpha $\alpha(t,x)$
-   * @param beta $\beta(t,x)$
+   * PDE Data bundle representing PDEs of the type $\frac{\partial f}{\partial t} + a(t,x)\frac{\partial^2}{\partial x^2}\left[ \alpha(t,x) f \right] +
+   * b(t,x)\frac{\partial}{\partial x}\left[\beta(t,x) f \right] + c(t,x)f = 0$
+   * 
+   * @param a
+   *          $a(t,x)$
+   * @param b
+   *          $b(t,x)$
+   * @param c
+   *          $c(t,x)$
+   * @param alpha
+   *          $\alpha(t,x)$
+   * @param beta
+   *          $\beta(t,x)$
    */
   public ConvectionDiffusionPDE1DFullCoefficients(final Surface<Double, Double, Double> a, final Surface<Double, Double, Double> b,
       final Surface<Double, Double, Double> c, final Surface<Double, Double, Double> alpha, final Surface<Double, Double, Double> beta) {
@@ -60,8 +65,10 @@ public class ConvectionDiffusionPDE1DFullCoefficients implements ConvectionDiffu
 
   /**
    *
-   * @param t Time value
-   * @param x Space value
+   * @param t
+   *          Time value
+   * @param x
+   *          Space value
    * @return value of $\alpha(t,x)$
    */
   public double getAlpha(final double t, final double x) {
@@ -70,8 +77,10 @@ public class ConvectionDiffusionPDE1DFullCoefficients implements ConvectionDiffu
 
   /**
    *
-   * @param t Time value
-   * @param x Space value
+   * @param t
+   *          Time value
+   * @param x
+   *          Space value
    * @return value of $\beta(t,x)$
    */
   public double getBeta(final double t, final double x) {
@@ -79,7 +88,9 @@ public class ConvectionDiffusionPDE1DFullCoefficients implements ConvectionDiffu
   }
 
   /**
-   * Gets the coefficients a, b and c as a ParabolicPDECoefficients object. <b> This does not convert ParabolicPDEExtendedCoefficients to ParabolicPDECoefficients</b>
+   * Gets the coefficients a, b and c as a ParabolicPDECoefficients object. <b> This does not convert ParabolicPDEExtendedCoefficients to
+   * ParabolicPDECoefficients</b>
+   * 
    * @return ParabolicPDECoefficients
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getStandardCoefficients() {

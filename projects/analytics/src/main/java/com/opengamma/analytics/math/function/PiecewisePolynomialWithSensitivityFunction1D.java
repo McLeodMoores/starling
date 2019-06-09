@@ -16,8 +16,8 @@ import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Give a class {@link PiecewisePolynomialResultsWithSensitivity}, Compute node sensitivity of function value, first derivative value
- * and second derivative value.
+ * Give a class {@link PiecewisePolynomialResultsWithSensitivity}, Compute node sensitivity of function value, first derivative value and second derivative
+ * value.
  */
 public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolynomialFunction1D {
 
@@ -171,7 +171,8 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
       diffSense[i] = new DoubleMatrix2D(tmp);
     }
 
-    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 1, pp.getDimensions(), diffSense);
+    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 1,
+        pp.getDimensions(), diffSense);
     return nodeSensitivity(ppDiff, xKeys);
   }
 
@@ -242,7 +243,8 @@ public class PiecewisePolynomialWithSensitivityFunction1D extends PiecewisePolyn
       diffSense[i] = new DoubleMatrix2D(tmp);
     }
 
-    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 2, pp.getDimensions(), diffSense);
+    final PiecewisePolynomialResultsWithSensitivity ppDiff = new PiecewisePolynomialResultsWithSensitivity(pp.getKnots(), pp.getCoefMatrix(), nCoefs - 2,
+        pp.getDimensions(), diffSense);
     return nodeSensitivity(ppDiff, xKeys);
   }
 }

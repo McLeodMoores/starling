@@ -5,7 +5,6 @@
  */
 package com.opengamma.financial.convention.initializer;
 
-
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.DEPOSIT_ON;
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.FIXED_LEG;
 import static com.opengamma.financial.convention.initializer.PerCurrencyConventionHelper.ON_CMP_LEG;
@@ -61,7 +60,7 @@ public class AUConventions extends ConventionMasterInitializer {
   protected AUConventions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ConventionMaster master) {
 
@@ -89,9 +88,11 @@ public class AUConventions extends ConventionMasterInitializer {
 
     // BBSW Legs
     final String bbsw3MLegConventionName = getConventionName(Currency.AUD, TENOR_STR_3M, BBSW_LEG);
-    final VanillaIborLegConvention bbsw3MLegConvention = createVanillaIborLegConvention(bbsw3MLegConventionName, bbswConventionId, TENOR_STR_3M, Tenor.THREE_MONTHS);
+    final VanillaIborLegConvention bbsw3MLegConvention = createVanillaIborLegConvention(bbsw3MLegConventionName, bbswConventionId, TENOR_STR_3M,
+        Tenor.THREE_MONTHS);
     final String bbsw6MLegConventionName = getConventionName(Currency.AUD, TENOR_STR_6M, BBSW_LEG);
-    final VanillaIborLegConvention bbsw6MLegConvention = createVanillaIborLegConvention(bbsw6MLegConventionName, bbswConventionId, TENOR_STR_6M, Tenor.SIX_MONTHS);
+    final VanillaIborLegConvention bbsw6MLegConvention = createVanillaIborLegConvention(bbsw6MLegConventionName, bbswConventionId, TENOR_STR_6M,
+        Tenor.SIX_MONTHS);
 
     // Overnight Legs
     final String onLegConventionName = getConventionName(Currency.AUD, TENOR_STR_1Y, ON_CMP_LEG);

@@ -17,15 +17,17 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
+
 //CSOFF
 /**
- * For cash-settled swaptions, calculates the difference in present value between one day and the next without volatility
- * or rate slide i.e. the market moves in such a way that the interest rates or volatility for the same time to maturity
- * will be equal. The pricing model used is the Black model.
+ * For cash-settled swaptions, calculates the difference in present value between one day and the next without volatility or rate slide i.e. the market moves in
+ * such a way that the interest rates or volatility for the same time to maturity will be equal. The pricing model used is the Black model.
+ * 
  * @deprecated This class uses deprecated market data objects.
  */
 @Deprecated
-public class CashSwaptionBlackConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<SwaptionCashFixedIborDefinition, YieldCurveWithBlackSwaptionBundle, Void> {
+public class CashSwaptionBlackConstantSpreadHorizonCalculator
+    implements HorizonCalculatorDeprecated<SwaptionCashFixedIborDefinition, YieldCurveWithBlackSwaptionBundle, Void> {
   /** Rolls down swaption data (curves and surface) */
   private static final ConstantSpreadSwaptionBlackRolldown SWAPTION_ROLLDOWN = ConstantSpreadSwaptionBlackRolldown.getInstance();
   /** Present value calculator */

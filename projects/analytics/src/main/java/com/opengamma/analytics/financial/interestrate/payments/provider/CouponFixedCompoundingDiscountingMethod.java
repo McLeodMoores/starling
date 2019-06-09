@@ -32,6 +32,7 @@ public final class CouponFixedCompoundingDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponFixedCompoundingDiscountingMethod getInstance() {
@@ -46,8 +47,11 @@ public final class CouponFixedCompoundingDiscountingMethod {
 
   /**
    * Computes the present value of a fixed compounded coupon by discounting.
-   * @param coupon The coupon.
-   * @param multicurves The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponFixedCompounding coupon, final MulticurveProviderInterface multicurves) {
@@ -58,7 +62,8 @@ public final class CouponFixedCompoundingDiscountingMethod {
     return MultipleCurrencyAmount.of(coupon.getCurrency(), pv);
   }
 
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponFixedCompounding coupon, final MulticurveProviderInterface multicurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponFixedCompounding coupon,
+      final MulticurveProviderInterface multicurves) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurves, "Multi-curves provider");
 

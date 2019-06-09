@@ -16,7 +16,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Black
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueBlackSensitivityBlackSwaptionCalculator extends InstrumentDerivativeVisitorAdapter<BlackSwaptionFlatProviderInterface, PresentValueBlackSwaptionSensitivity> {
+public final class PresentValueBlackSensitivityBlackSwaptionCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackSwaptionFlatProviderInterface, PresentValueBlackSwaptionSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -25,6 +26,7 @@ public final class PresentValueBlackSensitivityBlackSwaptionCalculator extends I
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueBlackSensitivityBlackSwaptionCalculator getInstance() {
@@ -43,7 +45,8 @@ public final class PresentValueBlackSensitivityBlackSwaptionCalculator extends I
   private static final SwaptionCashFixedIborBlackMethod METHOD_SWT_CASH = SwaptionCashFixedIborBlackMethod.getInstance();
 
   @Override
-  public PresentValueBlackSwaptionSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final BlackSwaptionFlatProviderInterface black) {
+  public PresentValueBlackSwaptionSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface black) {
     return METHOD_SWT_PHYS.presentValueBlackSensitivity(swaption, black);
   }
 

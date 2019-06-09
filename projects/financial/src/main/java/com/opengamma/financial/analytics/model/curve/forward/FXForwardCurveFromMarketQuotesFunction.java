@@ -85,7 +85,8 @@ public class FXForwardCurveFromMarketQuotesFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -151,9 +152,11 @@ public class FXForwardCurveFromMarketQuotesFunction extends AbstractFunction {
         return Collections.singleton(new ComputedValue(getResultSpec(target, curveName, interpolatorName, leftExtrapolatorName, rightExtrapolatorName), curve));
       }
 
-      private ValueSpecification getResultSpec(final ComputationTarget target, final String curveName, final String interpolatorName, final String leftExtrapolatorName,
+      private ValueSpecification getResultSpec(final ComputationTarget target, final String curveName, final String interpolatorName,
+          final String leftExtrapolatorName,
           final String rightExtrapolatorName) {
-        final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName).with(PROPERTY_FORWARD_CURVE_INTERPOLATOR, interpolatorName)
+        final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName)
+            .with(PROPERTY_FORWARD_CURVE_INTERPOLATOR, interpolatorName)
             .with(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR, leftExtrapolatorName).with(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR, rightExtrapolatorName)
             .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, FX_FORWARD_QUOTES).get();
         return new ValueSpecification(ValueRequirementNames.FORWARD_CURVE, target.toSpecification(), properties);

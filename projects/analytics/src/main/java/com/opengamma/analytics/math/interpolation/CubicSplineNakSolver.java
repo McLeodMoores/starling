@@ -49,61 +49,69 @@ public class CubicSplineNakSolver extends CubicSplineSolver {
   public DoubleMatrix1D getKnotsMat1D(final double[] xValues) {
     final int nData = xValues.length;
     if (nData == 2) {
-      return new DoubleMatrix1D(new double[] {xValues[0], xValues[nData - 1] });
+      return new DoubleMatrix1D(new double[] { xValues[0], xValues[nData - 1] });
     }
     if (nData == 3) {
-      return new DoubleMatrix1D(new double[] {xValues[0], xValues[nData - 1] });
+      return new DoubleMatrix1D(new double[] { xValues[0], xValues[nData - 1] });
     }
     return new DoubleMatrix1D(xValues);
   }
 
   /**
-   * @param xValues X values of Data
-   * @param yValues Y values of Data
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
-   * @param solnVector Values of second derivative at knots
+   * @param xValues
+   *          X values of Data
+   * @param yValues
+   *          Y values of Data
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * @param solnVector
+   *          Values of second derivative at knots
    * @return Coefficient matrix whose i-th row vector is (a_0,a_1,...) for i-th intervals, where a_0,a_1,... are coefficients of f(x) = a_0 + a_1 x^1 + ....
    */
   private DoubleMatrix2D getSplineCoeffs(final double[] xValues, final double[] yValues, final double[] intervals, final double[] solnVector) {
     final int nData = xValues.length;
 
     if (nData == 2) {
-      final double[][] res = new double[][] {{
-          yValues[1] / intervals[0] - yValues[0] / intervals[0] - intervals[0] * solnVector[0] / 2. - intervals[0] * solnVector[1] / 6. + intervals[0] * solnVector[0] / 6., yValues[0] } };
+      final double[][] res = new double[][] { {
+                    yValues[1] / intervals[0] - yValues[0] / intervals[0] - intervals[0] * solnVector[0] / 2. - intervals[0] * solnVector[1] / 6.
+                        + intervals[0] * solnVector[0] / 6.,
+                    yValues[0] } };
       return new DoubleMatrix2D(res);
     }
     if (nData == 3) {
-      final double[][] res = new double[][] {{solnVector[0] / 2., yValues[1] / intervals[0] - yValues[0] / intervals[0] - intervals[0] * solnVector[0] / 2., yValues[0] } };
+      final double[][] res = new double[][] {
+                    { solnVector[0] / 2., yValues[1] / intervals[0] - yValues[0] / intervals[0] - intervals[0] * solnVector[0] / 2., yValues[0] } };
       return new DoubleMatrix2D(res);
     }
     return getCommonSplineCoeffs(xValues, yValues, intervals, solnVector);
   }
 
-  private DoubleMatrix2D[] getSplineCoeffsWithSensitivity(final double[] xValues, final double[] yValues, final double[] intervals, final double[][] toBeInv, final double[] vector,
+  private DoubleMatrix2D[] getSplineCoeffsWithSensitivity(final double[] xValues, final double[] yValues, final double[] intervals, final double[][] toBeInv,
+      final double[] vector,
       final double[][] vecSensitivity) {
     final int nData = xValues.length;
 
     if (nData == 2) {
       final DoubleMatrix2D[] res = new DoubleMatrix2D[nData];
-      final double[][] coef = new double[][] {{yValues[1] / intervals[0] - yValues[0] / intervals[0], yValues[0] } };
+      final double[][] coef = new double[][] { { yValues[1] / intervals[0] - yValues[0] / intervals[0], yValues[0] } };
       res[0] = new DoubleMatrix2D(coef);
       final double[][] coefSense = new double[2][];
-      coefSense[0] = new double[] {-1. / intervals[0], 1. / intervals[0] };
-      coefSense[1] = new double[] {1., 0. };
+      coefSense[0] = new double[] { -1. / intervals[0], 1. / intervals[0] };
+      coefSense[1] = new double[] { 1., 0. };
       res[1] = new DoubleMatrix2D(coefSense);
       return res;
     }
     if (nData == 3) {
       final DoubleMatrix2D[] res = new DoubleMatrix2D[2];
       final DoubleMatrix1D[] soln = combinedMatrixEqnSolver(toBeInv, vector, vecSensitivity);
-      final double[][] coef = new double[][] {{soln[0].getData()[0] / 2.,
-          yValues[1] / intervals[0] - yValues[0] / intervals[0] - intervals[0] * soln[0].getData()[0] / 2., yValues[0] } };
+      final double[][] coef = new double[][] { { soln[0].getData()[0] / 2.,
+                    yValues[1] / intervals[0] - yValues[0] / intervals[0] - intervals[0] * soln[0].getData()[0] / 2., yValues[0] } };
       res[0] = new DoubleMatrix2D(coef);
       final double[][] coefSense = new double[3][0];
-      coefSense[0] = new double[] {soln[1].getData()[0] / 2., soln[2].getData()[0] / 2., soln[3].getData()[0] / 2. };
-      coefSense[1] = new double[]
-      {-1. / intervals[0] - intervals[0] * soln[1].getData()[0] / 2., 1. / intervals[0] - intervals[0] * soln[2].getData()[0] / 2., -intervals[0] * soln[3].getData()[0] / 2. };
-      coefSense[2] = new double[] {1., 0., 0. };
+      coefSense[0] = new double[] { soln[1].getData()[0] / 2., soln[2].getData()[0] / 2., soln[3].getData()[0] / 2. };
+      coefSense[1] = new double[] { -1. / intervals[0] - intervals[0] * soln[1].getData()[0] / 2., 1. / intervals[0] - intervals[0] * soln[2].getData()[0] / 2.,
+                    -intervals[0] * soln[3].getData()[0] / 2. };
+      coefSense[2] = new double[] { 1., 0., 0. };
       res[1] = new DoubleMatrix2D(coefSense);
       return res;
     }
@@ -123,8 +131,11 @@ public class CubicSplineNakSolver extends CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * @param yValues Y Values of data
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * 
+   * @param yValues
+   *          Y Values of data
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return Vector b
    */
   private double[] getVector(final double[] yValues, final double[] intervals) {
@@ -134,7 +145,8 @@ public class CubicSplineNakSolver extends CubicSplineSolver {
 
     if (nData == 3) {
       for (int i = 0; i < nData; ++i) {
-        res[i] = 2. * yValues[2] / (intervals[0] + intervals[1]) - 2. * yValues[0] / (intervals[0] + intervals[1]) - 2. * yValues[1] / (intervals[0]) + 2. * yValues[0] / (intervals[0]);
+        res[i] = 2. * yValues[2] / (intervals[0] + intervals[1]) - 2. * yValues[0] / (intervals[0] + intervals[1]) - 2. * yValues[1] / intervals[0]
+            + 2. * yValues[0] / intervals[0];
       }
     } else {
       res = getCommonVectorElements(yValues, intervals);
@@ -149,8 +161,8 @@ public class CubicSplineNakSolver extends CubicSplineSolver {
 
     if (nData == 3) {
       for (int i = 0; i < nData; ++i) {
-        res[i][0] = -2. / (intervals[0] + intervals[1]) + 2. / (intervals[0]);
-        res[i][1] = -2. / (intervals[0]);
+        res[i][0] = -2. / (intervals[0] + intervals[1]) + 2. / intervals[0];
+        res[i][1] = -2. / intervals[0];
         res[i][2] = 2. / (intervals[0] + intervals[1]);
       }
     } else {
@@ -161,7 +173,9 @@ public class CubicSplineNakSolver extends CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * 
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return Matrix A
    */
   private double[][] getMatrix(final double[] intervals) {

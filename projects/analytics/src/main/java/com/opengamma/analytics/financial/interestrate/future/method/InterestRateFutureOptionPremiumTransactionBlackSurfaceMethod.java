@@ -15,24 +15,28 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Method for the pricing of interest rate future options with up-front premium. The pricing is done with a Black approach on the future rate (1.0-price).
- * The Black parameters are represented by (expiration-strike-delay) surfaces. The "delay" is the time between option expiration and future last trading date,
- * i.e. 0 for quarterly options and x for x-year mid-curve options. The future prices are computed without convexity adjustments.
+ * Method for the pricing of interest rate future options with up-front premium. The pricing is done with a Black approach on the future rate (1.0-price). The
+ * Black parameters are represented by (expiration-strike-delay) surfaces. The "delay" is the time between option expiration and future last trading date, i.e.
+ * 0 for quarterly options and x for x-year mid-curve options. The future prices are computed without convexity adjustments.
+ *
  * @deprecated The parent class is deprecated
  */
 @Deprecated
 public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod extends InterestRateFutureOptionPremiumTransactionMethod {
 
   /** Calculates values for the security */
-  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod SECURITY_METHOD = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod.getInstance();
+  private static final InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod SECURITY_METHOD = InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod
+      .getInstance();
 
   /**
    * Creates the method unique instance.
    */
-  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod INSTANCE = new InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod();
+  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod INSTANCE =
+      new InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod();
 
   /**
    * Return the method unique instance.
+   *
    * @return The instance.
    */
   public static InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod getInstance() {
@@ -48,7 +52,8 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
 
   @Override
   public CurrencyAmount presentValue(final InstrumentDerivative instrument, final YieldCurveBundle curves) {
-    ArgumentChecker.isTrue(instrument instanceof InterestRateFutureOptionPremiumTransaction, "The instrument should be a InterestRateFutureOptionPremiumTransaction");
+    ArgumentChecker.isTrue(instrument instanceof InterestRateFutureOptionPremiumTransaction,
+        "The instrument should be a InterestRateFutureOptionPremiumTransaction");
     final InterestRateFutureOptionPremiumTransaction transaction = (InterestRateFutureOptionPremiumTransaction) instrument;
     final double price = SECURITY_METHOD.optionPrice(transaction.getUnderlyingOption(), curves);
     final double pvTransaction = presentValueFromPrice(transaction, curves, price);
@@ -57,8 +62,11 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
 
   /**
    * Computes the present value volatility sensitivity of a transaction.
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The present value curve sensitivity.
    */
   public double vega(final InterestRateFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
@@ -72,8 +80,11 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
 
   /**
    * Computes the theta of a transaction.
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The theta.
    */
   public double theta(final InterestRateFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
@@ -87,22 +98,30 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
 
   /**
    * Computes the present value volatility sensitivity of a transaction.
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The present value curve sensitivity.
    */
-  public SurfaceValue presentValueBlackSensitivity(final InterestRateFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
-    SurfaceValue securitySensitivity = ((InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod) getSecurityMethod()).priceBlackSensitivity(transaction.getUnderlyingOption(), blackData);
-    securitySensitivity = SurfaceValue.multiplyBy(securitySensitivity, transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional()
+  public SurfaceValue presentValueBlackSensitivity(final InterestRateFutureOptionPremiumTransaction transaction,
+      final YieldCurveWithBlackCubeBundle blackData) {
+    SurfaceValue securitySensitivity = ((InterestRateFutureOptionPremiumSecurityBlackSurfaceMethod) getSecurityMethod())
+        .priceBlackSensitivity(transaction.getUnderlyingOption(), blackData);
+    securitySensitivity = SurfaceValue.multiplyBy(securitySensitivity,
+        transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional()
         * transaction.getUnderlyingOption().getUnderlyingFuture().getPaymentAccrualFactor());
     return securitySensitivity;
   }
 
   /**
-   * Computes the present value delta of a transaction.
-   * This is with respect to futures price
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   * Computes the present value delta of a transaction. This is with respect to futures price
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The present value curve sensitivity.
    */
   public double deltaWrtFuturesPrice(final InterestRateFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
@@ -115,13 +134,16 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
   }
 
   /**
-   * Computes the present value delta of a transaction.
-   * This is with respect to futures price
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   * Computes the present value delta of a transaction. This is with respect to futures price
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The present value curve sensitivity.
    */
-  public InterestRateCurveSensitivity deltaWrtCurve(final InterestRateFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
+  public InterestRateCurveSensitivity deltaWrtCurve(final InterestRateFutureOptionPremiumTransaction transaction,
+      final YieldCurveWithBlackCubeBundle blackData) {
     final InterestRateCurveSensitivity securityDelta = SECURITY_METHOD.priceCurveSensitivity(transaction.getUnderlyingOption(), blackData);
     final double scaleFactor = transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional()
         * transaction.getUnderlyingOption().getUnderlyingFuture().getPaymentAccrualFactor();
@@ -129,10 +151,12 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
   }
 
   /**
-   * Computes the present value gamma of a transaction.
-   * This is with respect to either futures price, or rate=1-price
-   * @param transaction The future option transaction.
-   * @param blackData The curve and Black volatility data.
+   * Computes the present value gamma of a transaction. This is with respect to either futures price, or rate=1-price
+   *
+   * @param transaction
+   *          The future option transaction.
+   * @param blackData
+   *          The curve and Black volatility data.
    * @return The present value curve sensitivity.
    */
   public double presentValueGamma(final InterestRateFutureOptionPremiumTransaction transaction, final YieldCurveWithBlackCubeBundle blackData) {
@@ -146,8 +170,11 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
 
   /**
    * Interpolates on the Black Volatility Surface at expiry and strike of optionTransaction
-   * @param optionTransaction InterestRateFutureOptionPremiumTransaction
-   * @param curveBundle YieldCurveWithBlackSwaptionBundle
+   *
+   * @param optionTransaction
+   *          InterestRateFutureOptionPremiumTransaction
+   * @param curveBundle
+   *          YieldCurveWithBlackSwaptionBundle
    * @return Lognormal Implied Volatility
    */
   public Double impliedVolatility(final InterestRateFutureOptionPremiumTransaction optionTransaction, final YieldCurveBundle curveBundle) {

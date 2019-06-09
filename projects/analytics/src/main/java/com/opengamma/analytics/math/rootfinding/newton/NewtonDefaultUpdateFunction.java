@@ -17,7 +17,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 public class NewtonDefaultUpdateFunction implements NewtonRootFinderMatrixUpdateFunction {
 
   @Override
-  public DoubleMatrix2D getUpdatedMatrix(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction, final DoubleMatrix1D x, final DoubleMatrix1D deltaX, final DoubleMatrix1D deltaY,
+  public DoubleMatrix2D getUpdatedMatrix(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianFunction, final DoubleMatrix1D x, final DoubleMatrix1D deltaX,
+      final DoubleMatrix1D deltaY,
       final DoubleMatrix2D matrix) {
     Validate.notNull(jacobianFunction);
     Validate.notNull(x);

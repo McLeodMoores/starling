@@ -52,7 +52,8 @@ import com.opengamma.util.money.Currency;
 public class ForexLocalVolatilityPDEGridPresentValueFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final FXOptionSecurity fxOption = (FXOptionSecurity) target.getSecurity();
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String surfaceName = desiredValue.getConstraint(SURFACE);
@@ -70,7 +71,7 @@ public class ForexLocalVolatilityPDEGridPresentValueFunction extends AbstractFun
     final String spaceGridBunching = desiredValue.getConstraint(PROPERTY_SPACE_GRID_BUNCHING);
     final String maxMoneyness = desiredValue.getConstraint(PROPERTY_MAX_MONEYNESS);
     final String pdeDirection = desiredValue.getConstraint(PROPERTY_PDE_DIRECTION);
-    if (!(pdeDirection.equals(LocalVolatilityPDEValuePropertyNames.FORWARD_PDE))) {
+    if (!pdeDirection.equals(LocalVolatilityPDEValuePropertyNames.FORWARD_PDE)) {
       throw new OpenGammaRuntimeException("Can only use forward PDE; should never ask for this direction: " + pdeDirection);
     }
     final Object greekObject = inputs.getValue(getGreekRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType,
@@ -91,7 +92,8 @@ public class ForexLocalVolatilityPDEGridPresentValueFunction extends AbstractFun
     final Currency callCurrency = fxOption.getCallCurrency();
     final double putAmount = fxOption.getPutAmount();
     final double callAmount = fxOption.getCallAmount();
-    final ForexLocalVolatilityPDEPresentValueResultCollection result = new ForexLocalVolatilityPDEPresentValueResultCollection(strikes, lvPutPips, blackPutPips, spotFX,
+    final ForexLocalVolatilityPDEPresentValueResultCollection result = new ForexLocalVolatilityPDEPresentValueResultCollection(strikes, lvPutPips, blackPutPips,
+        spotFX,
         putCurrency, callCurrency, putAmount, callAmount);
     final ValueProperties properties = createValueProperties()
         .with(ValuePropertyNames.CALCULATION_METHOD, LocalVolatilityPDEValuePropertyNames.LOCAL_VOLATILITY_METHOD)
@@ -228,8 +230,10 @@ public class ForexLocalVolatilityPDEGridPresentValueFunction extends AbstractFun
   }
 
   private ValueRequirement getGreekRequirement(final ComputationTarget target, final String surfaceName, final String surfaceType, final String xAxis,
-      final String yAxis, final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName, final String theta, final String timeSteps,
-      final String spaceSteps, final String timeGridBunching, final String spaceGridBunching, final String maxMoneyness, final String h, final String pdeDirection) {
+      final String yAxis, final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName, final String theta,
+      final String timeSteps,
+      final String spaceSteps, final String timeGridBunching, final String spaceGridBunching, final String maxMoneyness, final String h,
+      final String pdeDirection) {
     final ValueProperties properties = ValueProperties.builder()
         .with(ValuePropertyNames.CALCULATION_METHOD, LocalVolatilityPDEValuePropertyNames.LOCAL_VOLATILITY_METHOD)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)

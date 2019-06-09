@@ -50,8 +50,8 @@ import com.sun.jersey.api.client.ClientResponse;
 /**
  * Provides access to a remote {@link ViewClient}.
  * <p>
- * At most <b>one</b> remote view client is supported for any view client; attempting to attach more than one remote view client to a single engine-side view client may result in undesired behaviour
- * including inconsistencies.
+ * At most <b>one</b> remote view client is supported for any view client; attempting to attach more than one remote view client to a single engine-side view
+ * client may result in undesired behaviour including inconsistencies.
  */
 public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResultListener> implements ViewClient {
 
@@ -85,13 +85,19 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
   /**
    * Creates an instance.
    *
-   * @param viewProcessor the view processor
-   * @param baseUri the base URI to connect to
-   * @param fudgeContext the Fudge context
-   * @param jmsConnector the JMS connector
-   * @param scheduler the scheduler
+   * @param viewProcessor
+   *          the view processor
+   * @param baseUri
+   *          the base URI to connect to
+   * @param fudgeContext
+   *          the Fudge context
+   * @param jmsConnector
+   *          the JMS connector
+   * @param scheduler
+   *          the scheduler
    */
-  public RemoteViewClient(final ViewProcessor viewProcessor, final URI baseUri, final FudgeContext fudgeContext, final JmsConnector jmsConnector, final ScheduledExecutorService scheduler) {
+  public RemoteViewClient(final ViewProcessor viewProcessor, final URI baseUri, final FudgeContext fudgeContext, final JmsConnector jmsConnector,
+      final ScheduledExecutorService scheduler) {
     super(baseUri, fudgeContext, jmsConnector, scheduler, DataViewProcessorUris.VIEW_CLIENT_TIMEOUT_MILLIS / 2);
     _viewProcessor = viewProcessor;
     _scheduler = scheduler;
@@ -110,7 +116,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     };
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void heartbeatFailed(final Exception e) {
     super.heartbeatFailed(e);
@@ -122,7 +128,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId getUniqueId() {
     final URI uri = getUri(getBaseUri(), DataViewClientUris.PATH_UNIQUE_ID);
@@ -146,7 +152,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     return getClient().accessFudge(uri).get(ViewClientState.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean isAttached() {
     final URI uri = getUri(getBaseUri(), DataViewClientUris.PATH_IS_ATTACHED);
@@ -222,7 +228,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void setResultListener(final ViewResultListener newListener) {
     _listenerLock.lock();
@@ -283,7 +289,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     getClient().accessFudge(uri).put(viewResultMode);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void pause() {
     final URI uri = getUri(getBaseUri(), DataViewClientUris.PATH_PAUSE);
@@ -393,7 +399,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     return new RemoteViewCycleReference(referenceUri, _scheduler, getClient());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void setMinimumLogMode(final ExecutionLogMode minimumLogMode, final Set<Pair<String, ValueSpecification>> targets) {
     final SetMinimumLogModeRequest request = new SetMinimumLogModeRequest();
@@ -403,7 +409,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     getClient().accessFudge(uri).post(request);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void shutdown() {
     terminateRemoteClient();
@@ -417,7 +423,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
     processCompleted();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void dispatchListenerCall(final Function<ViewResultListener, ?> listenerCall) {
     final ViewResultListener listener = _resultListener;

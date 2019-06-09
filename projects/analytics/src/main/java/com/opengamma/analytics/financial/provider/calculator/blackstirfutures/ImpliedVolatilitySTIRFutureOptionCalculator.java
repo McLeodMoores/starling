@@ -22,6 +22,7 @@ public final class ImpliedVolatilitySTIRFutureOptionCalculator extends Instrumen
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ImpliedVolatilitySTIRFutureOptionCalculator getInstance() {
@@ -37,15 +38,18 @@ public final class ImpliedVolatilitySTIRFutureOptionCalculator extends Instrumen
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginSecurityBlackSmileMethod METHOD_STIR_MARGIN = InterestRateFutureOptionMarginSecurityBlackSmileMethod.getInstance();
+  private static final InterestRateFutureOptionMarginSecurityBlackSmileMethod METHOD_STIR_MARGIN = InterestRateFutureOptionMarginSecurityBlackSmileMethod
+      .getInstance();
 
   @Override
-  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final BlackSTIRFuturesProviderInterface black) {
+  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
     return METHOD_STIR_MARGIN.impliedVolatility(futures.getUnderlyingSecurity(), black);
   }
 
   @Override
-  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity futures, final BlackSTIRFuturesProviderInterface black) {
+  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity futures,
+      final BlackSTIRFuturesProviderInterface black) {
     return METHOD_STIR_MARGIN.impliedVolatility(futures, black);
   }
 }

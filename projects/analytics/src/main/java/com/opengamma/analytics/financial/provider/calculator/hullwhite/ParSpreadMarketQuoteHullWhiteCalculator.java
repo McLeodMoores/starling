@@ -25,6 +25,7 @@ public final class ParSpreadMarketQuoteHullWhiteCalculator extends InstrumentDer
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteHullWhiteCalculator getInstance() {
@@ -44,12 +45,15 @@ public final class ParSpreadMarketQuoteHullWhiteCalculator extends InstrumentDer
   private static final InterestRateFutureSecurityHullWhiteMethod METHOD_STIR_FUT = InterestRateFutureSecurityHullWhiteMethod.getInstance();
   private static final SwapFuturesPriceDeliverableSecurityHullWhiteMethod METHOD_SWAP_FUT = SwapFuturesPriceDeliverableSecurityHullWhiteMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   /**
    * For InterestRateFutures the ParSpread is the spread to be added to the reference price to obtain a present value of zero.
-   * @param future The futures.
-   * @param multicurves The multi-curves and Hull-White provider.
+   * 
+   * @param future
+   *          The futures.
+   * @param multicurves
+   *          The multi-curves and Hull-White provider.
    * @return The par spread.
    */
   @Override
@@ -58,7 +62,8 @@ public final class ParSpreadMarketQuoteHullWhiteCalculator extends InstrumentDer
   }
 
   @Override
-  public Double visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures, final HullWhiteOneFactorProviderInterface multicurves) {
+  public Double visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures,
+      final HullWhiteOneFactorProviderInterface multicurves) {
     return METHOD_SWAP_FUT.price(futures.getUnderlyingSecurity(), multicurves) - futures.getReferencePrice();
   }
 

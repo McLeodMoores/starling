@@ -51,15 +51,16 @@ public class FFTPricer {
    *          Tolerance - smaller values give higher accuracy
    * @return array of arrays of strikes and prices
    */
-  public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final double lowestStrike,
+  public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce,
+      final double lowestStrike,
       final double highestStrike, final int minStrikesDisplayed, final double limitSigma, final double alpha, final double tol) {
 
     Validate.notNull(ce, "characteristic exponent");
     Validate.isTrue(tol > 0.0, "need tol > 0");
     Validate.isTrue(alpha != 0.0 && alpha != -1.0, "alpha cannot be -1 or 0");
     Validate.isTrue(highestStrike >= lowestStrike, "need highestStrike >= lowestStrike");
-    //   Validate.isTrue(lowestStrike <= forward, "need lowestStrike <= forward");
-    //    Validate.isTrue(highestStrike >= forward, "need highestStrike >= forward");
+    // Validate.isTrue(lowestStrike <= forward, "need lowestStrike <= forward");
+    // Validate.isTrue(highestStrike >= forward, "need highestStrike >= forward");
     Validate.isTrue(limitSigma > 0.0, "need limitSigma > 0");
 
     double kMax;
@@ -124,7 +125,8 @@ public class FFTPricer {
    *          Tolerance - smaller values give higher accuracy
    * @return array of arrays of strikes and prices
    */
-  public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikes,
+  public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce,
+      final int nStrikes,
       final double maxDeltaMoneyness,
       final double limitSigma, final double alpha,
       final double tol) {
@@ -201,7 +203,8 @@ public class FFTPricer {
    *          The actual number of samples. Need n &gt;= 2m-1
    * @return array of arrays of strikes and prices
    */
-  public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,
+  public double[][] price(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce,
+      final int nStrikesBelowATM,
       final int nStrikesAboveATM, final double alpha, final double delta, final int n, final int m) {
 
     Validate.notNull(ce, "characteristic exponent");
@@ -235,7 +238,8 @@ public class FFTPricer {
     return res;
   }
 
-  private ComplexNumber[] getPaddedArray(final double alpha, final double delta, final int n, final int m, final Function1D<ComplexNumber, ComplexNumber> func, final int halfN) {
+  private ComplexNumber[] getPaddedArray(final double alpha, final double delta, final int n, final int m, final Function1D<ComplexNumber, ComplexNumber> func,
+      final int halfN) {
     final ComplexNumber[] z = new ComplexNumber[n];
 
     final int lowerPadOutSize = halfN - m;
@@ -257,7 +261,7 @@ public class FFTPricer {
       u = new ComplexNumber(i * delta, -(1 + alpha));
       final ComplexNumber f = func.evaluate(u);
       z[offset + i] = f;
-      z[offset - i] = ComplexMathUtils.conjugate(f); //TODO the FFT should take care of this
+      z[offset - i] = ComplexMathUtils.conjugate(f); // TODO the FFT should take care of this
     }
     return z;
   }

@@ -34,7 +34,8 @@ public class InterestRateInstrumentTradeOrSecurityConverter {
   private final InterestRateFutureTradeConverterDeprecated _interestRateFutureTradeConverter;
   private final InterestRateFutureOptionTradeConverterDeprecated _interestRateFutureOptionTradeConverter;
 
-  public InterestRateInstrumentTradeOrSecurityConverter(final HolidaySource holidaySource, final ConventionBundleSource conventionSource, final RegionSource regionSource,
+  public InterestRateInstrumentTradeOrSecurityConverter(final HolidaySource holidaySource, final ConventionBundleSource conventionSource,
+      final RegionSource regionSource,
       final SecuritySource securitySource, final boolean forCurves, final VersionCorrection versionCorrection) {
     Validate.notNull(holidaySource, "holiday source");
     Validate.notNull(conventionSource, "convention source");
@@ -44,13 +45,14 @@ public class InterestRateInstrumentTradeOrSecurityConverter {
     final FRASecurityConverterDeprecated fraConverter = new FRASecurityConverterDeprecated(holidaySource, regionSource, conventionSource);
     final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, forCurves);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final InterestRateFutureOptionSecurityConverterDeprecated irFutureOptionConverter =
-        new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, securitySource, versionCorrection);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureOptionSecurityConverterDeprecated irFutureOptionConverter = new InterestRateFutureOptionSecurityConverterDeprecated(holidaySource,
+        conventionSource, regionSource, securitySource, versionCorrection);
+    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource,
+        regionSource);
     final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
 
     final ZeroDepositConverter zeroDepositConverter = new ZeroDepositConverter(conventionSource, holidaySource);
-    _securityVisitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder()
+    _securityVisitor = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
         .cashSecurityVisitor(cashConverter)
         .fraSecurityVisitor(fraConverter)
         .swapSecurityVisitor(swapConverter)

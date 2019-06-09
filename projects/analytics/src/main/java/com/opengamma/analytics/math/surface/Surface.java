@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.surface;
@@ -12,26 +12,32 @@ import org.apache.commons.lang.ObjectUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Defines a general surface <i>(x, y, z)</i> class. The <i>x</i>, <i>y</i> and <i>z</i> data can be any type. The surfaces are named; if a name is not provided then a unique
- * ID will be used. 
- * @param <T> The type of the x data
- * @param <U> The type of the y data
- * @param <V> The type of the z data
+ * Defines a general surface <i>(x, y, z)</i> class. The <i>x</i>, <i>y</i> and <i>z</i> data can be any type. The surfaces are named; if a name is not provided
+ * then a unique ID will be used.
+ * 
+ * @param <T>
+ *          The type of the x data
+ * @param <U>
+ *          The type of the y data
+ * @param <V>
+ *          The type of the z data
  */
 public abstract class Surface<T, U, V> {
   private static final AtomicLong ATOMIC = new AtomicLong();
   private final String _name;
 
   /**
-   * Constructs a surface with an automatically-generated name
+   * Constructs a surface with an automatically-generated name.
    */
   public Surface() {
     this(Long.toString(ATOMIC.getAndIncrement()));
   }
 
   /**
-   * Constructs a surface with the given name
-   * @param name The name
+   * Constructs a surface with the given name.
+   * 
+   * @param name
+   *          The name
    */
   public Surface(final String name) {
     _name = name;
@@ -65,16 +71,21 @@ public abstract class Surface<T, U, V> {
   public abstract int size();
 
   /**
-   * Given an <i>(x, y)</i> point, return the <i>z</i> value from this surface. 
-   * @param x The <i>x</i> value, not null
-   * @param y The <i>y</i> value, not null
+   * Given an <i>(x, y)</i> point, return the <i>z</i> value from this surface.
+   * 
+   * @param x
+   *          The <i>x</i> value, not null
+   * @param y
+   *          The <i>y</i> value, not null
    * @return The <i>z</i> value
    */
   public abstract V getZValue(T x, U y);
 
   /**
-   * Given an <i>(x, y)</i> point, return the <i>z</i> value from this surface. 
-   * @param xy The <i>(x, y)</i> value, not null
+   * Given an <i>(x, y)</i> point, return the <i>z</i> value from this surface.
+   * 
+   * @param xy
+   *          The <i>(x, y)</i> value, not null
    * @return The <i>z</i> value
    */
   public abstract V getZValue(Pair<T, U> xy);
@@ -83,7 +94,7 @@ public abstract class Surface<T, U, V> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name == null) ? 0 : _name.hashCode());
+    result = prime * result + (_name == null ? 0 : _name.hashCode());
     return result;
   }
 

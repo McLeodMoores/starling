@@ -41,10 +41,14 @@ public class DupireLocalVolatilityCalculator {
   /**
    * Classic Dupire local volatility formula
    *
-   * @param priceSurface present value (i.e. discounted) value of options on underlying at various expiries and strikes
-   * @param spot The current value of the underlying
-   * @param r The risk free rate (or domestic rate in FX)
-   * @param q The dividend yield (or foreign rate in FX)
+   * @param priceSurface
+   *          present value (i.e. discounted) value of options on underlying at various expiries and strikes
+   * @param spot
+   *          The current value of the underlying
+   * @param r
+   *          The risk free rate (or domestic rate in FX)
+   * @param q
+   *          The dividend yield (or foreign rate in FX)
    * @return The local volatility surface
    */
   public LocalVolatilitySurfaceStrike getLocalVolatility(final PriceSurface priceSurface, final double spot, final double r, final double q) {
@@ -70,7 +74,9 @@ public class DupireLocalVolatilityCalculator {
       }
 
       public Object writeReplace() {
-        return new InvokedSerializedForm(new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatility", priceSurface, spot, r, q), "getSurface"),
+        return new InvokedSerializedForm(
+            new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatility", priceSurface, spot, r, q),
+                "getSurface"),
             "getFunction");
       }
 
@@ -86,9 +92,12 @@ public class DupireLocalVolatilityCalculator {
   /**
    * REVIEW if we need this Get the absolute (i.e. normal instantaneous) local vol surface
    *
-   * @param impliedVolatilitySurface BlackVolatilitySurface
-   * @param spot value of underlying
-   * @param rate interest rate
+   * @param impliedVolatilitySurface
+   *          BlackVolatilitySurface
+   * @param spot
+   *          value of underlying
+   * @param rate
+   *          interest rate
    * @return local vol surface
    */
   public AbsoluteLocalVolatilitySurface getAbsoluteLocalVolatilitySurface(final BlackVolatilitySurfaceStrike impliedVolatilitySurface, final double spot,
@@ -123,8 +132,10 @@ public class DupireLocalVolatilityCalculator {
       }
 
       public Object writeReplace() {
-        return new InvokedSerializedForm(new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getAbsoluteLocalVolatilitSurface", impliedVolatilitySurface, spot,
-            rate), "getSurface"), "getFunction");
+        return new InvokedSerializedForm(new InvokedSerializedForm(
+            new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getAbsoluteLocalVolatilitSurface", impliedVolatilitySurface, spot,
+                rate),
+            "getSurface"), "getFunction");
       }
 
     };
@@ -139,9 +150,12 @@ public class DupireLocalVolatilityCalculator {
   /**
    * Classic Dupire local volatility formula in terms of the Black Volatility surface (parameterised by strike)
    *
-   * @param impliedVolatilitySurface Black Volatility surface (parameterised by strike)
-   * @param spot Level of underlying
-   * @param drift The risk free rate minus The dividend yield (r-q), or the difference between the domestic and foreign risk free rates in FX
+   * @param impliedVolatilitySurface
+   *          Black Volatility surface (parameterised by strike)
+   * @param spot
+   *          Level of underlying
+   * @param drift
+   *          The risk free rate minus The dividend yield (r-q), or the difference between the domestic and foreign risk free rates in FX
    * @return A Local Volatility surface parameterised by expiry and strike
    * @deprecated Don't use
    */
@@ -177,7 +191,8 @@ public class DupireLocalVolatilityCalculator {
       }
 
       public Object writeReplace() {
-        return new InvokedSerializedForm(new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatility", impliedVolatilitySurface, spot, drift),
+        return new InvokedSerializedForm(new InvokedSerializedForm(
+            new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatility", impliedVolatilitySurface, spot, drift),
             "getSurface"), "getFunction");
       }
 
@@ -190,7 +205,7 @@ public class DupireLocalVolatilityCalculator {
     };
   }
 
-  //TODO replace this
+  // TODO replace this
   public <T extends StrikeType> LocalVolatilitySurface<?> getLocalVolatilitySurface(final BlackVolatilitySurface<T> impliedVolatilitySurface,
       final ForwardCurve forwardCurve) {
     if (impliedVolatilitySurface instanceof BlackVolatilitySurfaceStrike) {
@@ -204,8 +219,10 @@ public class DupireLocalVolatilityCalculator {
   /**
    * Get the local volatility in the case where the option price is a function of the forward price
    *
-   * @param impliedVolatilitySurface The Black implied volatility surface
-   * @param forwardCurve Curve of forward prices
+   * @param impliedVolatilitySurface
+   *          The Black implied volatility surface
+   * @param forwardCurve
+   *          Curve of forward prices
    * @return The local volatility
    */
   public LocalVolatilitySurfaceStrike getLocalVolatility(final BlackVolatilitySurfaceStrike impliedVolatilitySurface, final ForwardCurve forwardCurve) {
@@ -240,7 +257,8 @@ public class DupireLocalVolatilityCalculator {
       }
 
       public Object writeReplace() {
-        return new InvokedSerializedForm(new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatility", impliedVolatilitySurface, forwardCurve),
+        return new InvokedSerializedForm(new InvokedSerializedForm(
+            new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatility", impliedVolatilitySurface, forwardCurve),
             "getSurface"), "getFunction");
       }
 
@@ -254,11 +272,13 @@ public class DupireLocalVolatilityCalculator {
   }
 
   /**
-   * Get the <b>pure</b> local volatility surface (i.e. if the pure stock $x$ follows the SDE $\frac{dx}{x} = \sigma(t,x) dW$ then $\sigma(t,x)$ is the pure local volatility
+   * Get the <b>pure</b> local volatility surface (i.e. if the pure stock $x$ follows the SDE $\frac{dx}{x} = \sigma(t,x) dW$ then $\sigma(t,x)$ is the pure
+   * local volatility
    * <p>
    * See White, R (2012) Equity Variance Swap with Dividends
    *
-   * @param pureImpliedVolatilitySurface The pure implied volatility surface - i.e. the volatility that put into the Black formula will give the price of an option on the pure stock
+   * @param pureImpliedVolatilitySurface
+   *          The pure implied volatility surface - i.e. the volatility that put into the Black formula will give the price of an option on the pure stock
    * @return pure local volatility surface
    */
   public PureLocalVolatilitySurface getLocalVolatility(final PureImpliedVolatilitySurface pureImpliedVolatilitySurface) {
@@ -311,8 +331,10 @@ public class DupireLocalVolatilityCalculator {
       }
 
       public Object writeReplace() {
-        return new InvokedSerializedForm(new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatilityDebug", impliedVolatilitySurface),
-            "getSurface"), "getFunction");
+        return new InvokedSerializedForm(
+            new InvokedSerializedForm(new InvokedSerializedForm(DupireLocalVolatilityCalculator.this, "getLocalVolatilityDebug", impliedVolatilitySurface),
+                "getSurface"),
+            "getFunction");
       }
 
     };
@@ -325,10 +347,11 @@ public class DupireLocalVolatilityCalculator {
   }
 
   /**
-   * Get the theta surface - the rate of change of an option with respect to the time-to-expiry (<b>Note</b> this is the negative of the normal definition as change of an option with respect to
-   * (calendar) time)
+   * Get the theta surface - the rate of change of an option with respect to the time-to-expiry (<b>Note</b> this is the negative of the normal definition as
+   * change of an option with respect to (calendar) time)
    *
-   * @param impliedVolatilitySurface Black volatility surface (parameterised by expiry and moneyness)
+   * @param impliedVolatilitySurface
+   *          Black volatility surface (parameterised by expiry and moneyness)
    * @return Theta surface (parameterised by moneyness)
    */
   public Surface<Double, Double, Double> getTheta(final BlackVolatilitySurfaceMoneyness impliedVolatilitySurface) {
@@ -367,10 +390,11 @@ public class DupireLocalVolatilityCalculator {
   }
 
   /**
-   * Get the transition density surface - each time slice through this surface is the Probably Density Function (PDF), in the risk neutral measure, for the underlying at that time (parameterised by
-   * moneyness)
+   * Get the transition density surface - each time slice through this surface is the Probably Density Function (PDF), in the risk neutral measure, for the
+   * underlying at that time (parameterised by moneyness)
    *
-   * @param impliedVolatilitySurface Black volatility surface (parameterised by expiry and moneyness)
+   * @param impliedVolatilitySurface
+   *          Black volatility surface (parameterised by expiry and moneyness)
    * @return The transition density surface
    */
   public Surface<Double, Double, Double> getDensity(final BlackVolatilitySurfaceMoneyness impliedVolatilitySurface) {

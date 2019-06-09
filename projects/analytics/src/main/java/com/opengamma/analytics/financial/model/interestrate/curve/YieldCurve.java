@@ -27,8 +27,10 @@ public class YieldCurve extends YieldAndDiscountCurve {
   private final DoublesCurve _curve;
 
   /**
-   * @param name The curve name.
-   * @param yieldCurve Curve containing continuously-compounded rates against maturities. Rates are unitless (eg 0.02 for two percent) and maturities are in years.
+   * @param name
+   *          The curve name.
+   * @param yieldCurve
+   *          Curve containing continuously-compounded rates against maturities. Rates are unitless (eg 0.02 for two percent) and maturities are in years.
    */
   public YieldCurve(final String name, final DoublesCurve yieldCurve) {
     super(name);
@@ -38,7 +40,9 @@ public class YieldCurve extends YieldAndDiscountCurve {
 
   /**
    * Builder from a DoublesCurve using the name of the DoublesCurve as the name of the YieldCurve.
-   * @param yieldCurve The underlying curve based on yields (continuously-compounded).
+   * 
+   * @param yieldCurve
+   *          The underlying curve based on yields (continuously-compounded).
    * @return The yield curve.
    */
   public static YieldCurve from(final DoublesCurve yieldCurve) {
@@ -47,14 +51,20 @@ public class YieldCurve extends YieldAndDiscountCurve {
   }
 
   /**
-   * Builder of an interpolated yield  (continuously compounded) curve from discount factors.
-   * @param nodePoints The node points for the interpolated curve.
-   * @param discountFactors The discount factors at the node points.
-   * @param interpolator The yield (cc) interpolator.
-   * @param name The curve name.
+   * Builder of an interpolated yield (continuously compounded) curve from discount factors.
+   * 
+   * @param nodePoints
+   *          The node points for the interpolated curve.
+   * @param discountFactors
+   *          The discount factors at the node points.
+   * @param interpolator
+   *          The yield (cc) interpolator.
+   * @param name
+   *          The curve name.
    * @return The yield curve.
    */
-  public static YieldCurve fromDiscountFactorInterpolated(final double[] nodePoints, final double[] discountFactors, final Interpolator1D interpolator, final String name) {
+  public static YieldCurve fromDiscountFactorInterpolated(final double[] nodePoints, final double[] discountFactors, final Interpolator1D interpolator,
+      final String name) {
     final int nbDF = discountFactors.length;
     ArgumentChecker.isTrue(nodePoints.length == nbDF, "Yields array of incorrect length");
     final double[] yields = new double[nbDF];
@@ -93,6 +103,7 @@ public class YieldCurve extends YieldAndDiscountCurve {
 
   /**
    * Gets the underlying curve.
+   * 
    * @return The curve.
    */
   public DoublesCurve getCurve() {

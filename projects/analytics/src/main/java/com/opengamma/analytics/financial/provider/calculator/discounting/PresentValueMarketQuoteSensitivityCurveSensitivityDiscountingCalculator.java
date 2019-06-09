@@ -31,15 +31,18 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Computes the sensitivity to the curves (in the Market description of curve bundle) of the market quote sensitivity.
  */
-public final class PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
+public final class PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator
+extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator INSTANCE = new PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator();
+  private static final PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator INSTANCE =
+      new PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator();
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator getInstance() {
@@ -52,7 +55,7 @@ public final class PresentValueMarketQuoteSensitivityCurveSensitivityDiscounting
   private PresentValueMarketQuoteSensitivityCurveSensitivityDiscountingCalculator() {
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MulticurveSensitivity visitFixedPayment(final PaymentFixed payment, final MulticurveProviderInterface multicurve) {
@@ -69,7 +72,7 @@ public final class PresentValueMarketQuoteSensitivityCurveSensitivityDiscounting
     final Map<String, List<DoublesPair>> resultMapDsc = new HashMap<>();
     final List<DoublesPair> listDiscounting = new ArrayList<>();
     listDiscounting.add(DoublesPair.of(coupon.getPaymentTime(), -coupon.getPaymentTime() * df * dfBar));
-    //    resultMapDsc.put(coupon.getFundingCurveName(), listDiscounting);
+    // resultMapDsc.put(coupon.getFundingCurveName(), listDiscounting);
     resultMapDsc.put(multicurve.getName(coupon.getCurrency()), listDiscounting);
     return MulticurveSensitivity.ofYieldDiscounting(resultMapDsc);
   }
@@ -85,7 +88,8 @@ public final class PresentValueMarketQuoteSensitivityCurveSensitivityDiscounting
   }
 
   @Override
-  public MulticurveSensitivity visitCouponONArithmeticAverageSpreadSimplified(final CouponONArithmeticAverageSpreadSimplified coupon, final MulticurveProviderInterface multicurve) {
+  public MulticurveSensitivity visitCouponONArithmeticAverageSpreadSimplified(final CouponONArithmeticAverageSpreadSimplified coupon,
+      final MulticurveProviderInterface multicurve) {
     return visitCoupon(coupon, multicurve);
   }
 
@@ -111,7 +115,7 @@ public final class PresentValueMarketQuoteSensitivityCurveSensitivityDiscounting
     return visitCoupon(coupon, multicurve);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MulticurveSensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity, final MulticurveProviderInterface multicurve) {

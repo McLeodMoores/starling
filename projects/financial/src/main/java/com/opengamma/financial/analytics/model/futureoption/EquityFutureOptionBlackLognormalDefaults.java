@@ -36,17 +36,17 @@ import com.opengamma.util.ArgumentChecker;
 public class EquityFutureOptionBlackLognormalDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureOptionBlackLognormalDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.FORWARD_DELTA,
-    ValueRequirementNames.FORWARD_GAMMA,
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.GAMMA,
-    ValueRequirementNames.VEGA,
-    ValueRequirementNames.THETA
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.THETA
   };
   private final PriorityClass _priority;
   private final Map<String, Set<String>> _currencyToCurveName;
@@ -107,14 +107,15 @@ public class EquityFutureOptionBlackLognormalDefaults extends DefaultPropertyFun
       return null;
     }
     final Set<String> values = constraints.getValues(ValuePropertyNames.SURFACE_CALCULATION_METHOD);
-    if ((values == null) || (!values.isEmpty() && !values.contains(BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL))) {
+    if (values == null || !values.isEmpty() && !values.contains(BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL)) {
       return null;
     }
     return super.getRequirements(context, target, desiredValue);
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     switch (propertyName) {
       case EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME:

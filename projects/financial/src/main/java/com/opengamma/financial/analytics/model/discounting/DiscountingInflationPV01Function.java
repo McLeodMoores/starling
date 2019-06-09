@@ -46,12 +46,11 @@ public class DiscountingInflationPV01Function extends DiscountingInflationFuncti
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(DiscountingInflationPV01Function.class);
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<InflationProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersInflationCalculator<>(
-      PresentValueCurveSensitivityDiscountingInflationCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<InflationProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersInflationCalculator<>(PresentValueCurveSensitivityDiscountingInflationCalculator.getInstance());
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public DiscountingInflationPV01Function() {
     super(PV01);

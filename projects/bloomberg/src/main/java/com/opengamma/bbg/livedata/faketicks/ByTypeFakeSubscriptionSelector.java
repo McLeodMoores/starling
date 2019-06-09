@@ -39,7 +39,8 @@ public class ByTypeFakeSubscriptionSelector implements FakeSubscriptionSelector 
   public ObjectsPair<Collection<LiveDataSpecification>, Collection<LiveDataSpecification>> splitShouldFake(
       final FakeSubscriptionBloombergLiveDataServer server, final Collection<LiveDataSpecification> specs) {
     if (specs.isEmpty()) {
-      return ObjectsPair.of((Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>(), (Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>());
+      return ObjectsPair.of((Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>(),
+          (Collection<LiveDataSpecification>) new ArrayList<LiveDataSpecification>());
     }
 
     final Set<LiveDataSpecification> fakes = new HashSet<>();
@@ -51,7 +52,7 @@ public class ByTypeFakeSubscriptionSelector implements FakeSubscriptionSelector 
 
     for (final java.util.Map.Entry<LiveDataSpecification, DistributionSpecification> entry : resolved.entrySet()) {
       if (entry.getValue() == null) {
-        //Subscription won't work.  Presume we want a real subscription.
+        // Subscription won't work. Presume we want a real subscription.
         underlyings.add(entry.getKey());
         continue;
       }

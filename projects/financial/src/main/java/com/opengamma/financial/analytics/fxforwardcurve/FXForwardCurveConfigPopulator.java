@@ -33,7 +33,8 @@ public class FXForwardCurveConfigPopulator {
       Tenor.ofYears(5), Tenor.ofYears(10));
 
   /**
-   * @param configMaster The configuration master, not null
+   * @param configMaster
+   *          The configuration master, not null
    */
   public FXForwardCurveConfigPopulator(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configuration master");
@@ -42,7 +43,9 @@ public class FXForwardCurveConfigPopulator {
 
   /**
    * Populates the configuration master with a single EUR/USD FX forward curve definition and specification called DEFAULT.
-   * @param configMaster The configuration master, not null
+   * 
+   * @param configMaster
+   *          The configuration master, not null
    * @return The populated configuration master
    */
   public static ConfigMaster populateFXForwardCurveConfigMaster(final ConfigMaster configMaster) {
@@ -52,11 +55,15 @@ public class FXForwardCurveConfigPopulator {
 
   /**
    * Populates the configuration master curves.
-   * @param configMaster The configuration master, not null
-   * @param pairs The currency pairs and (surface name, forward prefix and spot prefix) information, not null
+   * 
+   * @param configMaster
+   *          The configuration master, not null
+   * @param pairs
+   *          The currency pairs and (surface name, forward prefix and spot prefix) information, not null
    * @return The populated configuration master
    */
-  public static ConfigMaster populateFXForwardCurveConfigMaster(final ConfigMaster configMaster, final Map<UnorderedCurrencyPair, Triple<String, String, String>> pairs) {
+  public static ConfigMaster populateFXForwardCurveConfigMaster(final ConfigMaster configMaster,
+      final Map<UnorderedCurrencyPair, Triple<String, String, String>> pairs) {
     ArgumentChecker.notNull(configMaster, "configuration master");
     ArgumentChecker.notNull(pairs, "pairs, names and tickers");
     for (final Map.Entry<UnorderedCurrencyPair, Triple<String, String, String>> pair : pairs.entrySet()) {
@@ -72,8 +79,10 @@ public class FXForwardCurveConfigPopulator {
     ConfigMasterUtils.storeByName(configMaster, makeConfig(definition));
   }
 
-  private static void populateCurveSpecifications(final ConfigMaster configMaster, final UnorderedCurrencyPair target, final Triple<String, String, String> triple) {
-    final FXForwardCurveInstrumentProvider curveInstrumentProvider = new BloombergFXForwardCurveInstrumentProvider(triple.getSecond(), "Curncy", triple.getThird(),
+  private static void populateCurveSpecifications(final ConfigMaster configMaster, final UnorderedCurrencyPair target,
+      final Triple<String, String, String> triple) {
+    final FXForwardCurveInstrumentProvider curveInstrumentProvider = new BloombergFXForwardCurveInstrumentProvider(triple.getSecond(), "Curncy",
+        triple.getThird(),
         MarketDataRequirementNames.MARKET_VALUE);
     final String fullName = triple.getFirst() + SEPARATOR + target.toString() + SEPARATOR + INSTRUMENT_TYPE;
     final FXForwardCurveSpecification spec = new FXForwardCurveSpecification(fullName, target, curveInstrumentProvider);

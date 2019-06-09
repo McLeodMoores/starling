@@ -24,6 +24,7 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 
 /**
  * Function that calculated the present value of the pay leg of a swap.
+ * 
  * @deprecated The parent class is deprecated.
  */
 @Deprecated
@@ -32,8 +33,7 @@ public class SwapPayLegPresentValueFunction extends InterestRateInstrumentFuncti
   private static final PresentValueCalculator CALCULATOR = PresentValueCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PAY_LEG_PRESENT_VALUE}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PAY_LEG_PRESENT_VALUE}.
    */
   public SwapPayLegPresentValueFunction() {
     super(PAY_LEG_PRESENT_VALUE);
@@ -45,7 +45,8 @@ public class SwapPayLegPresentValueFunction extends InterestRateInstrumentFuncti
   }
 
   @Override
-  public Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle, final FinancialSecurity security, final ComputationTarget target,
+  public Set<ComputedValue> getComputedValues(final InstrumentDerivative derivative, final YieldCurveBundle bundle, final FinancialSecurity security,
+      final ComputationTarget target,
       final String curveCalculationConfigName, final String currency) {
     if (!(derivative instanceof Swap<?, ?>)) {
       throw new OpenGammaRuntimeException("Expected a swap, have " + derivative.getClass());

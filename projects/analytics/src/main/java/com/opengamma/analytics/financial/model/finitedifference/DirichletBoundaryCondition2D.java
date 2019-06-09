@@ -20,10 +20,13 @@ public class DirichletBoundaryCondition2D implements BoundaryCondition2D {
   private final double _level;
 
   /**
-   * Dirichlet boundary condition, i.e. u(A, x, t) = f(x, t), where A is the boundary level of one of the spatial dimensions, and f(x, t) is some specified function of time
-   * and the other spatial dimension
-   * @param boundaryValue The value of u at the boundary, i.e. u(A, x, t) = f(x, t)
-   * @param boundaryLevel The boundary level (A)
+   * Dirichlet boundary condition, i.e. u(A, x, t) = f(x, t), where A is the boundary level of one of the spatial dimensions, and f(x, t) is some specified
+   * function of time and the other spatial dimension
+   * 
+   * @param boundaryValue
+   *          The value of u at the boundary, i.e. u(A, x, t) = f(x, t)
+   * @param boundaryLevel
+   *          The boundary level (A)
    */
   public DirichletBoundaryCondition2D(final Surface<Double, Double, Double> boundaryValue, final double boundaryLevel) {
     Validate.notNull(boundaryValue, "boundaryValue ");
@@ -38,7 +41,7 @@ public class DirichletBoundaryCondition2D implements BoundaryCondition2D {
 
   @Override
   public double[] getLeftMatrixCondition(final double t, final double x) {
-    return new double[] {1.0 };
+    return new double[] { 1.0 };
   }
 
   @Override

@@ -43,12 +43,11 @@ import com.opengamma.util.tuple.Pair;
  */
 public class ShiftedLognormalDiscountingPV01CapFloorFunction extends ShiftedLognormalDiscountingCapFloorFunction {
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivityBlackSmileShiftCapCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityBlackSmileShiftCapCalculator.getInstance());
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public ShiftedLognormalDiscountingPV01CapFloorFunction() {
     super(PV01);
@@ -105,7 +104,8 @@ public class ShiftedLognormalDiscountingPV01CapFloorFunction extends ShiftedLogn
       }
 
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         Set<String> curveNames = null;
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueSpecification key = entry.getKey();

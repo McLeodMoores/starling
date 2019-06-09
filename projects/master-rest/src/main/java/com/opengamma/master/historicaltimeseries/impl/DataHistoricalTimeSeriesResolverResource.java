@@ -63,7 +63,8 @@ public class DataHistoricalTimeSeriesResolverResource extends AbstractDataResour
     private final String _dataField;
     private final String _resolutionKey;
 
-    private Resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider, final String dataField,
+    private Resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider,
+        final String dataField,
         final String resolutionKey) {
       _identifierBundle = identifierBundle;
       _identifierValidityDate = identifierValidityDate;
@@ -78,7 +79,8 @@ public class DataHistoricalTimeSeriesResolverResource extends AbstractDataResour
       if (_identifierBundle == null) {
         return new Resolve(ExternalIdBundle.of(ExternalId.parse(id)), _identifierValidityDate, _dataSource, _dataProvider, _dataField, _resolutionKey);
       }
-      return new Resolve(_identifierBundle.withExternalId(ExternalId.parse(id)), _identifierValidityDate, _dataSource, _dataProvider, _dataField, _resolutionKey);
+      return new Resolve(_identifierBundle.withExternalId(ExternalId.parse(id)), _identifierValidityDate, _dataSource, _dataProvider, _dataField,
+          _resolutionKey);
     }
 
     @Path("identifierValidityDate/{date}")

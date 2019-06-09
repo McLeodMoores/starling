@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -46,7 +46,8 @@ public class FXOptionBlackDeltaPnLDefaultsDeprecated extends DefaultPropertyFunc
   private final String _putCurrency;
   private final String _callCurrency;
 
-  public FXOptionBlackDeltaPnLDefaultsDeprecated(final String putCurveName, final String callCurveName, final String putCurveConfig, final String callCurveConfig,
+  public FXOptionBlackDeltaPnLDefaultsDeprecated(final String putCurveName, final String callCurveName, final String putCurveConfig,
+      final String callCurveConfig,
       final String surfaceName, final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName,
       final String samplingPeriod, final String scheduleCalculator, final String samplingFunction, final String putCurrency, final String callCurrency) {
     super(ComputationTargetType.POSITION, true);
@@ -108,7 +109,8 @@ public class FXOptionBlackDeltaPnLDefaultsDeprecated extends DefaultPropertyFunc
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (FXOptionBlackFunction.CALL_CURVE.equals(propertyName)) {
       return Collections.singleton(_callCurveName);
     }

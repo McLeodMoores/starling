@@ -42,7 +42,8 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This class is thread-safe and immutable.
  * <p>
- * See <a href="http://www.spindices.com/documents/index-policies/methodology-gics.pdf">http://www.spindices.com/documents/index-policies/methodology-gics.pdf</a>
+ * See <a href="http://www.spindices.com/documents/index-policies/methodology-gics.pdf">
+ * http://www.spindices.com/documents/index-policies/methodology-gics.pdf</a>
  */
 @BeanDefinition(builderScope = "private")
 public final class GICSCode implements ImmutableBean, Serializable {

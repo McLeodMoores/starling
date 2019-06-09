@@ -30,6 +30,7 @@ public final class DepositCounterpartDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static DepositCounterpartDiscountingMethod getInstance() {
@@ -44,8 +45,11 @@ public final class DepositCounterpartDiscountingMethod {
 
   /**
    * Compute the present value by discounting the final cash flow (nominal + interest) and the initial payment (initial amount).
-   * @param deposit The deposit.
-   * @param multicurves The multi-curves and issuer curves provider.
+   * 
+   * @param deposit
+   *          The deposit.
+   * @param multicurves
+   *          The multi-curves and issuer curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final DepositCounterpart deposit, final IssuerProviderInterface multicurves) {
@@ -59,8 +63,11 @@ public final class DepositCounterpartDiscountingMethod {
 
   /**
    * Compute the present value by discounting the final cash flow (nominal + interest) and the initial payment (initial amount).
-   * @param deposit The deposit.
-   * @param multicurves The multi-curves and issuer curves provider.
+   * 
+   * @param deposit
+   *          The deposit.
+   * @param multicurves
+   *          The multi-curves and issuer curves provider.
    * @return The present value.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final DepositCounterpart deposit, final IssuerProviderInterface multicurves) {
@@ -83,10 +90,13 @@ public final class DepositCounterpartDiscountingMethod {
   }
 
   /**
-   * Computes the spread to be added to the deposit rate to have a zero present value.
-   * When deposit has already start the number may not be meaning full as only the final payment remains (no initial payment).
-   * @param deposit The deposit.
-   * @param multicurves The multi-curves and issuer curves provider.
+   * Computes the spread to be added to the deposit rate to have a zero present value. When deposit has already start the number may not be meaning full as only
+   * the final payment remains (no initial payment).
+   * 
+   * @param deposit
+   *          The deposit.
+   * @param multicurves
+   *          The multi-curves and issuer curves provider.
    * @return The spread.
    */
   public double parSpread(final DepositCounterpart deposit, final IssuerProviderInterface multicurves) {
@@ -95,14 +105,18 @@ public final class DepositCounterpartDiscountingMethod {
     ArgumentChecker.isTrue(deposit.getNotional() != 0.0, "Notional is 0");
     final double dfStart = multicurves.getDiscountFactor(deposit.getCounterparty(), deposit.getStartTime());
     final double dfEnd = multicurves.getDiscountFactor(deposit.getCounterparty(), deposit.getEndTime());
-    return (deposit.getInitialAmount() * dfStart - (deposit.getNotional() + deposit.getInterestAmount()) * dfEnd) / (deposit.getNotional() * deposit.getAccrualFactor() * dfEnd);
+    return (deposit.getInitialAmount() * dfStart - (deposit.getNotional() + deposit.getInterestAmount()) * dfEnd)
+        / (deposit.getNotional() * deposit.getAccrualFactor() * dfEnd);
   }
 
   /**
-   * Computes the par spread curve sensitivity.
-   * When deposit has already start the number may not be meaning full as only the final payment remains (no initial payment).
-   * @param deposit The deposit.
-   * @param multicurves The multi-curves and issuer curves provider.
+   * Computes the par spread curve sensitivity. When deposit has already start the number may not be meaning full as only the final payment remains (no initial
+   * payment).
+   * 
+   * @param deposit
+   *          The deposit.
+   * @param multicurves
+   *          The multi-curves and issuer curves provider.
    * @return The spread curve sensitivity.
    */
   public MulticurveSensitivity parSpreadCurveSensitivity(final DepositCounterpart deposit, final IssuerProviderInterface multicurves) {
@@ -114,7 +128,7 @@ public final class DepositCounterpartDiscountingMethod {
     // Backward sweep
     final double parSpreadBar = 1.0;
     final double dfEndBar = -(deposit.getInitialAmount() * dfStart / (dfEnd * dfEnd)) / (deposit.getNotional() * deposit.getAccrualFactor()) * parSpreadBar;
-    final double dfStartBar = (deposit.getInitialAmount() / dfEnd) / (deposit.getNotional() * deposit.getAccrualFactor()) * parSpreadBar;
+    final double dfStartBar = deposit.getInitialAmount() / dfEnd / (deposit.getNotional() * deposit.getAccrualFactor()) * parSpreadBar;
     final Map<String, List<DoublesPair>> mapDsc = new HashMap<>();
     final List<DoublesPair> listDiscounting = new ArrayList<>();
     listDiscounting.add(DoublesPair.of(deposit.getStartTime(), -deposit.getStartTime() * dfStart * dfStartBar));

@@ -32,15 +32,24 @@ public class CouponFixedDefinition extends CouponDefinition {
 
   /**
    * Constructor from all the coupon details.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param rate Fixed rate.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param rate
+   *          Fixed rate.
    */
-  public CouponFixedDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+  public CouponFixedDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
       final double paymentYearFraction, final double notional, final double rate) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional);
     _rate = rate;
@@ -49,24 +58,36 @@ public class CouponFixedDefinition extends CouponDefinition {
 
   /**
    * Fixed coupon constructor from a coupon and the fixed rate.
-   * @param coupon Underlying coupon.
-   * @param rate Fixed rate.
+   * 
+   * @param coupon
+   *          Underlying coupon.
+   * @param rate
+   *          Fixed rate.
    */
   public CouponFixedDefinition(final CouponDefinition coupon, final double rate) {
-    super(coupon.getCurrency(), coupon.getPaymentDate(), coupon.getAccrualStartDate(), coupon.getAccrualEndDate(), coupon.getPaymentYearFraction(), coupon.getNotional());
+    super(coupon.getCurrency(), coupon.getPaymentDate(), coupon.getAccrualStartDate(), coupon.getAccrualEndDate(), coupon.getPaymentYearFraction(),
+        coupon.getNotional());
     _rate = rate;
     _amount = coupon.getNotional() * rate * coupon.getPaymentYearFraction();
   }
 
   /**
    * Static constructor for a fixed coupon definition.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param rate Fixed rate.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param rate
+   *          Fixed rate.
    * @return The fixed coupon definition
    */
   public static CouponFixedDefinition from(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
@@ -86,11 +107,17 @@ public class CouponFixedDefinition extends CouponDefinition {
 
   /**
    * Build a fixed coupon from a start date, tenor and deposit generator.
-   * @param startDate The coupon start date.
-   * @param tenor The coupon tenor. The end date is used both for the end accrual and the payment date.
-   * @param generator The deposit generator with relevant conventions.
-   * @param notional Coupon notional.
-   * @param fixedRate The coupon fixed rate.
+   * 
+   * @param startDate
+   *          The coupon start date.
+   * @param tenor
+   *          The coupon tenor. The end date is used both for the end accrual and the payment date.
+   * @param generator
+   *          The deposit generator with relevant conventions.
+   * @param notional
+   *          Coupon notional.
+   * @param fixedRate
+   *          The coupon fixed rate.
    * @return The coupon.
    */
   public static CouponFixedDefinition from(final ZonedDateTime startDate, final Period tenor, final GeneratorDeposit generator, final double notional,
@@ -103,6 +130,7 @@ public class CouponFixedDefinition extends CouponDefinition {
 
   /**
    * Gets the fixed rate.
+   * 
    * @return The rate.
    */
   public double getRate() {
@@ -111,6 +139,7 @@ public class CouponFixedDefinition extends CouponDefinition {
 
   /**
    * Gets the payment amount.
+   * 
    * @return The amount.
    */
   public double getAmount() {
@@ -119,7 +148,9 @@ public class CouponFixedDefinition extends CouponDefinition {
 
   /**
    * Creates a new coupon with all the details the same except the notional which is the one provided.
-   * @param notional The new notional.
+   * 
+   * @param notional
+   *          The new notional.
    * @return The coupon.
    */
   public CouponFixedDefinition withNotional(final double notional) {
@@ -137,9 +168,9 @@ public class CouponFixedDefinition extends CouponDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_amount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -166,6 +197,7 @@ public class CouponFixedDefinition extends CouponDefinition {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -174,16 +206,19 @@ public class CouponFixedDefinition extends CouponDefinition {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     ArgumentChecker.isTrue(yieldCurveNames.length > 0, "at least one curve required");
-    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment date
+    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment
+                                                                                                                         // date
     final String fundingCurveName = yieldCurveNames[0];
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
-    return new CouponFixed(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), getRate(), getAccrualStartDate(), getAccrualEndDate());
+    return new CouponFixed(getCurrency(), paymentTime, fundingCurveName, getPaymentYearFraction(), getNotional(), getRate(), getAccrualStartDate(),
+        getAccrualEndDate());
   }
 
   @Override
   public CouponFixed toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
-    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment date
+    ArgumentChecker.isTrue(!date.isAfter(getPaymentDate()), "date {} is after payment date {}", date, getPaymentDate()); // Required: reference date <= payment
+                                                                                                                         // date
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
     return new CouponFixed(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getRate(), getAccrualStartDate(), getAccrualEndDate());
   }

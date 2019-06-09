@@ -36,8 +36,8 @@ public class EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults extends Defa
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD_CURVE,
-    ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
+                ValueRequirementNames.FORWARD_CURVE,
+                ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
   };
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
@@ -45,8 +45,10 @@ public class EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults extends Defa
   private final Map<String, Triple<String, String, String>> _perCurrencyConfig;
 
   /**
-   * @param priority The priority, not null
-   * @param perCurrencyConfig The default values per currency, not null
+   * @param priority
+   *          The priority, not null
+   * @param perCurrencyConfig
+   *          The default values per currency, not null
    */
   public EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults(final String priority, final String... perCurrencyConfig) {
     super(ComputationTargetType.PRIMITIVE, true); // // [PLAT-2286]: change to correct type; should this be SECURITY?
@@ -85,10 +87,11 @@ public class EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults extends Defa
     // Properties specific to FORWARD_CURVE
     defaults.addValuePropertyName(ValueRequirementNames.FORWARD_CURVE, ValuePropertyNames.CURVE);
     defaults.addValuePropertyName(ValueRequirementNames.FORWARD_CURVE, ValuePropertyNames.DIVIDEND_TYPE);
-    //  Properties specific to STANDARD_VOLATILITY_SURFACE_DATA
+    // Properties specific to STANDARD_VOLATILITY_SURFACE_DATA
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.DISCOUNTING_CURVE_NAME);
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.FORWARD_CURVE_NAME);
-    defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);    
+    defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA,
+        ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
   }
 
   @Override
@@ -102,12 +105,12 @@ public class EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults extends Defa
       return null;
     }
     final Triple<String, String, String> config = _perCurrencyConfig.get(currency);
-    
+
     switch (propertyName) {
       case ValuePropertyNames.CURVE_CURRENCY:
         return Collections.singleton(currency);
       case ValuePropertyNames.CURVE_CALCULATION_CONFIG:
-        return Collections.singleton(config.getSecond()); 
+        return Collections.singleton(config.getSecond());
       case ValuePropertyNames.CURVE:
         return Collections.singleton(config.getFirst());
       case ValuePropertyNames.DIVIDEND_TYPE:
@@ -117,7 +120,7 @@ public class EquityForwardCurveYieldCurveImpliedPerCurrencyDefaults extends Defa
       case ValuePropertyNames.FORWARD_CURVE_NAME:
         return Collections.singleton(config.getFirst());
       case ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD:
-        return  Collections.singleton(ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD);
+        return Collections.singleton(ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD);
       default:
         LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;

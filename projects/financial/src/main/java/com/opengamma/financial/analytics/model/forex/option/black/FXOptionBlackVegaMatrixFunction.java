@@ -31,11 +31,13 @@ import com.opengamma.financial.currency.CurrencyPair;
 
 /**
  * Calculates the bucketed vega matrix for FX options.
+ *
  * @deprecated Use {@link BlackDiscountingVegaMatrixFXOptionFunction}
  */
 @Deprecated
 public class FXOptionBlackVegaMatrixFunction extends FXOptionBlackSingleValuedFunction {
-  private static final PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator CALCULATOR = PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator.getInstance();
+  private static final PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator CALCULATOR =
+      PresentValueBlackVolatilityNodeSensitivityBlackForexCalculator.getInstance();
   private static final DecimalFormat DELTA_FORMATTER = new DecimalFormat("##");
 
   public FXOptionBlackVegaMatrixFunction() {
@@ -83,7 +85,8 @@ public class FXOptionBlackVegaMatrixFunction extends FXOptionBlackSingleValuedFu
   @Override
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target, final String putCurve, final String putCurveCalculationConfig,
       final String callCurve, final String callCurveCalculationConfig, final CurrencyPair baseQuotePair, final ValueProperties optionalProperties) {
-    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig, baseQuotePair,
+    final ValueProperties.Builder properties = super.getResultProperties(target, putCurve, putCurveCalculationConfig, callCurve, callCurveCalculationConfig,
+        baseQuotePair,
         optionalProperties);
     properties.with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX);
     return properties;

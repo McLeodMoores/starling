@@ -78,14 +78,15 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
   /**
    * Creates a new instance.
    *
-   * @param refDataProvider  the Bloomberg data, not null
+   * @param refDataProvider
+   *          the Bloomberg data, not null
    */
   public BloombergIdentifierProvider(final ReferenceDataProvider refDataProvider) {
     ArgumentChecker.notNull(refDataProvider, "refDataProvider");
     _bbgRefDataProvider = refDataProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Map<ExternalId, ExternalIdBundleWithDates> getExternalIds(final Set<ExternalId> unresolvedIdentifiers) {
     final Map<ExternalId, ExternalIdBundleWithDates> result = new HashMap<>(unresolvedIdentifiers.size());
@@ -112,7 +113,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
         if (errors != null && errors.size() > 0) {
           for (final ReferenceDataError error : errors) {
             LOGGER.warn("Exception looking up {}/{} - {}",
-                new Object[] {securityDes, _bbgFields, error });
+                new Object[] { securityDes, _bbgFields, error });
           }
           continue;
         }
@@ -134,7 +135,8 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
         final String lastTradeStr = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
         final LocalDate lastTradeDate = parseDate(lastTradeStr);
         if (lastTradeDate.isBefore(firstTradeDate)) {
-          LOGGER.warn("Reference data for {} indicates last trade date ({}) before first trade date ({}) - ignoring", new Object[] {securityDes, lastTradeDate, firstTradeDate});
+          LOGGER.warn("Reference data for {} indicates last trade date ({}) before first trade date ({}) - ignoring",
+              new Object[] { securityDes, lastTradeDate, firstTradeDate });
           continue;
         }
       }
@@ -152,11 +154,12 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses the response to a bundle.
    *
-   * @param fieldData  the Bloomberg field data, not null
+   * @param fieldData
+   *          the Bloomberg field data, not null
    * @return the identifier bundle, null if not available
    */
   private ExternalIdBundleWithDates parseIdentifiers(final FudgeMsg fieldData) {
@@ -183,14 +186,15 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
     if (ticker != null) {
       identifiers.add(ticker);
     }
-    return identifiers.isEmpty() ?  null : new ExternalIdBundleWithDates(identifiers);
+    return identifiers.isEmpty() ? null : new ExternalIdBundleWithDates(identifiers);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extract and build a ticker identifier.
    *
-   * @param fieldData  the Bloomberg field data, not null
+   * @param fieldData
+   *          the Bloomberg field data, not null
    * @return the identifier, null if not found
    */
   private ExternalIdWithDates makeTickerIdentifier(final FudgeMsg fieldData) {
@@ -226,11 +230,12 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extract and build a SEDOL1 identifier.
    *
-   * @param fieldData  the Bloomberg field data, not null
+   * @param fieldData
+   *          the Bloomberg field data, not null
    * @return the identifier, null if not found
    */
   private ExternalIdWithDates makeSedol1Identifier(final FudgeMsg fieldData) {
@@ -245,7 +250,8 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
   /**
    * Extract and build a ISIN identifier.
    *
-   * @param fieldData  the Bloomberg field data, not null
+   * @param fieldData
+   *          the Bloomberg field data, not null
    * @return the identifier, null if not found
    */
   private ExternalIdWithDates makeIsinIdentifier(final FudgeMsg fieldData) {
@@ -260,7 +266,8 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
   /**
    * Extract and build a CUSIP identifier.
    *
-   * @param fieldData  the Bloomberg field data, not null
+   * @param fieldData
+   *          the Bloomberg field data, not null
    * @return the identifier, null if not found
    */
   private ExternalIdWithDates makeCusipIdentifier(final FudgeMsg fieldData) {
@@ -276,7 +283,8 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
   /**
    * Extract and build a BIUD identifier.
    *
-   * @param fieldData  the Bloomberg field data, not null
+   * @param fieldData
+   *          the Bloomberg field data, not null
    * @return the identifier, null if not found
    */
   private ExternalIdWithDates makeBuidIdentifier(final FudgeMsg fieldData) {
@@ -288,11 +296,12 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
     return ExternalIdWithDates.of(buid, null, null);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses a Bloomberg formatted date.
    *
-   * @param dateStr  the date, not null
+   * @param dateStr
+   *          the date, not null
    * @return the parsed date, null if not available
    */
   private LocalDate parseDate(final String dateStr) {

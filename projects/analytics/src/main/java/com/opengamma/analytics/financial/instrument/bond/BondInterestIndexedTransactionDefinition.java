@@ -94,9 +94,11 @@ implements InstrumentDefinitionWithData<BondTransaction<? extends BondSecurity<?
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(data, "Price index fixing time series");
     final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondPurchase =
-        ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond()).toDerivative(date, getSettlementDate(), data);
+        ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond())
+        .toDerivative(date, getSettlementDate(), data);
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getUnderlyingBond().getSettlementDays(), getUnderlyingBond().getCalendar());
-    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondStandard = ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond())
+    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondStandard =
+        ((BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationDefinition>) getUnderlyingBond())
         .toDerivative(date, spot, data);
     final int nbCoupon = getUnderlyingBond().getCoupons().getNumberOfPayments();
     int couponIndex = 0; // The index of the coupon of the spot date.

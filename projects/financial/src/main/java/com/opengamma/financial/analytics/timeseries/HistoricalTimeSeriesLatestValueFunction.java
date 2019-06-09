@@ -36,7 +36,8 @@ import com.opengamma.util.tuple.Pair;
 public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalTimeSeriesSource timeSeriesSource = OpenGammaExecutionContext.getHistoricalTimeSeriesSource(executionContext);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Pair<LocalDate, Double> latestDataPoint = timeSeriesSource.getLatestDataPoint(target.getUniqueId());
@@ -50,7 +51,8 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
       final HistoricalTimeSeriesAdjustment htsa = HistoricalTimeSeriesAdjustment.parse(adjusterString);
       value = htsa.adjust(latestDataPoint.getSecond());
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), value));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), value));
   }
 
   // TODO: reverse logic here to be checkAvailable()
@@ -90,23 +92,24 @@ public class HistoricalTimeSeriesLatestValueFunction extends AbstractFunction.No
     final Builder constraints = desiredValue.getConstraints().copy();
     if (adjustValues == null || adjustValues.isEmpty()) {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
-      .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
+          .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, "");
     } else {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY)
-      .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, adjustValues.iterator().next());
+          .with(HistoricalTimeSeriesFunctionUtils.ADJUST_PROPERTY, adjustValues.iterator().next());
     }
     if (ageLimitValues == null || ageLimitValues.isEmpty()) {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY)
-      .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, HistoricalTimeSeriesFunctionUtils.UNLIMITED_AGE_LIMIT_VALUE);
+          .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, HistoricalTimeSeriesFunctionUtils.UNLIMITED_AGE_LIMIT_VALUE);
     } else {
       constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY)
-      .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, ageLimitValues.iterator().next());
+          .with(HistoricalTimeSeriesFunctionUtils.AGE_LIMIT_PROPERTY, ageLimitValues.iterator().next());
     }
     return ImmutableSet.of(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST, target.toSpecification(), constraints.get()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.isEmpty()) {
       // Use full results - graph builder will compose correctly against the desired value
       return getResults(context, target);

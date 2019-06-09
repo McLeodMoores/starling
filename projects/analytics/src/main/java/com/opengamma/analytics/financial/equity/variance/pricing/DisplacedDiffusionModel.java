@@ -25,7 +25,8 @@ import com.opengamma.util.CompareUtils;
  * follow a geometric Brownian motion (GBM). European options can be priced using the Black formula with forward $f \rightarrow f +\alpha$ and strike $k
  * \rightarrow k + \alpha$
  * <p>
- * <b> This should not be confused with Shifted Log-Normal</b> (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction})
+ * <b> This should not be confused with Shifted Log-Normal</b>
+ * (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction})
  */
 public class DisplacedDiffusionModel {
   /** A logger */

@@ -155,7 +155,8 @@ public class CreditSpreadCurveHistoricalTimeSeriesFunction extends AbstractFunct
       if (constraints == null) {
         constraints = desiredValueConstraints.copy();
       }
-      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
+      constraints.withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY).with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY,
+          values.iterator().next());
     }
     values = desiredValueConstraints.getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
     if (values == null || values.isEmpty()) {

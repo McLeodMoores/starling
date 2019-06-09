@@ -63,36 +63,59 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   private final DayCount _dayCount;
 
   /**
-   * Fixed coupon bond constructor from all the bond details. The repo type is empty and the legal
-   * entity only contains the issuer name.
-   * @param nominal The notional payments. For bullet bond, it is restricted to a single payment.
-   * @param coupon The bond fixed coupons. The coupons notional should be in line with the bond nominal.
-   * @param exCouponDays Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The calendar used to compute the standard settlement date.
-   * @param dayCount The coupon day count convention.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param couponPerYear The number of coupons per year.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
+   * Fixed coupon bond constructor from all the bond details. The repo type is empty and the legal entity only contains the issuer name.
+   * 
+   * @param nominal
+   *          The notional payments. For bullet bond, it is restricted to a single payment.
+   * @param coupon
+   *          The bond fixed coupons. The coupons notional should be in line with the bond nominal.
+   * @param exCouponDays
+   *          Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The calendar used to compute the standard settlement date.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param couponPerYear
+   *          The number of coupons per year.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
    */
   public BondFixedSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponFixedDefinition coupon, final int exCouponDays,
-      final int settlementDays, final Calendar calendar, final DayCount dayCount, final YieldConvention yieldConvention, final int couponPerYear, final boolean isEOM, final String issuer) {
-    this(nominal, coupon, exCouponDays, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM, new LegalEntity(null, issuer, null, null, null));
+      final int settlementDays, final Calendar calendar, final DayCount dayCount, final YieldConvention yieldConvention, final int couponPerYear,
+      final boolean isEOM, final String issuer) {
+    this(nominal, coupon, exCouponDays, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM,
+        new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Fixed coupon bond constructor from all the bond details. The repo type is empty.
-   * @param nominal The notional payments. For bullet bond, it is restricted to a single payment.
-   * @param coupon The bond fixed coupons. The coupons notional should be in line with the bond nominal.
-   * @param exCouponDays Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The calendar used to compute the standard settlement date.
-   * @param dayCount The coupon day count convention.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param couponPerYear The number of coupons per year
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer.
+   * 
+   * @param nominal
+   *          The notional payments. For bullet bond, it is restricted to a single payment.
+   * @param coupon
+   *          The bond fixed coupons. The coupons notional should be in line with the bond nominal.
+   * @param exCouponDays
+   *          Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The calendar used to compute the standard settlement date.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param couponPerYear
+   *          The number of coupons per year
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer.
    */
   public BondFixedSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponFixedDefinition coupon, final int exCouponDays,
       final int settlementDays, final Calendar calendar, final DayCount dayCount, final YieldConvention yieldConvention, final int couponPerYear,
@@ -107,38 +130,63 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
 
   /**
    * Fixed coupon bond constructor from all the bond details. The legal entity only contains the issuer name.
-   * @param nominal The notional payments. For bullet bond, it is restricted to a single payment.
-   * @param coupon The bond fixed coupons. The coupons notional should be in line with the bond nominal.
-   * @param exCouponDays Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The calendar used to compute the standard settlement date.
-   * @param dayCount The coupon day count convention.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param couponPerYear The number of coupons per year.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
-   * @param repoType The repo type name.
+   * 
+   * @param nominal
+   *          The notional payments. For bullet bond, it is restricted to a single payment.
+   * @param coupon
+   *          The bond fixed coupons. The coupons notional should be in line with the bond nominal.
+   * @param exCouponDays
+   *          Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The calendar used to compute the standard settlement date.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param couponPerYear
+   *          The number of coupons per year.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
+   * @param repoType
+   *          The repo type name.
    */
   public BondFixedSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponFixedDefinition coupon, final int exCouponDays,
       final int settlementDays, final Calendar calendar, final DayCount dayCount, final YieldConvention yieldConvention, final int couponPerYear,
       final boolean isEOM, final String issuer, final String repoType) {
-    this(nominal, coupon, exCouponDays, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM, new LegalEntity(null, issuer, null, null, null),
+    this(nominal, coupon, exCouponDays, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM,
+        new LegalEntity(null, issuer, null, null, null),
         repoType);
   }
 
   /**
    * Fixed coupon bond constructor from all the bond details.
-   * @param nominal The notional payments. For bullet bond, it is restricted to a single payment.
-   * @param coupon The bond fixed coupons. The coupons notional should be in line with the bond nominal.
-   * @param exCouponDays Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The calendar used to compute the standard settlement date.
-   * @param dayCount The coupon day count convention.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param couponPerYear The number of coupons per year
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer.
-   * @param repoType The repo type name.
+   * 
+   * @param nominal
+   *          The notional payments. For bullet bond, it is restricted to a single payment.
+   * @param coupon
+   *          The bond fixed coupons. The coupons notional should be in line with the bond nominal.
+   * @param exCouponDays
+   *          Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The calendar used to compute the standard settlement date.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param couponPerYear
+   *          The number of coupons per year
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer.
+   * @param repoType
+   *          The repo type name.
    */
   public BondFixedSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponFixedDefinition coupon, final int exCouponDays,
       final int settlementDays, final Calendar calendar, final DayCount dayCount, final YieldConvention yieldConvention, final int couponPerYear,
@@ -152,49 +200,78 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day convention.
-   * The default notional 1 and default ex-coupon days 0 are used; if the first coupon is non-standard, it is short; the coupon dates are computed from the maturity.
-   * The legal entity contains only the issuer name.
-   * @param currency The currency.
-   * @param maturityDate The maturity date.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default notional 1 and default ex-coupon days 0 are used; if the first coupon is non-standard, it is short; the coupon dates are computed
+   * from the maturity. The legal entity contains only the issuer name.
+   * 
+   * @param currency
+   *          The currency.
+   * @param maturityDate
+   *          The maturity date.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
-      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay,
+      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount,
+      final BusinessDayConvention businessDay,
       final YieldConvention yieldConvention, final boolean isEOM, final String issuer) {
     return from(currency, maturityDate, firstAccrualDate, paymentPeriod, rate, settlementDays, calendar, dayCount, businessDay, yieldConvention,
         isEOM, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day convention.
-   * The default notional 1 and default ex-coupon days 0 are used; if the first coupon is non-standard, it is short; the coupon dates are computed from the maturity.
-   * @param currency The currency.
-   * @param maturityDate The maturity date.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default notional 1 and default ex-coupon days 0 are used; if the first coupon is non-standard, it is short; the coupon dates are computed
+   * from the maturity.
+   * 
+   * @param currency
+   *          The currency.
+   * @param maturityDate
+   *          The maturity date.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
-      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay,
+      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount,
+      final BusinessDayConvention businessDay,
       final YieldConvention yieldConvention, final boolean isEOM, final LegalEntity issuer) {
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(maturityDate, "Maturity date");
@@ -207,63 +284,100 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
     final int couponPerYear = (int) Math.round(12.0 / (paymentPeriod.getMonths() + paymentPeriod.getYears() * 12));
     AnnuityCouponFixedDefinition coupon;
     if (dayCount instanceof ActualActualICMA || dayCount instanceof ActualActualICMANormal) {
-      coupon = AnnuityCouponFixedDefinition.fromAccrualUnadjusted(currency, firstAccrualDate, maturityDate, paymentPeriod, couponPerYear, true, true, calendar, dayCount,
+      coupon = AnnuityCouponFixedDefinition.fromAccrualUnadjusted(currency, firstAccrualDate, maturityDate, paymentPeriod, couponPerYear, true, true, calendar,
+          dayCount,
           businessDay, isEOM, DEFAULT_NOTIONAL, rate, false);
     } else {
-      coupon = AnnuityCouponFixedDefinition.fromAccrualUnadjusted(currency, firstAccrualDate, maturityDate, paymentPeriod, true, true, calendar, dayCount, businessDay,
+      coupon = AnnuityCouponFixedDefinition.fromAccrualUnadjusted(currency, firstAccrualDate, maturityDate, paymentPeriod, true, true, calendar, dayCount,
+          businessDay,
           isEOM, DEFAULT_NOTIONAL, rate, false);
     }
-    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {new PaymentFixedDefinition(currency, businessDay.adjustDate(calendar, maturityDate),
-        DEFAULT_NOTIONAL) };
+    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {
+                  new PaymentFixedDefinition(currency, businessDay.adjustDate(calendar, maturityDate),
+                      DEFAULT_NOTIONAL) };
     final AnnuityPaymentFixedDefinition nominal = new AnnuityPaymentFixedDefinition(nominalPayment, calendar);
-    return new BondFixedSecurityDefinition(nominal, coupon, DEFAULT_EX_COUPON_DAYS, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM, issuer);
+    return new BondFixedSecurityDefinition(nominal, coupon, DEFAULT_EX_COUPON_DAYS, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM,
+        issuer);
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day convention.
-   * The default notional 1 and default ex-coupon days 0 are used.
-   * @param currency The currency.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param firstCouponDate The date of the first coupon.
-   * @param maturityDate The maturity date.
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default notional 1 and default ex-coupon days 0 are used.
+   * 
+   * @param currency
+   *          The currency.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param firstCouponDate
+   *          The date of the first coupon.
+   * @param maturityDate
+   *          The maturity date.
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
    * @return The fixed coupon bond.
    */
-  public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime firstAccrualDate, final ZonedDateTime firstCouponDate, final ZonedDateTime maturityDate,
-      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay,
+  public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime firstAccrualDate, final ZonedDateTime firstCouponDate,
+      final ZonedDateTime maturityDate,
+      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount,
+      final BusinessDayConvention businessDay,
       final YieldConvention yieldConvention, final boolean isEOM, final String issuer) {
-    return from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount, businessDay, yieldConvention, isEOM,
+    return from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount, businessDay,
+        yieldConvention, isEOM,
         new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day convention.
-   * The default notional 1 and default ex-coupon days 0 are used.
-   * @param currency The currency.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param firstCouponDate The date of the first coupon.
-   * @param maturityDate The maturity date.
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default notional 1 and default ex-coupon days 0 are used.
+   * 
+   * @param currency
+   *          The currency.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param firstCouponDate
+   *          The date of the first coupon.
+   * @param maturityDate
+   *          The maturity date.
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
    * @return The fixed coupon bond.
    */
-  public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime firstAccrualDate, final ZonedDateTime firstCouponDate, final ZonedDateTime maturityDate,
-      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay,
+  public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime firstAccrualDate, final ZonedDateTime firstCouponDate,
+      final ZonedDateTime maturityDate,
+      final Period paymentPeriod, final double rate, final int settlementDays, final Calendar calendar, final DayCount dayCount,
+      final BusinessDayConvention businessDay,
       final YieldConvention yieldConvention, final boolean isEOM, final LegalEntity issuer) {
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(firstAccrualDate, "First accrual date");
@@ -279,43 +393,65 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
     double firstCouponAccrual;
     if (dayCount instanceof ActualActualICMA) { // In case day-count is ActualActualICMA, need to guess the stub-type
       if (firstCouponDate.minus(paymentPeriod).isAfter(firstAccrualDate)) { // Stub: Long start
-        firstCouponAccrual = ((ActualActualICMA) dayCount).getAccruedInterest(firstAccrualDate, firstCouponDate, firstCouponDate, 1.0, couponPerYear, StubType.LONG_START);
+        firstCouponAccrual = ((ActualActualICMA) dayCount).getAccruedInterest(firstAccrualDate, firstCouponDate, firstCouponDate, 1.0, couponPerYear,
+            StubType.LONG_START);
       } else {
-        firstCouponAccrual = ((ActualActualICMA) dayCount).getAccruedInterest(firstAccrualDate, firstCouponDate, firstCouponDate, 1.0, couponPerYear, StubType.SHORT_START);
+        firstCouponAccrual = ((ActualActualICMA) dayCount).getAccruedInterest(firstAccrualDate, firstCouponDate, firstCouponDate, 1.0, couponPerYear,
+            StubType.SHORT_START);
       }
     } else {
       firstCouponAccrual = dayCount.getAccruedInterest(firstAccrualDate, firstCouponDate, firstCouponDate, 1.0, couponPerYear);
     }
-    final CouponFixedDefinition[] couponAfterFirst = AnnuityCouponFixedDefinition.fromAccrualUnadjusted(currency, firstCouponDate, maturityDate, paymentPeriod, couponPerYear, true, true, calendar,
-        dayCount, businessDay, isEOM, DEFAULT_NOTIONAL, rate, false).getPayments();
+    final CouponFixedDefinition[] couponAfterFirst = AnnuityCouponFixedDefinition
+        .fromAccrualUnadjusted(currency, firstCouponDate, maturityDate, paymentPeriod, couponPerYear, true, true, calendar,
+            dayCount, businessDay, isEOM, DEFAULT_NOTIONAL, rate, false)
+        .getPayments();
     final CouponFixedDefinition[] allCoupons = new CouponFixedDefinition[couponAfterFirst.length + 1];
-    allCoupons[0] = new CouponFixedDefinition(currency, businessDay.adjustDate(calendar, firstCouponDate), firstAccrualDate, firstCouponDate, firstCouponAccrual, DEFAULT_NOTIONAL,
+    allCoupons[0] = new CouponFixedDefinition(currency, businessDay.adjustDate(calendar, firstCouponDate), firstAccrualDate, firstCouponDate,
+        firstCouponAccrual, DEFAULT_NOTIONAL,
         rate);
     System.arraycopy(couponAfterFirst, 0, allCoupons, 1, couponAfterFirst.length);
     final AnnuityCouponFixedDefinition coupons = new AnnuityCouponFixedDefinition(allCoupons, calendar);
-    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {new PaymentFixedDefinition(currency, businessDay.adjustDate(calendar, maturityDate),
-        DEFAULT_NOTIONAL) };
+    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {
+                  new PaymentFixedDefinition(currency, businessDay.adjustDate(calendar, maturityDate),
+                      DEFAULT_NOTIONAL) };
     final AnnuityPaymentFixedDefinition nominal = new AnnuityPaymentFixedDefinition(nominalPayment, calendar);
-    return new BondFixedSecurityDefinition(nominal, coupons, DEFAULT_EX_COUPON_DAYS, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM, issuer);
+    return new BondFixedSecurityDefinition(nominal, coupons, DEFAULT_EX_COUPON_DAYS, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM,
+        issuer);
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day convention.
-   * The default notional 1 is used.
-   * @param currency The currency.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param firstCouponDate The date of the first coupon.
-   * @param maturityDate The maturity date.
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param exCouponDays The number of ex-coupon calendar days.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default notional 1 is used.
+   * 
+   * @param currency
+   *          The currency.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param firstCouponDate
+   *          The date of the first coupon.
+   * @param maturityDate
+   *          The maturity date.
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param exCouponDays
+   *          The number of ex-coupon calendar days.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime firstAccrualDate, final ZonedDateTime firstCouponDate,
@@ -353,30 +489,46 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
         firstCouponDate, firstCouponAccrual, DEFAULT_NOTIONAL, rate);
     System.arraycopy(couponAfterFirst, 0, allCoupons, 1, couponAfterFirst.length);
     final AnnuityCouponFixedDefinition coupons = new AnnuityCouponFixedDefinition(allCoupons, calendar);
-    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {new PaymentFixedDefinition(currency,
+    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] { new PaymentFixedDefinition(currency,
         businessDay.adjustDate(calendar, maturityDate), DEFAULT_NOTIONAL) };
     final AnnuityPaymentFixedDefinition nominal = new AnnuityPaymentFixedDefinition(nominalPayment, calendar);
     return new BondFixedSecurityDefinition(nominal, coupons, exCouponDays, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM, issuer);
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted
-   * according to the business day convention.
-   * @param currency The currency.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param firstCouponDate The date of the first coupon.
-   * @param maturityDate The maturity date.
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param exCouponDays The number of ex-coupon calendar days.
-   * @param notional The notional.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention.
+   * 
+   * @param currency
+   *          The currency.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param firstCouponDate
+   *          The date of the first coupon.
+   * @param maturityDate
+   *          The maturity date.
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param exCouponDays
+   *          The number of ex-coupon calendar days.
+   * @param notional
+   *          The notional.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime firstAccrualDate, final ZonedDateTime firstCouponDate,
@@ -415,32 +567,47 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
         rate);
     System.arraycopy(couponAfterFirst, 0, allCoupons, 1, couponAfterFirst.length);
     final AnnuityCouponFixedDefinition coupons = new AnnuityCouponFixedDefinition(allCoupons, calendar);
-    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {new PaymentFixedDefinition(currency,
+    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] { new PaymentFixedDefinition(currency,
         businessDay.adjustDate(calendar, maturityDate), notional) };
     final AnnuityPaymentFixedDefinition nominal = new AnnuityPaymentFixedDefinition(nominalPayment, calendar);
     return new BondFixedSecurityDefinition(nominal, coupons, exCouponDays, settlementDays, calendar, dayCount, yieldConvention, couponPerYear, isEOM, issuer);
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according
-   * to the business day convention.
-   * The default ex-coupon days 0 is used; if the first coupon is non-standard, it is short; the coupon dates are computed from the maturity. The legal
-   * entity contains only the issuer name.
-   * @param currency The currency.
-   * @param maturityDate The maturity date.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param notional The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
-   * @param exCouponDays Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
-   * @param repoType The repo type name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default ex-coupon days 0 is used; if the first coupon is non-standard, it is short; the coupon dates are computed from the maturity. The
+   * legal entity contains only the issuer name.
+   * 
+   * @param currency
+   *          The currency.
+   * @param maturityDate
+   *          The maturity date.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param notional
+   *          The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
+   * @param exCouponDays
+   *          Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
+   * @param repoType
+   *          The repo type name.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
@@ -452,24 +619,39 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according
-   * to the business day convention.
-   * If the first coupon is non-standard, it is short; the coupon dates are computed from the maturity.
-   * @param currency The currency.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param maturityDate The maturity date.
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param notional The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
-   * @param exCouponDays Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
-   * @param repoType The repo type name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. If the first coupon is non-standard, it is short; the coupon dates are computed from the maturity.
+   * 
+   * @param currency
+   *          The currency.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param maturityDate
+   *          The maturity date.
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param notional
+   *          The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
+   * @param exCouponDays
+   *          Number of days before the payment of the coupon is detached from the bond (and paid to the then owner).
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
+   * @param repoType
+   *          The repo type name.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime firstAccrualDate, final ZonedDateTime maturityDate,
@@ -496,7 +678,7 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
       coupon = AnnuityCouponFixedDefinition.fromAccrualUnadjusted(currency, firstAccrualDate, maturityDate, paymentPeriod,
           true, true, calendar, dayCount, businessDay, isEOM, notional, rate, false);
     }
-    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {new PaymentFixedDefinition(currency,
+    final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] { new PaymentFixedDefinition(currency,
         businessDay.adjustDate(calendar, maturityDate), notional) };
     final AnnuityPaymentFixedDefinition nominal = new AnnuityPaymentFixedDefinition(nominalPayment, calendar);
     return new BondFixedSecurityDefinition(nominal, coupon, exCouponDays, settlementDays, calendar, dayCount, yieldConvention,
@@ -504,23 +686,37 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted
-   * according to the business day convention.
-   * The default ex-coupon days 0 is used.
-   * @param currency The currency.
-   * @param maturityDate The maturity date.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param notional The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
-   * @param repoType The repo type name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default ex-coupon days 0 is used.
+   * 
+   * @param currency
+   *          The currency.
+   * @param maturityDate
+   *          The maturity date.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param notional
+   *          The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
+   * @param repoType
+   *          The repo type name.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
@@ -532,23 +728,37 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted
-   * according to the business day convention.
-   * The default ex-coupon days 0 is used.
-   * @param currency The currency.
-   * @param maturityDate The maturity date.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param notional The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
-   * @param issuer The issuer name.
-   * @param repoType The repo type name.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default ex-coupon days 0 is used.
+   * 
+   * @param currency
+   *          The currency.
+   * @param maturityDate
+   *          The maturity date.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param notional
+   *          The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
+   * @param issuer
+   *          The issuer name.
+   * @param repoType
+   *          The repo type name.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
@@ -559,21 +769,33 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according
-   * to the business day convention.
-   * The default ex-coupon days 0 is used.
-   * @param currency The currency.
-   * @param maturityDate The maturity date.
-   * @param firstAccrualDate The first accrual date (bond start date).
-   * @param paymentPeriod The coupon payment period.
-   * @param rate The fixed rate.
-   * @param settlementDays Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
-   * @param notional The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
-   * @param calendar The payment calendar.
-   * @param dayCount The coupon day count convention.
-   * @param businessDay The business day convention for the payments.
-   * @param yieldConvention The yield (to maturity) computation convention.
-   * @param isEOM The end-of-month flag.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
+   * convention. The default ex-coupon days 0 is used.
+   * 
+   * @param currency
+   *          The currency.
+   * @param maturityDate
+   *          The maturity date.
+   * @param firstAccrualDate
+   *          The first accrual date (bond start date).
+   * @param paymentPeriod
+   *          The coupon payment period.
+   * @param rate
+   *          The fixed rate.
+   * @param settlementDays
+   *          Standard number of days between trade date and trade settlement. Used for clean price and yield computation.
+   * @param notional
+   *          The bond security notional. Usually is a conventional figure like 1, 100 or 1,000,000.
+   * @param calendar
+   *          The payment calendar.
+   * @param dayCount
+   *          The coupon day count convention.
+   * @param businessDay
+   *          The business day convention for the payments.
+   * @param yieldConvention
+   *          The yield (to maturity) computation convention.
+   * @param isEOM
+   *          The end-of-month flag.
    * @return The fixed coupon bond.
    */
   public static BondFixedSecurityDefinition from(final Currency currency, final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
@@ -585,7 +807,9 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
 
   /**
    * Return the relative (not multiplied by the notional) accrued interest rate at a given date.
-   * @param date The date.
+   * 
+   * @param date
+   *          The date.
    * @return The accrued interest.
    */
   public double accruedInterest(final ZonedDateTime date) {
@@ -613,6 +837,7 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
 
   /**
    * Gets the yield convention.
+   * 
    * @return The yield convention.
    */
   public YieldConvention getYieldConvention() {
@@ -621,6 +846,7 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
 
   /**
    * Gets the number of coupon per year field.
+   * 
    * @return The number of coupon per year.
    */
   public int getCouponPerYear() {
@@ -629,6 +855,7 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
 
   /**
    * Gets the end-of-month flag.
+   * 
    * @return The end-of-month convention flag.
    */
   public boolean isEOM() {
@@ -637,6 +864,7 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
 
   /**
    * Gets the coupon day count.
+   * 
    * @return The day count.
    */
   public DayCount getDayCount() {
@@ -649,8 +877,10 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * @param date The valuation date
-   * @param yieldCurveNames The yield curve names
+   * @param date
+   *          The valuation date
+   * @param yieldCurveNames
+   *          The yield curve names
    * @return A fixed-coupon bond security
    * @deprecated Use the method that does not take yield curve names
    */
@@ -663,9 +893,12 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * @param date The valuation date
-   * @param settlementDate The settlement date
-   * @param yieldCurveNames The yield curve names
+   * @param date
+   *          The valuation date
+   * @param settlementDate
+   *          The settlement date
+   * @param yieldCurveNames
+   *          The yield curve names
    * @return A fixed-coupon bond security
    * @deprecated Use the method that does not take yield curve names
    */
@@ -721,8 +954,10 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
   }
 
   /**
-   * @param date The valuation date
-   * @param settlementDate The settlement date
+   * @param date
+   *          The valuation date
+   * @param settlementDate
+   *          The settlement date
    * @return A fixed-coupon bond security
    */
   public BondFixedSecurity toDerivative(final ZonedDateTime date, final ZonedDateTime settlementDate) {
@@ -762,10 +997,9 @@ public class BondFixedSecurityDefinition extends BondSecurityDefinition<PaymentF
       if (firstAccrualStartDate.isAfter(settlementDate)) {
         factor = 0;
       } else {
-        final double accruedToSpot =
-            getDayCount().getAccruedInterest(firstAccrualStartDate, settlementDate, firstAccrualEndDate, 1.0, _couponPerYear);
-        final double accruedForFirstPeriod =
-            getDayCount().getAccruedInterest(firstAccrualStartDate, firstAccrualEndDate, firstAccrualEndDate, 1.0, _couponPerYear);
+        final double accruedToSpot = getDayCount().getAccruedInterest(firstAccrualStartDate, settlementDate, firstAccrualEndDate, 1.0, _couponPerYear);
+        final double accruedForFirstPeriod = getDayCount().getAccruedInterest(firstAccrualStartDate, firstAccrualEndDate, firstAccrualEndDate, 1.0,
+            _couponPerYear);
         factor = (accruedForFirstPeriod - accruedToSpot) / accruedForFirstPeriod;
       }
     }

@@ -34,17 +34,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of inflation swaps using curves constructed
- * using the discounting method.
+ * Calculates the present value of inflation swaps using curves constructed using the discounting method.
  */
 public class DiscountingInflationPVFunction extends DiscountingInflationFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<InflationProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      PresentValueDiscountingInflationCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<InflationProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueDiscountingInflationCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirements to
-   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}
    */
   public DiscountingInflationPVFunction() {
     super(PRESENT_VALUE);
@@ -67,7 +65,8 @@ public class DiscountingInflationPVFunction extends DiscountingInflationFunction
       }
 
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         return getResults(context, target);
       }
     };

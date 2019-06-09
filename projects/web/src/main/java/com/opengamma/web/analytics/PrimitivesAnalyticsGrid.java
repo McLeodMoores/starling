@@ -17,26 +17,31 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinition;
 
   private final PrimitivesGridStructure _gridStructure;
 
-  /* package */PrimitivesAnalyticsGrid(final CompiledViewDefinition compiledViewDef, final String gridId, final ComputationTargetResolver targetResolver,
+  /* package */ PrimitivesAnalyticsGrid(final CompiledViewDefinition compiledViewDef, final String gridId, final ComputationTargetResolver targetResolver,
       final FunctionRepositoryFactory functions, final ViewportListener viewportListener) {
     this(PrimitivesGridStructure.create(compiledViewDef), gridId, targetResolver, functions, viewportListener);
   }
 
-  /* package */PrimitivesAnalyticsGrid(final PrimitivesGridStructure gridStructure, final String gridId, final ComputationTargetResolver targetResolver,
+  /* package */ PrimitivesAnalyticsGrid(final PrimitivesGridStructure gridStructure, final String gridId, final ComputationTargetResolver targetResolver,
       final FunctionRepositoryFactory functions, final ViewportListener viewportListener) {
     super(AnalyticsView.GridType.PRIMITIVES, gridId, targetResolver, functions, viewportListener);
     _gridStructure = gridStructure;
   }
 
   /**
-   * @param viewportDefinition Defines the extent and properties of the viewport
-   * @param callbackId ID that will be passed to listeners when the grid's data changes
-   * @param structureCallbackId ID that will be passed to listeners when the grid's structure changes
-   * @param cache The current results
+   * @param viewportDefinition
+   *          Defines the extent and properties of the viewport
+   * @param callbackId
+   *          ID that will be passed to listeners when the grid's data changes
+   * @param structureCallbackId
+   *          ID that will be passed to listeners when the grid's structure changes
+   * @param cache
+   *          The current results
    * @return The viewport
    */
   @Override
-  protected MainGridViewport createViewport(final ViewportDefinition viewportDefinition, final String callbackId, final String structureCallbackId, final ResultsCache cache) {
+  protected MainGridViewport createViewport(final ViewportDefinition viewportDefinition, final String callbackId, final String structureCallbackId,
+      final ResultsCache cache) {
     return new PrimitivesGridViewport(getGridStructure(), callbackId, structureCallbackId, viewportDefinition, getViewCycle(), cache);
   }
 
@@ -46,8 +51,7 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinition;
   }
 
   /**
-   * Factory method for creating a primitives grid that doesn't contain any
-   * data.
+   * Factory method for creating a primitives grid that doesn't contain any data.
    *
    * @param gridId
    *          the grid id

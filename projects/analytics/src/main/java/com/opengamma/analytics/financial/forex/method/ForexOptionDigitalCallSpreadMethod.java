@@ -4,6 +4,7 @@
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.method;
+
 // CSOFF
 import com.opengamma.analytics.financial.forex.derivative.Forex;
 import com.opengamma.analytics.financial.forex.derivative.ForexOptionDigital;
@@ -17,6 +18,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Pricing method for digital Forex option transactions as a call or put spread option.
+ * 
  * @deprecated Use {@link ForexOptionDigitalCallSpreadBlackSmileMethod}
  */
 @Deprecated
@@ -33,7 +35,9 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
 
   /**
    * Constructor of the digital pricing method.
-   * @param baseMethod The base method for the pricing of standard vanilla options.
+   * 
+   * @param baseMethod
+   *          The base method for the pricing of standard vanilla options.
    */
   public ForexOptionDigitalCallSpreadMethod(final ForexPricingMethod baseMethod) {
     _baseMethod = baseMethod;
@@ -42,8 +46,11 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
 
   /**
    * Constructor of the digital pricing method.
-   * @param baseMethod The base method for the pricing of standard vanilla options.
-   * @param spread The relative spread used in the call-spread pricing. The call spread strikes are (for an original strike K), K*(1-spread) and K*(1+spread).
+   * 
+   * @param baseMethod
+   *          The base method for the pricing of standard vanilla options.
+   * @param spread
+   *          The relative spread used in the call-spread pricing. The call spread strikes are (for an original strike K), K*(1-spread) and K*(1+spread).
    */
   public ForexOptionDigitalCallSpreadMethod(final ForexPricingMethod baseMethod, final double spread) {
     _baseMethod = baseMethod;
@@ -52,14 +59,18 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
 
   /**
    * Computes the present value of a digital Forex option by call-spread.
-   * @param optionDigital The option.
-   * @param smile The curve and smile data.
+   * 
+   * @param optionDigital
+   *          The option.
+   * @param smile
+   *          The curve and smile data.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final ForexOptionDigital optionDigital, final SmileDeltaTermStructureDataBundle smile) {
     ArgumentChecker.notNull(optionDigital, "Forex option difital");
     ArgumentChecker.notNull(smile, "Curve and smile data");
-    ArgumentChecker.isTrue(smile.checkCurrencies(optionDigital.getCurrency1(), optionDigital.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smile.checkCurrencies(optionDigital.getCurrency1(), optionDigital.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final ForexOptionVanilla[] callSpread = callSpread(optionDigital, _spread);
     // Spread value
     final MultipleCurrencyAmount pvM = _baseMethod.presentValue(callSpread[0], smile);
@@ -76,8 +87,11 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
 
   /**
    * Computes the currency exposure of a digital Forex option by call-spread.
-   * @param optionDigital The option.
-   * @param smile The curve and smile data.
+   * 
+   * @param optionDigital
+   *          The option.
+   * @param smile
+   *          The curve and smile data.
    * @return The currency exposure.
    */
   public MultipleCurrencyAmount currencyExposure(final ForexOptionDigital optionDigital, final SmileDeltaTermStructureDataBundle smile) {
@@ -99,11 +113,15 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
 
   /**
    * Computes the curve sensitivity of a digital Forex option by call-spread.
-   * @param optionDigital The option.
-   * @param smile The curve and smile data.
+   * 
+   * @param optionDigital
+   *          The option.
+   * @param smile
+   *          The curve and smile data.
    * @return The curve sensitivity.
    */
-  public MultipleCurrencyInterestRateCurveSensitivity presentValueCurveSensitivity(final ForexOptionDigital optionDigital, final SmileDeltaTermStructureDataBundle smile) {
+  public MultipleCurrencyInterestRateCurveSensitivity presentValueCurveSensitivity(final ForexOptionDigital optionDigital,
+      final SmileDeltaTermStructureDataBundle smile) {
     ArgumentChecker.notNull(optionDigital, "Forex option");
     ArgumentChecker.notNull(smile, "Smile");
     final ForexOptionVanilla[] callSpread = callSpread(optionDigital, _spread);
@@ -160,6 +178,7 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
 
   /**
    * Gets the base pricing method.
+   * 
    * @return The method.
    */
   public ForexPricingMethod getBaseMethod() {
@@ -168,6 +187,7 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
 
   /**
    * Gets the spread used for call spread.
+   * 
    * @return The spread.
    */
   public double getSpread() {
