@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.surface.Surface;
 
 /**
  * Describes a partial differential for a option price V in the form $\frac{\partial V}{\partial t} + a(S,t) \frac{\partial^2 V}{\partial S^2}$ + b(S,t)
- * \frac{\partial V}{\partial S} + (S,t)V = 0$
+ * \frac{\partial V}{\partial S} + (S,t)V = 0$.
  */
 public class PDEOptionDataBundle extends StandardOptionDataBundle {
 

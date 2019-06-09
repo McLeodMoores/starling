@@ -84,7 +84,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   @PropertyDefinition(validate = "notNull")
   private String _defaultProviders;
   /**
-   * JMS topic for notifications when market data providers become available
+   * JMS topic for notifications when market data providers become available.
    */
   @PropertyDefinition
   private String _jmsMarketDataAvailabilityTopic;
@@ -337,7 +337,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets jMS topic for notifications when market data providers become available
+   * Gets jMS topic for notifications when market data providers become available.
    * @return the value of the property
    */
   public String getJmsMarketDataAvailabilityTopic() {
@@ -345,7 +345,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   }
 
   /**
-   * Sets jMS topic for notifications when market data providers become available
+   * Sets jMS topic for notifications when market data providers become available.
    * @param jmsMarketDataAvailabilityTopic  the new value of the property
    */
   public void setJmsMarketDataAvailabilityTopic(String jmsMarketDataAvailabilityTopic) {

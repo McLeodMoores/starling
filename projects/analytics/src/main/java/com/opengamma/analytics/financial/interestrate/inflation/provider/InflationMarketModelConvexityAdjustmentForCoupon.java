@@ -19,13 +19,13 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Compute the convexity adjustment between two times for year on year coupons and for zero coupons (this adjustment is also used for the computation of the
- * forward in optional inflation instruments)
+ * forward in optional inflation instruments).
  */
 public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for year on year inflation coupon with a monthly index.
-   * 
+   *
    * @param coupon
    *          The year on year coupon.
    * @param inflationConvexity
@@ -61,7 +61,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for year on year inflation coupon with an interpolated index.
-   * 
+   *
    * @param coupon
    *          The year on year coupon.
    * @param inflationConvexity
@@ -98,7 +98,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for year on year inflation coupon with margin with a monthly index.
-   * 
+   *
    * @param coupon
    *          The year on year coupon.
    * @param inflationConvexity
@@ -134,7 +134,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for year on year inflation coupon with margin with an interpolated index.
-   * 
+   *
    * @param coupon
    *          The year on year coupon.
    * @param inflationConvexity
@@ -171,7 +171,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for zero coupon inflation swap with a monthly index.
-   * 
+   *
    * @param coupon
    *          The zero-coupon payment.
    * @param inflationConvexity
@@ -196,7 +196,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for zero coupon inflation swap with an interpolated index.
-   * 
+   *
    * @param coupon
    *          The zero-coupon payment.
    * @param inflationConvexity
@@ -221,7 +221,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for zero coupon Gearing inflation swap with a monthly index.
-   * 
+   *
    * @param coupon
    *          The zero-coupon payment.
    * @param inflationConvexity
@@ -246,7 +246,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the convexity adjustment for zero coupon Gearing inflation swap with an interpolated index.
-   * 
+   *
    * @param coupon
    *          The zero-coupon payment.
    * @param inflationConvexity
@@ -271,7 +271,7 @@ public class InflationMarketModelConvexityAdjustmentForCoupon {
 
   /**
    * Computes the volatility of a bond forward, a bond forward is defined by his start time and his end time.
-   * 
+   *
    * @param startTime
    *          The
    * @param endTime

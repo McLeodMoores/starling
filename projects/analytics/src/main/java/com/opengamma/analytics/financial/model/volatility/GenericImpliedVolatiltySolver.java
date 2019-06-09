@@ -91,8 +91,8 @@ public class GenericImpliedVolatiltySolver {
   }
 
   /**
-   * Compute implied volatility with geuss value as an input
-   * 
+   * Compute implied volatility with geuss value as an input.
+   *
    * @param optionPrice
    *          Option price
    * @param pavFunc

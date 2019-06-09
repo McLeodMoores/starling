@@ -144,8 +144,8 @@ abstract class CubicSplineSolver {
 
   /**
    * Cubic spline and its node sensitivity are respectively obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector and AN=L
-   * where N,L are matrices
-   * 
+   * where N,L are matrices.
+   *
    * @param xValues
    *          X values of data
    * @param yValues
@@ -182,7 +182,7 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
+   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector.
    *
    * @param intervals
    *          the intervals
@@ -208,8 +208,8 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * 
+   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector.
+   *
    * @param yValues
    *          Y values of Data
    * @param intervals
@@ -233,8 +233,8 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * Node sensitivity is obtained by solving a linear problem AN = L where A,N,L are matrices
-   * 
+   * Node sensitivity is obtained by solving a linear problem AN = L where A,N,L are matrices.
+   *
    * @param intervals
    *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return The matrix L
@@ -256,8 +256,8 @@ abstract class CubicSplineSolver {
   }
 
   /**
-   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector This can be done by LU decomposition
-   * 
+   * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector This can be done by LU decomposition.
+   *
    * @param doubMat
    *          Matrix A
    * @param doubVec
@@ -276,8 +276,8 @@ abstract class CubicSplineSolver {
 
   /**
    * Cubic spline and its node sensitivity are respectively obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector and AN=L
-   * where N,L are matrices
-   * 
+   * where N,L are matrices.
+   *
    * @param doubMat1
    *          The matrix A
    * @param doubVec
@@ -308,7 +308,7 @@ abstract class CubicSplineSolver {
 
   /**
    * Linear problem Ax=b is solved by forward substitution if A is lower triangular
-   * 
+   *
    * @param lMat
    *          Lower triangular matrix
    * @param doubVec
@@ -333,7 +333,7 @@ abstract class CubicSplineSolver {
 
   /**
    * Linear problem Ax=b is solved by backward substitution if A is upper triangular
-   * 
+   *
    * @param uMat
    *          Upper triangular matrix
    * @param doubVec

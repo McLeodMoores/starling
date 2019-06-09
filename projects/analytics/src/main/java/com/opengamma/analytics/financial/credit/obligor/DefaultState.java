@@ -1,20 +1,20 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.obligor;
 
 /**
- * Enumerate the state of default that an obligor is in
+ * Enumerate the state of default that an obligor is in.
  */
 public enum DefaultState {
   /**
-   * Not defaulted
+   * Not defaulted.
    */
   NOTDEFAULTED,
   /**
-   * Defaulted
+   * Defaulted.
    */
   DEFAULTED;
 

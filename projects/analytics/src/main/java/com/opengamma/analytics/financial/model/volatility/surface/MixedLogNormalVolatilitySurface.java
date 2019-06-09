@@ -20,15 +20,15 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Utility to produce volatility surfaces (implied and local) via a mixed log-normal model. This guarantees an arbitrage free implied volatility surface and a
- * corresponding local volatility surface. It's use is primarily in testing
+ * corresponding local volatility surface. It's use is primarily in testing.
  */
 public class MixedLogNormalVolatilitySurface {
 
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   /**
-   * The out-the-money price surface
-   * 
+   * The out-the-money price surface.
+   *
    * @param fwdCurve
    *          The forward curve
    * @param disCurve
@@ -85,8 +85,8 @@ public class MixedLogNormalVolatilitySurface {
   }
 
   /**
-   * Gets the implied volatility surface from a mixed log-normal model
-   * 
+   * Gets the implied volatility surface from a mixed log-normal model.
+   *
    * @param fwdCurve
    *          The forward curve
    * @param data
@@ -152,8 +152,8 @@ public class MixedLogNormalVolatilitySurface {
   }
 
   /**
-   * Gets the local volatility surface from a mixed log-normal model
-   * 
+   * Gets the local volatility surface from a mixed log-normal model.
+   *
    * @param fwdCurve
    *          The forward curve
    * @param data

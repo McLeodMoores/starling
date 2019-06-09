@@ -36,8 +36,8 @@ public abstract class BlackFormulaRepository {
   private static final double VOL_TOL = 1e-9; // 1 part in 100,000 basis points will do for implied vol
 
   /**
-   * The <b>forward</b> price of an option using the Black formula
-   * 
+   * The <b>forward</b> price of an option using the Black formula.
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -95,8 +95,8 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The PV of a single option
-   * 
+   * The PV of a single option.
+   *
    * @param data
    *          required data on the option
    * @param lognormalVol
@@ -109,8 +109,8 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The PV of a strip of options all with the same Black volatility
-   * 
+   * The PV of a strip of options all with the same Black volatility.
+   *
    * @param data
    *          array of required data on the option
    * @param lognormalVol
@@ -130,7 +130,7 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The forward (i.e. driftless) delta
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -202,8 +202,8 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The driftless dual delta (first derivative of option price with respect to strike)
-   * 
+   * The driftless dual delta (first derivative of option price with respect to strike).
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -312,7 +312,7 @@ public abstract class BlackFormulaRepository {
    * The forward (i.e. driftless) gamma, 2nd order sensitivity of the forward option value to the forward.
    * <p>
    * $\frac{\partial^2 FV}{\partial^2 f}$
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -361,8 +361,8 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The driftless dual gamma
-   * 
+   * The driftless dual gamma.
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -411,8 +411,8 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The driftless cross gamma - the sensitity of the delta to the strike $\frac{\partial^2 V}{\partial f \partial K}$
-   * 
+   * The driftless cross gamma - the sensitity of the delta to the strike $\frac{\partial^2 V}{\partial f \partial K}$.
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -461,7 +461,7 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * The theta (non-forward), the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$
+   * The theta (non-forward), the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$.
    *
    * @param forward
    *          The forward value of the underlying
@@ -543,8 +543,8 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The theta (non-forward), the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$ This is consistent with
-   * {@link BlackScholesFormulaRepository}
-   * 
+   * {@link BlackScholesFormulaRepository}.
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -618,7 +618,7 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The forward (i.e. driftless) theta
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -677,7 +677,7 @@ public abstract class BlackFormulaRepository {
   /**
    * The forward vega of an option, i.e. the sensitivity of the option's forward price wrt the implied volatility (which is just the the spot vega divided by
    * the the numeraire)
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -736,7 +736,7 @@ public abstract class BlackFormulaRepository {
    * The driftless vanna of an option, i.e. second order derivative of the option value, once to the underlying forward and once to volatility.
    * <p>
    * $\frac{\partial^2 FV}{\partial f \partial \sigma}$
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -791,7 +791,7 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless dual vanna of an option, i.e. second order derivative of the option value, once to the strike and once to volatility.
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -846,7 +846,7 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless vomma (aka volga) of an option, i.e. second order derivative of the option forward price with respect to the implied volatility.
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -905,7 +905,7 @@ public abstract class BlackFormulaRepository {
 
   /**
    * The driftless volga (aka vomma) of an option, i.e. second order derivative of the option forward price with respect to the implied volatility.
-   * 
+   *
    * @param forward
    *          The forward value of the underlying
    * @param strike
@@ -922,8 +922,8 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * Get the log-normal (Black) implied volatility of an European option
-   * 
+   * Get the log-normal (Black) implied volatility of an European option.
+   *
    * @param price
    *          The <b>forward</b> price - i.e. the market price divided by the numeraire (i.e. the zero bond p(0,T) for the T-forward measure)
    * @param forward
@@ -954,7 +954,7 @@ public abstract class BlackFormulaRepository {
   }
 
   /**
-   * Get the log-normal (Black) implied volatility of an out-the-money European option starting from an initial guess
+   * Get the log-normal (Black) implied volatility of an out-the-money European option starting from an initial guess.
    *
    * @param otmPrice
    *          The <b>forward</b> price - i.e. the market price divided by the numeraire (i.e. the zero bond p(0,T) for the T-forward measure) <b>Note</b> This
@@ -1071,7 +1071,7 @@ public abstract class BlackFormulaRepository {
    * Find the single volatility for a portfolio of European options such that the sum of Black prices of the options (with that volatility) equals the (market)
    * price of the portfolio - this is the implied volatility of the portfolio. A concrete example is a cap (floor) which can be viewed as a portfolio of caplets
    * (floorlets)
-   * 
+   *
    * @param data
    *          basic description of each option
    * @param price
@@ -1147,7 +1147,7 @@ public abstract class BlackFormulaRepository {
 
   /**
    * Computes the implied strike from delta and volatility in the Black formula.
-   * 
+   *
    * @param delta
    *          The option delta
    * @param isCall
@@ -1172,7 +1172,7 @@ public abstract class BlackFormulaRepository {
 
   /**
    * Computes the implied strike and its derivatives from delta and volatility in the Black formula.
-   * 
+   *
    * @param delta
    *          The option delta
    * @param isCall

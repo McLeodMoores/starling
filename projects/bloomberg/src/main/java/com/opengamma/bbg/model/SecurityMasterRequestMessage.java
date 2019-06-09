@@ -71,7 +71,7 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Gets the unique identifier.
-   * 
+   *
    * @return the unique identifier
    */
   public UniqueId getUniqueId() {
@@ -80,7 +80,7 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Sets the unique identifier.
-   * 
+   *
    * @param uid
    *          the unique identifier
    */
@@ -89,8 +89,8 @@ public class SecurityMasterRequestMessage implements Serializable {
   }
 
   /**
-   * Gets the bond issuer type
-   * 
+   * Gets the bond issuer type.
+   *
    * @return the bond issuer type
    */
   public String getBondIssuerType() {
@@ -98,8 +98,8 @@ public class SecurityMasterRequestMessage implements Serializable {
   }
 
   /**
-   * Sets the bond issuer type
-   * 
+   * Sets the bond issuer type.
+   *
    * @param bondIssuerType
    *          the bond issuer type
    */

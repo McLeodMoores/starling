@@ -13,7 +13,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Compute vega of forward volatility by parallel shift to volatility surface
+ * Compute vega of forward volatility by parallel shift to volatility surface.
  */
 public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeVisitorAdapter<CarrLeeFXData, Double> {
 
@@ -32,7 +32,7 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
   }
 
   /**
-   * Constructor specifying bump amount
+   * Constructor specifying bump amount.
    *
    * @param bump
    *          The bump amount
@@ -43,7 +43,7 @@ public class CarrLeeFXVolatilitySwapVegaCalculator extends InstrumentDerivativeV
   }
 
   /**
-   * Constructor specifying bump amount
+   * Constructor specifying bump amount.
    *
    * @param bump
    *          The bump amount

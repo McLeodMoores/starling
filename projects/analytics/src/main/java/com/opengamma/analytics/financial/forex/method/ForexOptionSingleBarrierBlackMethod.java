@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.DoublesPair;
 // CSOFF
 /**
  * Pricing method for single barrier Forex option transactions in the Black world.
- * 
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.forex.provider.ForexOptionSingleBarrierBlackMethod}
  */
 @Deprecated
@@ -51,7 +51,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static ForexOptionSingleBarrierBlackMethod getInstance() {
@@ -71,7 +71,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the present value for single barrier Forex option in Black model (log-normal spot rate).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -113,7 +113,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   /**
    * Computes the currency exposure for single barrier Forex option in Black model (log-normal spot rate). The sensitivity of the volatility on the spot is not
    * taken into account. It is the currency exposure in the Black model where the volatility is suppose to be constant for curve and forward changes.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -161,7 +161,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   /**
    * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward (and on the curves) is not taken into account.
    * It is the curve sensitivity in the Black model where the volatility is suppose to be constant for curve and forward changes.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -212,7 +212,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Present value curve sensitivity with a generic instrument as argument.
-   * 
+   *
    * @param instrument
    *          A single barrier Forex option.
    * @param curves
@@ -228,7 +228,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the volatility sensitivity of the option present value.
-   * 
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -267,7 +267,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the present value volatility sensitivity with a generic instrument as argument.
-   * 
+   *
    * @param instrument
    *          A single barrier Forex option.
    * @param curves
@@ -284,7 +284,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   /**
    * Computes the volatility sensitivity with respect to input data for a vanilla option with the Black function and a volatility from a volatility surface. The
    * sensitivity is computed with respect to each node in the volatility surface.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -322,7 +322,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the implied Black volatility of the barrier option.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -348,7 +348,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   /**
    * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency equivalent to the option up to the first order
    * divided by the option notional.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -392,7 +392,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the delta of the Forex option. The delta is the first order derivative of the option present value to the spot fx rate.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -414,7 +414,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the forward delta (first derivative with respect to forward).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -433,7 +433,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the spot delta (first derivative with respect to spot).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -469,7 +469,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
    * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference.
    * <p>
    * This gamma is be computed with respect to the direct quote (1 foreign = x domestic)
-   * 
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -513,7 +513,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   /**
    * Computes the gamma of the Forex option multiplied by the spot rate. The gamma is the second order derivative of the pv. The reason to multiply by the spot
    * rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -541,8 +541,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points
-   * 
+   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -557,7 +557,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * 2nd order spot sensitivity with a generic instrument as argument.
-   * 
+   *
    * @param instrument
    *          A single barrier Forex option.
    * @param curves
@@ -572,7 +572,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the theta (derivative with respect to the time). The theta is not scaled.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -615,7 +615,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the theta (derivative with respect to the time). The theta is not scaled.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -655,7 +655,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the theta (derivative with respect to the time). The theta is not scaled.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -690,8 +690,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference
-   * 
+   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -736,8 +736,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a default relative shift of 1 basis point
-   * 
+   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a default relative shift of 1 basis point.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -752,7 +752,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * 2nd order volatility sensitivity with a generic instrument as argument.
-   * 
+   *
    * @param instrument
    *          A single barrier Forex option.
    * @param curves
@@ -766,8 +766,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price
-   * 
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -781,8 +781,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points
-   * 
+   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -797,7 +797,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * 2nd order sensitivity wrt spot and volatility with a generic instrument as argument.
-   * 
+   *
    * @param instrument
    *          A single barrier Forex option.
    * @param curves
@@ -811,8 +811,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the vega
-   * 
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the vega.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -856,8 +856,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the delta
-   * 
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the delta.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -902,8 +902,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price
-   * 
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -950,8 +950,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price
-   * 
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param smile
@@ -1014,7 +1014,7 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
 
   /**
    * Computes the forward gamma (second derivative with respect to forward).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -1034,10 +1034,10 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference
+   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference.
    * <p>
    * This gamma is be computed with respect to the direct quote (1 foreign = x domestic)
-   * 
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param curves
@@ -1073,8 +1073,8 @@ public final class ForexOptionSingleBarrierBlackMethod implements ForexPricingMe
   }
 
   /**
-   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference
-   * 
+   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference.
+   *
    * @param optionForex
    *          A single barrier Forex option.
    * @param curves

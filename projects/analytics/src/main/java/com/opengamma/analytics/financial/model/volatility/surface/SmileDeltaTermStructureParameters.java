@@ -51,7 +51,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from volatility term structure.
-   * 
+   *
    * @param volatilityTerm
    *          The volatility description at the different expiration.
    */
@@ -61,7 +61,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from volatility term structure.
-   * 
+   *
    * @param volatilityTerm
    *          The volatility description at the different expiration.
    * @param interpolator
@@ -81,7 +81,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from market data.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile, not null
    * @param delta
@@ -109,7 +109,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from market data. The default interpolator is used for the time dimension.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile.
    * @param delta
@@ -128,7 +128,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Constructor from market data.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile, not null
    * @param delta
@@ -172,7 +172,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Get smile at a given time. The smile is described by the volatilities at a given delta. The smile is obtained from the data by the given interpolator.
-   * 
+   *
    * @param time
    *          The time to expiration.
    * @return The smile.
@@ -196,7 +196,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Get the smile at a given time and the sensitivities with respect to the volatilities.
-   * 
+   *
    * @param time
    *          The time to expiration.
    * @param volatilityAtTimeSensitivity
@@ -229,7 +229,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the times to expiration.
-   * 
+   *
    * @return The times.
    */
   public double[] getTimeToExpiration() {
@@ -238,7 +238,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the number of expirations.
-   * 
+   *
    * @return The number of expirations.
    */
   public int getNumberExpiration() {
@@ -246,8 +246,8 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
   }
 
   /**
-   * Gets the time interpolator
-   * 
+   * Gets the time interpolator.
+   *
    * @return The time interpolator
    */
   public Interpolator1D getTimeInterpolator() {
@@ -256,7 +256,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the volatility smiles from delta.
-   * 
+   *
    * @return The volatility smiles.
    */
   public SmileDeltaParameters[] getVolatilityTerm() {
@@ -265,7 +265,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets the number of strikes (common to all dates).
-   * 
+   *
    * @return The number of strikes.
    */
   public int getNumberStrike() {
@@ -274,7 +274,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets delta (common to all time to expiration).
-   * 
+   *
    * @return The delta.
    */
   public double[] getDelta() {
@@ -283,7 +283,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Gets put delta absolute value for all strikes. The ATM is 0.50 delta and the x call are transformed in 1-x put.
-   * 
+   *
    * @return The delta.
    */
   public double[] getDeltaFull() {
@@ -299,7 +299,7 @@ public class SmileDeltaTermStructureParameters implements VolatilityAndBucketedS
 
   /**
    * Get the volatility from a triple.
-   * 
+   *
    * @param tsf
    *          The Time, Strike, Forward triple, not null
    * @return The volatility.

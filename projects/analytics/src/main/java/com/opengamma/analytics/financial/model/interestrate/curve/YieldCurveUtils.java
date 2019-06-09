@@ -36,24 +36,26 @@ public class YieldCurveUtils {
   private static final CurveSpreadFunction ADD_SPREAD = AddCurveSpreadFunction.getInstance();
   /** Curve spread function that multiplies one curve by another */
   private static final CurveSpreadFunction MULTIPLY_SPREAD = MultiplyCurveSpreadFunction.getInstance();
-  /** Suffix for parallel shifts */
+  /** Suffix for parallel shifts. */
   public static final String PARALLEL_SHIFT_NAME = "_WithParallelShift";
-  /** Suffix for bucketed shifts */
+  /** Suffix for bucketed shifts. */
   public static final String BUCKETED_SHIFT_NAME = "_WithBucketedShifts";
-  /** Suffix for point shifts */
+  /** Suffix for point shifts. */
   public static final String POINT_SHIFT_NAME = "_WithPointShifts";
 
   /**
-   * Shifts a curve by a constant amount over all tenors. If the {@link ShiftType} is
-   * absolute, the shift is added to the curve i.e. a shift of 0.0001 results in all
-   * yields on the curve having one basis point added. If it is relative, then all yields on
-   * are the curve are multiplied by the shift amount i.e. a relative shift of 0.01 will
-   * result in all points on the curve being shifted upwards by 1% of the yield.
+   * Shifts a curve by a constant amount over all tenors. If the {@link ShiftType} is absolute, the shift is added to the curve i.e. a shift of 0.0001 results
+   * in all yields on the curve having one basis point added. If it is relative, then all yields on are the curve are multiplied by the shift amount i.e. a
+   * relative shift of 0.01 will result in all points on the curve being shifted upwards by 1% of the yield.
    * <p>
    * The original curve is unchanged and a new curve is returned.
-   * @param curve The original curve, not null
-   * @param shift The shift
-   * @param shiftType The shift type, not null
+   *
+   * @param curve
+   *          The original curve, not null
+   * @param shift
+   *          The shift
+   * @param shiftType
+   *          The shift type, not null
    * @return A new curve with all values shifted by a constant amount
    */
   public static YieldCurve withParallelShift(final YieldCurve curve, final double shift, final ShiftType shiftType) {
@@ -72,21 +74,23 @@ public class YieldCurveUtils {
   }
 
   /**
-   * Performs bucketed shifts on curves. The buckets need not be continuous; if they are not,
-   * then the curve is unchanged between the two times. The shifts include the lower time but
-   * exclude the upper, and are applied as a step function (i.e. constant over the bucket).
-   * The units of time of the buckets are years.
+   * Performs bucketed shifts on curves. The buckets need not be continuous; if they are not, then the curve is unchanged between the two times. The shifts
+   * include the lower time but exclude the upper, and are applied as a step function (i.e. constant over the bucket). The units of time of the buckets are
+   * years.
    * <p>
-   * If the {@link ShiftType} is absolute, the shift is added to the curve; a shift of 0.0001
-   * from one year to two years results in the curve being shifted upwards by one basis point
-   * from the one year point to the two year point. If this shift is relative, the yields are
-   * multiplied by the shift amount.
+   * If the {@link ShiftType} is absolute, the shift is added to the curve; a shift of 0.0001 from one year to two years results in the curve being shifted
+   * upwards by one basis point from the one year point to the two year point. If this shift is relative, the yields are multiplied by the shift amount.
    * <p>
    * The original curve is unchanged and a new curve is returned.
-   * @param curve The original curve, not null
-   * @param buckets The buckets, not null
-   * @param shifts The shifts, not null. There must be one shift per bucket.
-   * @param shiftType The shift type, not null
+   *
+   * @param curve
+   *          The original curve, not null
+   * @param buckets
+   *          The buckets, not null
+   * @param shifts
+   *          The shifts, not null. There must be one shift per bucket.
+   * @param shiftType
+   *          The shift type, not null
    * @return A new curve with bucketed shifts applied
    */
   public static YieldCurve withBucketedShifts(final YieldCurve curve, final List<DoublesPair> buckets, final List<Double> shifts,
@@ -127,7 +131,8 @@ public class YieldCurveUtils {
         stepCurvePoints.add(DoublesPair.of(oldPair.getSecondDouble(), 0));
         final DoublesCurve spreadCurve = InterpolatedDoublesCurve.from(stepCurvePoints, stepInterpolator);
         return new YieldCurve(newName, SpreadDoublesCurve.from(ADD_SPREAD, newName, underlyingCurve, spreadCurve));
-      } case RELATIVE: {
+      }
+      case RELATIVE: {
         if (oldPair.getFirstDouble() >= 0 && Double.compare(0, oldPair.getFirstDouble()) != 0) {
           stepCurvePoints.add(DoublesPair.of(0., 1.));
         }
@@ -146,7 +151,8 @@ public class YieldCurveUtils {
         stepCurvePoints.add(DoublesPair.of(oldPair.getSecondDouble(), 1));
         final DoublesCurve spreadCurve = InterpolatedDoublesCurve.from(stepCurvePoints, stepInterpolator);
         return new YieldCurve(newName, SpreadDoublesCurve.from(MULTIPLY_SPREAD, newName, underlyingCurve, spreadCurve));
-      } default:
+      }
+      default:
         throw new IllegalArgumentException("Cannot handle curve shift type " + shiftType + " for bucketed shifts");
     }
   }
@@ -154,19 +160,24 @@ public class YieldCurveUtils {
   /**
    * Performs point shifts on curves. The units of time are years.
    * <p>
-   * If the {@link ShiftType} is absolute, the shift is added to the curve; a shift of 0.0001
-   * results in the curve being shifted upwards by one basis point at the time point. If this
-   * shift is relative, the yields are multiplied by the shift amount.
+   * If the {@link ShiftType} is absolute, the shift is added to the curve; a shift of 0.0001 results in the curve being shifted upwards by one basis point at
+   * the time point. If this shift is relative, the yields are multiplied by the shift amount.
    * <p>
    * The original curve is unchanged and a new curve is returned.
    * <p>
    * This method only works for interpolated yield curves.
-   * @param curve The original curve, not null
-   * @param t The times, not null
-   * @param shifts The shifts, not null. There must be one shift per time.
-   * @param shiftType The shift type, not null
+   *
+   * @param curve
+   *          The original curve, not null
+   * @param t
+   *          The times, not null
+   * @param shifts
+   *          The shifts, not null. There must be one shift per time.
+   * @param shiftType
+   *          The shift type, not null
    * @return A new curve with point shifts applied
-   * @throws IllegalArgumentException if the curve is not an interpolated curve
+   * @throws IllegalArgumentException
+   *           if the curve is not an interpolated curve
    */
   public static YieldCurve withPointShifts(final YieldCurve curve, final List<Double> t, final List<Double> shifts,
       final ShiftType shiftType) {
@@ -183,23 +194,30 @@ public class YieldCurveUtils {
     switch (shiftType) {
       case ABSOLUTE: {
         return new YieldCurve(newName, CurveShiftFunctionFactory.getShiftedCurve(curve.getCurve(), tArray, shiftArray, newName));
-      } case RELATIVE: {
+      }
+      case RELATIVE: {
         final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) curve.getCurve();
         return new YieldCurve(newName, getRelativeShiftedCurve(interpolatedCurve, tArray, shiftArray, newName));
-      } default:
+      }
+      default:
         throw new IllegalArgumentException("Cannot handle curve shift type " + shiftType + " for point shifts");
     }
   }
 
   /**
    * Performs relative shifts on a yield curve
-   * @param curve The curve
-   * @param t The times
-   * @param yShift The shifts
-   * @param newName The new curve name
+   *
+   * @param curve
+   *          The curve
+   * @param t
+   *          The times
+   * @param yShift
+   *          The shifts
+   * @param newName
+   *          The new curve name
    * @return A shifted curve
    */
-  //TODO this should be moved into a separate CurveShiftFunction
+  // TODO this should be moved into a separate CurveShiftFunction
   private static InterpolatedDoublesCurve getRelativeShiftedCurve(final InterpolatedDoublesCurve curve, final double[] t, final double[] yShift,
       final String newName) {
     if (t.length == 0) {

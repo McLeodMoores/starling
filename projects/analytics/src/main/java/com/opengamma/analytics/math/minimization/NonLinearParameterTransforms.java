@@ -36,7 +36,7 @@ public interface NonLinearParameterTransforms {
   int getNumberOfFittingParameters();
 
   /**
-   * Transforms from a set of model parameters to a (possibly smaller) set of unconstrained fitting parameters
+   * Transforms from a set of model parameters to a (possibly smaller) set of unconstrained fitting parameters.
    *
    * @param modelParameters
    *          the model parameters
@@ -45,8 +45,8 @@ public interface NonLinearParameterTransforms {
   DoubleMatrix1D transform(DoubleMatrix1D modelParameters);
 
   /**
-   * Transforms from a set of unconstrained fitting parameters to a (possibly larger) set of function parameters
-   * 
+   * Transforms from a set of unconstrained fitting parameters to a (possibly larger) set of function parameters.
+   *
    * @param fittingParameters
    *          The fitting parameters
    * @return The model parameters
@@ -54,8 +54,8 @@ public interface NonLinearParameterTransforms {
   DoubleMatrix1D inverseTransform(DoubleMatrix1D fittingParameters);
 
   /**
-   * Calculates the Jacobian - the rate of change of the fitting parameters WRT the model parameters
-   * 
+   * Calculates the Jacobian - the rate of change of the fitting parameters WRT the model parameters.
+   *
    * @param modelParameters
    *          The model parameters
    * @return The Jacobian
@@ -63,8 +63,8 @@ public interface NonLinearParameterTransforms {
   DoubleMatrix2D jacobian(DoubleMatrix1D modelParameters);
 
   /**
-   * Calculates the inverse Jacobian - the rate of change of the model parameters WRT the fitting parameters
-   * 
+   * Calculates the inverse Jacobian - the rate of change of the model parameters WRT the fitting parameters.
+   *
    * @param fittingParameters
    *          The fitting parameters
    * @return the inverse Jacobian

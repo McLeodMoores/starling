@@ -26,7 +26,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Fudge message builder for {@link ExecutionOptions}
+ * Fudge message builder for {@link ExecutionOptions}.
  */
 @FudgeBuilderFor(ExecutionOptions.class)
 public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptions> {

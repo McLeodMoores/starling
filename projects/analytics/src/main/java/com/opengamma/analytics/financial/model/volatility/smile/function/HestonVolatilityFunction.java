@@ -47,7 +47,7 @@ public class HestonVolatilityFunction extends VolatilityFunctionProvider<HestonM
   private final Interpolator1D _interpolator;
 
   /**
-   * Default constructor setting sigma, alpha, the limit tolerance and the interpolator to the default values
+   * Default constructor setting sigma, alpha, the limit tolerance and the interpolator to the default values.
    */
   public HestonVolatilityFunction() {
     _limitSigma = DEFAULT_LIMIT_SIGMA;

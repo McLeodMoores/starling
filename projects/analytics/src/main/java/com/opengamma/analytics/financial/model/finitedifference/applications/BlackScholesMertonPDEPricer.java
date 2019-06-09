@@ -58,8 +58,8 @@ public class BlackScholesMertonPDEPricer {
   }
 
   /**
-   * All these setting are ignored if user supplies own grids and thetas
-   * 
+   * All these setting are ignored if user supplies own grids and thetas.
+   *
    * @param useBurnin
    *          useBurnin if true use a 'burn-in' period that consumes 20% of the time nodes (and hence the compute time) and runs with a theta of 1.0
    */
@@ -71,8 +71,8 @@ public class BlackScholesMertonPDEPricer {
   }
 
   /**
-   * All these setting are ignored if user supplies own grids and thetas
-   * 
+   * All these setting are ignored if user supplies own grids and thetas.
+   *
    * @param useBurnin
    *          if true use a 'burn-in' period that consumes some fraction of the time nodes (and hence the compute time) and runs with a theta of 1.0
    * @param burninFrac
@@ -87,8 +87,8 @@ public class BlackScholesMertonPDEPricer {
   }
 
   /**
-   * All these setting are ignored if user supplies own grids and thetas
-   * 
+   * All these setting are ignored if user supplies own grids and thetas.
+   *
    * @param useBurnin
    *          if true use a 'burn-in' period that consumes some fraction of the time nodes (and hence the compute time) and runs with a different theta
    * @param burninFrac
@@ -113,7 +113,7 @@ public class BlackScholesMertonPDEPricer {
    * finite difference methods to solve the Black-Scholes-Merton PDE. The grid is close to uniform in space (the strike and spot lie on the grid) and time
    * <p>
    * Since a rather famous analytic formula exists for the price of European options on commodities, this is simple for test purposes
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -146,7 +146,7 @@ public class BlackScholesMertonPDEPricer {
    * time
    * <p>
    * Since a rather famous analytic formula exists for the price of European options on commodities that should be used in place of this
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -286,7 +286,7 @@ public class BlackScholesMertonPDEPricer {
    * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate, cost-of-carry, and volatility)
    * by using finite difference methods to solve the Black-Scholes-Merton PDE. <b>Note</b> This is a specialist method that requires correct grid set up - if
    * unsure use another method that sets up the grid for you.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k

@@ -18,14 +18,15 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.util.tuple.LongObjectPair;
 
 /**
- * A JMX Mbean for {@link BloombergReferenceDataStatistics}
+ * A JMX Mbean for {@link BloombergReferenceDataStatistics}.
  */
 @ManagedResource(description = "Statistics collected over several days")
 public class DailyBloombergReferenceDataStatisticsMBean {
   private final DailyBloombergReferenceDataStatistics _stats;
 
   /**
-   * @param stats the  statistics to expose
+   * @param stats
+   *          the statistics to expose
    */
   public DailyBloombergReferenceDataStatisticsMBean(final DailyBloombergReferenceDataStatistics stats) {
     super();
@@ -42,7 +43,7 @@ public class DailyBloombergReferenceDataStatisticsMBean {
     return ret;
   }
 
-  //TODAY
+  // TODAY
   @ManagedAttribute(description = "The total number of gets done today.")
   public long getTodaysGetCount() {
     return getTodaysStats().getTotalGetsCount();
@@ -64,12 +65,12 @@ public class DailyBloombergReferenceDataStatisticsMBean {
     return wrap(lookupsBySecurity);
   }
 
-
   @ManagedOperation(description = "The total number of gets done on each field today.")
   public List<String> getTodaysGetCountsByField() {
     final List<LongObjectPair<String>> lookupsByField = getTodaysSnapshot().getLookupsByField();
     return wrap(lookupsByField);
   }
+
   private Snapshot getTodaysSnapshot() {
     return _stats.getTodaysSnapshot();
   }
@@ -78,7 +79,7 @@ public class DailyBloombergReferenceDataStatisticsMBean {
     return _stats.getTodaysStats();
   }
 
-  //ALLTIME
+  // ALLTIME
   @ManagedAttribute(description = "The total number of gets done for all time.")
   public long getAllTimesGetCount() {
     return getAllTimesStats().getTotalGetsCount();
@@ -99,11 +100,13 @@ public class DailyBloombergReferenceDataStatisticsMBean {
     final List<LongObjectPair<String>> lookupsBySecurity = getAllTimesSnapshot().getLookupsBySecurity();
     return wrap(lookupsBySecurity);
   }
+
   @ManagedOperation(description = "The total number of gets done on each field for all time.")
   public List<String> getAllTimesGetCountsByField() {
     final List<LongObjectPair<String>> lookupsByField = getAllTimesSnapshot().getLookupsByField();
     return wrap(lookupsByField);
   }
+
   private Snapshot getAllTimesSnapshot() {
     return _stats.getAllTimeSnapshot();
   }

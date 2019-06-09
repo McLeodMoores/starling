@@ -95,7 +95,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   }
 
   /**
-   * Creates a new instance
+   * Creates a new instance.
    *
    * @param cacheManager
    *          the cache manager, not null

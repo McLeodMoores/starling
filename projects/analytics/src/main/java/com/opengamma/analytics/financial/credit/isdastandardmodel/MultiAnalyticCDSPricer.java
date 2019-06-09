@@ -35,7 +35,7 @@ public class MultiAnalyticCDSPricer {
 
   /**
    * For consistency with the ISDA model version 1.8.2 and lower, a bug in the accrual on default calculation has been reproduced.
-   * 
+   *
    * @param formula
    *          which accrual on default formulae to use.
    */
@@ -51,7 +51,7 @@ public class MultiAnalyticCDSPricer {
 
   /**
    * Present value for the payer of premiums (i.e. the buyer of protection)
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -74,7 +74,7 @@ public class MultiAnalyticCDSPricer {
 
   /**
    * Present value for the payer of premiums (i.e. the buyer of protection)
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -108,7 +108,7 @@ public class MultiAnalyticCDSPricer {
 
   /**
    * Present value (clean price) for the payer of premiums (i.e. the buyer of protection)
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -126,7 +126,7 @@ public class MultiAnalyticCDSPricer {
 
   /**
    * Present value (clean price) for the payer of premiums (i.e. the buyer of protection)
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -144,7 +144,7 @@ public class MultiAnalyticCDSPricer {
   /**
    * Sensitivity of the present value (for the payer of premiums, i.e. the buyer of protection) to the zero hazard rate of a given node (knot) of the credit
    * curve. This is per unit of notional
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -168,8 +168,8 @@ public class MultiAnalyticCDSPricer {
   // }
 
   /**
-   * The par spread par spread for a given yield and credit (hazard rate/survival) curve)
-   * 
+   * The par spread par spread for a given yield and credit (hazard rate/survival) curve).
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -197,7 +197,7 @@ public class MultiAnalyticCDSPricer {
   /**
    * Sensitivity of the par spread (the fixed payment on the premium leg that make the PV of the CDS zero for a given yield and credit (hazard rate/survival)
    * curve) to the zero hazard rate of a given node (knot) of the credit curve.
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -225,7 +225,7 @@ public class MultiAnalyticCDSPricer {
   /**
    * This is the present value of the premium leg per unit of fractional spread - hence it is equal to 10,000 times the RPV01 (Risky PV01). The actual PV of the
    * leg is this multiplied by the notional and the fractional spread (i.e. spread in basis points divided by 10,000)
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -295,7 +295,7 @@ public class MultiAnalyticCDSPricer {
 
   /**
    * The sensitivity (on a unit notional) of the (scaled) RPV01 to the zero hazard rate of a given node (knot) of the credit curve.
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -494,7 +494,7 @@ public class MultiAnalyticCDSPricer {
    * Compute the present value of the protection leg with a notional of 1, which is given by the integral $\frac{1-R}{P(T_{v})} \int_{T_a} ^{T_b} P(t)
    * \frac{dQ(t)}{dt} dt$ where $P(t)$ and $Q(t)$ are the discount and survival curves respectively, $T_a$ and $T_b$ are the start and end of the protection
    * respectively, $T_v$ is the valuation time (all measured from $t = 0$, 'today') and $R$ is the recovery rate.
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -568,7 +568,7 @@ public class MultiAnalyticCDSPricer {
 
   /**
    * The sensitivity of the PV of the protection leg to the zero hazard rate of a given node (knot) of the credit curve.
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve

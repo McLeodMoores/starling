@@ -21,8 +21,8 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
   private static final double EPS = 1.e-12;
 
   /**
-   * The respective strikes should be sorted in ascending order
-   * 
+   * The respective strikes should be sorted in ascending order.
+   *
    * @param spot
    *          The spot
    * @param putStrikes

@@ -70,20 +70,22 @@ public class IRFutureOptionLoader extends SecurityLoader {
       FIELD_UNDL_ID_BB_UNIQUE);
 
   /**
-   * The valid Bloomberg security types for Interest Rate Future Option
+   * The valid Bloomberg security types for Interest Rate Future Option.
    */
   public static final Set<String> VALID_SECURITY_TYPES = ImmutableSet.of(
       BLOOMBERG_INTEREST_RATE_TYPE, BLOOMBERG_FINANCIAL_COMMODITY_OPTION_TYPE);
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public IRFutureOptionLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.IR_FUTURE_OPTION);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String rootTicker = fieldData.getString(FIELD_TICKER);
@@ -136,7 +138,7 @@ public class IRFutureOptionLoader extends SecurityLoader {
       return null;
     }
     final OptionType optionType = getOptionType(putOrCall);
-    //get year month day from expiryDate in the yyyy-mm-dd format
+    // get year month day from expiryDate in the yyyy-mm-dd format
     LocalDate expiryLocalDate = null;
     try {
       expiryLocalDate = LocalDate.parse(expiryDate);
@@ -168,7 +170,7 @@ public class IRFutureOptionLoader extends SecurityLoader {
         optionType);
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));
     security.setUniqueId(BloombergSecurityProvider.createUniqueId(bbgUniqueID));
-    //build option display name
+    // build option display name
     final StringBuilder buf = new StringBuilder(rootTicker);
     buf.append(" ");
     buf.append(expiryDate);

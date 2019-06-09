@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.hullwhite;
-
-import cern.jet.random.engine.MersenneTwister;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponIborRatchet;
@@ -14,8 +12,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.analytics.math.random.NormalRandomNumberGenerator;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+import cern.jet.random.engine.MersenneTwister;
+
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public class PresentValueHullWhiteMonteCarloCalculator extends InstrumentDerivativeVisitorAdapter<HullWhiteOneFactorProviderInterface, MultipleCurrencyAmount> {
 
@@ -37,7 +37,9 @@ public class PresentValueHullWhiteMonteCarloCalculator extends InstrumentDerivat
 
   /**
    * Constructor with a given number of simulation paths.
-   * @param nbPath The number of paths.
+   * 
+   * @param nbPath
+   *          The number of paths.
    */
   public PresentValueHullWhiteMonteCarloCalculator(final int nbPath) {
     _nbPath = nbPath;
@@ -45,7 +47,7 @@ public class PresentValueHullWhiteMonteCarloCalculator extends InstrumentDerivat
 
   @Override
   public MultipleCurrencyAmount visitAnnuityCouponIborRatchet(final AnnuityCouponIborRatchet annuity, final HullWhiteOneFactorProviderInterface hullWhite) {
-    HullWhiteMonteCarloMethod methodMC = new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister()), _nbPath);
+    final HullWhiteMonteCarloMethod methodMC = new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister()), _nbPath);
     return methodMC.presentValue(annuity, annuity.getCurrency(), hullWhite);
   }
 

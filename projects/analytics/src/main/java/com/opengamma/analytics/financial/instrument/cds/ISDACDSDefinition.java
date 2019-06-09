@@ -21,7 +21,7 @@ import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * ISDA definition for CDS securities
+ * ISDA definition for CDS securities.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  *
@@ -62,8 +62,8 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   private final StubType _stubType;
 
   /**
-   * Create an (immutable) CDS definition
-   * 
+   * Create an (immutable) CDS definition.
+   *
    * @param startDate
    *          Protection start date of the CDS contract (may be in the past, not null)
    * @param maturity
@@ -114,7 +114,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * Create a {@link ISDACDSDerivative} object for pricing relative to the given pricing date
+   * Create a {@link ISDACDSDerivative} object for pricing relative to the given pricing date.
    *
    * @param pricingDate
    *          Pricing point for offsetting t values
@@ -273,7 +273,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the start date.
-   * 
+   *
    * @return The start date
    */
   public ZonedDateTime getStartDate() {
@@ -282,7 +282,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the maturity date.
-   * 
+   *
    * @return The maturity date
    */
   public ZonedDateTime getMaturity() {
@@ -291,7 +291,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the premium.
-   * 
+   *
    * @return The premium
    */
   public ISDACDSPremiumDefinition getPremium() {
@@ -300,7 +300,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the notional.
-   * 
+   *
    * @return The notional
    */
   public double getNotional() {
@@ -309,7 +309,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the spread.
-   * 
+   *
    * @return The spread
    */
   public double getSpread() {
@@ -318,7 +318,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the recovery rate.
-   * 
+   *
    * @return The recovery rate
    */
   public double getRecoveryRate() {
@@ -327,7 +327,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Is accrued interest paid on default.
-   * 
+   *
    * @return true if the accrued interest should be paid on default
    */
   public boolean isAccrualOnDefault() {
@@ -336,7 +336,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Is the payment made on the default or at maturity.
-   * 
+   *
    * @return true if the payment is made on the default date
    */
   public boolean isPayOnDefault() {
@@ -345,7 +345,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Is the start date protected.
-   * 
+   *
    * @return true if the start date is protected.
    */
   public boolean isProtectStart() {
@@ -354,7 +354,7 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
 
   /**
    * Gets the coupon frequency.
-   * 
+   *
    * @return The coupon frequency
    */
   public Frequency getCouponFrequency() {
@@ -362,8 +362,8 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * Gets the convention
-   * 
+   * Gets the convention.
+   *
    * @return The convention
    */
   public Convention getConvention() {
@@ -371,8 +371,8 @@ public class ISDACDSDefinition implements InstrumentDefinition<ISDACDSDerivative
   }
 
   /**
-   * Gets the stub type
-   * 
+   * Gets the stub type.
+   *
    * @return The stub type
    */
   public StubType getStubType() {

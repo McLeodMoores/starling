@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.collateralmodel;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.credit.collateralmodel;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class to define the characteristics of initial margin required by a CCP for a centrally cleared trade
+ * Class to define the characteristics of initial margin required by a CCP for a centrally cleared trade.
  */
 public class InitialMarginDefinition extends CollateralDefinition {
 

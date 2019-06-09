@@ -68,7 +68,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   private volatile Instant _lastSuccessfulCycleTimeStamp;
 
   /**
-   * Create a management View
+   * Create a management View.
    *
    * @param viewProcess
    *          the underlying view process

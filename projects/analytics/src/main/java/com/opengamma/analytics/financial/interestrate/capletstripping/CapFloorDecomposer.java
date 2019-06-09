@@ -13,7 +13,8 @@ import com.opengamma.analytics.financial.model.volatility.SimpleOptionData;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Decomposes a {@link CapFloor} into an array of {@link SimpleOptionData}
+ * Decomposes a {@link CapFloor} into an array of {@link SimpleOptionData}.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -27,9 +28,12 @@ public final class CapFloorDecomposer {
   }
 
   /**
-   * Express a cap or floor as a strip of European call or put options
-   * @param cap The cap or floor
-   * @param ycb yield curves (i.e. discount and Ibor-projection curves)
+   * Express a cap or floor as a strip of European call or put options.
+   * 
+   * @param cap
+   *          The cap or floor
+   * @param ycb
+   *          yield curves (i.e. discount and Ibor-projection curves)
    * @return strip of European call or put options
    */
   public static SimpleOptionData[] toOptions(final CapFloor cap, final YieldCurveBundle ycb) {

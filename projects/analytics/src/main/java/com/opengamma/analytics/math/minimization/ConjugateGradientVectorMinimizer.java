@@ -30,8 +30,8 @@ public class ConjugateGradientVectorMinimizer
   private final LineSearch _lineSearch;
 
   /**
-   * Constructs the object with default values for relative and absolute tolerance (10<sup>-8</sup>) and the number of iterations (100)
-   * 
+   * Constructs the object with default values for relative and absolute tolerance (10<sup>-8</sup>) and the number of iterations (100).
+   *
    * @param minimizer
    *          The minimizer, not null
    */
@@ -41,7 +41,7 @@ public class ConjugateGradientVectorMinimizer
 
   /**
    * Constructs the object with equal relative and absolute values of tolerance.
-   * 
+   *
    * @param minimizer
    *          The minimizer, not null
    * @param tolerance

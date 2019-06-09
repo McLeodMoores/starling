@@ -15,10 +15,8 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.engine.marketdata.spec.LatestHistoricalMarketDataSpecification;
 
 /**
- * Fudge message builder for {@link LatestHistoricalMarketDataSpecification}
- * NOTE: jim 28-Jan-15 -- This class _should_ be auto fudge encoded because it's a JodaBean, but the encoding
- * doesn't work (it gets encoded as a HistoricalMarketDataSpecification, it's sub-class, so i think it's a JodaBean/Fudge
- * issue)
+ * Fudge message builder for {@link LatestHistoricalMarketDataSpecification}. NOTE: jim 28-Jan-15 -- This class _should_ be auto fudge encoded because it's a
+ * JodaBean, but the encoding doesn't work (it gets encoded as a HistoricalMarketDataSpecification, it's sub-class, so i think it's a JodaBean/Fudge issue)
  */
 @FudgeBuilderFor(LatestHistoricalMarketDataSpecification.class)
 public class LatestHistoricalMarketDataSpecificationFudgeBuilder implements FudgeBuilder<LatestHistoricalMarketDataSpecification> {

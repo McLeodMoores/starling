@@ -8,7 +8,7 @@ package com.opengamma.engine.function.config;
 import java.io.Serializable;
 
 /**
- * Marker interface for function configuration objects
+ * Marker interface for function configuration objects.
  */
 public interface FunctionConfiguration extends Serializable, Comparable<FunctionConfiguration> {
 }

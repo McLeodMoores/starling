@@ -30,7 +30,7 @@ public class InterestRateSensitivityCalculator {
   /**
    * The IR01 (Interest-Rate 01) is by definition the change in the price of a CDS when the market interest rates (these are money-market and swap rates) all
    * increased by 1bps. This assumes that the quoted (or flat) spread is invariant to a change in the yield curve
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param quote
@@ -71,7 +71,7 @@ public class InterestRateSensitivityCalculator {
    * The IR01 (Interest-Rate 01) is by definition the change in the price of a CDS when the market interest rates (these are money-market and swap rates) all
    * increased by 1bps. This assumes that the quoted (or flat) spread is invariant to a change in the yield curve. In addition the bumps are applied directly to
    * the yield curve and NOT the instruments.
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param quote
@@ -109,7 +109,7 @@ public class InterestRateSensitivityCalculator {
   /**
    * The IR01 (Interest-Rate 01) is by definition the change in the price of a CDS when the market interest rates (these are money-market and swap rates) all
    * increased by 1bps. This assumes that the credit curve is invariant
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param coupon
@@ -159,8 +159,8 @@ public class InterestRateSensitivityCalculator {
 
   /**
    * The bucketed IR01 (Interest-Rate 01) is by definition the vector of changes in the price of a CDS when the market interest rates (these are money-market
-   * and swap rates) increased by 1bps in turn
-   * 
+   * and swap rates) increased by 1bps in turn.
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param coupon

@@ -57,7 +57,7 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
   @PropertyDefinition
   private JmsConnector _jmsConnector;
   /**
-   * The scheduled executor to use for housekeeping operations
+   * The scheduled executor to use for housekeeping operations.
    */
   @PropertyDefinition
   private ScheduledExecutorService _executor = Executors.newSingleThreadScheduledExecutor();
@@ -178,7 +178,7 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the scheduled executor to use for housekeeping operations
+   * Gets the scheduled executor to use for housekeeping operations.
    * @return the value of the property
    */
   public ScheduledExecutorService getExecutor() {
@@ -186,7 +186,7 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
   }
 
   /**
-   * Sets the scheduled executor to use for housekeeping operations
+   * Sets the scheduled executor to use for housekeeping operations.
    * @param executor  the new value of the property
    */
   public void setExecutor(ScheduledExecutorService executor) {

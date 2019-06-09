@@ -11,7 +11,7 @@ import com.opengamma.analytics.math.number.ComplexNumber;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ComplexMathUtils {
 
@@ -23,7 +23,7 @@ public class ComplexMathUtils {
 
   public static ComplexNumber add(final ComplexNumber... z) {
     ArgumentChecker.notNull(z, "z");
-    int n = z.length;
+    final int n = z.length;
     double res = 0.0;
     double img = 0.0;
     for (int i = 0; i < n; i++) {
@@ -110,8 +110,10 @@ public class ComplexMathUtils {
   }
 
   /**
-   * Returns the principal value of log, with z the principal argument of z defined to lie in the interval (-pi, pi]
-   * @param z ComplexNumber
+   * Returns the principal value of log, with z the principal argument of z defined to lie in the interval (-pi, pi].
+   * 
+   * @param z
+   *          ComplexNumber
    * @return The log
    */
   public static ComplexNumber log(final ComplexNumber z) {
@@ -159,7 +161,7 @@ public class ComplexMathUtils {
   }
 
   public static ComplexNumber multiply(final double x, final ComplexNumber... z) {
-    ComplexNumber product = multiply(z);
+    final ComplexNumber product = multiply(z);
     return multiply(x, product);
   }
 

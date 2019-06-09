@@ -10,11 +10,11 @@ package com.opengamma.analytics.math.number;
  */
 public class ComplexNumber extends Number {
   private static final long serialVersionUID = 1L;
-  /** Defining <i>i</i>*/
+  /** Defining <i>i</i>. */
   public static final ComplexNumber I = new ComplexNumber(0, 1);
-  /** Defining <i>-i</i>*/
+  /** Defining <i>-i</i>. */
   public static final ComplexNumber MINUS_I = new ComplexNumber(0, -1);
-  /** Defining 0 + 0<i>i</i> */
+  /** Defining 0 + 0<i>i</i>. */
   public static final ComplexNumber ZERO = new ComplexNumber(0);
 
   private final double _real;
@@ -22,7 +22,9 @@ public class ComplexNumber extends Number {
 
   /**
    * Sets the imaginary part to zero.
-   * @param real The real part
+   * 
+   * @param real
+   *          The real part
    */
   public ComplexNumber(final double real) {
     _real = real;
@@ -30,8 +32,10 @@ public class ComplexNumber extends Number {
   }
 
   /**
-   * @param real The real part
-   * @param imaginary The imaginary part
+   * @param real
+   *          The real part
+   * @param imaginary
+   *          The imaginary part
    */
   public ComplexNumber(final double real, final double imaginary) {
     _real = real;
@@ -94,7 +98,7 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws UnsupportedOperationException
    *           in all cases
    */
@@ -105,7 +109,7 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws UnsupportedOperationException
    *           in all cases
    */
@@ -116,7 +120,7 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws UnsupportedOperationException
    *           in all cases
    */
@@ -127,7 +131,7 @@ public class ComplexNumber extends Number {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws UnsupportedOperationException
    *           in all cases
    */

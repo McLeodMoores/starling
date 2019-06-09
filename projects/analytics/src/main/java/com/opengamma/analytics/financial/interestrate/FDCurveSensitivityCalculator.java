@@ -25,8 +25,8 @@ import com.opengamma.util.tuple.DoublesPair;
 public abstract class FDCurveSensitivityCalculator {
 
   /**
-   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference
-   * 
+   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference.
+   *
    * @param ird
    *          The Interest Rate Derivative
    * @param calculator
@@ -77,8 +77,8 @@ public abstract class FDCurveSensitivityCalculator {
   // }
 
   /**
-   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference
-   * 
+   * Gives the sensitivity of the some metric of an IRD to a points on a one of the family of curves by finite difference.
+   *
    * @param ird
    *          The Interest Rate Derivative
    * @param method
@@ -124,8 +124,8 @@ public abstract class FDCurveSensitivityCalculator {
   }
 
   /**
-   * Gives the sensitivity of the some metric of an IRD to a point on a one of the family of curves by finite difference
-   * 
+   * Gives the sensitivity of the some metric of an IRD to a point on a one of the family of curves by finite difference.
+   *
    * @param ird
    *          The Interest Rate Derivative
    * @param calculator

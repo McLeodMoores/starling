@@ -162,7 +162,7 @@ public class BondLoader extends SecurityLoader {
       FIELD_INTERPOLATION_FOR_COUPON_CALC);
 
   /**
-   * The valid Bloomberg security types for Bond
+   * The valid Bloomberg security types for Bond.
    */
   public static final Set<String> VALID_SECURITY_TYPES = ImmutableSet.of(
       "Prvt CMO FLT",
@@ -192,7 +192,9 @@ public class BondLoader extends SecurityLoader {
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public BondLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.BOND);
@@ -255,7 +257,7 @@ public class BondLoader extends SecurityLoader {
     return fieldData.getInt(fieldName);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     try {
@@ -337,7 +339,7 @@ public class BondLoader extends SecurityLoader {
       final Double parAmount = validateAndGetDoubleField(fieldData, FIELD_PAR_AMT);
       final Double redemptionValue = validateAndGetDoubleField(fieldData, FIELD_REDEMP_VAL);
 
-      //String bbgUnique = validateAndGetStringField(fieldData, FIELD_ID_BBG_UNIQUE);
+      // String bbgUnique = validateAndGetStringField(fieldData, FIELD_ID_BBG_UNIQUE);
       final String marketSector = validateAndGetStringField(fieldData, FIELD_MARKET_SECTOR_DES);
       final String des = validateAndGetStringField(fieldData, FIELD_SECURITY_DES);
 
@@ -365,7 +367,7 @@ public class BondLoader extends SecurityLoader {
         ((BondSecurity) bondSecurity).addAttribute("interpolationMethod", interpolationMethod);
       } else if (isFloater) {
         // six character stub of CUSIP to link to legal entity.
-        final String benchmarkRateStr = validateAndGetStringField(fieldData, FIELD_RESET_IDX)  + " Index"; //TODO safe to assume the suffix?
+        final String benchmarkRateStr = validateAndGetStringField(fieldData, FIELD_RESET_IDX) + " Index"; // TODO safe to assume the suffix?
         final ExternalId benchmarkRateId = ExternalSchemes.bloombergTickerSecurityId(benchmarkRateStr);
         final ZonedDateTime issueDate = validateAndGetNullableDateField(fieldData, FIELD_ISSUE_DT);
         final int daysToSettle = validateAndGetIntegerField(fieldData, FIELD_DAYS_TO_SETTLE);
@@ -428,15 +430,18 @@ public class BondLoader extends SecurityLoader {
       return bondSecurity;
     } catch (final OpenGammaRuntimeException ogre) {
       LOGGER.error("Error loading bond {} - {} - FLOATER={}, Fields are {}",
-          new Object[] {fieldData.getValue(FIELD_ID_ISIN), ogre.getMessage(), fieldData.getString(FIELD_FLOATER), null }); //fieldData });
+          new Object[] { fieldData.getValue(FIELD_ID_ISIN), ogre.getMessage(), fieldData.getString(FIELD_FLOATER), null }); // fieldData });
       return null;
     }
   }
 
   /**
-   * Parse the identifiers from the response.  Note that we don't populate BLOOMBERG_TICKER because it's always either S or T.
-   * @param fieldData  the response, not null
-   * @param security  the security to populate, not null
+   * Parse the identifiers from the response. Note that we don't populate BLOOMBERG_TICKER because it's always either S or T.
+   * 
+   * @param fieldData
+   *          the response, not null
+   * @param security
+   *          the security to populate, not null
    */
   @Override
   protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security) {

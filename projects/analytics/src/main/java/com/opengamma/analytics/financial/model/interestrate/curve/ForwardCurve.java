@@ -40,7 +40,7 @@ public class ForwardCurve {
   }
 
   /**
-   * Forward curve with zero drift (i.e. curve is constant)
+   * Forward curve with zero drift (i.e. curve is constant).
    *
    * @param spot
    *          The spot rate
@@ -52,7 +52,7 @@ public class ForwardCurve {
   }
 
   /**
-   * Forward curve with constant drift
+   * Forward curve with constant drift.
    *
    * @param spot
    *          The spot

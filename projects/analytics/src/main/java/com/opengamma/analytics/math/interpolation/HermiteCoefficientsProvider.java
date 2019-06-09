@@ -11,7 +11,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Hermite interpolation is determined if one specifies first derivatives for a cubic interpolant and first and second derivatives for a quintic interpolant
+ * Hermite interpolation is determined if one specifies first derivatives for a cubic interpolant and first and second derivatives for a quintic interpolant.
  */
 public class HermiteCoefficientsProvider {
 
@@ -209,8 +209,8 @@ public class HermiteCoefficientsProvider {
   }
 
   /**
-   * Derivative values of slopes_i with respect to yValues_j, s_{ij}
-   * 
+   * Derivative values of slopes_i with respect to yValues_j, s_{ij}.
+   *
    * @param intervals
    *          Intervals of x data
    * @return The matrix s_{ij}

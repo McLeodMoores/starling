@@ -37,17 +37,17 @@ import com.opengamma.util.rest.AbstractDataResource;
 public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterComponentFactory<PositionMaster, DbPositionMaster> {
 
   /**
-   * The maximum number of get requests to pass in one hit - see {@link QuerySplittingPositionMaster#get(Collection)}
+   * The maximum number of get requests to pass in one hit - see {@link QuerySplittingPositionMaster#get(Collection)}.
    */
   @PropertyDefinition
   private Integer _maxGetRequestSize;
   /**
-   * The maximum size of search request to pass in one hit - see {@link QuerySplittingPositionMaster#search}
+   * The maximum size of search request to pass in one hit - see {@link QuerySplittingPositionMaster#search}.
    */
   @PropertyDefinition
   private Integer _maxSearchRequestSize;
   /**
-   * Whether to use parallel search queries - see {@link ParallelQuerySplittingPositionMaster}
+   * Whether to use parallel search queries - see {@link ParallelQuerySplittingPositionMaster}.
    */
   @PropertyDefinition
   private boolean _parallelSearchQueries;
@@ -64,7 +64,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
     return RemotePositionMaster.class;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected DbPositionMaster createDbDocumentMaster() {
     return new DbPositionMaster(getDbConnector());
@@ -82,14 +82,15 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
 
   @Override
   protected AbstractDataResource createPublishedResource(final DbPositionMaster dbMaster, final PositionMaster postProcessedMaster) {
-    //note - the db instance is required for this resource
+    // note - the db instance is required for this resource
     return new DataDbPositionMasterResource(dbMaster);
   }
 
   /**
    * If query splitting is enabled, wraps the position master with a query splitter.
    *
-   * @param master the underlying master, not null
+   * @param master
+   *          the underlying master, not null
    * @return the original master if splitting is disabled, otherwise the splitting form
    */
   protected PositionMaster splitQueries(final PositionMaster master) {
@@ -131,7 +132,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the maximum number of get requests to pass in one hit - see {@link QuerySplittingPositionMaster#get(Collection)}
+   * Gets the maximum number of get requests to pass in one hit - see {@link QuerySplittingPositionMaster#get(Collection)}.
    * @return the value of the property
    */
   public Integer getMaxGetRequestSize() {
@@ -139,7 +140,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
   }
 
   /**
-   * Sets the maximum number of get requests to pass in one hit - see {@link QuerySplittingPositionMaster#get(Collection)}
+   * Sets the maximum number of get requests to pass in one hit - see {@link QuerySplittingPositionMaster#get(Collection)}.
    * @param maxGetRequestSize  the new value of the property
    */
   public void setMaxGetRequestSize(Integer maxGetRequestSize) {
@@ -156,7 +157,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the maximum size of search request to pass in one hit - see {@link QuerySplittingPositionMaster#search}
+   * Gets the maximum size of search request to pass in one hit - see {@link QuerySplittingPositionMaster#search}.
    * @return the value of the property
    */
   public Integer getMaxSearchRequestSize() {
@@ -164,7 +165,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
   }
 
   /**
-   * Sets the maximum size of search request to pass in one hit - see {@link QuerySplittingPositionMaster#search}
+   * Sets the maximum size of search request to pass in one hit - see {@link QuerySplittingPositionMaster#search}.
    * @param maxSearchRequestSize  the new value of the property
    */
   public void setMaxSearchRequestSize(Integer maxSearchRequestSize) {
@@ -181,7 +182,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether to use parallel search queries - see {@link ParallelQuerySplittingPositionMaster}
+   * Gets whether to use parallel search queries - see {@link ParallelQuerySplittingPositionMaster}.
    * @return the value of the property
    */
   public boolean isParallelSearchQueries() {
@@ -189,7 +190,7 @@ public class DbPositionMasterComponentFactory extends AbstractDocumentDbMasterCo
   }
 
   /**
-   * Sets whether to use parallel search queries - see {@link ParallelQuerySplittingPositionMaster}
+   * Sets whether to use parallel search queries - see {@link ParallelQuerySplittingPositionMaster}.
    * @param parallelSearchQueries  the new value of the property
    */
   public void setParallelSearchQueries(boolean parallelSearchQueries) {

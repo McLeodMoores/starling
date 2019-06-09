@@ -119,7 +119,7 @@ public class ShiftedLogNormalTailExtrapolation {
   }
 
   /**
-   * The gradient of the smile under a shifted log normal model
+   * The gradient of the smile under a shifted log normal model.
    *
    * @param forward
    *          The (actual) forward value of the underlying

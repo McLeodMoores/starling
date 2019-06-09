@@ -20,9 +20,8 @@ import com.opengamma.analytics.math.function.special.GammaFunction;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * This class represents the characteristic function of the
- * Carr-Madan-Geman-Yor (CGMY) process. This process is a pure jump process
- * (i.e.  there is no Brownian component).
+ * This class represents the characteristic function of the Carr-Madan-Geman-Yor (CGMY) process. This process is a pure jump process (i.e. there is no Brownian
+ * component).
  */
 public class CGMYCharacteristicExponent implements CharacteristicExponent {
   private static final GammaFunction GAMMA_FUNCTION = new GammaFunction();
@@ -37,8 +36,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   private final double _r3;
 
   /**
-   * The parameters for the CGMY process
-   * 
+   * The parameters for the CGMY process.
+   *
    * @param c
    *          C, greater than 0
    * @param g
@@ -96,7 +95,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets C
+   * Gets C.
+   *
    * @return C
    */
   public double getC() {
@@ -104,7 +104,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets G
+   * Gets G.
+   *
    * @return G
    */
   public double getG() {
@@ -112,7 +113,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets M
+   * Gets M.
+   *
    * @return M
    */
   public double getM() {
@@ -120,7 +122,8 @@ public class CGMYCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * Gets Y
+   * Gets Y.
+   *
    * @return Y
    */
   public double getY() {

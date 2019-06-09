@@ -22,7 +22,7 @@ import com.opengamma.id.ExternalId;
  * The idiom for using this class is to create a parser instance around the Bloomberg ticker, and then call various getters on the instance to read the
  * indicatives.
  * </p>
- * 
+ *
  * @author noah@opengamma
  */
 public class BloombergTickerParserEQVanillaOption extends BloombergTickerParserEQOption {
@@ -30,17 +30,20 @@ public class BloombergTickerParserEQVanillaOption extends BloombergTickerParserE
   // ------------ METHODS ------------
   // -------- CONSTRUCTORS --------
   /**
-   * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.
+   * Create a parser.
+   * 
+   * @param ticker
+   *          a legal Bloomberg ticker, as string.
    */
   public BloombergTickerParserEQVanillaOption(final String ticker) {
     super(ticker);
   }
 
   /**
-   * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
+   * Create a parser.
+   * 
+   * @param identifier
+   *          a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    */
   public BloombergTickerParserEQVanillaOption(final ExternalId identifier) {
     super(identifier);

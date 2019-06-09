@@ -11,10 +11,8 @@ import com.opengamma.engine.value.ValueRequirement;
 /**
  * Runtime exception thrown when a dependency graph cannot be constructed.
  * <p>
- * This is thrown during the creation of a dependency graph. It indicates that
- * the {@link com.opengamma.engine.function.FunctionDefinition}s available in
- * the provided {@link com.opengamma.engine.function.FunctionRepository} were
- * insufficient to meet the requirements.
+ * This is thrown during the creation of a dependency graph. It indicates that the {@link com.opengamma.engine.function.FunctionDefinition}s available in the
+ * provided {@link com.opengamma.engine.function.FunctionRepository} were insufficient to meet the requirements.
  */
 public final class UnsatisfiableDependencyGraphException extends OpenGammaRuntimeException {
 
@@ -27,9 +25,10 @@ public final class UnsatisfiableDependencyGraphException extends OpenGammaRuntim
   private final ResolutionFailure _failure;
 
   /**
-   * Creates an instance based on a resolution failure
+   * Creates an instance based on a resolution failure.
    *
-   * @param failure the failure, not null
+   * @param failure
+   *          the failure, not null
    */
   protected UnsatisfiableDependencyGraphException(final ResolutionFailure failure) {
     super(failure.getValueRequirement().toString());
@@ -39,7 +38,8 @@ public final class UnsatisfiableDependencyGraphException extends OpenGammaRuntim
   /**
    * Creates an instance based on a value requirement.
    *
-   * @param requirement the value requirement, not null
+   * @param requirement
+   *          the value requirement, not null
    */
   public UnsatisfiableDependencyGraphException(final ValueRequirement requirement) {
     this(ResolutionFailureImpl.unsatisfied(requirement));

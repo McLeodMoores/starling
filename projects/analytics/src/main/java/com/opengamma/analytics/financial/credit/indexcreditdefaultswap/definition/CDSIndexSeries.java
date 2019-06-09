@@ -1,92 +1,92 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.indexcreditdefaultswap.definition;
 
 /**
- * Enumerate the different series for CDS indices
+ * Enumerate the different series for CDS indices.
  */
 public enum CDSIndexSeries {
   /**
-   * 
+   *
    */
   S1,
   /**
-   * 
+   *
    */
   S2,
   /**
-   * 
+   *
    */
   S3,
   /**
-   * 
+   *
    */
   S4,
   /**
-   * 
+   *
    */
   S5,
   /**
-   * 
+   *
    */
   S6,
   /**
-   * 
+   *
    */
   S7,
   /**
-   * 
+   *
    */
   S8,
   /**
-   * 
+   *
    */
   S9,
   /**
-   * 
+   *
    */
   S10,
   /**
-   * 
+   *
    */
   S11,
   /**
-   * 
+   *
    */
   S12,
   /**
-   * 
+   *
    */
   S13,
   /**
-   * 
+   *
    */
   S14,
   /**
-   * 
+   *
    */
   S15,
   /**
-   * 
+   *
    */
   S16,
   /**
-   * 
+   *
    */
   S17,
   /**
-   * 
+   *
    */
   S18,
   /**
-   * 
+   *
    */
   S19,
   /**
-   * 
+   *
    */
   S20;
 }

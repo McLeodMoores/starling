@@ -15,7 +15,7 @@ public class Diff {
   /**
    * Finds the numerical difference between value at position (i+1) and (i) returning a vector of what would be needed to be added to the first (n-1) elements
    * of the original vector to get the original vector.
-   * 
+   *
    * @param v
    *          the vector
    * @return the numerical difference between adjacent elements in v
@@ -31,8 +31,8 @@ public class Diff {
   }
 
   /**
-   * Finds the t^{th} numerical difference between value at position (i+1) and (i) (effectively recurses #values "t" times);
-   * 
+   * Finds the t^{th} numerical difference between value at position (i+1) and (i) (effectively recurses #values "t" times).
+   *
    * @param v
    *          the vector
    * @param t
@@ -61,7 +61,7 @@ public class Diff {
   /**
    * Finds the numerical difference between value at position (i+1) and (i) returning a vector of what would be needed to be added to the first (n-1) elements
    * of the original vector to get the original vector.
-   * 
+   *
    * @param v
    *          the vector
    * @return the numerical difference between adjacent elements in v
@@ -77,8 +77,8 @@ public class Diff {
   }
 
   /**
-   * Finds the t^{th} numerical difference between value at position (i+1) and (i) (effectively recurses #values "t" times);
-   * 
+   * Finds the t^{th} numerical difference between value at position (i+1) and (i) (effectively recurses #values "t" times).
+   *
    * @param v
    *          the vector
    * @param t
@@ -107,7 +107,7 @@ public class Diff {
   /**
    * Finds the numerical difference between value at position (i+1) and (i) returning a vector of what would be needed to be added to the first (n-1) elements
    * of the original vector to get the original vector.
-   * 
+   *
    * @param v
    *          the vector
    * @return the numerical difference between adjacent elements in v
@@ -124,7 +124,7 @@ public class Diff {
 
   /**
    * Finds the t^{th} numerical difference between value at position (i+1) and (i) (effectively recurses #values "t" times).
-   * 
+   *
    * @param v
    *          the vector
    * @param t
@@ -153,7 +153,7 @@ public class Diff {
   /**
    * Finds the numerical difference between value at position (i+1) and (i) returning a vector of what would be needed to be added to the first (n-1) elements
    * of the original vector to get the original vector.
-   * 
+   *
    * @param v
    *          the vector
    * @return the numerical difference between adjacent elements in v
@@ -170,7 +170,7 @@ public class Diff {
 
   /**
    * Finds the t^{th} numerical difference between value at position (i+1) and (i) (effectively recurses #values "t" times).
-   * 
+   *
    * @param v
    *          the vector
    * @param t

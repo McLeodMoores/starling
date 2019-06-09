@@ -63,7 +63,7 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
       }
     }
     if (count == 1 && !backslash) {
-      return new String[] {str.substring(i) };
+      return new String[] { str.substring(i) };
     }
     final String[] result = new String[count];
     final StringBuilder sb = new StringBuilder();
@@ -127,9 +127,12 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
   // ObjectResolver
 
   /**
-   * Utility function for resolving external ids from unique identifier
-   * @param uniqueId unique identifier
-   * @param schemePrefix the scheme prefix
+   * Utility function for resolving external ids from unique identifier.
+   * 
+   * @param uniqueId
+   *          unique identifier
+   * @param schemePrefix
+   *          the scheme prefix
    * @return external id bundle
    */
   public static ExternalIdBundle resolveExternalIds(final UniqueId uniqueId, final String schemePrefix) {

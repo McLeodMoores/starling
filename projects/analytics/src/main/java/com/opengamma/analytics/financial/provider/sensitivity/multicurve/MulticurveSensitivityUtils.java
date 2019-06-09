@@ -32,7 +32,7 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Clean a map by sorting the times and adding the values at duplicated times.
-   * 
+   *
    * @param map
    *          The map.
    * @return The cleaned map.
@@ -63,7 +63,7 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Clean a map by sorting the times and adding the values at duplicated times. The total value below the tolerance threshold are removed.
-   * 
+   *
    * @param map
    *          The map.
    * @param tolerance
@@ -154,7 +154,7 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Add two list representing sensitivities into one. No attempt is made to net off sensitivities occurring at the same time - Use clean() to do this
-   * 
+   *
    * @param sensi1
    *          First list of sensitivities
    * @param sensi2
@@ -200,7 +200,7 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Add the list representing the sensitivity to one curve to the map of sensitivities to several curves.
-   * 
+   *
    * @param sensi
    *          The multi-curves sensitivity. Not null.
    * @param curveName
@@ -229,7 +229,7 @@ public class MulticurveSensitivityUtils {
 
   /**
    * Add two maps links to forward curves.
-   * 
+   *
    * @param map1
    *          The first map.
    * @param map2
@@ -293,7 +293,7 @@ public class MulticurveSensitivityUtils {
   }
 
   /**
-   * Product of two sensitivities
+   * Product of two sensitivities.
    *
    * @param sensi1
    *          the original sensitivity, not null
@@ -340,8 +340,8 @@ public class MulticurveSensitivityUtils {
   }
 
   /**
-   * Product of two sensitivities
-   * 
+   * Product of two sensitivities.
+   *
    * @param map1
    *          the original sensitivity
    * @param map2

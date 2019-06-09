@@ -30,8 +30,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 public class ParameterSensitivityIssuerUnderlyingMatrixCalculator extends AbstractParameterSensitivityIssuerMatrixCalculator {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param curveSensitivityCalculator
    *          The curve sensitivity calculator.
    */
@@ -42,7 +42,7 @@ public class ParameterSensitivityIssuerUnderlyingMatrixCalculator extends Abstra
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate.
-   * 
+   *
    * @param sensitivity
    *          The point sensitivity.
    * @param issuer

@@ -28,9 +28,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Environment holding analytics customisations.
- * This allows custom behaviour to be injected into analytics functions.
- * e.g. the model daycount
+ * Environment holding analytics customisations. This allows custom behaviour to be injected into analytics functions. e.g. the model daycount
  */
 @BeanDefinition
 public final class AnalyticsEnvironment implements ImmutableBean {
@@ -38,9 +36,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   /**
    * The default environment, which consists of:
    * <ul>
-   *  <li> model daycount of Act/Act ISDA.
-   *  <li> standard fixed annuity builder
-   *  <li> standard floating annuity builder
+   * <li>model daycount of Act/Act ISDA.
+   * <li>standard fixed annuity builder
+   * <li>standard floating annuity builder
    * </ul>
    */
   public static final AnalyticsEnvironment DEFAULT = AnalyticsEnvironment.builder()
@@ -55,16 +53,17 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   private static ThreadLocal<AnalyticsEnvironment> s_instance = new InheritableThreadLocal<>();
 
   /**
-   * The model daycount. Used to compute fractions of a year when obtaining values from a curve.
-   * Different to the daycount used to price an instrument, which
+   * The model daycount. Used to compute fractions of a year when obtaining values from a curve. Different to the daycount used to price an instrument, which
    * comes from the instrument or a convention.
+   * 
    * @see DayCount
    */
   @PropertyDefinition(validate = "notNull")
   private final DayCount _modelDayCount;
 
   /**
-   * Builder for generating fixed annuities
+   * Builder for generating fixed annuities.
+   * 
    * @see FixedAnnuityDefinitionBuilder
    */
   @PropertyDefinition(validate = "notNull")
@@ -72,6 +71,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * Builder for generating floating (Ibor, OIS etc) annuities.
+   * 
    * @see FloatingAnnuityDefinitionBuilder
    */
   @PropertyDefinition(validate = "notNull")
@@ -93,7 +93,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * Set the current {@link AnalyticsEnvironment} for the current thread.
-   * @param analyticsEnvironment the analytics environment to set, not null
+   * 
+   * @param analyticsEnvironment
+   *          the analytics environment to set, not null
    */
   public static void setInstance(final AnalyticsEnvironment analyticsEnvironment) {
     ArgumentChecker.notNull(analyticsEnvironment, "analyticsEnvironment");
@@ -151,9 +153,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the model daycount. Used to compute fractions of a year when obtaining values from a curve.
-   * Different to the daycount used to price an instrument, which
+   * Gets the model daycount. Used to compute fractions of a year when obtaining values from a curve. Different to the daycount used to price an instrument, which
    * comes from the instrument or a convention.
+   * 
    * @see DayCount
    * @return the value of the property, not null
    */
@@ -163,7 +165,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets builder for generating fixed annuities
+   * Gets builder for generating fixed annuities.
+   * 
    * @see FixedAnnuityDefinitionBuilder
    * @return the value of the property, not null
    */
@@ -174,6 +177,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   //-----------------------------------------------------------------------
   /**
    * Gets builder for generating floating (Ibor, OIS etc) annuities.
+   * 
    * @see FloatingAnnuityDefinitionBuilder
    * @return the value of the property, not null
    */
@@ -447,9 +451,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the model daycount. Used to compute fractions of a year when obtaining values from a curve.
-     * Different to the daycount used to price an instrument, which
+     * Sets the model daycount. Used to compute fractions of a year when obtaining values from a curve. Different to the daycount used to price an instrument, which
      * comes from the instrument or a convention.
+     * 
      * @see DayCount
      * @param modelDayCount  the new value, not null
      * @return this, for chaining, not null
@@ -461,7 +465,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
     }
 
     /**
-     * Sets builder for generating fixed annuities
+     * Sets builder for generating fixed annuities.
+     * 
      * @see FixedAnnuityDefinitionBuilder
      * @param fixedAnnuityDefinitionBuilder  the new value, not null
      * @return this, for chaining, not null
@@ -474,6 +479,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
     /**
      * Sets builder for generating floating (Ibor, OIS etc) annuities.
+     * 
      * @see FloatingAnnuityDefinitionBuilder
      * @param floatingAnnuityDefinitionBuilder  the new value, not null
      * @return this, for chaining, not null

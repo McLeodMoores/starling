@@ -17,7 +17,7 @@ import com.opengamma.util.ArgumentChecker;
  * Method for the pricing of interest rate future options with up-front premium. The pricing is done with a Black approach on the future rate (1.0-price). The
  * Black parameters are represented by (expiration-strike-delay) surfaces. The "delay" is the time between option expiration and future last trading date, i.e.
  * 0 for quarterly options and x for x-year mid-curve options. The future prices are computed without convexity adjustments.
- * 
+ *
  * @deprecated Use {@link InterestRateFutureOptionMarginTransactionBlackSmileMethod}
  */
 @Deprecated
@@ -34,7 +34,7 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
 
   /**
    * Return the method unique instance.
-   * 
+   *
    * @return The instance.
    */
   public static InterestRateFutureOptionMarginTransactionBlackSurfaceMethod getInstance() {
@@ -50,7 +50,7 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
 
   /**
    * Computes the present value volatility sensitivity of a transaction.
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param blackData
@@ -68,7 +68,7 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
 
   /**
    * Computes the theta of a transaction.
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param blackData
@@ -86,7 +86,7 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
 
   /**
    * Computes the present value volatility sensitivity of a transaction.
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param blackData
@@ -104,7 +104,7 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
 
   /**
    * Computes the present value delta of a transaction. This is with respect to futures price
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param blackData
@@ -122,7 +122,7 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
 
   /**
    * Computes the present value delta of a transaction. This is with respect to futures price
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param blackData
@@ -139,7 +139,7 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
 
   /**
    * Computes the present value gamma of a transaction. This is with respect to either futures price, or rate=1-price
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param blackData
@@ -156,8 +156,8 @@ public final class InterestRateFutureOptionMarginTransactionBlackSurfaceMethod e
   }
 
   /**
-   * Interpolates on the Black Volatility Surface at expiry and strike of optionTransaction
-   * 
+   * Interpolates on the Black Volatility Surface at expiry and strike of optionTransaction.
+   *
    * @param optionTransaction
    *          InterestRateFutureOptionMarginTransaction
    * @param curveBundle

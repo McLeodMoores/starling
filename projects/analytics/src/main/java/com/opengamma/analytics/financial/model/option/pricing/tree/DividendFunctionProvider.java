@@ -11,7 +11,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provide functions of discrete dividend, needed for tree option pricing
+ * Provide functions of discrete dividend, needed for tree option pricing.
  */
 public abstract class DividendFunctionProvider {
 
@@ -49,7 +49,7 @@ public abstract class DividendFunctionProvider {
   }
 
   /**
-   * Compute the asset price modified due to dividend payments
+   * Compute the asset price modified due to dividend payments.
    *
    * @param spot
    *          The spot price of asset
@@ -60,7 +60,7 @@ public abstract class DividendFunctionProvider {
   public abstract double spotModifier(double spot, double interestRate);
 
   /**
-   * Compute correction to asset price due to dividends up to the k-th payment
+   * Compute correction to asset price due to dividends up to the k-th payment.
    *
    * @param assetPrice
    *          The asset price just before the k-th payment
@@ -75,7 +75,7 @@ public abstract class DividendFunctionProvider {
   public abstract double dividendCorrections(double assetPrice, double interestRate, double offset, int k);
 
   /**
-   * Asset prices in the 1st layer, i.e., S_{10} and S_{11}
+   * Asset prices in the 1st layer, i.e., S_{10} and S_{11}.
    *
    * @param spot
    *          The spot
@@ -94,7 +94,7 @@ public abstract class DividendFunctionProvider {
   public abstract double[] getAssetPricesForDelta(double spot, double interestRate, int[] divSteps, double upFactor, double downFactor, double sumDiscountDiv);
 
   /**
-   * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}
+   * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}.
    *
    * @param spot
    *          The spot
@@ -113,7 +113,7 @@ public abstract class DividendFunctionProvider {
   public abstract double[] getAssetPricesForGamma(double spot, double interestRate, int[] divSteps, double upFactor, double downFactor, double sumDiscountDiv);
 
   /**
-   * Asset prices in the 1st layer, i.e., S_{10} and S_{11}
+   * Asset prices in the 1st layer, i.e., S_{10} and S_{11}.
    *
    * @param spot
    *          The spot
@@ -135,7 +135,7 @@ public abstract class DividendFunctionProvider {
       double sumDiscountDiv);
 
   /**
-   * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}
+   * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}.
    *
    * @param spot
    *          The spot
@@ -172,7 +172,7 @@ public abstract class DividendFunctionProvider {
   }
 
   /**
-   * Compare time step width with payment time width
+   * Compare time step width with payment time width.
    *
    * @param dt
    *          Time step width

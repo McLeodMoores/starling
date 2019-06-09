@@ -63,7 +63,7 @@ import com.opengamma.master.config.ConfigSearchResult;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Loads config master with default bloomberg security types definition
+ * Loads config master with default bloomberg security types definition.
  */
 public class BloombergSecurityTypeDefinitionLoader {
 

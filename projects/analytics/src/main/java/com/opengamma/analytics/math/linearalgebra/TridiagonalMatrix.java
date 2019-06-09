@@ -34,9 +34,12 @@ public class TridiagonalMatrix implements Matrix<Double> {
   private DoubleMatrix2D _matrix;
 
   /**
-   * @param a An array containing the diagonal values of the matrix, not null
-   * @param b An array containing the upper sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
-   * @param c An array containing the lower sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
+   * @param a
+   *          An array containing the diagonal values of the matrix, not null
+   * @param b
+   *          An array containing the upper sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
+   * @param c
+   *          An array containing the lower sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
    */
   public TridiagonalMatrix(final double[] a, final double[] b, final double[] c) {
     Validate.notNull(a, "a");
@@ -51,7 +54,8 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   /**
-   * Direct access to Diagonal Data
+   * Direct access to Diagonal Data.
+   *
    * @return An array of the values of the diagonal
    */
   public double[] getDiagonalData() {
@@ -66,7 +70,8 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   /**
-   *  Direct access to upper sub-Diagonal Data
+   * Direct access to upper sub-Diagonal Data.
+   *
    * @return An array of the values of the upper sub-diagonal
    */
   public double[] getUpperSubDiagonalData() {
@@ -81,7 +86,8 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   /**
-   * Direct access to lower sub-Diagonal Data
+   * Direct access to lower sub-Diagonal Data.
+   *
    * @return An array of the values of the lower sub-diagonal
    */
   public double[] getLowerSubDiagonalData() {

@@ -21,7 +21,7 @@ import com.opengamma.util.LogUtils;
 import com.opengamma.util.StartupUtils;
 
 /**
- * Abstract class for command line tools which do not require access to a ToolContext
+ * Abstract class for command line tools which do not require access to a ToolContext.
  */
 public abstract class AbstractToolWithoutContext {
 

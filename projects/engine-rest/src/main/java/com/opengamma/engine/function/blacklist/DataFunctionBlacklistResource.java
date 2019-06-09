@@ -35,7 +35,7 @@ import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * Publishes a {@link FunctionBlacklist} to remote clients
+ * Publishes a {@link FunctionBlacklist} to remote clients.
  */
 public class DataFunctionBlacklistResource extends AbstractDataResource implements FunctionBlacklistRuleListener {
 

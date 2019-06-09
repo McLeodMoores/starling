@@ -358,7 +358,7 @@ public final class BondFutureOptionPremiumSecurityBlackSurfaceMethod {
   }
 
   /**
-   * Interpolates and returns the option's implied volatility
+   * Interpolates and returns the option's implied volatility.
    *
    * @param security
    *          The future option security, not null
@@ -376,7 +376,7 @@ public final class BondFutureOptionPremiumSecurityBlackSurfaceMethod {
   }
 
   /**
-   * Interpolates and returns the option's implied volatility
+   * Interpolates and returns the option's implied volatility.
    *
    * @param security
    *          The future option security, not null

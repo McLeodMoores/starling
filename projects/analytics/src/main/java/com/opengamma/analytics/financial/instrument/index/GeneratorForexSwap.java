@@ -46,8 +46,8 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
   private final boolean _endOfMonth;
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param name
    *          The generator name.
    * @param currency1
@@ -80,7 +80,7 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
 
   /**
    * Gets the _currency1 field.
-   * 
+   *
    * @return the _currency1
    */
   public Currency getCurrency1() {
@@ -89,7 +89,7 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
 
   /**
    * Gets the _currency2 field.
-   * 
+   *
    * @return the _currency2
    */
   public Currency getCurrency2() {
@@ -98,7 +98,7 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
 
   /**
    * Gets the _calendar field.
-   * 
+   *
    * @return the _calendar
    */
   public Calendar getCalendar() {
@@ -107,7 +107,7 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
 
   /**
    * Gets the _spotLag field.
-   * 
+   *
    * @return the _spotLag
    */
   public int getSpotLag() {
@@ -116,7 +116,7 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
 
   /**
    * Gets the _businessDayConvention field.
-   * 
+   *
    * @return the _businessDayConvention
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -125,7 +125,7 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
 
   /**
    * Gets the _endOfMonth field.
-   * 
+   *
    * @return the _endOfMonth
    */
   public boolean isEndOfMonth() {

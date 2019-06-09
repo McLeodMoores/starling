@@ -28,8 +28,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 public class ParameterSensitivityInflationUnderlyingMatrixCalculator extends ParameterSensitivityInflationMatrixProviderAbstractCalculator {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param curveSensitivityCalculator
    *          The curve sensitivity calculator.
    */
@@ -40,7 +40,7 @@ public class ParameterSensitivityInflationUnderlyingMatrixCalculator extends Par
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate.
-   * 
+   *
    * @param sensitivity
    *          The point sensitivity.
    * @param inflation

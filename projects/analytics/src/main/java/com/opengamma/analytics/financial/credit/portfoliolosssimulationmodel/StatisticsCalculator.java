@@ -6,7 +6,8 @@
 package com.opengamma.analytics.financial.credit.portfoliolosssimulationmodel;
 
 /**
- * Class to extract statistics from the simulated scenarios
+ * Class to extract statistics from the simulated scenarios.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated

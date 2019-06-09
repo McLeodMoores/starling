@@ -28,7 +28,7 @@ public class BondAnalytic {
 
   /**
    * Simple analytic representation of a fixed coupon bond that allows it to be priced consistently with a CDS (i.e. using the ISDA model)
-   * 
+   *
    * @param today
    *          today's date
    * @param coupon
@@ -46,7 +46,7 @@ public class BondAnalytic {
 
   /**
    * Simple analytic representation of a fixed coupon bond that allows it to be priced consistently with a CDS (i.e. using the ISDA model)
-   * 
+   *
    * @param today
    *          today's date
    * @param coupon
@@ -86,7 +86,7 @@ public class BondAnalytic {
 
   /**
    * Simple analytic representation of a fixed coupon bond that allows it to be priced consistently with a CDS (i.e. using the ISDA model)
-   * 
+   *
    * @param paymentTimes
    *          The payment times. Year fraction between today and the payment dates. This should use the same year fraction as the ISDA curves (i.e. normally
    *          ACT/365F)
@@ -118,7 +118,7 @@ public class BondAnalytic {
 
   /**
    * Gets the accrued interest.
-   * 
+   *
    * @return the accuredInterest
    */
   public double getAccruedInterest() {
@@ -127,7 +127,7 @@ public class BondAnalytic {
 
   /**
    * Gets the payment time for the given index.
-   * 
+   *
    * @param index
    *          the index
    * @return the paymentTime
@@ -138,7 +138,7 @@ public class BondAnalytic {
 
   /**
    * Gets the payment amount for the given index.
-   * 
+   *
    * @param index
    *          the index
    * @return the paymentAmount
@@ -148,8 +148,8 @@ public class BondAnalytic {
   }
 
   /**
-   * Gets the number of payments
-   * 
+   * Gets the number of payments.
+   *
    * @return the nPayments
    */
   public int getnPayments() {
@@ -158,7 +158,7 @@ public class BondAnalytic {
 
   /**
    * Gets the recovery rate.
-   * 
+   *
    * @return the recoveryRate
    */
   public double getRecoveryRate() {

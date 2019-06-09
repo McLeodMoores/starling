@@ -20,7 +20,7 @@ import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * Publishes a {@link FunctionBlacklistProvider} to remote clients
+ * Publishes a {@link FunctionBlacklistProvider} to remote clients.
  */
 public class DataFunctionBlacklistProviderResource extends AbstractDataResource {
 

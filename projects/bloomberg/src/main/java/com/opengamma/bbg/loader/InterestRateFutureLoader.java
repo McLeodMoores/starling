@@ -72,7 +72,7 @@ public class InterestRateFutureLoader extends SecurityLoader {
   private static final Map<String, String> BBGCODE_UNDERLYING = Maps.newHashMap();
   static {
     // Mid-curves
-    for (final int i : new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0 }) {
+    for (final int i : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 }) {
       BBGCODE_UNDERLYING.put(i + "E", "US0003M Index");
       BBGCODE_UNDERLYING.put(i + "R", "EUR003M Index");
       BBGCODE_UNDERLYING.put(i + "L", "BP0003M Index");
@@ -91,19 +91,21 @@ public class InterestRateFutureLoader extends SecurityLoader {
   }
 
   /**
-   * The valid Bloomberg future categories for IR Futures
+   * The valid Bloomberg future categories for IR Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(BLOOMBERG_INTEREST_RATE_TYPE);
 
   /**
    * Creates an instance. See {@link FutureSecurity}
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public InterestRateFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.INTEREST_RATE_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);

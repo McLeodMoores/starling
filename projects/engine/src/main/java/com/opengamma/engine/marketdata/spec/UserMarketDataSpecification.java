@@ -35,9 +35,10 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
   private final UniqueId _userSnapshotId;
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param userSnapshotId the user snapshot id, not-null
+   * @param userSnapshotId
+   *          the user snapshot id, not-null
    * @return the user market data specification
    */
   public static UserMarketDataSpecification of(final UniqueId userSnapshotId) {

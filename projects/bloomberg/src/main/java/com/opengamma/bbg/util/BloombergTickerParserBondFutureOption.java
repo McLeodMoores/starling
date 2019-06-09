@@ -6,7 +6,6 @@
 
 package com.opengamma.bbg.util;
 
-
 import com.opengamma.id.ExternalId;
 
 /**
@@ -27,17 +26,20 @@ import com.opengamma.id.ExternalId;
 public class BloombergTickerParserBondFutureOption extends BloombergTickerParserFutureOption {
 
   /**
-   * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.
+   * Create a parser.
+   * 
+   * @param ticker
+   *          a legal Bloomberg ticker, as string.
    */
   public BloombergTickerParserBondFutureOption(final String ticker) {
     super(ticker);
   }
 
   /**
-   * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
+   * Create a parser.
+   * 
+   * @param identifier
+   *          a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    */
   public BloombergTickerParserBondFutureOption(final ExternalId identifier) {
     super(identifier);

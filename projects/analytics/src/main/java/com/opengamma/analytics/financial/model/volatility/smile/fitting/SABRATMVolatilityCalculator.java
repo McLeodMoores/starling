@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RidderSingleRootFinder;
 
 /**
- * 
+ *
  */
 public class SABRATMVolatilityCalculator {
   private final VolatilityFunctionProvider<SABRFormulaData> _sabrFormula;
@@ -29,11 +29,16 @@ public class SABRATMVolatilityCalculator {
   }
 
   /**
-   * Finds the alpha that gives the required ATM volatility 
-   * @param data SABR parameters - the alpha value is ignored 
-   * @param option The option
-   * @param forward the forward
-   * @param atmVol The ATM volatility
+   * Finds the alpha that gives the required ATM volatility .
+   * 
+   * @param data
+   *          SABR parameters - the alpha value is ignored
+   * @param option
+   *          The option
+   * @param forward
+   *          the forward
+   * @param atmVol
+   *          The ATM volatility
    * @return the value of alpha
    */
   public double calculate(final SABRFormulaData data, final EuropeanVanillaOption option, final double forward, final double atmVol) {

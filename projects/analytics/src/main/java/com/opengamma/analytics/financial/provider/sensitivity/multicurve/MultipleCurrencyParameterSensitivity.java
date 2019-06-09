@@ -169,7 +169,7 @@ public class MultipleCurrencyParameterSensitivity {
   }
 
   /**
-   * Returns the sensitivities wrapped in an unmodifiable map
+   * Returns the sensitivities wrapped in an unmodifiable map.
    *
    * @return The sensitivities
    */

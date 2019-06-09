@@ -59,7 +59,7 @@ public class BloombergTicksCollector implements Lifecycle {
   private static final StorageMode DEFAULT_STORAGE_MODE = StorageMode.SINGLE;
 
   /**
-   * Default ticks root directory
+   * Default ticks root directory.
    */
   public static final String DEFAULT_ROOT_DIR = "/tickData";
 
@@ -89,12 +89,18 @@ public class BloombergTicksCollector implements Lifecycle {
   }
 
   /**
-   * @param sessionOptions the bloomberg session options, not null.
-   * @param refDataProvider the reference data provider, not null
-   * @param rootDir the base directory to write ticks to, not null
-   * @param trackFile the watchList file containing identifiers, not null
-   * @param bbgSessions the number of bloomberg sessions to create, must be positive
-   * @param storageMode the storage mode, not null
+   * @param sessionOptions
+   *          the bloomberg session options, not null.
+   * @param refDataProvider
+   *          the reference data provider, not null
+   * @param rootDir
+   *          the base directory to write ticks to, not null
+   * @param trackFile
+   *          the watchList file containing identifiers, not null
+   * @param bbgSessions
+   *          the number of bloomberg sessions to create, must be positive
+   * @param storageMode
+   *          the storage mode, not null
    */
   public BloombergTicksCollector(final BloombergConnector sessionOptions, final ReferenceDataProvider refDataProvider,
       final String rootDir, final String trackFile, final int bbgSessions, final StorageMode storageMode) {
@@ -116,7 +122,7 @@ public class BloombergTicksCollector implements Lifecycle {
     checkRootDir();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void checkRootDir() {
     final File file = new File(_rootDir);
     if (!file.isDirectory()) {
@@ -150,7 +156,7 @@ public class BloombergTicksCollector implements Lifecycle {
     final Map<String, String> ticker2Buid = BloombergDataUtils.getBUID(_refDataProvider, loadSecurities());
     doSnapshot(ticker2Buid);
 
-    //setup writer thread
+    // setup writer thread
     final BloombergTickWriter tickWriter = new BloombergTickWriter(FUDGE_CONTEXT, _allTicksQueue, ticker2Buid, _rootDir, _storageMode);
     final Thread thread = new Thread(tickWriter, "TicksWriter");
     thread.start();

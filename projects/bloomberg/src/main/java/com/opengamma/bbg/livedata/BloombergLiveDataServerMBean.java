@@ -13,7 +13,7 @@ import org.threeten.bp.Instant;
 import com.opengamma.livedata.server.LiveDataServerMBean;
 
 /**
- * JMX management of a {@link BloombergLiveDataServer}
+ * JMX management of a {@link BloombergLiveDataServer}.
  */
 public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
 
@@ -36,6 +36,7 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
       throw new RuntimeException(e.getMessage());
     }
   }
+
   @ManagedAttribute(description = "Set the limit on concurrent subscriptions")
   public void setSubscriptionLimit(final long subscriptionLimit) {
     try {

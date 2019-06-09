@@ -31,8 +31,7 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
   /**
    * Creates the method unique instance.
    */
-  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod INSTANCE =
-      new InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod();
+  private static final InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod INSTANCE = new InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod();
 
   /**
    * Return the method unique instance.
@@ -111,7 +110,7 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
         .priceBlackSensitivity(transaction.getUnderlyingOption(), blackData);
     securitySensitivity = SurfaceValue.multiplyBy(securitySensitivity,
         transaction.getQuantity() * transaction.getUnderlyingOption().getUnderlyingFuture().getNotional()
-        * transaction.getUnderlyingOption().getUnderlyingFuture().getPaymentAccrualFactor());
+            * transaction.getUnderlyingOption().getUnderlyingFuture().getPaymentAccrualFactor());
     return securitySensitivity;
   }
 
@@ -169,7 +168,7 @@ public final class InterestRateFutureOptionPremiumTransactionBlackSurfaceMethod 
   }
 
   /**
-   * Interpolates on the Black Volatility Surface at expiry and strike of optionTransaction
+   * Interpolates on the Black Volatility Surface at expiry and strike of optionTransaction.
    *
    * @param optionTransaction
    *          InterestRateFutureOptionPremiumTransaction

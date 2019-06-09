@@ -29,7 +29,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class MockFunction extends AbstractFunction.NonCompiledInvoker {
 
   /**
-   * default unique id
+   * default unique id.
    */
   public static final String UNIQUE_ID = "mock";
 
@@ -39,9 +39,12 @@ public class MockFunction extends AbstractFunction.NonCompiledInvoker {
   private final Set<ComputedValue> _results = new HashSet<>();
 
   /**
-   * @param uniqueId identifier of the function
-   * @param target Target mock function applies to
-   * @param output What the mock function outputs
+   * @param uniqueId
+   *          identifier of the function
+   * @param target
+   *          Target mock function applies to
+   * @param output
+   *          What the mock function outputs
    * @return A mock function with one input and one output
    */
   public static MockFunction getMockFunction(final String uniqueId, final ComputationTarget target, final Object output) {

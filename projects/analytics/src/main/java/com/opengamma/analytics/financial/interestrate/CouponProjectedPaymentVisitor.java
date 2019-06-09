@@ -22,8 +22,8 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
   public CurrencyAmount visitCouponIbor(final CouponIbor payment, final YieldCurveBundle curves) {
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(payment.getForwardCurveName());
     final double forward = (forwardCurve.getDiscountFactor(payment.getFixingPeriodStartTime())
-        / forwardCurve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1) /
-        payment.getFixingAccrualFactor();
+        / forwardCurve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1)
+        / payment.getFixingAccrualFactor();
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotional() * payment.getPaymentYearFraction() * forward);
   }
 
@@ -31,8 +31,8 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
   public CurrencyAmount visitCouponIborSpread(final CouponIborSpread payment, final YieldCurveBundle curves) {
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(payment.getForwardCurveName());
     final double forward = (forwardCurve.getDiscountFactor(payment.getFixingPeriodStartTime())
-        / forwardCurve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1) /
-        payment.getFixingAccrualFactor();
+        / forwardCurve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1)
+        / payment.getFixingAccrualFactor();
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotional() * payment.getPaymentYearFraction() * forward);
   }
 
@@ -40,8 +40,8 @@ public class CouponProjectedPaymentVisitor extends InstrumentDerivativeVisitorAd
   public CurrencyAmount visitCouponIborGearing(final CouponIborGearing payment, final YieldCurveBundle curves) {
     final YieldAndDiscountCurve forwardCurve = curves.getCurve(payment.getForwardCurveName());
     final double forward = (forwardCurve.getDiscountFactor(payment.getFixingPeriodStartTime())
-        / forwardCurve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1) /
-        payment.getFixingAccrualFactor();
+        / forwardCurve.getDiscountFactor(payment.getFixingPeriodEndTime()) - 1)
+        / payment.getFixingAccrualFactor();
     return CurrencyAmount.of(payment.getCurrency(), payment.getNotional() * payment.getPaymentYearFraction() * forward);
   }
 

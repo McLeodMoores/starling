@@ -63,7 +63,7 @@ public class TwoStateMarkovChainFitter {
     final ParameterLimitsTransform[] trans = new ParameterLimitsTransform[6];
     trans[0] = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN);
     trans[1] = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN);
-    trans[2] = new DoubleRangeLimitTransform(0.1, 5.0); //try to keep transition rates physical
+    trans[2] = new DoubleRangeLimitTransform(0.1, 5.0); // try to keep transition rates physical
     trans[3] = new DoubleRangeLimitTransform(0.1, 5.0);
     trans[4] = new DoubleRangeLimitTransform(0.0, 1.0);
     trans[5] = new DoubleRangeLimitTransform(0.0, 2.0);
@@ -74,23 +74,27 @@ public class TwoStateMarkovChainFitter {
   private final double _theta;
 
   /**
-   * Default constructor that sets theta to 0.5
+   * Default constructor that sets theta to 0.5.
    */
   public TwoStateMarkovChainFitter() {
     _theta = 0.5;
   }
 
   /**
-   * @param theta Theta
+   * @param theta
+   *          Theta
    */
   public TwoStateMarkovChainFitter(final double theta) {
     _theta = theta;
   }
 
   /**
-   * @param forward The forward
-   * @param marketVols The market volatilities
-   * @param initialGuess The initial guess. Must have the same number of elements as the parameter transforms
+   * @param forward
+   *          The forward
+   * @param marketVols
+   *          The market volatilities
+   * @param initialGuess
+   *          The initial guess. Must have the same number of elements as the parameter transforms
    * @return The results of the least squared fit
    */
   public LeastSquareResultsWithTransform fit(final ForwardCurve forward, final List<Pair<double[], Double>> marketVols, final DoubleMatrix1D initialGuess) {
@@ -131,7 +135,7 @@ public class TwoStateMarkovChainFitter {
     final int tNodes = 20;
     final int xNodes = 100;
 
-    //TODO remove hard coded grid
+    // TODO remove hard coded grid
     final MeshingFunction timeMesh = new ExponentialMeshing(0, tmaxT, tNodes, 5.0);
     final MeshingFunction spaceMesh = new HyperbolicMeshing(0, 10.0 * forward.getForward(maxT), forward.getSpot(), xNodes, 0.01);
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
@@ -204,11 +208,11 @@ public class TwoStateMarkovChainFitter {
     final double[] sigma = new double[nMarketValues];
     for (int i = 0; i < nMarketValues; i++) {
       mrkVols[i] = marketVols.get(i).getSecond();
-      sigma[i] = 0.01; //1% error
+      sigma[i] = 0.01; // 1% error
     }
 
     final NonLinearLeastSquare ls = new NonLinearLeastSquare();
-    //solve approx first
+    // solve approx first
     LeastSquareResults solverRes = ls.solve(new DoubleMatrix1D(mrkVols), new DoubleMatrix1D(sigma), funcAppox, TRANSFORMS.transform(initialGuess));
     // now solve pde model
     solverRes = ls.solve(new DoubleMatrix1D(mrkVols), new DoubleMatrix1D(sigma), func, solverRes.getFitParameters());
@@ -217,6 +221,7 @@ public class TwoStateMarkovChainFitter {
 
   /**
    * Transforms the price data (in PDEFullResults1D form) to implied volatility in a form used by 2D interpolator
+   * 
    * @param forward
    * @param yield
    * @param prices
@@ -241,7 +246,7 @@ public class TwoStateMarkovChainFitter {
             final EuropeanVanillaOption option = new EuropeanVanillaOption(k, t, true);
             try {
               final double impVol = BLACK_IMPLIED_VOL.getImpliedVolatility(data, option, price);
-              final Pair<double[], Double> pair = Pairs.of(new double[] {prices.getTimeValue(i), prices.getSpaceValue(j)}, impVol);
+              final Pair<double[], Double> pair = Pairs.of(new double[] { prices.getTimeValue(i), prices.getSpaceValue(j) }, impVol);
               out.add(pair);
             } catch (final Exception e) {
               LOGGER.error("can't find vol for strike: " + prices.getSpaceValue(j) + " and expiry " + prices.getTimeValue(i) + " . Not added to data set");

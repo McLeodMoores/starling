@@ -22,7 +22,7 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The meaning of
  * "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.). The return format is ParameterSensitivity object.
- * 
+ *
  * @param <DATA_TYPE>
  *          Data type.
  */
@@ -30,8 +30,8 @@ public class ParameterSensitivityIssuerCalculator<DATA_TYPE extends ParameterIss
     extends AbstractParameterSensitivityIssuerCalculator<DATA_TYPE> {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param curveSensitivityCalculator
    *          The curve sensitivity calculator.
    */
@@ -42,7 +42,7 @@ public class ParameterSensitivityIssuerCalculator<DATA_TYPE extends ParameterIss
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate and to the forward rates for the
    * supplied curve names.
-   * 
+   *
    * @param sensitivity
    *          The point sensitivity.
    * @param multicurves
@@ -81,7 +81,7 @@ public class ParameterSensitivityIssuerCalculator<DATA_TYPE extends ParameterIss
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate and to the forward rates for all
    * curves.
-   * 
+   *
    * @param sensitivity
    *          The point sensitivity.
    * @param multicurves

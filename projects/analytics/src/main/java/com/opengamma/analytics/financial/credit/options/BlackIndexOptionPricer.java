@@ -35,7 +35,7 @@ public class BlackIndexOptionPricer {
 
   /**
    * Price options on CDS indices using an approximation where the forward annuity is `frozen' to today's value - this allows the use for the Black formula.
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - this represents the index (a CDSAnayltic which holds the cash flow details) at <b>the option expiry</b> - i.e. the 'trade date' of
    *          the CDS should be the option expiry and <b>not</b> today (where we are valuing the option)
@@ -59,7 +59,7 @@ public class BlackIndexOptionPricer {
 
   /**
    * Price options on CDS indices using an approximation where the forward annuity is `frozen' to today's value - this allows the use for the Black formula.
-   * 
+   *
    * @param fwdCDS
    *          Forward CDS - this represents the index (a CDSAnayltic which holds the cash flow details) at <b>the option expiry</b> - i.e. the 'trade date' of
    *          the CDS should be the option expiry and <b>not</b> today (where we are valuing the option)
@@ -125,8 +125,8 @@ public class BlackIndexOptionPricer {
   }
 
   /**
-   * Calculate the option premium (price per unit of notional)
-   * 
+   * Calculate the option premium (price per unit of notional).
+   *
    * @see CDSIndexCalculator
    * @param strike
    *          The option strike. This can be either given as the exercise price directly (ExerciseAmount) or as a spread (SpreadBasedStrike)
@@ -149,7 +149,7 @@ public class BlackIndexOptionPricer {
 
   /**
    * Price an option of a CDS index that is spread based (i.e. the strike is given as a spread).
-   * 
+   *
    * @param strike
    *          The strike as a spread
    * @param vol
@@ -167,7 +167,7 @@ public class BlackIndexOptionPricer {
 
   /**
    * Price an option of a CDS index that is priced based (i.e. the exercise price is given directly).
-   * 
+   *
    * @param gK
    *          Exercise price
    * @param vol
@@ -186,8 +186,8 @@ public class BlackIndexOptionPricer {
   }
 
   /**
-   * Get the implied volatility given a known option premium (price for unit notional)
-   * 
+   * Get the implied volatility given a known option premium (price for unit notional).
+   *
    * @param strike
    *          strike The option strike. This can be either given as the exercise price directly (ExerciseAmount) or as a spread (SpreadBasedStrike)
    * @param optionPremium
@@ -208,8 +208,8 @@ public class BlackIndexOptionPricer {
   }
 
   /**
-   * Get the implied volatility given a known option premium (price for unit notional)
-   * 
+   * Get the implied volatility given a known option premium (price for unit notional).
+   *
    * @param strike
    *          The strike as a spread
    * @param optionPremium
@@ -224,8 +224,8 @@ public class BlackIndexOptionPricer {
   }
 
   /**
-   * Get the implied volatility given a known option premium (price for unit notional)
-   * 
+   * Get the implied volatility given a known option premium (price for unit notional).
+   *
    * @param gK
    *          Exercise price
    * @param optionPremium

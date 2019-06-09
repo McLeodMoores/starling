@@ -9,7 +9,8 @@ import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class to specify the terms of a ISDA Master Agreement between two counterparties
+ * Class to specify the terms of a ISDA Master Agreement between two counterparties.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated

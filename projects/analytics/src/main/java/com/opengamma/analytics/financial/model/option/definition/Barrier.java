@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -12,28 +12,28 @@ import org.apache.commons.lang.Validate;
  */
 
 public class Barrier {
-  /** Knock type */
+  /** Knock type. */
   public enum KnockType {
-    /** Knock-in */
+    /** Knock-in. */
     IN,
-    /** Knock-out */
+    /** Knock-out. */
     OUT
   }
 
-  /** Barrier type */
+  /** Barrier type. */
   public enum BarrierType {
-    /** Down */
+    /** Down. */
     DOWN,
-    /** Up */
+    /** Up. */
     UP
   }
 
-  //TODO probably will need something more useful 
-  /** Observation type */
+  // TODO probably will need something more useful
+  /** Observation type. */
   public enum ObservationType {
-    /** Continuous */
+    /** Continuous. */
     CONTINUOUS,
-    /** Close */
+    /** Close. */
     CLOSE
   }
 
@@ -78,7 +78,7 @@ public class Barrier {
     result = prime * result + _observation.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_level);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -92,8 +92,8 @@ public class Barrier {
     }
     final Barrier other = (Barrier) obj;
     return _barrier == other._barrier &&
-           _knock == other._knock &&
-           _observation == other._observation &&
-           Double.doubleToLongBits(_level) == Double.doubleToLongBits(other._level);
+        _knock == other._knock &&
+        _observation == other._observation &&
+        Double.doubleToLongBits(_level) == Double.doubleToLongBits(other._level);
   }
 }

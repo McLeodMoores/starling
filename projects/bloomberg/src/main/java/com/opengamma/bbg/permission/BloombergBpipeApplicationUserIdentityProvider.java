@@ -49,7 +49,7 @@ public class BloombergBpipeApplicationUserIdentityProvider {
   }
 
   /**
-   * Return an authorized identity for a bpipe application
+   * Return an authorized identity for a bpipe application.
    *
    * @return the bloomberg identity for an application
    * @throws UnauthenticatedException

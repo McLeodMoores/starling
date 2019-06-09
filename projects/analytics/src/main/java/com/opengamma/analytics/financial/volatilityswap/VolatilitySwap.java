@@ -36,14 +36,22 @@ public class VolatilitySwap implements InstrumentDerivative {
   private final double _annualizationFactor;
 
   /**
-   * @param timeToObservationStart Time to first observation. Negative if observations have begun.
-   * @param timeToObservationEnd Time to final observation. Negative if observations have finished.
-   * @param observationFrequency The observation frequency, not null
-   * @param timeToMaturity Time of cash maturity. If negative, the swap has expired.
-   * @param volStrike Fair value of Variance struck at trade date
-   * @param volNotional Trade pays the difference between realized and strike variance multiplied by this
-   * @param currency Currency of cash maturity
-   * @param annualizationFactor Number of business days per year
+   * @param timeToObservationStart
+   *          Time to first observation. Negative if observations have begun.
+   * @param timeToObservationEnd
+   *          Time to final observation. Negative if observations have finished.
+   * @param observationFrequency
+   *          The observation frequency, not null
+   * @param timeToMaturity
+   *          Time of cash maturity. If negative, the swap has expired.
+   * @param volStrike
+   *          Fair value of Variance struck at trade date
+   * @param volNotional
+   *          Trade pays the difference between realized and strike variance multiplied by this
+   * @param currency
+   *          Currency of cash maturity
+   * @param annualizationFactor
+   *          Number of business days per year
    */
   public VolatilitySwap(final double timeToObservationStart, final double timeToObservationEnd, final PeriodFrequency observationFrequency,
       final double timeToMaturity, final double volStrike, final double volNotional, final Currency currency, final double annualizationFactor) {
@@ -60,8 +68,10 @@ public class VolatilitySwap implements InstrumentDerivative {
   }
 
   /**
-   * Copy constructor
-   * @param other VarianceSwap to copy from
+   * Copy constructor.
+   * 
+   * @param other
+   *          VarianceSwap to copy from
    */
   public VolatilitySwap(final VolatilitySwap other) {
     ArgumentChecker.notNull(other, "other");
@@ -77,6 +87,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the time to the start of volatility observation.
+   * 
    * @return The time to the start of volatility observation
    */
   public double getTimeToObservationStart() {
@@ -85,6 +96,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the time to the end of volatility observation.
+   * 
    * @return The time to the end of volatility observation
    */
   public double getTimeToObservationEnd() {
@@ -93,6 +105,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the observation frequency.
+   * 
    * @return The observation frequency
    */
   public PeriodFrequency getObservationFrequency() {
@@ -101,6 +114,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the time to maturity.
+   * 
    * @return The time to maturity
    */
   public double getTimeToMaturity() {
@@ -109,6 +123,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the currency.
+   * 
    * @return the currency
    */
   public Currency getCurrency() {
@@ -117,6 +132,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the volatility strike.
+   * 
    * @return The volatility strike
    */
   public double getVolatilityStrike() {
@@ -125,6 +141,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the volatility notional.
+   * 
    * @return The volatility notional
    */
   public double getVolatilityNotional() {
@@ -133,6 +150,7 @@ public class VolatilitySwap implements InstrumentDerivative {
 
   /**
    * Gets the annualization factor.
+   * 
    * @return The annualization factor
    */
   public double getAnnualizationFactor() {

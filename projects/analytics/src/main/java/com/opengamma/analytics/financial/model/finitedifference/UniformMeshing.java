@@ -25,8 +25,8 @@ public class UniformMeshing extends MeshingFunction {
   private final double[] _fpValues;
 
   /**
-   * Crates a set of points (mesh) equally spaced between 0.0 and 1.0 inclusive
-   * 
+   * Crates a set of points (mesh) equally spaced between 0.0 and 1.0 inclusive.
+   *
    * @param nPoints
    *          Number of points in the mesh
    */
@@ -39,8 +39,8 @@ public class UniformMeshing extends MeshingFunction {
 
   /**
    * Crates a set of points (mesh) approximately equally spaced between 0.0 and 1.0 inclusive, such that the specified <em>fixedPoints</em> are included as
-   * points
-   * 
+   * points.
+   *
    * @param nPoints
    *          Number of points in the mesh
    * @param fixedPoints

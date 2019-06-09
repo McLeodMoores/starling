@@ -35,7 +35,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   /**
-   * American vanilla option function with acceleration technique in binomial model
+   * American vanilla option function with acceleration technique in binomial model.
    *
    * @param strike
    *          Strike price
@@ -60,7 +60,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   /**
-   * American vanilla option function with truncation technique in binomial model
+   * American vanilla option function with truncation technique in binomial model.
    *
    * @param strike
    *          Strike price
@@ -87,7 +87,7 @@ public class AmericanVanillaOptionFunctionProvider extends OptionFunctionProvide
   }
 
   /**
-   * American vanilla option function with truncation and acceleration techniques in binomial model
+   * American vanilla option function with truncation and acceleration techniques in binomial model.
    *
    * @param strike
    *          Strike price

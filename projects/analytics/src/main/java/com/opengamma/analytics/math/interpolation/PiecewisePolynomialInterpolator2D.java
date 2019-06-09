@@ -140,8 +140,8 @@ public abstract class PiecewisePolynomialInterpolator2D {
 
   /**
    * Gets the value, defined as:<br>
-   * sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij} (x0-leftKnots0)^{order0-1-i} (x1-leftKnots1)^{order0-1-j}
-   * 
+   * sum_{i=0}^{order0-1} sum_{j=0}^{order1-1} coefMat_{ij} (x0-leftKnots0)^{order0-1-i} (x1-leftKnots1)^{order0-1-j}.
+   *
    * @param coefMat
    *          the coefficient matrix
    * @param x0

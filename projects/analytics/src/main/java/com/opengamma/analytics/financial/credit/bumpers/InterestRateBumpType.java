@@ -7,16 +7,16 @@ package com.opengamma.analytics.financial.credit.bumpers;
 
 // CSOFF
 /**
- * Enumerate the types of interest rate bumps that can be applied to a term structure of interest rates
+ * Enumerate the types of interest rate bumps that can be applied to a term structure of interest rates.
  */
 @Deprecated
 public enum InterestRateBumpType {
   /**
-   * Same as ADDITIVE_BUCKETED
+   * Same as ADDITIVE_BUCKETED.
    */
   ADDITIVE,
   /**
-   * Same as MULTIPLICATIVE_BUCKETED
+   * Same as MULTIPLICATIVE_BUCKETED.
    */
   MULTIPLICATIVE,
   /**
@@ -28,11 +28,11 @@ public enum InterestRateBumpType {
    */
   ADDITIVE_BUCKETED,
   /**
-   * r(t,T) -&gt; [1 + dr] x r(t,T)
+   * r(t,T) -&gt; [1 + dr] x r(t,T).
    */
   MULTIPLICATIVE_PARALLEL,
   /**
-   * r(t,T) -&gt; [1 + dr(T)] x r(t,T)
+   * r(t,T) -&gt; [1 + dr(T)] x r(t,T).
    */
   MULTIPLICATIVE_BUCKETED;
 }

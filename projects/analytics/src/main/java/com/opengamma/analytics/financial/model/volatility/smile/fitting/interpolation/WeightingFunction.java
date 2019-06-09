@@ -16,9 +16,12 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class WeightingFunction {
 
   /**
-   * Get the function weight for point x
-   * @param xs  All the independent data points
-   * @param x An arbitrary point
+   * Get the function weight for point x.
+   * 
+   * @param xs
+   *          All the independent data points
+   * @param x
+   *          An arbitrary point
    * @return The weight
    */
   public double getWeight(final double[] xs, final double x) {
@@ -29,10 +32,14 @@ public abstract class WeightingFunction {
   }
 
   /**
-   * Get the function weight for point x  - use this if index in known
-   * @param xs  All the independent data points
-   * @param index The index of the data point below x
-   * @param x An arbitrary point
+   * Get the function weight for point x - use this if index in known.
+   * 
+   * @param xs
+   *          All the independent data points
+   * @param index
+   *          The index of the data point below x
+   * @param x
+   *          An arbitrary point
    * @return The weight
    */
   public double getWeight(final double[] xs, final int index, final double x) {
@@ -43,9 +50,13 @@ public abstract class WeightingFunction {
 
   /**
    * For an arbitrary point x, let the two data points immediately below and above x be, x_a and x_b, then define y = (x_b - x)/(x_b - x_a).
-   * @param xs All the independent data points
-   * @param lowerBoundIndex The index of x_a
-   * @param x An arbitrary point
+   * 
+   * @param xs
+   *          All the independent data points
+   * @param lowerBoundIndex
+   *          The index of x_a
+   * @param x
+   *          An arbitrary point
    * @return y
    */
   private double getY(final double[] xs, final int lowerBoundIndex, final double x) {
@@ -57,7 +68,7 @@ public abstract class WeightingFunction {
 
   /**
    * The condition that must be satisfied by all weight functions is that w(1) = 1, w(0) = 0 and dw(y)/dy &le; 0 - i.e. w(y) is monotonically decreasing
-   * 
+   *
    * @param y
    *          a value between 0 and 1
    * @return The weight

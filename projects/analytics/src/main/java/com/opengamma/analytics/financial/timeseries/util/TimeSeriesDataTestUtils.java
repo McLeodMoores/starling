@@ -16,7 +16,7 @@ public class TimeSeriesDataTestUtils {
 
   /**
    * Tests that the time series is not null or empty.
-   * 
+   *
    * @param ts
    *          The time series
    * @throws IllegalArgumentException
@@ -29,7 +29,7 @@ public class TimeSeriesDataTestUtils {
 
   /**
    * Tests that the time series has a minimum amount of data.
-   * 
+   *
    * @param ts
    *          The time series
    * @param minLength
@@ -44,8 +44,8 @@ public class TimeSeriesDataTestUtils {
   }
 
   /**
-   * Tests that the two time series contain the same dates
-   * 
+   * Tests that the two time series contain the same dates.
+   *
    * @param ts1
    *          The first time series
    * @param ts2
@@ -69,7 +69,7 @@ public class TimeSeriesDataTestUtils {
 
   /**
    * Tests that the two time-series contain approximately-equal values.
-   * 
+   *
    * @param ts1
    *          the first time-series, not null
    * @param ts2

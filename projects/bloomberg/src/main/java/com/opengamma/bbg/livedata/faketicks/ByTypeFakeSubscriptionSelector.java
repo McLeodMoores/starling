@@ -21,7 +21,7 @@ import com.opengamma.livedata.server.DistributionSpecification;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Decides based of security type whether to fake out subscriptions
+ * Decides based of security type whether to fake out subscriptions.
  */
 public class ByTypeFakeSubscriptionSelector implements FakeSubscriptionSelector {
 

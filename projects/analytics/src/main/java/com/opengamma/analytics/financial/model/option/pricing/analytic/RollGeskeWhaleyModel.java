@@ -27,7 +27,7 @@ public class RollGeskeWhaleyModel {
   private static final double EPS = 1.e-12;
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public RollGeskeWhaleyModel() {
   }

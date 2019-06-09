@@ -34,8 +34,8 @@ public class PDE1DCoefficientsProvider {
 
   /**
    * Sets up a standard Black-Scholes PDE $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2 s^2}{2} \frac{\partial^2 V}{\partial s^2} -(r-y)s \frac{\partial
-   * V}{\partial s} + rV = 0$$ where the 'time' term $\tau$ is time to maturity
-   * 
+   * V}{\partial s} + rV = 0$$ where the 'time' term $\tau$ is time to maturity.
+   *
    * @param rate
    *          The rate, $r$
    * @param yield
@@ -71,8 +71,8 @@ public class PDE1DCoefficientsProvider {
 
   /**
    * Sets up a Black-Scholes PDE with term structure of rates, yield and volatility $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2 s^2}{2} \frac{\partial^2
-   * V}{\partial s^2} -(r-y)s \frac{\partial V}{\partial s} + rV = 0$$ where the 'time' term $\tau$ is time to maturity
-   * 
+   * V}{\partial s^2} -(r-y)s \frac{\partial V}{\partial s} + rV = 0$$ where the 'time' term $\tau$ is time to maturity.
+   *
    * @param rate
    *          The rate, $r$
    * @param yield
@@ -120,8 +120,8 @@ public class PDE1DCoefficientsProvider {
 
   /**
    * Set up a Black-Scholes PDE where the space variable is the log of the spot $x=\ln(s)$ $$\frac{\partial V}{\partial \tau} - \frac{\sigma^2}{2}
-   * \frac{\partial^2 V}{\partial x^2} -(\frac{\sigma^2}{2}+r-y) \frac{\partial V}{\partial x} + rV = 0$$
-   * 
+   * \frac{\partial^2 V}{\partial x^2} -(\frac{\sigma^2}{2}+r-y) \frac{\partial V}{\partial x} + rV = 0$$.
+   *
    * @param rate
    *          The rate, $r$
    * @param yield
@@ -142,7 +142,7 @@ public class PDE1DCoefficientsProvider {
    * This models the CEV process - the forward follows the SDE $df = \sigma f^\beta dW$ where $f(t,T) = \mathbb{E^T}[s_T|\mathcal{F}_t]$ and is a Martingale.
    * The corresponding PDE for the option price is $$\frac{\partial V}{\partial \tau} - \frac{(\sigma^*)^2 f^{2\beta}}{2} \frac{\partial^2 V}{\partial f^2} + rV
    * = 0$$ The term $r$ is yield to maturity - it can be set to zero and a discount factor applied to the option price instead.
-   * 
+   *
    * @param zeroRate
    *          The zero rate
    * @param beta
@@ -173,7 +173,7 @@ public class PDE1DCoefficientsProvider {
    * <p>
    * <b>Note</b> The local volatility is a function of calendar time, t, and spot, but since the time variable in this PDE is $\tau = T-t$ where $T$ is the
    * expiry, we must specify $T$ is get the correct local volatility at a given $\tau$.
-   * 
+   *
    * @param rate
    *          The risk free rate (domestic risk free rate in FX case)
    * @param yield
@@ -219,7 +219,7 @@ public class PDE1DCoefficientsProvider {
    * the option price will be the forward (non-discounted) price. The PDE is $$ \frac{\partial V}{\partial \tau} -
    * \frac{1}{2}\sigma\left(t,f_{\tau}\frac{f(0,t)}{f(0,T)}\right)^2f(t,T)^2\frac{\partial^2 V}{\partial f_{\tau}^2}=0\\ \text{where} \quad f_{\tau} \equiv
    * f(T-\tau,T) $$
-   * 
+   *
    * @param forwardCurve
    *          the time-zero forward curve, F(0,T), for the underlying
    * @param maturity
@@ -255,7 +255,7 @@ public class PDE1DCoefficientsProvider {
 
   /**
    * Backwards PDE setup for option price under a local volatility. The state variables are time-to-maturity and value of the underlying. The PDE is
-   * 
+   *
    * @param instRiskFreeRate
    *          the instantaneous risk free rate, r_t
    * @param instCostOfCarry
@@ -312,7 +312,7 @@ public class PDE1DCoefficientsProvider {
    * underlying. <b>Note</b> the option price will be the forward (non-discounted) price. The PDE is $$ \frac{\partial V}{\partial \tau} -
    * \frac{1}{2}\sigma\left(t,\frac{f_{\tau}}{f(0,T)}\right)^2f(t,T)^2\frac{\partial^2 V}{\partial f_{\tau}^2}=0\\ \text{where} \quad f_{\tau} \equiv
    * f(T-\tau,T) $$
-   * 
+   *
    * @param maturity
    *          the time-to-maturity
    * @param localVol
@@ -346,7 +346,7 @@ public class PDE1DCoefficientsProvider {
    * <P>
    * The PDE is $$ \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(T-\tau,e^x\right)^2\frac{\partial^2 V}{\partial x^2} +
    * \left(\frac{1}{2}\sigma\left(T-\tau,e^x\right)^2 -r + y \right)\frac{\partial V}{\partial x} + rV=0\\ \text{where} \quad x \equiv \log S $$
-   * 
+   *
    * @param rate
    *          The risk free rate (domestic risk free rate in FX case)
    * @param yield
@@ -397,7 +397,7 @@ public class PDE1DCoefficientsProvider {
    * <P>
    * The PDE is $$ \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,\frac{e^x}{f(0,T)}\right)^2\frac{\partial^2 V}{\partial x^2} +
    * \frac{1}{2}\sigma\left(t,\frac{e^x}{f(0,T)}\right)^2\frac{\partial V}{\partial x}=0\\ \text{where} \quad x \equiv \log f(T-\tau,T) $$
-   * 
+   *
    * @param maturity
    *          the time-to-maturity
    * @param localVol
@@ -444,7 +444,7 @@ public class PDE1DCoefficientsProvider {
    * <P>
    * The PDE is $$ \frac{\partial V}{\partial \tau} - \frac{1}{2}\sigma\left(t,\frac{e^xf(0,T-\tau)}{f(0,T)}\right)^2\frac{\partial^2 V}{\partial x^2} +
    * \frac{1}{2}\sigma\left(t,\frac{e^xf(0,T-\tau)}{f(0,T)}\right)^2\frac{\partial V}{\partial x}=0\\ \text{where} \quad x \equiv \log f(T-\tau,T) $$
-   * 
+   *
    * @param forwardCurve
    *          Forward Curve
    * @param maturity
@@ -501,7 +501,7 @@ public class PDE1DCoefficientsProvider {
    * Classic (i.e. formulated in terms of constant instantaneous short rates) forward PDE setup for option price under a BlackSholes framework. The state
    * variables are time-to-maturity, $T$ and strike, $k$. The PDE is $$ \frac{\partial V(T,k)}{\partial T} - \frac{1}{2}\sigma^2 k^2 \frac{\partial^2
    * V(T,k)}{\partial k^2} + k(r-y) \frac{\partial V(T,k)}{\partial k} +yV(T,k)=0 $$
-   * 
+   *
    * @param rate
    *          $r$ The risk free rate (domestic risk free rate in FX case)
    * @param yield
@@ -539,7 +539,7 @@ public class PDE1DCoefficientsProvider {
    * Classic (i.e. formulated in terms of constant instantaneous short rates) forwards PDE setup for option price under a local volatility. The state variables
    * are time-to-maturity, $T$ and strike, $k$. The PDE is $$ \frac{\partial V(T,k)}{\partial T} - \frac{1}{2}\sigma(T,k)^2 k^2 \frac{\partial^2
    * V(T,k)}{\partial k^2} + k(r-y) \frac{\partial V(T,k)}{\partial k} +yV(T,k)=0 $$
-   * 
+   *
    * @param rate
    *          $r$ The risk free rate (domestic risk free rate in FX case)
    * @param yield
@@ -579,7 +579,7 @@ public class PDE1DCoefficientsProvider {
    * Set up for running forward PDE with local volatility parameterised by moneyness (i.e. m = strike/forward). The option prices will be in a normalised form,
    * and will have to be multiplied by the discount factor AND the forward to recover the actual option price. The PDE is $$ \frac{\partial V(T,m)}{\partial T}
    * - \frac{1}{2}\sigma\left(T,m\right)^2 m^2 \frac{\partial^2 V(T,m)}{\partial m^2}=0\\ \text{where}\quad m \equiv \frac{k}{f(0,T)} $$
-   * 
+   *
    * @param localVol
    *          A local volatility surface parametrised by expiry and moneyness (=strike/forward)
    * @return The data to run through a PDE solver that will give the modified option price (the true option price is this multiplied by the discount factor AND
@@ -611,7 +611,7 @@ public class PDE1DCoefficientsProvider {
    * \text{where}\quad m \equiv \frac{k}{f(0,T)} $$
    * <p>
    * <b>Note</b> The coordinates used in the PDE are expiry (T) and <b>moneyness</b> (m), hence the solution will be in these coordinates
-   * 
+   *
    * @param forwardCurve
    *          the forward curve
    * @param localVol
@@ -632,7 +632,7 @@ public class PDE1DCoefficientsProvider {
    * The Fokker-Plank equation with a deterministic (time dependent) short-rate and a local volatility (i.e. a instantaneous volatility that is a function of
    * time and spot). If the SDE for the underlying is $\frac{dS_t}{S_t}=r_t dt + \sigma(t,S_t)^2dW_t$, then the PDE for the transition density $P(t,S_t;T,S_T)$
    * is $$ \frac{\partial P}{\partial T} - \frac{1}{2}\frac{\partial^2[ \sigma(T,S)^2S^2P]}{\partial S^2} + r_T \frac{\partial[ S^2 P]}{\partial S} $$
-   * 
+   *
    * @param shortRate
    *          Deterministic (time dependent) short-rate
    * @param localVol
@@ -673,7 +673,7 @@ public class PDE1DCoefficientsProvider {
    * time and spot), but written in the form.
    * <P>
    * $$ \frac{\partial P}{\partial t}+ a(t,x)\frac{\partial^2 P}{\partial x^2}+b(t,x)\frac{\partial P}{\partial x2}+c(t,x)V=0 $$
-   * 
+   *
    * @param shortRate
    *          Deterministic (time dependent) short-rate
    * @param localVol

@@ -20,8 +20,8 @@ public class TwoAssetCorrelationOptionModel extends TwoAssetAnalyticOptionModel<
   private static final ProbabilityDistribution<double[]> BIVARIATE = new BivariateNormalDistribution();
 
   /**
-   * Gets the pricing function for a European-style two-asset correlation option
-   * 
+   * Gets the pricing function for a European-style two-asset correlation option.
+   *
    * @param definition
    *          The option definition
    * @return The pricing function

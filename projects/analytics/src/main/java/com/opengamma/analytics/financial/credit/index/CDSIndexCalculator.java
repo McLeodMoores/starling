@@ -29,7 +29,7 @@ public class CDSIndexCalculator {
   /**
    * The Points-Up-Front (PUF) of an index. This is the (clean) price of a unit notional index. The actual clean price is this multiplied by the (current) index
    * notional (i.e. the initial notional times the index factor).
-   * 
+   *
    * @param indexCDS
    *          analytic description of a CDS traded at a certain time
    * @param indexCoupon
@@ -52,7 +52,7 @@ public class CDSIndexCalculator {
   /**
    * Intrinsic (normalised) price an index from the credit curves of the individual single names. To get the actual index value, this multiplied by the
    * <b>initial</b> notional of the index
-   * 
+   *
    * @param indexCDS
    *          analytic description of a CDS traded at a certain time
    * @param indexCoupon
@@ -73,7 +73,7 @@ public class CDSIndexCalculator {
   /**
    * Intrinsic (normalised) price an index from the credit curves of the individual single names. To get the actual index value, this multiplied by the
    * <b>initial</b> notional of the index
-   * 
+   *
    * @param indexCDS
    *          analytic description of a CDS traded at a certain time
    * @param indexCoupon
@@ -96,7 +96,7 @@ public class CDSIndexCalculator {
   /**
    * Intrinsic (normalised) price an index from the credit curves of the individual single names. To get the actual index value, this multiplied by the
    * <b>initial</b> notional of the index
-   * 
+   *
    * @param indexCDS
    *          analytic description of a CDS traded at a certain time
    * @param indexCoupon
@@ -122,7 +122,7 @@ public class CDSIndexCalculator {
 
   /**
    * The intrinsic index spread. this is defined as the ratio of the intrinsic protection leg to the intrinsic annuity.
-   * 
+   *
    * @see #averageSpread(CDSAnalytic, ISDACompliantYieldCurve, IntrinsicIndexDataBundle)
    * @param indexCDS
    *          analytic description of a CDS traded at a certain time
@@ -145,7 +145,7 @@ public class CDSIndexCalculator {
   /**
    * The normalised intrinsic value of the protection leg of a CDS portfolio (index). The actual value of the leg is this multiplied by the <b>initial</b>
    * notional of the index
-   * 
+   *
    * @param indexCDS
    *          representation of the index cashflows (seen from today).
    * @param yieldCurve
@@ -162,7 +162,7 @@ public class CDSIndexCalculator {
   /**
    * The normalised intrinsic value of the protection leg of a CDS portfolio (index). The actual value of the leg is this multiplied by the <b>initial</b>
    * notional of the index
-   * 
+   *
    * @param indexCDS
    *          representation of the index cashflows (seen from today).
    * @param yieldCurve
@@ -195,7 +195,7 @@ public class CDSIndexCalculator {
   /**
    * The intrinsic annuity of a CDS portfolio (index) for a unit (initial) notional. The value of the premium leg is this multiplied by the <b> initial</b>
    * notional of the index and the index coupon (as a fraction).
-   * 
+   *
    * @param indexCDS
    *          representation of the index cashflows (seen from today).
    * @param yieldCurve
@@ -215,7 +215,7 @@ public class CDSIndexCalculator {
   /**
    * The intrinsic annuity of a CDS portfolio (index) for a unit (initial) notional. The value of the premium leg is this multiplied by the <b> initial</b>
    * notional of the index and the index coupon (as a fraction).
-   * 
+   *
    * @param indexCDS
    *          representation of the index cashflows (seen from today).
    * @param yieldCurve
@@ -231,7 +231,7 @@ public class CDSIndexCalculator {
   /**
    * The intrinsic annuity of a CDS portfolio (index) for a unit (initial) notional. The value of the premium leg is this multiplied by the <b> initial</b>
    * notional of the index and the index coupon (as a fraction).
-   * 
+   *
    * @param indexCDS
    *          representation of the index cashflows (seen from today).
    * @param yieldCurve
@@ -251,7 +251,7 @@ public class CDSIndexCalculator {
   /**
    * The intrinsic annuity of a CDS portfolio (index) for a unit (initial) notional. The value of the premium leg is this multiplied by the <b> initial</b>
    * notional of the index and the index coupon (as a fraction).
-   * 
+   *
    * @param indexCDS
    *          representation of the index cashflows (seen from today).
    * @param yieldCurve
@@ -284,8 +284,8 @@ public class CDSIndexCalculator {
   }
 
   /**
-   * The average spread of a CDS portfolio (index), defined as the weighted average of the (implied) par spreads of the constituent names
-   * 
+   * The average spread of a CDS portfolio (index), defined as the weighted average of the (implied) par spreads of the constituent names.
+   *
    * @see intrinsicIndexSpread
    * @param indexCDS
    *          representation of the index cashflows (seen from today).
@@ -320,7 +320,7 @@ public class CDSIndexCalculator {
 
   /**
    * Imply a single (pseudo) credit curve for an index that will give the same index values at a set of terms (supplied via pillarCDS) as the intrinsic value.
-   * 
+   *
    * @param pillarCDS
    *          Point to build the curve
    * @param indexCoupon
@@ -358,7 +358,7 @@ public class CDSIndexCalculator {
   /**
    * For a future expiry date, the default adjusted forward index value is the expected (full) value of the index plus the cash settlement of any defaults
    * before the expiry date, valued on the (forward) cash settlement date (usually 3 working days after the expiry date - i.e. the expiry settlement date).
-   * 
+   *
    * @param fwdStartingCDS
    *          A forward starting CDS to represent cash flows in the index. The stepin date should be one day after the expiry and the cashSettlement date
    *          (usually) 3 working days after expiry
@@ -392,7 +392,7 @@ public class CDSIndexCalculator {
    * For a future expiry date, the default adjusted forward index value is the expected (full) value of the index plus the cash settlement of any defaults
    * before the expiry date, valued on the (forward) cash settlement date (usually 3 working days after the expiry date - i.e. the expiry settlement date). This
    * calculation assumes an homogeneous pool that can be described by a single index curve.
-   * 
+   *
    * @param fwdStartingCDS
    *          A forward starting CDS to represent cash flows in the index. The stepin date should be one day after the expiry and the cashSettlement date
    *          (usually) 3 working days after expiry. This must contain the index recovery rate.
@@ -423,7 +423,7 @@ public class CDSIndexCalculator {
    * For a future expiry date, the default adjusted forward index value is the expected (full) value of the index plus the cash settlement of any defaults
    * before the expiry date, valued on the (forward) cash settlement date (usually 3 working days after the expiry date - i.e. the expiry settlement date). This
    * calculation assumes an homogeneous pool that can be described by a single index curve.
-   * 
+   *
    * @param fwdStartingCDS
    *          A forward starting CDS to represent cash flows in the index. The stepin date should be one day after the expiry and the cashSettlement date
    *          (usually) 3 working days after expiry. This must contain the index recovery rate.
@@ -462,7 +462,7 @@ public class CDSIndexCalculator {
   /**
    * The (default adjusted) intrinsic forward spread of an index. This is defined as the ratio of expected value of the protection leg and default settlement to
    * the expected value of the annuity at expiry
-   * 
+   *
    * @param fwdStartingCDS
    *          forward starting CDS to represent cash flows in the index. The stepin date should be one day after the expiry and the cashSettlement date
    *          (usually) 3 working days after expiry the time in years between the trade date and expiry. This should use the same DCC as the curves (ACT365F
@@ -495,7 +495,7 @@ public class CDSIndexCalculator {
    * The (default adjusted) intrinsic forward spread of an index <b>when no defaults have yet occurred</b>. This is defined as the ratio of expected value of
    * the protection leg and default settlement to the expected value of the annuity at expiry. This calculation assumes an homogeneous pool that can be
    * described by a single index curve.
-   * 
+   *
    * @param fwdStartingCDS
    *          forward starting CDS to represent cash flows in the index. The stepin date should be one day after the expiry and the cashSettlement date
    *          (usually) 3 working days after expiry
@@ -523,7 +523,7 @@ public class CDSIndexCalculator {
   /**
    * The (default adjusted) intrinsic forward spread of an index. This is defined as the ratio of expected value of the protection leg and default settlement to
    * the expected value of the annuity at expiry. This calculation assumes an homogeneous pool that can be described by a single index curve.
-   * 
+   *
    * @param fwdStartingCDS
    *          forward starting CDS to represent cash flows in the index. The stepin date should be one day after the expiry and the cashSettlement date
    *          (usually) 3 working days after expiry
@@ -561,7 +561,7 @@ public class CDSIndexCalculator {
   /**
    * The normalised expected default settlement value paid on the exercise settlement date. The actual default settlement is this multiplied by the (initial)
    * index notional.
-   * 
+   *
    * @param timeToExpiry
    *          Time to expiry
    * @param intrinsicData
@@ -582,7 +582,7 @@ public class CDSIndexCalculator {
   /**
    * The normalised expected default settlement value paid on the exercise settlement date <b>when no defaults have yet occurred</b>. The actual default
    * settlement is this multiplied by the (initial) index notional. This calculation assumes an homogeneous pool that can be described by a single index curve.
-   * 
+   *
    * @param timeToExpiry
    *          Time to expiry
    * @param indexCurve
@@ -602,7 +602,7 @@ public class CDSIndexCalculator {
   /**
    * The normalised expected default settlement value paid on the exercise settlement date. The actual default settlement is this multiplied by the (initial)
    * index notional. This calculation assumes an homogeneous pool that can be described by a single index curve.
-   * 
+   *
    * @param initialIndexSize
    *          Initial index size
    * @param timeToExpiry

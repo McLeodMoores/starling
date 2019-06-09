@@ -171,7 +171,7 @@ public class BloombergRefDataCollector implements Lifecycle {
 
   // -------------------------------------------------------------------------
   /**
-   * Main entry point from command line
+   * Main entry point from command line.
    *
    * @param args
    *          the args

@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Compute delta, vega and theta by using finite difference method
+ * Compute delta, vega and theta by using finite difference method.
  */
 public class VolatilitySwapFiniteDifferenceGreeksCalculator {
 
@@ -33,15 +33,15 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
   private final double _bumpVol;
 
   /**
-   * Constructor using default bump amount
+   * Constructor using default bump amount.
    */
   public VolatilitySwapFiniteDifferenceGreeksCalculator() {
     this(DEFAULT_BUMP);
   }
 
   /**
-   * Constructor specifying bump amount
-   * 
+   * Constructor specifying bump amount.
+   *
    * @param bump
    *          The bump amount
    */
@@ -52,8 +52,8 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
   }
 
   /**
-   * Constructor specifying bump amount and base calculator
-   * 
+   * Constructor specifying bump amount and base calculator.
+   *
    * @param bump
    *          The bump amount
    * @param baseCal
@@ -68,7 +68,7 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
   /**
    * Greeks calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, i.e., assuming the fair value
    * has been already calculated. For theta the bump amount is 1 working day.
-   * 
+   *
    * @param result
    *          {@link VolatilitySwapCalculatorResultWithStrikes}
    * @param swap
@@ -157,7 +157,7 @@ public class VolatilitySwapFiniteDifferenceGreeksCalculator {
 
   /**
    * Greeks calculator for FX volatility swap based on "bump and reprice." For theta the bump amount is 1 working day.
-   * 
+   *
    * @param swap
    *          The FX volatility swap
    * @param data

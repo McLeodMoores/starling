@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.cube.Cube;
 
 /**
- * <b>Note</b> this is for testing purposes and is not recommended for actual use
+ * <b>Note</b> this is for testing purposes and is not recommended for actual use.
  */
 @SuppressWarnings("deprecation")
 public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESolver2D {
@@ -18,15 +18,15 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
   private final double _theta;
 
   /**
-   * Sets up a standard Crank-Nicolson scheme for 2-D (two spatial dimensions) PDEs
+   * Sets up a standard Crank-Nicolson scheme for 2-D (two spatial dimensions) PDEs.
    */
   public CrankNicolsonFiniteDifference2D() {
     _theta = 0.5;
   }
 
   /**
-   * Sets up a scheme that is the weighted average of an explicit and an implicit scheme
-   * 
+   * Sets up a scheme that is the weighted average of an explicit and an implicit scheme.
+   *
    * @param theta
    *          The weight. theta = 0 - fully explicit, theta = 0.5 - Crank-Nicolson, theta = 1.0 - fully implicit
    */

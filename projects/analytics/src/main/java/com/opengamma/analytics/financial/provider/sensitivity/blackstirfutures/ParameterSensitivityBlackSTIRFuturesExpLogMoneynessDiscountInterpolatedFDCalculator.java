@@ -43,8 +43,8 @@ public class ParameterSensitivityBlackSTIRFuturesExpLogMoneynessDiscountInterpol
   private final double _shift;
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param valueCalculator
    *          The value calculator.
    * @param shift
@@ -60,7 +60,7 @@ public class ParameterSensitivityBlackSTIRFuturesExpLogMoneynessDiscountInterpol
   /**
    * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves. Only the discounting and forward curves
    * sensitivity is computed.
-   * 
+   *
    * @param instrument
    *          The instrument.
    * @param black

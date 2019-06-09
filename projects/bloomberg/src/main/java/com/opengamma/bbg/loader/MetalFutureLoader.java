@@ -71,7 +71,7 @@ public class MetalFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT));
 
   /**
-   * The valid Bloomberg future categories for Metal Futures
+   * The valid Bloomberg future categories for Metal Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BBG_PRECIOUS_METAL_TYPE,
@@ -85,13 +85,15 @@ public class MetalFutureLoader extends SecurityLoader {
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public MetalFutureLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.METAL_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);

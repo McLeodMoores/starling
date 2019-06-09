@@ -53,7 +53,7 @@ public class PDEUtilityTools {
 
   /**
    * Take the terminal result for a forward PDE (i.e. forward option prices) and returns a map between strikes and implied volatilities
-   * 
+   *
    * @param forwardCurve
    *          The forward curve
    * @param expiry
@@ -92,7 +92,7 @@ public class PDEUtilityTools {
   /**
    * Takes the results from a forward PDE solve - grid of option prices by maturity and strike and returns a map between a DoublesPair (i.e. maturity and
    * strike) and the Black implied volatility
-   * 
+   *
    * @param forwardCurve
    *          The forward
    * @param prices
@@ -175,7 +175,7 @@ public class PDEUtilityTools {
   /**
    * Takes the results from a forward PDE solve - grid of option prices by maturity and strike and returns a map between a DoublesPair (i.e. maturity and
    * strike) and the Black implied volatility
-   * 
+   *
    * @param forwardCurve
    *          The forward
    * @param discountCurve
@@ -303,7 +303,7 @@ public class PDEUtilityTools {
   /**
    * Prints out the values of the function f(x,y) where x takes the values x_1 to x_N and y takes the values y_1 to y_M, along with the x and y values, with x
    * as the top row and y as the left column. This format can be used by the Excel 3D surface plotter.
-   * 
+   *
    * @param name
    *          Optional name for the output
    * @param data
@@ -341,8 +341,8 @@ public class PDEUtilityTools {
   }
 
   /**
-   * This form takes vectors of x (typically expiry) and y (typically strike)
-   * 
+   * This form takes vectors of x (typically expiry) and y (typically strike).
+   *
    * @param name
    *          The name of the surface
    * @param surface

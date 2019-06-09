@@ -97,7 +97,7 @@ public class MultiCapFloorPricer {
    * Price a set of caps/floors (that will generally share some caplets/floorlets) using a VolatilityModel1D for the caplet volatilities - this will give a
    * (Black) volatility dependent on the forward, strike and expiry of each caplet. The individual cap prices are of course the sum of the prices of each of
    * their constituent caplets.
-   * 
+   *
    * @param capletVolCurve
    *          model describing the (Black) volatility of the underlying caplets
    * @return The cap/floor prices (in the same order the caps were given in the constructor)
@@ -117,7 +117,7 @@ public class MultiCapFloorPricer {
   /**
    * Price a set of caps/floors from the (Black) volatility of the set of unique caplets. These caplets are sorted by ascending order of fixingTime. This is
    * mainly used to calibrate to cap prices by directly setting the individual caplet vols
-   * 
+   *
    * @param capletVols
    *          The (Black) volatility of the unique caplets sorted by ascending order of fixingTime.
    * @return The cap/floor prices (in the same order the caps were given in the constructor)
@@ -136,7 +136,7 @@ public class MultiCapFloorPricer {
   /**
    * This vega matrix gives the sensitivity of the ith cap to the volatility of the jth caplet (where the caplets are order by their expiry). of course if a cap
    * does not contain a particular caplet, that entry will be zero.
-   * 
+   *
    * @param capletVols
    *          The volatilities of all the caplets that make up the set of caps
    * @return vega matrix
@@ -166,7 +166,7 @@ public class MultiCapFloorPricer {
    * Price a set of cap/floors from the implied volatilities of the caps/floors - this (by definition) is the common volatility applied to each of the
    * underlying caplets making up the cap. Since different caps will likely have some caplets in common, this pricing involves pricing the same caplets with
    * different volatilities depending on what cap you are considering.
-   * 
+   *
    * @param capVolatilities
    *          the cap/floor (Black) volatilities
    * @return The cap/floor prices (in the same order the caps were given in the constructor)
@@ -190,7 +190,7 @@ public class MultiCapFloorPricer {
    * applied to each of the constituent caplets such that the sum of the (Black) prices of the caplets equals the cap price. As the caps will generally share
    * some caplets, this is inconsistent as a model since a forward rate (which forms the payoff of a caplet) will 'see' a different volatility depending on what
    * cap is being priced. The cap implied volatilities should be viewed as nothing more than monotonic mapping from prices.
-   * 
+   *
    * @param capPrices
    *          The cap prices (in the same order the caps were given in the constructor)
    * @return The cap/floor implied volatilities (in the same order the caps were given in the constructor)
@@ -209,7 +209,7 @@ public class MultiCapFloorPricer {
    * The implied volatilities for a set of caps from a model that describes the (Black) volatility of the individual constituent caplets. The individual cap
    * prices are of course the sum of the prices of each of their constituent caplets. The implied volatility of a cap (or floor) is defined as the common
    * (Black) volatility applied to each of the constituent caplets such that the sum of the (Black) prices of the caplets equals the cap price.
-   * 
+   *
    * @param capletVolCurve
    *          model describing the (Black) volatility of the underlying caplets
    * @return The cap/floor implied volatilities (in the same order the caps were given in the constructor)
@@ -220,8 +220,8 @@ public class MultiCapFloorPricer {
   }
 
   /**
-   * The sensitivity of the prices of a set of caps to their implied volatility
-   * 
+   * The sensitivity of the prices of a set of caps to their implied volatility.
+   *
    * @param capVolatilities
    *          the cap/floor (Black) volatilities
    * @return The cap/floor vega (in the same order the caps were given in the constructor)
@@ -242,8 +242,8 @@ public class MultiCapFloorPricer {
   }
 
   /**
-   * Get the total number of unique caplets in the set of caps supplied
-   * 
+   * Get the total number of unique caplets in the set of caps supplied.
+   *
    * @return total number of unique caplets
    */
   public int getTotalNumberOfCaplets() {
@@ -251,8 +251,8 @@ public class MultiCapFloorPricer {
   }
 
   /**
-   * get the sorted array of unique caplet expiry times from the set of caps supplied
-   * 
+   * get the sorted array of unique caplet expiry times from the set of caps supplied.
+   *
    * @return caplet expiry times
    */
   public double[] getCapletExpiries() {
@@ -277,7 +277,7 @@ public class MultiCapFloorPricer {
 
   /**
    * Aggregate additive values computer on caplets in caps
-   * 
+   *
    * @param values
    *          computed on caplets
    * @return values aggregated to caps

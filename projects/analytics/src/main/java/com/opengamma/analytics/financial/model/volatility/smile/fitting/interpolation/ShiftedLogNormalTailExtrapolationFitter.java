@@ -47,8 +47,8 @@ public class ShiftedLogNormalTailExtrapolationFitter {
   }
 
   /**
-   * Fit a shifted log-normal model to two option prices at different strikes
-   * 
+   * Fit a shifted log-normal model to two option prices at different strikes.
+   *
    * @param forward
    *          The forward value of the underlying at expiry
    * @param strikes
@@ -93,8 +93,8 @@ public class ShiftedLogNormalTailExtrapolationFitter {
   }
 
   /**
-   * Fit a shifted log-normal model to an option's price and dual delta (price sensitivity to strike) at a single strike
-   * 
+   * Fit a shifted log-normal model to an option's price and dual delta (price sensitivity to strike) at a single strike.
+   *
    * @param forward
    *          The forward value of the underlying at expiry
    * @param strike
@@ -138,8 +138,8 @@ public class ShiftedLogNormalTailExtrapolationFitter {
   }
 
   /**
-   * Fit a shifted log-normal model to two option implied volatilities at different strikes
-   * 
+   * Fit a shifted log-normal model to two option implied volatilities at different strikes.
+   *
    * @param forward
    *          The forward value of the underlying at expiry
    * @param strikes
@@ -170,7 +170,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
   /**
    * Fit a shifted log-normal model to an option's implied volatility and implied volatility sensitivity to strike (i.e. the gradient of the smile) at a single
    * strike.
-   * 
+   *
    * @param forward
    *          The forward value of the underlying at expiry
    * @param strike
@@ -212,7 +212,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
   /**
    * Fit a shifted log-normal model to an option's implied volatility and implied volatility sensitivity to strike (i.e. the gradient of the smile) at a single
    * strike
-   * 
+   *
    * @param forward
    *          The forward value of the underlying at expiry
    * @param strike
@@ -275,7 +275,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
   /**
    * Calls fitVolatilityAndGrad. If this fails, it will retry from the nearest strike within the domain, and continue to do this until success is found
-   * 
+   *
    * @param forward
    *          forward
    * @param strikes
@@ -321,7 +321,7 @@ public class ShiftedLogNormalTailExtrapolationFitter {
 
   /**
    * Calls fitVolatilityAndGrad. If this fails, it will retry from the nearest strike within the domain, then continue to reduce smile until success is found
-   * 
+   *
    * @param forward
    *          forward
    * @param strike

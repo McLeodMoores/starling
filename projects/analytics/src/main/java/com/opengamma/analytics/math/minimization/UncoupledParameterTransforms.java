@@ -81,7 +81,7 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
   /**
    * Transforms from a set of function parameters (some of which may have constrained range and/or be fixed) to a (possibly smaller) set of unconstrained
    * fitting parameters <b>Note:</b> If a parameter is fixed, it is its value as provided by <i>startValues</i> not the value given here that will be returned
-   * by inverseTransform (and thus used in the function)
+   * by inverseTransform (and thus used in the function).
    *
    * @param functionParameters
    *          The function parameters
@@ -104,7 +104,7 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
   /**
    * Transforms from a set of unconstrained fitting parameters to a (possibly larger) set of function parameters (some of which may have constrained range
    * and/or be fixed).
-   * 
+   *
    * @param fittingParameters
    *          The fitting parameters
    * @return The function parameters
@@ -127,8 +127,8 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
 
   /**
    * Calculates the Jacobian of the transform from function parameters to fitting parameters - the i,j element will be the partial derivative of i^th fitting
-   * parameter with respect to the j^th function parameter
-   * 
+   * parameter with respect to the j^th function parameter.
+   *
    * @param functionParameters
    *          The function parameters
    * @return matrix of partial derivative of fitting parameter with respect to function parameters
@@ -150,8 +150,8 @@ public class UncoupledParameterTransforms implements NonLinearParameterTransform
 
   /**
    * Calculates the Jacobian of the transform from fitting parameters to function parameters - the i,j element will be the partial derivative of i^th function
-   * parameter with respect to the j^th fitting parameter
-   * 
+   * parameter with respect to the j^th fitting parameter.
+   *
    * @param fittingParameters
    *          The fitting parameters
    * @return matrix of partial derivative of function parameter with respect to fitting parameters

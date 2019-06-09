@@ -34,9 +34,9 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
   }
 
   /**
-   * 
-   * a Hessian (for the dependent variable y_i), so the indexing is H^i_{j,k} =\partial^2y_i/\partial x_j \partial x_k
-   * 
+   *
+   * a Hessian (for the dependent variable y_i), so the indexing is H^i_{j,k} =\partial^2y_i/\partial x_j \partial x_k.
+   *
    * @param function
    *          the function representing the vector field
    * @return A function representing the second derivative of the vector field (i.e. a rank 3 tensor field)
@@ -77,7 +77,7 @@ public class VectorFieldSecondOrderDifferentiator implements Differentiator<Doub
    * Gamma is in the form gamma^i_{j,k} =\partial^2y_j/\partial x_i \partial x_k, where i is the index of the matrix in the stack (3rd index of the tensor), and
    * j,k are the individual matrix indices. We would like it in the form H^i_{j,k} =\partial^2y_i/\partial x_j \partial x_k, so that each matrix is a Hessian
    * (for the dependent variable y_i), hence the reshaping below.
-   * 
+   *
    * @param gamma
    *          Rank 3 tensor
    * @return Reshaped rank 3 tensor

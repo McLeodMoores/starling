@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding;
@@ -9,7 +9,7 @@ import com.opengamma.analytics.math.MathException;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
+ *
  */
 public class BrentSingleRootFinder extends RealSingleRootFinder {
   private static final int MAX_ITER = 100;
@@ -17,14 +17,15 @@ public class BrentSingleRootFinder extends RealSingleRootFinder {
   private final double _accuracy;
 
   /**
-   * Sets the accuracy to 10<sup>-15</sup>
+   * Sets the accuracy to 10<sup>-15</sup>.
    */
   public BrentSingleRootFinder() {
     this(1e-15);
   }
 
   /**
-   * @param accuracy The accuracy of the root
+   * @param accuracy
+   *          The accuracy of the root
    */
   public BrentSingleRootFinder(final double accuracy) {
     _accuracy = accuracy;

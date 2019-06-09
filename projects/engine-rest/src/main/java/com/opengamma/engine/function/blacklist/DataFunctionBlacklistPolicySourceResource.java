@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * Publishes a {@link FunctionBlacklistPolicySource} to remote clients
+ * Publishes a {@link FunctionBlacklistPolicySource} to remote clients.
  */
 public class DataFunctionBlacklistPolicySourceResource extends AbstractDataResource {
 

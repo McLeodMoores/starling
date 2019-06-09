@@ -99,8 +99,8 @@ public class MarkovChainApprox {
   }
 
   /**
-   * Calculates the price using the Black formula
-   * 
+   * Calculates the price using the Black formula.
+   *
    * @param forward
    *          The forward price
    * @param df
@@ -125,8 +125,8 @@ public class MarkovChainApprox {
   }
 
   /**
-   * Calculates the price using the CEV formula
-   * 
+   * Calculates the price using the CEV formula.
+   *
    * @param forward
    *          The forward price
    * @param df
@@ -162,8 +162,8 @@ public class MarkovChainApprox {
   }
 
   /**
-   * Gets the first three moments at expiry
-   * 
+   * Gets the first three moments at expiry.
+   *
    * @param expiry
    *          The expiry
    * @return An array whose elements are {first moment, second moment, third moment}
@@ -177,8 +177,8 @@ public class MarkovChainApprox {
   }
 
   /**
-   * The mean variance (sigma^2*t) of the markov chain
-   * 
+   * The mean variance (sigma^2*t) of the markov chain.
+   *
    * @param t
    * @return The mean variance
    */

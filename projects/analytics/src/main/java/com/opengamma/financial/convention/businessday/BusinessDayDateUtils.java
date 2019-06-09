@@ -65,7 +65,7 @@ public class BusinessDayDateUtils {
   }
 
   /**
-   * Add a certain number of working days (defined by the holidayCalendar) to a date
+   * Add a certain number of working days (defined by the holidayCalendar) to a date.
    *
    * @param startDate
    *          The start date
@@ -93,7 +93,7 @@ public class BusinessDayDateUtils {
   }
 
   /**
-   * Add a certain number of working days (defined by the holiday calendar) to a date
+   * Add a certain number of working days (defined by the holiday calendar) to a date.
    *
    * @param startDate
    *          The start date

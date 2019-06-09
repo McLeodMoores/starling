@@ -14,16 +14,17 @@ import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 
 /**
- * Example for yield curve
+ * Example for yield curve.
+ * 
  * @deprecated Deprecated
  */
 @Deprecated
 public class YieldCurveExample {
 
   // @export constantYieldCurveDemo
-  //CSOFF
+  // CSOFF
   public static double y = 0.02;
-  //CSON
+  // CSON
 
   public static void constantYieldCurveDemo(final PrintStream out) {
     final DoublesCurve curve = new ConstantDoublesCurve(y);

@@ -13,7 +13,7 @@ import com.opengamma.engine.view.ViewDeltaResultModel;
 import com.opengamma.engine.view.impl.InMemoryViewComputationResultModel;
 
 /**
- * Represents a call to {@link ViewResultListener#cycleFragmentCompleted(ViewComputationResultModel, ViewDeltaResultModel)}
+ * Represents a call to {@link ViewResultListener#cycleFragmentCompleted(ViewComputationResultModel, ViewDeltaResultModel)}.
  */
 public class CycleFragmentCompletedCall extends AbstractCompletedResultsCall {
 

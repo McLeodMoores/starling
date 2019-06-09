@@ -7,22 +7,22 @@ package com.opengamma.analytics.financial.credit.bumpers;
 
 // CSOFF
 /**
- * Enumerate the types of spread bumps that can be applied to a term structure of credit spreads
+ * Enumerate the types of spread bumps that can be applied to a term structure of credit spreads.
  *
  * @deprecated this will be deleted
  */
 @Deprecated
 public enum SpreadBumpType {
   /**
-   * Same as ADDITIVE_BUCKETED
+   * Same as ADDITIVE_BUCKETED.
    */
   ADDITIVE,
   /**
-   * Same as MULTIPLICATIVE_BUCKETED
+   * Same as MULTIPLICATIVE_BUCKETED.
    */
   MULTIPLICATIVE,
   /**
-   * s(t,T) -&gt; s(t,T) + ds i.e. each point on the curve is shifted by an equal amount ds
+   * s(t,T) -&gt; s(t,T) + ds i.e. each point on the curve is shifted by an equal amount ds.
    */
   ADDITIVE_PARALLEL,
   /**
@@ -30,11 +30,11 @@ public enum SpreadBumpType {
    */
   ADDITIVE_BUCKETED,
   /**
-   * s(t,T) -&gt; [1 + ds] x s(t,T)
+   * s(t,T) -&gt; [1 + ds] x s(t,T).
    */
   MULTIPLICATIVE_PARALLEL,
   /**
-   * s(t,T) -&gt; [1 + ds(T)] x s(t,T)
+   * s(t,T) -&gt; [1 + ds(T)] x s(t,T).
    */
   MULTIPLICATIVE_BUCKETED;
 }

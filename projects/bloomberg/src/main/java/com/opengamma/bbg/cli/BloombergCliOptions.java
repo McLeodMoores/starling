@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Creates common command line options for Bloomberg scripts
+ * Creates common command line options for Bloomberg scripts.
  */
 public final class BloombergCliOptions {
 
@@ -112,6 +112,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has data fields option.
+   * 
    * @return true or false
    */
   public boolean hasFields() {
@@ -120,6 +121,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has data fields file option.
+   * 
    * @return true or false
    */
   public boolean hasFieldsFile() {
@@ -128,6 +130,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has dataProviders option.
+   * 
    * @return true or false
    */
   public boolean hasDataProviders() {
@@ -136,6 +139,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has help option.
+   * 
    * @return true or false
    */
   public boolean hasHelp() {
@@ -144,6 +148,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has identifiers option.
+   * 
    * @return true or false
    */
   public boolean hasIdentifiers() {
@@ -152,6 +157,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has output option.
+   * 
    * @return true or false
    */
   public boolean hasOutput() {
@@ -160,6 +166,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has host option.
+   * 
    * @return true or false
    */
   public boolean hasHost() {
@@ -168,6 +175,7 @@ public final class BloombergCliOptions {
 
   /**
    * Checks if options has port option.
+   * 
    * @return true or false
    */
   public boolean hasPort() {
@@ -200,13 +208,13 @@ public final class BloombergCliOptions {
     if (hasPort()) {
       _options.addOption(createPortOption());
     }
-//    options.addOption(createReloadOption());
-//    options.addOption(createLoadPositionMasterOption());
-//    options.addOption(createUpdateOption());
-//    options.addOption(createStartOption());
-//    options.addOption(createEndOption());
-//    options.addOption(createUniqueOption());
-//    options.addOption(createCsvOption());
+    // options.addOption(createReloadOption());
+    // options.addOption(createLoadPositionMasterOption());
+    // options.addOption(createUpdateOption());
+    // options.addOption(createStartOption());
+    // options.addOption(createEndOption());
+    // options.addOption(createUniqueOption());
+    // options.addOption(createCsvOption());
   }
 
   public Options getOptions() {
@@ -359,9 +367,10 @@ public final class BloombergCliOptions {
   }
 
   /**
-   * Parses the command line arguments with created options
+   * Parses the command line arguments with created options.
    *
-   * @param args the command line
+   * @param args
+   *          the command line
    * @return the commandline or null if it can not be parsed
    */
   public CommandLine parse(final String[] args) {
@@ -370,13 +379,13 @@ public final class BloombergCliOptions {
     try {
       result = parser.parse(_options, args);
     } catch (final ParseException e) {
-      LOGGER.warn("error parsing command line arguments {}", new Object[]{args});
+      LOGGER.warn("error parsing command line arguments {}", new Object[] { args });
     }
     return result;
   }
 
   /**
-   * Builds command line options based on requested parameters
+   * Builds command line options based on requested parameters.
    */
   public static class Builder {
 
@@ -401,9 +410,10 @@ public final class BloombergCliOptions {
     }
 
     /**
-     * Builds options with data fields
+     * Builds options with data fields.
      *
-     * @param required true if required
+     * @param required
+     *          true if required
      * @return the builder
      */
     public Builder withDataFields(final boolean required) {
@@ -419,8 +429,10 @@ public final class BloombergCliOptions {
     }
 
     /**
-     * Builds options with data provider
-     * @param required true if required
+     * Builds options with data provider.
+     * 
+     * @param required
+     *          true if required
      * @return the builder
      */
     public Builder withDataProviders(final boolean required) {

@@ -33,7 +33,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * TODO : remove when inflation curves with issuer are integrated
+ * TODO : remove when inflation curves with issuer are integrated.
  */
 public class BondCapitalIndexedSecurityDiscountingMethodWithoutIssuer {
 

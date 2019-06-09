@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueSABRSwaptionRightExtrapolationCalculator
     extends InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, MultipleCurrencyAmount> {
@@ -49,7 +49,7 @@ public final class PresentValueSABRSwaptionRightExtrapolationCalculator
 
   /**
    * Constructor.
-   * 
+   *
    * @param cutOffStrike
    *          The cut-off strike.
    * @param mu

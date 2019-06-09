@@ -11,15 +11,15 @@ import com.opengamma.analytics.financial.model.option.pricing.tree.BarrierOption
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Adaptive mesh method for single barrier options
+ * Adaptive mesh method for single barrier options.
  */
 public class AdaptiveLatticeSpecification extends LatticeSpecification {
   private static final double SHIFT = 1.e-12;
   private final BarrierOptionFunctionProvider _provider;
 
   /**
-   * Constructor specifying the barrier
-   * 
+   * Constructor specifying the barrier.
+   *
    * @param provider
    *          BarrierOptionFunctionProvider of OptionFunctionProvider1D
    */

@@ -102,7 +102,7 @@ public abstract class OptionFunctionProvider1D {
 
   /**
    * Given a set of option values in the (steps+1)-th layer, derive option values in the (steps)-th layer For an option with early exercise feature or barriers,
-   * this method should be overridden
+   * this method should be overridden.
    *
    * @param discount
    *          Discount factor

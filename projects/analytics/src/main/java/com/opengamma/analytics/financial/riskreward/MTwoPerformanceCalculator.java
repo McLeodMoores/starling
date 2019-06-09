@@ -16,8 +16,8 @@ public class MTwoPerformanceCalculator {
   private static final RiskAdjustedPerformanceCalculator RAP = new RiskAdjustedPerformanceCalculator();
 
   /**
-   * Calculates the M<sup>2</sup>
-   * 
+   * Calculates the M<sup>2</sup>.
+   *
    * @param assetReturn
    *          The return of the asset
    * @param riskFreeReturn

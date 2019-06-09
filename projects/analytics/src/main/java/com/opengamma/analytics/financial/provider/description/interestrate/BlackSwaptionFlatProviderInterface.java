@@ -13,7 +13,8 @@ import com.opengamma.analytics.financial.model.option.parameters.BlackFlatSwapti
 public interface BlackSwaptionFlatProviderInterface extends ParameterProviderInterface {
 
   /**
-   * Create a new copy of the provider
+   * Create a new copy of the provider.
+   * 
    * @return The bundle
    */
   @Override
@@ -21,6 +22,7 @@ public interface BlackSwaptionFlatProviderInterface extends ParameterProviderInt
 
   /**
    * Returns the Black parameters.
+   * 
    * @return The parameters
    */
   BlackFlatSwaptionParameters getBlackParameters();

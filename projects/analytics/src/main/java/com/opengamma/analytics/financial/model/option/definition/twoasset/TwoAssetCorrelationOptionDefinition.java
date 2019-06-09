@@ -36,11 +36,15 @@ public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
   private final double _payoutLevel;
 
   /**
-   * 
-   * @param strike The strike
-   * @param expiry The expiry
-   * @param isCall Is the option a call
-   * @param payoutLevel The payout level of the option
+   *
+   * @param strike
+   *          The strike
+   * @param expiry
+   *          The expiry
+   * @param isCall
+   *          Is the option a call
+   * @param payoutLevel
+   *          The payout level of the option
    */
   public TwoAssetCorrelationOptionDefinition(final double strike, final Expiry expiry, final boolean isCall, final double payoutLevel) {
     super(strike, expiry, isCall);
@@ -48,7 +52,8 @@ public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
   }
 
   /**
-   * The exercise function of this option is European (see {@link EuropeanExerciseFunction})
+   * The exercise function of this option is European (see {@link EuropeanExerciseFunction}).
+   * 
    * @return The exercise function
    */
   @SuppressWarnings("unchecked")
@@ -67,7 +72,7 @@ public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
   }
 
   /**
-   * 
+   *
    * @return The payout level
    */
   public double getPayoutLevel() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.portfoliolosssimulationmodel;
@@ -9,7 +9,7 @@ import com.opengamma.analytics.financial.credit.recoveryratemodel.RecoveryRateMo
 import com.opengamma.analytics.financial.credit.recoveryratemodel.RecoveryRateModelConstant;
 
 /**
- * Class to provide utility methods for the portfolio loss simulation model
+ * Class to provide utility methods for the portfolio loss simulation model.
  */
 public class SimulationMethods {
 
@@ -27,7 +27,7 @@ public class SimulationMethods {
 
   public RecoveryRateModel[] constructRecoveryRateModels(final int numberOfObligors) {
 
-    RecoveryRateModel[] recoveryRateModels = new RecoveryRateModel[numberOfObligors];
+    final RecoveryRateModel[] recoveryRateModels = new RecoveryRateModel[numberOfObligors];
 
     for (int i = 0; i < numberOfObligors; i++) {
 
@@ -43,7 +43,7 @@ public class SimulationMethods {
 
   public double[] constructCorrelationVector(final int numberOfObligors, final double homogeneousCorrelation) {
 
-    double[] correlationVector = new double[numberOfObligors];
+    final double[] correlationVector = new double[numberOfObligors];
 
     for (int i = 0; i < numberOfObligors; i++) {
       correlationVector[i] = homogeneousCorrelation;
@@ -56,7 +56,7 @@ public class SimulationMethods {
 
   public double[] constructDefaultProbabilityVector(final int numberOfObligors, final double homogeneousDefaultProbability) {
 
-    double[] defaultProbabilityVector = new double[numberOfObligors];
+    final double[] defaultProbabilityVector = new double[numberOfObligors];
 
     for (int i = 0; i < numberOfObligors; i++) {
       defaultProbabilityVector[i] = homogeneousDefaultProbability;

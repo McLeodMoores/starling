@@ -17,7 +17,7 @@ import com.opengamma.engine.view.execution.ViewCycleExecutionOptions;
 import com.opengamma.engine.view.listener.CycleExecutionFailedCall;
 
 /**
- * Fudge message builder for {@link CycleExecutionFailedCall}
+ * Fudge message builder for {@link CycleExecutionFailedCall}.
  */
 @FudgeBuilderFor(CycleExecutionFailedCall.class)
 public class CycleExecutionFailedCallFudgeBuilder implements FudgeBuilder<CycleExecutionFailedCall> {
@@ -35,8 +35,8 @@ public class CycleExecutionFailedCallFudgeBuilder implements FudgeBuilder<CycleE
 
   @Override
   public CycleExecutionFailedCall buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    final ViewCycleExecutionOptions cycleExecutionOptions =
-        deserializer.fieldValueToObject(ViewCycleExecutionOptions.class, msg.getByName(EXECUTION_OPTIONS_FIELD));
+    final ViewCycleExecutionOptions cycleExecutionOptions = deserializer.fieldValueToObject(ViewCycleExecutionOptions.class,
+        msg.getByName(EXECUTION_OPTIONS_FIELD));
     final FudgeField exceptionField = msg.getByName(EXCEPTION_FIELD);
     final Exception exception = exceptionField != null ? deserializer.fieldValueToObject(Exception.class, exceptionField) : null;
     return new CycleExecutionFailedCall(cycleExecutionOptions, exception);

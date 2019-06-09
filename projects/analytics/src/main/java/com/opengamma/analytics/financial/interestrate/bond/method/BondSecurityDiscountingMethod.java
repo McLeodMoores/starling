@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Class with methods related to bond security valued by discounting.
- * 
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.bond.provider.BondSecurityDiscountingMethod}
  */
 @Deprecated
@@ -44,7 +44,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Return the class instance.
-   * 
+   *
    * @return The instance.
    */
   public static BondSecurityDiscountingMethod getInstance() {
@@ -84,7 +84,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the present value of a bond security (without settlement amount payment).
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -99,7 +99,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the present value of a bond transaction from its clean price.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param curves
@@ -120,7 +120,7 @@ public final class BondSecurityDiscountingMethod {
   /**
    * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond. The
    * parallel shift is done in the curve convention.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -140,8 +140,8 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the sensitivity of the bond to the z spread
-   * 
+   * Calculates the sensitivity of the bond to the z spread.
+   *
    * @param bond
    *          The bond
    * @param curves
@@ -164,7 +164,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the dirty price of a bond security from curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -180,7 +180,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price of a bond security from a clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -194,7 +194,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price from the conventional yield.
-   * 
+   *
    * @param bond
    *          The bond security, not null
    * @param yield
@@ -223,7 +223,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Calculates the dirty price from a standard yield.
-   * 
+   *
    * @param bond
    *          The bond
    * @param yield
@@ -245,7 +245,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the dirty price sensitivity to the curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -269,7 +269,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -283,7 +283,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price of a bond security from a dirty price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -297,7 +297,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the clean price from the conventional yield.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param yield
@@ -312,7 +312,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -336,7 +336,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the dirty price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -353,7 +353,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Compute the conventional yield from the clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -368,7 +368,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the conventional yield.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param yield
@@ -405,7 +405,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -419,7 +419,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the dirty price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -433,7 +433,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the modified duration of a bond from the clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -447,7 +447,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macaulay duration of a bond from the conventional yield.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param yield
@@ -469,7 +469,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macaulay duration of a bond from the curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -483,7 +483,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the Macauley duration of a bond from the dirty price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -497,7 +497,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the conventional yield.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param yield
@@ -542,7 +542,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the curves.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -556,7 +556,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the dirty price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param dirtyPrice
@@ -570,7 +570,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the convexity of a bond from the clean price.
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param cleanPrice
@@ -584,7 +584,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes a bond z-spread from the curves and a present value.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param curves
@@ -610,7 +610,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes a bond present value z-spread sensitivity from the curves and a present value.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param curves
@@ -627,7 +627,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes a bond z-spread from the curves and a clean price.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param curves
@@ -643,7 +643,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the bond present value z-spread sensitivity from the curves and a clean price.
-   * 
+   *
    * @param bond
    *          The bond.
    * @param curves
@@ -659,7 +659,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity of a bond security (without settlement amount payment).
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -675,7 +675,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity to parallel curve movement of a bond security (without settlement amount payment).
-   * 
+   *
    * @param bond
    *          The bond security.
    * @param curves
@@ -690,7 +690,7 @@ public final class BondSecurityDiscountingMethod {
 
   /**
    * Calculates the accrued interest for a fixed-coupon bond using the curves. The accrued interest is defined as dirty price - clean price.
-   * 
+   *
    * @param bond
    *          The bond, not null
    * @param curves

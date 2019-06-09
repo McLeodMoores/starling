@@ -13,8 +13,8 @@ import com.opengamma.analytics.financial.credit.obligor.Region;
 import com.opengamma.analytics.financial.credit.obligor.Sector;
 
 /**
- * Class to define a General Clearing Member of a CCP (an extension of the Obligor class)
- * 
+ * Class to define a General Clearing Member of a CCP (an extension of the Obligor class).
+ *
  * @deprecated Deprecated
  */
 @Deprecated

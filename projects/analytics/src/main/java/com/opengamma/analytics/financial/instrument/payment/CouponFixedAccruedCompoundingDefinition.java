@@ -37,8 +37,8 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
   private final Calendar _calendar;
 
   /**
-   * Constructor from all details
-   * 
+   * Constructor from all details.
+   *
    * @param currency
    *          The coupon currency.
    * @param paymentDate
@@ -67,7 +67,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Fixed coupon constructor from a coupon and the fixed rate.
-   * 
+   *
    * @param coupon
    *          Underlying coupon.
    * @param rate
@@ -85,7 +85,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Static constructor for a fixed coupon definition.
-   * 
+   *
    * @param currency
    *          The payment currency.
    * @param paymentDate
@@ -111,7 +111,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Gets the fixed rate.
-   * 
+   *
    * @return The fixed rate
    */
   public double getRate() {
@@ -120,7 +120,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Gets the amount.
-   * 
+   *
    * @return The amount
    */
   public double getAmount() {
@@ -129,7 +129,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * Gets the calendar.
-   * 
+   *
    * @return The calendar
    */
   public Calendar getCalendar() {
@@ -143,7 +143,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -185,7 +185,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -203,7 +203,7 @@ public class CouponFixedAccruedCompoundingDefinition extends CouponDefinition {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

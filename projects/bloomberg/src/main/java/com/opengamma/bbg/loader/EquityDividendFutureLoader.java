@@ -71,14 +71,14 @@ public class EquityDividendFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT));
 
   /**
-   * The valid Bloomberg future categories for Equity Dividend Futures
+   * The valid Bloomberg future categories for Equity Dividend Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BloombergConstants.BBG_STOCK_FUTURE_TYPE));
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param referenceDataProvider
    *          the provider, not null
    */

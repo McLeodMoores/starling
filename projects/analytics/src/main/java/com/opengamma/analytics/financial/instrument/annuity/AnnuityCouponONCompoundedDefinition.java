@@ -27,7 +27,7 @@ public class AnnuityCouponONCompoundedDefinition extends AnnuityDefinition<Coupo
 
   /**
    * Constructor from a list of overnight coupons.
-   * 
+   *
    * @param payments
    *          The coupons.
    * @param index
@@ -42,7 +42,7 @@ public class AnnuityCouponONCompoundedDefinition extends AnnuityDefinition<Coupo
 
   /**
    * Annuity builder from the financial details.
-   * 
+   *
    * @param settlementDate
    *          The settlement date, not null
    * @param tenorAnnuity
@@ -69,7 +69,7 @@ public class AnnuityCouponONCompoundedDefinition extends AnnuityDefinition<Coupo
 
   /**
    * Annuity builder from the financial details.
-   * 
+   *
    * @param settlementDate
    *          The settlement date, not null
    * @param maturityDate
@@ -96,7 +96,7 @@ public class AnnuityCouponONCompoundedDefinition extends AnnuityDefinition<Coupo
 
   /**
    * Build a annuity of overnight coupons from financial details.
-   * 
+   *
    * @param settlementDate
    *          The annuity settlement or first fixing date, not null.
    * @param endFixingPeriodDate
@@ -137,7 +137,7 @@ public class AnnuityCouponONCompoundedDefinition extends AnnuityDefinition<Coupo
 
   /**
    * Build a annuity of overnight coupons from financial details.
-   * 
+   *
    * @param settlementDate
    *          The annuity settlement or first fixing date, not null.
    * @param tenorAnnuity
@@ -177,7 +177,7 @@ public class AnnuityCouponONCompoundedDefinition extends AnnuityDefinition<Coupo
 
   /**
    * Creates an overnight annuity
-   * 
+   *
    * @param settlementDate
    *          The settlement date
    * @param endFixingPeriodDates
@@ -209,8 +209,8 @@ public class AnnuityCouponONCompoundedDefinition extends AnnuityDefinition<Coupo
   }
 
   /**
-   * Gets the overnight reference index
-   * 
+   * Gets the overnight reference index.
+   *
    * @return The overnight reference index
    */
   public IndexON getIndex() {

@@ -28,8 +28,8 @@ public class InflationIssuerDiscountFinderFunction extends Function1D<DoubleMatr
   private final InflationIssuerDiscountBuildingData _data;
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param inflationCalculator
    *          The instrument value calculator.
    * @param data

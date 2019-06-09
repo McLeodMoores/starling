@@ -58,7 +58,7 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
   @PropertyDefinition(validate = "notNull")
   private BloombergConnector _bloombergConnector;
   /**
-   * The reference data provider
+   * The reference data provider.
    */
   @PropertyDefinition(validate = "notNull")
   private ReferenceDataProvider _referenceDataProvider;
@@ -225,7 +225,7 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the reference data provider
+   * Gets the reference data provider.
    * @return the value of the property, not null
    */
   public ReferenceDataProvider getReferenceDataProvider() {
@@ -233,7 +233,7 @@ public abstract class AbstractBloombergLiveDataServerComponentFactory extends Ab
   }
 
   /**
-   * Sets the reference data provider
+   * Sets the reference data provider.
    * @param referenceDataProvider  the new value of the property, not null
    */
   public void setReferenceDataProvider(ReferenceDataProvider referenceDataProvider) {

@@ -6,8 +6,8 @@
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
 
 /**
- * Risk factors not covered by other calculators
- * 
+ * Risk factors not covered by other calculators.
+ *
  * @see FiniteDifferenceSpreadSensitivityCalculator
  */
 public class CDSRiskFactors {
@@ -25,7 +25,7 @@ public class CDSRiskFactors {
   /**
    * The sensitivity of a CDS to the recovery rate. Note this is per unit amount, so the change in PV due to a one percent (say from 40% to 41%) rise is RR will
    * be 0.01 * the returned value.
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve
@@ -43,7 +43,7 @@ public class CDSRiskFactors {
    * Immediately prior to default, the CDS has some value V (to the protection buyer). After default, the contract cancelled, so there is an immediate loss of
    * -V (or a gain if V was negative). The protection buyer pays the accrued interest A and receives 1-RR, so the full Value on Default (VoD) is -V + (1-RR)
    * (where the A has been absorbed as we use the clean price for V).
-   * 
+   *
    * @param cds
    *          analytic description of a CDS traded at a certain time
    * @param yieldCurve

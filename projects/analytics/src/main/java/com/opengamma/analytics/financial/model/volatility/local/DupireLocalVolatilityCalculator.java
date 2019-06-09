@@ -39,7 +39,7 @@ public class DupireLocalVolatilityCalculator {
   }
 
   /**
-   * Classic Dupire local volatility formula
+   * Classic Dupire local volatility formula.
    *
    * @param priceSurface
    *          present value (i.e. discounted) value of options on underlying at various expiries and strikes
@@ -148,7 +148,7 @@ public class DupireLocalVolatilityCalculator {
   }
 
   /**
-   * Classic Dupire local volatility formula in terms of the Black Volatility surface (parameterised by strike)
+   * Classic Dupire local volatility formula in terms of the Black Volatility surface (parameterised by strike).
    *
    * @param impliedVolatilitySurface
    *          Black Volatility surface (parameterised by strike)
@@ -217,7 +217,7 @@ public class DupireLocalVolatilityCalculator {
   }
 
   /**
-   * Get the local volatility in the case where the option price is a function of the forward price
+   * Get the local volatility in the case where the option price is a function of the forward price.
    *
    * @param impliedVolatilitySurface
    *          The Black implied volatility surface
@@ -348,7 +348,7 @@ public class DupireLocalVolatilityCalculator {
 
   /**
    * Get the theta surface - the rate of change of an option with respect to the time-to-expiry (<b>Note</b> this is the negative of the normal definition as
-   * change of an option with respect to (calendar) time)
+   * change of an option with respect to (calendar) time).
    *
    * @param impliedVolatilitySurface
    *          Black volatility surface (parameterised by expiry and moneyness)
@@ -391,7 +391,7 @@ public class DupireLocalVolatilityCalculator {
 
   /**
    * Get the transition density surface - each time slice through this surface is the Probably Density Function (PDF), in the risk neutral measure, for the
-   * underlying at that time (parameterised by moneyness)
+   * underlying at that time (parameterised by moneyness).
    *
    * @param impliedVolatilitySurface
    *          Black volatility surface (parameterised by expiry and moneyness)

@@ -11,20 +11,20 @@ import com.opengamma.analytics.financial.provider.description.volatilityswap.Car
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Compute theta of forward volatility based on finite difference method
+ * Compute theta of forward volatility based on finite difference method.
  */
 public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivativeVisitorAdapter<CarrLeeFXData, Double> {
   private final CarrLeeFXVolatilitySwapCalculator _cal;
 
   /**
-   * Constructor using default calculator
+   * Constructor using default calculator.
    */
   public CarrLeeFXVolatilitySwapThetaCalculator() {
     _cal = new CarrLeeFXVolatilitySwapCalculator();
   }
 
   /**
-   * Constructor specifying base calculator
+   * Constructor specifying base calculator.
    *
    * @param cal
    *          Base calculator

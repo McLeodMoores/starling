@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Class used to compute the price and sensitivity of a physical delivery swaption with Black model. The implied Black volatilities are expiry and underlying
  * maturity dependent. The swap underlying the swaption should be a Fixed for Ibor (without spread) swap.
- * 
+ *
  * @deprecated Use {@link SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod}
  */
 @Deprecated
@@ -46,7 +46,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod getInstance() {
@@ -66,7 +66,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value of a physical delivery European swaption in the Black model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -96,7 +96,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value of a physical delivery European swaption in the Black model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -120,7 +120,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the implied Black volatility of the vanilla swaption.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curves
@@ -139,7 +139,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value rate sensitivity to rates of a physical delivery European swaption in the SABR model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -184,7 +184,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the present value sensitivity to the Black volatility (also called vega) of a physical delivery European swaption in the Black swaption model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -218,8 +218,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Calculates the delta
-   * 
+   * Calculates the delta.
+   *
    * @param swaption
    *          The swaption, not null
    * @param curves
@@ -239,7 +239,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Computes the gamma of the swaption. The gamma is the second order derivative of the option present value to the spot fx rate.
-   * 
+   *
    * @param swaption
    *          The Forex option.
    * @param curves
@@ -259,7 +259,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
 
   /**
    * Calculates the theta.
-   * 
+   *
    * @param swaption
    *          The swaption, not null
    * @param curves
@@ -277,8 +277,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute first derivative of present value with respect to forward rate
-   * 
+   * Compute first derivative of present value with respect to forward rate.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -301,8 +301,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute first derivative of present value with respect to volatility
-   * 
+   * Compute first derivative of present value with respect to volatility.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -326,8 +326,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute second derivative of present value with respect to forward rate
-   * 
+   * Compute second derivative of present value with respect to forward rate.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -350,8 +350,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0
-   * 
+   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -374,8 +374,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time
-   * 
+   * Compute minus of first derivative of present value with respect to time.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack

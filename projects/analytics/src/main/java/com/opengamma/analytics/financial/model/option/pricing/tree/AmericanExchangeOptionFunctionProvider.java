@@ -9,7 +9,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * {@link EuropeanExchangeOptionFunctionProvider} with early exercise feature
+ * {@link EuropeanExchangeOptionFunctionProvider} with early exercise feature.
  */
 public class AmericanExchangeOptionFunctionProvider extends OptionFunctionProvider2D {
   private final double _quantity1;
@@ -131,8 +131,8 @@ public class AmericanExchangeOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access quantity of asset 1
-   * 
+   * Access quantity of asset 1.
+   *
    * @return _quantity1
    */
   public double getQuantity1() {
@@ -140,8 +140,8 @@ public class AmericanExchangeOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access quantity of asset 2
-   * 
+   * Access quantity of asset 2.
+   *
    * @return _quantity2
    */
   public double getQuantity2() {

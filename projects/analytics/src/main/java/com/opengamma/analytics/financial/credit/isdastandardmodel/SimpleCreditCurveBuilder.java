@@ -16,9 +16,9 @@ import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * /** This is a bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs
- * (up to numerical round-off)
- * 
+ * This is a bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs (up to numerical
+ * round-off).
+ *
  * @deprecated Use the faster ISDACompliantCreditCurveBuild
  */
 @Deprecated

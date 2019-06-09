@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Container for function configurations
+ * Container for function configurations.
  */
 @BeanDefinition
 public class FunctionConfigurationBundle extends DirectBean implements Serializable {
@@ -40,7 +40,8 @@ public class FunctionConfigurationBundle extends DirectBean implements Serializa
   /**
    * Creates an instance.
    *
-   * @param functions the list of function configurations, not-null.
+   * @param functions
+   *          the list of function configurations, not-null.
    */
   public FunctionConfigurationBundle(final Collection<FunctionConfiguration> functions) {
     ArgumentChecker.notNull(functions, "functions");

@@ -9,18 +9,23 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Payoff of powered option is max( S - K , 0 )^i for call and max( K - S , 0 )^i for put with i &gt; 0
+ * Payoff of powered option is max( S - K , 0 )^i for call and max( K - S , 0 )^i for put with i &gt; 0.
  */
 public class PoweredOptionFunctionProvider extends OptionFunctionProvider1D {
 
   private final double _power;
 
   /**
-   * @param strike Strike price, K
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param power Power, i
+   * @param strike
+   *          Strike price, K
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param power
+   *          Power, i
    */
   public PoweredOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double power) {
     super(strike, timeToExpiry, steps, isCall);
@@ -62,7 +67,8 @@ public class PoweredOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access power
+   * Access power.
+   *
    * @return _power
    */
   public double getPower() {

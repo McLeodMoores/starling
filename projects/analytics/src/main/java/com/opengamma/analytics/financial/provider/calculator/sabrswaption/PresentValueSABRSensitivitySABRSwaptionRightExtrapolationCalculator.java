@@ -23,10 +23,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRS
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueSABRSensitivitySABRSwaptionRightExtrapolationCalculator extends
-InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, PresentValueSABRSensitivityDataBundle> {
+    InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, PresentValueSABRSensitivityDataBundle> {
 
   /**
    * The cut-off strike. The smile is extrapolated above that level.

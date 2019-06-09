@@ -149,7 +149,7 @@ public class MulticurveSensitivity {
   }
 
   /**
-   * Create a new sensitivity object by a product of two sensitivities
+   * Create a new sensitivity object by a product of two sensitivities.
    *
    * @param other
    *          The other sensitivity

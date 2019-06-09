@@ -11,7 +11,7 @@ import com.opengamma.analytics.math.cube.Cube;
 
 /**
  * Peaceman-Rachford splitting with boundary conditions applied at each of the 4 steps <b>Note</b> this is for testing purposes and is not recommended for
- * actual use
+ * actual use.
  */
 @SuppressWarnings("deprecation")
 public class PeacemanRachfordFiniteDifference2Db implements ConvectionDiffusionPDESolver2D {

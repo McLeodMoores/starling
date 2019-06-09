@@ -15,15 +15,24 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
   private final double[] _callStrikes;
 
   /**
-   * @param putStrikes The put option strikes
-   * @param callStrikes The call option strikes
-   * @param putWeights The weights of put options
-   * @param straddleWeight The weight of straddle
-   * @param callWeights The weights of call options
-   * @param putPrices The put option prices
-   * @param straddlePrice The straddle price
-   * @param callPrices The call option prices
-   * @param cash The cash amount
+   * @param putStrikes
+   *          The put option strikes
+   * @param callStrikes
+   *          The call option strikes
+   * @param putWeights
+   *          The weights of put options
+   * @param straddleWeight
+   *          The weight of straddle
+   * @param callWeights
+   *          The weights of call options
+   * @param putPrices
+   *          The put option prices
+   * @param straddlePrice
+   *          The straddle price
+   * @param callPrices
+   *          The call option prices
+   * @param cash
+   *          The cash amount
    */
   public VolatilitySwapCalculatorResultWithStrikes(final double[] putStrikes, final double[] callStrikes, final double[] putWeights,
       final double straddleWeight, final double[] callWeights, final double[] putPrices, final double straddlePrice,
@@ -40,17 +49,28 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
   }
 
   /**
-   * @param putStrikes The put option strikes
-   * @param callStrikes The call option strikes
-   * @param putWeights The weights of put options
-   * @param straddleWeight The weight of straddle
-   * @param callWeights The weights of call options
-   * @param putPrices The put option prices
-   * @param straddlePrice The straddle price
-   * @param callPrices The call option prices
-   * @param cash The cash amount
-   * @param optionTotal The total option value
-   * @param fairValue The fair value
+   * @param putStrikes
+   *          The put option strikes
+   * @param callStrikes
+   *          The call option strikes
+   * @param putWeights
+   *          The weights of put options
+   * @param straddleWeight
+   *          The weight of straddle
+   * @param callWeights
+   *          The weights of call options
+   * @param putPrices
+   *          The put option prices
+   * @param straddlePrice
+   *          The straddle price
+   * @param callPrices
+   *          The call option prices
+   * @param cash
+   *          The cash amount
+   * @param optionTotal
+   *          The total option value
+   * @param fairValue
+   *          The fair value
    */
   public VolatilitySwapCalculatorResultWithStrikes(final double[] putStrikes, final double[] callStrikes, final double[] putWeights,
       final double straddleWeight, final double[] callWeights, final double[] putPrices, final double straddlePrice,
@@ -67,7 +87,8 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
   }
 
   /**
-   * Access _putStrikes
+   * Access _putStrikes.
+   * 
    * @return put option strikes
    */
   public double[] getPutStrikes() {
@@ -75,7 +96,8 @@ public class VolatilitySwapCalculatorResultWithStrikes extends VolatilitySwapCal
   }
 
   /**
-   * Access _callStrikes
+   * Access _callStrikes.
+   * 
    * @return call option strikes
    */
   public double[] getCallStrikes() {

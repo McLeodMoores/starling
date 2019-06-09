@@ -17,11 +17,16 @@ public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
   private final double _payoffStrike;
 
   /**
-   * @param strike Strike price, K1
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param payoffStrike Payoff-strike, K2
+   * @param strike
+   *          Strike price, K1
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param payoffStrike
+   *          Payoff-strike, K2
    */
   public GapOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double payoffStrike) {
     super(strike, timeToExpiry, steps, isCall);
@@ -63,7 +68,8 @@ public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access payoff-strike
+   * Access payoff-strike.
+   * 
    * @return _payoffStrike
    */
   public double getStrikePayoff() {

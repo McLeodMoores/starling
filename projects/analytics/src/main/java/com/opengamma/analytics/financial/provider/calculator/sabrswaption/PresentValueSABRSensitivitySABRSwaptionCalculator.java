@@ -25,7 +25,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRS
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueSABRSensitivitySABRSwaptionCalculator
     extends InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, PresentValueSABRSensitivityDataBundle> {
@@ -37,7 +37,7 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static PresentValueSABRSensitivitySABRSwaptionCalculator getInstance() {

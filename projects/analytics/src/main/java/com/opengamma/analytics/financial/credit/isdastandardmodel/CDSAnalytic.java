@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
  * This converts and stores all the date logic as doubles for CDS pricing on a particular date.
  * <p>
  * For convenient ways to generate sets of CDSs
- * 
+ *
  * @see CDSAnalyticFactory
  */
 public class CDSAnalytic {
@@ -52,7 +52,7 @@ public class CDSAnalytic {
    * Generates an analytic description of a CDS trade on a particular date. This can then be passed to a analytic CDS pricer.<br>
    * This using a weekend only calendar with a following convention. ACT/360 is used for accrual and ACT/365 to convert payment dates to year-fractions
    * (doubles)
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param stepinDate
@@ -135,7 +135,7 @@ public class CDSAnalytic {
 
   /**
    * Generates an analytic description of a CDS trade on a particular date. This can then be passed to a analytic CDS pricer
-   * 
+   *
    * @param tradeDate
    *          The trade date or 'today', this is the date other times are measured from (i.e. t = 0)
    * @param stepinDate
@@ -224,7 +224,7 @@ public class CDSAnalytic {
 
   /**
    * Gets the payAccOnDefault.
-   * 
+   *
    * @return the payAccOnDefault
    */
   public boolean isPayAccOnDefault() {
@@ -241,7 +241,7 @@ public class CDSAnalytic {
 
   /**
    * The loss-given-default. This is 1 - recovery rate
-   * 
+   *
    * @return the LGD
    */
   public double getLGD() {
@@ -249,8 +249,8 @@ public class CDSAnalytic {
   }
 
   /**
-   * Gets year fraction (according to curve DCC) between the trade date and the cash-settle date
-   * 
+   * Gets year fraction (according to curve DCC) between the trade date and the cash-settle date.
+   *
    * @return the CashSettleTime
    */
   public double getCashSettleTime() {
@@ -260,7 +260,7 @@ public class CDSAnalytic {
   /**
    * Year fraction (according to curve DCC) from trade date to accrual start date. This will be negative for spot starting CDS, but will be positive for forward
    * starting CDS.
-   * 
+   *
    * @return accrual start year-fraction.
    */
   public double getAccStart() {
@@ -270,7 +270,7 @@ public class CDSAnalytic {
   /**
    * Year fraction (according to curve DCC) from trade date to effective protection start date. The effective protection start date is the greater of the
    * accrual start date and the step-in date; if protection is from start of day, this is adjusted back one day - so for a standard CDS it is the trade date.
-   * 
+   *
    * @return the effectiveProtectionStart
    */
   public double getEffectiveProtectionStart() {
@@ -279,7 +279,7 @@ public class CDSAnalytic {
 
   /**
    * Year fraction (according to curve DCC) from trade date to the maturity of the CDS.
-   * 
+   *
    * @return the protectionEnd
    */
   public double getProtectionEnd() {
@@ -288,7 +288,7 @@ public class CDSAnalytic {
 
   /**
    * Get all the coupons on the premium leg.
-   * 
+   *
    * @return the coupons.
    */
   public CDSCoupon[] getCoupons() {
@@ -297,7 +297,7 @@ public class CDSAnalytic {
 
   /**
    * get a coupon at a particular index (zero based).
-   * 
+   *
    * @param index
    *          the index
    * @return a coupon
@@ -309,7 +309,7 @@ public class CDSAnalytic {
   /**
    * Gets the accrued premium per unit of (fractional) spread - i.e. if the quoted spread (coupon) was 500bps the actual accrued premium paid would be this
    * times 0.05
-   * 
+   *
    * @return the accrued premium per unit of (fractional) spread (and unit of notional)
    */
   public double getAccruedYearFraction() {
@@ -317,8 +317,8 @@ public class CDSAnalytic {
   }
 
   /**
-   * Gets the accrued premium per unit of notional
-   * 
+   * Gets the accrued premium per unit of notional.
+   *
    * @param fractionalSpread
    *          The <b>fraction</b> spread
    * @return the accrued premium
@@ -329,7 +329,7 @@ public class CDSAnalytic {
 
   /**
    * Get the number of days of accrued premium.
-   * 
+   *
    * @return Accrued days
    */
   public int getAccruedDays() {
@@ -338,7 +338,7 @@ public class CDSAnalytic {
 
   /**
    * Get the number of days of accrued premium.
-   * 
+   *
    * @return the accrued days
    * @deprecated use {@link #getAccruedDays()}
    */
@@ -365,8 +365,8 @@ public class CDSAnalytic {
   }
 
   /**
-   * produce a copy of the CDS with a new recovery rate
-   * 
+   * produce a copy of the CDS with a new recovery rate.
+   *
    * @param recoveryRate
    *          The recovery rate
    * @return a new CDS
@@ -381,7 +381,7 @@ public class CDSAnalytic {
    * Generate a CDS with a time offset. The main use is to produce a forward starting CDS from a forward CDS. A forward CDS is a CDS with a future trade date
    * viewed from that date (i.e. it is a spot CDS view from the future trade date). A forward starting CDS is a CDS (seen today) that starts on some future
    * date. The effect of this operation is to shift all time-to based numbers by offset.
-   * 
+   *
    * @param offset
    *          The offset (in years) - must be positive
    * @return an offset (i.e. forward starting) CDS

@@ -44,7 +44,7 @@ public class MultiCDSAnalytic {
    * Set up a strip of increasing maturity CDSs that have some coupons in common. The trade date, step-in date and valuation date and accrual start date are all
    * common, as is the payment frequency. The maturities are expressed as integer multiples of the payment interval from a reference date (the next IMM date
    * after the trade date for standard CDSs) - this guarantees that premiums will be the same across several CDSs.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param stepinDate
@@ -187,8 +187,8 @@ public class MultiCDSAnalytic {
   }
 
   /**
-   * This is the number of payments for the largest maturity CDS
-   * 
+   * This is the number of payments for the largest maturity CDS.
+   *
    * @return totalPayments
    */
   public int getTotalPayments() {
@@ -196,8 +196,8 @@ public class MultiCDSAnalytic {
   }
 
   /**
-   * get payment index for a particular maturity index. The final standard coupon is one less than this
-   * 
+   * get payment index for a particular maturity index. The final standard coupon is one less than this.
+   *
    * @param matIndex
    *          maturity index (0 for first maturity, etc)
    * @return payment index
@@ -218,7 +218,7 @@ public class MultiCDSAnalytic {
 
   /**
    * Gets the payAccOnDefault.
-   * 
+   *
    * @return the payAccOnDefault
    */
   public boolean isPayAccOnDefault() {
@@ -227,7 +227,7 @@ public class MultiCDSAnalytic {
 
   /**
    * The loss-given-default. This is 1 - recovery rate
-   * 
+   *
    * @return the LGD
    */
   public double getLGD() {
@@ -241,8 +241,8 @@ public class MultiCDSAnalytic {
   }
 
   /**
-   * Gets year fraction (according to curve DCC) between the trade date and the cash-settle date
-   * 
+   * Gets year fraction (according to curve DCC) between the trade date and the cash-settle date.
+   *
    * @return the CashSettleTime
    */
   public double getCashSettleTime() {
@@ -252,7 +252,7 @@ public class MultiCDSAnalytic {
   /**
    * Year fraction (according to curve DCC) from trade date to accrual start date. This will be negative for spot starting CDS, but will be positive for forward
    * starting CDS.
-   * 
+   *
    * @return accrual start year-fraction.
    */
   public double getAccStart() {
@@ -262,7 +262,7 @@ public class MultiCDSAnalytic {
   /**
    * Year fraction (according to curve DCC) from trade date to effective protection start date. The effective protection start date is the greater of the
    * accrual start date and the step-in date; if protection is from start of day, this is adjusted back one day - so for a standard CDS it is the trade date.
-   * 
+   *
    * @return the effectiveProtectionStart
    */
   public double getEffectiveProtectionStart() {
@@ -271,7 +271,7 @@ public class MultiCDSAnalytic {
 
   /**
    * Year fraction (according to curve DCC) from trade date to the maturity of the CDS at the given index (zero based).
-   * 
+   *
    * @param matIndex
    *          the index
    * @return the protectionEnd
@@ -282,7 +282,7 @@ public class MultiCDSAnalytic {
 
   /**
    * Get the final coupon for the CDS at the given index (zero based).
-   * 
+   *
    * @param matIndex
    *          the index
    * @return A coupon
@@ -293,7 +293,7 @@ public class MultiCDSAnalytic {
 
   /**
    * Get the standard (i.e. not the final or terminal coupon of a CDS) at the given index
-   * 
+   *
    * @param index
    *          the index
    * @return a coupon
@@ -309,7 +309,7 @@ public class MultiCDSAnalytic {
   /**
    * Gets the accrued premium per unit of (fractional) spread (i.e. if the quoted spread (coupon) was 500bps the actual accrued premium paid would be this times
    * 0.05) for the CDS at the given index (zero based).
-   * 
+   *
    * @param matIndex
    *          the index
    * @return the accrued premium per unit of (fractional) spread (and unit of notional)
@@ -320,7 +320,7 @@ public class MultiCDSAnalytic {
 
   /**
    * Gets the accrued premium per unit of notional for the CDS at the given index (zero based).
-   * 
+   *
    * @param matIndex
    *          the index
    * @param fractionalSpread
@@ -332,8 +332,8 @@ public class MultiCDSAnalytic {
   }
 
   /**
-   * Get the number of days of accrued premium for the CDS at the given index (zero based)
-   * 
+   * Get the number of days of accrued premium for the CDS at the given index (zero based).
+   *
    * @param matIndex
    *          the index
    * @return Accrued days

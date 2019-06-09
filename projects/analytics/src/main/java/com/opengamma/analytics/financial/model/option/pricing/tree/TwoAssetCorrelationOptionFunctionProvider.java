@@ -73,7 +73,7 @@ public class TwoAssetCorrelationOptionFunctionProvider extends OptionFunctionPro
   }
 
   /**
-   * Access strike for asset 1
+   * Access strike for asset 1.
    *
    * @return strike1
    */
@@ -82,7 +82,7 @@ public class TwoAssetCorrelationOptionFunctionProvider extends OptionFunctionPro
   }
 
   /**
-   * Access strike for asset 2
+   * Access strike for asset 2.
    *
    * @return strike2
    */

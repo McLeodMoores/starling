@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PlatformConfigUtils;
 
 /**
- * Updates the timeseries identifiers with loaded identifiers from Bloomberg
+ * Updates the timeseries identifiers with loaded identifiers from Bloomberg.
  */
 public class BloombergTimeSeriesIdentifiersUpdater {
 
@@ -57,8 +57,10 @@ public class BloombergTimeSeriesIdentifiersUpdater {
   /**
    * Creates a new instance of the updater.
    *
-   * @param htsMaster  the historical time-series master, not null
-   * @param bbgIdentifierProvider  the identifier provider, not null
+   * @param htsMaster
+   *          the historical time-series master, not null
+   * @param bbgIdentifierProvider
+   *          the identifier provider, not null
    */
   public BloombergTimeSeriesIdentifiersUpdater(final HistoricalTimeSeriesMaster htsMaster, final ExternalIdResolver bbgIdentifierProvider) {
     ArgumentChecker.notNull(htsMaster, "htsMaster");
@@ -67,7 +69,7 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     _bbgIdentifierProvider = bbgIdentifierProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main processing.
    */
@@ -89,7 +91,7 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     updateIdentifiers(buidDocMap, buidToUpdated);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets all the current Bloomberg-based time-series.
    *
@@ -101,11 +103,12 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     return HistoricalTimeSeriesInfoSearchIterator.iterable(_htsMaster, request);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extracts the BUID from each document.
    *
-   * @param documents  the documents, not null
+   * @param documents
+   *          the documents, not null
    * @return the map of BIUD to unique identifier, not null
    */
   private Map<ExternalId, HistoricalTimeSeriesInfoDocument> extractBuids(final Iterable<HistoricalTimeSeriesInfoDocument> documents) {
@@ -122,12 +125,14 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     return buids;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Updates the identifiers.
    *
-   * @param buidDocMap  the map from BUID to document, not null
-   * @param buidToUpdated  the map from BUID to updated identifier, not null
+   * @param buidDocMap
+   *          the map from BUID to document, not null
+   * @param buidToUpdated
+   *          the map from BUID to updated identifier, not null
    */
   private void updateIdentifiers(
       final Map<ExternalId, HistoricalTimeSeriesInfoDocument> buidDocMap,
@@ -143,14 +148,14 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Main method to run the updater.
-   * This uses the updater configured by Spring.
+   * Main method to run the updater. This uses the updater configured by Spring.
    *
-   * @param args  not used
+   * @param args
+   *          not used
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     PlatformConfigUtils.configureSystemProperties();
     final BloombergTimeSeriesIdentifiersUpdater updater = loadUpdater();
     updater.run();

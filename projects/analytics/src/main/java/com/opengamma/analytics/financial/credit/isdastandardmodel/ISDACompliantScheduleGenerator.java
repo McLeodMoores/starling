@@ -24,8 +24,8 @@ public class ISDACompliantScheduleGenerator {
   private static final DayCount ACT365 = DayCounts.ACT_365;
 
   /**
-   * This mimics JpmcdsRiskyTimeLine from the ISDA model in c
-   * 
+   * This mimics JpmcdsRiskyTimeLine from the ISDA model in c.
+   *
    * @param startDate
    *          start date
    * @param endDate
@@ -85,7 +85,7 @@ public class ISDACompliantScheduleGenerator {
 
   /**
    * This calls getIntegrationNodesAsDates to get an array of dates then calculates the year fraction from today to those points using ACT/365.
-   * 
+   *
    * @param today
    *          the date to measure year-fractions from. Must NOT have today after startDate
    * @param startDate
@@ -112,7 +112,7 @@ public class ISDACompliantScheduleGenerator {
   /**
    * Truncate an sort (ascending) array of dates so the the interior values are strictly after startDate and strictly before endEnd, and startDate and endDate
    * becomes to first and last entries.
-   * 
+   *
    * @param startDate
    *          This will be the first value in the list
    * @param endDate
@@ -149,8 +149,8 @@ public class ISDACompliantScheduleGenerator {
   }
 
   /**
-   * Year fractions from a fixed date to a set of dates using ACT/365
-   * 
+   * Year fractions from a fixed date to a set of dates using ACT/365.
+   *
    * @param today
    *          the date to measure from
    * @param dates
@@ -162,8 +162,8 @@ public class ISDACompliantScheduleGenerator {
   }
 
   /**
-   * Year fractions from a fixed date to a set of dates using the specified day-count
-   * 
+   * Year fractions from a fixed date to a set of dates using the specified day-count.
+   *
    * @param today
    *          the date to measure from
    * @param dates

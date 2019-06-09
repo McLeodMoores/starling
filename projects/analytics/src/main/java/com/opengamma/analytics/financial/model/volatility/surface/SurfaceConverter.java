@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -18,7 +18,7 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public final class SurfaceConverter {
   /** The tolerance */
@@ -36,7 +36,8 @@ public final class SurfaceConverter {
   }
 
   /**
-   * Gets the static instance of this class
+   * Gets the static instance of this class.
+   *
    * @return The static instance
    */
   public static SurfaceConverter getInstance() {
@@ -51,7 +52,7 @@ public final class SurfaceConverter {
         final double x = tx[1];
         ArgumentChecker.isTrue(t >= 0, "Must have t >= 0.0");
 
-        //find the delta that gives the required log-moneyness (x) at time t
+        // find the delta that gives the required log-moneyness (x) at time t
         final double delta = getDeltaForLogMoneyness(x, deltaSurf, t);
         return deltaSurf.getZValue(t, delta);
       }
@@ -78,7 +79,7 @@ public final class SurfaceConverter {
         ArgumentChecker.isTrue(t >= 0, "Must have t >= 0.0");
         ArgumentChecker.isTrue(delta > 0 && delta < 1.0, "Delta not in range (0,1)");
 
-        //find the log-moneyness that gives the required Black delta at the given time
+        // find the log-moneyness that gives the required Black delta at the given time
         final double x = getlogMoneynessForDelta(delta, logMoneynessSurf, t);
         return logMoneynessSurf.getZValue(t, x);
       }
@@ -137,9 +138,12 @@ public final class SurfaceConverter {
   }
 
   /**
-   * Convert a volatility surface parameterised by moneyness (strike/forward)  to one parameterised by strike
-   * @param  strikeSurf volatility surface parameterised by  moneyness
-   * @param forwardCurve The forward Curve
+   * Convert a volatility surface parameterised by moneyness (strike/forward) to one parameterised by strike.
+   *
+   * @param moneynessSurf
+   *          volatility surface parameterised by moneyness
+   * @param forwardCurve
+   *          The forward Curve
    * @return volatility surface parameterised by strike
    */
   Surface<Double, Double, Double> moneynessToStrike(final Surface<Double, Double, Double> moneynessSurf, final ForwardCurve forwardCurve) {
@@ -163,9 +167,12 @@ public final class SurfaceConverter {
   }
 
   /**
-   * Convert a volatility surface parameterised by strike to one parameterised by moneyness (strike/forward)
-   * @param  strikeSurf volatility surface parameterised by strike
-   * @param forwardCurve The forward Curve
+   * Convert a volatility surface parameterised by strike to one parameterised by moneyness (strike/forward).
+   *
+   * @param strikeSurf
+   *          volatility surface parameterised by strike
+   * @param forwardCurve
+   *          The forward Curve
    * @return volatility surface parameterised by moneyness
    */
   Surface<Double, Double, Double> strikeToLogMoneyness(final Surface<Double, Double, Double> strikeSurf, final ForwardCurve forwardCurve) {
@@ -183,9 +190,12 @@ public final class SurfaceConverter {
   }
 
   /**
-   * Convert a volatility surface parameterised by strike to one parameterised by moneyness (strike/forward)
-   * @param  strikeSurf volatility surface parameterised by strike
-   * @param forwardCurve The forward Curve
+   * Convert a volatility surface parameterised by strike to one parameterised by moneyness (strike/forward).
+   *
+   * @param strikeSurf
+   *          volatility surface parameterised by strike
+   * @param forwardCurve
+   *          The forward Curve
    * @return volatility surface parameterised by moneyness
    */
   Surface<Double, Double, Double> strikeToMoneyness(final Surface<Double, Double, Double> strikeSurf, final ForwardCurve forwardCurve) {

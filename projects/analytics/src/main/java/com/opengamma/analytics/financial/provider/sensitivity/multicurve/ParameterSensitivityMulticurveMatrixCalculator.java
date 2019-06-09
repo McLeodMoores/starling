@@ -23,8 +23,8 @@ import com.opengamma.util.tuple.DoublesPair;
 public class ParameterSensitivityMulticurveMatrixCalculator extends ParameterSensitivityMulticurveMatrixAbstractCalculator {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param curveSensitivityCalculator
    *          The curve sensitivity calculator.
    */
@@ -35,7 +35,7 @@ public class ParameterSensitivityMulticurveMatrixCalculator extends ParameterSen
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities.
-   * 
+   *
    * @param sensitivity
    *          The point sensitivity.
    * @param multicurves

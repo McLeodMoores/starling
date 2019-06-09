@@ -17,8 +17,8 @@ public class DigitalOptionFunction {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   /**
-   * Compute <b>spot</b> price of cash-or-nothing option
-   * 
+   * Compute <b>spot</b> price of cash-or-nothing option.
+   *
    * @param spot
    *          The spot
    * @param strike
@@ -50,8 +50,8 @@ public class DigitalOptionFunction {
   }
 
   /**
-   * Compute delta of cash-or-nothing option
-   * 
+   * Compute delta of cash-or-nothing option.
+   *
    * @param spot
    *          The spot
    * @param strike
@@ -84,8 +84,8 @@ public class DigitalOptionFunction {
   }
 
   /**
-   * Compute gamma of cash-or-nothing option
-   * 
+   * Compute gamma of cash-or-nothing option.
+   *
    * @param spot
    *          The spot
    * @param strike
@@ -118,8 +118,8 @@ public class DigitalOptionFunction {
   }
 
   /**
-   * Compute theta price of cash-or-nothing option
-   * 
+   * Compute theta price of cash-or-nothing option.
+   *
    * @param spot
    *          The spot
    * @param strike
@@ -155,8 +155,8 @@ public class DigitalOptionFunction {
   }
 
   /**
-   * Compute driftless (forward) theta price of cash-or-nothing option
-   * 
+   * Compute driftless (forward) theta price of cash-or-nothing option.
+   *
    * @param forward
    *          The forward
    * @param strike
@@ -183,8 +183,8 @@ public class DigitalOptionFunction {
   }
 
   /**
-   * Compute vega price of cash-or-nothing option
-   * 
+   * Compute vega price of cash-or-nothing option.
+   *
    * @param spot
    *          The spot
    * @param strike

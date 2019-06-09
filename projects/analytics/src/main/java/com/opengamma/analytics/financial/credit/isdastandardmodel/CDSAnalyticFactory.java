@@ -55,7 +55,7 @@ public class CDSAnalyticFactory {
   private final DayCount _curveDayCount;
 
   /**
-   * Produce CDSs with the following default values:
+   * Produce CDSs with the following default values.
    * <P>
    * Step-in: T+1<br>
    * Cash-Settle: T+3 working days<br>
@@ -87,7 +87,7 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Produce CDSs with the following default values and a supplied recovery rate:
+   * Produce CDSs with the following default values and a supplied recovery rate.
    * <P>
    * Step-in: T+1<br>
    * Cash-Settle: T+3 working days<br>
@@ -99,7 +99,7 @@ public class CDSAnalyticFactory {
    * Calendar: weekend only<br>
    * Accrual day count: ACT/360<br>
    * Curve day count: ACT/365 (fixed)
-   * 
+   *
    * @param recoveryRate
    *          The recovery rate
    */
@@ -119,7 +119,7 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Produce CDSs with the following default values and a supplied coupon interval:
+   * Produce CDSs with the following default values and a supplied coupon interval.
    * <P>
    * Step-in: T+1<br>
    * Cash-Settle: T+3 working days<br>
@@ -131,7 +131,7 @@ public class CDSAnalyticFactory {
    * Calendar: weekend only<br>
    * Accrual day count: ACT/360<br>
    * Curve day count: ACT/365 (fixed)
-   * 
+   *
    * @param couponInterval
    *          The coupon interval
    */
@@ -152,7 +152,7 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Produce CDSs with the following default values and a supplied recovery rate and coupon interval:
+   * Produce CDSs with the following default values and a supplied recovery rate and coupon interval.
    * <P>
    * Step-in: T+1<br>
    * Cash-Settle: T+3 working days<br>
@@ -163,7 +163,7 @@ public class CDSAnalyticFactory {
    * Calendar: weekend only<br>
    * Accrual day count: ACT/360<br>
    * Curve day count: ACT/365 (fixed)
-   * 
+   *
    * @param recoveryRate
    *          The recovery rate
    * @param couponInterval
@@ -186,8 +186,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Copy constructor
-   * 
+   * Copy constructor.
+   *
    * @param other
    *          The factory to copy
    */
@@ -231,7 +231,7 @@ public class CDSAnalyticFactory {
 
   /**
    * The Step-in (Protection Effective Date or sometimes just Effective Date) is usually T+1. This is when protection (and risk) starts in terms of the model.
-   * 
+   *
    * @param stepIn
    *          Zero or more days (after trade day)
    * @return A new factory with the step-in days set.
@@ -246,7 +246,7 @@ public class CDSAnalyticFactory {
   /**
    * Valuation or Cash-settle Date. This is the date for which the present value (PV) of the CDS is calculated. It is usually three working dates after the
    * trade date.
-   * 
+   *
    * @param cashSettle
    *          Zero or more days (after trade day)
    * @return A new factory with the cash-settle days set.
@@ -258,8 +258,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Is the accrued premium paid in the event of a default (default value is true)
-   * 
+   * Is the accrued premium paid in the event of a default (default value is true).
+   *
    * @param payAcc
    *          Set to true to pay accrued on default
    * @return A new factory with the payAccOnDefault set
@@ -270,8 +270,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Set the coupon interval (default is 3M)
-   * 
+   * Set the coupon interval (default is 3M).
+   *
    * @param couponInterval
    *          The coupon interval
    * @return A new factory with the coupon interval set
@@ -283,8 +283,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * stubType Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE (default is FRONTSHORT) - <b>Note</b> in this code NONE is not allowed
-   * 
+   * stubType Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE (default is FRONTSHORT) - <b>Note</b> in this code NONE is not allowed.
+   *
    * @param stubType
    *          The stub type
    * @return A new factory with the stub-type interval set
@@ -297,7 +297,7 @@ public class CDSAnalyticFactory {
 
   /**
    * If protectStart = true, then protections starts at the beginning of the day, otherwise it is at the end.
-   * 
+   *
    * @param protectionStart
    *          Protected from start of day?
    * @return A new factory with protectStart set
@@ -309,8 +309,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Set the recovery rate (default is 40%)
-   * 
+   * Set the recovery rate (default is 40%).
+   *
    * @param recovery
    *          The recovery rate
    * @return A new factory with recovery rate set
@@ -323,7 +323,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Set how adjustments for non-business are days made. Default is following.
-   * 
+   *
    * @param busDay
    *          business-day adjustment convention
    * @return A new factory with business-day adjustment convention set
@@ -335,7 +335,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Set the calendar. Default is weekend-only
-   * 
+   *
    * @param calendar
    *          Calendar defining what is a non-business day
    * @return A new factory with calendar set
@@ -348,7 +348,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Set the day count used for accrual calculations (i.e. premium payments). Default is ACT/360
-   * 
+   *
    * @param accDCC
    *          Day count used for accrual
    * @return A new factory with accDCC set
@@ -359,8 +359,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Set the day count used on curve
-   * 
+   * Set the day count used on curve.
+   *
    * @param curveDCC
    *          Day count used on curve (NOTE ISDA uses ACT/365 (fixed) and it is not recommended to change this)
    * @return A new factory with curveDCC set
@@ -423,7 +423,7 @@ public class CDSAnalyticFactory {
    * Make a CDS with a maturity date the given period on from the next IMM date after the trade-date. The accrual start date will be the previous IMM date
    * (before the trade date), business-day adjusted. <b>Note</b> it payment interval is changed from the default of 3M, this will produce a (possibly incorrect)
    * non-standard first coupon.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param tenor
@@ -438,7 +438,7 @@ public class CDSAnalyticFactory {
    * Make a CDS with a maturity date the given period on from the next IMM date after the trade-date. The accrual start date will be the previous IMM date
    * (before the trade date). <b>Note</b> it payment interval is changed from the default of 3M, this will produce a (possibly incorrect) non-standard first
    * coupon.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param tenor
@@ -461,7 +461,7 @@ public class CDSAnalyticFactory {
    * Make a set of CDSs with a common trade date and maturities dates the given periods after the next IMM date (after the trade-date). The accrual start date
    * will be the previous IMM date (before the trade date), business-day adjusted. <b>Note</b> it payment interval is changed from the default of 3M, this will
    * produce a (possibly incorrect) non-standard first coupon.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param tenors
@@ -476,7 +476,7 @@ public class CDSAnalyticFactory {
    * Make a set of CDSs with a common trade date and maturities dates the given periods after the next IMM date (after the trade-date). The accrual start date
    * will be the previous IMM date (before the trade date). <b>Note</b> it payment interval is changed from the default of 3M, this will produce a (possibly
    * incorrect) non-standard first coupon.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param tenors
@@ -493,7 +493,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Make a set of CDSs with a common trade date and maturities dates the given periods after the next IMM date (after the trade-date).
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param accStartDate
@@ -513,8 +513,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Make a CDS by specifying key dates
-   * 
+   * Make a CDS by specifying key dates.
+   *
    * @param tradeDate
    *          The trade date
    * @param accStartDate
@@ -533,8 +533,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Make a CDS by specifying all dates
-   * 
+   * Make a CDS by specifying all dates.
+   *
    * @param tradeDate
    *          The trade date
    * @param stepinDate
@@ -559,8 +559,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Make a set of CDS by specifying key dates
-   * 
+   * Make a set of CDS by specifying key dates.
+   *
    * @param tradeDate
    *          The trade date
    * @param accStartDate
@@ -577,8 +577,8 @@ public class CDSAnalyticFactory {
   }
 
   /**
-   * Make a set of CDS by specifying all dates
-   * 
+   * Make a set of CDS by specifying all dates.
+   *
    * @param tradeDate
    *          The trade date
    * @param stepinDate
@@ -614,7 +614,7 @@ public class CDSAnalyticFactory {
   /**
    * A forward starting CDS starts on some date after today (the trade date). The stepin date and cash settlement date are taken from the forward start date (1
    * day and 3 working days by default)
-   * 
+   *
    * @param tradeDate
    *          The trade date (i.e. today)
    * @param forwardStartDate
@@ -634,7 +634,7 @@ public class CDSAnalyticFactory {
   /**
    * A forward starting CDS starts on some date after today (the trade date). The accrual start must be specified (would normally use this for T+1 accrual
    * atart). The stepin date and cash settlement date are taken from the forward start date (1 day and 3 working days by default)
-   * 
+   *
    * @param tradeDate
    *          The trade date (i.e. today)
    * @param forwardStartDate
@@ -657,7 +657,7 @@ public class CDSAnalyticFactory {
    * A forward starting CDS starts on some date after today (the trade date). The stepin date and cash settlement date are taken from the forward start date (1
    * day and 3 working days by default). The period is from the next IMM date after the forward-start-date, so for a trade-date of 13-Feb-2014, a
    * forward-start-date of 25-Mar-2014 and a tenor of 1Y, the maturity will be 20-Jun-2015.
-   * 
+   *
    * @param tradeDate
    *          The trade date (i.e. today)
    * @param forwardStartDate
@@ -700,7 +700,7 @@ public class CDSAnalyticFactory {
   /**
    * Make a CDS represented as a MultiCDSAnalytic instance. Note, this is mainly for testing, since if you want only a single CDS should use a method that
    * returns a {@link CDSAnalytic}
-   * 
+   *
    * @param tradeDate
    *          The trade day
    * @param maturityReferanceDate
@@ -721,7 +721,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Make a set of CDS represented as a MultiCDSAnalytic instance.
-   * 
+   *
    * @param tradeDate
    *          The trade day
    * @param accStartDate
@@ -744,7 +744,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Make a set of CDS represented as a MultiCDSAnalytic instance.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param stepinDate
@@ -774,7 +774,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Make a set of standard CDS represented as a MultiCDSAnalytic instance.
-   * 
+   *
    * @param tradeDate
    *          the trade date
    * @param tenors
@@ -788,7 +788,7 @@ public class CDSAnalyticFactory {
 
   /**
    * Make a set of standard CDS represented as a MultiCDSAnalytic instance.
-   * 
+   *
    * @param tradeDate
    *          the trade date
    * @param accStartDate
@@ -819,7 +819,7 @@ public class CDSAnalyticFactory {
    * Make a set of standard CDS represented as a MultiCDSAnalytic instance. The first CDS with have a tenor of firstTenor, while the last CDS will have a tenor
    * of lastTenor; the remaining CDS will consist of all the (multiple of 3 month) tenors between the first and last tenor, e.g. if firstTenor = 6M and
    * lastTenor = 5Y, there will be a total of 22 CDS with tenors of 6M, 9M, 1Y,....4Y9M, 5Y
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param firstTenor
@@ -846,7 +846,7 @@ public class CDSAnalyticFactory {
    * Make a set of standard CDS represented as a MultiCDSAnalytic instance. The maturities of the CDS are measured from the next IMM date (after the trade
    * date), and the first and last tenors are the firstIndex and lastIndex multiplied by the coupon interval (3 months), which the remaining tenors being
    * everything in between
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param firstIndex
@@ -869,7 +869,7 @@ public class CDSAnalyticFactory {
   /**
    * Make a set of standard CDS represented as a MultiCDSAnalytic instance. The maturities of the CDS are measured from the next IMM date (after the trade
    * date), and the tenors are the given matIndices multiplied by the coupon interval (3 months)
-   * 
+   *
    * @param tradeDate
    *          the trade date
    * @param matIndices
@@ -884,7 +884,7 @@ public class CDSAnalyticFactory {
   /**
    * Make a set of standard CDS represented as a MultiCDSAnalytic instance. The maturities of the CDS are measured from the next IMM date (after the trade
    * date), and the tenors are the given matIndices multiplied by the coupon interval (3 months)
-   * 
+   *
    * @param tradeDate
    *          the trade date
    * @param accStartDate

@@ -25,7 +25,7 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueCurveSensitivitySABRSwaptionCalculator
     extends InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> {
@@ -37,7 +37,7 @@ public final class PresentValueCurveSensitivitySABRSwaptionCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivitySABRSwaptionCalculator getInstance() {

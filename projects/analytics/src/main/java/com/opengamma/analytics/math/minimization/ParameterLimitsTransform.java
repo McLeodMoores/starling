@@ -13,7 +13,7 @@ package com.opengamma.analytics.math.minimization;
 public interface ParameterLimitsTransform {
   /** Types of the limits. */
   enum LimitType {
-    /** Greater than limit */
+    /** Greater than limit. */
     GREATER_THAN,
     /** Less than limit. */
     LESS_THAN

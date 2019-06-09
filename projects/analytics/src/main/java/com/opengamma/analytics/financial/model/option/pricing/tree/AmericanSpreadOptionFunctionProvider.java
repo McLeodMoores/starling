@@ -6,7 +6,7 @@
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 /**
- * {@link EuropeanSpreadOptionFunctionProvider} with early exercise feature
+ * {@link EuropeanSpreadOptionFunctionProvider} with early exercise feature.
  */
 public class AmericanSpreadOptionFunctionProvider extends OptionFunctionProvider2D {
 

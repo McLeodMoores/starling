@@ -12,9 +12,11 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This class contains all the relevant information to solve a 1D PDE on a finite difference grid - the (functional) coefficients that
- * describe the PDE; the initial condition; the boundary conditions; the free boundary (if any); and the grid.
- * @param <T> The type of PDE
+ * This class contains all the relevant information to solve a 1D PDE on a finite difference grid - the (functional) coefficients that describe the PDE; the
+ * initial condition; the boundary conditions; the free boundary (if any); and the grid.
+ *
+ * @param <T>
+ *          The type of PDE
  */
 public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
@@ -26,8 +28,8 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
   private final PDEGrid1D _grid;
 
   /**
-   * All the relevant information to solve a 1D PDE on a finite difference grid
-   * 
+   * All the relevant information to solve a 1D PDE on a finite difference grid.
+   *
    * @param coefficients
    *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
    * @param initialCondition
@@ -54,8 +56,8 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
   }
 
   /**
-   * All the relevant information to solve a 1D PDE on a finite difference grid
-   * 
+   * All the relevant information to solve a 1D PDE on a finite difference grid.
+   *
    * @param coefficients
    *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
    * @param initialCondition
@@ -87,8 +89,8 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
   }
 
   /**
-   * All the relevant information to solve a 1D PDE on a finite difference grid
-   * 
+   * All the relevant information to solve a 1D PDE on a finite difference grid.
+   *
    * @param coefficients
    *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
    * @param initialCondition
@@ -116,7 +118,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
   }
 
   /**
-   * All the relevant information to solve a 1D PDE on a finite difference grid
+   * All the relevant information to solve a 1D PDE on a finite difference grid.
    *
    * @param coefficients
    *          The description of the PDE $\mathcal{D}[V(t,x)]=0$
@@ -152,6 +154,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * Gets the coefficients.
+   *
    * @return the coefficients
    */
   public T getCoefficients() {
@@ -160,6 +163,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * Gets the initialCondition.
+   *
    * @return the initialCondition
    */
   public double[] getInitialCondition() {
@@ -168,6 +172,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * Gets the lowerBoundary.
+   *
    * @return the lowerBoundary
    */
   public BoundaryCondition getLowerBoundary() {
@@ -176,6 +181,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * Gets the upperBoundary.
+   *
    * @return the upperBoundary
    */
   public BoundaryCondition getUpperBoundary() {
@@ -184,6 +190,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * Gets the freeBoundary.
+   *
    * @return the freeBoundary
    */
   public Surface<Double, Double, Double> getFreeBoundary() {
@@ -192,6 +199,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
 
   /**
    * Gets the grid.
+   *
    * @return the grid
    */
   public PDEGrid1D getGrid() {
@@ -244,8 +252,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
       return false;
     }
     @SuppressWarnings("unchecked")
-    final
-    PDE1DDataBundle<T> other = (PDE1DDataBundle<T>) obj;
+    final PDE1DDataBundle<T> other = (PDE1DDataBundle<T>) obj;
     if (_coefficients == null) {
       if (other._coefficients != null) {
         return false;
@@ -328,6 +335,6 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
         "space grid not consistent with upper boundary level. Highest grid point at " + grid.getSpaceNode(n - 1) + " but upper boundary at "
             + upperBoundary.getLevel());
 
-    //TODO check that boundary condition is consistent with initial condition
+    // TODO check that boundary condition is consistent with initial condition
   }
 }

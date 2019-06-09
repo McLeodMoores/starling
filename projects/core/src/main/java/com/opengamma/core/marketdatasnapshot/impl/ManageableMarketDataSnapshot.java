@@ -58,7 +58,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   private String _name;
 
   /**
-   * The name of the view on which this snapshot was based
+   * The name of the view on which this snapshot was based.
    */
   @PropertyDefinition(overrideGet = true)
   private String _basisViewName;
@@ -67,37 +67,37 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   private ManageableUnstructuredMarketDataSnapshot _globalValues;
 
   /**
-   * The yield curves in this snapshot
+   * The yield curves in this snapshot.
    */
   @PropertyDefinition(overrideGet = true)
   private Map<YieldCurveKey, YieldCurveSnapshot> _yieldCurves;
 
   /**
-   * The yield curves in this snapshot
+   * The yield curves in this snapshot.
    */
   @PropertyDefinition(overrideGet = true)
   private Map<CurveKey, CurveSnapshot> _curves;
 
   /**
-   * The vol cubes in this snapshot
+   * The vol cubes in this snapshot.
    */
   @PropertyDefinition(overrideGet = true)
   private Map<VolatilityCubeKey, VolatilityCubeSnapshot> _volatilityCubes;
 
   /**
-   * The vol surfaces in this snapshot
+   * The vol surfaces in this snapshot.
    */
   @PropertyDefinition(overrideGet = true)
-  private Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> _volatilitySurfaces = Maps.newHashMap(); //Initialize in order to handle old format
+  private Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> _volatilitySurfaces = Maps.newHashMap(); // Initialize in order to handle old format
 
   /**
-   * The surfaces in this snapshot
+   * The surfaces in this snapshot.
    */
   @PropertyDefinition(overrideGet = true)
   private Map<SurfaceKey, SurfaceSnapshot> _surfaces;
 
   /**
-   * The valuation time of the snapshot
+   * The valuation time of the snapshot.
    */
   @PropertyDefinition(get = "manual")
   private Instant _valuationTime;
@@ -112,9 +112,12 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   /**
    * Creates a snapshot.
    *
-   * @param name the name of the snapshot
-   * @param globalValues the snapshot for the global scope
-   * @param yieldCurves the yield curves
+   * @param name
+   *          the name of the snapshot
+   * @param globalValues
+   *          the snapshot for the global scope
+   * @param yieldCurves
+   *          the yield curves
    */
   public ManageableMarketDataSnapshot(final String name, final UnstructuredMarketDataSnapshot globalValues,
       final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves) {
@@ -126,15 +129,20 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   /**
    * Creates a snapshot.
    *
-   * @param name the name of the snapshot
-   * @param globalValues the snapshot for the global scope
-   * @param yieldCurves the yield curves
-   * @param volatilitySurfaces the volatility surfaces
-   * @param volatilityCubes the volatility cubes
+   * @param name
+   *          the name of the snapshot
+   * @param globalValues
+   *          the snapshot for the global scope
+   * @param yieldCurves
+   *          the yield curves
+   * @param volatilitySurfaces
+   *          the volatility surfaces
+   * @param volatilityCubes
+   *          the volatility cubes
    */
   public ManageableMarketDataSnapshot(final String name, final UnstructuredMarketDataSnapshot globalValues,
-      final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves, final Map<VolatilitySurfaceKey,
-      VolatilitySurfaceSnapshot> volatilitySurfaces, final Map<VolatilityCubeKey, VolatilityCubeSnapshot> volatilityCubes) {
+      final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves, final Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> volatilitySurfaces,
+      final Map<VolatilityCubeKey, VolatilityCubeSnapshot> volatilityCubes) {
     _name = name;
     _globalValues = globalValues != null ? new ManageableUnstructuredMarketDataSnapshot(globalValues) : null;
     _yieldCurves = yieldCurves;
@@ -146,16 +154,22 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   /**
    * Creates a snapshot.
    *
-   * @param name the name of the snapshot
-   * @param globalValues the snapshot for the global scope
-   * @param yieldCurves the yield curves
-   * @param curves the curves
-   * @param volatilitySurfaces the volatility surfaces
-   * @param volatilityCubes the volatility cubes
+   * @param name
+   *          the name of the snapshot
+   * @param globalValues
+   *          the snapshot for the global scope
+   * @param yieldCurves
+   *          the yield curves
+   * @param curves
+   *          the curves
+   * @param volatilitySurfaces
+   *          the volatility surfaces
+   * @param volatilityCubes
+   *          the volatility cubes
    */
   public ManageableMarketDataSnapshot(final String name, final UnstructuredMarketDataSnapshot globalValues,
-      final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves, final Map<CurveKey, CurveSnapshot> curves, final Map<VolatilitySurfaceKey,
-      VolatilitySurfaceSnapshot> volatilitySurfaces, final Map<VolatilityCubeKey, VolatilityCubeSnapshot> volatilityCubes) {
+      final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves, final Map<CurveKey, CurveSnapshot> curves,
+      final Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> volatilitySurfaces, final Map<VolatilityCubeKey, VolatilityCubeSnapshot> volatilityCubes) {
     _name = name;
     _globalValues = globalValues != null ? new ManageableUnstructuredMarketDataSnapshot(globalValues) : null;
     _yieldCurves = yieldCurves;
@@ -167,13 +181,20 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   /**
    * Creates a snapshot.
    *
-   * @param name the name of the snapshot
-   * @param globalValues the snapshot for the global scope
-   * @param yieldCurves the yield curves
-   * @param curves the curves
-   * @param volatilitySurfaces the volatility surfaces
-   * @param volatilityCubes the volatility cubes
-   * @param surfaces the surfaces
+   * @param name
+   *          the name of the snapshot
+   * @param globalValues
+   *          the snapshot for the global scope
+   * @param yieldCurves
+   *          the yield curves
+   * @param curves
+   *          the curves
+   * @param volatilitySurfaces
+   *          the volatility surfaces
+   * @param volatilityCubes
+   *          the volatility cubes
+   * @param surfaces
+   *          the surfaces
    */
   public ManageableMarketDataSnapshot(final String name, final UnstructuredMarketDataSnapshot globalValues,
       final Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves, final Map<CurveKey, CurveSnapshot> curves,
@@ -205,13 +226,13 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   /**
    * Gets the valuation time of the snapshot.
-   * @return the valuation time of the snapshot, or null if
-   * no valuation time could be inferred from the snapshot
+   * 
+   * @return the valuation time of the snapshot, or null if no valuation time could be inferred from the snapshot
    */
   @Override
   public Instant getValuationTime() {
-    //[PLAT-1393] manual implementation provided for backwards compatibility.
-    //older versions took the valuation time from the yieldCurves
+    // [PLAT-1393] manual implementation provided for backwards compatibility.
+    // older versions took the valuation time from the yieldCurves
     if (_valuationTime != null) {
       return _valuationTime;
     }
@@ -309,7 +330,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name of the view on which this snapshot was based
+   * Gets the name of the view on which this snapshot was based.
    * @return the value of the property
    */
   @Override
@@ -318,7 +339,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   }
 
   /**
-   * Sets the name of the view on which this snapshot was based
+   * Sets the name of the view on which this snapshot was based.
    * @param basisViewName  the new value of the property
    */
   public void setBasisViewName(String basisViewName) {
@@ -361,7 +382,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the yield curves in this snapshot
+   * Gets the yield curves in this snapshot.
    * @return the value of the property
    */
   @Override
@@ -370,7 +391,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   }
 
   /**
-   * Sets the yield curves in this snapshot
+   * Sets the yield curves in this snapshot.
    * @param yieldCurves  the new value of the property
    */
   public void setYieldCurves(Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves) {
@@ -387,7 +408,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the yield curves in this snapshot
+   * Gets the yield curves in this snapshot.
    * @return the value of the property
    */
   @Override
@@ -396,7 +417,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   }
 
   /**
-   * Sets the yield curves in this snapshot
+   * Sets the yield curves in this snapshot.
    * @param curves  the new value of the property
    */
   public void setCurves(Map<CurveKey, CurveSnapshot> curves) {
@@ -413,7 +434,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the vol cubes in this snapshot
+   * Gets the vol cubes in this snapshot.
    * @return the value of the property
    */
   @Override
@@ -422,7 +443,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   }
 
   /**
-   * Sets the vol cubes in this snapshot
+   * Sets the vol cubes in this snapshot.
    * @param volatilityCubes  the new value of the property
    */
   public void setVolatilityCubes(Map<VolatilityCubeKey, VolatilityCubeSnapshot> volatilityCubes) {
@@ -439,7 +460,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the vol surfaces in this snapshot
+   * Gets the vol surfaces in this snapshot.
    * @return the value of the property
    */
   @Override
@@ -448,7 +469,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   }
 
   /**
-   * Sets the vol surfaces in this snapshot
+   * Sets the vol surfaces in this snapshot.
    * @param volatilitySurfaces  the new value of the property
    */
   public void setVolatilitySurfaces(Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> volatilitySurfaces) {
@@ -465,7 +486,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the surfaces in this snapshot
+   * Gets the surfaces in this snapshot.
    * @return the value of the property
    */
   @Override
@@ -474,7 +495,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
   }
 
   /**
-   * Sets the surfaces in this snapshot
+   * Sets the surfaces in this snapshot.
    * @param surfaces  the new value of the property
    */
   public void setSurfaces(Map<SurfaceKey, SurfaceSnapshot> surfaces) {
@@ -491,7 +512,7 @@ public class ManageableMarketDataSnapshot extends DirectBean implements Structur
 
   //-----------------------------------------------------------------------
   /**
-   * Sets the valuation time of the snapshot
+   * Sets the valuation time of the snapshot.
    * @param valuationTime  the new value of the property
    */
   public void setValuationTime(Instant valuationTime) {

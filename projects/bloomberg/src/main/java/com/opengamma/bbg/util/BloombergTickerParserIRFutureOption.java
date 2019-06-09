@@ -6,7 +6,6 @@
 
 package com.opengamma.bbg.util;
 
-
 import java.util.regex.Matcher;
 
 import com.opengamma.id.ExternalId;
@@ -32,24 +31,28 @@ public class BloombergTickerParserIRFutureOption extends BloombergTickerParserFu
   private String _type;
 
   /**
-   * Create a parser
-   * @param ticker a legal Bloomberg ticker, as string.
+   * Create a parser.
+   * 
+   * @param ticker
+   *          a legal Bloomberg ticker, as string.
    */
   public BloombergTickerParserIRFutureOption(final String ticker) {
     super(ticker);
   }
 
   /**
-   * Create a parser
-   * @param identifier a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme}
-   * of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
+   * Create a parser.
+   * 
+   * @param identifier
+   *          a legal Bloomberg ticker, with {@link com.opengamma.id.ExternalScheme} of {@link com.opengamma.core.id.ExternalSchemes#BLOOMBERG_TICKER}.
    */
   public BloombergTickerParserIRFutureOption(final ExternalId identifier) {
     super(identifier);
   }
 
   /**
-   * The type
+   * The type.
+   * 
    * @return the type
    */
   @Override

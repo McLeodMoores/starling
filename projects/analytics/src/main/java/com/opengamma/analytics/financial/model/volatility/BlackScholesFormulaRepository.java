@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Repository for Black-Scholes formulas, i.e., the price and the first and second order greeks When the formula involves ambiguous quantities, a reference
  * value (rather than NaN) is returned Note that the formulas are expressed in terms of interest rate (r) and cost of carry (b), then d_1 and d_2 are d_{1,2} =
- * \frac{\ln(S/X) + (b \pm \sigma^2 ) T}{\sigma \sqrt{T}}
+ * \frac{\ln(S/X) + (b \pm \sigma^2 ) T}{\sigma \sqrt{T}}.
  */
 public abstract class BlackScholesFormulaRepository {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -23,8 +23,8 @@ public abstract class BlackScholesFormulaRepository {
   private static final double LARGE = 1.0E13;
 
   /**
-   * The <b>spot</b> price
-   * 
+   * The <b>spot</b> price.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -118,8 +118,8 @@ public abstract class BlackScholesFormulaRepository {
   }
 
   /**
-   * The spot delta
-   * 
+   * The spot delta.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -249,8 +249,8 @@ public abstract class BlackScholesFormulaRepository {
   }
 
   /**
-   * The dual delta (first derivative of option price with respect to strike)
-   * 
+   * The dual delta (first derivative of option price with respect to strike).
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -333,7 +333,7 @@ public abstract class BlackScholesFormulaRepository {
    * The spot gamma, 2nd order sensitivity of the spot option value to the spot.
    * <p>
    * $\frac{\partial^2 FV}{\partial^2 f}$
-   * 
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -414,8 +414,8 @@ public abstract class BlackScholesFormulaRepository {
   }
 
   /**
-   * The dual gamma
-   * 
+   * The dual gamma.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -490,8 +490,8 @@ public abstract class BlackScholesFormulaRepository {
   }
 
   /**
-   * The cross gamma - the sensitity of the delta to the strike $\frac{\partial^2 V}{\partial f \partial K}$
-   * 
+   * The cross gamma - the sensitity of the delta to the strike $\frac{\partial^2 V}{\partial f \partial K}$.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -566,7 +566,7 @@ public abstract class BlackScholesFormulaRepository {
   }
 
   /**
-   * The theta, the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$
+   * The theta, the sensitivity of the present value to a change in time to maturity, $\-frac{\partial V}{\partial T}$.
    *
    * @param spot
    *          The spot value of the underlying
@@ -677,8 +677,8 @@ public abstract class BlackScholesFormulaRepository {
   }
 
   /**
-   * Charm, minus of second order derivative of option value, once spot and once time to maturity
-   * 
+   * Charm, minus of second order derivative of option value, once spot and once time to maturity.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -768,8 +768,8 @@ public abstract class BlackScholesFormulaRepository {
   }
 
   /**
-   * Dual charm, minus of second order derivative of option value, once strike and once time to maturity
-   * 
+   * Dual charm, minus of second order derivative of option value, once strike and once time to maturity.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -866,7 +866,7 @@ public abstract class BlackScholesFormulaRepository {
   /**
    * The spot vega of an option, i.e. the sensitivity of the option's spot price wrt the implied volatility (which is just the the spot vega divided by the the
    * numeraire)
-   * 
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -947,7 +947,7 @@ public abstract class BlackScholesFormulaRepository {
    * The vanna of an option, i.e. second order derivative of the option value, once to the underlying spot and once to volatility.
    * <p>
    * $\frac{\partial^2 FV}{\partial f \partial \sigma}$
-   * 
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -1033,7 +1033,7 @@ public abstract class BlackScholesFormulaRepository {
 
   /**
    * The dual vanna of an option, i.e. second order derivative of the option value, once to the strike and once to volatility.
-   * 
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -1114,7 +1114,7 @@ public abstract class BlackScholesFormulaRepository {
 
   /**
    * The vomma (aka volga) of an option, i.e. second order derivative of the option spot price with respect to the implied volatility.
-   * 
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -1204,7 +1204,7 @@ public abstract class BlackScholesFormulaRepository {
 
   /**
    * The vega bleed of an option, i.e. second order derivative of the option spot price, once to the volatility and once to the time.
-   * 
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -1297,8 +1297,8 @@ public abstract class BlackScholesFormulaRepository {
 
   /**
    * The rho, the derivative of the option value with respect to the risk free interest rate Note that costOfCarry = interestRate - dividend, which the
-   * derivative also acts on
-   * 
+   * derivative also acts on.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike
@@ -1374,8 +1374,8 @@ public abstract class BlackScholesFormulaRepository {
 
   /**
    * The carry rho, the derivative of the option value with respect to the cost of carry Note that costOfCarry = interestRate - dividend, which the derivative
-   * also acts on
-   * 
+   * also acts on.
+   *
    * @param spot
    *          The spot value of the underlying
    * @param strike

@@ -38,7 +38,7 @@ public class LegalEntityCombiningFilter implements LegalEntityFilter<LegalEntity
   private static final long serialVersionUID = 1L;
 
   /**
-   * The filters to use
+   * The filters to use.
    */
   @PropertyDefinition(validate = "notNull")
   private Set<LegalEntityFilter<LegalEntity>> _filtersToUse;
@@ -47,11 +47,12 @@ public class LegalEntityCombiningFilter implements LegalEntityFilter<LegalEntity
    * For the builder.
    */
   public LegalEntityCombiningFilter() {
-    setFiltersToUse(Collections.<LegalEntityFilter<LegalEntity>>emptySet());
+    setFiltersToUse(Collections.<LegalEntityFilter<LegalEntity>> emptySet());
   }
 
   /**
-   * @param filtersToUse The filters, not null
+   * @param filtersToUse
+   *          The filters, not null
    */
   public LegalEntityCombiningFilter(final Set<LegalEntityFilter<LegalEntity>> filtersToUse) {
     setFiltersToUse(filtersToUse);
@@ -139,7 +140,7 @@ public class LegalEntityCombiningFilter implements LegalEntityFilter<LegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the filters to use
+   * Gets the filters to use.
    * @return the value of the property, not null
    */
   public Set<LegalEntityFilter<LegalEntity>> getFiltersToUse() {
@@ -147,7 +148,7 @@ public class LegalEntityCombiningFilter implements LegalEntityFilter<LegalEntity
   }
 
   /**
-   * Sets the filters to use
+   * Sets the filters to use.
    * @param filtersToUse  the new value of the property, not null
    */
   public void setFiltersToUse(Set<LegalEntityFilter<LegalEntity>> filtersToUse) {

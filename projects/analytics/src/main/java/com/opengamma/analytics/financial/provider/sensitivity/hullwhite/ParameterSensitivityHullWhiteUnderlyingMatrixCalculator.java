@@ -30,8 +30,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 public class ParameterSensitivityHullWhiteUnderlyingMatrixCalculator extends ParameterSensitivityHullWhiteMatrixAbstractCalculator {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param curveSensitivityCalculator
    *          The curve sensitivity calculator.
    */

@@ -30,8 +30,8 @@ public class MonotonicityPreservingCubicSplineInterpolator extends PiecewisePoly
   private static final double SMALL = 1.e-14;
 
   /**
-   * Primary interpolation method should be passed
-   * 
+   * Primary interpolation method should be passed.
+   *
    * @param method
    *          PiecewisePolynomialInterpolator
    */
@@ -280,7 +280,7 @@ public class MonotonicityPreservingCubicSplineInterpolator extends PiecewisePoly
 
   /**
    * First derivatives are modified such that cubic interpolant has the same sign as linear interpolator
-   * 
+   *
    * @param yValues
    * @param intervals
    * @param slopes

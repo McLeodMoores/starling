@@ -13,15 +13,19 @@ package com.opengamma.analytics.financial.model.tree;
 public interface Lattice<T> {
 
   /**
-   * Gets the base data of the tree
+   * Gets the base data of the tree.
+   * 
    * @return The underlying data for the tree
    */
   T[][] getNodes();
 
   /**
-   * Get an individual node value
-   * @param step Time position in the tree
-   * @param node Position at a given time (step)
+   * Get an individual node value.
+   * 
+   * @param step
+   *          Time position in the tree
+   * @param node
+   *          Position at a given time (step)
    * @return an individual node value
    */
   T getNode(int step, int node);

@@ -51,8 +51,8 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
   private final double _spread;
 
   /**
-   * Constructor without start dates and end dates of fixing period
-   * 
+   * Constructor without start dates and end dates of fixing period.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -112,8 +112,8 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
   }
 
   /**
-   * Constructor with full details
-   * 
+   * Constructor with full details.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -175,8 +175,8 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
   }
 
   /**
-   * Construct a coupon without start dates and end dates of fixing period
-   * 
+   * Construct a coupon without start dates and end dates of fixing period.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -216,8 +216,8 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
   }
 
   /**
-   * Construct a coupon with full details
-   * 
+   * Construct a coupon with full details.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -262,8 +262,8 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
   }
 
   /**
-   * Construct a new coupon with the same detail except notional
-   * 
+   * Construct a new coupon with the same detail except notional.
+   *
    * @param notional
    *          The notional
    * @return The coupon
@@ -289,7 +289,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the index.
-   * 
+   *
    * @return the index
    */
   public IborIndex getIndex() {
@@ -298,7 +298,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the paymentAccrualFactors.
-   * 
+   *
    * @return the paymentAccrualFactors
    */
   public double[] getPaymentAccrualFactors() {
@@ -307,7 +307,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the weight.
-   * 
+   *
    * @return the weight
    */
   public double[][] getWeight() {
@@ -316,7 +316,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the fixingPeriodStartDates.
-   * 
+   *
    * @return the fixingPeriodStartDates
    */
   public ZonedDateTime[][] getFixingPeriodStartDates() {
@@ -325,7 +325,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the fixingPeriodEndDates.
-   * 
+   *
    * @return the fixingPeriodEndDates
    */
   public ZonedDateTime[][] getFixingPeriodEndDates() {
@@ -334,7 +334,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the fixingDates.
-   * 
+   *
    * @return the fixingDates
    */
   public ZonedDateTime[][] getFixingDates() {
@@ -343,7 +343,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the fixingPeriodAccrualFactor.
-   * 
+   *
    * @return the fixingPeriodAccrualFactor
    */
   public double[][] getFixingPeriodAccrualFactor() {
@@ -352,7 +352,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * Gets the spread.
-   * 
+   *
    * @return the spread
    */
   public double getSpread() {
@@ -498,7 +498,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Override
@@ -509,7 +509,7 @@ public class CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition extends
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Override

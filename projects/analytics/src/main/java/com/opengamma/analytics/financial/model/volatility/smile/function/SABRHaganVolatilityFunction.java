@@ -92,8 +92,8 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   }
 
   /**
-   * Standard Hagan formula for log-normal vol
-   * 
+   * Standard Hagan formula for log-normal vol.
+   *
    * @param option
    *          The option.
    * @param forward
@@ -170,8 +170,8 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   }
 
   /**
-   * Gets the volatility sensitivity to the SABr parameters
-   * 
+   * Gets the volatility sensitivity to the SABr parameters.
+   *
    * @param option
    *          The option.
    * @param forward
@@ -250,7 +250,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
   /**
    * Return the Black implied volatility in the SABR model and its derivatives.
-   * 
+   *
    * @param option
    *          The option.
    * @param forward
@@ -420,7 +420,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   /**
    * Computes the first and second order derivatives of the Black implied volatility in the SABR model. Around ATM, a first order expansion is used to due to
    * some 0/0-type indetermination. The second order derivative produced is poor around ATM.
-   * 
+   *
    * @param option
    *          The option.
    * @param forward
@@ -637,7 +637,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
 
   /**
    * computes the z/chi(z) term, and its derivatives wrt rho and z for all possible values of rho and z (i.e. the edge cases rho = +- 1 are handled).
-   * 
+   *
    * @param rho
    * @param z
    * @return values, derivative wrt rho, and derivative wrt z

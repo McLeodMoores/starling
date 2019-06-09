@@ -14,13 +14,13 @@ import com.opengamma.analytics.financial.model.volatility.surface.DriftSurface;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * data bundle for the SDE df = a(f,t)dt + b(f,t)dw
+ * data bundle for the SDE df = a(f,t)dt + b(f,t)dw.
  */
 public class GeneralNormalOptionDataBundle extends StandardOptionDataBundle {
   private final DriftSurface _drift;
 
   /**
-   * Creates a data bundle for the SDE df = a(f,t)dt + b(f,t)dw
+   * Creates a data bundle for the SDE df = a(f,t)dt + b(f,t)dw.
    *
    * @param discountCurve
    *          the discounting curve
@@ -47,7 +47,7 @@ public class GeneralNormalOptionDataBundle extends StandardOptionDataBundle {
 
   /**
    * Gets the drift field.
-   * 
+   *
    * @return the drift
    */
   public DriftSurface getDriftSurface() {
@@ -89,7 +89,7 @@ public class GeneralNormalOptionDataBundle extends StandardOptionDataBundle {
   // TODO finish this once we have the ability to multiply / divide surfaces by a constant amount
   /*
    * public static ForwardOptionDataBundle fromNormalSurfaces(final DriftSurface localDrift, final VolatilitySurface localVolatility, double f) {
-   * 
+   *
    * }
    */
 

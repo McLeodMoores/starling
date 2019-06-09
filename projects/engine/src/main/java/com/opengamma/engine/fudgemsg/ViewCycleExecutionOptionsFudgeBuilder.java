@@ -26,7 +26,7 @@ import com.opengamma.engine.view.execution.ViewCycleExecutionOptions;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Fudge message builder for {@link ViewCycleExecutionOptions}
+ * Fudge message builder for {@link ViewCycleExecutionOptions}.
  */
 @FudgeBuilderFor(ViewCycleExecutionOptions.class)
 public class ViewCycleExecutionOptionsFudgeBuilder implements FudgeBuilder<ViewCycleExecutionOptions> {
@@ -51,9 +51,9 @@ public class ViewCycleExecutionOptionsFudgeBuilder implements FudgeBuilder<ViewC
     serializer.addToMessageWithClassHeaders(msg, MARKET_DATA_SELECTOR, null, object.getMarketDataSelector());
     serializer.addToMessage(msg, RESOLVER_VERSION_CORRECTION, null, object.getResolverVersionCorrection());
     if (!object.getFunctionParameters().isEmpty()) {
-      MutableFudgeMsg parametersMsg = serializer.newMessage();
-      for (Map.Entry<DistinctMarketDataSelector, FunctionParameters> entry : object.getFunctionParameters().entrySet()) {
-        MutableFudgeMsg entryMsg = serializer.newMessage();
+      final MutableFudgeMsg parametersMsg = serializer.newMessage();
+      for (final Map.Entry<DistinctMarketDataSelector, FunctionParameters> entry : object.getFunctionParameters().entrySet()) {
+        final MutableFudgeMsg entryMsg = serializer.newMessage();
         serializer.addToMessageWithClassHeaders(entryMsg, SELECTOR, null, entry.getKey());
         serializer.addToMessageWithClassHeaders(entryMsg, FUNCTION_PARAMETERS, null, entry.getValue());
         serializer.addToMessage(parametersMsg, FUNCTION_PARAMETERS, null, entryMsg);
@@ -90,14 +90,14 @@ public class ViewCycleExecutionOptionsFudgeBuilder implements FudgeBuilder<ViewC
     }
     field = msg.getByName(FUNCTION_PARAMETERS);
     if (field != null) {
-      Map<DistinctMarketDataSelector, FunctionParameters> paramMap = Maps.newHashMap();
-      FudgeMsg paramsMsg = (FudgeMsg) field.getValue();
-      for (FudgeField paramsField : paramsMsg) {
-        FudgeMsg paramMsg = (FudgeMsg) paramsField.getValue();
-        DistinctMarketDataSelector selector = deserializer.fieldValueToObject(DistinctMarketDataSelector.class,
-                                                                              paramMsg.getByName(SELECTOR));
-        FunctionParameters params = deserializer.fieldValueToObject(FunctionParameters.class,
-                                                                    paramMsg.getByName(FUNCTION_PARAMETERS));
+      final Map<DistinctMarketDataSelector, FunctionParameters> paramMap = Maps.newHashMap();
+      final FudgeMsg paramsMsg = (FudgeMsg) field.getValue();
+      for (final FudgeField paramsField : paramsMsg) {
+        final FudgeMsg paramMsg = (FudgeMsg) paramsField.getValue();
+        final DistinctMarketDataSelector selector = deserializer.fieldValueToObject(DistinctMarketDataSelector.class,
+            paramMsg.getByName(SELECTOR));
+        final FunctionParameters params = deserializer.fieldValueToObject(FunctionParameters.class,
+            paramMsg.getByName(FUNCTION_PARAMETERS));
         paramMap.put(selector, params);
       }
       builder.setFunctionParameters(paramMap);

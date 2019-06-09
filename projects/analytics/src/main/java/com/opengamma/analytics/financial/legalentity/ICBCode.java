@@ -28,9 +28,7 @@ import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class representing an Industry Classification Benchmark (ICB).
- * ICB codes are four-digit numbers used to classify the industry of a
- * company.
+ * Class representing an Industry Classification Benchmark (ICB). ICB codes are four-digit numbers used to classify the industry of a company.
  * <p>
  * The code represents:
  * <ul>
@@ -64,7 +62,9 @@ public final class ICBCode implements ImmutableBean, Serializable {
 
   /**
    * Constructs an ICB code from an integer.
-   * @param code The code, greater than 1000 or less than 10000
+   *
+   * @param code
+   *          The code, greater than 1000 or less than 10000
    * @return The ICB code
    */
   public static ICBCode of(final int code) {
@@ -75,10 +75,13 @@ public final class ICBCode implements ImmutableBean, Serializable {
   }
 
   /**
-   * Constructs an ICB code from a string
-   * @param code The code, not null
+   * Constructs an ICB code from a string.
+   *
+   * @param code
+   *          The code, not null
    * @return The ICB code
-   * @throws IllegalArgumentException If the code is not a four-digit number
+   * @throws IllegalArgumentException
+   *           If the code is not a four-digit number
    */
   public static ICBCode of(final String code) {
     ArgumentChecker.notNull(code, "code");
@@ -89,7 +92,8 @@ public final class ICBCode implements ImmutableBean, Serializable {
   }
 
   /**
-   * @param code The code, not null
+   * @param code
+   *          The code, not null
    */
   @ImmutableConstructor
   private ICBCode(final String code) {
@@ -99,6 +103,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
 
   /**
    * Gets the name of this classification type.
+   *
    * @return The name
    */
   public String getClassificationName() {
@@ -106,7 +111,8 @@ public final class ICBCode implements ImmutableBean, Serializable {
   }
 
   /**
-   * Gets the ICB code
+   * Gets the ICB code.
+   *
    * @return The ICB code
    */
   public String getCode() {

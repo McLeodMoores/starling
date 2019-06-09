@@ -21,8 +21,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Definition of a generic Index Credit Default Swap contract
- * 
+ * Definition of a generic Index Credit Default Swap contract.
+ *
  * @deprecated this will be deleted
  */
 @Deprecated

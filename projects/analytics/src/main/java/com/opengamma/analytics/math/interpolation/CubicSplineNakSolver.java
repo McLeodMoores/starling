@@ -11,7 +11,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Solves cubic spline problem with Not-A-Knot endpoint conditions, where the third derivative at the endpoints is the same as that of their adjacent points
+ * Solves cubic spline problem with Not-A-Knot endpoint conditions, where the third derivative at the endpoints is the same as that of their adjacent points.
  */
 public class CubicSplineNakSolver extends CubicSplineSolver {
 
@@ -131,7 +131,7 @@ public class CubicSplineNakSolver extends CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * 
+   *
    * @param yValues
    *          Y Values of data
    * @param intervals
@@ -173,7 +173,7 @@ public class CubicSplineNakSolver extends CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * 
+   *
    * @param intervals
    *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return Matrix A

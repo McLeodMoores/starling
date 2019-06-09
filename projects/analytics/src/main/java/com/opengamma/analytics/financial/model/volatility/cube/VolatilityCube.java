@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.cube;
@@ -20,15 +20,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * 
+ *
  */
 public class VolatilityCube implements VolatilityModel<Triple<Double, Double, Double>> {
   private final Cube<Double, Double, Double, Double> _cube;
-  /** x-axis */
+  /** x-axis. */
   public static final Axis EXPIRY_AXIS = Axis.X; // TODO Review
-  /** y-axis */
+  /** y-axis. */
   public static final Axis STRIKE_AXIS = Axis.Y;
-  /** z-axis */
+  /** z-axis . */
   public static final Axis MATURITY_AXIS = Axis.Z;
 
   public VolatilityCube(final Cube<Double, Double, Double, Double> cube) {
@@ -43,12 +43,15 @@ public class VolatilityCube implements VolatilityModel<Triple<Double, Double, Do
   }
 
   /**
-   * Return a volatility for the expiry, strike, maturity triple provided.
-   * Interpolation/extrapolation behaviour depends on underlying cube
-   * @param t time to maturity
-   * @param k strike
-   * @param m maturity  //TODO review it !
-   * @return The Black (implied) volatility  //TODO review it !
+   * Return a volatility for the expiry, strike, maturity triple provided. Interpolation/extrapolation behaviour depends on underlying cube
+   * 
+   * @param t
+   *          time to maturity
+   * @param k
+   *          strike
+   * @param m
+   *          maturity //TODO review it !
+   * @return The Black (implied) volatility //TODO review it !
    */
   public double getVolatility(final double t, final double k, final double m) {
     final Triple<Double, Double, Double> temp = Triple.of(t, k, m);

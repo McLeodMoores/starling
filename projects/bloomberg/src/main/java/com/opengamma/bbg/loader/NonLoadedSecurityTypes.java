@@ -11,8 +11,8 @@ import com.google.common.collect.ImmutableSet;
 import com.opengamma.bbg.BloombergConstants;
 
 /**
- * Security type mappings for types which cannot be loaded, either because no loader has been written or because they
- * cannot or do not need to be represented as a security in the security master.
+ * Security type mappings for types which cannot be loaded, either because no loader has been written or because they cannot or do not need to be represented as
+ * a security in the security master.
  */
 public final class NonLoadedSecurityTypes {
 
@@ -27,7 +27,7 @@ public final class NonLoadedSecurityTypes {
   private static final String BLOOMBERG_SWAP_TYPE = "SWAP";
   private static final String BLOOMBERG_ONSHORE_SWAP_TYPE = "ONSHORE SWAP";
   /**
-   * The valid Bloomberg security types for swaps
+   * The valid Bloomberg security types for swaps.
    */
   public static final Set<String> VALID_SWAP_SECURITY_TYPES = ImmutableSet.of(
       BLOOMBERG_SWAP_TYPE,
@@ -38,7 +38,7 @@ public final class NonLoadedSecurityTypes {
       BloombergConstants.BLOOMBERG_NON_DELIVERABLE_IRS_SWAP_TYPE,
       BloombergConstants.BLOOMBERG_IMM_SWAP_TYPE);
   /**
-   * The valid Bloomberg security types for basis swaps
+   * The valid Bloomberg security types for basis swaps.
    */
   public static final Set<String> VALID_BASIS_SWAP_SECURITY_TYPES = ImmutableSet.of(
       BLOOMBERG_BASIS_SWAP_TYPE);
@@ -46,7 +46,7 @@ public final class NonLoadedSecurityTypes {
   // FRAs
   private static final String BLOOMBERG_FRA_TYPE = "FRA";
   /**
-   * The valid Bloomberg security types for FRAs
+   * The valid Bloomberg security types for FRAs.
    */
   public static final Set<String> VALID_FRA_SECURITY_TYPES = ImmutableSet.of(
       BLOOMBERG_FRA_TYPE);
@@ -55,7 +55,7 @@ public final class NonLoadedSecurityTypes {
   private static final String BLOOMBERG_OPTION_VOLATILITY_TYPE = "OPTION VOLATILITY";
   private static final String BLOOMBERG_SWAPTION_VOLATILITY_TYPE = "SWAPTION VOLATILITY";
   /**
-   * The valid Bloomberg security types where quotes are provided
+   * The valid Bloomberg security types where quotes are provided.
    */
   public static final Set<String> VALID_VOLATILITY_QUOTE_TYPES = ImmutableSet.of(
       BLOOMBERG_OPTION_VOLATILITY_TYPE,
@@ -78,7 +78,7 @@ public final class NonLoadedSecurityTypes {
   private static final String BLOOMBERG_CDS_TYPE = "CREDIT DEFAULT SWAP";
 
   /**
-   * The valid Bloomberg security types for spot rates
+   * The valid Bloomberg security types for spot rates.
    */
   public static final Set<String> VALID_SPOT_RATE_TYPES = ImmutableSet.of(
       BLOOMBERG_PHYSICAL_COMMODITY_SPOT_TYPE,
@@ -86,7 +86,7 @@ public final class NonLoadedSecurityTypes {
       BLOOMBERG_CROSS_TYPE,
       BLOOMBERG_CD);
   /**
-   * The valid Bloomberg security types for rates
+   * The valid Bloomberg security types for rates.
    */
   public static final Set<String> VALID_RATE_TYPES = ImmutableSet.of(
       BLOOMBERG_DEPOSIT_TYPE,
@@ -94,7 +94,7 @@ public final class NonLoadedSecurityTypes {
 
   // Equity Indices
   /**
-   * The valid Bloomberg security types for equity indices
+   * The valid Bloomberg security types for equity indices.
    */
   public static final Set<String> VALID_EQUITY_INDEX_SECURITY_TYPES = ImmutableSet.of(
       BloombergConstants.BLOOMBERG_EQUITY_INDEX_TYPE);
@@ -102,7 +102,7 @@ public final class NonLoadedSecurityTypes {
   // Forward Cross
   private static final String BLOOMBERG_FORWARD_CROSS_TYPE = "FORWARD CROSS";
   /**
-   * The valid Bloomberg security types for forward cross products
+   * The valid Bloomberg security types for forward cross products.
    */
   public static final Set<String> VALID_FORWARD_CROSS_SECURITY_TYPES = ImmutableSet.of(
       BLOOMBERG_FORWARD_CROSS_TYPE);
@@ -110,20 +110,20 @@ public final class NonLoadedSecurityTypes {
   // Bills
   private static final String BLOOMBERG_BANK_BILL_TYPE = "BANK BILL";
   /**
-   * The valid Bloomberg security types for bills
+   * The valid Bloomberg security types for bills.
    */
   public static final Set<String> VALID_BILL_TYPES = ImmutableSet.of(BLOOMBERG_BANK_BILL_TYPE);
 
   /**
-   * The valid Bloomberg security types for FX forwards
+   * The valid Bloomberg security types for FX forwards.
    */
   public static final Set<String> VALID_FX_FORWARD_TYPES = ImmutableSet.of(BLOOMBERG_FX_FORWARD_TYPE, BLOOMBERG_FX_ONSHORE_FORWARD_TYPE, BLOOMBERG_FX_NDF);
 
   /**
-   * The valid Bloomberg security types for CDS
+   * The valid Bloomberg security types for CDS.
    */
   public static final Set<String> VALID_CDS_TYPES = ImmutableSet.of(BLOOMBERG_CDS_TYPE);
-  
+
   /**
    * The valid Bloomberg security types for inflation swaps.
    */

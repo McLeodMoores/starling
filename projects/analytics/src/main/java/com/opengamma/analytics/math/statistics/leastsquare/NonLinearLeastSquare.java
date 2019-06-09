@@ -57,8 +57,8 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available
-   * 
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available.
+   *
    * @param x
    *          Set of measurement points
    * @param y
@@ -82,7 +82,7 @@ public class NonLinearLeastSquare {
 
   /**
    * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available but a measurement error is.
-   * 
+   *
    * @param x
    *          Set of measurement points
    * @param y
@@ -111,7 +111,7 @@ public class NonLinearLeastSquare {
 
   /**
    * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity is not available but an array of measurements errors is.
-   * 
+   *
    * @param x
    *          Set of measurement points
    * @param y
@@ -151,8 +151,8 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity
-   * 
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity.
+   *
    * @param x
    *          Set of measurement points
    * @param y
@@ -179,8 +179,8 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and a single measurement error are available
-   * 
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and a single measurement error are available.
+   *
    * @param x
    *          Set of measurement points
    * @param y
@@ -209,8 +209,8 @@ public class NonLinearLeastSquare {
   }
 
   /**
-   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and measurement errors are available
-   * 
+   * Use this when the model is in the ParameterizedFunction form and analytic parameter sensitivity and measurement errors are available.
+   *
    * @param x
    *          Set of measurement points
    * @param y
@@ -270,7 +270,7 @@ public class NonLinearLeastSquare {
   /**
    * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
    * the measurement points are already known to the function), and analytic parameter sensitivity is not available
-   * 
+   *
    * @param observedValues
    *          Set of measurement values
    * @param func
@@ -288,7 +288,7 @@ public class NonLinearLeastSquare {
   /**
    * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
    * the measurement points are already known to the function), and analytic parameter sensitivity is not available
-   * 
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -308,7 +308,7 @@ public class NonLinearLeastSquare {
   /**
    * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
    * the measurement points are already known to the function), and analytic parameter sensitivity is not available
-   * 
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -331,7 +331,7 @@ public class NonLinearLeastSquare {
   /**
    * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
    * the measurement points are already known to the function), and analytic parameter sensitivity is available
-   * 
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -352,7 +352,7 @@ public class NonLinearLeastSquare {
   /**
    * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
    * the measurement points are already known to the function), and analytic parameter sensitivity is available
-   * 
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -376,7 +376,7 @@ public class NonLinearLeastSquare {
   /**
    * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
    * the measurement points are already known to the function), and analytic parameter sensitivity is available
-   * 
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -597,7 +597,7 @@ public class NonLinearLeastSquare {
   /**
    *
    * the inverse-Jacobian where the i-j entry is the sensitivity of the ith (fitted) parameter (a_i) to the jth data point (y_j).
-   * 
+   *
    * @param sigma
    *          Set of measurement errors
    * @param func

@@ -17,7 +17,7 @@ public abstract class ForwardSensitivity {
   private final double _value;
 
   /**
-   * Constructor
+   * Constructor.
    *
    * @param startTime
    *          The start time

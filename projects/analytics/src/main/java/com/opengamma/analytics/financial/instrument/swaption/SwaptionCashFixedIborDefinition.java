@@ -165,7 +165,7 @@ public final class SwaptionCashFixedIborDefinition implements InstrumentDefiniti
   }
 
   /**
-   * Gets the call/put flag
+   * Gets the call/put flag.
    *
    * @return True if the swaption is a call
    */

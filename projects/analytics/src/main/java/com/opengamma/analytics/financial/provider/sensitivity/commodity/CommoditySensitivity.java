@@ -45,7 +45,7 @@ public class CommoditySensitivity {
 
   /**
    * Constructor from a yield discounting map, a forward map and a price index curve of sensitivity. The maps are used directly.
-   * 
+   *
    * @param sensitivityYieldDiscounting
    *          The map.
    * @param sensitivityForward
@@ -61,7 +61,7 @@ public class CommoditySensitivity {
 
   /**
    * Constructor from a multicurveSensitivity and a sensitivityPriceCurve. The maps are used directly.
-   * 
+   *
    * @param multicurveSensitivity
    *          The multicurveSensitivity.
    * @param sensitivityCommodityForwardCurve
@@ -78,7 +78,7 @@ public class CommoditySensitivity {
 
   /**
    * Constructor from a yield discounting map of sensitivity. The maps are used directly.
-   * 
+   *
    * @param sensitivityYieldDiscounting
    *          The map.
    * @param sensitivityForward
@@ -98,7 +98,7 @@ public class CommoditySensitivity {
 
   /**
    * Constructor from a yield discounting map of sensitivity. The map is used directly.
-   * 
+   *
    * @param sensitivityYieldDiscounting
    *          The map.
    * @return The sensitivity.
@@ -110,7 +110,7 @@ public class CommoditySensitivity {
 
   /**
    * Constructor from a yield discounting map and a price map. The maps are used directly.
-   * 
+   *
    * @param sensitivityYieldDiscounting
    *          The map.
    * @param sensitivityCommodityForwardCurve
@@ -126,7 +126,7 @@ public class CommoditySensitivity {
 
   /**
    * Constructor from a yield discounting map of sensitivity. The map is used directly.
-   * 
+   *
    * @param sensitivityCommodityForwardCurve
    *          The map.
    * @return The sensitivity.
@@ -139,7 +139,7 @@ public class CommoditySensitivity {
 
   /**
    * Gets the MulticurveSensitivity.
-   * 
+   *
    * @return The sensitivity map
    */
   public MulticurveSensitivity getMulticurveSensitivity() {
@@ -148,7 +148,7 @@ public class CommoditySensitivity {
 
   /**
    * Gets the discounting curve sensitivities.
-   * 
+   *
    * @return The sensitivity map
    */
   public Map<String, List<DoublesPair>> getYieldDiscountingSensitivities() {
@@ -157,7 +157,7 @@ public class CommoditySensitivity {
 
   /**
    * Gets the forward curve sensitivity map.
-   * 
+   *
    * @return The sensitivity map
    */
   public Map<String, List<ForwardSensitivity>> getForwardSensitivities() {
@@ -166,7 +166,7 @@ public class CommoditySensitivity {
 
   /**
    * Gets the commodity forward curve sensitivity map.
-   * 
+   *
    * @return The sensitivity map wrapped in an unmodifiable map
    */
   public Map<String, List<DoublesPair>> getCommodityForwardCurveSensitivities() {
@@ -175,7 +175,7 @@ public class CommoditySensitivity {
 
   /**
    * Create a copy of the sensitivity and add a given sensitivity to it.
-   * 
+   *
    * @param other
    *          The sensitivity to add.
    * @return The total sensitivity.
@@ -190,7 +190,7 @@ public class CommoditySensitivity {
 
   /**
    * Create a new sensitivity object containing the original sensitivity multiplied by a common factor.
-   * 
+   *
    * @param factor
    *          The multiplicative factor.
    * @return The multiplied sensitivity.
@@ -203,7 +203,7 @@ public class CommoditySensitivity {
 
   /**
    * Return a new sensitivity by sorting the times and adding the values at duplicated times.
-   * 
+   *
    * @return The cleaned sensitivity.
    */
   public CommoditySensitivity cleaned() {
@@ -213,8 +213,8 @@ public class CommoditySensitivity {
   }
 
   /**
-   * Gets the multicurve sensitivities
-   * 
+   * Gets the multicurve sensitivities.
+   *
    * @return The multicurve sensitivities
    */
   public MulticurveSensitivity getMulticurveSensitivities() {

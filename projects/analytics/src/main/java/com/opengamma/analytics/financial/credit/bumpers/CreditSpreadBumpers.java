@@ -11,8 +11,8 @@ import com.opengamma.OpenGammaRuntimeException;
 
 // CSOFF
 /**
- * Class containing utilities for bumping credit spread term structures by user defined methods and amounts
- * 
+ * Class containing utilities for bumping credit spread term structures by user defined methods and amounts.
+ *
  * @deprecated this will be deleted
  */
 @Deprecated

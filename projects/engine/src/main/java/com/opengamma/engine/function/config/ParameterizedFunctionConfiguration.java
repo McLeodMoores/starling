@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Parameterized function configuration representation
+ * Parameterized function configuration representation.
  */
 @BeanDefinition
 public class ParameterizedFunctionConfiguration extends StaticFunctionConfiguration {
@@ -35,10 +35,12 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
   private final List<String> _parameter = Lists.newArrayList();
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param definitionClassName the definition class name, not null.
-   * @param parameter the list of parameters, not null.
+   * @param definitionClassName
+   *          the definition class name, not null.
+   * @param parameter
+   *          the list of parameters, not null.
    */
   public ParameterizedFunctionConfiguration(final String definitionClassName, final Collection<String> parameter) {
     super(definitionClassName);
@@ -47,7 +49,7 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
   }
 
   /**
-   * Constructor for builders
+   * Constructor for builders.
    */
   ParameterizedFunctionConfiguration() {
   }
@@ -74,7 +76,7 @@ public class ParameterizedFunctionConfiguration extends StaticFunctionConfigurat
         }
       }
       // Equal? Put a breakpoint here; we don't really want this to be happening.
-      //assert false;
+      // assert false;
       return 0;
     } else if (other instanceof StaticFunctionConfiguration) {
       // Static goes first

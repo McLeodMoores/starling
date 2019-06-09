@@ -211,7 +211,7 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
   private ComputationTargetResolver _computationTargetResolver;
 
   /**
-   * The external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * The external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity.
    */
   @PropertyDefinition
   private String _externalSchemes;
@@ -983,7 +983,7 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * Gets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity.
    * @return the value of the property
    */
   public String getExternalSchemes() {
@@ -991,7 +991,7 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity
+   * Sets the external Scheme configuration e.g BLOOMBERG_TICKER:Bloomberg Ticker,BLOOMBERG_TCM:Bloomberg Ticker/Coupon/Maturity.
    * @param externalSchemes  the new value of the property
    */
   public void setExternalSchemes(String externalSchemes) {

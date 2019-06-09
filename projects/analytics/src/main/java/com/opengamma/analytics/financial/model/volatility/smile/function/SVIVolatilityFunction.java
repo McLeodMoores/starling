@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.lang.annotation.ExternalFunction;
 
 /**
- * Gatheral's Stochastic Volatility Inspired (SVI) model
+ * Gatheral's Stochastic Volatility Inspired (SVI) model.
  */
 public class SVIVolatilityFunction extends VolatilityFunctionProvider<SVIFormulaData> {
 

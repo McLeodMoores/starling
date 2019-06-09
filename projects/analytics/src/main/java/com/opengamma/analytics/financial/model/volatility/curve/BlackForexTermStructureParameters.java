@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.curve;
@@ -23,7 +23,9 @@ public class BlackForexTermStructureParameters implements VolatilityModel<Double
 
   /**
    * Constructor from a curve.
-   * @param volatility The term structure of implied volatility. Not null.
+   * 
+   * @param volatility
+   *          The term structure of implied volatility. Not null.
    */
   public BlackForexTermStructureParameters(final DoublesCurve volatility) {
     ArgumentChecker.notNull(volatility, "Volatility");
@@ -32,6 +34,7 @@ public class BlackForexTermStructureParameters implements VolatilityModel<Double
 
   /**
    * Returns the volatility term structure curve.
+   * 
    * @return The curve.
    */
   public DoublesCurve getVolatilityCurve() {
@@ -39,8 +42,10 @@ public class BlackForexTermStructureParameters implements VolatilityModel<Double
   }
 
   /**
-   * Returns the time sensitivity of the volatility
-   * @param t The time to expiration.
+   * Returns the time sensitivity of the volatility.
+   * 
+   * @param t
+   *          The time to expiration.
    * @return The volatility.
    */
   public Double[] getVolatilityTimeSensitivity(final double t) {
@@ -49,7 +54,9 @@ public class BlackForexTermStructureParameters implements VolatilityModel<Double
 
   /**
    * Returns the implied volatility for a given expiration.
-   * @param time The time to expiration, not null
+   * 
+   * @param time
+   *          The time to expiration, not null
    * @return The volatility.
    */
   @Override

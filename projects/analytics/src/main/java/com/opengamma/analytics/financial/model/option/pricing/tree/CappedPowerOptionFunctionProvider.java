@@ -77,8 +77,8 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
   }
 
   /**
-   * Access power
-   * 
+   * Access power.
+   *
    * @return _power
    */
   public double getPower() {
@@ -86,8 +86,8 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
   }
 
   /**
-   * Access cap
-   * 
+   * Access cap.
+   *
    * @return _cap
    */
   public double getCap() {

@@ -27,7 +27,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
 /**
- * Little util for parsing swaption files
+ * Little util for parsing swaption files.
  */
 public class BloombergSwaptionFileLoader {
 
@@ -47,7 +47,7 @@ public class BloombergSwaptionFileLoader {
 
   /**
    * Little util to parse swaption tickers into a csv for further analysis.
-   * 
+   *
    * @param args
    *          command line params
    */

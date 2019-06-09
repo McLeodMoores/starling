@@ -14,7 +14,7 @@ import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpre
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderInterface;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class ParSpreadMarketQuoteHullWhiteCalculator extends InstrumentDerivativeVisitorDelegate<HullWhiteOneFactorProviderInterface, Double> {
 
@@ -25,7 +25,7 @@ public final class ParSpreadMarketQuoteHullWhiteCalculator extends InstrumentDer
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteHullWhiteCalculator getInstance() {
@@ -49,7 +49,7 @@ public final class ParSpreadMarketQuoteHullWhiteCalculator extends InstrumentDer
 
   /**
    * For InterestRateFutures the ParSpread is the spread to be added to the reference price to obtain a present value of zero.
-   * 
+   *
    * @param future
    *          The futures.
    * @param multicurves

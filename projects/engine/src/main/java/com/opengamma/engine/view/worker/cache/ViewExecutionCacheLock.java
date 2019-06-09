@@ -56,7 +56,8 @@ public final class ViewExecutionCacheLock {
   /**
    * Acquires the broad lock for the view compilation.
    *
-   * @param cacheKey the broad key that summarizes the view definition and market data providers, not null
+   * @param cacheKey
+   *          the broad key that summarizes the view definition and market data providers, not null
    * @return the lock instance, not null
    */
   public Lock get(final ViewExecutionCacheKey cacheKey) {
@@ -64,11 +65,14 @@ public final class ViewExecutionCacheLock {
   }
 
   /**
-   * Acquires the broad and finer grained locks for a specific compilation of a view
+   * Acquires the broad and finer grained locks for a specific compilation of a view.
    *
-   * @param cacheKey the broad key that summarizes the view definition and market data providers, not null
-   * @param valuationTime an indicative valuation time for any compilation, not null
-   * @param resolverVersionCorrection the target resolver version/correction timestamp, not null
+   * @param cacheKey
+   *          the broad key that summarizes the view definition and market data providers, not null
+   * @param valuationTime
+   *          an indicative valuation time for any compilation, not null
+   * @param resolverVersionCorrection
+   *          the target resolver version/correction timestamp, not null
    * @return the lock instances, not null. The first element in the pair is the broad lock, the second is the finer lock
    */
   public Pair<Lock, Lock> get(final ViewExecutionCacheKey cacheKey, final Instant valuationTime, final VersionCorrection resolverVersionCorrection) {

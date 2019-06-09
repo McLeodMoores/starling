@@ -103,7 +103,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
 
   /**
    * Since Monotone Convex spline method introduces extra knots in some cases and the number of knots depends on yValues, this multidimensional method can not
-   * be supported
+   * be supported.
    *
    * @param xValues
    *          the x values
@@ -216,7 +216,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   /**
    * Since this interpolation method introduces new breakpoints in certain cases, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined Instead
    * the node sensitivity is computed in {@link MonotoneConvexSplineInterpolator1D} via
-   * {@link com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}
+   * {@link com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}.
    *
    * @param xValues
    *          the x values
@@ -230,8 +230,8 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Determine f(t) = \frac{\partial r(t) t}{\partial t}
-   * 
+   * Determine f(t) = \frac{\partial r(t) t}{\partial t}.
+   *
    * @param xValues
    *          Data t_i
    * @param yValues
@@ -289,8 +289,8 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Compute the value of f(t) = \frac{\partial r(t) t}{\partial t} at t=x
-   * 
+   * Compute the value of f(t) = \frac{\partial r(t) t}{\partial t} at t=x.
+   *
    * @param xValues
    *          Data r_i
    * @param yValues
@@ -326,8 +326,8 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Compute the values of f(t)
-   * 
+   * Compute the values of f(t).
+   *
    * @param xValues
    *          Data t_i
    * @param yValues
@@ -367,8 +367,8 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Compute the values of f(t)
-   * 
+   * Compute the values of f(t).
+   *
    * @param xValues
    *          Data t_i
    * @param yValues
@@ -392,8 +392,8 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Derive r(t) * t from f(t)
-   * 
+   * Derive r(t) * t from f(t).
+   *
    * @param knots
    * @param coefMatrix
    * @return coefmatrix of r(t) * t
@@ -552,7 +552,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
 
   /**
    * Modify forwards such that positivity holds
-   * 
+   *
    * @param discFwds
    *          Discrete forwards
    * @param fwds

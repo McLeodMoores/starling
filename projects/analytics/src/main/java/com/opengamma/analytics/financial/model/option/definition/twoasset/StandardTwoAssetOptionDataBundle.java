@@ -71,8 +71,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Copies the data from another two-asset option data bundle
-   * 
+   * Copies the data from another two-asset option data bundle.
+   *
    * @param other
    *          The data bundle
    * @throws IllegalArgumentException
@@ -92,8 +92,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Gets the interest rate as a decimal
-   * 
+   * Gets the interest rate as a decimal.
+   *
    * @param t
    *          The time to expiry
    * @return The interest rate
@@ -103,8 +103,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Gets the cost of carry of the first asset as a decimal
-   * 
+   * Gets the cost of carry of the first asset as a decimal.
+   *
    * @return The cost of carry
    */
   public double getFirstCostOfCarry() {
@@ -112,8 +112,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Gets the cost of carry of the second asset as a decimal
-   * 
+   * Gets the cost of carry of the second asset as a decimal.
+   *
    * @return The cost of carry
    */
   public double getSecondCostOfCarry() {
@@ -121,8 +121,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Gets the volatility of the first asset as a decimal
-   * 
+   * Gets the volatility of the first asset as a decimal.
+   *
    * @param timeToExpiry
    *          The time to expiry
    * @param strike
@@ -134,8 +134,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Gets the volatility of the second asset as a decimal
-   * 
+   * Gets the volatility of the second asset as a decimal.
+   *
    * @param timeToExpiry
    *          The time to expiry
    * @param strike
@@ -203,8 +203,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the interest rate curve replaced by the argument
-   * 
+   * Returns a new data bundle with the interest rate curve replaced by the argument.
+   *
    * @param interestRateCurve
    *          The new interest rate curve
    * @return The new data bundle
@@ -216,8 +216,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the cost of carry of the first asset replaced by the argument
-   * 
+   * Returns a new data bundle with the cost of carry of the first asset replaced by the argument.
+   *
    * @param costOfCarry
    *          The new cost of carry
    * @return The new data bundle
@@ -229,8 +229,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the cost of carry of the second asset replaced by the argument
-   * 
+   * Returns a new data bundle with the cost of carry of the second asset replaced by the argument.
+   *
    * @param costOfCarry
    *          The new cost of carry
    * @return The new data bundle
@@ -242,8 +242,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the volatility surface of the first asset replaced by the argument
-   * 
+   * Returns a new data bundle with the volatility surface of the first asset replaced by the argument.
+   *
    * @param volatilitySurface
    *          The new volatility surface
    * @return The new data bundle
@@ -255,8 +255,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the volatility surface of the second asset replaced by the argument
-   * 
+   * Returns a new data bundle with the volatility surface of the second asset replaced by the argument.
+   *
    * @param volatilitySurface
    *          The new volatility surface
    * @return The new data bundle
@@ -268,8 +268,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the spot value of the first asset replaced by the argument
-   * 
+   * Returns a new data bundle with the spot value of the first asset replaced by the argument.
+   *
    * @param spot
    *          The new spot
    * @return The new data bundle
@@ -281,8 +281,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the spot value of the second asset replaced by the argument
-   * 
+   * Returns a new data bundle with the spot value of the second asset replaced by the argument.
+   *
    * @param spot
    *          The new spot
    * @return The new data bundle
@@ -294,7 +294,7 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the correlation between the two spot prices replaced by the argument
+   * Returns a new data bundle with the correlation between the two spot prices replaced by the argument.
    *
    * @param correlation
    *          The correlation
@@ -312,8 +312,8 @@ public class StandardTwoAssetOptionDataBundle {
   }
 
   /**
-   * Returns a new data bundle with the date replaced by the argument
-   * 
+   * Returns a new data bundle with the date replaced by the argument.
+   *
    * @param date
    *          The date
    * @return The new data bundle

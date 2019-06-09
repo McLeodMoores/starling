@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * Wrapper for results of the Commons implementation of Cholesky decomposition ({@link CholeskyDecompositionCommons})
+ * Wrapper for results of the Commons implementation of Cholesky decomposition ({@link CholeskyDecompositionCommons}).
  */
 public class CholeskyDecompositionCommonsResult implements CholeskyDecompositionResult {
   private final double _determinant;
@@ -24,7 +24,9 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
 
   /**
    * Constructor.
-   * @param ch The result of the Cholesky decomposition.
+   * 
+   * @param ch
+   *          The result of the Cholesky decomposition.
    */
   public CholeskyDecompositionCommonsResult(final CholeskyDecomposition ch) {
     Validate.notNull(ch, "Cholesky decomposition");

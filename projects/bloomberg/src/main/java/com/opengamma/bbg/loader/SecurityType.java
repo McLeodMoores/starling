@@ -85,7 +85,7 @@ public enum SecurityType {
    */
   FX_FUTURE,
   /**
-   * Index
+   * Index.
    */
   INDEX,
   /**

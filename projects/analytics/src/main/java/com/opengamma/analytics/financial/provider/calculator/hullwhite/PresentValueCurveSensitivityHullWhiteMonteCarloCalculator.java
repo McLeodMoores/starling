@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.random.NormalRandomNumberGenerator;
 import cern.jet.random.engine.MersenneTwister;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public class PresentValueCurveSensitivityHullWhiteMonteCarloCalculator
     extends InstrumentDerivativeVisitorAdapter<HullWhiteOneFactorProviderInterface, MultipleCurrencyMulticurveSensitivity> {
@@ -38,7 +38,7 @@ public class PresentValueCurveSensitivityHullWhiteMonteCarloCalculator
 
   /**
    * Constructor with a given number of simulation paths.
-   * 
+   *
    * @param nbPath
    *          The number of paths.
    */

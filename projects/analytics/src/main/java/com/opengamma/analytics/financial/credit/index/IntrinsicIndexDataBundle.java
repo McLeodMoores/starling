@@ -182,8 +182,8 @@ public class IntrinsicIndexDataBundle {
   }
 
   /**
-   * Gets the (initial) index size
-   * 
+   * Gets the (initial) index size.
+   *
    * @return the index size
    */
   public int getIndexSize() {
@@ -191,8 +191,8 @@ public class IntrinsicIndexDataBundle {
   }
 
   /**
-   * Gets the number of defaults the index has suffered
-   * 
+   * Gets the number of defaults the index has suffered.
+   *
    * @return the number of defaults
    */
   public int getNumOfDefaults() {
@@ -201,7 +201,7 @@ public class IntrinsicIndexDataBundle {
 
   /**
    * Gets the weight of a particular name in the index.
-   * 
+   *
    * @param index
    *          The index of the constituent name
    * @return The weight
@@ -211,8 +211,8 @@ public class IntrinsicIndexDataBundle {
   }
 
   /**
-   * Gets the Loss-Given-Default (LGD) for a particular name,
-   * 
+   * Gets the Loss-Given-Default (LGD) for a particular name.
+   *
    * @param index
    *          The index of the constituent name
    * @return The LGD
@@ -222,7 +222,7 @@ public class IntrinsicIndexDataBundle {
   }
 
   /**
-   * Gets the credit curve for a particular name,
+   * Gets the credit curve for a particular name.
    *
    * @param index
    *          The index of the constituent name
@@ -237,8 +237,8 @@ public class IntrinsicIndexDataBundle {
   }
 
   /**
-   * Get whether a particular name has defaulted
-   * 
+   * Get whether a particular name has defaulted.
+   *
    * @param index
    *          The index of the constituent name
    * @return true if the name has defaulted
@@ -248,8 +248,8 @@ public class IntrinsicIndexDataBundle {
   }
 
   /**
-   * Get the index factor
-   * 
+   * Get the index factor.
+   *
    * @return the index factor
    */
   public double getIndexFactor() {
@@ -257,8 +257,8 @@ public class IntrinsicIndexDataBundle {
   }
 
   /**
-   * Replace the credit curves with a new set
-   * 
+   * Replace the credit curves with a new set.
+   *
    * @param curves
    *          Credit curves. Must be the same length as the index size, and only null for defaulted names
    * @return new IntrinsicIndexDataBundle with given curves
@@ -283,7 +283,7 @@ public class IntrinsicIndexDataBundle {
   /**
    * Produce a new data bundle with the name at the given index marked as defaulted. The number of defaults {@link #getNumOfDefaults} is incremented and the
    * index factor {@link #getIndexFactor} adjusted down - everything else remained unchanged.
-   * 
+   *
    * @param index
    *          The index of the name to set as defaulted. If this name is already marked as defaulted, an exception is thrown
    * @return new data bundle with the name at the given index marked as defaulted
@@ -302,7 +302,7 @@ public class IntrinsicIndexDataBundle {
   /**
    * Produce a new data bundle with the names at the given indices marked as defaulted. The number of defaults {@link #getNumOfDefaults} is incremented and the
    * index factor {@link #getIndexFactor} adjusted down - everything else remained unchanged.
-   * 
+   *
    * @param index
    *          The indices of the names to set as defaulted. If any name is already marked as defaulted (or the list contains duplicates), an exception is thrown
    * @return new data bundle with the names at the given indices marked as defaulted

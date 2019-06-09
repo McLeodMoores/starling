@@ -105,7 +105,8 @@ public class WebConventionsUtils {
   }
 
   /**
-   * Gets all expiry calculators stored in the {@link ExpiryCalculatorFactory} as an array of <code>[expiry calculator]|display name]</code>.
+   * Gets all expiry calculators stored in the {@link ExchangeTradedInstrumentExpiryCalculatorFactory} as an array of
+   * <code>[expiry calculator]|display name]</code>.
    *
    * @return the calculators
    */
@@ -140,7 +141,7 @@ public class WebConventionsUtils {
     return new JSONArray(results).toString();
   }
 
-  private static class EnumComparator implements Comparator<Enum<?>> {
+  private static final class EnumComparator implements Comparator<Enum<?>> {
     public static final Comparator<Enum<?>> INSTANCE = new EnumComparator();
 
     @Override

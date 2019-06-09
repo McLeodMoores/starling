@@ -31,7 +31,7 @@ public abstract class AnalyticOptionModel<T extends OptionDefinition, U extends 
 
   /**
    * Returns a pricing function.
-   * 
+   *
    * @param definition
    *          The option definition, not null
    * @return The pricing function
@@ -41,7 +41,7 @@ public abstract class AnalyticOptionModel<T extends OptionDefinition, U extends 
   /**
    * Returns a visitor that calculates greeks. By default, the calculation method is finite difference. If a different method is possible (e.g. analytic
    * formulae) then this method should be overridden in the implementing class.
-   * 
+   *
    * @param pricingFunction
    *          The pricing function, not null
    * @param data
@@ -92,8 +92,8 @@ public abstract class AnalyticOptionModel<T extends OptionDefinition, U extends 
   }
 
   /**
-   * Extends the finite difference greek visitor to allow calculation of dZetaDVol
-   * 
+   * Extends the finite difference greek visitor to allow calculation of dZetaDVol.
+   *
    * @param <S>
    *          The type of the option data bundle
    * @param <R>

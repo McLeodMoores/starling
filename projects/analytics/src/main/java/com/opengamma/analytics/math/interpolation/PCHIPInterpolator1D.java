@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePo
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 
 /**
- * Piecewise Cubic Hermite Interpolating Polynomial (PCHIP)
+ * Piecewise Cubic Hermite Interpolating Polynomial (PCHIP).
  */
 public class PCHIPInterpolator1D extends Interpolator1D {
 

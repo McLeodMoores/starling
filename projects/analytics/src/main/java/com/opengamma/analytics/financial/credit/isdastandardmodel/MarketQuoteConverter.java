@@ -36,7 +36,7 @@ public class MarketQuoteConverter {
 
   /**
    * The clean price as a fraction of notional (it is often expressed as a percentage of notional)
-   * 
+   *
    * @param fractionalPUF
    *          The points up-front (as a fraction)
    * @return The clean price (as a fraction)
@@ -47,7 +47,7 @@ public class MarketQuoteConverter {
 
   /**
    * The clean price as a fraction of notional (it is often expressed as a percentage of notional) - this requires that a credit curve is bootstrapped first
-   * 
+   *
    * @param cds
    *          The CDS to be traded
    * @param yieldCurve
@@ -65,7 +65,7 @@ public class MarketQuoteConverter {
 
   /**
    * The principal - this is the clean present value
-   * 
+   *
    * @param notional
    *          The notional of the trade
    * @param cds
@@ -85,7 +85,7 @@ public class MarketQuoteConverter {
 
   /**
    * Get the points up-front - this requires that a credit curve is bootstrapped first.
-   * 
+   *
    * @param cds
    *          The CDS to be traded
    * @param premium
@@ -104,7 +104,7 @@ public class MarketQuoteConverter {
   /**
    * Get the points up-front for a collection of CDSs - this requires that a credit curve is bootstrapped first. This will give a slightly different answer to
    * using a single (flat) credit curve for each CDS (the latter is the market standard)
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premium
@@ -129,7 +129,7 @@ public class MarketQuoteConverter {
   /**
    * Get the points up-front for a collection of CDSs - this requires that a credit curve is bootstrapped first. This will give a slightly different answer to
    * using a single (flat) credit curve for each CDS (the latter is the market standard)
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premiums
@@ -154,7 +154,7 @@ public class MarketQuoteConverter {
 
   /**
    * The par spreads for a collection of CDSs where a single, non-flat, credit/hazard curve is known.
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param yieldCurve
@@ -182,7 +182,7 @@ public class MarketQuoteConverter {
 
   /**
    * Convert from a CDS quoted spread to points up-front (PUF).
-   * 
+   *
    * @param cds
    *          The CDS to be traded
    * @param qSpread
@@ -200,7 +200,7 @@ public class MarketQuoteConverter {
   /**
    * Convert from a CDS quoted spread to points up-front (PUF). <b>Note:</b> Quoted spread is not the same as par spread (although they are numerically similar)
    * - it is simply an alternative quoting convention from PUF where the CDS is priced off a flat credit/hazard curve.
-   * 
+   *
    * @param cds
    *          The CDS to be traded
    * @param premium
@@ -220,7 +220,7 @@ public class MarketQuoteConverter {
 
   /**
    * Convert from a CDS points up-front (PUF) to a quoted spread.
-   * 
+   *
    * @param cds
    *          The CDS to be traded
    * @param puf
@@ -238,7 +238,7 @@ public class MarketQuoteConverter {
   /**
    * Convert from a CDS quote as points up-front (PUF) and a standard premium, to a <i>quoted</i> spread. This is simply an alternative quoting convention from
    * PUF where the CDS is priced off a flat credit/hazard curve.
-   * 
+   *
    * @param cds
    *          The CDS to be traded
    * @param premium
@@ -277,7 +277,7 @@ public class MarketQuoteConverter {
    * Convert from a set of CDSs quoted spreads to points up-front (PUF). <b>Note:</b> Quoted spread is not the same as par spread (although they are numerically
    * similar) - it is simply an alternative quoting convention from PUF where each CDS is priced off a <b>separate</b> flat credit/hazard curve - i.e. the CDSs
    * are completely decoupled from each other.
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premium
@@ -304,7 +304,7 @@ public class MarketQuoteConverter {
    * Convert from a set of CDSs quoted spreads to points up-front (PUF). <b>Note:</b> Quoted spread is not the same as par spread (although they are numerically
    * similar) - it is simply an alternative quoting convention from PUF where each CDS is priced off a <b>separate</b> flat credit/hazard curve - i.e. the CDSs
    * are completely decoupled from each other.
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premiums
@@ -344,7 +344,7 @@ public class MarketQuoteConverter {
   /**
    * Get the equivalent <i>quoted</i> spreads for a collection of CDSs. This is simply a quoting convention -each CDS is priced off a <b>separate</b> flat
    * credit/hazard curve - i.e. the CDSs are completely decoupled from each other.
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premium
@@ -371,7 +371,7 @@ public class MarketQuoteConverter {
   /**
    * Get the equivalent <i>quoted</i> spreads for a collection of CDSs. This is simply a quoting convention -each CDS is priced off a <b>separate</b> flat
    * credit/hazard curve - i.e. the CDSs are completely decoupled from each other.
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premiums
@@ -405,7 +405,7 @@ public class MarketQuoteConverter {
    * Convert from a set of CDSs quoted as a par spreads (the old way of quoting) to points up-front (PUF). Each CDS is priced off a <b>single non-flat</b>
    * credit/hazard curve. <br>
    * If the CDS are quoted as <b>quoted</b> spreads one must use quotedSpreadsToPUF instead {@link #pointsUpFront}
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premium
@@ -425,7 +425,7 @@ public class MarketQuoteConverter {
    * Convert from a set of CDSs quoted as a par spreads (the old way of quoting) to points up-front (PUF). Each CDS is priced off a <b>single non-flat</b>
    * credit/hazard curve. <br>
    * If the CDS are quoted as <b>quoted</b> spreads one must use quotedSpreadsToPUF instead
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premiums
@@ -444,7 +444,7 @@ public class MarketQuoteConverter {
 
   /**
    * The equivalent par spreads for a collection of CDSs where a single, non-flat, credit/hazard curve is bootstrapped to reprice all the given CDSs.
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premium
@@ -466,7 +466,7 @@ public class MarketQuoteConverter {
 
   /**
    * The equivalent par spreads for a collection of CDSs where a single, non-flat, credit/hazard curve is bootstrapped to reprice all the given CDSs.
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premiums
@@ -485,7 +485,7 @@ public class MarketQuoteConverter {
 
   /**
    * Convert from par spreads to quoted spreads
-   * 
+   *
    * @param cds
    *          collection of CDSs
    * @param premium
@@ -503,8 +503,8 @@ public class MarketQuoteConverter {
   }
 
   /**
-   * Convert from par spreads to quoted spreads
-   * 
+   * Convert from par spreads to quoted spreads.
+   *
    * @param cds
    *          collection of CDSs
    * @param premiums
@@ -522,8 +522,8 @@ public class MarketQuoteConverter {
   }
 
   /**
-   * Convert from quoted spreads to par spreads
-   * 
+   * Convert from quoted spreads to par spreads.
+   *
    * @param cds
    *          collection of CDSs
    * @param premium
@@ -541,8 +541,8 @@ public class MarketQuoteConverter {
   }
 
   /**
-   * Convert from quoted spreads to par spreads
-   * 
+   * Convert from quoted spreads to par spreads.
+   *
    * @param cds
    *          collection of CDSs
    * @param premiums

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.sabrcap;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRC
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueSABRCapCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<SABRCapProviderInterface, MultipleCurrencyAmount> {
 
@@ -30,6 +30,7 @@ public final class PresentValueSABRCapCalculator extends InstrumentDerivativeVis
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueSABRCapCalculator getInstance() {
@@ -46,7 +47,7 @@ public final class PresentValueSABRCapCalculator extends InstrumentDerivativeVis
     return derivative.accept(this, sabr);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MultipleCurrencyAmount visitCapFloorIbor(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {

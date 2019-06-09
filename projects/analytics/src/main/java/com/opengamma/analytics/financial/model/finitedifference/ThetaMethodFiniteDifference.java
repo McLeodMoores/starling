@@ -31,7 +31,7 @@ public class ThetaMethodFiniteDifference implements ConvectionDiffusionPDESolver
   private final boolean _showFullResults;
 
   /**
-   * Sets up a standard Crank-Nicolson scheme
+   * Sets up a standard Crank-Nicolson scheme.
    */
   public ThetaMethodFiniteDifference() {
     _theta = 0.5;
@@ -39,8 +39,8 @@ public class ThetaMethodFiniteDifference implements ConvectionDiffusionPDESolver
   }
 
   /**
-   * Sets up a scheme that is the weighted average of an explicit and an implicit scheme
-   * 
+   * Sets up a scheme that is the weighted average of an explicit and an implicit scheme.
+   *
    * @param theta
    *          The weight. theta = 0 - fully explicit, theta = 0.5 - Crank-Nicolson, theta = 1.0 - fully implicit
    * @param showFullResults
@@ -324,7 +324,7 @@ public class ThetaMethodFiniteDifference implements ConvectionDiffusionPDESolver
     /**
      * This is modified from the Exponential Fitting of Duffy. We find no effect on the accuracy from using this adjustment, but leave it as a stub for further
      * investigation
-     * 
+     *
      * @param a
      *          The diffusion coefficient
      * @param b
@@ -637,7 +637,7 @@ public class ThetaMethodFiniteDifference implements ConvectionDiffusionPDESolver
 
     /**
      * Gets the grid.
-     * 
+     *
      * @return the grid
      */
     public PDEGrid1D getGrid() {

@@ -17,8 +17,8 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the value (or dollar) vega of an option given market data and the vega. The value vega is defined as the
- * option vega multiplied by the shares per option.
+ * Calculates the value (or dollar) vega of an option given market data and the vega. The value vega is defined as the option vega multiplied by the shares per
+ * option.
  */
 public final class ValueVegaCalculator implements ValueGreekCalculator {
   /** Static instance */
@@ -27,7 +27,8 @@ public final class ValueVegaCalculator implements ValueGreekCalculator {
   private static final MultiplierCalculator MULTIPLIER_CALCULATOR = new MultiplierCalculator();
 
   /**
-   * Gets an instance of this calculator
+   * Gets an instance of this calculator.
+   * 
    * @return The (singleton) instance
    */
   public static ValueVegaCalculator getInstance() {
@@ -55,7 +56,7 @@ public final class ValueVegaCalculator implements ValueGreekCalculator {
     /**
      * Default constructor.
      */
-    /* package */MultiplierCalculator() {
+    /* package */ MultiplierCalculator() {
     }
 
     @Override

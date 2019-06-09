@@ -27,8 +27,8 @@ public final class BlackBarrierPriceFunction {
   private static final BlackBarrierPriceFunction INSTANCE = new BlackBarrierPriceFunction();
 
   /**
-   * Gets the static instance
-   * 
+   * Gets the static instance.
+   *
    * @return The instance
    */
   public static BlackBarrierPriceFunction getInstance() {
@@ -40,7 +40,7 @@ public final class BlackBarrierPriceFunction {
 
   /**
    * Computes the price of a barrier option in the Black world.
-   * 
+   *
    * @param option
    *          The underlying European vanilla option.
    * @param barrier
@@ -120,7 +120,7 @@ public final class BlackBarrierPriceFunction {
 
   /**
    * Computes the price of a barrier option in the Black world.
-   * 
+   *
    * @param option
    *          The underlying European vanilla option.
    * @param barrier
@@ -365,7 +365,7 @@ public final class BlackBarrierPriceFunction {
 
   /**
    * The adjoint version of the quantity A computation.
-   * 
+   *
    * @param s
    *          The parameter s.
    * @param k
@@ -436,7 +436,7 @@ public final class BlackBarrierPriceFunction {
 
   /**
    * The adjoint version of the quantity C computation.
-   * 
+   *
    * @param s
    * @param k
    * @param df1
@@ -499,7 +499,7 @@ public final class BlackBarrierPriceFunction {
 
   /**
    * The adjoint version of the quantity E computation.
-   * 
+   *
    * @param s
    * @param rebate
    * @param df2
@@ -544,7 +544,7 @@ public final class BlackBarrierPriceFunction {
 
   /**
    * The adjoint version of the quantity F computation.
-   * 
+   *
    * @param s
    * @param rebate
    * @param z

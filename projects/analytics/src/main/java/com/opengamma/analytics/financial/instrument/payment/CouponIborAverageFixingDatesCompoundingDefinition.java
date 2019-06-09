@@ -49,8 +49,8 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   private final double[] _paymentAccrualFactors;
 
   /**
-   * Constructor without start dates and end dates of fixing period
-   * 
+   * Constructor without start dates and end dates of fixing period.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -108,8 +108,8 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Constructor with full details
-   * 
+   * Constructor with full details.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -166,8 +166,8 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Construct a coupon without start dates and end dates of fixing period
-   * 
+   * Construct a coupon without start dates and end dates of fixing period.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -201,8 +201,8 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Construct coupon with full details
-   * 
+   * Construct coupon with full details.
+   *
    * @param currency
    *          The coupon currency
    * @param paymentDate
@@ -242,8 +242,8 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Construct a new coupon with the same detail except notional
-   * 
+   * Construct a new coupon with the same detail except notional.
+   *
    * @param notional
    *          The notional
    * @return The coupon
@@ -268,7 +268,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the index.
-   * 
+   *
    * @return the index
    */
   public IborIndex getIndex() {
@@ -277,7 +277,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the paymentAccrualFactors.
-   * 
+   *
    * @return the paymentAccrualFactors
    */
   public double[] getPaymentAccrualFactors() {
@@ -286,7 +286,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the weight.
-   * 
+   *
    * @return the weight
    */
   public double[][] getWeight() {
@@ -295,7 +295,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingPeriodStartDates.
-   * 
+   *
    * @return the fixingPeriodStartDates
    */
   public ZonedDateTime[][] getFixingPeriodStartDates() {
@@ -304,7 +304,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingPeriodEndDates.
-   * 
+   *
    * @return the fixingPeriodEndDates
    */
   public ZonedDateTime[][] getFixingPeriodEndDates() {
@@ -313,7 +313,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingDates.
-   * 
+   *
    * @return the fixingDates
    */
   public ZonedDateTime[][] getFixingDates() {
@@ -322,7 +322,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingPeriodAccrualFactor.
-   * 
+   *
    * @return the fixingPeriodAccrualFactor
    */
   public double[][] getFixingPeriodAccrualFactor() {
@@ -467,7 +467,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Override
@@ -478,7 +478,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Override

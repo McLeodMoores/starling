@@ -36,11 +36,12 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Data structure to hold the data points of a surface.
- * Note no interpolation or fitting is done in this code.
+ * Data structure to hold the data points of a surface. Note no interpolation or fitting is done in this code.
  *
- * @param <X> Type of the x-data
- * @param <Y> Type of the y-data
+ * @param <X>
+ *          Type of the x-data
+ * @param <Y>
+ *          Type of the y-data
  */
 @BeanDefinition
 public class SurfaceData<X, Y> implements Bean, Serializable {
@@ -88,53 +89,60 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
   private String _yLabel;
 
   /**
-   * The x values
+   * The x values.
    */
   @PropertyDefinition(validate = "notNull", set = "private")
   private X[] _xs;
 
   /**
-   * The y values
+   * The y values.
    */
   @PropertyDefinition(validate = "notNull", set = "private")
   private Y[] _ys;
 
   /**
-   * The volatilities
+   * The volatilities.
    */
   @PropertyDefinition(validate = "notNull", set = "private")
   private Double[] _vs;
 
   /**
-   * A set of unique x values
+   * A set of unique x values.
    */
   private transient SortedSet<X> _uniqueXs;
 
   /**
-   * A set of strips in the x plane
+   * A set of strips in the x plane.
    */
   private transient Map<X, List<ObjectsPair<Y, Double>>> _strips;
 
   /**
    * For the builder.
    */
-  /* package */SurfaceData() {
+  /* package */ SurfaceData() {
   }
 
   /**
    * Constructor that uses the default axis labels.
-   * @param name The surface name, not null
-   * @param values The (x, y, value) points, not null
+   * 
+   * @param name
+   *          The surface name, not null
+   * @param values
+   *          The (x, y, value) points, not null
    */
   public SurfaceData(final String name, final Map<Pair<X, Y>, Double> values) {
     this(name, DEFAULT_X_LABEL, DEFAULT_Y_LABEL, values);
   }
 
   /**
-   * @param name The name, not null
-   * @param xLabel The x axis label, not null
-   * @param yLabel The y axis label, not null
-   * @param values The (x, y, value) points, not null
+   * @param name
+   *          The name, not null
+   * @param xLabel
+   *          The x axis label, not null
+   * @param yLabel
+   *          The y axis label, not null
+   * @param values
+   *          The (x, y, value) points, not null
    */
   public SurfaceData(final String name,
       final String xLabel,
@@ -149,7 +157,9 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   /**
    * Initializes data structures and divides the surface into x strips.
-   * @param values The values, not null
+   * 
+   * @param values
+   *          The values, not null
    */
   @SuppressWarnings("unchecked")
   private void init(final Map<Pair<X, Y>, Double> values) {
@@ -179,6 +189,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   /**
    * Gets the number of points in this surface.
+   * 
    * @return The number of points
    */
   public int size() {
@@ -187,8 +198,11 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   /**
    * Gets the value for a particular x, y point.
-   * @param x The x value
-   * @param y The y value
+   * 
+   * @param x
+   *          The x value
+   * @param y
+   *          The y value
    * @return The value
    */
   public Double getValue(final X x, final Y y) {
@@ -197,6 +211,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   /**
    * Gets a sorted set of unique x values.
+   * 
    * @return The unique x values
    */
   public SortedSet<X> getUniqueXValues() {
@@ -205,7 +220,9 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   /**
    * Gets a slice through the surface in the x plane.
-   * @param x The x value, not null
+   * 
+   * @param x
+   *          The x value, not null
    * @return A slice of the cube
    */
   public List<ObjectsPair<Y, Double>> getYValuesForX(final X x) {
@@ -223,6 +240,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   /**
    * Gets the surface data as a map.
+   * 
    * @return The surface data
    */
   public Map<Pair<X, Y>, Double> asMap() {
@@ -231,7 +249,9 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   /**
    * Sets a (x, y) to value map.
-   * @param values  the new value of the property, not null
+   * 
+   * @param values
+   *          the new value of the property, not null
    */
   public void setValues(final Map<Pair<X, Y>, Double> values) {
     ArgumentChecker.notNull(values, "values");
@@ -379,7 +399,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the x values
+   * Gets the x values.
    * @return the value of the property, not null
    */
   public X[] getXs() {
@@ -387,7 +407,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
   }
 
   /**
-   * Sets the x values
+   * Sets the x values.
    * @param xs  the new value of the property, not null
    */
   private void setXs(X[] xs) {
@@ -405,7 +425,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the y values
+   * Gets the y values.
    * @return the value of the property, not null
    */
   public Y[] getYs() {
@@ -413,7 +433,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
   }
 
   /**
-   * Sets the y values
+   * Sets the y values.
    * @param ys  the new value of the property, not null
    */
   private void setYs(Y[] ys) {
@@ -431,7 +451,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the volatilities
+   * Gets the volatilities.
    * @return the value of the property, not null
    */
   public Double[] getVs() {
@@ -439,7 +459,7 @@ public class SurfaceData<X, Y> implements Bean, Serializable {
   }
 
   /**
-   * Sets the volatilities
+   * Sets the volatilities.
    * @param vs  the new value of the property, not null
    */
   private void setVs(Double[] vs) {

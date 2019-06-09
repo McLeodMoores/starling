@@ -30,8 +30,8 @@ public class SmileDeltaParameters {
   private final double[] _volatility;
 
   /**
-   * Constructor from volatility
-   * 
+   * Constructor from volatility.
+   *
    * @param timeToExpiration
    *          The time to expiration associated to the data.
    * @param delta
@@ -51,7 +51,7 @@ public class SmileDeltaParameters {
 
   /**
    * Constructor from market data ATM, RR, Strangle.
-   * 
+   *
    * @param timeToExpiry
    *          The time to expiration associated to the data.
    * @param atm
@@ -86,7 +86,7 @@ public class SmileDeltaParameters {
 
   /**
    * Computes the strikes in ascending order. Put with lower delta (in absolute value) first, ATM and call with larger delta first
-   * 
+   *
    * @param forward
    *          The forward.
    * @return The strikes.
@@ -105,7 +105,7 @@ public class SmileDeltaParameters {
 
   /**
    * Gets the time to expiry associated to the data.
-   * 
+   *
    * @return The time to expiry.
    */
   public double getTimeToExpiry() {
@@ -114,7 +114,7 @@ public class SmileDeltaParameters {
 
   /**
    * Gets the delta of the different data points. Must be positive and sorted in ascending order. The put will have as delta the opposite of the numbers.
-   * 
+   *
    * @return The delta.
    */
   public double[] getDelta() {
@@ -123,7 +123,7 @@ public class SmileDeltaParameters {
 
   /**
    * Gets the volatilities associated to the strikes.
-   * 
+   *
    * @return The volatilities,
    */
   public double[] getVolatility() {

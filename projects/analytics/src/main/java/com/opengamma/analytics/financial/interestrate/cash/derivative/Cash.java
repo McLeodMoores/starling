@@ -57,7 +57,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * Constructor of a cash deposit.
-   * 
+   *
    * @param currency
    *          The currency
    * @param startTime
@@ -82,7 +82,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * Constructor of a cash deposit.
-   * 
+   *
    * @param currency
    *          The currency
    * @param startTime
@@ -101,8 +101,8 @@ public class Cash implements InstrumentDerivative {
   }
 
   /**
-   * A cash loan
-   * 
+   * A cash loan.
+   *
    * @param currency
    *          The currency
    * @param startTime
@@ -145,7 +145,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * A cash loan.
-   * 
+   *
    * @param currency
    *          The currency
    * @param startTime
@@ -218,7 +218,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * Gets the interest amount.
-   * 
+   *
    * @return The amount.
    */
   public double getInterestAmount() {
@@ -227,7 +227,7 @@ public class Cash implements InstrumentDerivative {
 
   /**
    * Gets the initial amount.
-   * 
+   *
    * @return The amount.
    */
   public double getInitialAmount() {

@@ -140,7 +140,7 @@ import com.opengamma.analytics.financial.volatilityswap.VolatilitySwap;
 
 /**
  * Adapter that uses the same method regardless of the type of the derivative.
- * 
+ *
  * @param <DATA_TYPE>
  *          The type of the data
  * @param <RESULT_TYPE>
@@ -150,8 +150,8 @@ import com.opengamma.analytics.financial.volatilityswap.VolatilitySwap;
 public abstract class InstrumentDerivativeVisitorSameMethodAdapter<DATA_TYPE, RESULT_TYPE> implements InstrumentDerivativeVisitor<DATA_TYPE, RESULT_TYPE> {
 
   /**
-   * Calculates the result
-   * 
+   * Calculates the result.
+   *
    * @param derivative
    *          The derivative
    * @return The result
@@ -159,8 +159,8 @@ public abstract class InstrumentDerivativeVisitorSameMethodAdapter<DATA_TYPE, RE
   public abstract RESULT_TYPE visit(InstrumentDerivative derivative);
 
   /**
-   * Calculates the result
-   * 
+   * Calculates the result.
+   *
    * @param derivative
    *          The derivative
    * @param data

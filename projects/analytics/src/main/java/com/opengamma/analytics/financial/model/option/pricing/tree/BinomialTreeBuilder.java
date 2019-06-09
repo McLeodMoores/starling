@@ -17,7 +17,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Builds a binomial tree.
- * 
+ *
  * @param <T>
  *          StandardOptionDataBundle
  */
@@ -25,7 +25,7 @@ public abstract class BinomialTreeBuilder<T extends StandardOptionDataBundle> {
 
   /**
    * Builds a tree of an asset prices.
-   * 
+   *
    * @param maturity
    *          The time span (in years) of the tree
    * @param data
@@ -113,8 +113,8 @@ public abstract class BinomialTreeBuilder<T extends StandardOptionDataBundle> {
   protected abstract DoublesPair getCentralNodePair(double dt, double sigma, double forward, double centreLevel);
 
   /**
-   * Builds a tree of option prices
-   * 
+   * Builds a tree of option prices.
+   *
    * @param definition
    *          Option Definition
    * @param data

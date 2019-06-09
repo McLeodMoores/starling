@@ -6,15 +6,19 @@
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 /**
- * A call has payoff max[S1 * S2 - K, 0], while a put pays off max[K - S1 * S2, 0] at expiry
+ * A call has payoff max[S1 * S2 - K, 0], while a put pays off max[K - S1 * S2, 0] at expiry.
  */
 public class ProductOptionFunctionProvider extends OptionFunctionProvider2D {
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
    */
   public ProductOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall) {
     super(strike, timeToExpiry, steps, isCall);

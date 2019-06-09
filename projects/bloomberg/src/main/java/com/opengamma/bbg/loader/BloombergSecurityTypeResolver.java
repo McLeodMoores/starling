@@ -25,7 +25,7 @@ import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Maps Bloomberg security type and futures category to subclasses of {@link ManageableSecurity}
+ * Maps Bloomberg security type and futures category to subclasses of {@link ManageableSecurity}.
  */
 public class BloombergSecurityTypeResolver implements SecurityTypeResolver {
 
@@ -96,7 +96,7 @@ public class BloombergSecurityTypeResolver implements SecurityTypeResolver {
   private final ReferenceDataProvider _referenceDataProvider;
 
   /**
-   * Creates a BloombergSecurityTypeResolver
+   * Creates a BloombergSecurityTypeResolver.
    *
    * @param referenceDataProvider
    *          the reference data provider, not null

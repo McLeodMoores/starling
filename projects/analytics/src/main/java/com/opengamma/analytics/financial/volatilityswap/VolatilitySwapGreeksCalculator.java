@@ -18,8 +18,8 @@ import com.opengamma.util.tuple.Triple;
 public class VolatilitySwapGreeksCalculator {
 
   /**
-   * Greeks calculator for FX volatility swap based on result from Carr-Lee model
-   * 
+   * Greeks calculator for FX volatility swap based on result from Carr-Lee model.
+   *
    * @param result
    *          {@link VolatilitySwapCalculatorResultWithStrikes}
    * @param swap
@@ -67,8 +67,8 @@ public class VolatilitySwapGreeksCalculator {
   }
 
   /**
-   * Greeks calculator for FX volatility swap using Carr-Lee model
-   * 
+   * Greeks calculator for FX volatility swap using Carr-Lee model.
+   *
    * @param swap
    *          The FX volatility swap
    * @param data

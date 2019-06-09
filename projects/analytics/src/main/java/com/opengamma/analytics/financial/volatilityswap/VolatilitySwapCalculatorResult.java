@@ -114,8 +114,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Construct subclass with strikes
-   * 
+   * Construct subclass with strikes.
+   *
    * @param putStrikes
    *          The put option strikes
    * @param callStrikes
@@ -128,8 +128,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _fairValue
-   * 
+   * Access _fairValue.
+   *
    * @return fair value
    */
   public double getFairValue() {
@@ -137,8 +137,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _putWeights
-   * 
+   * Access _putWeights.
+   *
    * @return put option weights
    */
   public double[] getPutWeights() {
@@ -146,8 +146,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _straddleWeight
-   * 
+   * Access _straddleWeight.
+   *
    * @return straddle weight
    */
   public double getStraddleWeight() {
@@ -155,8 +155,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _callWeights
-   * 
+   * Access _callWeights.
+   *
    * @return call option weights
    */
   public double[] getCallWeights() {
@@ -164,8 +164,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _putPrices
-   * 
+   * Access _putPrices.
+   *
    * @return put option prices
    */
   public double[] getPutPrices() {
@@ -173,8 +173,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _straddlePrice
-   * 
+   * Access _straddlePrice.
+   *
    * @return straddle price
    */
   public double getStraddlePrice() {
@@ -182,8 +182,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _callPrices
-   * 
+   * Access _callPrices.
+   *
    * @return call option prices
    */
   public double[] getCallPrices() {
@@ -191,8 +191,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _cash
-   * 
+   * Access _cash.
+   *
    * @return cash amount
    */
   public double getCash() {
@@ -200,8 +200,8 @@ public class VolatilitySwapCalculatorResult {
   }
 
   /**
-   * Access _optionTotal
-   * 
+   * Access _optionTotal.
+   *
    * @return total option value
    */
   public double getOptionTotal() {

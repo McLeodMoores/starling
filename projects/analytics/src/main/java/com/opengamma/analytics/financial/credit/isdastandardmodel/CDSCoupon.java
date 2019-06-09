@@ -12,7 +12,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This represents one payment period on the premium leg of a CDS
+ * This represents one payment period on the premium leg of a CDS.
  */
 public class CDSCoupon {
   private static final DayCount ACT_365 = DayCounts.ACT_365;
@@ -55,8 +55,8 @@ public class CDSCoupon {
   }
 
   /**
-   * Make a set of CDSCoupon used by {@link CDSAnalytic} given a trade date and a set of {@link CDSCouponDes}
-   * 
+   * Make a set of CDSCoupon used by {@link CDSAnalytic} given a trade date and a set of {@link CDSCouponDes}.
+   *
    * @param tradeDate
    *          The trade date
    * @param couponsDes
@@ -89,7 +89,7 @@ public class CDSCoupon {
   /**
    * Turn a date based description of a CDS accrual period ({@link CDSCouponDes}) into an analytic description ({@link CDSCoupon}). This has protection from
    * start of day and uses ACT/360 for the accrual day count.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param coupon
@@ -102,7 +102,7 @@ public class CDSCoupon {
   /**
    * Turn a date based description of a CDS accrual period ({@link CDSCouponDes}) into an analytic description ({@link CDSCoupon}). This has protection from
    * start of day and uses ACT/360 for the accrual day count.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param coupon
@@ -117,7 +117,7 @@ public class CDSCoupon {
   /**
    * Turn a date based description of a CDS accrual period ({@link CDSCouponDes}) into an analytic description ({@link CDSCoupon}). This uses ACT/360 for the
    * accrual day count.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param coupon
@@ -134,7 +134,7 @@ public class CDSCoupon {
   /**
    * Turn a date based description of a CDS accrual period ({@link CDSCouponDes}) into an analytic description ({@link CDSCoupon}). This uses ACT/360 for the
    * accrual day count.
-   * 
+   *
    * @param tradeDate
    *          The trade date
    * @param coupon
@@ -164,7 +164,7 @@ public class CDSCoupon {
   /**
    * Setup a analytic description (i.e. involving only doubles) of a single CDS premium payment period seen from a particular trade date. Protection is taken
    * from start of day; ACT/360 is used for the accrual DCC and ACT/365F for the curve DCC
-   * 
+   *
    * @param tradeDate
    *          The trade date (this is the base date that discount factors and survival probabilities are measured from)
    * @param premiumDateTriplet
@@ -178,7 +178,7 @@ public class CDSCoupon {
    *
    * Setup a analytic description (i.e. involving only doubles) of a single CDS premium payment period seen from a particular trade date. ACT/360 is used for
    * the accrual DCC and ACT/365F for the curve DCC
-   * 
+   *
    * @param tradeDate
    *          The trade date (this is the base date that discount factors and survival probabilities are measured from)
    * @param accStart
@@ -197,7 +197,7 @@ public class CDSCoupon {
 
   /**
    * Setup a analytic description (i.e. involving only doubles) of a single CDS premium payment period seen from a particular trade date.
-   * 
+   *
    * @param tradeDate
    *          The trade date (this is the base date that discount factors and survival probabilities are measured from)
    * @param premiumDateTriplet
@@ -216,7 +216,7 @@ public class CDSCoupon {
 
   /**
    * Setup a analytic description (i.e. involving only doubles) of a single CDS premium payment period seen from a particular trade date.
-   * 
+   *
    * @param tradeDate
    *          The trade date (this is the base date that discount factors and survival probabilities are measured from)
    * @param accStart
@@ -284,7 +284,7 @@ public class CDSCoupon {
 
   /**
    * Gets the paymentTime.
-   * 
+   *
    * @return the paymentTime
    */
   public double getPaymentTime() {
@@ -293,7 +293,7 @@ public class CDSCoupon {
 
   /**
    * Gets the yearFrac.
-   * 
+   *
    * @return the yearFrac
    */
   public double getYearFrac() {
@@ -302,7 +302,7 @@ public class CDSCoupon {
 
   /**
    * Gets the effStart.
-   * 
+   *
    * @return the effStart
    */
   public double getEffStart() {
@@ -311,7 +311,7 @@ public class CDSCoupon {
 
   /**
    * Gets the effEnd.
-   * 
+   *
    * @return the effEnd
    */
   public double getEffEnd() {
@@ -321,7 +321,7 @@ public class CDSCoupon {
   /**
    * Gets the ratio of the accrual period year fraction calculated using the accrual DCC to that calculated using the curve DCC. This is used in accrual on
    * default calculations
-   * 
+   *
    * @return the year fraction ratio
    */
   public double getYFRatio() {
@@ -331,7 +331,7 @@ public class CDSCoupon {
   /**
    * Produce a coupon with payments and accrual start/end offset by a given amount. For example if an offset of 0.5 was applied to a coupon with effStart,
    * effEnd and payment time of 0, 0.25 and 0.25, the new coupon would have 0.5, 0.75, 0.75 (effStart, effEnd, payment time)
-   * 
+   *
    * @param offset
    *          amount of offset (in years)
    * @return offset coupon

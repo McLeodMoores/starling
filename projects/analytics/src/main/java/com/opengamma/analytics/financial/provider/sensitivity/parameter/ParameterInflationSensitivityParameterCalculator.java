@@ -24,7 +24,7 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The meaning of
  * "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.). The return format is ParameterSensitivity object.
- * 
+ *
  * @param <DATA_TYPE>
  *          Data type.
  */
@@ -32,8 +32,8 @@ public class ParameterInflationSensitivityParameterCalculator<DATA_TYPE extends 
     extends AbstractParameterInflationSensitivityParameterCalculator<DATA_TYPE> {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param curveSensitivityCalculator
    *          The curve sensitivity calculator.
    */

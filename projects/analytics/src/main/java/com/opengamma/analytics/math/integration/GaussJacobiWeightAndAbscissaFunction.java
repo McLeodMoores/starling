@@ -30,7 +30,7 @@ public class GaussJacobiWeightAndAbscissaFunction implements QuadratureWeightAnd
   private final double _c;
 
   /**
-   * Sets $\alpha = 0$ and $\beta = 0$
+   * Sets $\alpha = 0$ and $\beta = 0$.
    */
   public GaussJacobiWeightAndAbscissaFunction() {
     this(0, 0);

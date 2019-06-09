@@ -13,8 +13,8 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Adaptive composite integrator: step size is set to be small if functional variation of integrand is large
- * The integrator in individual intervals (base integrator) should be specified by constructor
+ * Adaptive composite integrator: step size is set to be small if functional variation of integrand is large The integrator in individual intervals (base
+ * integrator) should be specified by constructor.
  */
 public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> {
   private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveCompositeIntegrator1D.class);
@@ -24,7 +24,8 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
   private final double _tol;
 
   /**
-   * @param integrator The base integrator
+   * @param integrator
+   *          The base integrator
    */
   public AdaptiveCompositeIntegrator1D(final Integrator1D<Double, Double> integrator) {
     Validate.notNull(integrator, "integrator");
@@ -34,9 +35,12 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
   }
 
   /**
-   * @param integrator The base integrator
-   * @param gain The gain ratio
-   * @param tol The tolerance
+   * @param integrator
+   *          The base integrator
+   * @param gain
+   *          The gain ratio
+   * @param tol
+   *          The tolerance
    */
   public AdaptiveCompositeIntegrator1D(final Integrator1D<Double, Double> integrator, final double gain, final double tol) {
     Validate.notNull(integrator, "integrator");

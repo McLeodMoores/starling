@@ -51,7 +51,7 @@ public class MixedBivariateLogNormalFitter {
   private final MixedLogNormalVolatilityFunction _volfunc = MixedLogNormalVolatilityFunction.getInstance();
 
   /**
-   * Find a set of parameters such that sum ( (_dataStrikes - exactFunctionValue)^2 ) is minimum
+   * Find a set of parameters such that sum ( (_dataStrikes - exactFunctionValue)^2 ) is minimum.
    *
    * @param paramsGuess
    *          Initial (unconstrained) guess parameters of X,Y to be chosen randomly
@@ -384,7 +384,7 @@ public class MixedBivariateLogNormalFitter {
   /**
    * During the iterations of least-square fitting, a set of parameters sometimes breaks the condition 0 < targetPrice < Math.min(forward, strike). Do not use
    * getImpliedVolatilityZ method in MixedLogNormalModel2DVolatility.
-   * 
+   *
    * @param option
    * @param forward
    * @param data
@@ -595,7 +595,7 @@ public class MixedBivariateLogNormalFitter {
 
   /**
    * Solve the matrix equation ( hessian + shift (Id matrix) ) jump = gradFunctionValueM
-   * 
+   *
    * @param dataStrs
    *          Strike data
    * @param dataVols
@@ -642,8 +642,8 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * Linear problem Ax=b where A is a square matrix and x,b are vector can be solved by LU decomposition
-   * 
+   * Linear problem Ax=b where A is a square matrix and x,b are vector can be solved by LU decomposition.
+   *
    * @param doubMat
    *          Matrix A
    * @param doubVec
@@ -662,8 +662,8 @@ public class MixedBivariateLogNormalFitter {
   }
 
   /**
-   * Linear problem Ax=b is solved by forward substitution if A is lower triangular
-   * 
+   * Linear problem Ax=b is solved by forward substitution if A is lower triangular.
+   *
    * @param lMat
    *          Lower triangular matrix
    * @param doubVec
@@ -688,7 +688,7 @@ public class MixedBivariateLogNormalFitter {
 
   /**
    * Linear problem Ax=b is solved by backward substitution if A is upper triangular
-   * 
+   *
    * @param uMat
    *          Upper triangular matrix
    * @param doubVec

@@ -64,7 +64,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Constructor from all details.
-   * 
+   *
    * @param currency
    *          The currency.
    * @param startDate
@@ -104,7 +104,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Builder. The day count is used to compute the accrual factor. The notional is 1.
-   * 
+   *
    * @param currency
    *          The currency.
    * @param startDate
@@ -130,7 +130,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Builder. The day count is used to compute the accrual factor. The notional is 1.
-   * 
+   *
    * @param currency
    *          The currency.
    * @param startDate
@@ -162,7 +162,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the deposit currency.
-   * 
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -170,8 +170,8 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
   }
 
   /**
-   * Gets the deposit start date
-   * 
+   * Gets the deposit start date.
+   *
    * @return The date.
    */
   public ZonedDateTime getStartDate() {
@@ -179,8 +179,8 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
   }
 
   /**
-   * Gets the deposit end date
-   * 
+   * Gets the deposit end date.
+   *
    * @return The date.
    */
   public ZonedDateTime getEndDate() {
@@ -189,7 +189,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the deposit notional.
-   * 
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -198,7 +198,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the accrual factor (or year fraction).
-   * 
+   *
    * @return The factor.
    */
   public double getPaymentAccrualFactor() {
@@ -207,7 +207,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the rate (figure and composition rule).
-   * 
+   *
    * @return The rate.
    */
   public InterestRate getRate() {
@@ -216,7 +216,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * Gets the interest rate amount.
-   * 
+   *
    * @return The amount.
    */
   public double getInterestAmount() {
@@ -230,7 +230,7 @@ public class DepositZeroDefinition implements InstrumentDefinition<DepositZero> 
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated

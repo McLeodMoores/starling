@@ -123,8 +123,8 @@ public class BloombergHTSMasterUpdater {
 
   // -------------------------------------------------------------------------
   /**
-   * Check a time series entry to see if it requires updating and update request and lookup data structures
-   * 
+   * Check a time series entry to see if it requires updating and update request and lookup data structures.
+   *
    * @param doc
    *          time series info document of the time series to update
    * @param metaDataKeyMap

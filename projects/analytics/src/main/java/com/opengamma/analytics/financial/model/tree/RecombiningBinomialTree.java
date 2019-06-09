@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.function.Function1D;
  *          The type of the data
  */
 public class RecombiningBinomialTree<T> extends RecombiningTree<T> {
-  /** Number of nodes at each level */
+  /** Number of nodes at each level. */
   public static final Function1D<Integer, Integer> NODES = new Function1D<Integer, Integer>() {
 
     @Override

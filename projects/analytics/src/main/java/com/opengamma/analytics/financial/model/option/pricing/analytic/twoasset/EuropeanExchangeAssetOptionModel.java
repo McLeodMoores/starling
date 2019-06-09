@@ -20,10 +20,13 @@ public class EuropeanExchangeAssetOptionModel extends TwoAssetAnalyticOptionMode
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   /**
-   * Gets the pricing function for a European-style exchange asset option
-   * @param definition The option definition
+   * Gets the pricing function for a European-style exchange asset option.
+   * 
+   * @param definition
+   *          The option definition
    * @return The pricing function
-   * @throws IllegalArgumentException If the definition is null
+   * @throws IllegalArgumentException
+   *           If the definition is null
    */
   @Override
   public Function1D<StandardTwoAssetOptionDataBundle, Double> getPricingFunction(final EuropeanExchangeAssetOptionDefinition definition) {

@@ -61,7 +61,7 @@ public class IsdaCurveProvider extends MulticurveProviderDiscount implements Imm
   /** The curve names. */
   @PropertyDefinition
   private final Set<String> _curveNames;
-  /** All curves */
+  /** All curves. */
   @PropertyDefinition
   private final Map<String, YieldAndDiscountCurve> _allCurves;
 
@@ -464,7 +464,7 @@ public class IsdaCurveProvider extends MulticurveProviderDiscount implements Imm
 
   //-----------------------------------------------------------------------
   /**
-   * Gets all curves
+   * Gets all curves.
    * @return the value of the property
    */
   public Map<String, YieldAndDiscountCurve> getAllCurves() {
@@ -859,7 +859,7 @@ public class IsdaCurveProvider extends MulticurveProviderDiscount implements Imm
     }
 
     /**
-     * Sets all curves
+     * Sets all curves.
      * @param allCurves  the new value
      * @return this, for chaining, not null
      */

@@ -71,7 +71,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   }
 
   /**
-   * Get x values of breakpoints, which are different from "keys" for certain interpolations
+   * Get x values of breakpoints, which are different from "keys" for certain interpolations.
    *
    * @return X values of breakpoints
    */
@@ -80,7 +80,7 @@ public class Interpolator1DPiecewisePoynomialDataBundle implements Interpolator1
   }
 
   /**
-   * Get y values of breakpoints, which are different from "values" for certain interpolations
+   * Get y values of breakpoints, which are different from "values" for certain interpolations.
    *
    * @return Y values of breakpoints
    */

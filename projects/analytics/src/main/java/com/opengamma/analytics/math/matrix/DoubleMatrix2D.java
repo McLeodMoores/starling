@@ -18,13 +18,13 @@ public class DoubleMatrix2D implements Matrix<Double> {
   private final int _rows;
   private final int _columns;
   private final int _elements;
-  /** * Empty 2D matrix */
+  /** * Empty 2D matrix. */
   public static final DoubleMatrix2D EMPTY_MATRIX = new DoubleMatrix2D(new double[0][0]);
 
   /**
-   * @deprecated
-   * Does not copy data on constructions. Do not use.
-   * @param data The data
+   * @deprecated Does not copy data on constructions. Do not use.
+   * @param data
+   *          The data
    * @return A matrix
    */
   @Deprecated
@@ -33,9 +33,12 @@ public class DoubleMatrix2D implements Matrix<Double> {
   }
 
   /**
-   * Sets up an empty matrix
-   * @param rows Number of rows
-   * @param columns Number of columns
+   * Sets up an empty matrix.
+   * 
+   * @param rows
+   *          Number of rows
+   * @param columns
+   *          Number of columns
    */
   public DoubleMatrix2D(final int rows, final int columns) {
     Validate.isTrue(rows > 0, "row number cannot be negative or zero");
@@ -48,8 +51,10 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   // REVIEW could do with a constructor that does NOT copy the data
   /**
-   * @param data The data, not null. The data is expected in row-column form.
-   * @throws IllegalArgumentException If the matrix is not rectangular
+   * @param data
+   *          The data, not null. The data is expected in row-column form.
+   * @throws IllegalArgumentException
+   *           If the matrix is not rectangular
    */
   public DoubleMatrix2D(final double[][] data) {
     Validate.notNull(data);
@@ -70,8 +75,10 @@ public class DoubleMatrix2D implements Matrix<Double> {
   }
 
   /**
-   * @param data The data, not null. The data is expected in row-column form.
-   * @throws IllegalArgumentException If the matrix is not rectangular
+   * @param data
+   *          The data, not null. The data is expected in row-column form.
+   * @throws IllegalArgumentException
+   *           If the matrix is not rectangular
    */
   public DoubleMatrix2D(final Double[][] data) {
     Validate.notNull(data);
@@ -102,7 +109,9 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Returns the row for a particular index.
-   * @param index The index
+   * 
+   * @param index
+   *          The index
    * @return The row
    */
   public DoubleMatrix1D getRowVector(final int index) {
@@ -111,7 +120,9 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Returns the column for a particular index.
-   * @param index The index
+   * 
+   * @param index
+   *          The index
    * @return The column
    */
   public DoubleMatrix1D getColumnVector(final int index) {
@@ -135,6 +146,7 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Returns the underlying matrix data. If this is changed so is the matrix.
+   * 
    * @see #toArray to get a copy of data
    * @return An array of arrays containing the matrix elements
    */
@@ -143,8 +155,8 @@ public class DoubleMatrix2D implements Matrix<Double> {
   }
 
   /**
-   * Convert the matrix to an array of double arrays.
-   * As its elements are copied, the array is independent from the matrix data.
+   * Convert the matrix to an array of double arrays. As its elements are copied, the array is independent from the matrix data.
+   * 
    * @return An array of arrays containing a copy of matrix elements
    */
   public double[][] toArray() {
@@ -228,12 +240,12 @@ public class DoubleMatrix2D implements Matrix<Double> {
   public String toString() {
     final StringBuffer sb = new StringBuffer();
     for (final double[] d : _data) {
-      //  sb.append("(");
+      // sb.append("(");
       for (int i = 0; i < d.length - 1; i++) {
         sb.append(d[i] + "\t");
       }
       sb.append(d[d.length - 1] + "\n");
-      //  sb.append(d[d.length - 1] + ")\n");
+      // sb.append(d[d.length - 1] + ")\n");
     }
     return sb.toString();
   }

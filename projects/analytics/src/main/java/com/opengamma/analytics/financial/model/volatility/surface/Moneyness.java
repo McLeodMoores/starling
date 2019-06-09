@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.volatility.surface;
 import org.apache.commons.lang.Validate;
 
 /**
- * This is defined as strike/forward
+ * This is defined as strike/forward.
  */
 public class Moneyness implements StrikeType {
 
@@ -29,8 +29,6 @@ public class Moneyness implements StrikeType {
   public double value() {
     return _value;
   }
-
-
 
   @Override
   public Moneyness with(final double value) {

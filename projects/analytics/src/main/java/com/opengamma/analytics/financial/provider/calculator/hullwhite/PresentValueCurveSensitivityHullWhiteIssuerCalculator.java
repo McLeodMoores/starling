@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueCurveSensitivityHullWhiteIssuerCalculator
     extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
@@ -30,7 +30,7 @@ public final class PresentValueCurveSensitivityHullWhiteIssuerCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityHullWhiteIssuerCalculator getInstance() {

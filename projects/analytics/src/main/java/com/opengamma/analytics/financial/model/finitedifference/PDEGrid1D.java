@@ -24,7 +24,7 @@ public class PDEGrid1D {
   private final double[][] _x2nd;
 
   /**
-   * Create a uniform grid with numTimeNodes between 0 and tMax, and numSpaceNodes between xMin and xMax
+   * Create a uniform grid with numTimeNodes between 0 and tMax, and numSpaceNodes between xMin and xMax.
    *
    * @param numTimeNodes
    *          The number of time nodes. Note, the number of time steps is numTimeNodes - 1, therefore need numTimeNodes &gt;= 2

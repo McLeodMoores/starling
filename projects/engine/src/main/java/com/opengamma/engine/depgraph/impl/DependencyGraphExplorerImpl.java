@@ -21,7 +21,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Default engine-side implementation of {@link DependencyGraphExplorer}
+ * Default engine-side implementation of {@link DependencyGraphExplorer}.
  */
 public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
 

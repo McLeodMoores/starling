@@ -25,8 +25,8 @@ import com.opengamma.util.tuple.DoublesPair;
 public class ParameterSensitivityInflationIssuerMatrixCalculator extends ParameterSensitivityInflationIssuerMatrixProviderAbstractCalculator {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param inflationSensitivityCalculator
    *          The curve sensitivity calculator.
    */
@@ -37,7 +37,7 @@ public class ParameterSensitivityInflationIssuerMatrixCalculator extends Paramet
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities.
-   * 
+   *
    * @param sensitivity
    *          The point sensitivity.
    * @param inflation

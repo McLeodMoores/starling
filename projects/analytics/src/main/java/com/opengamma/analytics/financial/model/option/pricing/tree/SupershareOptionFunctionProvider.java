@@ -16,10 +16,14 @@ public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
   private final double _upperBound;
 
   /**
-   * @param timeToExpiry Time to expiry
-   * @param lowerBound Lower bound, KL
-   * @param upperBound Upper bound, KH
-   * @param steps Number of steps
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param lowerBound
+   *          Lower bound, KL
+   * @param upperBound
+   *          Upper bound, KH
+   * @param steps
+   *          Number of steps
    */
   public SupershareOptionFunctionProvider(final double timeToExpiry, final double lowerBound, final double upperBound, final int steps) {
     super(lowerBound, timeToExpiry, steps, true);
@@ -60,7 +64,8 @@ public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access lower bound
+   * Access lower bound.
+   * 
    * @return _strike in superclass
    */
   public double getLowerBound() {
@@ -68,7 +73,8 @@ public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access upper bound
+   * Access upper bound.
+   * 
    * @return _upperBound
    */
   public double getUpperBound() {

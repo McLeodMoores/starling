@@ -55,8 +55,8 @@ public class QuasiNewtonVectorMinimizer
   }
 
   /**
-   * Disabled because not working properly (see JIRA issue)
-   * 
+   * Disabled because not working properly (see JIRA issue).
+   *
    * @param function
    *          The function
    * @param startPosition
@@ -209,7 +209,7 @@ public class QuasiNewtonVectorMinimizer
   }
 
   /**
-   * Data bundle for intermediate data
+   * Data bundle for intermediate data.
    */
   public static class DataBundle {
     private double _g0;
@@ -292,8 +292,8 @@ public class QuasiNewtonVectorMinimizer
     }
 
     /**
-     * Inverse Hessian matrix
-     * 
+     * Inverse Hessian matrix.
+     *
      * @return The inverse Hessian Matrix
      */
     public DoubleMatrix2D getInverseHessianEsimate() {

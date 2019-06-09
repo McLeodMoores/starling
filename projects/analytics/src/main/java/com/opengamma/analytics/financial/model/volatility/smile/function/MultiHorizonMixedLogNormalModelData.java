@@ -36,7 +36,7 @@ public class MultiHorizonMixedLogNormalModelData {
   private final double[] _parameters;
 
   /**
-   * Set up a mixed log-normal model with the means of the distributions all the same value
+   * Set up a mixed log-normal model with the means of the distributions all the same value.
    *
    * @param parameters
    *          The 2n-1 parameters (where n is the number of normals) in order as: sigma_0, deltaSigma_1....deltaSigma_{n-1}, theta_1...theta_{n-1} where sigma_0
@@ -48,7 +48,7 @@ public class MultiHorizonMixedLogNormalModelData {
   }
 
   /**
-   * Set up a mixed log-normal model with option to have distributions with different means
+   * Set up a mixed log-normal model with option to have distributions with different means.
    *
    * @param parameters
    *          The 2n-1 or 3n-2 parameters (where n is the number of normals) depending on whether useShiftedMeans is false or true. The parameters in order as:
@@ -96,8 +96,8 @@ public class MultiHorizonMixedLogNormalModelData {
   }
 
   /**
-   * Set up a mixed log-normal model with the means of the distributions all the same value
-   * 
+   * Set up a mixed log-normal model with the means of the distributions all the same value.
+   *
    * @param weights
    *          The weights of (i.e. probability of being in) each state <b>These weights must sum to 1</b>
    * @param sigmas
@@ -137,8 +137,8 @@ public class MultiHorizonMixedLogNormalModelData {
   }
 
   /**
-   * Set up a mixed log-normal model with the means of the distributions can take different values
-   * 
+   * Set up a mixed log-normal model with the means of the distributions can take different values.
+   *
    * @param weights
    *          The weights of (i.e. probability of being in) each state <b>These weights must sum to 1</b>
    * @param sigmas
@@ -194,8 +194,8 @@ public class MultiHorizonMixedLogNormalModelData {
   }
 
   /**
-   * The matrix of partial derivatives of weights with respect to the angles theta
-   * 
+   * The matrix of partial derivatives of weights with respect to the angles theta.
+   *
    * @return the n by n-1 Jacobian, where n is the number of normals
    */
   public double[][] getWeightsJacobian() {

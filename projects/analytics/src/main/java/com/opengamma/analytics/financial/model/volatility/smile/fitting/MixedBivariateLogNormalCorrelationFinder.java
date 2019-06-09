@@ -49,7 +49,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Find a set of correlations such that sum ( (_dataStrikes - exactFunctionValue)^2 ) is minimum.
-   * 
+   *
    * @param rhosGuess
    *          Initial geuss rhos
    * @param dataStrikes
@@ -511,17 +511,17 @@ public class MixedBivariateLogNormalCorrelationFinder {
       final double impVolZ = getVolatility(option, forwardZ, guessDataZ);
       for (int i = 0; i < nNormals; ++i) {
         final double part1 = weightsZ[i] * forwardZ * BlackFormulaRepository.delta(relativePartialForwardsZ[i], dataStrs[j] / forwardZ, time, sigmasZ[i], true)
-            * sigmasX[i] *
-            sigmasY[i] * relativePartialForwardsZ[i] / BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
+            * sigmasX[i]
+            * sigmasY[i] * relativePartialForwardsZ[i] / BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
         final double part2 = forwardZ * weightsZ[i] * BlackFormulaRepository.vega(relativePartialForwardsZ[i], dataStrs[j] / forwardZ, time, sigmasZ[i])
-            * sigmasX[i] *
-            sigmasY[i] / sigmasZ[i] / BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
+            * sigmasX[i]
+            * sigmasY[i] / sigmasZ[i] / BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
         final double factor = weightsZ[i] * relativePartialForwardsZ[i] * sigmasX[i] * sigmasY[i] * correction * correction;
         double part3 = 0.;
         for (int l = 0; l < nNormals; ++l) {
-          part3 += factor * weightsZ[l] * forwardZ * BlackFormulaRepository.delta(relativePartialForwardsZ[l], dataStrs[j] / forwardZ, time, sigmasZ[l], true) *
-              relativePartialForwardsZ[l] /
-              BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
+          part3 += factor * weightsZ[l] * forwardZ * BlackFormulaRepository.delta(relativePartialForwardsZ[l], dataStrs[j] / forwardZ, time, sigmasZ[l], true)
+              * relativePartialForwardsZ[l]
+              / BlackFormulaRepository.vega(forwardZ, dataStrs[j], time, impVolZ);
         }
         res[j][i] = part1 + part2 - part3;
       }
@@ -533,7 +533,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Solve the matrix equation ( hessian + shift (Id matrix) ) jump = gradFunctionValueM
-   * 
+   *
    * @param dataStrs
    *          Strike data
    * @param dataVols
@@ -581,8 +581,8 @@ public class MixedBivariateLogNormalCorrelationFinder {
   }
 
   /**
-   * Linear problem Ax=b where A is a square matrix and x,b are vector can be solved by LU decomposition
-   * 
+   * Linear problem Ax=b where A is a square matrix and x,b are vector can be solved by LU decomposition.
+   *
    * @param doubMat
    *          Matrix A
    * @param doubVec
@@ -602,7 +602,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Linear problem Ax=b is solved by forward substitution if A is lower triangular
-   * 
+   *
    * @param lMat
    *          Lower triangular matrix
    * @param doubVec
@@ -627,7 +627,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
 
   /**
    * Linear problem Ax=b is solved by backward substitution if A is upper triangular
-   * 
+   *
    * @param uMat
    *          Upper triangular matrix
    * @param doubVec

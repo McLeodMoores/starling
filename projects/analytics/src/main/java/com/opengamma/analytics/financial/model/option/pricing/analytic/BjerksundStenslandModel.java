@@ -35,7 +35,7 @@ public class BjerksundStenslandModel {
 
   /**
    * Returns a pricing function.
-   * 
+   *
    * @param definition
    *          The option definition, not null
    * @return The pricing function
@@ -69,7 +69,7 @@ public class BjerksundStenslandModel {
   /**
    * Get the price of an American option by the Bjerksund and Stensland (2002) approximation. We ensure that the price is the maximum of the no early exercise
    * (Black-Scholes price), the immediate exercise value and the Bjerksund-Stensland approximation value.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -111,7 +111,7 @@ public class BjerksundStenslandModel {
 
   /**
    * Get the price of an American call option by the Bjerksund and Stensland (2002) approximation.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -310,7 +310,7 @@ public class BjerksundStenslandModel {
   /**
    * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided difference on the delta. For a call both
    * delta and gamma are found by Algorithmic Differentiation.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -363,7 +363,7 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation
+   * Get the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation.
    *
    * @param s0
    *          The spot
@@ -698,7 +698,7 @@ public class BjerksundStenslandModel {
 
   /**
    * Get the put option price, plus its delta and gamma from dual-delta and dual-gamma of the call option by using the put-call transformation.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -720,10 +720,10 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * get alpha and its sensitivity to k, x (I) and beta
-   * 
+   *
    * @param k
    *          strike
    * @param x
@@ -751,10 +751,10 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * Get lambda and its sensitivity to gamma, r, b and sigma-squared
-   * 
+   *
    * @param gamma
    *          If this is set to 0 or 1, then the gamma sensitivity should be ignored
    * @param r
@@ -763,7 +763,7 @@ public class BjerksundStenslandModel {
    *          cost-of-carry
    * @param sigmaSq
    *          volatility squared
-   * 
+   *
    * @return length 5 array of lambda and its sensitivity to gamma, r, b and sigma-squared
    */
   protected double[] getLambdaAdjoint(final double gamma, final double r, final double b, final double sigmaSq) {
@@ -778,10 +778,10 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * Get kappa and its sensitivity to gamma, b and sigma-squared
-   * 
+   *
    * @param gamma
    *          If this is set to 0 or 1, then the gamma sensitivity should be ignored
    * @param b
@@ -801,7 +801,7 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * get phi and its sensitivity to s, t, gamma, h, x (I), r, b &amp; sigma
    *
@@ -960,10 +960,10 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * get Psi and its sensitivity to s, t, gamma, h, x2, x1, r, b and sigma
-   * 
+   *
    * @param s
    *          spot
    * @param t
@@ -1197,10 +1197,10 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * Get the first and second derivatives of the bi-variate normal with repect to a and b (rho is fixed)
-   * 
+   *
    * @param a
    *          first cooridinate
    * @param b
@@ -1231,10 +1231,10 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * Get beta and its sensitivity to r, b and sigma-squared
-   * 
+   *
    * @param r
    *          risk-free rate
    * @param b
@@ -1269,7 +1269,7 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * get I1 and its sensitivity to k, r, b, sigma &amp; t
    *
@@ -1290,7 +1290,7 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * access given for tests - expert use only
+   * access given for tests - expert use only.
    * <p>
    * get I2 and its sensitivity to k, r, b, sigma &amp; t
    *
@@ -1377,7 +1377,7 @@ public class BjerksundStenslandModel {
 
   /**
    * get I and its sensitivity to b0, bInf, k, b, sigma and t
-   * 
+   *
    * @param b0
    * @param bInf
    * @param k

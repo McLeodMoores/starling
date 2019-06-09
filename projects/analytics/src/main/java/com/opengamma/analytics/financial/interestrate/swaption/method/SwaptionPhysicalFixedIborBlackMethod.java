@@ -226,7 +226,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute first derivative of present value with respect to forward rate
+   * Compute first derivative of present value with respect to forward rate.
    *
    * @param swaption
    *          The swaption.
@@ -254,7 +254,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Calculates the delta
+   * Calculates the delta.
    *
    * @param swaption
    *          The swaption, not null
@@ -296,7 +296,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Calculates the theta
+   * Calculates the theta.
    *
    * @param swaption
    *          The swaption, not null
@@ -312,7 +312,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute second derivative of present value with respect to forward rate
+   * Compute second derivative of present value with respect to forward rate.
    *
    * @param swaption
    *          The swaption.
@@ -340,7 +340,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0
+   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0.
    *
    * @param swaption
    *          The swaption.
@@ -368,7 +368,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time
+   * Compute minus of first derivative of present value with respect to time.
    *
    * @param swaption
    *          The swaption.
@@ -396,7 +396,7 @@ public final class SwaptionPhysicalFixedIborBlackMethod implements PricingMethod
   }
 
   /**
-   * Compute first derivative of present value with respect to volatility
+   * Compute first derivative of present value with respect to volatility.
    *
    * @param swaption
    *          The swaption.

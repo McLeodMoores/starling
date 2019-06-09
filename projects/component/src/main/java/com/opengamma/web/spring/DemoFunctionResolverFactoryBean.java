@@ -20,7 +20,7 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * Creates a FunctionResolver for the demo, prioritizing the functions
+ * Creates a FunctionResolver for the demo, prioritizing the functions.
  */
 @SuppressWarnings("deprecation")
 public class DemoFunctionResolverFactoryBean extends SingletonFactoryBean<FunctionResolver> {

@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Describes a capital inflation indexed bond issue. Both the coupon and the nominal are indexed on a price index.
- * 
+ *
  * @param <C>
  *          Type of inflation coupon.
  */
@@ -66,7 +66,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Constructor of the Capital inflation indexed bond.
-   * 
+   *
    * @param nominal
    *          The nominal annuity.
    * @param coupon
@@ -109,7 +109,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Constructor of the Capital inflation indexed bond.
-   * 
+   *
    * @param nominal
    *          The nominal annuity.
    * @param coupon
@@ -161,7 +161,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the bond yield convention.
-   * 
+   *
    * @return The yield convention.
    */
   public YieldConvention getYieldConvention() {
@@ -170,7 +170,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the real accrued interest at the settlement date.
-   * 
+   *
    * @return The accrued interest.
    */
   public double getAccruedInterest() {
@@ -179,7 +179,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the number of coupon per year.
-   * 
+   *
    * @return The number of coupon per year.
    */
   public int getCouponPerYear() {
@@ -188,7 +188,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the real accrual factor to the first coupon.
-   * 
+   *
    * @return The accrual factor to the first coupon.
    */
   public double getAccrualFactorToNextCoupon() {
@@ -197,7 +197,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the real accrual factor to the first coupon.
-   * 
+   *
    * @return The accrual factor to the first coupon.
    */
   public double getRatioPeriodToNextCoupon() {
@@ -206,7 +206,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the price index associated to the bond.
-   * 
+   *
    * @return The price index.
    */
   public IndexPrice getPriceIndex() {
@@ -215,7 +215,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the index value at the start of the bond.
-   * 
+   *
    * @return The index value.
    */
   public double getIndexStartValue() {
@@ -223,8 +223,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value xxx
-   * 
+   * Gets the index value xxx.
+   *
    * @return The index value.
    */
   public double getLastIndexKnownFixing() {
@@ -232,8 +232,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value xxx
-   * 
+   * Gets the index value xxx.
+   *
    * @return The index value.
    */
   public double getLastButOneIndexKnownFixing() {
@@ -241,8 +241,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value at xxx
-   * 
+   * Gets the index value at xxx.
+   *
    * @return The index value.
    */
   public double getLastKnownFixingTime() {
@@ -250,8 +250,8 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
   }
 
   /**
-   * Gets the index value xxx
-   * 
+   * Gets the index value xxx.
+   *
    * @return The index value.
    */
   public double getIndexRatio() {
@@ -260,7 +260,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /**
    * Gets the index value at the start of the bond.
-   * 
+   *
    * @return The index value.
    */
   public CouponInflation getSettlement() {
@@ -304,7 +304,7 @@ public class BondCapitalIndexedSecurity<C extends Coupon> extends BondSecurity<C
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

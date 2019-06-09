@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.description.inflation;
@@ -13,7 +13,8 @@ import com.opengamma.analytics.financial.model.option.parameters.BlackSmileCapIn
 public interface BlackSmileCapInflationYearOnYearWithConvexityProviderInterface extends InflationConvexityAdjustmentProviderInterface {
 
   /**
-   * Create a new copy of the provider
+   * Create a new copy of the provider.
+   * 
    * @return The bundle
    */
   @Override
@@ -21,6 +22,7 @@ public interface BlackSmileCapInflationYearOnYearWithConvexityProviderInterface 
 
   /**
    * Returns the Black parameters.
+   * 
    * @return The parameters
    */
   BlackSmileCapInflationYearOnYearParameters getBlackParameters();

@@ -54,7 +54,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
   private final String _name;
   /**
    * The holiday calendar.
-   * 
+   *
    * @deprecated Deprecated since 2.2.0.M17
    */
   @Deprecated
@@ -62,7 +62,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Constructor.
-   * 
+   *
    * @param lastTradingDate
    *          The last trading date, not null
    * @param fixingPeriodStartDate
@@ -104,7 +104,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Constructor of the interest rate future security.
-   * 
+   *
    * @param lastTradingDate
    *          Future last trading date.
    * @param iborIndex
@@ -138,7 +138,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Build a interest rate futures transaction from the fixing period start date.
-   * 
+   *
    * @param fixingPeriodStartDate
    *          The start date of the fixing period.
    * @param iborIndex
@@ -165,8 +165,8 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
   }
 
   /**
-   * Scales notional to 1.0 in curve fitting to provide better conditioning of the Jacobian
-   * 
+   * Scales notional to 1.0 in curve fitting to provide better conditioning of the Jacobian.
+   *
    * @deprecated Deprecated since 2.2.0.M17
    */
   @Deprecated
@@ -176,7 +176,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the Ibor index associated to the future.
-   * 
+   *
    * @return The Ibor index
    */
   public IborIndex getIborIndex() {
@@ -185,7 +185,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the _unitAmount. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'.
-   * 
+   *
    * @return the _unitAmount
    */
   public double getUnitAmount() {
@@ -194,7 +194,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the fixing period of the reference Ibor starting date.
-   * 
+   *
    * @return The fixing period starting date
    */
   public ZonedDateTime getFixingPeriodStartDate() {
@@ -203,7 +203,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the fixing period of the reference Ibor end date.
-   * 
+   *
    * @return The fixing period end date.
    */
   public ZonedDateTime getFixingPeriodEndDate() {
@@ -212,7 +212,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the fixing period of the reference Ibor accrual factor.
-   * 
+   *
    * @return The Fixing period accrual factor.
    */
   public double getFixingPeriodAccrualFactor() {
@@ -221,7 +221,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future notional.
-   * 
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -230,7 +230,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future payment accrual factor.
-   * 
+   *
    * @return The future payment accrual factor.
    */
   public double getPaymentAccrualFactor() {
@@ -239,7 +239,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future name.
-   * 
+   *
    * @return The name
    */
   public String getName() {
@@ -248,7 +248,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * The future currency.
-   * 
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -257,7 +257,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the holiday calendar.
-   * 
+   *
    * @return The holiday calendar
    * @deprecated Deprecated since 2.2.0.M17
    */
@@ -268,7 +268,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated

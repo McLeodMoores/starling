@@ -11,7 +11,7 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * European type of double barrier option
+ * European type of double barrier option.
  */
 public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionProvider {
 
@@ -131,8 +131,8 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   /**
-   * Access lower barrier
-   * 
+   * Access lower barrier.
+   *
    * @return _barrier in superclass
    */
   public double getLowerBarrier() {
@@ -140,8 +140,8 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   /**
-   * Access upper barrier
-   * 
+   * Access upper barrier.
+   *
    * @return _upperBarrier
    */
   public double getUpperBarrier() {
@@ -154,7 +154,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   /**
-   * The inherited class checks barriers crossing for double knock-out option
+   * The inherited class checks barriers crossing for double knock-out option.
    */
   @SuppressWarnings("synthetic-access")
   protected class DoubleBarrier extends CrossBarrierChecker {

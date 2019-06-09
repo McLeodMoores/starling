@@ -53,33 +53,30 @@ public class ViewCalculationConfiguration implements Serializable {
   private final String _name;
 
   /**
-   * Contains the required portfolio outputs for each security type. These are the outputs produced at the position
-   * and aggregate position level, with respect to the reference portfolio. Accepting portfolio outputs as a set of
-   * strings is really just for user convenience; ValueRequirements are eventually still needed for each of these for
-   * every position and aggregate position in the reference portfolio.
+   * Contains the required portfolio outputs for each security type. These are the outputs produced at the position and aggregate position level, with respect
+   * to the reference portfolio. Accepting portfolio outputs as a set of strings is really just for user convenience; ValueRequirements are eventually still
+   * needed for each of these for every position and aggregate position in the reference portfolio.
    */
   private final Map<String, Set<Pair<String, ValueProperties>>> _portfolioRequirementsBySecurityType = new TreeMap<>();
 
   /**
-   * Contains any specific outputs required, where each entry really corresponds to a single output at computation
-   * time.
+   * Contains any specific outputs required, where each entry really corresponds to a single output at computation time.
    */
   private final Set<ValueRequirement> _specificRequirements = new LinkedHashSet<>();
 
   /**
-   * Start with an empty delta definition which will perform simple equality comparisons. This should be customized as
-   * required for the view configuration.
+   * Start with an empty delta definition which will perform simple equality comparisons. This should be customized as required for the view configuration.
    */
   private DeltaDefinition _deltaDefinition = new DeltaDefinition();
 
   /**
    * The scenarioId to be used for this configuration
-   * */
+   */
   private UniqueId _scenarioId;
 
   /**
    * The scenarioParametersId to be used for this configuration
-   * */
+   */
   private UniqueId _scenarioParametersId;
 
   /**
@@ -99,23 +96,24 @@ public class ViewCalculationConfiguration implements Serializable {
   private ResolutionRuleTransform _resolutionRuleTransform = IdentityResolutionRuleTransform.INSTANCE;
 
   /**
-   * Defines merged outputs. These are sets of portfolio requirements which should be published under a single output
-   * name with common aggregates.
+   * Defines merged outputs. These are sets of portfolio requirements which should be published under a single output name with common aggregates.
    */
   private final List<MergedOutput> _mergedOutputs = new ArrayList<>();
 
   /**
-   * Defines the labels and order of the columns used for displaying the data in the UI. This doesn't have to contain
-   * columns for every value name / properties combination in the configuration. Any columns that aren't defined
-   * will use the default label and will appear at the end in the order their requirements are defined.
+   * Defines the labels and order of the columns used for displaying the data in the UI. This doesn't have to contain columns for every value name / properties
+   * combination in the configuration. Any columns that aren't defined will use the default label and will appear at the end in the order their requirements are
+   * defined.
    */
   private List<Column> _columns = Collections.emptyList();
 
   /**
    * Constructs an instance.
    *
-   * @param definition  the parent view definition, not null
-   * @param name  the calculation configuration name, not null
+   * @param definition
+   *          the parent view definition, not null
+   * @param name
+   *          the calculation configuration name, not null
    */
   public ViewCalculationConfiguration(final ViewDefinition definition, final String name) {
     ArgumentChecker.notNull(definition, "Parent view definition");
@@ -124,11 +122,12 @@ public class ViewCalculationConfiguration implements Serializable {
     _name = name;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Copies this view calculation configuration to a new parent view definition, adding the copy to the new owner.
    *
-   * @param newOwner  the new parent view definition, not null
+   * @param newOwner
+   *          the new parent view definition, not null
    */
   public void copyTo(final ViewDefinition newOwner) {
     final ViewCalculationConfiguration copy = new ViewCalculationConfiguration(newOwner, getName());
@@ -175,9 +174,8 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Returns the default value properties for the view. Functions that expect a property constraint on values
-   * they are asked to produce should refer to the defaults if the constraint is absent, or use the default
-   * to construct the input requirements.
+   * Returns the default value properties for the view. Functions that expect a property constraint on values they are asked to produce should refer to the
+   * defaults if the constraint is absent, or use the default to construct the input requirements.
    *
    * @return the default property set
    */
@@ -186,8 +184,7 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Returns the scenarioId to be used for this configuration - if set, this will refer to a scenario defined in
-   * the config master.
+   * Returns the scenarioId to be used for this configuration - if set, this will refer to a scenario defined in the config master.
    *
    * @return the scenarioId for this configuration, may be null
    */
@@ -196,19 +193,17 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Sets the scenarioId to be used for this configuration - if set, this will refer to a scenario defined in
-   * the config master.
+   * Sets the scenarioId to be used for this configuration - if set, this will refer to a scenario defined in the config master.
    *
-   * @param scenarioId the scenarioId for this configuration, may be null
+   * @param scenarioId
+   *          the scenarioId for this configuration, may be null
    */
   public void setScenarioId(final UniqueId scenarioId) {
     _scenarioId = scenarioId;
   }
 
   /**
-  /**
-   * Returns the scenarioParametersId to be used for this configuration - if set, this will refer to a scenario
-   * parameters defined in the config master.
+   * /** Returns the scenarioParametersId to be used for this configuration - if set, this will refer to a scenario parameters defined in the config master.
    *
    * @return the scenarioParametersId for this configuration, may be null
    */
@@ -217,21 +212,21 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Sets the scenarioParametersId to be used for this configuration - if set, this will refer to a scenario parameters
-   * defined in the config master.
+   * Sets the scenarioParametersId to be used for this configuration - if set, this will refer to a scenario parameters defined in the config master.
    *
-   * @param scenarioParametersId the scenarioParametersId for this configuration, may be null
+   * @param scenarioParametersId
+   *          the scenarioParametersId for this configuration, may be null
    */
   public void setScenarioParametersId(final UniqueId scenarioParametersId) {
     _scenarioParametersId = scenarioParametersId;
   }
 
   /**
-   * Sets the default value properties for the view. Functions that expect a property constraint on values
-   * they are asked to produce should refer to the defaults if the constraint is absent, or use the default
-   * to construct the input requirements.
+   * Sets the default value properties for the view. Functions that expect a property constraint on values they are asked to produce should refer to the
+   * defaults if the constraint is absent, or use the default to construct the input requirements.
    *
-   * @param defaultProperties the default properties
+   * @param defaultProperties
+   *          the default properties
    */
   public void setDefaultProperties(final ValueProperties defaultProperties) {
     ArgumentChecker.notNull(defaultProperties, "defaultProperties");
@@ -239,8 +234,7 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Gets the transformation to use on resolution rules when compiling a view for execution under this
-   * configuration.
+   * Gets the transformation to use on resolution rules when compiling a view for execution under this configuration.
    *
    * @return the resolution rule transformation
    */
@@ -249,10 +243,10 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Sets the transformation to use on resolution rules when compiling a view for execution under this
-   * configuration.
+   * Sets the transformation to use on resolution rules when compiling a view for execution under this configuration.
    *
-   * @param resolutionRuleTransform the resolution rule transformation
+   * @param resolutionRuleTransform
+   *          the resolution rule transformation
    */
   public void setResolutionRuleTransform(final ResolutionRuleTransform resolutionRuleTransform) {
     ArgumentChecker.notNull(resolutionRuleTransform, "resolutionRuleTransform");
@@ -260,21 +254,20 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Gets the required portfolio outputs by security type. These are the outputs produced at the position and
-   * aggregate position level, with respect to the reference portfolio.
+   * Gets the required portfolio outputs by security type. These are the outputs produced at the position and aggregate position level, with respect to the
+   * reference portfolio.
    *
-   * @return  a map of security type to the names of the required outputs for that type, not null
+   * @return a map of security type to the names of the required outputs for that type, not null
    */
   public Map<String, Set<Pair<String, ValueProperties>>> getPortfolioRequirementsBySecurityType() {
     return Collections.unmodifiableMap(_portfolioRequirementsBySecurityType);
   }
 
   /**
-   * Gets a set containing every portfolio output that is required, regardless of the security type(s) on which the
-   * output is required. These are outputs produced at the position and aggregate position level, with respect to the
-   * reference portfolio.
+   * Gets a set containing every portfolio output that is required, regardless of the security type(s) on which the output is required. These are outputs
+   * produced at the position and aggregate position level, with respect to the reference portfolio.
    *
-   * @return  a set of every required portfolio output, not null
+   * @return a set of every required portfolio output, not null
    */
   public Set<Pair<String, ValueProperties>> getAllPortfolioRequirements() {
     final Set<Pair<String, ValueProperties>> requirements = Sets.newLinkedHashSet();
@@ -285,11 +278,13 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Adds a set of required portfolio outputs for the given security type. These are outputs produced at the position
-   * and aggregate position level, with respect to the reference portfolio.
+   * Adds a set of required portfolio outputs for the given security type. These are outputs produced at the position and aggregate position level, with respect
+   * to the reference portfolio.
    *
-   * @param securityType  the type of security for which the outputs should be produced, not null
-   * @param requiredOutputs  a set of output names and value constraints, not null
+   * @param securityType
+   *          the type of security for which the outputs should be produced, not null
+   * @param requiredOutputs
+   *          a set of output names and value constraints, not null
    */
   public void addPortfolioRequirements(final String securityType, final Set<Pair<String, ValueProperties>> requiredOutputs) {
     ArgumentChecker.notNull(securityType, "securityType");
@@ -303,12 +298,13 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Adds a set of required portfolio outputs for the given security type with no value constraints. This is
-   * equivalent to calling {@link #addPortfolioRequirements (String, Set)} with
-   * {@code ValueProperties.none ()} against each output name.
+   * Adds a set of required portfolio outputs for the given security type with no value constraints. This is equivalent to calling
+   * {@link #addPortfolioRequirements (String, Set)} with {@code ValueProperties.none ()} against each output name.
    *
-   * @param securityType the type of security for which the outputs should be produced, not null
-   * @param requiredOutputs a set of output names, not null
+   * @param securityType
+   *          the type of security for which the outputs should be produced, not null
+   * @param requiredOutputs
+   *          a set of output names, not null
    */
   public void addPortfolioRequirementNames(final String securityType, final Set<String> requiredOutputs) {
     ArgumentChecker.notNull(securityType, "securityType");
@@ -319,12 +315,15 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Adds a required portfolio output for the given security type. This is an output produced at the position and
-   * aggregate position level, with respect to the reference portfolio.
+   * Adds a required portfolio output for the given security type. This is an output produced at the position and aggregate position level, with respect to the
+   * reference portfolio.
    *
-   * @param securityType  the type of security for which the output should be produced, not null
-   * @param requiredOutput  an output name, not null
-   * @param constraints constraints on the requirement, not null
+   * @param securityType
+   *          the type of security for which the output should be produced, not null
+   * @param requiredOutput
+   *          an output name, not null
+   * @param constraints
+   *          constraints on the requirement, not null
    */
   public void addPortfolioRequirement(final String securityType, final String requiredOutput, final ValueProperties constraints) {
     ArgumentChecker.notNull(securityType, "securityType");
@@ -334,11 +333,13 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Adds a required portfolio output for the given security type with no value constraints. This is equivilant
-   * to calling {@link #addPortfolioRequirement (String, String, ValueProperties)} with {@code ValueProperties.none ()}.
+   * Adds a required portfolio output for the given security type with no value constraints. This is equivilant to calling
+   * {@link #addPortfolioRequirement (String, String, ValueProperties)} with {@code ValueProperties.none ()}.
    *
-   * @param securityType the type of security for which the output should be produced, not null
-   * @param requiredOutput an output name, not null
+   * @param securityType
+   *          the type of security for which the output should be produced, not null
+   * @param requiredOutput
+   *          an output name, not null
    */
   public void addPortfolioRequirementName(final String securityType, final String requiredOutput) {
     addPortfolioRequirement(securityType, requiredOutput, ValueProperties.none());
@@ -347,20 +348,20 @@ public class ViewCalculationConfiguration implements Serializable {
   /**
    * Gets a set containing every specific requirement.
    *
-   * @return  a set containing every specific requirement, not null
+   * @return a set containing every specific requirement, not null
    */
   public Set<ValueRequirement> getSpecificRequirements() {
     return Collections.unmodifiableSet(_specificRequirements);
   }
 
   /**
-   * Adds a set of required outputs. These outputs are specific in the sense that they have already been resolved into
-   * {@link ValueRequirement}s which reference the target for which the value is required. Such outputs would usually
-   * be related to the portfolio outputs in some way, for example to obtain some underlying market data that was input
-   * to the portfolio calculations. However, no relationship to the portfolio is required, particularly because
-   * the view might not reference a portfolio, and these outputs could be used to request arbitrary values.
+   * Adds a set of required outputs. These outputs are specific in the sense that they have already been resolved into {@link ValueRequirement}s which reference
+   * the target for which the value is required. Such outputs would usually be related to the portfolio outputs in some way, for example to obtain some
+   * underlying market data that was input to the portfolio calculations. However, no relationship to the portfolio is required, particularly because the view
+   * might not reference a portfolio, and these outputs could be used to request arbitrary values.
    *
-   * @param requirements  the requirements, not null
+   * @param requirements
+   *          the requirements, not null
    */
   public void addSpecificRequirements(final Set<ValueRequirement> requirements) {
     ArgumentChecker.notNull(requirements, "requirements");
@@ -368,13 +369,13 @@ public class ViewCalculationConfiguration implements Serializable {
   }
 
   /**
-   * Adds a required output. This output is specific in the sense that it has already been resolved into a
-   * {@link ValueRequirement} which references the target for which the value is required. Such an output would usually
-   * be related to the portfolio outputs in some way, for example to obtain some underlying market data that was an
-   * input to the portfolio calculations. However, no relationship to the portfolio is required, particularly because
-   * the view might not reference a portfolio, and this output could be used to request an arbitrary value.
+   * Adds a required output. This output is specific in the sense that it has already been resolved into a {@link ValueRequirement} which references the target
+   * for which the value is required. Such an output would usually be related to the portfolio outputs in some way, for example to obtain some underlying market
+   * data that was an input to the portfolio calculations. However, no relationship to the portfolio is required, particularly because the view might not
+   * reference a portfolio, and this output could be used to request an arbitrary value.
    *
-   * @param requirement  the output, not null
+   * @param requirement
+   *          the output, not null
    */
   public void addSpecificRequirement(final ValueRequirement requirement) {
     ArgumentChecker.notNull(requirement, "requirement");
@@ -393,7 +394,8 @@ public class ViewCalculationConfiguration implements Serializable {
   /**
    * Gets the merged output with a given name.
    *
-   * @param mergedOutputName  the merged output name, not null
+   * @param mergedOutputName
+   *          the merged output name, not null
    * @return the merged output, null if not found
    */
   public MergedOutput getMergedOutput(final String mergedOutputName) {
@@ -409,7 +411,8 @@ public class ViewCalculationConfiguration implements Serializable {
   /**
    * Adds a new merged output.
    *
-   * @param mergedOutput  the merged output, not null
+   * @param mergedOutput
+   *          the merged output, not null
    */
   public void addMergedOutput(final MergedOutput mergedOutput) {
     ArgumentChecker.notNull(mergedOutput, "mergedOutput");
@@ -428,7 +431,8 @@ public class ViewCalculationConfiguration implements Serializable {
   /**
    * Sets the list of column definitions.
    *
-   * @param columns  the column definitions, not null
+   * @param columns
+   *          the column definitions, not null
    */
   public void setColumns(final List<Column> columns) {
     ArgumentChecker.notNull(columns, "columns");
@@ -571,8 +575,10 @@ public class ViewCalculationConfiguration implements Serializable {
     /**
      * Creates an instance.
      *
-     * @param mergedOutputName  the name under which to display the merged output, not null
-     * @param aggregationType  the aggregation to apply to the merged output, not null
+     * @param mergedOutputName
+     *          the name under which to display the merged output, not null
+     * @param aggregationType
+     *          the aggregation to apply to the merged output, not null
      */
     public MergedOutput(final String mergedOutputName, final MergedOutputAggregationType aggregationType) {
       ArgumentChecker.notNull(mergedOutputName, "mergedOutputName");
@@ -600,8 +606,10 @@ public class ViewCalculationConfiguration implements Serializable {
     /**
      * Adds a requirement to this merged output.
      *
-     * @param valueName  the original value name, not null
-     * @param properties  the original value properties, not null
+     * @param valueName
+     *          the original value name, not null
+     * @param properties
+     *          the original value properties, not null
      */
     public void addMergedRequirement(final String valueName, final ValueProperties properties) {
       ArgumentChecker.notNull(valueName, "valueName");
@@ -641,7 +649,7 @@ public class ViewCalculationConfiguration implements Serializable {
   public enum MergedOutputAggregationType {
 
     /**
-     * Specifies that simple, linear aggregation should be used
+     * Specifies that simple, linear aggregation should be used.
      */
     LINEAR
 

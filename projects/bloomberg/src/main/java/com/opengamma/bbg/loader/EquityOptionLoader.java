@@ -73,7 +73,7 @@ public class EquityOptionLoader extends SecurityLoader {
       FIELD_OPT_VAL_PT);
 
   /**
-   * The valid Bloomberg security types for EquityOption
+   * The valid Bloomberg security types for EquityOption.
    */
   public static final Set<String> VALID_SECURITY_TYPES = ImmutableSet.of(BLOOMBERG_EQUITY_OPTION_SECURITY_TYPE);
 
@@ -81,13 +81,15 @@ public class EquityOptionLoader extends SecurityLoader {
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public EquityOptionLoader(final ReferenceDataProvider referenceDataProvider) {
     super(LOGGER, referenceDataProvider, SecurityType.EQUITY_OPTION);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String rootTicker = fieldData.getString(FIELD_OPTION_ROOT_TICKER);
@@ -137,7 +139,7 @@ public class EquityOptionLoader extends SecurityLoader {
       return null;
     }
     final OptionType optionType = getOptionType(putOrCall);
-    //get year month day from expiryDate in the yyyy-mm-dd format
+    // get year month day from expiryDate in the yyyy-mm-dd format
     LocalDate expiryLocalDate = null;
     try {
       expiryLocalDate = LocalDate.parse(expiryDate);
@@ -178,7 +180,7 @@ public class EquityOptionLoader extends SecurityLoader {
         exchange);
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));
     security.setUniqueId(BloombergSecurityProvider.createUniqueId(bbgUniqueID));
-    //build option display name
+    // build option display name
     final StringBuilder buf = new StringBuilder(rootTicker);
     buf.append(" ");
     buf.append(expiryDate);

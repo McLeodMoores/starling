@@ -131,8 +131,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access number of exercise times
-   * 
+   * Access number of exercise times.
+   *
    * @return _nTimes
    */
   public int getNumberOfExerciseTimes() {
@@ -140,8 +140,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access exercise times
-   * 
+   * Access exercise times.
+   *
    * @return _exerciseTimes
    */
   public double[] getExerciseTimes() {
@@ -149,8 +149,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access exercise steps
-   * 
+   * Access exercise steps.
+   *
    * @return _exerciseSteps
    */
   public int[] getExerciseSteps() {

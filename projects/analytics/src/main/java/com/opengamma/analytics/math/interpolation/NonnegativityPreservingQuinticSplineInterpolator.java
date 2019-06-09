@@ -30,8 +30,8 @@ public class NonnegativityPreservingQuinticSplineInterpolator extends PiecewiseP
   private final PiecewisePolynomialInterpolator _method;
 
   /**
-   * Primary interpolation method should be passed
-   * 
+   * Primary interpolation method should be passed.
+   *
    * @param method
    *          PiecewisePolynomialInterpolator
    */
@@ -301,7 +301,7 @@ public class NonnegativityPreservingQuinticSplineInterpolator extends PiecewiseP
 
   /**
    * First derivatives are modified such that cubic interpolant has the same sign as linear interpolator
-   * 
+   *
    * @param yValues
    * @param intervals
    * @param slopes

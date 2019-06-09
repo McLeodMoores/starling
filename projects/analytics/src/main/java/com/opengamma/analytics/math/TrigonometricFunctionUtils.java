@@ -23,8 +23,8 @@ public class TrigonometricFunctionUtils {
   }
 
   /**
-   * arccos - the inverse of cos
-   * 
+   * arccos - the inverse of cos.
+   *
    * @param z
    *          A complex number
    * @return acos(z)

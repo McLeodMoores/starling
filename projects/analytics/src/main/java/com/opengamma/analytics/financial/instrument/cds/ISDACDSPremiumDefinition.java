@@ -50,7 +50,7 @@ public class ISDACDSPremiumDefinition extends AnnuityCouponFixedDefinition {
   }
 
   /**
-   * An ISDA-compliant annuity builder for a CDS contract
+   * An ISDA-compliant annuity builder for a CDS contract.
    *
    * @param startDate
    *          The (original unadjusted) start of the CDS contract
@@ -128,7 +128,7 @@ public class ISDACDSPremiumDefinition extends AnnuityCouponFixedDefinition {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not use yield curve names
    */
   @Deprecated

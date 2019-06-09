@@ -7,7 +7,7 @@
 package com.opengamma.engine.function.blacklist;
 
 /**
- * Publishes a {@link ManageableFunctionBlacklist} to remote clients
+ * Publishes a {@link ManageableFunctionBlacklist} to remote clients.
  */
 public class DataManageableFunctionBlacklistFields {
 

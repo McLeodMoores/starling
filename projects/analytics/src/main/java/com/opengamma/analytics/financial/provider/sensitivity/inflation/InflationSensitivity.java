@@ -235,7 +235,7 @@ public class InflationSensitivity {
   }
 
   /**
-   * Gets the multicurve sensitivities
+   * Gets the multicurve sensitivities.
    *
    * @return The multicurve sensitivities
    */

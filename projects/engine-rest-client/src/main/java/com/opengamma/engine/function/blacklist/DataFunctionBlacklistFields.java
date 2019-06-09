@@ -1,14 +1,13 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
 
-
 /**
- * Shared field names for {@link FunctionBlacklist} remote clients
+ * Shared field names for {@link FunctionBlacklist} remote clients.
  */
 public class DataFunctionBlacklistFields {
 
@@ -36,7 +35,5 @@ public class DataFunctionBlacklistFields {
    * Field containing the JMS topic name updates will be published on.
    */
   public static final String JMS_TOPIC_FIELD = "jms";
-
-  
 
 }

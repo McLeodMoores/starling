@@ -12,7 +12,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Default implementation of {@link EngineResourceManager}
+ * Default implementation of {@link EngineResourceManager}.
  *
  * @param <T>
  *          the type of resource

@@ -935,7 +935,7 @@ public final class BloombergDataUtils {
   }
 
   /**
-   * Returns future month code for a given month
+   * Returns future month code for a given month.
    *
    * @param month
    *          the month of year, not null

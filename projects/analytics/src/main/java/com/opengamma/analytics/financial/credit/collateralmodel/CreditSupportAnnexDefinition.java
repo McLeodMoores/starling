@@ -12,8 +12,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class to define a CSA to an ISDA Master Agreement used to define the terms of a collateral agreement between two counterparties
- * 
+ * Class to define a CSA to an ISDA Master Agreement used to define the terms of a collateral agreement between two counterparties.
+ *
  * @deprecated Deprecated
  */
 @Deprecated

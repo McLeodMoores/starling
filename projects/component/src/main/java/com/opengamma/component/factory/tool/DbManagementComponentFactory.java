@@ -35,7 +35,7 @@ import com.opengamma.util.db.management.DbManagementUtils;
 public class DbManagementComponentFactory extends AbstractComponentFactory {
 
   /**
-   * The classifier under which to publish
+   * The classifier under which to publish.
    */
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
@@ -55,7 +55,7 @@ public class DbManagementComponentFactory extends AbstractComponentFactory {
   @PropertyDefinition(validate = "notNull")
   private String _password;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final DbManagement dbManagement = createDbManagement(repo);
@@ -66,7 +66,8 @@ public class DbManagementComponentFactory extends AbstractComponentFactory {
   /**
    * Creates the management object without registering it.
    *
-   * @param repo  the component repository, only used to register secondary items like lifecycle, not null
+   * @param repo
+   *          the component repository, only used to register secondary items like lifecycle, not null
    * @return the management object, not null
    */
   protected DbManagement createDbManagement(final ComponentRepository repo) {
@@ -110,7 +111,7 @@ public class DbManagementComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the classifier under which to publish
+   * Gets the classifier under which to publish.
    * @return the value of the property, not null
    */
   public String getClassifier() {
@@ -118,7 +119,7 @@ public class DbManagementComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the classifier under which to publish
+   * Sets the classifier under which to publish.
    * @param classifier  the new value of the property, not null
    */
   public void setClassifier(String classifier) {

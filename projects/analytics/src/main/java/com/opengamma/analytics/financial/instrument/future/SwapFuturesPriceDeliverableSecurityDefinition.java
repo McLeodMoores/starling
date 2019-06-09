@@ -39,7 +39,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Constructor. The delivery date is the accrual start date of the first coupon of the swap fixed leg.
-   * 
+   *
    * @param lastTradingDate
    *          The futures last trading date.
    * @param underlyingSwap
@@ -59,7 +59,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Builder from the financial details.
-   * 
+   *
    * @param effectiveDate
    *          The underlying swap effective date (delivery date).
    * @param generator
@@ -84,7 +84,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Returns the delivery date.
-   * 
+   *
    * @return The date.
    */
   public ZonedDateTime getDeliveryDate() {
@@ -93,7 +93,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Returns the futures underlying swap.
-   * 
+   *
    * @return The swap.
    */
   public SwapFixedIborDefinition getUnderlyingSwap() {
@@ -101,8 +101,8 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
   }
 
   /**
-   * Returns the notional of the future
-   * 
+   * Returns the notional of the future.
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -111,7 +111,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated

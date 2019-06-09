@@ -54,12 +54,12 @@ public class RedisSimulationSeriesSourceComponentFactory extends AbstractCompone
   @PropertyDefinition
   private RedisConnector _redisConnector;
   /**
-   * prefix to append to redis keys when stored
+   * prefix to append to redis keys when stored.
    */
   @PropertyDefinition
   private String _redisPrefix = "";
   /**
-   * The redis database to connect to
+   * The redis database to connect to.
    */
   @PropertyDefinition
   private Integer _database;
@@ -74,11 +74,11 @@ public class RedisSimulationSeriesSourceComponentFactory extends AbstractCompone
   @PropertyDefinition
   private boolean _publishRest = true;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final JedisPool jedisPool = getRedisConnector().getJedisPool();
-    final RedisSimulationSeriesSource  instance = new RedisSimulationSeriesSource(jedisPool, getRedisPrefix());
+    final RedisSimulationSeriesSource instance = new RedisSimulationSeriesSource(jedisPool, getRedisPrefix());
     if (_simulationDate != null) {
       instance.setCurrentSimulationExecutionDate(_simulationDate);
     }
@@ -179,7 +179,7 @@ public class RedisSimulationSeriesSourceComponentFactory extends AbstractCompone
 
   //-----------------------------------------------------------------------
   /**
-   * Gets prefix to append to redis keys when stored
+   * Gets prefix to append to redis keys when stored.
    * @return the value of the property
    */
   public String getRedisPrefix() {
@@ -187,7 +187,7 @@ public class RedisSimulationSeriesSourceComponentFactory extends AbstractCompone
   }
 
   /**
-   * Sets prefix to append to redis keys when stored
+   * Sets prefix to append to redis keys when stored.
    * @param redisPrefix  the new value of the property
    */
   public void setRedisPrefix(String redisPrefix) {
@@ -204,7 +204,7 @@ public class RedisSimulationSeriesSourceComponentFactory extends AbstractCompone
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the redis database to connect to
+   * Gets the redis database to connect to.
    * @return the value of the property
    */
   public Integer getDatabase() {
@@ -212,7 +212,7 @@ public class RedisSimulationSeriesSourceComponentFactory extends AbstractCompone
   }
 
   /**
-   * Sets the redis database to connect to
+   * Sets the redis database to connect to.
    * @param database  the new value of the property
    */
   public void setDatabase(Integer database) {

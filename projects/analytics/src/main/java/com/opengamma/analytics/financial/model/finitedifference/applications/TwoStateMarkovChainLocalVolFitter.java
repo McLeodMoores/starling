@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * AKA Poor man's LSV
+ * AKA Poor man's LSV.
  */
 public class TwoStateMarkovChainLocalVolFitter {
   private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = new DoubleQuadraticInterpolator1D();

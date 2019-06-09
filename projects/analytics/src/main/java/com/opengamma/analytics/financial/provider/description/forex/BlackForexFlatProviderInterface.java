@@ -14,19 +14,27 @@ import com.opengamma.util.money.Currency;
 public interface BlackForexFlatProviderInterface extends BlackForexProviderInterface<BlackForexTermStructureParameters> {
 
   /**
-    * Returns the (Black implied) volatility
-    * @param ccy1 The first currency.
-    * @param ccy2 The second currency.
-    * @param time The time to expiration.
-    * @return The volatility.
-    */
+   * Returns the (Black implied) volatility.
+   * 
+   * @param ccy1
+   *          The first currency.
+   * @param ccy2
+   *          The second currency.
+   * @param time
+   *          The time to expiration.
+   * @return The volatility.
+   */
   double getVolatility(Currency ccy1, Currency ccy2, double time);
 
   /**
    * Returns the volatility sensitivities at a particular time.
-   * @param ccy1 The first currency.
-   * @param ccy2 The second currency.
-   * @param time The time to expiration.
+   * 
+   * @param ccy1
+   *          The first currency.
+   * @param ccy2
+   *          The second currency.
+   * @param time
+   *          The time to expiration.
    * @return The sensitivities
    */
   Double[] getVolatilityTimeSensitivity(Currency ccy1, Currency ccy2, double time);

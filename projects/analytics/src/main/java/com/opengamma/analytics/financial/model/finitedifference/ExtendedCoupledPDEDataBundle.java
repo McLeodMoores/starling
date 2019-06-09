@@ -9,7 +9,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * Not part of the new hierarchy
+ * Not part of the new hierarchy.
  *
  * @deprecated Use {@link PDE1DDataBundle}
  */

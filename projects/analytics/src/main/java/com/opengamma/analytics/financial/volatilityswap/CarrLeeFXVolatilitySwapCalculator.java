@@ -36,15 +36,15 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
   private final double[] _strikeRange;
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CarrLeeFXVolatilitySwapCalculator() {
     this(DEFAULT_LOWEST_PUT_DELTA, DEFAULT_HIGHEST_CALL_DELTA, DEFAULT_NUM_POINTS);
   }
 
   /**
-   * Constructor specifying strike range and number of strikes
-   * 
+   * Constructor specifying strike range and number of strikes.
+   *
    * @param lowestPutDelta
    *          The delta for put with lowest strike
    * @param highestCallDelta
@@ -63,8 +63,8 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
   }
 
   /**
-   * Constructor specifying number of strikes and strike range by strike values
-   * 
+   * Constructor specifying number of strikes and strike range by strike values.
+   *
    * @param numPoints
    *          The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
    * @param strikeRange

@@ -18,7 +18,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * 
+   *
    * @param g2parameters
    *          The model parameters.
    * @param u
@@ -39,7 +39,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * 
+   *
    * @param g2parameters
    *          The model parameters.
    * @param u
@@ -62,7 +62,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The maturity dependent part of the volatility (function called H in the implementation note).
-   * 
+   *
    * @param g2parameters
    *          The model parameters.
    * @param u
@@ -89,7 +89,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * The expiry time dependent part of the volatility.
-   * 
+   *
    * @param g2parameters
    *          The model parameters.
    * @param theta0
@@ -142,7 +142,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * Computes the swap rate for a given value of the standard normal random variables in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable values.
    * @param discountedCashFlowFixed
@@ -175,7 +175,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * Computes the swap rate and its first order derivatives with respect to the value of the standard normal random variables in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable values.
    * @param discountedCashFlowFixed
@@ -225,7 +225,7 @@ public class G2ppPiecewiseConstantModel {
   /**
    * Computes the swap rate and its first and second order derivatives with respect to the value of the standard normal random variables in the $P(.,\theta)$
    * numeraire.
-   * 
+   *
    * @param x
    *          The random variable values.
    * @param discountedCashFlowFixed
@@ -297,7 +297,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowIbor in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -332,7 +332,7 @@ public class G2ppPiecewiseConstantModel {
 
   /**
    * Compute the first order derivative of the swap rate with respect to the discountedCashFlowFixed in the $P(.,\theta)$ numeraire.
-   * 
+   *
    * @param x
    *          The random variable value.
    * @param discountedCashFlowFixed
@@ -432,8 +432,8 @@ public class G2ppPiecewiseConstantModel {
     for (int loopd1 = 0; loopd1 < 2; loopd1++) {
       for (int loopd2 = 0; loopd2 < 2; loopd2++) {
         d2P[loopd1][loopd2] = -(d2f[loopd1][loopd2] * g - df[loopd2] * dg[loopd1] - df[loopd1] * dg[loopd2] - f * (d2g[loopd1][loopd2] + shift)) / (g * g)
-            - 2 * dg[loopd1] * dg[loopd2] * f /
-                (g * g * g);
+            - 2 * dg[loopd1] * dg[loopd2] * f
+                / (g * g * g);
         testd2[loopd1][loopd2] = (d2P[loopd1][loopd2] - d2[loopd1][loopd2]) / shift;
       }
     }

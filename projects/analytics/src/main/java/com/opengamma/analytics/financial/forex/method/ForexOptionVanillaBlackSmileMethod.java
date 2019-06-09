@@ -34,7 +34,7 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Pricing method for vanilla Forex option transactions with Black function and a volatility provider. OG-Implementation: Vanilla Forex options:
  * Garman-Kohlhagen and risk reversal/strangle, version 1.5, May 2012.
- * 
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.forex.provider.ForexOptionVanillaBlackSmileMethod}
  */
 @Deprecated
@@ -47,7 +47,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static ForexOptionVanillaBlackSmileMethod getInstance() {
@@ -67,7 +67,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the present value of the vanilla option with the Black function and a volatility from a volatility surface.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -103,7 +103,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the implied Black volatility of the vanilla option.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -130,7 +130,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the currency exposure of the vanilla option with the Black function and a volatility from a volatility surface. The exposure is computed in both
    * option currencies.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -175,7 +175,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency equivalent to the option up to the first order
    * divided by the option notional.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -211,7 +211,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
    * Computes the relative delta of the Forex option multiplied by the spot rate. The relative delta is the amount in the foreign currency equivalent to the
    * option up to the first order divided by the option notional. The reason to multiply by the spot rate is to be able to compute the change of value for a
    * relative increase of e of the spot rate (from X to X(1+e)).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -246,7 +246,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the relative gamma of the Forex option. The relative gamma is the second order derivative of the pv divided by the option notional.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -284,7 +284,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
    * Computes the relative gamma of the Forex option multiplied by the spot rate. The relative gamma is the second oder derivative of the pv relative to the
    * option notional. The reason to multiply by the spot rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X
    * to X(1+e)).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -320,7 +320,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the delta of the Forex option. The delta is the first order derivative of the option present value to the spot fx rate.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -341,7 +341,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the gamma of the Forex option. The gamma is the second order derivative of the option present value to the spot fx rate.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -363,7 +363,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the gamma of the Forex option multiplied by the spot rate. The gamma is the second order derivative of the pv. The reason to multiply by the spot
    * rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -385,7 +385,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the theta (derivative with respect to the time) using the forward driftless theta in the Black formula. The theta is not scaled. Reference on
    * driftless theta: The complete guide to Option Pricing Formula (2007), E. G. Haug, McGraw Hill, p. 67, equation (2.43)
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -412,7 +412,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the theta (derivative with respect to the time). The theta is not scaled.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -446,7 +446,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the theta (derivative with respect to the time). The theta is not scaled.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -477,7 +477,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the forward driftless theta (derivative with respect to the time). The theta is not scaled. Reference on driftless theta: The complete guide to
    * Option Pricing Formula (2007), E. G. Haug, Mc Graw Hill, p. 67, equation (2.43)
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -501,7 +501,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the forward vega (first derivative with respect to spot).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -525,7 +525,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the spot delta (first derivative with respect to spot).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -543,7 +543,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the forward delta (first derivative with respect to forward).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -567,7 +567,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the spot gamma (second derivative with respect to spot).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -587,7 +587,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the forward gamma (second derivative with respect to forward).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -610,10 +610,10 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   }
 
   /**
-   * Computes the Vanna (2nd order cross-sensitivity of the option present value to the spot fx and implied vol),
+   * Computes the Vanna (2nd order cross-sensitivity of the option present value to the spot fx and implied vol).
    *
    * $\frac{\partial^2 (PV)}{\partial FX \partial \sigma}$
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -641,8 +641,8 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   }
 
   /**
-   * Computes the Vomma (aka Volga) (2nd order sensitivity of the option present value to the implied vol)
-   * 
+   * Computes the Vomma (aka Volga) (2nd order sensitivity of the option present value to the implied vol).
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -668,8 +668,8 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   }
 
   /**
-   * Computes the Volga (aka Vomma) (2nd order sensitivity of the option present value to the implied vol)
-   * 
+   * Computes the Volga (aka Vomma) (2nd order sensitivity of the option present value to the implied vol).
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -682,7 +682,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the forward exchange rate associated to the Forex option (1 Cyy1 = fwd Cyy2).
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param curves
@@ -697,7 +697,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward (and on the curves) is not taken into account.
    * It is the curve sensitivity in the Black model where the volatility is suppose to be constant for curve and forward changes.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -745,7 +745,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Present value curve sensitivity with a generic instrument as argument.
-   * 
+   *
    * @param instrument
    *          A vanilla Forex option.
    * @param curves
@@ -762,7 +762,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the volatility sensitivity of the vanilla option with the Black function and a volatility from a volatility surface. The sensitivity is computed
    * with respect to the computed Black implied volatility and not with respect to the volatility surface input.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile
@@ -800,7 +800,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
 
   /**
    * Computes the present value volatility sensitivity with a generic instrument as argument.
-   * 
+   *
    * @param instrument
    *          A vanilla Forex option.
    * @param curves
@@ -817,7 +817,7 @@ public final class ForexOptionVanillaBlackSmileMethod implements ForexPricingMet
   /**
    * Computes the volatility sensitivity with respect to input data for a vanilla option with the Black function and a volatility from a volatility surface. The
    * sensitivity is computed with respect to each node in the volatility surface.
-   * 
+   *
    * @param optionForex
    *          The Forex option.
    * @param smile

@@ -27,8 +27,8 @@ import com.opengamma.util.tuple.DoublesPair;
 public class ParameterSensitivityMulticurveUnderlyingMatrixCalculator extends ParameterSensitivityMulticurveMatrixAbstractCalculator {
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param curveSensitivityCalculator
    *          The curve sensitivity calculator.
    */
@@ -39,7 +39,7 @@ public class ParameterSensitivityMulticurveUnderlyingMatrixCalculator extends Pa
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate.
-   * 
+   *
    * @param sensitivity
    *          The point sensitivity.
    * @param data

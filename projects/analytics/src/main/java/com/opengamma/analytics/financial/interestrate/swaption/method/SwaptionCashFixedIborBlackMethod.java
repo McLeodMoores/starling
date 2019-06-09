@@ -31,7 +31,7 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Class used to compute the price and sensitivity of a cash-settled swaption with the Black model.
- * 
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionCashFixedIborBlackMethod}
  */
 @Deprecated
@@ -44,7 +44,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static SwaptionCashFixedIborBlackMethod getInstance() {
@@ -72,7 +72,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the present value of a cash-settled European swaption in the Black model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -99,7 +99,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the forward of a cash-settled European swaption in the Black model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -121,7 +121,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the present value rate sensitivity to rates of a cash-settled European swaption in the Black model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -161,7 +161,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the present value sensitivity to the Black volatility (also called vega) of a cash-settled European swaption in the Black swaption model.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -189,7 +189,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the implied Black volatility of the vanilla swaption.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param curves
@@ -208,7 +208,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the delta of the swaption. The delta is the first order derivative of the option present value to the spot fx rate.
-   * 
+   *
    * @param swaption
    *          The swaption
    * @param curveBlack
@@ -227,7 +227,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the gamma of the swaption. The gamma is the second order derivative of the option present value to the spot fx rate.
-   * 
+   *
    * @param swaption
    *          The Forex option.
    * @param curves
@@ -245,7 +245,7 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
 
   /**
    * Computes the theta of the swaption. The delta is the first order derivative of the option present value to the spot fx rate.
-   * 
+   *
    * @param swaption
    *          The swaption
    * @param curveBlack
@@ -261,8 +261,8 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
   }
 
   /**
-   * Compute first derivative of present value with respect to forward rate
-   * 
+   * Compute first derivative of present value with respect to forward rate.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -289,8 +289,8 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
   }
 
   /**
-   * Compute second derivative of present value with respect to forward rate
-   * 
+   * Compute second derivative of present value with respect to forward rate.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -316,8 +316,8 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0
-   * 
+   * Compute minus of first derivative of present value with respect to time, setting drift term to be 0.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -343,8 +343,8 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
   }
 
   /**
-   * Compute minus of first derivative of present value with respect to time
-   * 
+   * Compute minus of first derivative of present value with respect to time.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack
@@ -372,8 +372,8 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
   }
 
   /**
-   * Compute first derivative of present value with respect to volatility
-   * 
+   * Compute first derivative of present value with respect to volatility.
+   *
    * @param swaption
    *          The swaption.
    * @param curveBlack

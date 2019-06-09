@@ -18,8 +18,8 @@ import com.opengamma.util.ArgumentChecker;
 public class BasisFunctionGenerator {
 
   /**
-   * Generates a set of b-splines with knots a fixed distance apart
-   * 
+   * Generates a set of b-splines with knots a fixed distance apart.
+   *
    * @param xa
    *          minimum value of the function domain
    * @param xb

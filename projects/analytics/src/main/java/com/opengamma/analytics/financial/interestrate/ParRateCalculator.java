@@ -49,7 +49,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static ParRateCalculator getInstance() {
@@ -143,7 +143,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
 
   /**
    * Computes the par rate of a swap with one fixed leg.
-   * 
+   *
    * @param swap
    *          The Fixed coupon swap.
    * @param curves
@@ -161,7 +161,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
    * Computes the swap convention-modified par rate for a fixed coupon swap.
    * <P>
    * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * 
+   *
    * @param swap
    *          The swap.
    * @param dayCount
@@ -179,7 +179,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
    * Computes the swap convention-modified par rate for a fixed coupon swap.
    * <P>
    * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * 
+   *
    * @param swap
    *          The swap.
    * @param dayCount
@@ -199,7 +199,7 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
    * Computes the swap convention-modified par rate for a fixed coupon swap with a PVBP externally provided.
    * <P>
    * Reference: Swaption pricing - v 1.3, OpenGamma Quantitative Research, June 2012.
-   * 
+   *
    * @param swap
    *          The swap.
    * @param pvbp
@@ -247,8 +247,8 @@ public final class ParRateCalculator extends InstrumentDerivativeVisitorAdapter<
 
   // TODO: review
   /**
-   * This gives you the bond coupon, for a given yield curve, that renders the bond par (present value of all cash flows equal to 1.0)
-   * 
+   * This gives you the bond coupon, for a given yield curve, that renders the bond par (present value of all cash flows equal to 1.0).
+   *
    * @param bond
    *          the bond
    * @param curves

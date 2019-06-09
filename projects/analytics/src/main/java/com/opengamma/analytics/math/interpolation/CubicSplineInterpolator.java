@@ -13,7 +13,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * C2 cubic spline interpolator with Clamped/Not-A-Knot endpoint conditions
+ * C2 cubic spline interpolator with Clamped/Not-A-Knot endpoint conditions.
  */
 public class CubicSplineInterpolator extends PiecewisePolynomialInterpolator {
 
@@ -21,8 +21,8 @@ public class CubicSplineInterpolator extends PiecewisePolynomialInterpolator {
 
   /**
    * If (xValues length) = (yValues length), Not-A-Knot endpoint conditions are used If (xValues length) + 2 = (yValues length), Clamped endpoint conditions are
-   * used
-   * 
+   * used.
+   *
    * @param xValues
    *          X values of data
    * @param yValues
@@ -88,8 +88,8 @@ public class CubicSplineInterpolator extends PiecewisePolynomialInterpolator {
 
   /**
    * If (xValues length) = (yValuesMatrix NumberOfColumn), Not-A-Knot endpoint conditions are used If (xValues length) + 2 = (yValuesMatrix NumberOfColumn),
-   * Clamped endpoint conditions are used
-   * 
+   * Clamped endpoint conditions are used.
+   *
    * @param xValues
    *          X values of data
    * @param yValuesMatrix

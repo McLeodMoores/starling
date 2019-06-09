@@ -22,8 +22,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Definition of a generic Single Name Credit Default Swap contract (abstract class therefore different types of CDS will inherit from this)
- * 
+ * Definition of a generic Single Name Credit Default Swap contract (abstract class therefore different types of CDS will inherit from this).
+ *
  * @deprecated this will be deleted
  */
 @Deprecated

@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.cube.Cube;
 
 /**
- * Craig-Sneyd splitting <b>Note</b> this is for testing purposes and is not recommended for actual use
+ * Craig-Sneyd splitting <b>Note</b> this is for testing purposes and is not recommended for actual use.
  *
  */
 @SuppressWarnings("deprecation")

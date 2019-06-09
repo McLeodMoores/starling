@@ -35,7 +35,7 @@ import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWit
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO use root finding rather than chi^2 for this
+ * TODO use root finding rather than chi^2 for this.
  */
 public class PiecewiseSABRFitterRootFinder {
 

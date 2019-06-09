@@ -78,7 +78,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#COMPILE_ONLY}
+   * Adds {@link ViewExecutionFlags#COMPILE_ONLY}.
    *
    * @return this
    */
@@ -88,7 +88,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#FETCH_MARKET_DATA_ONLY}
+   * Adds {@link ViewExecutionFlags#FETCH_MARKET_DATA_ONLY}.
    *
    * @return this
    */
@@ -98,7 +98,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#SKIP_CYCLE_ON_NO_MARKET_DATA}
+   * Adds {@link ViewExecutionFlags#SKIP_CYCLE_ON_NO_MARKET_DATA}.
    *
    * @return this
    */
@@ -108,7 +108,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#WAIT_FOR_INITIAL_TRIGGER}
+   * Adds {@link ViewExecutionFlags#WAIT_FOR_INITIAL_TRIGGER}.
    *
    * @return this
    */
@@ -118,7 +118,7 @@ public final class ExecutionFlags {
   }
 
   /**
-   * Adds {@link ViewExecutionFlags#IGNORE_COMPILATION_VALIDITY}
+   * Adds {@link ViewExecutionFlags#IGNORE_COMPILATION_VALIDITY}.
    *
    * @return this
    */

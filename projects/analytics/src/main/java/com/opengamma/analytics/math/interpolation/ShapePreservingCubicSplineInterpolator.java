@@ -103,7 +103,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
   /**
    * Since this interpolation method introduces new breakpoints in certain cases, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined Instead
    * the node sensitivity is computed in {@link MonotoneConvexSplineInterpolator1D} via
-   * {@link com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}
+   * {@link com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}.
    *
    * @param xValues
    *          The xValues
@@ -178,7 +178,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Estimate first derivatives at endpoints
-   * 
+   *
    * @param ints1
    *          First (last) interval
    * @param ints2
@@ -220,7 +220,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * In the notation i =1,2,...,N-1, R_{2*i-1} = 6*slopes_i - 4*first_i - 2*first_{i+1} R_{2*i} = - 6*slopes_i + 2*first_i + 4*first_{i+1}
-   * 
+   *
    * @param slopes
    * @param first
    *          First derivatives
@@ -248,7 +248,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Check beta_i * R_{2*i-1} \geq 0 and beta_{i+1} *R_{2*i} \geq 0
-   * 
+   *
    * @param beta
    * @param rValues
    * @return True if the two inequalities are satisfied
@@ -268,7 +268,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
    * As the double sweep algorithm determines only intervals [minTmp, maxTmp] which should contain first derivative, choice of the values of first derivatives
    * is not unique. Infeasibility is returned in some cases, which is resolved by another choice of first derivatives within the allowed intervals, [minTmp,
    * maxTmp].
-   * 
+   *
    * @param intervals
    * @param slopes
    * @param beta
@@ -453,7 +453,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Extra knots are introduced at xValues[i] + tau[i] * intervals[i] and xValues[i + 1] - tau[i] * intervals[i]
-   * 
+   *
    * @param intervals
    * @param slopes
    * @param beta
@@ -527,7 +527,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
 
   /**
    * Determine value, first derivative, second derivative and third derivative of interpolant at extra knots
-   * 
+   *
    * @param yValues
    * @param intervals
    * @param slopes

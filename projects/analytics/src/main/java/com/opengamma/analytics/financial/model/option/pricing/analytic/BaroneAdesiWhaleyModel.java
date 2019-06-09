@@ -142,12 +142,12 @@ public class BaroneAdesiWhaleyModel {
   }
 
   /**
-   * Calculates the price and vega of an option and returns them as an array, with elements
+   * Calculates the price and vega of an option and returns them as an array, with elements.
    * <ol>
    * <li>price
    * <li>vega
    * </ol>
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -245,8 +245,8 @@ public class BaroneAdesiWhaleyModel {
   }
 
   /**
-   * critical spot price - when the spot is above (below) this for a call (put), it is optimal to excise early
-   * 
+   * critical spot price - when the spot is above (below) this for a call (put), it is optimal to excise early.
+   *
    * @param s0
    *          The spot
    * @param k
@@ -274,8 +274,8 @@ public class BaroneAdesiWhaleyModel {
 
   /**
    * The critical spot price (when the spot is above (below) this for a call (put), it is optimal to excise early) and its sensitivity to spot (r), strike (k),
-   * risk-free rate (r), cost-of-carry (b), expiry (t) and volatility (sigma)
-   * 
+   * risk-free rate (r), cost-of-carry (b), expiry (t) and volatility (sigma).
+   *
    * @param s0
    *          The spot
    * @param k
@@ -438,7 +438,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The sensitivity of price to the parameters s0, k, r, b, t, sigma
-     * 
+     *
      * @return arrays in order s0 (delta), k (dual-delta), r (rho), b (b-rho), t (theta), sigma (vega)
      */
     public double[] getPriceAdjoint() {
@@ -505,7 +505,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The price and first order Greeks for BSM call
-     * 
+     *
      * @param s
      *          spot level
      * @return Order is price, delta, dual-delta, rho, b-rho, theta and vega
@@ -547,7 +547,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * Sensitivity of sStar to k, r, b, t & sigma
-     * 
+     *
      * @param s
      *          sStar
      * @param a2Ajoint
@@ -577,7 +577,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The internal parameter A2 and its sensitivities
-     * 
+     *
      * @param s
      *          the critical value of s (sCrit or sStar)
      * @param q2Adjoint
@@ -621,7 +621,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The internal parameter q2 and its sensitivities
-     * 
+     *
      * @return array of q2 and sensitivity to r,b,t,sigma
      */
     protected double[] getQ2Adjoint() {
@@ -793,7 +793,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The price and its sensitivity to the parameters s0, k, r, b, t, sigma
-     * 
+     *
      * @return arrays in order price, s0 (delta), k (dual-delta), r (rho), b (b-rho), t (theta), sigma (vega)
      */
     public double[] getPriceAdjoint() {
@@ -858,7 +858,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The price and first order Greeks for BSM put
-     * 
+     *
      * @param s
      *          spot level
      * @return Order is price, delta, dual-delta, rho, b-rho, theta and vega
@@ -900,7 +900,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * Sensitivity of sStar to k, r, b, t & sigma
-     * 
+     *
      * @param s
      *          sStar
      * @param a1Ajoint
@@ -929,7 +929,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The internal parameter A1 and its sensitivities
-     * 
+     *
      * @param s
      *          the critical value of s (sCrit or sStar)
      * @param q1Adjoint
@@ -973,7 +973,7 @@ public class BaroneAdesiWhaleyModel {
 
     /**
      * The internal parameter q1 and its sensitivities
-     * 
+     *
      * @return array of q1 and sensitivity to r,b,t,sigma
      */
     protected double[] getQ1Adjoint() {

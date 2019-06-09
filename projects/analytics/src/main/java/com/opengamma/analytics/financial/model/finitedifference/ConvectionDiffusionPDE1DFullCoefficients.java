@@ -23,8 +23,8 @@ public class ConvectionDiffusionPDE1DFullCoefficients implements ConvectionDiffu
 
   /**
    * PDE Data bundle representing PDEs of the type $\frac{\partial f}{\partial t} + a(t,x)\frac{\partial^2}{\partial x^2}\left[ \alpha(t,x) f \right] +
-   * b(t,x)\frac{\partial}{\partial x}\left[\beta(t,x) f \right] + c(t,x)f = 0$
-   * 
+   * b(t,x)\frac{\partial}{\partial x}\left[\beta(t,x) f \right] + c(t,x)f = 0$.
+   *
    * @param a
    *          $a(t,x)$
    * @param b
@@ -90,7 +90,7 @@ public class ConvectionDiffusionPDE1DFullCoefficients implements ConvectionDiffu
   /**
    * Gets the coefficients a, b and c as a ParabolicPDECoefficients object. <b> This does not convert ParabolicPDEExtendedCoefficients to
    * ParabolicPDECoefficients</b>
-   * 
+   *
    * @return ParabolicPDECoefficients
    */
   public ConvectionDiffusionPDE1DStandardCoefficients getStandardCoefficients() {

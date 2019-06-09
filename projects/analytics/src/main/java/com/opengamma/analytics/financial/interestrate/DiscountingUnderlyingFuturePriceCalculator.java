@@ -10,13 +10,14 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.Interest
 import com.opengamma.analytics.financial.interestrate.future.method.InterestRateFutureTransactionDiscountingMethod;
 
 /**
- * Returns the underlying future price of the security, given a yield curve bundle
+ * Returns the underlying future price of the security, given a yield curve bundle.
+ * 
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
 public class DiscountingUnderlyingFuturePriceCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
 
-  /** The method unique instance.*/
+  /** The method unique instance. */
   private static final DiscountingUnderlyingFuturePriceCalculator INSTANCE = new DiscountingUnderlyingFuturePriceCalculator();
 
   /** @return the unique instance of the class. */
@@ -28,7 +29,7 @@ public class DiscountingUnderlyingFuturePriceCalculator extends InstrumentDeriva
   DiscountingUnderlyingFuturePriceCalculator() {
   }
 
-  /** The method used to compute the future price. It is a method without convexity adjustment.  */
+  /** The method used to compute the future price. It is a method without convexity adjustment. */
   private static final InterestRateFutureTransactionDiscountingMethod METHOD_FUTURE = InterestRateFutureTransactionDiscountingMethod.getInstance();
 
   @Override

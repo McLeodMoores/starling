@@ -38,7 +38,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
   /**
    * Constructor from volatility term structure. The default interpolator is used to interpolate in the strike dimension. The default interpolator is linear
    * with flat extrapolation.
-   * 
+   *
    * @param volatilityTerm
    *          The volatility description at the different expiration.
    */
@@ -48,7 +48,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
 
   /**
    * Constructor from volatility term structure.
-   * 
+   *
    * @param volatilityTerm
    *          The volatility description at the different expiration.
    * @param strikeInterpolator
@@ -61,7 +61,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
 
   /**
    * Constructor from volatility term structure.
-   * 
+   *
    * @param volatilityTerm
    *          The volatility description at the different expiration.
    * @param strikeInterpolator
@@ -79,7 +79,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
   /**
    * Constructor from market data. The default interpolator is used to interpolate in the strike dimension. The default interpolator is linear with flat
    * extrapolation.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile.
    * @param delta
@@ -94,7 +94,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
 
   /**
    * Constructor from market data.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile.
    * @param delta
@@ -115,7 +115,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
   /**
    * Constructor from market data. The default interpolator is used to interpolate in the strike dimension. The default interpolator is linear with flat
    * extrapolation.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile.
    * @param delta
@@ -134,7 +134,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
 
   /**
    * Constructor from market data.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile.
    * @param delta
@@ -158,7 +158,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
 
   /**
    * Constructor from market data.
-   * 
+   *
    * @param timeToExpiration
    *          The time to expiration of each volatility smile.
    * @param delta
@@ -183,8 +183,8 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
   }
 
   /**
-   * Create a copy of the bundle
-   * 
+   * Create a copy of the bundle.
+   *
    * @return A copy of the bundle
    */
   @Override
@@ -195,7 +195,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
   /**
    * Get the volatility at a given time/strike/forward from the term structure. The volatility at a given delta are interpolated linearly on the total variance
    * (s^2*t) and extrapolated flat. The volatility are then linearly interpolated in the strike dimension and extrapolated flat.
-   * 
+   *
    * @param time
    *          The time to expiry.
    * @param strike
@@ -215,7 +215,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
 
   /**
    * Computes the volatility and the volatility sensitivity with respect to the volatility data points.
-   * 
+   *
    * @param time
    *          The time to expiration.
    * @param strike
@@ -239,7 +239,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
 
   /**
    * Get the volatility from a triple.
-   * 
+   *
    * @param tsf
    *          The Time, Strike, Forward triple, not null
    * @return The volatility.
@@ -257,8 +257,8 @@ public class SmileDeltaTermStructureParametersStrikeInterpolation extends SmileD
   }
 
   /**
-   * Gets the interpolator
-   * 
+   * Gets the interpolator.
+   *
    * @return The interpolator
    */
   public Interpolator1D getStrikeInterpolator() {

@@ -12,14 +12,14 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Parameter object for interpolated stub instrument derivative visitor
+ * Parameter object for interpolated stub instrument derivative visitor.
  */
 public final class InterpolatedStubData {
-  
+
   private final MulticurveProviderInterface _multicurve;
-  
+
   private final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> _interpolatedStubCoupon;
-  
+
   private InterpolatedStubData(
       final MulticurveProviderInterface multicurve,
       final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> interpolatedStubCoupon) {
@@ -28,15 +28,15 @@ public final class InterpolatedStubData {
     _multicurve = multicurve;
     _interpolatedStubCoupon = interpolatedStubCoupon;
   }
-  
+
   public MulticurveProviderInterface getMulticurve() {
     return _multicurve;
   }
-  
+
   public InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> getInterpolatedStubCoupon() {
     return _interpolatedStubCoupon;
   }
-  
+
   public static InterpolatedStubData of(
       final MulticurveProviderInterface multicurve,
       final InterpolatedStubCoupon<? extends DepositIndexCoupon<? extends IndexDeposit>, ? extends IndexDeposit> interpolatedStubCoupon) {

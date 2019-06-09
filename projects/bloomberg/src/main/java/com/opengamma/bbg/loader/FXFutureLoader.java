@@ -77,14 +77,14 @@ public class FXFutureLoader extends SecurityLoader {
       "cents/CAD", 100d);
 
   /**
-   * The valid Bloomberg future categories for FX Futures
+   * The valid Bloomberg future categories for FX Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BloombergConstants.BBG_CURRENCY_TYPE));
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param referenceDataProvider
    *          the provider, not null
    */

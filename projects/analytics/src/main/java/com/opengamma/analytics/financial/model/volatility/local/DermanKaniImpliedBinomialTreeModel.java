@@ -19,7 +19,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 
 /**
- * Implementation of the paper by Derman and Kani, The Volatility Smile and its Implied Tree (1994)
+ * Implementation of the paper by Derman and Kani, The Volatility Smile and its Implied Tree (1994).
  */
 public class DermanKaniImpliedBinomialTreeModel implements ImpliedTreeModel<OptionDefinition, StandardOptionDataBundle> {
   private static final BinomialOptionModelDefinition<OptionDefinition, StandardOptionDataBundle> CRR = new CoxRossRubinsteinBinomialOptionModelDefinition();

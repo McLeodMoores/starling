@@ -23,7 +23,7 @@ import com.opengamma.provider.security.SecurityProvider;
 import com.opengamma.util.PlatformConfigUtils;
 
 /**
- * Little util for loading options for Interest rate future
+ * Little util for loading options for Interest rate future.
  */
 public class BloombergIRFutureOptionLoader {
 
@@ -37,7 +37,9 @@ public class BloombergIRFutureOptionLoader {
 
   /**
    * Little util for loading options for Interest rate future.
-   * @param args command line params
+   * 
+   * @param args
+   *          command line params
    */
   public static void main(final String[] args) {
     final ExternalId underlyingId = ExternalId.parse(args[0]);

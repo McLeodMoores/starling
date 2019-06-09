@@ -54,7 +54,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get the price of an American option by the Bjerksund and Stensland (2002) approximation.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -77,7 +77,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
 
   /**
    * Get the price of an American call option by the Bjerksund and Stensland (2002) approximation.
-   * 
+   *
    * @param s0
    *          The spot
    * @param k
@@ -161,7 +161,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation
+   * Get the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation.
    *
    * @param s0
    *          The spot
@@ -250,8 +250,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * get alpha and its sensitivity to k, x (I) and beta
-   * 
+   * get alpha and its sensitivity to k, x (I) and beta.
+   *
    * @param k
    *          The strike
    * @param x
@@ -265,8 +265,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get lambda and its sensitivity to gamma, r, b and sigma-squared
-   * 
+   * Get lambda and its sensitivity to gamma, r, b and sigma-squared.
+   *
    * @param gamma
    *          gamma
    * @param r
@@ -282,8 +282,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get kappa and its sensitivity to gamma, b and sigma-squared
-   * 
+   * Get kappa and its sensitivity to gamma, b and sigma-squared.
+   *
    * @param gamma
    *          gamma
    * @param b
@@ -297,7 +297,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * get phi and its sensitivity to s, t, gamma, h, x (I), r, b &amp; sigma
+   * get phi and its sensitivity to s, t, gamma, h, x (I), r, b &amp; sigma.
    *
    * @param s
    *          the strike
@@ -349,8 +349,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * get Psi and its sensitivity to s, t, gamma, h, x2, x1, r, b and sigma
-   * 
+   * get Psi and its sensitivity to s, t, gamma, h, x2, x1, r, b and sigma.
+   *
    * @param s
    *          The spot
    * @param t
@@ -405,8 +405,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get the first and second derivatives of the bi-variate normal with respect to a and b (rho is fixed)
-   * 
+   * Get the first and second derivatives of the bi-variate normal with respect to a and b (rho is fixed).
+   *
    * @param a
    *          first coordinate
    * @param b
@@ -420,8 +420,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * Get beta and its sensitivity to r, b and sigma-squared
-   * 
+   * Get beta and its sensitivity to r, b and sigma-squared.
+   *
    * @param r
    *          The interest rate
    * @param b
@@ -435,7 +435,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * get I1 and its sensitivity to k, r, b, sigma &amp; t
+   * get I1 and its sensitivity to k, r, b, sigma &amp; t.
    *
    * @param k
    *          The strike
@@ -454,7 +454,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   }
 
   /**
-   * get I2 and its sensitivity to k, r, b, sigma &amp; t
+   * get I2 and its sensitivity to k, r, b, sigma &amp; t.
    *
    * @param k
    *          The strike

@@ -90,7 +90,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access cross barrier checker
+   * Access cross barrier checker.
    *
    * @return _checker
    */
@@ -99,7 +99,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access barrier
+   * Access barrier.
    *
    * @return _barrier
    */
@@ -165,7 +165,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * The inherited class checks upper barrier crossing for up-and-out option
+   * The inherited class checks upper barrier crossing for up-and-out option.
    */
   @SuppressWarnings("synthetic-access")
   protected class CrossUpperBarrier extends CrossBarrierChecker {

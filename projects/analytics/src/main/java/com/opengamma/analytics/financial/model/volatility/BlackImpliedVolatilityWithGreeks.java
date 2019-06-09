@@ -16,8 +16,8 @@ import com.opengamma.util.ArgumentChecker;
 public class BlackImpliedVolatilityWithGreeks {
 
   /**
-   * Compute implied volatility, spot option delta, spot option gamma, spot option vega WITH forward price of underlying
-   * 
+   * Compute implied volatility, spot option delta, spot option gamma, spot option vega WITH forward price of underlying.
+   *
    * @param spotOptionPrice
    *          Option price of spot
    * @param forward
@@ -53,8 +53,8 @@ public class BlackImpliedVolatilityWithGreeks {
   }
 
   /**
-   * Compute implied volatility, spot option delta, spot option gamma, spot option vega WITH forward option price
-   * 
+   * Compute implied volatility, spot option delta, spot option gamma, spot option vega WITH forward option price.
+   *
    * @param spotOptionPrice
    *          Spot option price
    * @param forwardOptionPrice
@@ -90,8 +90,8 @@ public class BlackImpliedVolatilityWithGreeks {
   }
 
   /**
-   * Compute implied volatility, spot option delta, spot option gamma, spot option vega WITH discount factor
-   * 
+   * Compute implied volatility, spot option delta, spot option gamma, spot option vega WITH discount factor.
+   *
    * @param spotOptionPrice
    *          Spot option price
    * @param discountFactor
@@ -127,8 +127,8 @@ public class BlackImpliedVolatilityWithGreeks {
   }
 
   /**
-   * Compute spot option price, spot option delta, spot option gamma, spot option vega
-   * 
+   * Compute spot option price, spot option delta, spot option gamma, spot option vega.
+   *
    * @param forward
    *          Forward price of underlying
    * @param spot
@@ -162,8 +162,8 @@ public class BlackImpliedVolatilityWithGreeks {
   }
 
   /**
-   * Compute spot option price, spot option delta, spot option gamma, spot option vega
-   * 
+   * Compute spot option price, spot option delta, spot option gamma, spot option vega.
+   *
    * @param discountFactor
    *          Discount factor
    * @param spot

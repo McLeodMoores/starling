@@ -9,8 +9,8 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * A surface with gives Black (implied) volatility as a function of time to maturity and value some abstraction of strike
- * 
+ * A surface with gives Black (implied) volatility as a function of time to maturity and value some abstraction of strike.
+ *
  * @param <T>
  *          Parameter that describes the abstraction of strike - this could be the actual strike, the delta (most commonly used in FX), moneyness (defined as
  *          the strike/forward), the logarithm of moneyness or some other parameterisation

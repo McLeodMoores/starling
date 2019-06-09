@@ -25,7 +25,7 @@ public class DefaultSwaption {
 
   /**
    * Price single-name CDS option.
-   * 
+   *
    * @param forwardStartingCDS
    *          The underlying forward starting CDS
    * @param yieldCurve
@@ -109,8 +109,8 @@ public class DefaultSwaption {
   }
 
   /**
-   * Compute volatility implied by {@link #price}
-   * 
+   * Compute volatility implied by {@link #price}.
+   *
    * @param forwardStartingCDS
    *          The underlying forward starting CDS
    * @param yieldCurve
