@@ -37,8 +37,8 @@ import com.opengamma.financial.analytics.model.VegaMatrixUtils;
  */
 public class BlackDiscountingVegaQuoteMatrixFXOptionFunction extends BlackDiscountingFXOptionFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, PresentValueForexBlackVolatilityQuoteSensitivityDataBundle> CALCULATOR = QuoteBucketedVegaForexBlackSmileCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, PresentValueForexBlackVolatilityQuoteSensitivityDataBundle> CALCULATOR =
+      QuoteBucketedVegaForexBlackSmileCalculator.getInstance();
 
   /**
    * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#VEGA_QUOTE_MATRIX}.

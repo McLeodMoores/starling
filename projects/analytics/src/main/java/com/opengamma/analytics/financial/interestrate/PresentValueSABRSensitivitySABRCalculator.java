@@ -44,7 +44,7 @@ public final class PresentValueSABRSensitivitySABRCalculator
   /**
    * The unique instance of the SABR sensitivity calculator.
    */
-  private static final PresentValueSABRSensitivitySABRCalculator s_instance = new PresentValueSABRSensitivitySABRCalculator();
+  private static final PresentValueSABRSensitivitySABRCalculator INSTANCE = new PresentValueSABRSensitivitySABRCalculator();
 
   /**
    * Returns the instance of the calculator.
@@ -52,7 +52,7 @@ public final class PresentValueSABRSensitivitySABRCalculator
    * @return The instance.
    */
   public static PresentValueSABRSensitivitySABRCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

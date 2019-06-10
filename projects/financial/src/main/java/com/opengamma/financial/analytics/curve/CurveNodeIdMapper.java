@@ -459,7 +459,7 @@ public class CurveNodeIdMapper {
   protected static List<String> getCurveIdMapperNames() {
     final List<String> list = new ArrayList<>();
     for (final Field field : CurveNodeIdMapperBuilder.class.getDeclaredFields()) {
-      if (Modifier.isStatic(field.getModifiers()) && field.isSynthetic() == false) {
+      if (Modifier.isStatic(field.getModifiers()) && !field.isSynthetic()) {
         field.setAccessible(true);
         try {
           list.add((String) field.get(null));

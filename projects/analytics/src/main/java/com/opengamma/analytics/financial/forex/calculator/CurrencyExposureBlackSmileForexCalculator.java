@@ -33,14 +33,14 @@ public final class CurrencyExposureBlackSmileForexCalculator extends CurrencyExp
   /**
    * The unique instance of the calculator.
    */
-  private static final CurrencyExposureBlackSmileForexCalculator s_instance = new CurrencyExposureBlackSmileForexCalculator();
+  private static final CurrencyExposureBlackSmileForexCalculator INSTANCE = new CurrencyExposureBlackSmileForexCalculator();
 
   /**
    * Gets the calculator instance.
    * @return The calculator.
    */
   public static CurrencyExposureBlackSmileForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

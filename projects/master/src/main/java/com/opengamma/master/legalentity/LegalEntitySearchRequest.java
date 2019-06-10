@@ -46,7 +46,8 @@ import com.opengamma.util.RegexUtils;
 public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   /**
-   * The set of legal entity object identifiers, null to not limit by legal entity object identifiers. Note that an empty set will return no legal entities.
+   * The set of legal entity object identifiers, null to not limit by legal entity object identifiers. Note
+   * that an empty set will return no legal entities.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -56,20 +57,22 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   @PropertyDefinition
   private ExternalIdSearch _externalIdSearch;
   /**
-   * The external identifier value, matching against the <b>value</b> of the identifiers, null to not match by identifier value. This matches against the
-   * {@link com.opengamma.id.ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable
+   * The external identifier value, matching against the <b>value</b> of the identifiers, null to not match by
+   * identifier value. This matches against the {@link com.opengamma.id.ExternalId#getValue() value} of the
+   * identifier and does not match against the key. Wildcards are allowed. This method is suitable
    * for human searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    */
   @PropertyDefinition
   private String _externalIdValue;
   /**
-   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. Wildcards are allowed.
+   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by
+   * identifier scheme. Wildcards are allowed.
    */
   @PropertyDefinition
   private String _externalIdScheme;
   /**
-   * Map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards are allowed for the values. Nulls are not
-   * allowed.
+   * Map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards
+   * are allowed for the values. Nulls are not allowed.
    */
   @PropertyDefinition
   private final Map<String, String> _attributes = Maps.newHashMap();
@@ -288,7 +291,8 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of legal entity object identifiers, null to not limit by legal entity object identifiers. Note that an empty set will return no legal entities.
+   * Gets the set of legal entity object identifiers, null to not limit by legal entity object identifiers. Note
+   * that an empty set will return no legal entities.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -297,6 +301,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code objectIds} property.
+   * that an empty set will return no legal entities.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {
@@ -330,8 +335,9 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by identifier value. This matches against the
-   * {@link com.opengamma.id.ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable
+   * Gets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by
+   * identifier value. This matches against the {@link com.opengamma.id.ExternalId#getValue() value} of the
+   * identifier and does not match against the key. Wildcards are allowed. This method is suitable
    * for human searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the value of the property
    */
@@ -340,8 +346,9 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by identifier value. This matches against the
-   * {@link com.opengamma.id.ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable
+   * Sets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by
+   * identifier value. This matches against the {@link com.opengamma.id.ExternalId#getValue() value} of the
+   * identifier and does not match against the key. Wildcards are allowed. This method is suitable
    * for human searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @param externalIdValue  the new value of the property
    */
@@ -351,7 +358,8 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdValue} property.
-   * {@link com.opengamma.id.ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable
+   * identifier value. This matches against the {@link com.opengamma.id.ExternalId#getValue() value} of the
+   * identifier and does not match against the key. Wildcards are allowed. This method is suitable
    * for human searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the property, not null
    */
@@ -361,7 +369,8 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. Wildcards are allowed.
+   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by
+   * identifier scheme. Wildcards are allowed.
    * @return the value of the property
    */
   public String getExternalIdScheme() {
@@ -369,7 +378,8 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. Wildcards are allowed.
+   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by
+   * identifier scheme. Wildcards are allowed.
    * @param externalIdScheme  the new value of the property
    */
   public void setExternalIdScheme(String externalIdScheme) {
@@ -378,6 +388,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdScheme} property.
+   * identifier scheme. Wildcards are allowed.
    * @return the property, not null
    */
   public final Property<String> externalIdScheme() {
@@ -386,8 +397,8 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards are allowed for the values. Nulls are not
-   * allowed.
+   * Gets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards
+   * are allowed for the values. Nulls are not allowed.
    * @return the value of the property, not null
    */
   public Map<String, String> getAttributes() {
@@ -395,8 +406,8 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards are allowed for the values. Nulls are not
-   * allowed.
+   * Sets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards
+   * are allowed for the values. Nulls are not allowed.
    * @param attributes  the new value of the property, not null
    */
   public void setAttributes(Map<String, String> attributes) {
@@ -407,7 +418,7 @@ public class LegalEntitySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code attributes} property.
-   * allowed.
+   * are allowed for the values. Nulls are not allowed.
    * @return the property, not null
    */
   public final Property<Map<String, String>> attributes() {

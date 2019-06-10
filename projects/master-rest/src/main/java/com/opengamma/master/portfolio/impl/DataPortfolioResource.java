@@ -54,8 +54,10 @@ public class DataPortfolioResource
   /**
    * Creates the resource.
    *
-   * @param portfoliosResource  the parent resource, not null
-   * @param portfolioId  the portfolio unique identifier, not null
+   * @param portfoliosResource
+   *          the parent resource, not null
+   * @param portfolioId
+   *          the portfolio unique identifier, not null
    */
   public DataPortfolioResource(final DataPortfolioMasterResource portfoliosResource, final ObjectId portfolioId) {
     ArgumentChecker.notNull(portfoliosResource, "portfoliosResource");
@@ -64,7 +66,7 @@ public class DataPortfolioResource
     _urlResourceId = portfolioId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the portfolios resource.
    *
@@ -84,7 +86,7 @@ public class DataPortfolioResource
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the portfolio master.
    *
@@ -99,7 +101,7 @@ public class DataPortfolioResource
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final PortfolioHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, PortfolioHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final PortfolioHistoryResult result = getMaster().history(request);
@@ -130,7 +132,6 @@ public class DataPortfolioResource
   public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
-
 
   @Override
   @PUT

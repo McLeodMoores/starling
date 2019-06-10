@@ -327,7 +327,7 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
         } else {
           // update existing
           HistoricalTimeSeriesInfoDocument doc = searchResult.getDocuments().get(0);
-          if (info.getRequiredPermissions().equals(doc.getInfo().getRequiredPermissions()) == false) {
+          if (!info.getRequiredPermissions().equals(doc.getInfo().getRequiredPermissions())) {
             doc.setInfo(info);
             doc = _htsMaster.update(doc);
           }

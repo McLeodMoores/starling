@@ -57,8 +57,8 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   private boolean _autoRestartOnDisconnection;
 
   /**
-   * The pre-populated session options. These options can be left null and they will then be created with default options. If they are non-null, then the server
-   * host and port will be added if the server host within this instance is null.
+   * The pre-populated session options. These options can be left null and they will then be created with default options.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    */
   @PropertyDefinition
   private SessionOptions _sessionOptions;
@@ -287,8 +287,8 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the pre-populated session options. These options can be left null and they will then be created with default options. If they are non-null, then the server
-   * host and port will be added if the server host within this instance is null.
+   * Gets the pre-populated session options. These options can be left null and they will then be created with default options.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    * @return the value of the property
    */
   public SessionOptions getSessionOptions() {
@@ -296,8 +296,8 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
   }
 
   /**
-   * Sets the pre-populated session options. These options can be left null and they will then be created with default options. If they are non-null, then the server
-   * host and port will be added if the server host within this instance is null.
+   * Sets the pre-populated session options. These options can be left null and they will then be created with default options.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    * @param sessionOptions  the new value of the property
    */
   public void setSessionOptions(SessionOptions sessionOptions) {
@@ -306,7 +306,7 @@ public class BloombergConnectorFactoryBean extends SpringFactoryBean<BloombergCo
 
   /**
    * Gets the the {@code sessionOptions} property.
-   * host and port will be added if the server host within this instance is null.
+   * If they are non-null, then the server host and port will be added if the server host within this instance is null.
    * @return the property, not null
    */
   public final Property<SessionOptions> sessionOptions() {

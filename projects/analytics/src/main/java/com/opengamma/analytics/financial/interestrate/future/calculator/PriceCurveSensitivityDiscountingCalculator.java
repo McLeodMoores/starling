@@ -24,7 +24,7 @@ public final class PriceCurveSensitivityDiscountingCalculator extends Instrument
   /**
    * The calculator instance.
    */
-  private static final PriceCurveSensitivityDiscountingCalculator s_instance = new PriceCurveSensitivityDiscountingCalculator();
+  private static final PriceCurveSensitivityDiscountingCalculator INSTANCE = new PriceCurveSensitivityDiscountingCalculator();
   /**
    * The method to compute bond future prices.
    */
@@ -35,7 +35,7 @@ public final class PriceCurveSensitivityDiscountingCalculator extends Instrument
    * @return The instance.
    */
   public static PriceCurveSensitivityDiscountingCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

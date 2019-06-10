@@ -48,14 +48,15 @@ public class DataUserMasterResource extends AbstractDataResource {
   /**
    * Creates the resource, exposing the underlying master over REST.
    *
-   * @param userMaster  the underlying user master, not null
+   * @param userMaster
+   *          the underlying user master, not null
    */
   public DataUserMasterResource(final UserMaster userMaster) {
     ArgumentChecker.notNull(userMaster, "userMaster");
     _userMaster = userMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the user master.
@@ -66,7 +67,7 @@ public class DataUserMasterResource extends AbstractDataResource {
     return _userMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
@@ -94,7 +95,7 @@ public class DataUserMasterResource extends AbstractDataResource {
     return responseCreatedObject(createdUri, result);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("users/{objectId}")
   public Response getById(@PathParam("objectId") final String idStr) {
@@ -107,7 +108,7 @@ public class DataUserMasterResource extends AbstractDataResource {
   @Path("users/{objectId}")
   public Response updateById(@Context final UriInfo uriInfo, @PathParam("objectId") final String idStr, final ManageableUser user) {
     final ObjectId id = ObjectId.parse(idStr);
-    if (id.equals(user.getObjectId()) == false) {
+    if (!id.equals(user.getObjectId())) {
       throw new IllegalArgumentException("ObjectId of user does not match URI");
     }
     final UniqueId result = getUserMaster().update(user);
@@ -130,7 +131,7 @@ public class DataUserMasterResource extends AbstractDataResource {
     return responseOkObject(result);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("users/exists/{userName}")
   public Response nameExists(@PathParam("userName") final String userName) {
@@ -149,7 +150,7 @@ public class DataUserMasterResource extends AbstractDataResource {
   @Path("users/name/{userName}")
   public Response updateByName(@Context final UriInfo uriInfo, @PathParam("userName") final String userName, final ManageableUser user) {
     final ManageableUser current = getUserMaster().getByName(userName);
-    if (current.getObjectId().equals(user.getObjectId()) == false) {
+    if (!current.getObjectId().equals(user.getObjectId())) {
       throw new IllegalArgumentException("User does not match URI");
     }
     final UniqueId result = getUserMaster().update(user);

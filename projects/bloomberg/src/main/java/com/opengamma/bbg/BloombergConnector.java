@@ -172,7 +172,7 @@ public class BloombergConnector implements Connector {
   public Session createOpenSession(final EventHandler eventHandler) {
     final Session session = createSession(eventHandler);
     try {
-      if (session.start() == false) {
+      if (!session.start()) {
         throw new OpenGammaRuntimeException("Bloomberg session failed to start: " + SessionOptionsUtils.toString(getSessionOptions()));
       }
     } catch (final InterruptedException ex) {

@@ -29,7 +29,8 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 public final class Rate implements ImmutableBean {
 
   /**
-   * The periods for which custom spreads are required. If a period is looked for but is not present then the value from the previous period will be used.
+   * The periods for which custom spreads are required. If a period is looked for but is not present then the
+   * value from the previous period will be used.
    */
   @PropertyDefinition
   private final int[] _dates;
@@ -185,7 +186,8 @@ public final class Rate implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the periods for which custom spreads are required. If a period is looked for but is not present then the value from the previous period will be used.
+   * Gets the periods for which custom spreads are required. If a period is looked for but is not present then the
+   * value from the previous period will be used.
    * @return the value of the property
    */
   public int[] getDates() {
@@ -476,7 +478,8 @@ public final class Rate implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the periods for which custom spreads are required. If a period is looked for but is not present then the value from the previous period will be used.
+     * Sets the periods for which custom spreads are required. If a period is looked for but is not present then the
+     * value from the previous period will be used.
      * @param dates  the new value
      * @return this, for chaining, not null
      */

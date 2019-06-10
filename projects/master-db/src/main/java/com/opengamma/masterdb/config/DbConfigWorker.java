@@ -261,7 +261,7 @@ import com.opengamma.util.paging.PagingRequest;
       } else {
         final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
         result.setPaging(Paging.of(request.getPagingRequest(), count));
-        if (count > 0 && request.getPagingRequest().equals(PagingRequest.NONE) == false) {
+        if (count > 0 && !request.getPagingRequest().equals(PagingRequest.NONE)) {
           final List<ConfigDocument> queryResult = namedJdbc.query(sql[0], args, configDocumentExtractor);
           for (final ConfigDocument configDocument : queryResult) {
             if (request.getType().isInstance(configDocument.getConfig().getValue())) {
@@ -301,7 +301,7 @@ import com.opengamma.util.paging.PagingRequest;
     } else {
       final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
       result.setPaging(Paging.of(request.getPagingRequest(), count));
-      if (count > 0 && request.getPagingRequest().equals(PagingRequest.NONE) == false) {
+      if (count > 0 && !request.getPagingRequest().equals(PagingRequest.NONE)) {
         final List<ConfigDocument> queryResult = namedJdbc.query(sql[0], args, extractor);
         for (final ConfigDocument configDocument : queryResult) {
           if (request.getType() == null || request.getType().isInstance(configDocument.getConfig().getValue())) {

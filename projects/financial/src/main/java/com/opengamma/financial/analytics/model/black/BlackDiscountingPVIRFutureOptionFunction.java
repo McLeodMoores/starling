@@ -36,8 +36,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  */
 public class BlackDiscountingPVIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The position gamma calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueBlackSTIRFutureOptionCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, MultipleCurrencyAmount> CALCULATOR =
+      PresentValueBlackSTIRFutureOptionCalculator.getInstance();
 
   /**
    * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.

@@ -63,7 +63,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
 
   @Override
   protected void finalize() throws Throwable {
-    if (_isReleased.getAndSet(true) == false) {
+    if (!_isReleased.getAndSet(true)) {
       LOGGER.warn("{} has open reference at garbage collection time", this);
       releaseImpl();
     }

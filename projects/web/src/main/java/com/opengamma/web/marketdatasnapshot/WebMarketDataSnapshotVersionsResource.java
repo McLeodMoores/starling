@@ -29,13 +29,15 @@ public class WebMarketDataSnapshotVersionsResource extends AbstractWebMarketData
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebMarketDataSnapshotVersionsResource(final AbstractWebMarketDataSnapshotResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final MarketDataSnapshotHistoryRequest request = new MarketDataSnapshotHistoryRequest(data().getSnapshot().getUniqueId());
@@ -47,7 +49,7 @@ public class WebMarketDataSnapshotVersionsResource extends AbstractWebMarketData
     return getFreemarker().build(HTML_DIR + "snapshotversions.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
    *
@@ -63,13 +65,13 @@ public class WebMarketDataSnapshotVersionsResource extends AbstractWebMarketData
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public WebMarketDataSnapshotVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final MarketDataSnapshotDocument doc = data().getSnapshot();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final MarketDataSnapshotDocument versioned = data().getMarketDataSnapshotMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -78,10 +80,12 @@ public class WebMarketDataSnapshotVersionsResource extends AbstractWebMarketData
     return new WebMarketDataSnapshotVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data) {

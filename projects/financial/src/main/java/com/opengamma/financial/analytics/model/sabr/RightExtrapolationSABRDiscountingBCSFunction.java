@@ -62,8 +62,8 @@ public class RightExtrapolationSABRDiscountingBCSFunction extends RightExtrapola
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, dayCount);
         final double strikeCutoff = Double.parseDouble(desiredValue.getConstraint(PROPERTY_STRIKE_CUTOFF));
         final double mu = Double.parseDouble(desiredValue.getConstraint(PROPERTY_MU));
-        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> pvcdsc = new PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator(
-            strikeCutoff, mu);
+        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> pvcdsc =
+            new PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator(strikeCutoff, mu);
         final ParameterSensitivityParameterCalculator<SABRSwaptionProviderInterface> psc = new ParameterSensitivityParameterCalculator<>(pvcdsc);
         final MarketQuoteSensitivityBlockCalculator<SABRSwaptionProviderInterface> calculator = new MarketQuoteSensitivityBlockCalculator<>(psc);
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);

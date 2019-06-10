@@ -43,7 +43,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent
    *          the parent resource, not null
    */
@@ -182,7 +182,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
       @FormParam("country") final String countryIso,
       @FormParam("currency") final String currencyIso,
       @FormParam("timezone") final String timeZoneId) {
-    if (data().getRegion().isLatest() == false) {
+    if (!data().getRegion().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -262,7 +262,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final RegionDocument doc = data().getRegion();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -284,7 +284,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
   // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
@@ -308,7 +308,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
   // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * 
+   *
    * @param data
    *          the data, not null
    * @return the URI, not null
@@ -319,7 +319,7 @@ public class WebRegionResource extends AbstractWebRegionResource {
 
   /**
    * Builds a URI for this resource.
-   * 
+   *
    * @param data
    *          the data, not null
    * @param overrideRegionId

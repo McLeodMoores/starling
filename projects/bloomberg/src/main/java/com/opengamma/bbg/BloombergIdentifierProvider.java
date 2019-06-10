@@ -240,7 +240,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
    */
   private ExternalIdWithDates makeSedol1Identifier(final FudgeMsg fieldData) {
     final String sedol1 = fieldData.getString(FIELD_ID_SEDOL1);
-    if (BloombergDataUtils.isValidField(sedol1) == false) {
+    if (!BloombergDataUtils.isValidField(sedol1)) {
       return null;
     }
     final ExternalId sedol1Id = ExternalSchemes.sedol1SecurityId(sedol1);
@@ -256,7 +256,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
    */
   private ExternalIdWithDates makeIsinIdentifier(final FudgeMsg fieldData) {
     final String isin = fieldData.getString(FIELD_ID_ISIN);
-    if (BloombergDataUtils.isValidField(isin) == false) {
+    if (!BloombergDataUtils.isValidField(isin)) {
       return null;
     }
     final ExternalId isinId = ExternalSchemes.isinSecurityId(isin);
@@ -272,7 +272,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
    */
   private ExternalIdWithDates makeCusipIdentifier(final FudgeMsg fieldData) {
     final String cusip = fieldData.getString(FIELD_ID_CUSIP);
-    if (BloombergDataUtils.isValidField(cusip) == false) {
+    if (!BloombergDataUtils.isValidField(cusip)) {
       return null;
     }
     final Pair<LocalDate, LocalDate> validFromTo = getFutureValidFromTo(fieldData);
@@ -289,7 +289,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
    */
   private ExternalIdWithDates makeBuidIdentifier(final FudgeMsg fieldData) {
     final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    if (BloombergDataUtils.isValidField(bbgUnique) == false) {
+    if (!BloombergDataUtils.isValidField(bbgUnique)) {
       return null;
     }
     final ExternalId buid = ExternalSchemes.bloombergBuidSecurityId(bbgUnique);
@@ -305,7 +305,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
    * @return the parsed date, null if not available
    */
   private LocalDate parseDate(final String dateStr) {
-    if (BloombergDataUtils.isValidField(dateStr) == false) {
+    if (!BloombergDataUtils.isValidField(dateStr)) {
       return null;
     }
     try {

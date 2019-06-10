@@ -102,7 +102,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   @Override
   protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
     // if use-cache is false, then do not cache
-    if (request.isUseCache() == false) {
+    if (!request.isUseCache()) {
       return getUnderlying().getReferenceData(request);
     }
 
@@ -198,7 +198,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
     // create combined result
     final ReferenceData resolvedResult = new ReferenceData(freshResult.getIdentifier(), unionFieldData);
     for (final ReferenceDataError error : freshResult.getErrors()) {
-      if (resolvedResult.getErrors().contains(error) == false) {
+      if (!resolvedResult.getErrors().contains(error)) {
         resolvedResult.getErrors().add(error);
       }
     }
@@ -319,7 +319,7 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
   }
 
   private boolean differentCachedResult(final ReferenceData previousResult, final ReferenceData resolvedResult) {
-    if (previousResult.getIdentifier().equals(resolvedResult.getIdentifier()) == false) {
+    if (!previousResult.getIdentifier().equals(resolvedResult.getIdentifier())) {
       throw new OpenGammaRuntimeException("Attempting to compare two different securities " + previousResult + " " + resolvedResult);
     }
     // TODO better, non ordered comparison

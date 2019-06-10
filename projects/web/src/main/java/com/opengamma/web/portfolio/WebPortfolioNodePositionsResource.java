@@ -33,20 +33,22 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebPortfolioNodePositionsResource(final AbstractWebPortfolioResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Produces(MediaType.TEXT_HTML)
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   public Response postHTML(
       @FormParam("positionurl") final String positionUrlStr) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(new WebPortfolioNodeResource(this).getHTML()).build();
     }
 
@@ -63,7 +65,7 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
       String uniqueIdStr = StringUtils.substringAfterLast(trimmedPositionUrlStr, "/positions/");
       uniqueIdStr = StringUtils.substringBefore(uniqueIdStr, "/");
       positionId = UniqueId.parse(uniqueIdStr);
-      data().getPositionMaster().get(positionId);  // validate position exists
+      data().getPositionMaster().get(positionId); // validate position exists
     } catch (final Exception ex) {
       final FlexiBean out = createRootData();
       out.put("err_positionUrlInvalid", true);
@@ -79,7 +81,7 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(@FormParam("uid") final String uniqueIdStr) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(new WebPortfolioNodeResource(this).getHTML()).build();
     }
     final String trimmedUniqueIdStr = StringUtils.trimToNull(uniqueIdStr);
@@ -89,7 +91,7 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
     UniqueId positionId = null;
     try {
       positionId = UniqueId.parse(trimmedUniqueIdStr);
-      data().getPositionMaster().get(positionId);  // validate position exists
+      data().getPositionMaster().get(positionId); // validate position exists
     } catch (final Exception ex) {
       return Response.status(Status.BAD_REQUEST).build();
     }
@@ -100,7 +102,7 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
   private URI addPosition(final PortfolioDocument doc, final UniqueId positionId) {
     final ManageablePortfolioNode node = data().getNode();
     final ObjectId objectId = positionId.getObjectId();
-    final URI uri = WebPortfolioNodeResource.uri(data());  // lock URI before updating data()
+    final URI uri = WebPortfolioNodeResource.uri(data()); // lock URI before updating data()
     if (!node.getPositionIds().contains(objectId)) {
       node.addPosition(positionId);
       final PortfolioDocument updated = data().getPortfolioMaster().update(doc);
@@ -109,16 +111,17 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{positionId}")
   public WebPortfolioNodePositionResource findNode(@PathParam("positionId") final String idStr) {
     data().setUriPositionId(idStr);
     return new WebPortfolioNodePositionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -135,10 +138,12 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {
@@ -147,8 +152,11 @@ public class WebPortfolioNodePositionsResource extends AbstractWebPortfolioResou
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideNodeId  the override node id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideNodeId
+   *          the override node id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overrideNodeId) {

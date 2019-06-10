@@ -190,13 +190,13 @@ public class MixedBivariateLogNormalCorrelationFinder {
       _finalSqu = 0.5 * getVecNormSq(tmp);
     }
 
-    while (done == false && k < ITRMAX) {
+    while (!done && k < ITRMAX) {
 
       k = k + 1;
 
       /// confirming -1<= rhos <=1 and NotNaN
       boolean confRhos = false;
-      while (confRhos == false) {
+      while (!confRhos) {
 
         rhosJump = theMatrixEqnSolver(dataStrs, dataVols, gradFunctionValueM, hessian, time, wghts, sigsX, sigsY, rpfsX, rpfsY, forwardZ);
 

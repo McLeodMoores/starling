@@ -13,7 +13,7 @@ package com.opengamma.analytics.math.statistics.distribution.fnlib;
 public class DERFC {
 
   // CSOFF
-  private static final double[] s_erfcs = {
+  private static final double[] ERFCS = {
                 -0.49046121234691808039984544033376e-1,
                 -0.14226120510371364237824741899631e+0,
                 +0.10035582187599795575754676712933e-1,
@@ -37,7 +37,7 @@ public class DERFC {
                 +0.12811883993017002666666666666666e-31
   };
 
-  private static final double[] s_erc2cs = {
+  private static final double[] ERC2CS = {
                 -0.6960134660230950112739150826197e-1,
                 -0.4110133936262089348982212084666e-1,
                 +0.3914495866689626881561143705244e-2,
@@ -89,7 +89,7 @@ public class DERFC {
                 +0.2666491705195388413323946666666e-31
   };
 
-  private static final double[] s_erfccs = {
+  private static final double[] ERFCCS = {
                 +0.715179310202924774503697709496e-1,
                 -0.265324343376067157558893386681e-1,
                 +0.171115397792085588332699194606e-2,
@@ -163,9 +163,9 @@ public class DERFC {
   private static double s_sqeps;
   static {
     s_eta = 0.1 * D1MACH.three(); // slight variation from F77 SLATEC, comparing using doubles opposed to floats
-    s_nterf = INITDS.getInitds(s_erfcs, 21, s_eta);
-    s_nterfc = INITDS.getInitds(s_erfccs, 59, s_eta);
-    s_nterc2 = INITDS.getInitds(s_erc2cs, 49, s_eta);
+    s_nterf = INITDS.getInitds(ERFCS, 21, s_eta);
+    s_nterfc = INITDS.getInitds(ERFCCS, 59, s_eta);
+    s_nterc2 = INITDS.getInitds(ERC2CS, 49, s_eta);
     s_xsml = -Math.sqrt(-Math.log(SQRTPI * D1MACH.three()));
     // s_txmax = Math.sqrt(-Math.log(SQRTPI * D1MACH.one()));
     // s_xmax = s_txmax - 0.5d * Math.log(s_txmax) / s_txmax - 0.01d;
@@ -190,15 +190,15 @@ public class DERFC {
         return 1d - 2d * x / SQRTPI;
       }
       if (y >= s_sqeps) {
-        return 1d - x * (1d + DCSEVL.getDCSEVL(2.d * x * x - 1.d, s_erfcs, s_nterf));
+        return 1d - x * (1d + DCSEVL.getDCSEVL(2.d * x * x - 1.d, ERFCS, s_nterf));
       }
     }
     y = y * y;
     if (y <= 4d) {
-      ret = Math.exp(-y) / Math.abs(x) * (0.5d + DCSEVL.getDCSEVL((8.d / y - 5.d) / 3.d, s_erc2cs, s_nterc2));
+      ret = Math.exp(-y) / Math.abs(x) * (0.5d + DCSEVL.getDCSEVL((8.d / y - 5.d) / 3.d, ERC2CS, s_nterc2));
     }
     if (y > 4d) {
-      ret = Math.exp(-y) / Math.abs(x) * (0.5d + DCSEVL.getDCSEVL(8.d / y - 1.d, s_erfccs, s_nterfc));
+      ret = Math.exp(-y) / Math.abs(x) * (0.5d + DCSEVL.getDCSEVL(8.d / y - 1.d, ERFCCS, s_nterfc));
     }
     if (x < 0d) {
       ret = 2d - ret;

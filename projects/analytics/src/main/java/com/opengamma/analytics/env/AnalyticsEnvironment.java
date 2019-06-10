@@ -53,9 +53,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   private static ThreadLocal<AnalyticsEnvironment> s_instance = new InheritableThreadLocal<>();
 
   /**
-   * The model daycount. Used to compute fractions of a year when obtaining values from a curve. Different to the daycount used to price an instrument, which
-   * comes from the instrument or a convention.
-   * 
+   * The model daycount. Used to compute fractions of a year when obtaining values from a curve.
+   * Different to the daycount used to price an instrument, which comes from the instrument or a convention.
+   *
    * @see DayCount
    */
   @PropertyDefinition(validate = "notNull")
@@ -63,7 +63,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * Builder for generating fixed annuities.
-   * 
+   *
    * @see FixedAnnuityDefinitionBuilder
    */
   @PropertyDefinition(validate = "notNull")
@@ -71,7 +71,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * Builder for generating floating (Ibor, OIS etc) annuities.
-   * 
+   *
    * @see FloatingAnnuityDefinitionBuilder
    */
   @PropertyDefinition(validate = "notNull")
@@ -93,7 +93,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * Set the current {@link AnalyticsEnvironment} for the current thread.
-   * 
+   *
    * @param analyticsEnvironment
    *          the analytics environment to set, not null
    */
@@ -153,8 +153,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the model daycount. Used to compute fractions of a year when obtaining values from a curve. Different to the daycount used to price an instrument, which
-   * comes from the instrument or a convention.
+   * Gets the model daycount. Used to compute fractions of a year when obtaining values from a curve.
+   * Different to the daycount used to price an instrument, which comes from the instrument or a convention.
    * 
    * @see DayCount
    * @return the value of the property, not null
@@ -451,8 +451,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the model daycount. Used to compute fractions of a year when obtaining values from a curve. Different to the daycount used to price an instrument, which
-     * comes from the instrument or a convention.
+     * Sets the model daycount. Used to compute fractions of a year when obtaining values from a curve.
+     * Different to the daycount used to price an instrument, which comes from the instrument or a convention.
      * 
      * @see DayCount
      * @param modelDayCount  the new value, not null

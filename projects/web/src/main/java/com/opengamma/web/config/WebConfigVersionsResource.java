@@ -33,15 +33,17 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebConfigVersionsResource(final AbstractWebConfigResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public String getHTML() {
     final ConfigHistoryRequest request = new ConfigHistoryRequest(data().getConfig().getUniqueId(), Object.class);
     final ConfigHistoryResult<?> result = data().getConfigMaster().history(request);
@@ -54,7 +56,7 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public Response getJSON(
       @QueryParam("pgIdx") final Integer pgIdx,
       @QueryParam("pgNum") final Integer pgNum,
@@ -72,9 +74,10 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -88,13 +91,13 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public WebConfigVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final ConfigDocument doc = data().getConfig();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final ConfigDocument versioned = data().getConfigMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -103,10 +106,12 @@ public class WebConfigVersionsResource extends AbstractWebConfigResource {
     return new WebConfigVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebConfigData data) {

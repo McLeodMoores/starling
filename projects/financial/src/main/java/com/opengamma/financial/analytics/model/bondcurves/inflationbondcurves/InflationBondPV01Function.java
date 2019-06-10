@@ -47,8 +47,8 @@ public class InflationBondPV01Function extends InflationBondFromCurvesFunction<I
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondPV01Function.class);
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersInflationCalculator<>(
-      PresentValueCurveSensitivityIssuerDiscountingInflationCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersInflationCalculator<>(PresentValueCurveSensitivityIssuerDiscountingInflationCalculator.getInstance());
 
   /**
    * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#PV01} and sets the calculator to

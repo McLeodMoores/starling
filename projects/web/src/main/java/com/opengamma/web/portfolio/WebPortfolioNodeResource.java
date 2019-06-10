@@ -41,13 +41,15 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebPortfolioNodeResource(final AbstractWebPortfolioResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -81,7 +83,7 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -112,18 +114,18 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
     node.addChildNode(newNode);
     PortfolioDocument doc = data().getPortfolio();
     doc = data().getPortfolioMaster().update(doc);
-    final URI uri = WebPortfolioNodeResource.uri(data());  // lock URI before updating data()
+    final URI uri = WebPortfolioNodeResource.uri(data()); // lock URI before updating data()
     data().setPortfolio(doc);
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(@FormParam("name") final String name) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final String trimmedName = StringUtils.trimToNull(name);
@@ -142,7 +144,7 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response putJSON(@FormParam("name") final String name) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final String trimmedName = StringUtils.trimToNull(name);
@@ -152,8 +154,8 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
 
   private URI updatePortfolioNode(final String name, final PortfolioDocument doc) {
     final ManageablePortfolioNode node = data().getNode();
-    final URI uri = WebPortfolioNodeResource.uri(data());  // lock URI before updating data()
-    if (Objects.equal(node.getName(), name) == false) {
+    final URI uri = WebPortfolioNodeResource.uri(data()); // lock URI before updating data()
+    if (!Objects.equal(node.getName(), name)) {
       node.setName(name);
       final PortfolioDocument updated = data().getPortfolioMaster().update(doc);
       data().setPortfolio(updated);
@@ -161,19 +163,19 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
     if (data().getParentNode() == null) {
       throw new IllegalArgumentException("Root node cannot be deleted");
     }
-    if (data().getParentNode().removeNode(data().getNode().getUniqueId()) == false) {
+    if (!data().getParentNode().removeNode(data().getNode().getUniqueId())) {
       throw new DataNotFoundException("PortfolioNode not found: " + data().getNode().getUniqueId());
     }
     doc = data().getPortfolioMaster().update(doc);
@@ -190,7 +192,7 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
       if (data().getParentNode() == null) {
         throw new IllegalArgumentException("Root node cannot be deleted");
       }
-      if (data().getParentNode().removeNode(data().getNode().getUniqueId()) == false) {
+      if (!data().getParentNode().removeNode(data().getNode().getUniqueId())) {
         throw new DataNotFoundException("PortfolioNode not found: " + data().getNode().getUniqueId());
       }
       doc = data().getPortfolioMaster().update(doc);
@@ -198,15 +200,16 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("positions")
   public WebPortfolioNodePositionsResource findPositions() {
     return new WebPortfolioNodePositionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -227,7 +230,7 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
   /**
    * Extracts the path from the root node to the current node, for web breadcrumb display. The nodes are returned in a list, ordered from root to current node.
    * Not using findNodeStackByObjectId(), which traverses the tree exhaustively until it finds the required path.
-   * 
+   *
    * @param node
    *          the current node
    * @return a list of &lt;UniqueId, String&gt; pairs denoting all nodes on the path from root to current node
@@ -240,15 +243,17 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
       result.addFirst(ObjectsPair.of(currentNode.getUniqueId(), currentNode.getName()));
       currentNode = currentNode.getParentNodeId() == null
           ? null
-              : data().getPortfolioMaster().getNode(currentNode.getParentNodeId());
+          : data().getPortfolioMaster().getNode(currentNode.getParentNodeId());
     }
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {
@@ -257,8 +262,11 @@ public class WebPortfolioNodeResource extends AbstractWebPortfolioResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideNodeId  the override node id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideNodeId
+   *          the override node id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overrideNodeId) {

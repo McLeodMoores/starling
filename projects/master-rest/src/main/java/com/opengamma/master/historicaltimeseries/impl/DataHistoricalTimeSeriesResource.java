@@ -53,8 +53,10 @@ public class DataHistoricalTimeSeriesResource extends AbstractDocumentDataResour
   /**
    * Creates the resource.
    *
-   * @param htsResource  the parent resource, not null
-   * @param infoId  the time-series unique identifier, not null
+   * @param htsResource
+   *          the parent resource, not null
+   * @param infoId
+   *          the time-series unique identifier, not null
    */
   public DataHistoricalTimeSeriesResource(final DataHistoricalTimeSeriesMasterResource htsResource, final ObjectId infoId) {
     ArgumentChecker.notNull(htsResource, "htsResource");
@@ -63,7 +65,7 @@ public class DataHistoricalTimeSeriesResource extends AbstractDocumentDataResour
     _urlResourceId = infoId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the parent resource.
@@ -84,7 +86,7 @@ public class DataHistoricalTimeSeriesResource extends AbstractDocumentDataResour
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the time-series master.
@@ -100,13 +102,12 @@ public class DataHistoricalTimeSeriesResource extends AbstractDocumentDataResour
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final HistoricalTimeSeriesInfoHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, HistoricalTimeSeriesInfoHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final HistoricalTimeSeriesInfoHistoryResult result = getMaster().history(request);
     return responseOkObject(result);
   }
-
 
   @Override
   @GET
@@ -132,7 +133,6 @@ public class DataHistoricalTimeSeriesResource extends AbstractDocumentDataResour
   public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
-
 
   @Override
   @PUT

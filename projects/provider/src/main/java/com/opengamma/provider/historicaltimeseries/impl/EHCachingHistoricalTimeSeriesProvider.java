@@ -160,7 +160,7 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
     }
 
     // find whole time-series in cache
-    if (requestKey.getMaxPoints() != null || requestKey.getDateRange().equals(LocalDateRange.ALL) == false) {
+    if (requestKey.getMaxPoints() != null || !requestKey.getDateRange().equals(LocalDateRange.ALL)) {
       final HistoricalTimeSeriesProviderGetRequest wholeHtsKey = createCacheKey(requestKey, null, true);
       cacheElement = _cache.get(wholeHtsKey);
       if (cacheElement != null) {

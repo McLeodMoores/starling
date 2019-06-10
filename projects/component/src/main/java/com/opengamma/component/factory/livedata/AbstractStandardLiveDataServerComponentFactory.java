@@ -100,8 +100,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   @PropertyDefinition
   private int _jmsSubscriptionQueueConcurrentConsumers = 1;
   /**
-   * The maximum number of listeners for the subscription queue (if used). When the limit is reached, messages will queue up until a listener becomes available
-   * to handle them.
+   * The maximum number of listeners for the subscription queue (if used). When the limit is reached, messages
+   * will queue up until a listener becomes available to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    */
@@ -250,7 +250,7 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   /**
    * Sets the prefix of the subscription queue name, null if not used.
-   * 
+   *
    * @param jmsSubscriptionQueuePrefix
    *          the new value of the property
    */
@@ -527,8 +527,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the maximum number of listeners for the subscription queue (if used). When the limit is reached, messages will queue up until a listener becomes available
-   * to handle them.
+   * Gets the maximum number of listeners for the subscription queue (if used). When the limit is reached, messages
+   * will queue up until a listener becomes available to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    * @return the value of the property
@@ -538,8 +538,8 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
   }
 
   /**
-   * Sets the maximum number of listeners for the subscription queue (if used). When the limit is reached, messages will queue up until a listener becomes available
-   * to handle them.
+   * Sets the maximum number of listeners for the subscription queue (if used). When the limit is reached, messages
+   * will queue up until a listener becomes available to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    * @param jmsSubscriptionQueueMaxConcurrentConsumers  the new value of the property
@@ -550,7 +550,7 @@ public abstract class AbstractStandardLiveDataServerComponentFactory extends Abs
 
   /**
    * Gets the the {@code jmsSubscriptionQueueMaxConcurrentConsumers} property.
-   * to handle them.
+   * will queue up until a listener becomes available to handle them.
    * <p>
    * Defaults to 1 but can be overridden from config.
    * @return the property, not null

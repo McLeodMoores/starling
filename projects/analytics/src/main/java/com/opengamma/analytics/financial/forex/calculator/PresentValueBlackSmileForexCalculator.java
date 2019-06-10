@@ -28,14 +28,14 @@ public final class PresentValueBlackSmileForexCalculator extends PresentValueMCA
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueBlackSmileForexCalculator s_instance = new PresentValueBlackSmileForexCalculator();
+  private static final PresentValueBlackSmileForexCalculator INSTANCE = new PresentValueBlackSmileForexCalculator();
 
   /**
    * Get the unique calculator instance.
    * @return The instance.
    */
   public static PresentValueBlackSmileForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

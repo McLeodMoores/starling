@@ -469,7 +469,7 @@ public class DbPortfolioMaster
       _node.setUniqueId(createUniqueId(nodeOid, nodeId));
       _node.setPortfolioId(_portfolio.getUniqueId());
       if (_nodes.size() == 0) {
-        if (_complete == false) {
+        if (!_complete) {
           final Long parentNodeId = (Long) rs.getObject("PARENT_NODE_ID");
           final Long parentNodeOid = (Long) rs.getObject("PARENT_NODE_OID");
           if (parentNodeId != null && parentNodeOid != null) {

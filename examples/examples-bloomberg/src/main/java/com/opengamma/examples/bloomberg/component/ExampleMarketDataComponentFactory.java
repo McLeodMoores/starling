@@ -109,7 +109,7 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
       throw new IllegalStateException();
     }
     JmsConnector jmsConnector = getJmsConnector();
-    if (jmsConnector.getClientBrokerUri().equals(jmsUri) == false) {
+    if (!jmsConnector.getClientBrokerUri().equals(jmsUri)) {
       final JmsConnectorFactoryBean jmsFactory = new JmsConnectorFactoryBean(jmsConnector);
       jmsFactory.setClientBrokerUri(jmsUri);
       jmsConnector = jmsFactory.getObjectCreating();

@@ -53,8 +53,10 @@ public class DataHolidayResource extends AbstractDocumentDataResource<HolidayDoc
   /**
    * Creates the resource.
    *
-   * @param holidaysResource  the parent resource, not null
-   * @param holidayId  the holiday unique identifier, not null
+   * @param holidaysResource
+   *          the parent resource, not null
+   * @param holidayId
+   *          the holiday unique identifier, not null
    */
   public DataHolidayResource(final DataHolidayMasterResource holidaysResource, final ObjectId holidayId) {
     ArgumentChecker.notNull(holidaysResource, "holidaysResource");
@@ -63,7 +65,7 @@ public class DataHolidayResource extends AbstractDocumentDataResource<HolidayDoc
     _urlResourceId = holidayId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the holidays resource.
    *
@@ -83,7 +85,7 @@ public class DataHolidayResource extends AbstractDocumentDataResource<HolidayDoc
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the holiday master.
    *
@@ -94,12 +96,12 @@ public class DataHolidayResource extends AbstractDocumentDataResource<HolidayDoc
     return getHolidaysResource().getHolidayMaster();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final HolidayHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, HolidayHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final HolidayHistoryResult result = getMaster().history(request);

@@ -33,13 +33,15 @@ public class MinimalWebSecurityVersionsResource extends AbstractMinimalWebSecuri
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public MinimalWebSecurityVersionsResource(final AbstractMinimalWebSecurityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final SecurityHistoryRequest request = new SecurityHistoryRequest(data().getSecurity().getUniqueId());
@@ -70,9 +72,10 @@ public class MinimalWebSecurityVersionsResource extends AbstractMinimalWebSecuri
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -85,13 +88,13 @@ public class MinimalWebSecurityVersionsResource extends AbstractMinimalWebSecuri
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public MinimalWebSecurityVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final SecurityDocument doc = data().getSecurity();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final SecurityDocument versioned = data().getSecurityMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -100,10 +103,12 @@ public class MinimalWebSecurityVersionsResource extends AbstractMinimalWebSecuri
     return new MinimalWebSecurityVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data) {

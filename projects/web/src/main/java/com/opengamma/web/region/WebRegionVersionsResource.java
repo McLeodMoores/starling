@@ -33,13 +33,15 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebRegionVersionsResource(final AbstractWebRegionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final RegionHistoryRequest request = new RegionHistoryRequest(data().getRegion().getUniqueId());
@@ -70,9 +72,10 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -85,13 +88,13 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public WebRegionVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final RegionDocument doc = data().getRegion();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final RegionDocument versioned = data().getRegionMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -100,10 +103,12 @@ public class WebRegionVersionsResource extends AbstractWebRegionResource {
     return new WebRegionVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebRegionData data) {

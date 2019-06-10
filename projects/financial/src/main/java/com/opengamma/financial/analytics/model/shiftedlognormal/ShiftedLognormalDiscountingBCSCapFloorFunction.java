@@ -42,8 +42,8 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class ShiftedLognormalDiscountingBCSCapFloorFunction extends ShiftedLognormalDiscountingCapFloorFunction {
   /** The curve sensitivity calculator */
-  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC = PresentValueCurveSensitivityBlackSmileShiftCapCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
+      PresentValueCurveSensitivityBlackSmileShiftCapCalculator.getInstance();
   /** The parameter sensitivity calculator */
   private static final ParameterSensitivityParameterCalculator<BlackSmileShiftCapProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
   /** The market quote sensitivity calculator */

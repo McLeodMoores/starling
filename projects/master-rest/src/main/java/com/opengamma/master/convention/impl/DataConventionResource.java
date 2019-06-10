@@ -53,8 +53,10 @@ public class DataConventionResource extends AbstractDocumentDataResource<Convent
   /**
    * Creates the resource.
    *
-   * @param conventionsResource  the parent resource, not null
-   * @param conventionId  the convention unique identifier, not null
+   * @param conventionsResource
+   *          the parent resource, not null
+   * @param conventionId
+   *          the convention unique identifier, not null
    */
   public DataConventionResource(final DataConventionMasterResource conventionsResource, final ObjectId conventionId) {
     ArgumentChecker.notNull(conventionsResource, "conventionsResource");
@@ -63,7 +65,7 @@ public class DataConventionResource extends AbstractDocumentDataResource<Convent
     _urlResourceId = conventionId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the conventions resource.
    *
@@ -83,7 +85,7 @@ public class DataConventionResource extends AbstractDocumentDataResource<Convent
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the convention master.
    *
@@ -98,7 +100,7 @@ public class DataConventionResource extends AbstractDocumentDataResource<Convent
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final ConventionHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, ConventionHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final ConventionHistoryResult result = getMaster().history(request);

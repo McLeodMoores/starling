@@ -23,14 +23,14 @@ public final class CurrencyExposureBlackTermStructureForexCalculator extends Cur
   /**
    * The unique instance of the calculator.
    */
-  private static final CurrencyExposureBlackTermStructureForexCalculator s_instance = new CurrencyExposureBlackTermStructureForexCalculator();
+  private static final CurrencyExposureBlackTermStructureForexCalculator INSTANCE = new CurrencyExposureBlackTermStructureForexCalculator();
 
   /**
    * Gets the calculator instance.
    * @return The calculator.
    */
   public static CurrencyExposureBlackTermStructureForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

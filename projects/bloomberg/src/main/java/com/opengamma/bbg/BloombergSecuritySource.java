@@ -58,7 +58,8 @@ public final class BloombergSecuritySource extends AbstractSecuritySource {
   /**
    * Creates a unique identifier.
    *
-   * @param value the value, not null
+   * @param value
+   *          the value, not null
    * @return a Bloomberg unique identifier, not null
    */
   public static UniqueId createUniqueId(final String value) {
@@ -68,8 +69,10 @@ public final class BloombergSecuritySource extends AbstractSecuritySource {
   /**
    * Creates the security master.
    *
-   * @param refDataProvider the reference data provider, not null
-   * @param exchangeDataProvider the data provider, not null
+   * @param refDataProvider
+   *          the reference data provider, not null
+   * @param exchangeDataProvider
+   *          the data provider, not null
    */
   public BloombergSecuritySource(final ReferenceDataProvider refDataProvider, final ExchangeDataProvider exchangeDataProvider) {
     ArgumentChecker.notNull(refDataProvider, "Reference Data Provider");
@@ -78,10 +81,10 @@ public final class BloombergSecuritySource extends AbstractSecuritySource {
     _bloombergBulkSecurityLoader = new BloombergBulkSecurityLoader(refDataProvider, exchangeDataProvider);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Security get(final UniqueId uniqueId) {
-    if (BLOOMBERG_SCHEME.equals(uniqueId.getScheme()) == false) {
+    if (!BLOOMBERG_SCHEME.equals(uniqueId.getScheme())) {
       throw new IllegalArgumentException("Identifier must be a Bloomberg unique identifier: " + uniqueId);
     }
     return getSecurity(uniqueId.getValue());
@@ -89,7 +92,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource {
 
   @Override
   public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
-    if (BLOOMBERG_SCHEME.equals(objectId.getScheme()) == false) {
+    if (!BLOOMBERG_SCHEME.equals(objectId.getScheme())) {
       throw new IllegalArgumentException("Identifier must be a Bloomberg object identifier: " + objectId);
     }
     return getSecurity(objectId.getValue());
@@ -99,7 +102,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource {
   public Collection<Security> get(final ExternalIdBundle bundle) {
     final Security sec = getSingle(bundle);
     if (sec != null) {
-      return Collections.<Security>singleton(getSingle(bundle));
+      return Collections.<Security> singleton(getSingle(bundle));
     }
     return Collections.emptyList();
   }
@@ -127,17 +130,18 @@ public final class BloombergSecuritySource extends AbstractSecuritySource {
     return getSingle(bundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ChangeManager changeManager() {
     return DummyChangeManager.INSTANCE;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the security type by id.
    *
-   * @param securityID the security id, null returns null
+   * @param securityID
+   *          the security id, null returns null
    * @return the security type, null if not found
    */
   /* package for testing */String getSecurityType(final String securityID) {
@@ -164,7 +168,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource {
   private Map<ExternalIdBundle, UniqueId> createBundle2UniqueIdMap(final Collection<UniqueId> uniqueIds) {
     final Map<ExternalIdBundle, UniqueId> result = Maps.newHashMap();
     for (final UniqueId uniqueId : uniqueIds) {
-      if (BLOOMBERG_SCHEME.equals(uniqueId.getScheme()) == false) {
+      if (!BLOOMBERG_SCHEME.equals(uniqueId.getScheme())) {
         throw new IllegalArgumentException("Identifier must be a Bloomberg unique identifier: " + uniqueId);
       }
       final String bbgIdValue = uniqueId.getValue();

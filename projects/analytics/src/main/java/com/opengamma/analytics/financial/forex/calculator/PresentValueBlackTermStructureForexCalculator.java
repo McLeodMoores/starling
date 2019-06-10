@@ -23,14 +23,14 @@ public final class PresentValueBlackTermStructureForexCalculator extends Present
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueBlackTermStructureForexCalculator s_instance = new PresentValueBlackTermStructureForexCalculator();
+  private static final PresentValueBlackTermStructureForexCalculator INSTANCE = new PresentValueBlackTermStructureForexCalculator();
 
   /**
    * Get the unique calculator instance.
    * @return The instance.
    */
   public static PresentValueBlackTermStructureForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

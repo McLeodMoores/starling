@@ -57,8 +57,8 @@ public class ManageableSecurity extends DirectBean implements Serializable, Secu
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of external identifiers that define the security. Each external system will typically refer to a security using a different identifier. Thus the
-   * bundle consists of a set of identifiers, one for each external system.
+   * The bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
@@ -207,8 +207,8 @@ public class ManageableSecurity extends DirectBean implements Serializable, Secu
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of external identifiers that define the security. Each external system will typically refer to a security using a different identifier. Thus the
-   * bundle consists of a set of identifiers, one for each external system.
+   * Gets the bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @return the value of the property, not null
    */
   @Override
@@ -217,8 +217,8 @@ public class ManageableSecurity extends DirectBean implements Serializable, Secu
   }
 
   /**
-   * Sets the bundle of external identifiers that define the security. Each external system will typically refer to a security using a different identifier. Thus the
-   * bundle consists of a set of identifiers, one for each external system.
+   * Sets the bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -228,7 +228,7 @@ public class ManageableSecurity extends DirectBean implements Serializable, Secu
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * bundle consists of a set of identifiers, one for each external system.
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {

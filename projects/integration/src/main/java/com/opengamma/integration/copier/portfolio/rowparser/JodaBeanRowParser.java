@@ -630,7 +630,7 @@ public class JodaBeanRowParser extends RowParser {
    * @return true if it is to be ignored
    */
   private boolean ignoreMetaProperty(final MetaProperty<?> mp) {
-    if (mp.style().isSerializable() == false) {
+    if (!mp.style().isSerializable()) {
       return true;
     }
     final String s = mp.name().trim().toLowerCase();

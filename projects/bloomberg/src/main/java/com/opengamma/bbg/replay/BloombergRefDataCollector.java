@@ -166,7 +166,7 @@ public class BloombergRefDataCollector implements Lifecycle {
 
   @Override
   public synchronized boolean isRunning() {
-    return _started.get() == true;
+    return _started.get();
   }
 
   // -------------------------------------------------------------------------

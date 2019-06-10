@@ -61,9 +61,9 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
     boolean correctSign = false;
     int it = 0;
 
-    while (correctSign == false) {
+    while (!correctSign) {
       correctSign = signChecker(beta, rValues);
-      if (correctSign == false) {
+      if (!correctSign) {
         first = firstDiffSweep(intervals, slopes, beta, first);
         rValues = rValuesCalculator(slopes, first);
       }
@@ -475,7 +475,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
           - intervals[i] * second[i + 1] * res[i] * (1. - res[i])) * beta[i];
       double ref2 = (2. * first[i] + 4. * first[i + 1] + intervals[i] * second[i] * res[i] * (1. - res[i])
           - intervals[i] * second[i + 1] * res[i] * (2. - res[i])) * beta[i + 1];
-      while (ineq1 == false) {
+      while (!ineq1) {
         if (ref1 - ERROR * Math.abs(ref1) <= bound1 + ERROR * Math.abs(bound1)) {
           ineq1 = true;
         } else {
@@ -487,7 +487,7 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
         ref1 = (4. * first[i] + 2. * first[i + 1] + intervals[i] * second[i] * res[i] * (2. - res[i]) - intervals[i] * second[i + 1] * res[i] * (1. - res[i]))
             * beta[i];
       }
-      while (ineq2 == false) {
+      while (!ineq2) {
         if (ref2 + ERROR * Math.abs(ref2) >= bound2 - ERROR * Math.abs(bound2)) {
           ineq2 = true;
         } else {

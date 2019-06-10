@@ -129,7 +129,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     final Collection<ObjectId> tradeObjectIds = request.getTradeObjectIds();
     if (positionObjectIds != null && positionObjectIds.size() == 0
         || tradeObjectIds != null && tradeObjectIds.size() == 0
-        || ExternalIdSearch.canMatch(securityIdSearch) == false) {
+        || !ExternalIdSearch.canMatch(securityIdSearch)) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
@@ -146,7 +146,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
       args.addValue("trade_provider_scheme", request.getTradeProviderId().getScheme().getName());
       args.addValue("trade_provider_value", request.getTradeProviderId().getValue());
     }
-    if (securityIdSearch != null && securityIdSearch.alwaysMatches() == false) {
+    if (securityIdSearch != null && !securityIdSearch.alwaysMatches()) {
       int i = 0;
       for (final ExternalId id : securityIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());

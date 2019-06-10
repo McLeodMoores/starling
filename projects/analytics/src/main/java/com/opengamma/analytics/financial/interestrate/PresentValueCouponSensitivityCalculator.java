@@ -28,10 +28,10 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 public final class PresentValueCouponSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, Double> {
   private static final RateReplacingInterestRateDerivativeVisitor REPLACE_RATE = RateReplacingInterestRateDerivativeVisitor.getInstance();
   private static final PresentValueCalculator PVC = PresentValueCalculator.getInstance();
-  private static final PresentValueCouponSensitivityCalculator s_instance = new PresentValueCouponSensitivityCalculator();
+  private static final PresentValueCouponSensitivityCalculator INSTANCE = new PresentValueCouponSensitivityCalculator();
 
   public static PresentValueCouponSensitivityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private PresentValueCouponSensitivityCalculator() {

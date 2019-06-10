@@ -24,7 +24,7 @@ public final class PriceFromCurvesDiscountingCalculator extends InstrumentDeriva
   /**
    * The calculator instance.
    */
-  private static final PriceFromCurvesDiscountingCalculator s_instance = new PriceFromCurvesDiscountingCalculator();
+  private static final PriceFromCurvesDiscountingCalculator INSTANCE = new PriceFromCurvesDiscountingCalculator();
   /**
    * The method to compute bond future prices.
    */
@@ -36,7 +36,7 @@ public final class PriceFromCurvesDiscountingCalculator extends InstrumentDeriva
    * @return The instance.
    */
   public static PriceFromCurvesDiscountingCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

@@ -54,11 +54,12 @@ public abstract class StandardCDSSecurity extends CreditDefaultSwapSecurity {
     super(securityType);
   }
 
-  public StandardCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer, final ExternalId referenceEntity, // CSIGNORE
-      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final ExternalId regionId, final ZonedDateTime startDate,
-      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final Frequency couponFrequency, final DayCount dayCount,
-      final BusinessDayConvention businessDayConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
-      final boolean adjustMaturityDate, final InterestRateNotional notional, final boolean includeAccruedPremium, final boolean protectionStart,
+  public StandardCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer,
+      final ExternalId referenceEntity, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause,
+      final ExternalId regionId, final ZonedDateTime startDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
+      final StubType stubType, final Frequency couponFrequency, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+      final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate, final boolean adjustMaturityDate,
+      final InterestRateNotional notional, final boolean includeAccruedPremium, final boolean protectionStart,
       final double quotedSpread, final InterestRateNotional upfrontAmount, final String securityType) {
 
     super(isBuy, protectionSeller, protectionBuyer, referenceEntity, debtSeniority, restructuringClause, regionId, startDate, effectiveDate, maturityDate,

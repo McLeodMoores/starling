@@ -35,8 +35,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  */
 public class BlackDiscountingCurrencyExposureFXOptionFunction extends BlackDiscountingFXOptionFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, MultipleCurrencyAmount> CALCULATOR = CurrencyExposureForexBlackSmileCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, MultipleCurrencyAmount> CALCULATOR =
+      CurrencyExposureForexBlackSmileCalculator.getInstance();
 
   /**
    * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#FX_CURRENCY_EXPOSURE}.

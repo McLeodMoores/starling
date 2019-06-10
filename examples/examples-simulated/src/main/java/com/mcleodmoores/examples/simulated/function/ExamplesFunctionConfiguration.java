@@ -815,7 +815,8 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   protected FunctionConfigurationSource curveFunctions() {
     final Providers providers = new CurveFunctions.Providers();
     setCurveTypeInformation(providers);
-    final com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults defaults = new com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults();
+    final com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults defaults =
+        new com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults();
     setCurveDefaults(defaults);
     return CombiningFunctionConfigurationSource.of(getRepository(defaults));
   }

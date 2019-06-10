@@ -166,7 +166,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
 
     @Override
     public boolean checkStrikeBehindBarrier() {
-      return getSign() == 1. ? _upperBarrier <= getStrike() : false || getSuperclassChecker().checkStrikeBehindBarrier();
+      return getSign() == 1. ? _upperBarrier <= getStrike() : getSuperclassChecker().checkStrikeBehindBarrier();
     }
   }
 

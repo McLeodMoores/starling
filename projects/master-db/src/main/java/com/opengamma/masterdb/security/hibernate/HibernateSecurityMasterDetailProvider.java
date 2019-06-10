@@ -245,7 +245,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
   // -------------------------------------------------------------------------
   /**
    * Gets the context for additional resources.
-   * 
+   *
    * @return the context
    */
   protected OperationContext getOperationContext() {
@@ -254,7 +254,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   /**
    * Gets the Hibernate Spring template.
-   * 
+   *
    * @return the template
    */
   protected HibernateTemplate getHibernateTemplate() {
@@ -263,7 +263,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   /**
    * Gets the database dialect.
-   * 
+   *
    * @return the dialect
    */
   protected DbDialect getDialect() {
@@ -272,7 +272,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   /**
    * Gets the session DAO.
-   * 
+   *
    * @param session
    *          the session
    * @return the DAO
@@ -301,7 +301,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
         if (result == null) {
           throw new IllegalStateException("Unable to convert security from database: " + base.getUniqueId() + " " + base.getSecurityType());
         }
-        if (Objects.equal(base.getSecurityType(), result.getSecurityType()) == false) {
+        if (!Objects.equal(base.getSecurityType(), result.getSecurityType())) {
           throw new IllegalStateException("Security type returned by Hibernate load does not match");
         }
         result.setUniqueId(base.getUniqueId());

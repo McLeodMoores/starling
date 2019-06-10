@@ -93,7 +93,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     double[] bValues = bValuesCalculator(slopes, first);
     double[][] intervalsA = getIntervalsA(intervals, slopes, first, bValues);
     double[][] intervalsB = getIntervalsB(intervals, slopes, first, aValues);
-    while (modFirst == false) {
+    while (!modFirst) {
       k = 0;
       for (int i = 0; i < nDataPts - 2; ++i) {
         if (first[i + 1] > 0.) {
@@ -183,7 +183,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       double[] bValues = bValuesCalculator(slopes, first);
       double[][] intervalsA = getIntervalsA(intervals, slopes, first, bValues);
       double[][] intervalsB = getIntervalsB(intervals, slopes, first, aValues);
-      while (modFirst == false) {
+      while (!modFirst) {
         k = 0;
         for (int j = 0; j < nDataPts - 2; ++j) {
           if (first[j + 1] > 0.) {
@@ -280,7 +280,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     double[] bValues = bValuesCalculator(slopes, first);
     double[][] intervalsA = getIntervalsA(intervals, slopes, first, bValues);
     double[][] intervalsB = getIntervalsB(intervals, slopes, first, aValues);
-    while (modFirst == false) {
+    while (!modFirst) {
       k = 0;
       for (int i = 0; i < nDataPts - 2; ++i) {
         if (first[i + 1] > 0.) {
@@ -332,7 +332,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
         double[] bValuesUpDw = bValuesCalculator(slopesUpDw, firstUpDw);
         double[][] intervalsAUpDw = getIntervalsA(intervals, slopesUpDw, firstUpDw, bValuesUpDw);
         double[][] intervalsBUpDw = getIntervalsB(intervals, slopesUpDw, firstUpDw, aValuesUpDw);
-        while (modFirstUpDw == false) {
+        while (!modFirstUpDw) {
           k = 0;
           for (int i = 0; i < nDataPts - 2; ++i) {
             if (firstUpDw[i + 1] > 0.) {

@@ -69,7 +69,7 @@ public class BloombergBpipePermissionCheckProviderComponentFactory extends Abstr
   @PropertyDefinition(validate = "notNull")
   private ReferenceDataProvider _referenceDataProvider;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     ArgumentChecker.isTrue(getIdentityExpiryTime().getSeconds() > 0, "identity expiry time must be positive");
@@ -87,7 +87,7 @@ public class BloombergBpipePermissionCheckProviderComponentFactory extends Abstr
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataPermissionCheckProviderResource(provider));
     }
-    if (AuthUtils.isPermissive() == false) {
+    if (!AuthUtils.isPermissive()) {
       AuthUtils.getPermissionResolver().register(
           new ProviderBasedPermissionResolver(BloombergPermissions.BLOOMBERG_PREFIX, provider));
     }

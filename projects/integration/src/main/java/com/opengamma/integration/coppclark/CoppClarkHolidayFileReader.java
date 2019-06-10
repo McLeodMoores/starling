@@ -127,7 +127,8 @@ public class CoppClarkHolidayFileReader {
   /**
    * Creates a populated holiday source around the specified master.
    *
-   * @param holidayMaster  the holiday master to populate, not null
+   * @param holidayMaster
+   *          the holiday master to populate, not null
    * @return the holiday source, not null
    */
   public static HolidaySource createPopulated(final HolidayMaster holidayMaster) {
@@ -160,7 +161,8 @@ public class CoppClarkHolidayFileReader {
    * <p>
    * The values can be extracted using the methods.
    *
-   * @param holidayMaster  the holiday master to populate, not null
+   * @param holidayMaster
+   *          the holiday master to populate, not null
    * @return the holiday reader, not null
    */
   private static CoppClarkHolidayFileReader createPopulated0(final HolidayMaster holidayMaster) {
@@ -179,7 +181,7 @@ public class CoppClarkHolidayFileReader {
             suffix = suffix.substring(1);
           }
           prefix = HOLIDAY_RESOURCE_PACKAGE + prefix;
-          suffix +=  ".csv";
+          suffix += ".csv";
           final InputStream currencyStream = fileReader.getClass().getResourceAsStream(prefix + "Currencies_" + suffix);
           if (currencyStream == null) {
             throw new IllegalArgumentException("Unable to find holiday data resource: " + prefix + "Currencies_" + suffix);
@@ -219,18 +221,19 @@ public class CoppClarkHolidayFileReader {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance with a master to populate.
    *
-   * @param holidayMaster  the holiday master, not null
+   * @param holidayMaster
+   *          the holiday master, not null
    */
   public CoppClarkHolidayFileReader(final HolidayMaster holidayMaster) {
     ArgumentChecker.notNull(holidayMaster, "holidayMaster");
     _holidayMaster = holidayMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the holiday master.
    *
@@ -285,7 +288,7 @@ public class CoppClarkHolidayFileReader {
     return _exchangeTradingStreams;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Reads the streams to create the master.
    */
@@ -318,7 +321,7 @@ public class CoppClarkHolidayFileReader {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void parseCurrencyFile() throws IOException {
     System.out.println("Parse currencies");
     final Map<String, HolidayDocument> combinedMap = new HashMap<>(512);
@@ -326,8 +329,7 @@ public class CoppClarkHolidayFileReader {
     for (final InputStream stream : getCurrencyStreams()) {
       final Map<String, HolidayDocument> fileMap = new HashMap<>(512);
       @SuppressWarnings("resource")
-      final
-      CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
+      final CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
 
       // header
       String[] row = reader.readNext();
@@ -341,9 +343,9 @@ public class CoppClarkHolidayFileReader {
         final String ccId = row[ccIdx].trim();
         final String countryISO = row[isoCountryIdx].trim();
         final String currencyISO = row[isoCurrencyIdx].trim();
-        Currency currency = Currency.of(currencyISO);  // validates format
+        Currency currency = Currency.of(currencyISO); // validates format
         final String eventDateStr = row[eventDateIdx];
-        final LocalDate eventDate =  LocalDate.parse(eventDateStr, DATE_FORMAT);
+        final LocalDate eventDate = LocalDate.parse(eventDateStr, DATE_FORMAT);
         HolidayDocument doc = fileMap.get(ccId);
         if (doc == null) {
           currency = fixEuro(currency, countryISO);
@@ -360,7 +362,7 @@ public class CoppClarkHolidayFileReader {
 
   private Currency fixEuro(final Currency currency, final String countryISO) {
     // historic data has lots mapped to EUR, which isn't very useful
-    if (countryISO.equals("EU") || currency.equals(EUR) == false) {
+    if (countryISO.equals("EU") || !currency.equals(EUR)) {
       return currency;
     }
     final Currency newCurrency = EURO_TO_OLD.get(countryISO);
@@ -377,8 +379,7 @@ public class CoppClarkHolidayFileReader {
     for (final InputStream stream : getFinancialCentresStreams()) {
       final Map<String, HolidayDocument> fileMap = new HashMap<>(512);
       @SuppressWarnings("resource")
-      final
-      CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
+      final CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
 
       // header
       String[] row = reader.readNext();
@@ -394,7 +395,7 @@ public class CoppClarkHolidayFileReader {
         final String unlocodePart = row[unlocodeIdx].trim();
         final ExternalId regionId = ExternalSchemes.coppClarkRegionId(countryISO + unlocodePart);
         final String eventDateStr = row[eventDateIdx];
-        final LocalDate eventDate =  LocalDate.parse(eventDateStr, DATE_FORMAT);
+        final LocalDate eventDate = LocalDate.parse(eventDateStr, DATE_FORMAT);
         HolidayDocument doc = fileMap.get(ccId);
         if (doc == null) {
           doc = new HolidayDocument(new ManageableHoliday(HolidayType.BANK, regionId, EMPTY_DATE_LIST));
@@ -415,8 +416,7 @@ public class CoppClarkHolidayFileReader {
     for (final InputStream stream : getExchangeSettlementStreams()) {
       final Map<String, HolidayDocument> fileMap = new HashMap<>(512);
       @SuppressWarnings("resource")
-      final
-      CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
+      final CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
 
       // header
       String[] row = reader.readNext();
@@ -430,7 +430,7 @@ public class CoppClarkHolidayFileReader {
         final String isoMICCode = row[isoMICCodeIdx].trim();
         final ExternalId micId = ExternalSchemes.isoMicExchangeId(isoMICCode);
         final String eventDateStr = row[eventDateIdx];
-        final LocalDate eventDate =  LocalDate.parse(eventDateStr, DATE_FORMAT);
+        final LocalDate eventDate = LocalDate.parse(eventDateStr, DATE_FORMAT);
         HolidayDocument doc = fileMap.get(ccId);
         if (doc == null) {
           doc = new HolidayDocument(new ManageableHoliday(HolidayType.SETTLEMENT, micId, EMPTY_DATE_LIST));
@@ -451,8 +451,7 @@ public class CoppClarkHolidayFileReader {
     for (final InputStream stream : getExchangeTradingStreams()) {
       final Map<String, HolidayDocument> fileMap = new HashMap<>(512);
       @SuppressWarnings("resource")
-      final
-      CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
+      final CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(stream)));
 
       // header
       String[] row = reader.readNext();
@@ -466,7 +465,7 @@ public class CoppClarkHolidayFileReader {
         final String isoMICCode = row[isoMICCodeIdx].trim();
         final ExternalId micId = ExternalSchemes.isoMicExchangeId(isoMICCode);
         final String eventDateStr = row[eventDateIdx];
-        final LocalDate eventDate =  LocalDate.parse(eventDateStr, DATE_FORMAT);
+        final LocalDate eventDate = LocalDate.parse(eventDateStr, DATE_FORMAT);
         HolidayDocument doc = fileMap.get(ccId);
         if (doc == null) {
           doc = new HolidayDocument(new ManageableHoliday(HolidayType.TRADING, micId, EMPTY_DATE_LIST));
@@ -480,7 +479,7 @@ public class CoppClarkHolidayFileReader {
     mergeWithDatabase(combinedMap);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void merge(final Map<String, HolidayDocument> combinedMap, final Map<String, HolidayDocument> newMap) {
     for (final String id : newMap.keySet()) {
       final HolidayDocument newDoc = newMap.get(id);
@@ -498,7 +497,7 @@ public class CoppClarkHolidayFileReader {
   private void mergeWithDatabase(final Map<String, HolidayDocument> map) {
     final Set<String> set = new HashSet<>();
     for (final HolidayDocument doc : map.values()) {
-      if (set.add(doc.getName()) == false) {
+      if (!set.add(doc.getName())) {
         System.out.println("Duplicate name: " + doc.getName());
         System.exit(0);
       }
@@ -526,7 +525,7 @@ public class CoppClarkHolidayFileReader {
         existing.setVersionToInstant(null);
         existing.setCorrectionFromInstant(null);
         existing.setCorrectionToInstant(null);
-        if (doc.equals(existing) == false) {  // only update if changed
+        if (!doc.equals(existing)) { // only update if changed
           _holidayMaster.update(doc);
         }
       } else {
@@ -545,7 +544,7 @@ public class CoppClarkHolidayFileReader {
     final SortedSet<LocalDate> newDates = new TreeSet<>(newDoc.getHoliday().getHolidayDates());
     final List<LocalDate> result = new ArrayList<>(newDates);
     result.addAll(0, existingDates.headSet(newDates.first()));
-    result.addAll(existingDates.tailSet(newDates.last().plusYears(1).withDayOfYear(1)));  // file is based on whole years
+    result.addAll(existingDates.tailSet(newDates.last().plusYears(1).withDayOfYear(1))); // file is based on whole years
 
     // store into new document
     newDoc.getHoliday().getHolidayDates().clear();

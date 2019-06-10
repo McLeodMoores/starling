@@ -144,8 +144,8 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
     final ExternalIdSearch customSearch = request.getCustomExternalIdSearch();
     final String currencyISO = request.getCurrency() != null ? request.getCurrency().getCode() : null;
     if (request.getHolidayObjectIds() != null && request.getHolidayObjectIds().size() == 0
-        || ExternalIdSearch.canMatch(regionSearch) == false
-        || ExternalIdSearch.canMatch(exchangeSearch) == false) {
+        || !ExternalIdSearch.canMatch(regionSearch)
+        || !ExternalIdSearch.canMatch(exchangeSearch)) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }

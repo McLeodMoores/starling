@@ -121,7 +121,7 @@ public final class BloombergBpipePermissionCheckProvider
   public PermissionCheckProviderResult isPermitted(final PermissionCheckProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
     // validate
-    if (isRunning() == false) {
+    if (!isRunning()) {
       return PermissionCheckProviderResult.ofAuthenticationError(
           "Bloomberg permission check found connection not running");
     }

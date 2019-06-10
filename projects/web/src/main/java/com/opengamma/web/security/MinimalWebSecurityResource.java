@@ -44,13 +44,15 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public MinimalWebSecurityResource(final AbstractMinimalWebSecurityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -81,14 +83,14 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(@FormParam("type") final String type, @FormParam(SECURITY_XML) final String securityXml) {
 
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     URI responseURI = null;
@@ -121,7 +123,7 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
   @Produces(MediaType.APPLICATION_JSON)
   public Response putJSON(@FormParam("type") final String type, @FormParam(SECURITY_XML) final String securityXml) {
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest() == false) {  // TODO: idempotent
+    if (!doc.isLatest()) { // TODO: idempotent
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -155,16 +157,16 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
     final ExternalIdBundle identifierBundle = doc.getSecurity().getExternalIdBundle();
     final SecurityLoaderRequest request = SecurityLoaderRequest.create(identifierBundle);
     request.setForceUpdate(true);
-    data().getSecurityLoader().loadSecurities(request);  // ignore errors
+    data().getSecurityLoader().loadSecurities(request); // ignore errors
     return MinimalWebSecurityResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getSecurityMaster().remove(doc.getUniqueId());
@@ -176,15 +178,16 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
     final SecurityDocument doc = data().getSecurity();
-    if (doc.isLatest()) {  // idempotent DELETE
+    if (doc.isLatest()) { // idempotent DELETE
       data().getSecurityMaster().remove(doc.getUniqueId());
     }
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -200,8 +203,7 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
     // Get the last price HTS for the security
     ObjectId tsObjectId = null;
     if (data().getHistoricalTimeSeriesMaster() != null) {
-      final HistoricalTimeSeriesInfoSearchRequest searchRequest =
-          new HistoricalTimeSeriesInfoSearchRequest(security.getExternalIdBundle());
+      final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest(security.getExternalIdBundle());
       final HistoricalTimeSeriesInfoSearchResult searchResult = data().getHistoricalTimeSeriesMaster().search(searchRequest);
       if (searchResult.getFirstInfo() != null) {
         tsObjectId = searchResult.getFirstInfo().getUniqueId().getObjectId();
@@ -218,16 +220,18 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public MinimalWebSecurityVersionsResource findVersions() {
     return new MinimalWebSecurityVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data) {
@@ -236,8 +240,11 @@ public class MinimalWebSecurityResource extends AbstractMinimalWebSecurityResour
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideSecurityId  the override security id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideSecurityId
+   *          the override security id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebSecuritiesData data, final UniqueId overrideSecurityId) {

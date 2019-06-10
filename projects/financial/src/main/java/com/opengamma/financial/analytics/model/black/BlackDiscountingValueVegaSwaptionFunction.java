@@ -35,8 +35,8 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class BlackDiscountingValueVegaSwaptionFunction extends BlackDiscountingSwaptionFunction {
   /** The value vega calculator */
-  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, PresentValueBlackSwaptionSensitivity> CALCULATOR = PresentValueBlackSensitivityBlackSwaptionCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSwaptionFlatProviderInterface, PresentValueBlackSwaptionSensitivity> CALCULATOR =
+      PresentValueBlackSensitivityBlackSwaptionCalculator.getInstance();
 
   /**
    * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_VEGA}.

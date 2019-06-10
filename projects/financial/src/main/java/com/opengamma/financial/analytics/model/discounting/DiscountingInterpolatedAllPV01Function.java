@@ -37,8 +37,8 @@ import com.opengamma.util.tuple.Pair;
 public class DiscountingInterpolatedAllPV01Function extends DiscountingInterpolatedFunction {
 
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivityDiscountingCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityDiscountingCalculator.getInstance());
 
   /**
    * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#ALL_PV01S}.

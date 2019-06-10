@@ -33,13 +33,15 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebPositionVersionsResource(final AbstractWebPositionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
     final PositionHistoryRequest request = new PositionHistoryRequest(data().getPosition().getUniqueId());
@@ -70,9 +72,10 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -85,13 +88,13 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public WebPositionVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final PositionDocument doc = data().getPosition();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final PositionDocument versioned = data().getPositionMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -100,10 +103,12 @@ public class WebPositionVersionsResource extends AbstractWebPositionResource {
     return new WebPositionVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPositionsData data) {

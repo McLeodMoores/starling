@@ -185,7 +185,7 @@ public class BloombergReferenceDataProvider extends AbstractReferenceDataProvide
         if (StringUtils.isEmpty(identifier)) {
           throw new IllegalArgumentException("Must not have any null or empty identifiers");
         }
-        if (CharMatcher.ASCII.matchesAllOf(identifier) == false) {
+        if (!CharMatcher.ASCII.matchesAllOf(identifier)) {
           // [BBG-93] - The C++ interface is declared as UChar, so this just enforces that restriction
           excluded.add(identifier);
         }
@@ -209,7 +209,7 @@ public class BloombergReferenceDataProvider extends AbstractReferenceDataProvide
         if (StringUtils.isEmpty(field)) {
           throw new IllegalArgumentException("Must not have any null or empty fields");
         }
-        if (CharMatcher.ASCII.matchesAllOf(field) == false) {
+        if (!CharMatcher.ASCII.matchesAllOf(field)) {
           excluded.add(field);
         }
       }
@@ -249,7 +249,7 @@ public class BloombergReferenceDataProvider extends AbstractReferenceDataProvide
         if (StringUtils.isEmpty(dataField)) {
           throw new IllegalArgumentException("Must not have any null or empty fields");
         }
-        if (dataField.equals(BloombergConstants.FIELD_EID_DATA) == false) {
+        if (!dataField.equals(BloombergConstants.FIELD_EID_DATA)) {
           fieldElem.appendValue(dataField);
         }
       }

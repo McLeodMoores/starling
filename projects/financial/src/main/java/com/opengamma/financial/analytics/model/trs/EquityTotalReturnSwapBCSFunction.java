@@ -44,8 +44,8 @@ import com.opengamma.engine.value.ValueSpecification;
 public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunction {
 
   /** The curve sensitivity calculator */
-  private static final InstrumentDerivativeVisitor<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> PVCSEDC = PresentValueCurveSensitivityEquityDiscountingCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> PVCSEDC =
+      PresentValueCurveSensitivityEquityDiscountingCalculator.getInstance();
   /** The parameter sensitivity calculator */
   private static final ParameterSensitivityParameterCalculator<EquityTrsDataBundle> PSC = new ParameterSensitivityParameterCalculator<>(PVCSEDC);
   /** The market quote sensitivity calculator */

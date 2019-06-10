@@ -177,13 +177,13 @@ public class MixedBivariateLogNormalFitter {
       _finalSqu = 0.5 * getVecNormSq(tmp);
     }
 
-    while (done == false && k < ITRMAX) {
+    while (!done && k < ITRMAX) {
 
       k = k + 1;
 
       /// confirming positive parameters and NotNaN
       boolean confPositiveParams = false;
-      while (confPositiveParams == false) {
+      while (!confPositiveParams) {
 
         paramsJump = theMatrixEqnSolver(dataStrs, dataVols, gradFunctionValueM, hessian, time, fwdX, fwdY, nNorms, nX);
 

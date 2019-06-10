@@ -86,13 +86,14 @@ public class QuandlCurveNodeConverter extends CurveNodeConverter {
             historicalTimeSeriesUnderlyingIndex = timeSeries.get(node.getDataField(), underlyingConvention.getExternalIdBundle());
             if (historicalTimeSeriesUnderlyingIndex == null) {
               throw new OpenGammaRuntimeException("Could not get price time series for " + fedFundsConvention.getUnderlyingConventionId()
-                  + " or " + underlyingConvention.getExternalIdBundle());
+              + " or " + underlyingConvention.getExternalIdBundle());
             }
           }
           final DoubleTimeSeries<ZonedDateTime>[] tsArray = new DoubleTimeSeries[1];
           tsArray[0] = convertTimeSeries(now.getZone(), historicalTimeSeriesUnderlyingIndex.getTimeSeries());
           // No time series is passed for the closing price; for curve calibration only the trade price is required.
-          final InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]> definitonInstWithData = (InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]>) definition;
+          final InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]> definitonInstWithData =
+              (InstrumentDefinitionWithData<?, DoubleTimeSeries<ZonedDateTime>[]>) definition;
           return definitonInstWithData.toDerivative(now, tsArray);
         }
       }

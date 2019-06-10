@@ -29,12 +29,9 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Decorates a reference data provider, storing the data to a flat file.
  * <p>
- * The request and response data is written to the file incrementally.
- * The intention is for this decorator to be used for a period while certain reference data
- * requests are made, such as when a view starts being processed. Subsequently the data file
- * can replace the 'real' source of reference data for the same requests.
- * The file is stored using Fudge.
- * See {@link LoggedReferenceDataProvider} for a reference data provider that reads the file.
+ * The request and response data is written to the file incrementally. The intention is for this decorator to be used for a period while certain reference data
+ * requests are made, such as when a view starts being processed. Subsequently the data file can replace the 'real' source of reference data for the same
+ * requests. The file is stored using Fudge. See {@link LoggedReferenceDataProvider} for a reference data provider that reads the file.
  */
 public class LoggingReferenceDataProvider extends AbstractReferenceDataProvider {
 
@@ -58,9 +55,12 @@ public class LoggingReferenceDataProvider extends AbstractReferenceDataProvider 
   /**
    * Creates an instance.
    *
-   * @param underlying  the underlying reference data provider, not null
-   * @param fudgeContext  the Fudge context, not null
-   * @param outputFile  the file to write to, not null
+   * @param underlying
+   *          the underlying reference data provider, not null
+   * @param fudgeContext
+   *          the Fudge context, not null
+   * @param outputFile
+   *          the file to write to, not null
    */
   public LoggingReferenceDataProvider(final ReferenceDataProvider underlying, final FudgeContext fudgeContext, final File outputFile) {
     ArgumentChecker.notNull(underlying, "underlying");
@@ -77,7 +77,7 @@ public class LoggingReferenceDataProvider extends AbstractReferenceDataProvider 
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
     final ReferenceDataProviderGetResult result = _underlying.getReferenceData(request);
@@ -96,7 +96,7 @@ public class LoggingReferenceDataProvider extends AbstractReferenceDataProvider 
 
       synchronized (fieldsLogged) {
         for (final String field : fields) {
-          if (fieldsLogged.contains(field) == false) {
+          if (!fieldsLogged.contains(field)) {
             final Object value = refData.getFieldValues().getValue(field);
             log(identifier, field, value);
           }

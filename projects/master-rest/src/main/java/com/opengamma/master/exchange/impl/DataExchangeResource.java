@@ -53,8 +53,10 @@ public class DataExchangeResource extends AbstractDocumentDataResource<ExchangeD
   /**
    * Creates the resource.
    *
-   * @param exchangesResource  the parent resource, not null
-   * @param exchangeId  the exchange unique identifier, not null
+   * @param exchangesResource
+   *          the parent resource, not null
+   * @param exchangeId
+   *          the exchange unique identifier, not null
    */
   public DataExchangeResource(final DataExchangeMasterResource exchangesResource, final ObjectId exchangeId) {
     ArgumentChecker.notNull(exchangesResource, "exchangesResource");
@@ -63,7 +65,7 @@ public class DataExchangeResource extends AbstractDocumentDataResource<ExchangeD
     _urlResourceId = exchangeId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the exchanges resource.
    *
@@ -83,7 +85,7 @@ public class DataExchangeResource extends AbstractDocumentDataResource<ExchangeD
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the exchange master.
    *
@@ -98,7 +100,7 @@ public class DataExchangeResource extends AbstractDocumentDataResource<ExchangeD
   @Path("versions")
   public Response history(@Context final UriInfo uriInfo) {
     final ExchangeHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, ExchangeHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
     final ExchangeHistoryResult result = getMaster().history(request);

@@ -22,7 +22,7 @@ public final class MacaulayDurationFromCurvesCalculator extends InstrumentDeriva
   /**
    * The calculator instance.
    */
-  private static final MacaulayDurationFromCurvesCalculator s_instance = new MacaulayDurationFromCurvesCalculator();
+  private static final MacaulayDurationFromCurvesCalculator INSTANCE = new MacaulayDurationFromCurvesCalculator();
   /**
    * The fixed coupon bond method.
    */
@@ -33,7 +33,7 @@ public final class MacaulayDurationFromCurvesCalculator extends InstrumentDeriva
    * @return The instance.
    */
   public static MacaulayDurationFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

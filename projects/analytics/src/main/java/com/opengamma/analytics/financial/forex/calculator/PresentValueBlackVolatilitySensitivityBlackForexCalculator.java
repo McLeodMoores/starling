@@ -28,7 +28,7 @@ public class PresentValueBlackVolatilitySensitivityBlackForexCalculator
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator s_instance = new PresentValueBlackVolatilitySensitivityBlackForexCalculator();
+  private static final PresentValueBlackVolatilitySensitivityBlackForexCalculator INSTANCE = new PresentValueBlackVolatilitySensitivityBlackForexCalculator();
 
   /**
    * Gets the calculator instance.
@@ -36,7 +36,7 @@ public class PresentValueBlackVolatilitySensitivityBlackForexCalculator
    * @return The calculator.
    */
   public static PresentValueBlackVolatilitySensitivityBlackForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

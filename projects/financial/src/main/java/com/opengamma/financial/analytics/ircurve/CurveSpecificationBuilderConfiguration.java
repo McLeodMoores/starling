@@ -136,7 +136,7 @@ public class CurveSpecificationBuilderConfiguration {
   private static List<String> getCurveSpecBuilderConfigurationNames() {
     final List<String> list = new ArrayList<>();
     for (final Field field : CurveSpecificationBuilderConfigurationFudgeBuilder.class.getDeclaredFields()) {
-      if (Modifier.isStatic(field.getModifiers()) && field.isSynthetic() == false) {
+      if (Modifier.isStatic(field.getModifiers()) && !field.isSynthetic()) {
         field.setAccessible(true);
         try {
           list.add((String) field.get(null));

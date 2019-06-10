@@ -47,7 +47,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
    */
   private final Set<String> _valueRequirementNames;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the resource.
    */
@@ -58,7 +58,8 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
   /**
    * Creates an instance.
    *
-   * @param valueRequirementNameClasses  the classes, not null
+   * @param valueRequirementNameClasses
+   *          the classes, not null
    */
   public WebValueRequirementNamesResource(final String[] valueRequirementNameClasses) {
     ArgumentChecker.notEmpty(valueRequirementNameClasses, "valueRequirementNameClasses");
@@ -66,7 +67,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
     for (final String className : valueRequirementNameClasses) {
       try {
         for (final Field field : Class.forName(className.trim()).getDeclaredFields()) {
-          if (Modifier.isPublic(field.getModifiers()) && field.isSynthetic() == false) {
+          if (Modifier.isPublic(field.getModifiers()) && !field.isSynthetic()) {
             list.add((String) field.get(null));
           }
         }
@@ -78,10 +79,9 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
     _valueRequirementNames = new LinkedHashSet<>(list);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Gets the value requirement names as JSON. The key is "types" and the values
-   * are stored in a JSONArray.
+   * Gets the value requirement names as JSON. The key is "types" and the values are stored in a JSONArray.
    *
    * @return the values as JSON
    */

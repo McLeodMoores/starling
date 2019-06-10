@@ -39,13 +39,15 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebExchangeResource(final AbstractWebExchangeResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -66,7 +68,7 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return Response.ok(json).tag(etag).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -76,7 +78,7 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
       @FormParam("idvalue") final String idValue,
       @FormParam("regionscheme") final String regionScheme,
       @FormParam("regionvalue") final String regionValue) {
-    if (data().getExchange().isLatest() == false) {
+    if (!data().getExchange().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -116,7 +118,7 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
       @FormParam("idvalue") final String idValue,
       @FormParam("regionscheme") final String regionScheme,
       @FormParam("regionvalue") final String regionValue) {
-    if (data().getExchange().isLatest() == false) {
+    if (!data().getExchange().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -142,12 +144,12 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final ExchangeDocument doc = data().getExchange();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getExchangeMaster().remove(doc.getUniqueId());
@@ -165,9 +167,10 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -180,16 +183,18 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebExchangeVersionsResource findVersions() {
     return new WebExchangeVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data) {
@@ -198,8 +203,11 @@ public class WebExchangeResource extends AbstractWebExchangeResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideExchangeId  the override exchange id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overrideExchangeId
+   *          the override exchange id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data, final UniqueId overrideExchangeId) {

@@ -110,7 +110,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
     final List<ObjectId> objectIds = request.getObjectIds();
     if (objectIds != null && objectIds.size() == 0
-        || ExternalIdSearch.canMatch(externalIdSearch) == false) {
+        || !ExternalIdSearch.canMatch(externalIdSearch)) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
@@ -119,7 +119,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
         .addTimestamp("version_as_of_instant", vc.getVersionAsOf())
         .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
         .addValueNullIgnored("name", getDialect().sqlWildcardAdjustValue(request.getName()));
-    if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
+    if (externalIdSearch != null && !externalIdSearch.alwaysMatches()) {
       int i = 0;
       for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());

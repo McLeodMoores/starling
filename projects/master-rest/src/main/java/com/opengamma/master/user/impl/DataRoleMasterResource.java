@@ -49,14 +49,15 @@ public class DataRoleMasterResource extends AbstractDataResource {
   /**
    * Creates the resource, exposing the underlying master over REST.
    *
-   * @param roleMaster  the underlying role master, not null
+   * @param roleMaster
+   *          the underlying role master, not null
    */
   public DataRoleMasterResource(final RoleMaster roleMaster) {
     ArgumentChecker.notNull(roleMaster, "roleMaster");
     _roleMaster = roleMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the role master.
@@ -67,7 +68,7 @@ public class DataRoleMasterResource extends AbstractDataResource {
     return _roleMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
@@ -95,7 +96,7 @@ public class DataRoleMasterResource extends AbstractDataResource {
     return responseCreated(createdUri);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("roles/{objectId}")
   public Response getById(@PathParam("objectId") final String idStr) {
@@ -108,7 +109,7 @@ public class DataRoleMasterResource extends AbstractDataResource {
   @Path("roles/{objectId}")
   public Response updateById(@Context final UriInfo uriInfo, @PathParam("objectId") final String idStr, final ManageableRole role) {
     final ObjectId id = ObjectId.parse(idStr);
-    if (id.equals(role.getObjectId()) == false) {
+    if (!id.equals(role.getObjectId())) {
       throw new IllegalArgumentException("ObjectId of role does not match URI");
     }
     final UniqueId result = getRoleMaster().update(role);
@@ -131,7 +132,7 @@ public class DataRoleMasterResource extends AbstractDataResource {
     return responseOkObject(result);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("roles/exists/{roleName}")
   public Response nameExists(@PathParam("roleName") final String roleName) {
@@ -150,7 +151,7 @@ public class DataRoleMasterResource extends AbstractDataResource {
   @Path("roles/name/{roleName}")
   public Response updateByName(@Context final UriInfo uriInfo, @PathParam("roleName") final String roleName, final ManageableRole role) {
     final ManageableRole current = getRoleMaster().getByName(roleName);
-    if (current.getObjectId().equals(role.getObjectId()) == false) {
+    if (!current.getObjectId().equals(role.getObjectId())) {
       throw new IllegalArgumentException("Role does not match URI");
     }
     final UniqueId result = getRoleMaster().update(role);
@@ -178,11 +179,12 @@ public class DataRoleMasterResource extends AbstractDataResource {
     return responseOkObject(resolved);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
+   * @param baseUri
+   *          the base URI, not null
    * @return the URI, not null
    */
   public static URI uriSearch(final URI baseUri) {
@@ -193,7 +195,8 @@ public class DataRoleMasterResource extends AbstractDataResource {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
+   * @param baseUri
+   *          the base URI, not null
    * @return the URI, not null
    */
   public static URI uriAdd(final URI baseUri) {

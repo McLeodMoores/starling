@@ -55,8 +55,8 @@ public final class PresentValueHullWhiteCalculator extends InstrumentDerivativeV
    */
   private static final CapFloorIborHullWhiteMethod METHOD_CAPFLOOR_IBOR = CapFloorIborHullWhiteMethod.getInstance();
   private static final InterestRateFutureTransactionHullWhiteMethod METHOD_STIRFUT = InterestRateFutureTransactionHullWhiteMethod.getInstance();
-  private static final InterestRateFutureOptionMarginTransactionHullWhiteMethod METHOD_STIRFUT_OPT_MAR = InterestRateFutureOptionMarginTransactionHullWhiteMethod
-      .getInstance();
+  private static final InterestRateFutureOptionMarginTransactionHullWhiteMethod METHOD_STIRFUT_OPT_MAR =
+      InterestRateFutureOptionMarginTransactionHullWhiteMethod.getInstance();
   private static final SwapFuturesPriceDeliverableTransactionHullWhiteMethod METHOD_SWAPFUT = SwapFuturesPriceDeliverableTransactionHullWhiteMethod
       .getInstance();
   private static final SwaptionPhysicalFixedIborHullWhiteMethod METHOD_SWPT_PHYS = SwaptionPhysicalFixedIborHullWhiteMethod.getInstance();

@@ -143,7 +143,7 @@ public class DbBeanMaster<D extends AbstractDocument, V extends Bean>
 
   /**
    * Creates the parameter source.
-   * 
+   *
    * @return the source, not null
    */
   @Override
@@ -188,7 +188,7 @@ public class DbBeanMaster<D extends AbstractDocument, V extends Bean>
     final Map<String, String> indexedProperties = request.getIndexedProperties();
     final List<ObjectId> objectIds = request.getObjectIds();
     if (objectIds != null && objectIds.size() == 0
-        || ExternalIdSearch.canMatch(request.getExternalIdSearch()) == false) {
+        || !ExternalIdSearch.canMatch(request.getExternalIdSearch())) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
@@ -202,7 +202,7 @@ public class DbBeanMaster<D extends AbstractDocument, V extends Bean>
         .addValueNullIgnored("actual_type", request.getActualType())
         .addValueNullIgnored("external_id_scheme", getDialect().sqlWildcardAdjustValue(request.getExternalIdScheme()))
         .addValueNullIgnored("external_id_value", getDialect().sqlWildcardAdjustValue(request.getExternalIdValue()));
-    if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
+    if (externalIdSearch != null && !externalIdSearch.alwaysMatches()) {
       int i = 0;
       for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());

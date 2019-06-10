@@ -16,20 +16,17 @@ import com.opengamma.util.auth.AuthUtils;
 public final class BloombergPermissions {
 
   /**
-   * The EID permission string prefix.
-   * The suffix is a Bloomberg EID authorization identifier.
+   * The EID permission string prefix. The suffix is a Bloomberg EID authorization identifier.
    */
   public static final String BLOOMBERG_PREFIX = "Data:Bloomberg:";
   /**
-   * The EID permission string prefix.
-   * The suffix is a Bloomberg EID authorization identifier.
+   * The EID permission string prefix. The suffix is a Bloomberg EID authorization identifier.
    */
   public static final String EID_PREFIX = BLOOMBERG_PREFIX + "EID:";
   /**
    * Permission granted to users that allows checking against Bloomberg.
    */
-  public static final Permission PERMISSION_BLOOMBERG =
-      AuthUtils.getPermissionResolver().resolvePermission(BLOOMBERG_PREFIX + "view");
+  public static final Permission PERMISSION_BLOOMBERG = AuthUtils.getPermissionResolver().resolvePermission(BLOOMBERG_PREFIX + "view");
 
   /**
    * Restricted constructor.
@@ -37,11 +34,12 @@ public final class BloombergPermissions {
   private BloombergPermissions() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a permission for an EID.
    *
-   * @param eid  the Bloomberg EID code
+   * @param eid
+   *          the Bloomberg EID code
    * @return the permission, not null
    */
   public static Permission createEidPermission(final int eid) {
@@ -52,18 +50,20 @@ public final class BloombergPermissions {
   /**
    * Creates a permission string for an EID.
    *
-   * @param eid  the Bloomberg EID code
+   * @param eid
+   *          the Bloomberg EID code
    * @return the permission string, not null
    */
   public static String createEidPermissionString(final int eid) {
     return EID_PREFIX + eid;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if a permission string represents an EID.
    *
-   * @param permissionString  the permission string, null returns false
+   * @param permissionString
+   *          the permission string, null returns false
    * @return true if the permission string is a Bloomberg EID permission
    */
   public static boolean isEid(final String permissionString) {
@@ -73,13 +73,15 @@ public final class BloombergPermissions {
   /**
    * Extracts the EID from the permission string.
    *
-   * @param permissionString  the permission string, not null
+   * @param permissionString
+   *          the permission string, not null
    * @return the Bloomberg EID code
-   * @throws IllegalArgumentException if the permission string is not an EID permission
+   * @throws IllegalArgumentException
+   *           if the permission string is not an EID permission
    */
   public static int extractEid(final String permissionString) {
     ArgumentChecker.notNull(permissionString, "permissionString");
-    if (isEid(permissionString) == false) {
+    if (!isEid(permissionString)) {
       throw new IllegalArgumentException("Permission string does not represent an EID: " + permissionString);
     }
     final String eidStr = permissionString.substring(EID_PREFIX.length());

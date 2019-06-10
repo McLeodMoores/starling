@@ -209,7 +209,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   private static String ensureIpAddressNonLoopback(final String remoteIp) {
     try {
       final InetAddress ia = remoteIp != null ? InetAddress.getByName(remoteIp) : null;
-      if (ia != null && ia.isLoopbackAddress() == false) {
+      if (ia != null && !ia.isLoopbackAddress()) {
         return remoteIp;
       }
       // search through network interfaces to find reasonable non-loopback IP address
@@ -218,7 +218,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
         final NetworkInterface iface = ifaces.nextElement();
         for (final Enumeration<InetAddress> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
           final InetAddress inetAddr = inetAddrs.nextElement();
-          if (inetAddr.isLoopbackAddress() == false) {
+          if (!inetAddr.isLoopbackAddress()) {
             if (inetAddr.isSiteLocalAddress()) {
               return inetAddr.getHostAddress();
             } else if (possible == null) {

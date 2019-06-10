@@ -49,33 +49,33 @@ public final class FixedIncomeCalculatorFactory {
   /** Delta calculator. */
   public static final DeltaBlackCalculator DELTA_CALCULATOR = DeltaBlackCalculator.getInstance();
 
-  private static final Map<String, InstrumentDerivativeVisitor<?, ?>> s_instances = new HashMap<>();
-  private static final Map<Class<?>, String> s_instanceNames = new HashMap<>();
+  private static final Map<String, InstrumentDerivativeVisitor<?, ?>> INSTANCES = new HashMap<>();
+  private static final Map<Class<?>, String> INSTANCE_NAMES = new HashMap<>();
 
   static {
-    s_instances.put(PAR_RATE, PAR_RATE_CALCULATOR);
-    s_instances.put(PAR_RATE_CURVE_SENSITIVITY, PAR_RATE_CURVE_SENSITIVITY_CALCULATOR);
-    s_instances.put(PAR_RATE_PARALLEL_SENSITIVITY, PAR_RATE_PARALLEL_SENSITIVITY_CALCULATOR);
-    s_instances.put(PRESENT_VALUE, PRESENT_VALUE_CALCULATOR);
-    s_instances.put(PRESENT_VALUE_COUPON_SENSITIVITY, PRESENT_VALUE_COUPON_SENSITIVITY_CALCULATOR);
-    s_instances.put(PRESENT_VALUE_SENSITIVITY, PRESENT_VALUE_SENSITIVITY_CALCULATOR);
-    s_instances.put(PV01, PV01_CALCULATOR);
-    s_instances.put(DELTA, DELTA_CALCULATOR);
-    s_instanceNames.put(PAR_RATE_CALCULATOR.getClass(), PAR_RATE);
-    s_instanceNames.put(PAR_RATE_CURVE_SENSITIVITY_CALCULATOR.getClass(), PAR_RATE_CURVE_SENSITIVITY);
-    s_instanceNames.put(PAR_RATE_PARALLEL_SENSITIVITY_CALCULATOR.getClass(), PAR_RATE_PARALLEL_SENSITIVITY);
-    s_instanceNames.put(PRESENT_VALUE_CALCULATOR.getClass(), PRESENT_VALUE);
-    s_instanceNames.put(PRESENT_VALUE_COUPON_SENSITIVITY_CALCULATOR.getClass(), PRESENT_VALUE_COUPON_SENSITIVITY);
-    s_instanceNames.put(PRESENT_VALUE_SENSITIVITY_CALCULATOR.getClass(), PRESENT_VALUE_SENSITIVITY);
-    s_instanceNames.put(PV01_CALCULATOR.getClass(), PV01);
-    s_instanceNames.put(DELTA_CALCULATOR.getClass(), DELTA);
+    INSTANCES.put(PAR_RATE, PAR_RATE_CALCULATOR);
+    INSTANCES.put(PAR_RATE_CURVE_SENSITIVITY, PAR_RATE_CURVE_SENSITIVITY_CALCULATOR);
+    INSTANCES.put(PAR_RATE_PARALLEL_SENSITIVITY, PAR_RATE_PARALLEL_SENSITIVITY_CALCULATOR);
+    INSTANCES.put(PRESENT_VALUE, PRESENT_VALUE_CALCULATOR);
+    INSTANCES.put(PRESENT_VALUE_COUPON_SENSITIVITY, PRESENT_VALUE_COUPON_SENSITIVITY_CALCULATOR);
+    INSTANCES.put(PRESENT_VALUE_SENSITIVITY, PRESENT_VALUE_SENSITIVITY_CALCULATOR);
+    INSTANCES.put(PV01, PV01_CALCULATOR);
+    INSTANCES.put(DELTA, DELTA_CALCULATOR);
+    INSTANCE_NAMES.put(PAR_RATE_CALCULATOR.getClass(), PAR_RATE);
+    INSTANCE_NAMES.put(PAR_RATE_CURVE_SENSITIVITY_CALCULATOR.getClass(), PAR_RATE_CURVE_SENSITIVITY);
+    INSTANCE_NAMES.put(PAR_RATE_PARALLEL_SENSITIVITY_CALCULATOR.getClass(), PAR_RATE_PARALLEL_SENSITIVITY);
+    INSTANCE_NAMES.put(PRESENT_VALUE_CALCULATOR.getClass(), PRESENT_VALUE);
+    INSTANCE_NAMES.put(PRESENT_VALUE_COUPON_SENSITIVITY_CALCULATOR.getClass(), PRESENT_VALUE_COUPON_SENSITIVITY);
+    INSTANCE_NAMES.put(PRESENT_VALUE_SENSITIVITY_CALCULATOR.getClass(), PRESENT_VALUE_SENSITIVITY);
+    INSTANCE_NAMES.put(PV01_CALCULATOR.getClass(), PV01);
+    INSTANCE_NAMES.put(DELTA_CALCULATOR.getClass(), DELTA);
   }
 
   private FixedIncomeCalculatorFactory() {
   }
 
   public static InstrumentDerivativeVisitor<?, ?> getCalculator(final String name) {
-    final InstrumentDerivativeVisitor<?, ?> calculator = s_instances.get(name);
+    final InstrumentDerivativeVisitor<?, ?> calculator = INSTANCES.get(name);
     if (calculator != null) {
       return calculator;
     }
@@ -86,6 +86,6 @@ public final class FixedIncomeCalculatorFactory {
     if (calculator == null) {
       return null;
     }
-    return s_instanceNames.get(calculator.getClass());
+    return INSTANCE_NAMES.get(calculator.getClass());
   }
 }

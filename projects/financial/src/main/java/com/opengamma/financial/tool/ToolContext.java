@@ -254,7 +254,7 @@ public class ToolContext extends DirectBean implements Closeable {
    *          the context manager.
    */
   public void setContextManager(final Object contextManager) {
-    if (ReflectionUtils.isCloseable(contextManager.getClass()) == false) {
+    if (!ReflectionUtils.isCloseable(contextManager.getClass())) {
       throw new IllegalArgumentException("Object is not closeable: " + contextManager);
     }
     _contextManager = contextManager;

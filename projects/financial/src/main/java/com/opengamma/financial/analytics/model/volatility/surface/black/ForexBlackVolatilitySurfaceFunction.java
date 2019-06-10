@@ -164,7 +164,8 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
     }
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
     @SuppressWarnings("unchecked")
-    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface = (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
+    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface =
+    (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
     return BlackVolatilitySurfaceUtils.getDataFromStrangleRiskReversalQuote(forwardCurve, fxVolatilitySurface);
   }
 
@@ -182,10 +183,10 @@ public abstract class ForexBlackVolatilitySurfaceFunction extends BlackVolatilit
   protected ValueRequirement getVolatilityDataRequirement(final ComputationTarget target, final String surfaceName) {
     final ValueRequirement volDataRequirement = new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(),
         ValueProperties.builder()
-            .with(SURFACE, surfaceName)
-            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
-            .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, getSurfaceQuoteType())
-            .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, getSurfaceQuoteUnits()).get());
+        .with(SURFACE, surfaceName)
+        .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE, getSurfaceQuoteType())
+        .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, getSurfaceQuoteUnits()).get());
     return volDataRequirement;
   }
 

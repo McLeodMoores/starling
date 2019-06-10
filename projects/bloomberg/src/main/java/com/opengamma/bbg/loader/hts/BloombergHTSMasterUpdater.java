@@ -350,7 +350,7 @@ public class BloombergHTSMasterUpdater {
       final LocalDate latestTime = timeSeries.getLatestTime();
       final LocalDate startDate = _startDate != null ? _startDate : DEFAULT_START_DATE;
       timeSeries = timeSeries.subSeries(startDate, true, latestTime, true);
-      if (timeSeries != null && timeSeries.isEmpty() == false) {
+      if (timeSeries != null && !timeSeries.isEmpty()) {
         // metaDataKeyMap holds the object id of the series to be updated
         final ExternalIdBundle idBundle = identifierTS.getKey();
         final MetaDataKey metaDataKey = new MetaDataKey(idBundle, dataProvider, dataField);

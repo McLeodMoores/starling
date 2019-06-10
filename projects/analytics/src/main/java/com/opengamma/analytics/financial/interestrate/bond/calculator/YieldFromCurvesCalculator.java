@@ -22,14 +22,14 @@ public final class YieldFromCurvesCalculator extends InstrumentDerivativeVisitor
   /**
    * The calculator instance.
    */
-  private static final YieldFromCurvesCalculator s_instance = new YieldFromCurvesCalculator();
+  private static final YieldFromCurvesCalculator INSTANCE = new YieldFromCurvesCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static YieldFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

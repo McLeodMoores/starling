@@ -54,10 +54,10 @@ public class OpenGammaServlet extends ServletContainer {
   @Override
   protected ResourceConfig getDefaultResourceConfig(final Map<String, Object> props, final WebConfig webConfig) throws ServletException {
     final DefaultResourceConfig cfg = new DefaultResourceConfig();
-    if (props.containsKey(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS) == false) {
+    if (!props.containsKey(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS)) {
       props.put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS, new ArrayList<Object>(Arrays.asList(new HttpMethodFilter(), new UrlSuffixFilter())));
     }
-    if (props.containsKey(ResourceConfig.PROPERTY_CONTAINER_RESPONSE_FILTERS) == false) {
+    if (!props.containsKey(ResourceConfig.PROPERTY_CONTAINER_RESPONSE_FILTERS)) {
       props.put(ResourceConfig.PROPERTY_CONTAINER_RESPONSE_FILTERS, new ArrayList<Object>(Arrays.asList(new NoCachingFilter())));
     }
     cfg.setPropertiesAndFeatures(props);
@@ -93,6 +93,7 @@ public class OpenGammaServlet extends ServletContainer {
       public Set<Class<?>> getClasses() {
         return classes;
       }
+
       @Override
       public Set<Object> getSingletons() {
         return singletons;

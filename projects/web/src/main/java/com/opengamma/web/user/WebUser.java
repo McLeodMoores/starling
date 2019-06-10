@@ -33,7 +33,8 @@ public class WebUser {
   /**
    * Creates an instance.
    *
-   * @param uriInfo  the URI, not null
+   * @param uriInfo
+   *          the URI, not null
    */
   public WebUser(final UriInfo uriInfo) {
     ArgumentChecker.notNull(uriInfo, "uriInfo");
@@ -42,14 +43,14 @@ public class WebUser {
     _uriInfo = uriInfo;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if security is enabled.
    *
    * @return true if enabled, not null
    */
   public boolean isEnabled() {
-    return AuthUtils.isPermissive() == false;
+    return !AuthUtils.isPermissive();
   }
 
   /**
@@ -83,7 +84,7 @@ public class WebUser {
     return _uriInfo;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the login URI.
    *
@@ -120,14 +121,14 @@ public class WebUser {
     return WebProfileResource.uri(_uriInfo);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the user name.
    *
    * @return the user name, not null
    */
   public String getUserName() {
-    if (_subject.isAuthenticated() == false) {
+    if (!_subject.isAuthenticated()) {
       return null;
     }
     return (String) _subject.getPrincipal();
@@ -136,7 +137,8 @@ public class WebUser {
   /**
    * Is the requested permission allowed for the subject.
    *
-   * @param permission  the permission, not null
+   * @param permission
+   *          the permission, not null
    * @return true if permitted
    */
   public boolean isPermitted(final String permission) {
@@ -152,7 +154,7 @@ public class WebUser {
     return _subject.isAuthenticated();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return String.format("WebSecurity[%s]", isLoggedIn() ? getUserName() : "<anonymous>");

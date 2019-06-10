@@ -147,7 +147,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
       final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
       final String sql = getElSqlBundle().getSql("GetIdByName", args);
       final SqlRowSet rowSet = namedJdbc.queryForRowSet(sql, args);
-      if (rowSet.next() == false) {
+      if (!rowSet.next()) {
         throw new DataNotFoundException("Name not found: " + name);
       }
       final String deleted = rowSet.getString("DELETED");
@@ -273,7 +273,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   void createChange(final List<String> changes, final Bean current, final Bean updated, final MetaProperty<?> metaProperty) {
     final Object currentValue = metaProperty.get(current);
     final Object updatedValue = metaProperty.get(updated);
-    if (Objects.equals(currentValue, updatedValue) == false) {
+    if (!Objects.equals(currentValue, updatedValue)) {
       final String text = "Changed " + metaProperty.name() + ": " + currentValue + " -> " + updatedValue;
       changes.add(StringUtils.left(text, 255));
     }

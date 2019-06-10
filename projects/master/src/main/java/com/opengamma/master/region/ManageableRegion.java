@@ -54,8 +54,8 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   @PropertyDefinition(overrideGet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of identifiers that define the region. This will include the country, currency and time-zone. This field must not be null for the object to be
-   * valid.
+   * The bundle of identifiers that define the region. This will include the country, currency and time-zone.
+   * This field must not be null for the object to be valid.
    */
   @PropertyDefinition(overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
@@ -243,8 +243,8 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of identifiers that define the region. This will include the country, currency and time-zone. This field must not be null for the object to be
-   * valid.
+   * Gets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
+   * This field must not be null for the object to be valid.
    * @return the value of the property
    */
   @Override
@@ -253,8 +253,8 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   }
 
   /**
-   * Sets the bundle of identifiers that define the region. This will include the country, currency and time-zone. This field must not be null for the object to be
-   * valid.
+   * Sets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
+   * This field must not be null for the object to be valid.
    * @param externalIdBundle  the new value of the property
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -263,7 +263,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * valid.
+   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {

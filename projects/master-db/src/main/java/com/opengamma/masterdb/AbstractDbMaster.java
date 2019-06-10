@@ -30,8 +30,7 @@ import com.opengamma.util.db.DbMapSqlParameterSource;
 /**
  * An abstract master for rapid implementation of a database backed master.
  * <p>
- * This combines the various configuration elements and convenience methods
- * needed for most database masters.
+ * This combines the various configuration elements and convenience methods needed for most database masters.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
@@ -71,8 +70,10 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
-   * @param defaultScheme  the default scheme for unique identifier, not null
+   * @param dbConnector
+   *          the database connector, not null
+   * @param defaultScheme
+   *          the default scheme for unique identifier, not null
    */
   public AbstractDbMaster(final DbConnector dbConnector, final String defaultScheme) {
     ArgumentChecker.notNull(dbConnector, "dbConnector");
@@ -84,8 +85,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   }
 
   /**
-   * Gets the maximum number of retries.
-   * The default is ten.
+   * Gets the maximum number of retries. The default is ten.
    *
    * @return the maximum number of retries, not null
    */
@@ -95,10 +95,10 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   }
 
   /**
-   * Sets the maximum number of retries.
-   * The default is ten.
+   * Sets the maximum number of retries. The default is ten.
    *
-   * @param maxRetries  the maximum number of retries, not negative
+   * @param maxRetries
+   *          the maximum number of retries, not negative
    */
   @Override
   public void setMaxRetries(final int maxRetries) {
@@ -106,7 +106,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     _maxRetries = maxRetries;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the database connector.
    *
@@ -135,7 +135,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     return _hibernateTemplate;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the external SQL bundle.
    *
@@ -149,14 +149,15 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Sets the external SQL bundle.
    *
-   * @param bundle  the external SQL bundle, not null
+   * @param bundle
+   *          the external SQL bundle, not null
    */
   @Override
   public void setElSqlBundle(final ElSqlBundle bundle) {
     _externalSqlBundle = bundle;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the clock that determines the current time.
    *
@@ -170,7 +171,8 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Sets the clock that determines the current time.
    *
-   * @param clock  the clock, not null
+   * @param clock
+   *          the clock, not null
    */
   @Override
   public void setClock(final Clock clock) {
@@ -195,9 +197,10 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     return Instant.now(getClock());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the parameter source.
+   * 
    * @return the source, not null
    */
   protected DbMapSqlParameterSource createParameterSource() {
@@ -207,14 +210,15 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Gets the next database id.
    *
-   * @param sequenceName  the name of the sequence to query, not null
+   * @param sequenceName
+   *          the name of the sequence to query, not null
    * @return the next database id
    */
   protected long nextId(final String sequenceName) {
     return getJdbcTemplate().getJdbcOperations().queryForObject(getDialect().sqlNextSequenceValueSelect(sequenceName), Long.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the database template.
    *
@@ -236,7 +240,8 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Gets the retrying transaction template.
    *
-   * @param retries number of retries of execution before considering the execution failed
+   * @param retries
+   *          number of retries of execution before considering the execution failed
    * @return the transaction template, not null if correctly initialized
    */
   protected DbConnector.TransactionTemplateRetrying getTransactionTemplateRetrying(final int retries) {
@@ -255,7 +260,8 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Gets the retrying hibernate transaction template.
    *
-   * @param retries number of retries of execution before considering the execution failed
+   * @param retries
+   *          number of retries of execution before considering the execution failed
    * @return the hibernate transaction template, not null if correctly initialized
    */
   protected DbConnector.HibernateTransactionTemplateRetrying getHibernateTransactionTemplateRetrying(final int retries) {
@@ -271,7 +277,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     return getDbConnector().getDialect();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the scheme in use for unique identifier.
    *
@@ -285,7 +291,8 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Sets the scheme in use for unique identifier.
    *
-   * @param scheme  the scheme for unique identifier, not null
+   * @param scheme
+   *          the scheme for unique identifier, not null
    */
   @Override
   public void setUniqueIdScheme(final String scheme) {
@@ -297,19 +304,21 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Checks the unique identifier scheme is valid.
    *
-   * @param objectId  the object identifier, not null
+   * @param objectId
+   *          the object identifier, not null
    */
   protected void checkScheme(final ObjectIdentifiable objectId) {
-    if (getUniqueIdScheme().equals(objectId.getObjectId().getScheme()) == false) {
+    if (!getUniqueIdScheme().equals(objectId.getObjectId().getScheme())) {
       throw new IllegalArgumentException("UniqueId is not from this master (" + toString() + "): " + objectId);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extracts the row identifier.
    *
-   * @param id  the identifier to extract from, not null
+   * @param id
+   *          the identifier to extract from, not null
    * @return the extracted row id
    */
   protected long extractRowId(final UniqueId id) {
@@ -323,7 +332,8 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Extracts the object identifier.
    *
-   * @param objectId  the identifier to extract from, not null
+   * @param objectId
+   *          the identifier to extract from, not null
    * @return the extracted oid
    */
   protected long extractOid(final ObjectIdentifiable objectId) {
@@ -334,11 +344,12 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an object identifier.
    *
-   * @param oid  the object identifier
+   * @param oid
+   *          the object identifier
    * @return the unique identifier, not null
    */
   public UniqueId createObjectId(final long oid) {
@@ -348,15 +359,17 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Creates a unique identifier.
    *
-   * @param oid  the object identifier
-   * @param rowId  the node unique row identifier, null if object identifier
+   * @param oid
+   *          the object identifier
+   * @param rowId
+   *          the node unique row identifier, null if object identifier
    * @return the unique identifier, not null
    */
   public UniqueId createUniqueId(final long oid, final long rowId) {
     return UniqueId.of(getUniqueIdScheme(), Long.toString(oid), Long.toString(rowId - oid));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extracts a BigDecimal handling DB annoyances.
    *
@@ -373,11 +386,11 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     if (value == null) {
       return null;
     }
-    final BigDecimal stripped = JdkUtils.stripTrailingZeros(value);  // Derby, and maybe others, add trailing zeroes
+    final BigDecimal stripped = JdkUtils.stripTrailingZeros(value); // Derby, and maybe others, add trailing zeroes
     return stripped.scale() < 0 ? stripped.setScale(0) : stripped;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Retrieves the version of the master schema from the database.
    *
@@ -396,7 +409,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a string summary of this master.
    *

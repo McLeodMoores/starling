@@ -240,8 +240,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
   private LiveMarketDataProviderFactory _liveMarketDataProviderFactory;
 
   /**
-   * Indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all views and should only be used where
-   * all results for all views will always be in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    */
   @PropertyDefinition
   private boolean _suppressCurrencyDisplay;
@@ -965,8 +966,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   //-----------------------------------------------------------------------
   /**
-   * Gets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all views and should only be used where
-   * all results for all views will always be in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Gets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @return the value of the property
    */
   public boolean isSuppressCurrencyDisplay() {
@@ -974,8 +976,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
   }
 
   /**
-   * Sets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all views and should only be used where
-   * all results for all views will always be in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Sets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @param suppressCurrencyDisplay  the new value of the property
    */
   public void setSuppressCurrencyDisplay(boolean suppressCurrencyDisplay) {
@@ -984,7 +987,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Gets the the {@code suppressCurrencyDisplay} property.
-   * all results for all views will always be in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @return the property, not null
    */
   public final Property<Boolean> suppressCurrencyDisplay() {

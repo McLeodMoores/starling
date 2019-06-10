@@ -85,7 +85,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
    */
   public static ICBCode of(final String code) {
     ArgumentChecker.notNull(code, "code");
-    if (FORMAT.matcher(code).matches() == false) {
+    if (!FORMAT.matcher(code).matches()) {
       throw new IllegalArgumentException("Invalid code : " + code);
     }
     return new ICBCode(code);

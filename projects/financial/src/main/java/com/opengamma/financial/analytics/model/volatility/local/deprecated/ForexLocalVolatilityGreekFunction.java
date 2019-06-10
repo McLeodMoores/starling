@@ -60,21 +60,21 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Map<String, Greek> s_greekNamesToGreeks;
+  private static final Map<String, Greek> GREEK_NAMES_TO_GREEKS;
 
   static {
-    s_greekNamesToGreeks = new HashMap<>();
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_DELTA, PDEResultCollection.GRID_DELTA);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_DUAL_DELTA, PDEResultCollection.GRID_DUAL_DELTA);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_DUAL_GAMMA, PDEResultCollection.GRID_DUAL_GAMMA);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_GAMMA, PDEResultCollection.GRID_GAMMA);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_VANNA, PDEResultCollection.GRID_VANNA);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_VEGA, PDEResultCollection.GRID_VEGA);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_VOMMA, PDEResultCollection.GRID_VOMMA);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_GRID_PRICE, PDEResultCollection.GRID_PRICE);
-    s_greekNamesToGreeks.put(ValueRequirementNames.BLACK_VOLATILITY_GRID_PRICE, PDEResultCollection.GRID_BLACK_PRICE);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_GRID_IMPLIED_VOL, PDEResultCollection.GRID_IMPLIED_VOL);
-    s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_DOMESTIC_PRICE, PDEResultCollection.GRID_DOMESTIC_PV_QUOTE);
+    GREEK_NAMES_TO_GREEKS = new HashMap<>();
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_DELTA, PDEResultCollection.GRID_DELTA);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_DUAL_DELTA, PDEResultCollection.GRID_DUAL_DELTA);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_DUAL_GAMMA, PDEResultCollection.GRID_DUAL_GAMMA);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_GAMMA, PDEResultCollection.GRID_GAMMA);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_VANNA, PDEResultCollection.GRID_VANNA);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_VEGA, PDEResultCollection.GRID_VEGA);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_VOMMA, PDEResultCollection.GRID_VOMMA);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_GRID_PRICE, PDEResultCollection.GRID_PRICE);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.BLACK_VOLATILITY_GRID_PRICE, PDEResultCollection.GRID_BLACK_PRICE);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_GRID_IMPLIED_VOL, PDEResultCollection.GRID_IMPLIED_VOL);
+    GREEK_NAMES_TO_GREEKS.put(ValueRequirementNames.LOCAL_VOLATILITY_DOMESTIC_PRICE, PDEResultCollection.GRID_DOMESTIC_PV_QUOTE);
   }
 
   // REVIEW 2012-03-19 Andrew -- The interpolations for each greek are independent of each other. Would it give a higher throughput
@@ -118,7 +118,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     final ComputationTargetSpecification spec = target.toSpecification();
     final Set<ComputedValue> result = new HashSet<>();
     for (final ValueRequirement value : desiredValues) {
-      final Greek greek = s_greekNamesToGreeks.get(value.getValueName());
+      final Greek greek = GREEK_NAMES_TO_GREEKS.get(value.getValueName());
       final String strikeInterpolatorName = value.getConstraint(PROPERTY_RESULT_STRIKE_INTERPOLATOR);
       final Double point = gridGreeks.getPointGreek(greek, strike, NamedInterpolator1dFactory.of(strikeInterpolatorName));
       if (point == null) {
@@ -159,7 +159,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
         .withAny(PROPERTY_RESULT_STRIKE_INTERPOLATOR)
         .get();
     final ComputationTargetSpecification specification = target.toSpecification();
-    for (final String requirement : s_greekNamesToGreeks.keySet()) {
+    for (final String requirement : GREEK_NAMES_TO_GREEKS.keySet()) {
       results.add(new ValueSpecification(requirement, specification, properties));
     }
     return results;
@@ -398,7 +398,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     final ValueProperties properties = getResultProperties(surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h,
         forwardCurveName, theta, timeSteps, spaceSteps, timeGridBunching, spaceGridBunching, maxMoneyness, pdeDirection);
     final Set<ValueSpecification> results = new HashSet<>();
-    for (final String requirement : s_greekNamesToGreeks.keySet()) {
+    for (final String requirement : GREEK_NAMES_TO_GREEKS.keySet()) {
       results.add(new ValueSpecification(requirement, specification, properties));
     }
     return results;

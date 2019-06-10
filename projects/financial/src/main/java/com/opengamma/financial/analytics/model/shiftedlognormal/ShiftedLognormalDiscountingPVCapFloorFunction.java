@@ -36,8 +36,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  */
 public class ShiftedLognormalDiscountingPVCapFloorFunction extends ShiftedLognormalDiscountingCapFloorFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueBlackSmileShiftCapCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSmileShiftCapProviderInterface, MultipleCurrencyAmount> CALCULATOR =
+      PresentValueBlackSmileShiftCapCalculator.getInstance();
 
   /**
    * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.

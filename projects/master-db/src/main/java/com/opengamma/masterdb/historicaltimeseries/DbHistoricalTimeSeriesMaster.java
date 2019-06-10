@@ -240,7 +240,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     final List<ObjectId> objectIds = request.getObjectIds();
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
     if (objectIds != null && objectIds.size() == 0
-        || ExternalIdSearch.canMatch(externalIdSearch) == false) {
+        || !ExternalIdSearch.canMatch(externalIdSearch)) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
@@ -263,7 +263,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
         i++;
       }
     }
-    if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
+    if (externalIdSearch != null && !externalIdSearch.alwaysMatches()) {
       int i = 0;
       for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());

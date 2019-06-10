@@ -40,7 +40,7 @@ public final class PresentValueCurveSensitivitySABRCalculator extends PresentVal
   /**
    * The instance of the calculator.
    */
-  private static final PresentValueCurveSensitivitySABRCalculator s_instance = new PresentValueCurveSensitivitySABRCalculator();
+  private static final PresentValueCurveSensitivitySABRCalculator INSTANCE = new PresentValueCurveSensitivitySABRCalculator();
 
   /**
    * Return the instance of the calculator.
@@ -48,7 +48,7 @@ public final class PresentValueCurveSensitivitySABRCalculator extends PresentVal
    * @return The calculator.
    */
   public static PresentValueCurveSensitivitySABRCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

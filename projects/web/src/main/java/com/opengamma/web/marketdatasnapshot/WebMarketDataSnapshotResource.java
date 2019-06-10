@@ -35,13 +35,15 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebMarketDataSnapshotResource(final AbstractWebMarketDataSnapshotResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -49,14 +51,14 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     return getFreemarker().build(HTML_DIR + "snapshot.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(
       @FormParam("name") final String name,
       @FormParam("snapshotxml") final String xml) {
-    if (data().getSnapshot().isLatest() == false) {
+    if (!data().getSnapshot().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -89,12 +91,12 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final MarketDataSnapshotDocument doc = data().getSnapshot();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getMarketDataSnapshotMaster().remove(doc.getUniqueId());
@@ -102,9 +104,10 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     return Response.seeOther(uri).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -118,16 +121,18 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebMarketDataSnapshotVersionsResource findVersions() {
     return new WebMarketDataSnapshotVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data) {
@@ -136,8 +141,11 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideSnapshotId  the override snapshot id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideSnapshotId
+   *          the override snapshot id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data, final UniqueId overrideSnapshotId) {

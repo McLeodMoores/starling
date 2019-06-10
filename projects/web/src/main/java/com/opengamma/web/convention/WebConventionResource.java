@@ -96,7 +96,7 @@ public class WebConventionResource extends AbstractWebConventionResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(@FormParam("name") final String name, @FormParam("conventionXML") final String xml) {
-    if (data().getConvention().isLatest() == false) {
+    if (!data().getConvention().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -132,7 +132,7 @@ public class WebConventionResource extends AbstractWebConventionResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response putJSON(@FormParam("name") final String name, @FormParam("conventionJSON") final String json, @FormParam("conventionXML") final String xml,
       @FormParam("type") final String typeName) {
-    if (data().getConvention().isLatest() == false) {
+    if (!data().getConvention().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final String trimmedName = StringUtils.trimToNull(name);
@@ -171,7 +171,7 @@ public class WebConventionResource extends AbstractWebConventionResource {
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final ConventionDocument doc = data().getConvention();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getConventionMaster().remove(doc.getUniqueId());

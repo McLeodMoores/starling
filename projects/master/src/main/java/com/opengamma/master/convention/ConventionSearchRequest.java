@@ -57,19 +57,22 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   @PropertyDefinition
   private ExternalIdSearch _externalIdSearch;
   /**
-   * The external identifier value, matching against the <b>value</b> of the identifiers, null to not match by identifier value. This matches against the
-   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * The external identifier value, matching against the <b>value</b> of the identifiers, null to not match
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
    * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    */
   @PropertyDefinition
   private String _externalIdValue;
   /**
-   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. Wildcards are allowed.
+   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match
+   * by identifier scheme. Wildcards are allowed.
    */
   @PropertyDefinition
   private String _externalIdScheme;
   /**
-   * Map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards are allowed for the values. Nulls are not
+   * Map of attributes to search for. The returned documents must match all of the specified attributes.
+   * Wildcards are allowed for the values. Nulls are not
    * allowed.
    */
   @PropertyDefinition
@@ -333,8 +336,9 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by identifier value. This matches against the
-   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * Gets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
    * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the value of the property
    */
@@ -343,8 +347,9 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by identifier value. This matches against the
-   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * Sets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
    * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @param externalIdValue  the new value of the property
    */
@@ -354,7 +359,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdValue} property.
-   * {@link ExternalId#getValue() value} of the identifier and does not match against the key. Wildcards are allowed. This method is suitable for human
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
    * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the property, not null
    */
@@ -364,7 +370,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. Wildcards are allowed.
+   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match
+   * by identifier scheme. Wildcards are allowed.
    * @return the value of the property
    */
   public String getExternalIdScheme() {
@@ -372,7 +379,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by identifier scheme. Wildcards are allowed.
+   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match
+   * by identifier scheme. Wildcards are allowed.
    * @param externalIdScheme  the new value of the property
    */
   public void setExternalIdScheme(String externalIdScheme) {
@@ -381,6 +389,7 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdScheme} property.
+   * by identifier scheme. Wildcards are allowed.
    * @return the property, not null
    */
   public final Property<String> externalIdScheme() {
@@ -389,7 +398,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards are allowed for the values. Nulls are not
+   * Gets map of attributes to search for. The returned documents must match all of the specified attributes.
+   * Wildcards are allowed for the values. Nulls are not
    * allowed.
    * @return the value of the property, not null
    */
@@ -398,7 +408,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards are allowed for the values. Nulls are not
+   * Sets map of attributes to search for. The returned documents must match all of the specified attributes.
+   * Wildcards are allowed for the values. Nulls are not
    * allowed.
    * @param attributes  the new value of the property, not null
    */
@@ -410,6 +421,7 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code attributes} property.
+   * Wildcards are allowed for the values. Nulls are not
    * allowed.
    * @return the property, not null
    */

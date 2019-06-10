@@ -21,11 +21,11 @@ import com.opengamma.util.tuple.DoublesPair;
  */
 @Deprecated
 public final class ParRateParallelSensitivityCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, Map<String, Double>> {
-  private static final ParRateParallelSensitivityCalculator s_instance = new ParRateParallelSensitivityCalculator();
+  private static final ParRateParallelSensitivityCalculator INSTANCE = new ParRateParallelSensitivityCalculator();
   private final ParRateCurveSensitivityCalculator _prcsc = ParRateCurveSensitivityCalculator.getInstance();
 
   public static ParRateParallelSensitivityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private ParRateParallelSensitivityCalculator() {

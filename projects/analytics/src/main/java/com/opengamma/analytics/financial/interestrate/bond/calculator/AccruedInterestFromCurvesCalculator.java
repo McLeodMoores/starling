@@ -22,7 +22,7 @@ public final class AccruedInterestFromCurvesCalculator extends InstrumentDerivat
   /**
    * The calculator instance.
    */
-  private static final AccruedInterestFromCurvesCalculator s_instance = new AccruedInterestFromCurvesCalculator();
+  private static final AccruedInterestFromCurvesCalculator INSTANCE = new AccruedInterestFromCurvesCalculator();
   /**
    * The fixed coupon bond method.
    */
@@ -33,7 +33,7 @@ public final class AccruedInterestFromCurvesCalculator extends InstrumentDerivat
    * @return The instance.
    */
   public static AccruedInterestFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

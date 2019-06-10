@@ -26,14 +26,14 @@ public class CurrencyExposureForexCalculator extends InstrumentDerivativeVisitor
   /**
    * The unique instance of the calculator.
    */
-  private static final CurrencyExposureForexCalculator s_instance = new CurrencyExposureForexCalculator();
+  private static final CurrencyExposureForexCalculator INSTANCE = new CurrencyExposureForexCalculator();
 
   /**
    * Gets the calculator instance.
    * @return The calculator.
    */
   public static CurrencyExposureForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

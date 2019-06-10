@@ -140,7 +140,7 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     for (final Entry<ExternalId, ExternalIdBundleWithDates> entry : buidToUpdated.entrySet()) {
       final HistoricalTimeSeriesInfoDocument doc = buidDocMap.get(entry.getKey());
       final ExternalIdBundleWithDates updatedId = entry.getValue();
-      if (doc != null && doc.getInfo().getExternalIdBundle().equals(updatedId) == false) {
+      if (doc != null && !doc.getInfo().getExternalIdBundle().equals(updatedId)) {
         doc.getInfo().setExternalIdBundle(updatedId);
         LOGGER.debug("Updated {} with {}", doc.getUniqueId(), updatedId);
         _htsMaster.update(doc);

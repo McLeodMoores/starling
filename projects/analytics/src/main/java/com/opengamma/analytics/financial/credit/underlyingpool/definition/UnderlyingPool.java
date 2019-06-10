@@ -14,7 +14,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Class to specify the composition and characteristics of a collection of Obligor objects aggregated into a common pool In the credit index context the
  * underlying pool is the set of obligors that constitute an index (e.g. CDX.NA.IG series 18)
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -142,7 +142,7 @@ public class UnderlyingPool {
     int numberOfDefaultedObligors = 0;
 
     for (int i = 0; i < _numberOfObligors; i++) {
-      if (obligors[i].isHasDefaulted() == true) {
+      if (obligors[i].isHasDefaulted()) {
         numberOfDefaultedObligors++;
       }
     }

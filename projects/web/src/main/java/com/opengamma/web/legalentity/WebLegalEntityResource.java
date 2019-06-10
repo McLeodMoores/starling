@@ -43,13 +43,14 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
   /**
    * Creates the resource.
    *
-   * @param parent the parent resource, not null
+   * @param parent
+   *          the parent resource, not null
    */
   public WebLegalEntityResource(final AbstractWebLegalEntityResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -98,14 +99,14 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
     return Response.ok(json).tag(etag).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(
       @FormParam("name") final String name,
       @FormParam("legalEntityXML") final String xml) {
-    if (data().getLegalEntity().isLatest() == false) {
+    if (!data().getLegalEntity().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -135,7 +136,7 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
       @FormParam("name") final String name,
       @FormParam("legalEntityJSON") final String json,
       @FormParam("legalEntityXML") final String xml) {
-    if (data().getLegalEntity().isLatest() == false) {
+    if (!data().getLegalEntity().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -166,12 +167,12 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
     return WebLegalEntityResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final LegalEntityDocument doc = data().getLegalEntity();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getLegalEntityMaster().remove(doc.getUniqueId());
@@ -189,7 +190,7 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Creates the output root data.
@@ -206,18 +207,19 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebLegalEntityVersionsResource findVersions() {
     return new WebLegalEntityVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Builds a URI for this resource.
    *
-   * @param data the data, not null
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebLegalEntityData data) {
@@ -227,8 +229,10 @@ public class WebLegalEntityResource extends AbstractWebLegalEntityResource {
   /**
    * Builds a URI for this resource.
    *
-   * @param data the data, not null
-   * @param overrideLegalEntityId the override legalEntity id, null uses information from data
+   * @param data
+   *          the data, not null
+   * @param overrideLegalEntityId
+   *          the override legalEntity id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebLegalEntityData data, final UniqueId overrideLegalEntityId) {

@@ -282,7 +282,7 @@ public class WebsiteBasicsComponentFactory extends AbstractComponentFactory {
   }
 
   protected void initBasics(final ComponentRepository repo, final Set<Class<?>> publishedTypes) {
-    if (AuthUtils.isPermissive() == false) {
+    if (!AuthUtils.isPermissive()) {
       ArgumentChecker.notNull(getUserMaster(), "UserMaster");
       ArgumentChecker.notNull(getPasswordService(), "PasswordService");
       repo.getRestComponents().publishResource(new WebLoginResource());

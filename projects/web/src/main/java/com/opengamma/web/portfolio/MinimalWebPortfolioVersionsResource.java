@@ -33,13 +33,15 @@ public class MinimalWebPortfolioVersionsResource extends AbstractMinimalWebPortf
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public MinimalWebPortfolioVersionsResource(final AbstractMinimalWebPortfolioResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -60,9 +62,10 @@ public class MinimalWebPortfolioVersionsResource extends AbstractMinimalWebPortf
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -75,13 +78,13 @@ public class MinimalWebPortfolioVersionsResource extends AbstractMinimalWebPortf
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
   public MinimalWebPortfolioVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
     final PortfolioDocument doc = data().getPortfolio();
     final UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
+    if (!doc.getUniqueId().equals(combined)) {
       final PortfolioDocument versioned = data().getPortfolioMaster().get(combined);
       data().setVersioned(versioned);
     } else {
@@ -90,10 +93,12 @@ public class MinimalWebPortfolioVersionsResource extends AbstractMinimalWebPortf
     return new MinimalWebPortfolioVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {

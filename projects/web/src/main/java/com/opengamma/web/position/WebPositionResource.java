@@ -53,13 +53,15 @@ public class WebPositionResource extends AbstractWebPositionResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   public WebPositionResource(final AbstractWebPositionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -74,13 +76,13 @@ public class WebPositionResource extends AbstractWebPositionResource {
     return getFreemarker().build(JSON_DIR + "position.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(@FormParam(POSITION_XML) final String positionXml) {
     final PositionDocument doc = data().getPosition();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final String trimmedPositionXml = trimToNull(positionXml);
@@ -111,7 +113,7 @@ public class WebPositionResource extends AbstractWebPositionResource {
       @FormParam(POSITION_XML) final String positionXml) {
 
     final PositionDocument doc = data().getPosition();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final String trimmedType = defaultString(trimToNull(type));
@@ -126,7 +128,7 @@ public class WebPositionResource extends AbstractWebPositionResource {
         if (trimmedTradesJson != null) {
           trades = parseTrades(trimmedTradesJson);
         } else {
-          trades = Collections.<ManageableTrade>emptyList();
+          trades = Collections.<ManageableTrade> emptyList();
         }
         final BigDecimal quantity = trimmedQuantityStr != null && NumberUtils.isNumber(trimmedQuantityStr) ? new BigDecimal(trimmedQuantityStr) : null;
         updatePosition(doc, quantity, trades);
@@ -136,7 +138,7 @@ public class WebPositionResource extends AbstractWebPositionResource {
 
   private URI updatePosition(final PositionDocument doc, final BigDecimal quantity, final Collection<ManageableTrade> trades) {
     final ManageablePosition position = doc.getPosition();
-    if (Objects.equal(position.getQuantity(), quantity) == false || trades != null) {
+    if (!Objects.equal(position.getQuantity(), quantity) || trades != null) {
       position.setQuantity(quantity);
       position.getTrades().clear();
       if (trades != null) {
@@ -151,12 +153,12 @@ public class WebPositionResource extends AbstractWebPositionResource {
     return WebPositionResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final PositionDocument doc = data().getPosition();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final URI uri = deletePosition(doc);
@@ -178,9 +180,10 @@ public class WebPositionResource extends AbstractWebPositionResource {
     return WebPositionResource.uri(data());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
   @Override
@@ -223,16 +226,18 @@ public class WebPositionResource extends AbstractWebPositionResource {
     return getTradeAttributesModel;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebPositionVersionsResource findVersions() {
     return new WebPositionVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   *
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPositionsData data) {
@@ -241,8 +246,11 @@ public class WebPositionResource extends AbstractWebPositionResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overridePositionId  the override position id, null uses information from data
+   *
+   * @param data
+   *          the data, not null
+   * @param overridePositionId
+   *          the override position id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebPositionsData data, final UniqueId overridePositionId) {

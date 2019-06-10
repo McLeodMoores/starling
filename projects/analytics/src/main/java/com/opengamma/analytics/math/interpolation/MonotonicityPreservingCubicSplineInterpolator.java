@@ -211,7 +211,7 @@ public class MonotonicityPreservingCubicSplineInterpolator extends PiecewisePoly
      * used in such cases
      */
     final boolean sym = checkSymm(slopes);
-    if (sym == true) {
+    if (sym) {
       final PiecewisePolynomialResult result = _method.interpolate(xValues, yValues);
       ArgumentChecker.isTrue(result.getOrder() == 4, "Primary interpolant is not cubic");
       final double[] initialFirst = _function.differentiate(result, xValues).getData()[0];

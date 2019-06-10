@@ -117,8 +117,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   private Class<? extends AbstractComponentFactory> _templateEngineContexts = EngineContextsComponentFactory.class;
 
   /**
-   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
-   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
+   * as the components that make them up are often used independently. Performance is better if the resolver goes
+   * through these, cached, instances rather than make independently cached remote requests.
    */
   @PropertyDefinition(validate = "notNull")
   private Class<? extends AbstractComponentFactory> _templateTargetResolver = TargetResolverComponentFactory.class;
@@ -709,8 +710,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
-   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
+   * as the components that make them up are often used independently. Performance is better if the resolver goes
+   * through these, cached, instances rather than make independently cached remote requests.
    * @return the value of the property, not null
    */
   public Class<? extends AbstractComponentFactory> getTemplateTargetResolver() {
@@ -718,8 +720,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
-   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
+   * as the components that make them up are often used independently. Performance is better if the resolver goes
+   * through these, cached, instances rather than make independently cached remote requests.
    * @param templateTargetResolver  the new value of the property, not null
    */
   public void setTemplateTargetResolver(Class<? extends AbstractComponentFactory> templateTargetResolver) {
@@ -729,7 +732,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code templateTargetResolver} property.
-   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * as the components that make them up are often used independently. Performance is better if the resolver goes
+   * through these, cached, instances rather than make independently cached remote requests.
    * @return the property, not null
    */
   public final Property<Class<? extends AbstractComponentFactory>> templateTargetResolver() {

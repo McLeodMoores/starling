@@ -39,7 +39,7 @@ public class CashFlowEquivalentCurveSensitivityCalculator
   /**
    * The unique instance of the calculator.
    */
-  private static final CashFlowEquivalentCurveSensitivityCalculator s_instance = new CashFlowEquivalentCurveSensitivityCalculator();
+  private static final CashFlowEquivalentCurveSensitivityCalculator INSTANCE = new CashFlowEquivalentCurveSensitivityCalculator();
 
   /**
    * Gets the calculator instance.
@@ -47,7 +47,7 @@ public class CashFlowEquivalentCurveSensitivityCalculator
    * @return The calculator.
    */
   public static CashFlowEquivalentCurveSensitivityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

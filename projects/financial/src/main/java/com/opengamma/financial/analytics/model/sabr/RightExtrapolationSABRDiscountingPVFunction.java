@@ -61,8 +61,8 @@ public class RightExtrapolationSABRDiscountingPVFunction extends RightExtrapolat
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final double strikeCutoff = Double.parseDouble(desiredValue.getConstraint(PROPERTY_STRIKE_CUTOFF));
         final double mu = Double.parseDouble(desiredValue.getConstraint(PROPERTY_MU));
-        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyAmount> calculator = new PresentValueSABRSwaptionRightExtrapolationCalculator(
-            strikeCutoff, mu);
+        final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyAmount> calculator =
+            new PresentValueSABRSwaptionRightExtrapolationCalculator(strikeCutoff, mu);
         final MultipleCurrencyAmount mca = derivative.accept(calculator, sabrData);
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final Currency currency = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());

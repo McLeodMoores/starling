@@ -36,13 +36,15 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebPortfolioResource(final AbstractWebPortfolioResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -70,13 +72,13 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(@FormParam("name") final String name, @FormParam("hidden") final Boolean isHidden) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -97,7 +99,7 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response putJSON(@FormParam("name") final String name, @FormParam("hidden") final Boolean isHidden) {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final String trimmedName = StringUtils.trimToNull(name);
@@ -115,12 +117,12 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
     return uri;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final PortfolioDocument doc = data().getPortfolio();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getPortfolioMaster().remove(doc.getUniqueId());
@@ -138,9 +140,10 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
     return Response.ok().build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -155,7 +158,7 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("nodes")
   public WebPortfolioNodesResource findNodes() {
     return new WebPortfolioNodesResource(this);
@@ -166,10 +169,12 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
     return new WebPortfolioVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {
@@ -178,8 +183,11 @@ public class WebPortfolioResource extends AbstractWebPortfolioResource {
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overridePortfolioId  the override portfolio id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overridePortfolioId
+   *          the override portfolio id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overridePortfolioId) {

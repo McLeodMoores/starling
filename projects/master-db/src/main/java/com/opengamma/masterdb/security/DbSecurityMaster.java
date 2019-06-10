@@ -203,7 +203,7 @@ public class DbSecurityMaster
     final Map<String, String> attributes = request.getAttributes();
     final List<ObjectId> objectIds = request.getObjectIds();
     if (objectIds != null && objectIds.size() == 0
-        || ExternalIdSearch.canMatch(request.getExternalIdSearch()) == false) {
+        || !ExternalIdSearch.canMatch(request.getExternalIdSearch())) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
@@ -215,7 +215,7 @@ public class DbSecurityMaster
         .addValueNullIgnored("sec_type", request.getSecurityType())
         .addValueNullIgnored("external_id_scheme", getDialect().sqlWildcardAdjustValue(request.getExternalIdScheme()))
         .addValueNullIgnored("external_id_value", getDialect().sqlWildcardAdjustValue(request.getExternalIdValue()));
-    if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
+    if (externalIdSearch != null && !externalIdSearch.alwaysMatches()) {
       int i = 0;
       for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());

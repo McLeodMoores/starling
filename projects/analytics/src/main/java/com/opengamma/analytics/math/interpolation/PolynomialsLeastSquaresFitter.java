@@ -32,7 +32,7 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * Given a set of data (X_i, Y_i) and degrees of a polynomial, determines optimal coefficients of the polynomial.
-   * 
+   *
    * @param xData
    *          X values of data
    * @param yData
@@ -49,7 +49,7 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * Alternative regression method with different output.
-   * 
+   *
    * @param xData
    *          X values of data
    * @param yData
@@ -70,7 +70,7 @@ public class PolynomialsLeastSquaresFitter {
     final DoubleMatrix1D resResult = new DoubleMatrix1D(result.getResiduals());
     final double resNorm = OG_ALGEBRA.getNorm2(resResult);
 
-    if (normalize == true) {
+    if (normalize) {
       return new PolynomialsLeastSquaresFitterResult(result.getBetas(), rMatriX, nData - degree - 1, resNorm, _renorm);
     }
     return new PolynomialsLeastSquaresFitterResult(result.getBetas(), rMatriX, nData - degree - 1, resNorm);
@@ -78,7 +78,7 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * This regression method is private and called in other regression methods
-   * 
+   *
    * @param xData
    *          X values of data
    * @param yData
@@ -125,7 +125,7 @@ public class PolynomialsLeastSquaresFitter {
 
     final double[][] tmpMatrix = new double[nData][degree + 1];
 
-    if (normalize == true) {
+    if (normalize) {
       final double[] normData = normaliseData(xData);
       for (int i = 0; i < nData; ++i) {
         for (int j = 0; j < degree + 1; ++j) {
@@ -152,7 +152,7 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * This regression method is private and called in other regression methods
-   * 
+   *
    * @param xDataMatrix
    *          _nData x (_degree + 1) matrix whose low vector is (xData[i]^0, xData[i]^1, ..., xData[i]^{_degree})
    * @param yDataVector
@@ -187,7 +187,7 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * Under the QR decomposition, xDataMatrix = qMatrix * rMatrix, optimal coefficients of the polynomial are computed by back substitution
-   * 
+   *
    * @param qMatrix
    * @param rMatrix
    * @param yDataVector
@@ -237,7 +237,7 @@ public class PolynomialsLeastSquaresFitter {
 
   /**
    * Normalize x_i as x_i -> (x_i - mean)/(standard deviation)
-   * 
+   *
    * @param xData
    *          X values of data
    * @return Normalized X values

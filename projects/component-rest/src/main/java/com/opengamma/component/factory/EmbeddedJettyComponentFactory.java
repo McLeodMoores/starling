@@ -92,7 +92,7 @@ public class EmbeddedJettyComponentFactory extends AbstractComponentFactory {
   // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
-    if (isActive() == false) {
+    if (!isActive()) {
       return;
     }
 

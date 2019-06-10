@@ -142,7 +142,7 @@ public class BloombergTicksCollector implements Lifecycle {
 
   @Override
   public synchronized boolean isRunning() {
-    return _bbgSessionStarted.get() == true || _ticksWriterThread != null && _ticksWriterThread.isAlive();
+    return _bbgSessionStarted.get() || _ticksWriterThread != null && _ticksWriterThread.isAlive();
   }
 
   @Override

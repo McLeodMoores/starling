@@ -24,7 +24,7 @@ public final class PresentValueFromFuturePriceCalculator extends InstrumentDeriv
   /**
    * The calculator instance.
    */
-  private static final PresentValueFromFuturePriceCalculator s_instance = new PresentValueFromFuturePriceCalculator();
+  private static final PresentValueFromFuturePriceCalculator INSTANCE = new PresentValueFromFuturePriceCalculator();
   /**
    * The method to compute bond future prices.
    */
@@ -39,7 +39,7 @@ public final class PresentValueFromFuturePriceCalculator extends InstrumentDeriv
    * @return The instance.
    */
   public static PresentValueFromFuturePriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

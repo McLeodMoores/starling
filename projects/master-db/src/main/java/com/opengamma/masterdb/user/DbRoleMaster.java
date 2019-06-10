@@ -53,18 +53,16 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * A role master implementation using a database for persistence.
  * <p>
- * This is a full implementation of the role master using an SQL database.
- * Full details of the API are in {@link RoleMaster}.
+ * This is a full implementation of the role master using an SQL database. Full details of the API are in {@link RoleMaster}.
  * <p>
- * The SQL is stored externally in {@code DbRoleMaster.elsql}.
- * Alternate databases or specific SQL requirements can be handled using database
- * specific overrides, such as {@code DbRoleMaster-MySpecialDB.elsql}.
+ * The SQL is stored externally in {@code DbRoleMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific
+ * overrides, such as {@code DbRoleMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
 public class DbRoleMaster
-extends AbstractDbUserMaster<ManageableRole>
-implements RoleMaster {
+    extends AbstractDbUserMaster<ManageableRole>
+    implements RoleMaster {
 
   /** Event sequence name. */
   private static final String USR_ROLE_EVENT_SEQ = "usr_role_event_seq";
@@ -97,7 +95,8 @@ implements RoleMaster {
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbRoleMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
@@ -110,7 +109,7 @@ implements RoleMaster {
     _searchTimer = summaryRegistry.timer(namePrefix + ".search");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean nameExists(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
@@ -135,7 +134,7 @@ implements RoleMaster {
     return doGetById(objectId, new RoleExtractor());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId add(final ManageableRole role) {
     return doAdd(role);
@@ -144,7 +143,8 @@ implements RoleMaster {
   /**
    * Processes the role add, within a retrying transaction.
    *
-   * @param role  the role to add, not null
+   * @param role
+   *          the role to add, not null
    * @return the information, not null
    */
   @Override
@@ -162,12 +162,12 @@ implements RoleMaster {
     insertAssociatedUsers(docOid, role);
     insertAssociatedPermissions(docOid, role);
     insertAssociatedRoles(docOid, role);
-    final HistoryEvent event = HistoryEvent.of(HistoryEventType.ADDED, uniqueId, "system", now, ImmutableList.<String>of());
+    final HistoryEvent event = HistoryEvent.of(HistoryEventType.ADDED, uniqueId, "system", now, ImmutableList.<String> of());
     insertEvent(event, USR_ROLE_EVENT_SEQ);
     return Pairs.of(uniqueId, now);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId update(final ManageableRole role) {
     return doUpdate(role);
@@ -176,7 +176,8 @@ implements RoleMaster {
   /**
    * Processes the update, within a retrying transaction.
    *
-   * @param role  the updated role, not null
+   * @param role
+   *          the updated role, not null
    * @return the updated document, not null
    */
   @Override
@@ -188,12 +189,12 @@ implements RoleMaster {
     final UniqueId newUniqueId = objectId.atVersion(Integer.toString(newVersion));
     // validate
     if (current.equals(role)) {
-      return Pairs.of(newUniqueId, null);  // no change
+      return Pairs.of(newUniqueId, null); // no change
     }
-    if (current.getUniqueId().getVersion().equals(oldVersion) == false) {
+    if (!current.getUniqueId().getVersion().equals(oldVersion)) {
       throw new DataVersionException("Invalid version, Role has already been updated: " + objectId);
     }
-    if (caseInsensitive(role.getRoleName()).equals(caseInsensitive(current.getRoleName())) == false) {
+    if (!caseInsensitive(role.getRoleName()).equals(caseInsensitive(current.getRoleName()))) {
       // check if role exists
       if (doNameExists(role.getRoleName())) {
         throw new DataDuplicationException("Role cannot be renamed, new name already exists: " + role.getRoleName());
@@ -203,15 +204,15 @@ implements RoleMaster {
     // update
     final long docOid = extractOid(objectId);
     updateMain(docOid, newVersion, role);
-    if (current.getAssociatedUsers().equals(role.getAssociatedUsers()) == false) {
+    if (!current.getAssociatedUsers().equals(role.getAssociatedUsers())) {
       deleteAssociatedUsers(docOid);
       insertAssociatedUsers(docOid, role);
     }
-    if (current.getAssociatedPermissions().equals(role.getAssociatedPermissions()) == false) {
+    if (!current.getAssociatedPermissions().equals(role.getAssociatedPermissions())) {
       deleteAssociatedPermissions(docOid);
       insertAssociatedPermissions(docOid, role);
     }
-    if (current.getAssociatedRoles().equals(role.getAssociatedRoles()) == false) {
+    if (!current.getAssociatedRoles().equals(role.getAssociatedRoles())) {
       deleteAssociatedRoles(docOid);
       insertAssociatedRoles(docOid, role);
     }
@@ -266,7 +267,7 @@ implements RoleMaster {
     return changes;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UniqueId save(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
@@ -277,7 +278,7 @@ implements RoleMaster {
     return add(role);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void removeByName(final String roleName) {
     doRemoveByName(roleName);
@@ -291,7 +292,8 @@ implements RoleMaster {
   /**
    * Processes the document update, within a retrying transaction.
    *
-   * @param objectId  the object identifier to remove, not null
+   * @param objectId
+   *          the object identifier to remove, not null
    * @return the updated document, not null
    */
   @Override
@@ -307,12 +309,12 @@ implements RoleMaster {
     deleteMain(docOid);
     updateNameLookupToDeleted(docOid);
     final Instant now = now();
-    final HistoryEvent event = HistoryEvent.of(HistoryEventType.REMOVED, newUniqueId, "system", now, ImmutableList.<String>of());
+    final HistoryEvent event = HistoryEvent.of(HistoryEventType.REMOVED, newUniqueId, "system", now, ImmutableList.<String> of());
     insertEvent(event, USR_ROLE_EVENT_SEQ);
     return now;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public RoleSearchResult search(final RoleSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -349,7 +351,7 @@ implements RoleMaster {
     args.addValue("paging_offset", pagingRequest.getFirstItem());
     args.addValue("paging_fetch", pagingRequest.getPagingSize());
     // search
-    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     final NamedParameterJdbcOperations namedJdbc = getJdbcTemplate();
     Paging paging;
     final List<ManageableRole> results = new ArrayList<>();
@@ -360,7 +362,7 @@ implements RoleMaster {
       LOGGER.debug("executing sql {}", sql[1]);
       final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
       paging = Paging.of(pagingRequest, count);
-      if (count > 0 && pagingRequest.equals(PagingRequest.NONE) == false) {
+      if (count > 0 && !pagingRequest.equals(PagingRequest.NONE)) {
         LOGGER.debug("executing sql {}", sql[0]);
         results.addAll(namedJdbc.query(sql[0], args, new RoleExtractor()));
       }
@@ -368,7 +370,7 @@ implements RoleMaster {
     return new RoleSearchResult(paging, results);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public RoleEventHistoryResult eventHistory(final RoleEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -382,7 +384,7 @@ implements RoleMaster {
     return new RoleEventHistoryResult(doEventHistory(objectId));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UserAccount resolveAccount(final UserAccount account) {
     ArgumentChecker.notNull(account, "account");
@@ -405,7 +407,7 @@ implements RoleMaster {
     return resolved;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void insertMain(final long docOid, final ManageableRole role) {
     final DbMapSqlParameterSource docArgs = mainArgs(docOid, 0, role);
     final String sqlDoc = getElSqlBundle().getSql("InsertMain", docArgs);
@@ -448,7 +450,7 @@ implements RoleMaster {
     getJdbcTemplate().batchUpdate(sql, argsList.toArray(new DbMapSqlParameterSource[argsList.size()]));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void updateMain(final long docOid, final int version, final ManageableRole role) {
     final DbMapSqlParameterSource docArgs = mainArgs(docOid, version, role);
     final String sqlDoc = getElSqlBundle().getSql("UpdateMain", docArgs);
@@ -465,7 +467,7 @@ implements RoleMaster {
     return docArgs;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private void deleteMain(final long docOid) {
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("doc_id", docOid);
@@ -494,7 +496,7 @@ implements RoleMaster {
     getJdbcTemplate().update(sql, args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a ManageableRole.
    */

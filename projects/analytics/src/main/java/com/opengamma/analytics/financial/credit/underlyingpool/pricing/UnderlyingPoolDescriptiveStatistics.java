@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class to compute basic statistics (e.g. average 5Y spread) for an underlying pool
- * 
+ *
  * @deprecated Deprecated
  */
 @Deprecated
@@ -45,7 +45,7 @@ public class UnderlyingPoolDescriptiveStatistics {
 
     for (int i = 0; i < numberOfObligorsInPool; i++) {
 
-      if (underlyingPool.getObligors()[i].isHasDefaulted() == true) {
+      if (!underlyingPool.getObligors()[i].isHasDefaulted()) {
         numberOfDefaultedNames++;
       }
     }
@@ -349,7 +349,7 @@ public class UnderlyingPoolDescriptiveStatistics {
       }
     }
 
-    if (haveFoundCreditSpreadTenor == false) {
+    if (!haveFoundCreditSpreadTenor) {
       throw new IllegalArgumentException("The credit spread tenor " + creditSpreadTenor + " is not in the list of credit spread tenors in the underlying pool");
     }
   }

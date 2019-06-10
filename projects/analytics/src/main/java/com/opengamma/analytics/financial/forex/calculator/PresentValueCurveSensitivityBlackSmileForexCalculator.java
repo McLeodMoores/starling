@@ -29,14 +29,14 @@ public class PresentValueCurveSensitivityBlackSmileForexCalculator extends Prese
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueCurveSensitivityBlackSmileForexCalculator s_instance = new PresentValueCurveSensitivityBlackSmileForexCalculator();
+  private static final PresentValueCurveSensitivityBlackSmileForexCalculator INSTANCE = new PresentValueCurveSensitivityBlackSmileForexCalculator();
 
   /**
    * Gets the calculator instance.
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackSmileForexCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

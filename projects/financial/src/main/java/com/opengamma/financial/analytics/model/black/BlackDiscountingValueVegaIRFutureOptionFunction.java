@@ -34,8 +34,8 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class BlackDiscountingValueVegaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The value vega calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, SurfaceValue> CALCULATOR = PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator
-      .getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, SurfaceValue> CALCULATOR =
+      PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator.getInstance();
 
   /**
    * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_VEGA}.
