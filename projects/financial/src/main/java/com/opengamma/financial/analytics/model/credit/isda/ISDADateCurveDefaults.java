@@ -53,8 +53,8 @@ public class ISDADateCurveDefaults extends DefaultPropertyFunction {
         .or(FinancialSecurityTypes.CREDIT_DEFAULT_SWAP_INDEX_SECURITY), true);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(perCurrencyDefaults, "per currency defaults");
-    ArgumentChecker.isTrue(perCurrencyDefaults.length % 4 == 0, "must have one yield curve name, yield curve calculation config and" +
-        "yield curve calculation method per currency");
+    ArgumentChecker.isTrue(perCurrencyDefaults.length % 4 == 0, "must have one yield curve name, yield curve calculation config and"
+        + "yield curve calculation method per currency");
     _priority = PriorityClass.valueOf(priority);
     _currencyToYieldCurveName = new HashMap<>();
     _currencyToYieldCurveConfigName = new HashMap<>();

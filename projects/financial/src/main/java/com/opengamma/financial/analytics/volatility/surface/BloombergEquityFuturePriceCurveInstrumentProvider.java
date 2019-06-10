@@ -192,10 +192,10 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
       return false;
     }
     final BloombergEquityFuturePriceCurveInstrumentProvider other = (BloombergEquityFuturePriceCurveInstrumentProvider) obj;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName()) &&
-        getExchange().equals(other.getExchange());
+    return getFuturePrefix().equals(other.getFuturePrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName())
+        && getExchange().equals(other.getExchange());
   }
 
 }

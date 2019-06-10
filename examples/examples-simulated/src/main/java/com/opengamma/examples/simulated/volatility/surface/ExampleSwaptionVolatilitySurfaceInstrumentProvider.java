@@ -146,12 +146,12 @@ public class ExampleSwaptionVolatilitySurfaceInstrumentProvider implements Surfa
     }
     final ExampleSwaptionVolatilitySurfaceInstrumentProvider other = (ExampleSwaptionVolatilitySurfaceInstrumentProvider) o;
     // we can avoid using ObjectUtil.equals because we validated the strings as not null.
-    return getCountryPrefix().equals(other.getCountryPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getTypePrefix().equals(other.getTypePrefix()) &&
-        isZeroPadSwapMaturityTenor() == other.isZeroPadSwapMaturityTenor() &&
-        isZeroPadSwaptionExpiryTenor() == other.isZeroPadSwaptionExpiryTenor() &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getCountryPrefix().equals(other.getCountryPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getTypePrefix().equals(other.getTypePrefix())
+        && isZeroPadSwapMaturityTenor() == other.isZeroPadSwapMaturityTenor()
+        && isZeroPadSwaptionExpiryTenor() == other.isZeroPadSwaptionExpiryTenor()
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
   @Override

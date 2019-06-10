@@ -33,9 +33,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private final Integer _inlineIndex;
 
   /**
-   * If a column's data can be displayed inline across multiple columns the type of data displayed
-   * in the cells will not be the same as the column's underlying data type. e.g. if a column contains a vector
-   * of double values the cells will contain doubles when but the underlying type of the first column will be a
+   * If a column's data can be displayed inline across multiple columns the type of data displayed in the cells will not be the same as the column's underlying
+   * data type. e.g. if a column contains a vector of double values the cells will contain doubles when but the underlying type of the first column will be a
    * vector.
    */
   private final Class<?> _underlyingType;
@@ -77,8 +76,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   /**
-   * Factory method that creates a column for a column specification,
-   * calculation configuration and data type.
+   * Factory method that creates a column for a column specification, calculation configuration and data type.
    *
    * @param columnSpec
    *          The column specification
@@ -86,8 +84,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    *          Type of data displayed in the column
    * @param targetLookup
    *          allows the target to be looked up
-   * @return A column for displaying data calculated for the requirement and
-   *         calculation configuration
+   * @return A column for displaying data calculated for the requirement and calculation configuration
    */
   /* package */ static GridColumn forSpec(final ColumnSpecification columnSpec,
       final Class<?> columnType,
@@ -96,8 +93,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   /**
-   * Factory method to create a column for inlined values. These are single
-   * values (e.g. vectors) displayed over multiple columns.
+   * Factory method to create a column for inlined values. These are single values (e.g. vectors) displayed over multiple columns.
    *
    * @param header
    *          The column header
@@ -106,17 +102,14 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * @param columnType
    *          The type displayed in the column
    * @param underlyingType
-   *          The type of the column's underlying data, can be different from
-   *          the type displayed in the column for types that are displayed
-   *          inline, e.g. vectors of doubles where the double values are
-   *          displayed but the underlying type is a vector
+   *          The type of the column's underlying data, can be different from the type displayed in the column for types that are displayed inline, e.g. vectors
+   *          of doubles where the double values are displayed but the underlying type is a vector
    * @param targetLookup
    *          For looking up values to populate the column
    * @param inlineKey
    *          the key of the data item
    * @param inlineIndex
-   *          The index of the individual data item in this column. This is used
-   *          to extract each cell's data from the value.
+   *          The index of the individual data item in this column. This is used to extract each cell's data from the value.
    * @return The column
    */
   /* package */ static GridColumn forSpec(final String header,
@@ -170,10 +163,9 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   /**
-   * @return If this column's data can be displayed inline (e.g. a vector) this returns the underlying type which
-   * won't be the type displayed in the cells. e.g. for a vector of doubles the underlying type is vector but the
-   * type of values displayed in the cells is double. If the column's data can't be displayed inline this method
-   * returns the same value as {@link #getType()}.
+   * @return If this column's data can be displayed inline (e.g. a vector) this returns the underlying type which won't be the type displayed in the cells. e.g.
+   *         for a vector of doubles the underlying type is vector but the type of values displayed in the cells is double. If the column's data can't be
+   *         displayed inline this method returns the same value as {@link #getType()}.
    */
   /* package */ Class<?> getUnderlyingType() {
     if (_underlyingType != null) {
@@ -230,11 +222,11 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   @Override
   public String toString() {
-    return "AnalyticsColumn [" +
-        "_header='" + _header + '\'' +
-        ", _type=" + _type +
-        ", _description='" + _description + '\'' +
-        "]";
+    return "AnalyticsColumn ["
+        + "_header='" + _header + '\''
+        + ", _type=" + _type
+        + ", _description='" + _description + '\''
+        + "]";
   }
 
   // TODO merge this into the AnalyticsColumn and create subclasses for each of the renderer classes

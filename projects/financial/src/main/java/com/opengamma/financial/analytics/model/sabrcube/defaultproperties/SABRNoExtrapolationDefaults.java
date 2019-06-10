@@ -35,6 +35,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Default properties for SABR functions.
+ * 
  * @deprecated The functions to which these defaults apply are deprecated.
  */
 @Deprecated
@@ -43,27 +44,27 @@ public class SABRNoExtrapolationDefaults extends DefaultPropertyFunction {
   private static final Logger LOGGER = LoggerFactory.getLogger(SABRNoExtrapolationDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.PRESENT_VALUE_CURVE_SENSITIVITY,
-    ValueRequirementNames.PRESENT_VALUE_SABR_ALPHA_SENSITIVITY,
-    ValueRequirementNames.PRESENT_VALUE_SABR_RHO_SENSITIVITY,
-    ValueRequirementNames.PRESENT_VALUE_SABR_NU_SENSITIVITY,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.VEGA_QUOTE_CUBE
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.PRESENT_VALUE_CURVE_SENSITIVITY,
+                ValueRequirementNames.PRESENT_VALUE_SABR_ALPHA_SENSITIVITY,
+                ValueRequirementNames.PRESENT_VALUE_SABR_RHO_SENSITIVITY,
+                ValueRequirementNames.PRESENT_VALUE_SABR_NU_SENSITIVITY,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.VEGA_QUOTE_CUBE
   };
   /** The SABR surface fitting method */
   private final String _fittingMethod;
   /**
-   * A map from currency to (curve config, cube definition, cube specification, forward swap surface definition,
-   * forward swap surface specification) names
+   * A map from currency to (curve config, cube definition, cube specification, forward swap surface definition, forward swap surface specification) names
    */
   private final Map<String, List<String>> _currencyAndConfigNames;
 
   /**
-   * @param fittingMethod The fitting method name, not null
-   * @param currencyAndConfigNames A list of either (currency, curve config, cube) triples or
-   * (currency, cube definition name, cube specification name, forward surface definition name,
-   * forward surface specification name) tuples, not null
+   * @param fittingMethod
+   *          The fitting method name, not null
+   * @param currencyAndConfigNames
+   *          A list of either (currency, curve config, cube) triples or (currency, cube definition name, cube specification name, forward surface definition
+   *          name, forward surface specification name) tuples, not null
    */
   public SABRNoExtrapolationDefaults(final String fittingMethod, final String... currencyAndConfigNames) {
     super(FinancialSecurityTypes.SWAPTION_SECURITY
@@ -115,9 +116,9 @@ public class SABRNoExtrapolationDefaults extends DefaultPropertyFunction {
         return false;
       }
       final InterestRateInstrumentType type = SwapSecurityUtils.getSwapType((SwapSecurity) security);
-      if ((type != InterestRateInstrumentType.SWAP_FIXED_CMS) &&
-          (type != InterestRateInstrumentType.SWAP_CMS_CMS) &&
-          (type != InterestRateInstrumentType.SWAP_IBOR_CMS)) {
+      if (type != InterestRateInstrumentType.SWAP_FIXED_CMS
+          && type != InterestRateInstrumentType.SWAP_CMS_CMS
+          && type != InterestRateInstrumentType.SWAP_IBOR_CMS) {
         return false;
       }
     }

@@ -56,8 +56,8 @@ public class RawEquityOptionVolatilitySurfaceDataFunction extends RawVolatilityS
   /**
    * The postfix (e.g. Index, Equity) is removed from the Bloomberg ticker when constructing the surface name, so the full name of a surface with
    * <ul>
-   *   <li>definitionName = OPENGAMMA</li>
-   *   <li>target=BLOOMBERG_TICKER~DJX Index</li>
+   * <li>definitionName = OPENGAMMA</li>
+   * <li>target=BLOOMBERG_TICKER~DJX Index</li>
    * </ul>
    * is OPENGAMMA_DJX_EQUITY_OPTION {@inheritDoc}
    */
@@ -70,8 +70,8 @@ public class RawEquityOptionVolatilitySurfaceDataFunction extends RawVolatilityS
     final VolatilitySurfaceDefinition<?, ?> definition = definitionSource.getDefinition(fullDefinitionName, InstrumentTypeProperties.EQUITY_OPTION,
         versionCorrection);
     if (definition == null) {
-      throw new OpenGammaRuntimeException("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " +
-    InstrumentTypeProperties.EQUITY_OPTION);
+      throw new OpenGammaRuntimeException("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type "
+          + InstrumentTypeProperties.EQUITY_OPTION);
     }
     return definition;
   }
@@ -79,8 +79,8 @@ public class RawEquityOptionVolatilitySurfaceDataFunction extends RawVolatilityS
   /**
    * The postfix (e.g. Index, Equity) is removed from the Bloomberg ticker when constructing the surface name, so the full name of a surface with
    * <ul>
-   *   <li>specificationName = OPENGAMMA</li>
-   *   <li>target=BLOOMBERG_TICKER~DJX Index</li>
+   * <li>specificationName = OPENGAMMA</li>
+   * <li>target=BLOOMBERG_TICKER~DJX Index</li>
    * </ul>
    * is OPENGAMMA_DJX_EQUITY_OPTION {@inheritDoc}
    */
@@ -93,8 +93,8 @@ public class RawEquityOptionVolatilitySurfaceDataFunction extends RawVolatilityS
     final VolatilitySurfaceSpecification specification = specificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.EQUITY_OPTION,
         versionCorrection);
     if (specification == null) {
-      throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " +
-    InstrumentTypeProperties.EQUITY_OPTION);
+      throw new OpenGammaRuntimeException("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type "
+          + InstrumentTypeProperties.EQUITY_OPTION);
     }
     return specification;
   }

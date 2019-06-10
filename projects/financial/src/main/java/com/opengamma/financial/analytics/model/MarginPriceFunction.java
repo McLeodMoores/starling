@@ -105,8 +105,8 @@ public class MarginPriceFunction extends AbstractFunction {
       @Override
       public boolean canApplyTo(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Security security = target.getTrade().getSecurity();
-        return security instanceof IRFutureOptionSecurity ||
-            security instanceof InterestRateFutureSecurity;
+        return security instanceof IRFutureOptionSecurity
+            || security instanceof InterestRateFutureSecurity;
       }
 
       @Override

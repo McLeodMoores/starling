@@ -78,7 +78,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void addListener(final MarketDataListener listener) {
     synchronized (_listenerLock) {
@@ -99,7 +99,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void subscribe(final ValueSpecification valueSpecification) {
     subscribe(Collections.singleton(valueSpecification));
@@ -121,7 +121,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     // TODO
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public MarketDataAvailabilityProvider getAvailabilityProvider(final MarketDataSpecification marketDataSpec) {
     return getSnapshot().getAvailabilityProvider();
@@ -132,7 +132,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     return _permissionProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean isCompatible(final MarketDataSpecification marketDataSpec) {
     if (!(marketDataSpec instanceof UserMarketDataSpecification)) {
@@ -145,8 +145,8 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
   @Override
   public MarketDataSnapshot snapshot(final MarketDataSpecification marketDataSpec) {
     if (!isCompatible(marketDataSpec)) {
-      throw new OpenGammaRuntimeException("Market data specification " + marketDataSpec + " is incompatible with " +
-          UserMarketDataProvider.class.getSimpleName() + " for snapshot " + getSnapshotId());
+      throw new OpenGammaRuntimeException("Market data specification " + marketDataSpec + " is incompatible with "
+          + UserMarketDataProvider.class.getSimpleName() + " for snapshot " + getSnapshotId());
     }
     return getSnapshot();
   }

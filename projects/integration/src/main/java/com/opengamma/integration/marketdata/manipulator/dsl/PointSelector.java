@@ -200,26 +200,26 @@ public class PointSelector implements DistinctMarketDataSelector {
       return false;
     }
     final PointSelector other = (PointSelector) obj;
-    return Objects.equals(this._calcConfigNames, other._calcConfigNames) &&
-        Objects.equals(this._ids, other._ids) &&
-        Objects.equals(this._idMatchScheme, other._idMatchScheme) &&
-        Objects.equals(this._idMatchPattern, other._idMatchPattern) &&
-        Objects.equals(this._idLikeScheme, other._idLikeScheme) &&
-        Objects.equals(this._idLikePattern, other._idLikePattern) &&
-        Objects.equals(this._securityTypes, other._securityTypes);
+    return Objects.equals(this._calcConfigNames, other._calcConfigNames)
+        && Objects.equals(this._ids, other._ids)
+        && Objects.equals(this._idMatchScheme, other._idMatchScheme)
+        && Objects.equals(this._idMatchPattern, other._idMatchPattern)
+        && Objects.equals(this._idLikeScheme, other._idLikeScheme)
+        && Objects.equals(this._idLikePattern, other._idLikePattern)
+        && Objects.equals(this._securityTypes, other._securityTypes);
   }
 
   @Override
   public String toString() {
-    return "PointSelector [" +
-        "_calcConfigNames=" + _calcConfigNames +
-        ", _ids=" + _ids +
-        ", _idMatchScheme=" + _idMatchScheme +
-        ", _idMatchPattern=" + _idMatchPattern +
-        ", _idLikeScheme=" + _idLikeScheme +
-        ", _idLikePattern=" + _idLikePattern +
-        ", _securityTypes=" + _securityTypes +
-        "]";
+    return "PointSelector ["
+        + "_calcConfigNames=" + _calcConfigNames
+        + ", _ids=" + _ids
+        + ", _idMatchScheme=" + _idMatchScheme
+        + ", _idMatchPattern=" + _idMatchPattern
+        + ", _idLikeScheme=" + _idLikeScheme
+        + ", _idLikePattern=" + _idLikePattern
+        + ", _securityTypes=" + _securityTypes
+        + "]";
   }
 
   /**
@@ -265,8 +265,11 @@ public class PointSelector implements DistinctMarketDataSelector {
 
     /**
      * Adds a test for the market data ID value to match exactly.
-     * @param scheme External ID scheme that must match the market data's ID scheme
-     * @param value External ID value that must match the market data's ID value
+     *
+     * @param scheme
+     *          External ID scheme that must match the market data's ID scheme
+     * @param value
+     *          External ID value that must match the market data's ID value
      * @return This builder
      */
     public Builder id(final String scheme, final String value) {
@@ -281,7 +284,9 @@ public class PointSelector implements DistinctMarketDataSelector {
 
     /**
      * Adds a test for the market data ID value to match exactly.
-     * @param ids The external IDs to match
+     *
+     * @param ids
+     *          The external IDs to match
      * @return This builder
      */
     public Builder ids(final String... ids) {
@@ -300,7 +305,9 @@ public class PointSelector implements DistinctMarketDataSelector {
 
     /**
      * Adds a test for the market data ID value to match exactly.
-     * @param ids The IDs to match
+     *
+     * @param ids
+     *          The IDs to match
      * @return This builder
      */
     public Builder ids(final ExternalId... ids) {
@@ -314,8 +321,11 @@ public class PointSelector implements DistinctMarketDataSelector {
 
     /**
      * Adds a test for the market data ID value to match a regular expression.
-     * @param scheme External ID scheme that must match the market data's ID scheme
-     * @param valueRegex Regular expression that must match the market data's ID value
+     *
+     * @param scheme
+     *          External ID scheme that must match the market data's ID scheme
+     * @param valueRegex
+     *          Regular expression that must match the market data's ID value
      * @return This builder
      */
     public Builder idMatches(final String scheme, final String valueRegex) {
@@ -331,8 +341,11 @@ public class PointSelector implements DistinctMarketDataSelector {
 
     /**
      * Adds a test for the market data ID value to match a regular expression.
-     * @param scheme External ID scheme that must match the market data's ID scheme
-     * @param valueGlob Glob for matching the ID value
+     *
+     * @param scheme
+     *          External ID scheme that must match the market data's ID scheme
+     * @param valueGlob
+     *          Glob for matching the ID value
      * @return This builder
      */
     public Builder idLike(final String scheme, final String valueGlob) {
@@ -348,7 +361,9 @@ public class PointSelector implements DistinctMarketDataSelector {
 
     /**
      * Limits the selection to the market value of IDs that identify a particular security type.
-     * @param types The security types to match, case insensitive.
+     *
+     * @param types
+     *          The security types to match, case insensitive.
      * @return This builder
      */
     public Builder securityTypes(final String... types) {

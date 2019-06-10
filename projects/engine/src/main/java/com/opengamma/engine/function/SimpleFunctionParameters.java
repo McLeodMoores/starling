@@ -16,9 +16,9 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
 /**
- * An implementation of {@link FunctionParameters} that is a trivial map of strings to values. The values must be Fudge serializable.
- * The Fudge encoding of simple parameters is a message with one field per parameter, with the field name equal to the parameter name
- * and the value equal to the value. There is thus a limit of 255 characters on a parameter name.
+ * An implementation of {@link FunctionParameters} that is a trivial map of strings to values. The values must be Fudge serializable. The Fudge encoding of
+ * simple parameters is a message with one field per parameter, with the field name equal to the parameter name and the value equal to the value. There is thus
+ * a limit of 255 characters on a parameter name.
  */
 public class SimpleFunctionParameters implements FunctionParameters {
 
@@ -81,8 +81,8 @@ public class SimpleFunctionParameters implements FunctionParameters {
 
   @Override
   public String toString() {
-    return "SimpleFunctionParameters [" +
-        "_parameters=" + _parameters +
-        "]";
+    return "SimpleFunctionParameters ["
+        + "_parameters=" + _parameters
+        + "]";
   }
 }

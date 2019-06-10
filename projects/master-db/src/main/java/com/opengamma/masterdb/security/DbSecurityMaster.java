@@ -202,8 +202,8 @@ public class DbSecurityMaster
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
     final Map<String, String> attributes = request.getAttributes();
     final List<ObjectId> objectIds = request.getObjectIds();
-    if (objectIds != null && objectIds.size() == 0 ||
-        ExternalIdSearch.canMatch(request.getExternalIdSearch()) == false) {
+    if (objectIds != null && objectIds.size() == 0
+        || ExternalIdSearch.canMatch(request.getExternalIdSearch()) == false) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }

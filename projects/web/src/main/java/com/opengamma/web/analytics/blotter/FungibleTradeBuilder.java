@@ -138,7 +138,7 @@ import com.opengamma.util.OpenGammaClock;
   /**
    * Updates a position directly. This is only allowed for positions with no trades. The position's size is changed to match the quantity in the trade details
    * and a single trade is created for the position.
-   * 
+   *
    * @param tradeData
    *          Trade data for the position
    * @param positionId
@@ -168,8 +168,8 @@ import com.opengamma.util.OpenGammaClock;
     final ManageableTrade previousTrade = getPositionMaster().getTrade(trade.getUniqueId());
     final ManageablePosition position = getPositionMaster().get(previousTrade.getParentPositionId()).getPosition();
     if (!trade.getSecurityLink().equals(previousTrade.getSecurityLink())) {
-      throw new IllegalArgumentException("Cannot update a trade's security. new version " + trade +
-          ", previous version: " + previousTrade);
+      throw new IllegalArgumentException("Cannot update a trade's security. new version " + trade
+          + ", previous version: " + previousTrade);
     }
     final List<ManageableTrade> trades = Lists.newArrayList();
     for (final ManageableTrade existingTrade : position.getTrades()) {
@@ -192,7 +192,7 @@ import com.opengamma.util.OpenGammaClock;
 
   /**
    * Returns a position from a node in a security or null if there isn't one.
-   * 
+   *
    * @param node
    *          A portfolio node
    * @param security
@@ -214,8 +214,8 @@ import com.opengamma.util.OpenGammaClock;
 
   private ManageableTrade buildTrade(final BeanDataSource tradeData) {
     if (!TRADE_TYPE_NAME.equals(tradeData.getBeanTypeName())) {
-      throw new IllegalArgumentException("Can only build trades of type " + TRADE_TYPE_NAME +
-          ", type name = " + tradeData.getBeanTypeName());
+      throw new IllegalArgumentException("Can only build trades of type " + TRADE_TYPE_NAME
+          + ", type name = " + tradeData.getBeanTypeName());
     }
     final ManageableTrade.Meta meta = ManageableTrade.meta();
     final BeanBuilder<? extends ManageableTrade> tradeBuilder = tradeBuilder(tradeData,
@@ -244,7 +244,7 @@ import com.opengamma.util.OpenGammaClock;
 
   /**
    * Creates a builder for a {@link ManageableTrade} and sets the simple properties from the data source.
-   * 
+   *
    * @param tradeData
    *          The trade data
    * @param properties

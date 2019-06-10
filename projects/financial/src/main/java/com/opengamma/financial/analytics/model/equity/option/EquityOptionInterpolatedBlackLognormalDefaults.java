@@ -100,8 +100,8 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
 
     final int nPairs = perIdConfig.length;
     ArgumentChecker.isTrue(nPairs % 7 == 0,
-        "Must have discounting name, discounting curve config, surface name, surface interpolation method, forward curve name" +
-            "and forward curve calculation method per id");
+        "Must have discounting name, discounting curve config, surface name, surface interpolation method, forward curve name"
+            + "and forward curve calculation method per id");
     _idToDiscountingCurveName = Maps.newHashMap();
     _idToDiscountingCurveConfig = Maps.newHashMap();
     _idToSurfaceName = Maps.newHashMap();

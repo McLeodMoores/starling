@@ -26,7 +26,9 @@ public class FraTradeSecurityExtractor extends TradeSecurityExtractor<FraTrade> 
 
   /**
    * Create an extractor for the given trade.
-   * @param trade the trade to
+   * 
+   * @param trade
+   *          the trade to
    */
   public FraTradeSecurityExtractor(final FraTrade trade) {
     super(trade);
@@ -42,28 +44,29 @@ public class FraTradeSecurityExtractor extends TradeSecurityExtractor<FraTrade> 
 
     final double specifiedNotional = fraTrade.getNotional().doubleValue();
 
-    //sign of notional determines the sides of the trade.
-    //pay fixed => positive; pay floating => negative
+    // sign of notional determines the sides of the trade.
+    // pay fixed => positive; pay floating => negative
     final double absoluteNotional = payFixed ? specifiedNotional : -specifiedNotional;
 
     final ExternalId underlyingIdentifier = fraTrade.getFixingIndex().getIndex().toExternalId();
 
-
     final FRASecurity fraSecurity = new FRASecurity(fraTrade.getCurrency(),
-                  fraTrade.getRegionId().toExternalId(), //region id not used.
-                  convertLocalDate(fraTrade.getEffectiveDate()),
-                  convertLocalDate(fraTrade.getTerminationDate()),
-                  fraTrade.getRate().doubleValue(),
-                  absoluteNotional,
-                  underlyingIdentifier,
-                  convertLocalDate(fraTrade.getFixingDate()));
+        fraTrade.getRegionId().toExternalId(), // region id not used.
+        convertLocalDate(fraTrade.getEffectiveDate()),
+        convertLocalDate(fraTrade.getTerminationDate()),
+        fraTrade.getRate().doubleValue(),
+        absoluteNotional,
+        underlyingIdentifier,
+        convertLocalDate(fraTrade.getFixingDate()));
 
     return securityArray(addIdentifier(fraSecurity));
   }
 
   /**
    * Checks all is as expected.
-   * @param fraTrade fraTrade to validate
+   * 
+   * @param fraTrade
+   *          fraTrade to validate
    */
   private void validate(final FraTrade fraTrade) {
     final String tradeId = fraTrade.getExternalSystemId().getExternalId().getId();
@@ -79,11 +82,11 @@ public class FraTradeSecurityExtractor extends TradeSecurityExtractor<FraTrade> 
               tradeId));
     }
 
-    //TODO would be better to check values against conventions here.
-    //this will require a refactor to get access to the ToolContext.
+    // TODO would be better to check values against conventions here.
+    // this will require a refactor to get access to the ToolContext.
     if (fraTrade.getBusinessDayConvention() != null || fraTrade.getDayCount() != null) {
-      LOGGER.warn("businessDayConvention and/or dayCount specified for trade %s. " +
-          "Note: this is currently ignored in favour of index defaults.", tradeId);
+      LOGGER.warn("businessDayConvention and/or dayCount specified for trade %s. "
+          + "Note: this is currently ignored in favour of index defaults.", tradeId);
     }
 
   }

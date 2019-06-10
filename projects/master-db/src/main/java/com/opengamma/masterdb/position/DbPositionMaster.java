@@ -127,9 +127,9 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     final ExternalIdSearch securityIdSearch = request.getSecurityIdSearch();
     final Collection<ObjectId> positionObjectIds = request.getPositionObjectIds();
     final Collection<ObjectId> tradeObjectIds = request.getTradeObjectIds();
-    if (positionObjectIds != null && positionObjectIds.size() == 0 ||
-        tradeObjectIds != null && tradeObjectIds.size() == 0 ||
-        ExternalIdSearch.canMatch(securityIdSearch) == false) {
+    if (positionObjectIds != null && positionObjectIds.size() == 0
+        || tradeObjectIds != null && tradeObjectIds.size() == 0
+        || ExternalIdSearch.canMatch(securityIdSearch) == false) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }

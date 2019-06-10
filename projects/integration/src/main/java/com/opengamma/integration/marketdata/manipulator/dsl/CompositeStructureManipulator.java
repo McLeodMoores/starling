@@ -67,8 +67,7 @@ public class CompositeStructureManipulator<T> implements StructureManipulator<T>
     final List<StructureManipulator<T>> manipulators = Lists.newArrayList();
     for (final FudgeField field : msg.getAllByName(MANIPULATOR_FIELD)) {
       @SuppressWarnings("unchecked")
-      final
-      StructureManipulator<T> manipulator = deserializer.fieldValueToObject(StructureManipulator.class, field);
+      final StructureManipulator<T> manipulator = deserializer.fieldValueToObject(StructureManipulator.class, field);
       manipulators.add(manipulator);
     }
     return new CompositeStructureManipulator<>(manipulators);
@@ -76,8 +75,8 @@ public class CompositeStructureManipulator<T> implements StructureManipulator<T>
 
   @Override
   public String toString() {
-    return "CompositeStructureManipulator [" +
-        "_manipulators=" + _manipulators +
-        "]";
+    return "CompositeStructureManipulator ["
+        + "_manipulators=" + _manipulators
+        + "]";
   }
 }

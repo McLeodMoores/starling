@@ -35,24 +35,29 @@ public class DependencyGraphViewport implements Viewport {
   /**
    * Creates an instance.
    *
-   * @param calcConfigName  the calculation configuration used to calculate the dependency graph
-   * @param gridStructure  the row and column structure of the grid
-   * @param callbackId  the ID that's passed to listeners when the viewport's data changes
-   * @param structureCallbackId  the ID that's passed to listeners when the viewport's structure changes
-   *  TODO not used currently
-   * @param viewportDefinition  the viewport definition
-   * @param cycle  the view cycle from the previous calculation cycle
-   * @param cache  the current results TODO should this be a new cache?
-   *  if all depgraphs share the main cache it won't get cleaned up when they close. is there a good reason to share
-   *  the cache? could this just be a new instance?
+   * @param calcConfigName
+   *          the calculation configuration used to calculate the dependency graph
+   * @param gridStructure
+   *          the row and column structure of the grid
+   * @param callbackId
+   *          the ID that's passed to listeners when the viewport's data changes
+   * @param structureCallbackId
+   *          the ID that's passed to listeners when the viewport's structure changes TODO not used currently
+   * @param viewportDefinition
+   *          the viewport definition
+   * @param cycle
+   *          the view cycle from the previous calculation cycle
+   * @param cache
+   *          the current results TODO should this be a new cache? if all depgraphs share the main cache it won't get cleaned up when they close. is there a
+   *          good reason to share the cache? could this just be a new instance?
    */
   /* package */ DependencyGraphViewport(final String calcConfigName,
-                                        final DependencyGraphGridStructure gridStructure,
-                                        final String callbackId,
-                                        final String structureCallbackId,
-                                        final ViewportDefinition viewportDefinition,
-                                        final ViewCycle cycle,
-                                        final ResultsCache cache) {
+      final DependencyGraphGridStructure gridStructure,
+      final String callbackId,
+      final String structureCallbackId,
+      final ViewportDefinition viewportDefinition,
+      final ViewCycle cycle,
+      final ResultsCache cache) {
     _structureCallbackId = structureCallbackId;
     ArgumentChecker.notEmpty(calcConfigName, "calcConfigName");
     ArgumentChecker.notNull(gridStructure, "gridStructure");
@@ -66,9 +71,12 @@ public class DependencyGraphViewport implements Viewport {
   /**
    * Updates the viewport, e.g. in response to the user scrolling the grid.
    *
-   * @param viewportDefinition  the definition of the viewport, not null
-   * @param cycle  the cycle used to calculate the latest set of results, not null
-   * @param cache  the cache of results for the grid, not null
+   * @param viewportDefinition
+   *          the definition of the viewport, not null
+   * @param cycle
+   *          the cycle used to calculate the latest set of results, not null
+   * @param cache
+   *          the cache of results for the grid, not null
    */
   @Override
   public void update(final ViewportDefinition viewportDefinition, final ViewCycle cycle, final ResultsCache cache) {
@@ -76,8 +84,8 @@ public class DependencyGraphViewport implements Viewport {
     ArgumentChecker.notNull(cycle, "cycle");
     ArgumentChecker.notNull(cache, "cache");
     if (!viewportDefinition.isValidFor(_gridStructure)) {
-      throw new IllegalArgumentException("Viewport contains cells outside the bounds of the grid. Viewport: " +
-                                             viewportDefinition + ", grid: " + _gridStructure);
+      throw new IllegalArgumentException("Viewport contains cells outside the bounds of the grid. Viewport: "
+          + viewportDefinition + ", grid: " + _gridStructure);
     }
     _viewportDefinition = viewportDefinition;
     updateResults(cycle, cache);
@@ -86,8 +94,10 @@ public class DependencyGraphViewport implements Viewport {
   /**
    * Updates the data in the viewport when a new set of results arrives from the calculation engine.
    *
-   * @param cycle  the view cycle, not null
-   * @param cache  the cache of results, not null
+   * @param cycle
+   *          the view cycle, not null
+   * @param cache
+   *          the cache of results, not null
    */
   /* package */void updateResults(final ViewCycle cycle, final ResultsCache cache) {
     final ComputationCycleQuery query = new ComputationCycleQuery();

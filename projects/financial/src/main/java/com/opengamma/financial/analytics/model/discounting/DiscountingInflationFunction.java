@@ -22,13 +22,13 @@ import com.opengamma.financial.security.swap.YearOnYearInflationSwapSecurity;
 import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
 
 /**
- * Base function for all inflation swap pricing and risk functions that use
- * curves constructed using the discounting method.
+ * Base function for all inflation swap pricing and risk functions that use curves constructed using the discounting method.
  */
 public abstract class DiscountingInflationFunction extends DiscountingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public DiscountingInflationFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -46,15 +46,17 @@ public abstract class DiscountingInflationFunction extends DiscountingFunction {
   }
 
   /**
-   * Base compiled function for all pricing and risk functions that use a curves constructed
-   * using the discounting method.
+   * Base compiled function for all pricing and risk functions that use a curves constructed using the discounting method.
    */
   protected abstract class DiscountingInflationCompiledFunction extends DiscountingCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
      */
     protected DiscountingInflationCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
         final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
@@ -64,8 +66,8 @@ public abstract class DiscountingInflationFunction extends DiscountingFunction {
     @Override
     public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
       final Security security = target.getTrade().getSecurity();
-      return security instanceof ZeroCouponInflationSwapSecurity ||
-          security instanceof YearOnYearInflationSwapSecurity;
+      return security instanceof ZeroCouponInflationSwapSecurity
+          || security instanceof YearOnYearInflationSwapSecurity;
     }
 
   }

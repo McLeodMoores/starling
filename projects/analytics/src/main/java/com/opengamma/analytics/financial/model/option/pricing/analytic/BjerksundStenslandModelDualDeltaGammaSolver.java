@@ -284,11 +284,11 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double w16dd = Math.pow(w1 / s, kappa - 1.) * kappa * w1dd / s + Math.pow(w1 / s, kappa - 2.) * kappa * (kappa - 1.) * w1d / s * w1d / s;
     final double w17dd = Math.pow(w2 / s, kappa - 1.) * kappa * w2dd / s + Math.pow(w2 / s, kappa - 2.) * kappa * (kappa - 1.) * w2d / s * w2d / s;
     final double w18dd = Math.pow(w1 / w2, kappa - 1.) * kappa
-        * (w1dd / w2 - w1 * w2dd / w2 / w2 - w1d * w2d / w2 / w2 - w1d * w2d / w2 / w2 + 2. * w1 * w2d * w2d / w2 / w2 / w2) +
-        Math.pow(w1 / w2, kappa - 2.) * kappa * (kappa - 1.) *
-        (w1d / w2 - w1 * w2d / w2 / w2) * (w1d / w2 - w1 * w2d / w2 / w2);
-    final double w19dd = Math.exp(lambda * t) * Math.pow(s, gamma) *
-        (w12dd - w17dd * w13 - w17 * w13dd - 2. * w17d * w13d - w16dd * w14 - w16 * w14dd - 2. * w16d * w14d + w18dd * w15 + w18 * w15dd + 2. * w18d * w15d);
+        * (w1dd / w2 - w1 * w2dd / w2 / w2 - w1d * w2d / w2 / w2 - w1d * w2d / w2 / w2 + 2. * w1 * w2d * w2d / w2 / w2 / w2)
+        + Math.pow(w1 / w2, kappa - 2.) * kappa * (kappa - 1.)
+            * (w1d / w2 - w1 * w2d / w2 / w2) * (w1d / w2 - w1 * w2d / w2 / w2);
+    final double w19dd = Math.exp(lambda * t) * Math.pow(s, gamma)
+        * (w12dd - w17dd * w13 - w17 * w13dd - 2. * w17d * w13d - w16dd * w14 - w16 * w14dd - 2. * w16d * w14d + w18dd * w15 + w18 * w15dd + 2. * w18d * w15d);
 
     final double[] res = new double[3];
     res[0] = w19;
@@ -301,11 +301,11 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
   static double getMdd(final double eF, final double eFd, final double eFdd, final double fF, final double fFd, final double fFdd, final double rho) {
 
     return -NORMAL.getPDF(-eF) * NORMAL.getCDF(-(fF - rho * eF) / RHO_STAR) * eFdd - NORMAL.getPDF(-fF) * NORMAL.getCDF(-(eF - rho * fF) / RHO_STAR) * fFdd
-        - NORMAL.getPDF(-eF) * NORMAL.getPDF(-(fF - rho * eF) / RHO_STAR) * eFd * (-(fFd - rho * eFd) / RHO_STAR) - NORMAL.getPDF(-fF) *
-        NORMAL.getPDF(-(eF - rho * fF) / RHO_STAR) * fFd * (-(eFd - rho * fFd) / RHO_STAR)
+        - NORMAL.getPDF(-eF) * NORMAL.getPDF(-(fF - rho * eF) / RHO_STAR) * eFd * (-(fFd - rho * eFd) / RHO_STAR) - NORMAL.getPDF(-fF)
+            * NORMAL.getPDF(-(eF - rho * fF) / RHO_STAR) * fFd * (-(eFd - rho * fFd) / RHO_STAR)
         - NORMAL.getPDF(-eF) * NORMAL.getCDF(-(fF - rho * eF) / RHO_STAR) * eFd * (-eF * eFd)
-        - NORMAL.getPDF(-fF) * NORMAL.getCDF(-(eF - rho * fF) / RHO_STAR) *
-        fFd * (-fF * fFd);
+        - NORMAL.getPDF(-fF) * NORMAL.getCDF(-(eF - rho * fF) / RHO_STAR)
+            * fFd * (-fF * fFd);
   }
 
   static double[] getHDualDeltaGamma(final double b, final double t, final double sigma, final double k, final double[] b0, final double[] bInfinity) {

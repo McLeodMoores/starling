@@ -90,8 +90,8 @@ public class FXForwardPointsCurrencyExposurePnLFunction extends AbstractFunction
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getPosition().getSecurity();
-    return security instanceof FXForwardSecurity ||
-        security instanceof NonDeliverableFXForwardSecurity;
+    return security instanceof FXForwardSecurity
+        || security instanceof NonDeliverableFXForwardSecurity;
   }
 
   @Override

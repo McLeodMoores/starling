@@ -32,8 +32,8 @@ public class VolatilitySurfaceParallelShift implements StructureManipulator<Vola
 
   @Override
   public VolatilitySurface execute(final VolatilitySurface surface,
-                                   final ValueSpecification valueSpecification,
-                                   final FunctionExecutionContext executionContext) {
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return surface.withParallelShift(_shift);
   }
 
@@ -72,8 +72,8 @@ public class VolatilitySurfaceParallelShift implements StructureManipulator<Vola
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceParallelShift [" +
-        "_shift=" + _shift +
-        "]";
+    return "VolatilitySurfaceParallelShift ["
+        + "_shift=" + _shift
+        + "]";
   }
 }

@@ -367,8 +367,8 @@ public final class SwaptionCashFixedIborBlackMethod implements PricingMethod {
     final double expiry = swaption.getTimeToExpiry();
     final boolean isCall = swaption.isCall();
     final double df = discountFactorSettle * pvbp;
-    return forward * df * BlackFormulaRepository.delta(forward, strike, expiry, volatility, isCall) * (swaption.isLong() ? 1.0 : -1.0) + df *
-        BlackFormulaRepository.driftlessTheta(forward, strike, expiry, volatility) * (swaption.isLong() ? 1.0 : -1.0);
+    return forward * df * BlackFormulaRepository.delta(forward, strike, expiry, volatility, isCall) * (swaption.isLong() ? 1.0 : -1.0) + df
+        * BlackFormulaRepository.driftlessTheta(forward, strike, expiry, volatility) * (swaption.isLong() ? 1.0 : -1.0);
   }
 
   /**

@@ -396,7 +396,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod implem
     final double expiry = swaption.getTimeToExpiry();
     final boolean isCall = swaption.isCall();
 
-    return forwardModified * BlackFormulaRepository.price(forwardModified, strikeModified, expiry, volatility, isCall) * (swaption.isLong() ? 1.0 : -1.0) +
-        BlackFormulaRepository.driftlessTheta(forwardModified, strikeModified, expiry, volatility) * (swaption.isLong() ? 1.0 : -1.0);
+    return forwardModified * BlackFormulaRepository.price(forwardModified, strikeModified, expiry, volatility, isCall) * (swaption.isLong() ? 1.0 : -1.0)
+        + BlackFormulaRepository.driftlessTheta(forwardModified, strikeModified, expiry, volatility) * (swaption.isLong() ? 1.0 : -1.0);
   }
 }

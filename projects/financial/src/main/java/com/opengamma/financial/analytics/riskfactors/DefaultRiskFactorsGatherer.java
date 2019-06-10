@@ -239,13 +239,13 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
       builder.add(getYieldCurveNodeSensitivities(getFundingCurve(), ccy));
       builder.add(getYieldCurveNodeSensitivities(getForwardCurve(ccy), ccy));
       final InterestRateInstrumentType type = SwapSecurityUtils.getSwapType(security);
-      if (type == InterestRateInstrumentType.SWAP_CMS_CMS ||
-          type == InterestRateInstrumentType.SWAP_FIXED_CMS ||
-          type == InterestRateInstrumentType.SWAP_IBOR_CMS) {
+      if (type == InterestRateInstrumentType.SWAP_CMS_CMS
+          || type == InterestRateInstrumentType.SWAP_FIXED_CMS
+          || type == InterestRateInstrumentType.SWAP_IBOR_CMS) {
         builder.add(getVegaQuoteCubeMatrix(ValueProperties.with(ValuePropertyNames.CUBE, "BLOOMBERG")));
-      } else if (type == InterestRateInstrumentType.SWAP_FIXED_IBOR ||
-          type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD ||
-          type == InterestRateInstrumentType.SWAP_IBOR_IBOR) {
+      } else if (type == InterestRateInstrumentType.SWAP_FIXED_IBOR
+          || type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
+          || type == InterestRateInstrumentType.SWAP_IBOR_IBOR) {
         builder.add(getPV01(getFundingCurve()));
         builder.add(getPV01(getForwardCurve(ccy)));
       }

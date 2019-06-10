@@ -15,7 +15,9 @@ import com.opengamma.id.UniqueIdentifiable;
 
 /**
  * Data structure to hold the data points for a future price curve.
- * @param <X> Type of the x-data
+ * 
+ * @param <X>
+ *          Type of the x-data
  */
 public class FuturePriceCurveData<X> {
   private final String _definitionName;
@@ -71,11 +73,11 @@ public class FuturePriceCurveData<X> {
       return false;
     }
     final FuturePriceCurveData<?> other = (FuturePriceCurveData<?>) o;
-    return getDefinitionName().equals(other.getDefinitionName()) &&
-        getSpecificationName().equals(other.getSpecificationName()) &&
-        getTarget().equals(other.getTarget()) &&
-        Arrays.equals(getXs(), other.getXs()) &&
-        _values.equals(other._values);
+    return getDefinitionName().equals(other.getDefinitionName())
+        && getSpecificationName().equals(other.getSpecificationName())
+        && getTarget().equals(other.getTarget())
+        && Arrays.equals(getXs(), other.getXs())
+        && _values.equals(other._values);
   }
 
   @Override

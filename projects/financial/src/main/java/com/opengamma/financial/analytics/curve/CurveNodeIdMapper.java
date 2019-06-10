@@ -808,8 +808,8 @@ public class CurveNodeIdMapper {
     if (mapper != null) {
       return mapper.getInstrument(curveDate, startTenor, startDateNumber, maturityDateNumber);
     }
-    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for calendar swap with time to start " + startTenor +
-        " with start period number " + startDateNumber + " and end period number " + maturityDateNumber);
+    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for calendar swap with time to start " + startTenor
+        + " with start period number " + startDateNumber + " and end period number " + maturityDateNumber);
   }
 
   /**
@@ -1067,8 +1067,8 @@ public class CurveNodeIdMapper {
     if (mapper != null) {
       return mapper.getInstrument(curveDate, tenor, swapTenor, numberFuturesFromTenor);
     }
-    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for deliverable swap future number " + numberFuturesFromTenor +
-        " with time to start " + tenor + " and swap tenor " + swapTenor);
+    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for deliverable swap future number " + numberFuturesFromTenor
+        + " with time to start " + tenor + " and swap tenor " + swapTenor);
   }
 
   /**
@@ -1276,8 +1276,8 @@ public class CurveNodeIdMapper {
     if (mapper != null) {
       return mapper.getInstrument(curveDate, startTenor, startNumberFromTenor, endNumberFromTenor);
     }
-    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for IMM FRA with time to start " + startTenor +
-        " with start IMM period number " + startNumberFromTenor + " and end IMM period number " + endNumberFromTenor);
+    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for IMM FRA with time to start " + startTenor
+        + " with start IMM period number " + startNumberFromTenor + " and end IMM period number " + endNumberFromTenor);
   }
 
   /**
@@ -1335,8 +1335,8 @@ public class CurveNodeIdMapper {
     if (mapper != null) {
       return mapper.getInstrument(curveDate, startTenor, startNumberFromTenor, endNumberFromTenor);
     }
-    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for IMM swap with time to start " + startTenor +
-        " with start IMM period number " + startNumberFromTenor + " and end IMM period number " + endNumberFromTenor);
+    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for IMM swap with time to start " + startTenor
+        + " with start IMM period number " + startNumberFromTenor + " and end IMM period number " + endNumberFromTenor);
   }
 
   /**
@@ -1394,8 +1394,8 @@ public class CurveNodeIdMapper {
     if (mapper != null) {
       return mapper.getInstrument(curveDate, tenor, rateTenor, numberFuturesFromTenor);
     }
-    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for rate future number " + numberFuturesFromTenor +
-        " with time to start " + tenor + " and rate tenor " + rateTenor);
+    throw new OpenGammaRuntimeException("Can't get instrument mapper definition for rate future number " + numberFuturesFromTenor
+        + " with time to start " + tenor + " and rate tenor " + rateTenor);
   }
 
   /**
@@ -1700,23 +1700,23 @@ public class CurveNodeIdMapper {
       return false;
     }
     final CurveNodeIdMapper other = (CurveNodeIdMapper) o;
-    return ObjectUtils.equals(_name, other._name) &&
-        ObjectUtils.equals(_billNodeIds, other._billNodeIds) &&
-        ObjectUtils.equals(_bondNodeIds, other._bondNodeIds) &&
-        ObjectUtils.equals(_cashNodeIds, other._cashNodeIds) &&
-        ObjectUtils.equals(_continuouslyCompoundedRateNodeIds, other._continuouslyCompoundedRateNodeIds) &&
-        ObjectUtils.equals(_periodicallyCompoundedRateNodeIds, other._periodicallyCompoundedRateNodeIds) &&
-        ObjectUtils.equals(_creditSpreadNodeIds, other._creditSpreadNodeIds) &&
-        ObjectUtils.equals(_deliverableSwapFutureNodeIds, other._deliverableSwapFutureNodeIds) &&
-        ObjectUtils.equals(_discountFactorNodeIds, other._discountFactorNodeIds) &&
-        ObjectUtils.equals(_fraNodeIds, other._fraNodeIds) &&
-        ObjectUtils.equals(_fxForwardNodeIds, other._fxForwardNodeIds) &&
-        ObjectUtils.equals(_immFRANodeIds, other._immFRANodeIds) &&
-        ObjectUtils.equals(_immSwapNodeIds, other._immSwapNodeIds) &&
-        ObjectUtils.equals(_rateFutureNodeIds, other._rateFutureNodeIds) &&
-        ObjectUtils.equals(_swapNodeIds, other._swapNodeIds) &&
-        ObjectUtils.equals(_threeLegBasisSwapNodeIds, other._threeLegBasisSwapNodeIds) &&
-        ObjectUtils.equals(_zeroCouponInflationNodeIds, other._zeroCouponInflationNodeIds);
+    return ObjectUtils.equals(_name, other._name)
+        && ObjectUtils.equals(_billNodeIds, other._billNodeIds)
+        && ObjectUtils.equals(_bondNodeIds, other._bondNodeIds)
+        && ObjectUtils.equals(_cashNodeIds, other._cashNodeIds)
+        && ObjectUtils.equals(_continuouslyCompoundedRateNodeIds, other._continuouslyCompoundedRateNodeIds)
+        && ObjectUtils.equals(_periodicallyCompoundedRateNodeIds, other._periodicallyCompoundedRateNodeIds)
+        && ObjectUtils.equals(_creditSpreadNodeIds, other._creditSpreadNodeIds)
+        && ObjectUtils.equals(_deliverableSwapFutureNodeIds, other._deliverableSwapFutureNodeIds)
+        && ObjectUtils.equals(_discountFactorNodeIds, other._discountFactorNodeIds)
+        && ObjectUtils.equals(_fraNodeIds, other._fraNodeIds)
+        && ObjectUtils.equals(_fxForwardNodeIds, other._fxForwardNodeIds)
+        && ObjectUtils.equals(_immFRANodeIds, other._immFRANodeIds)
+        && ObjectUtils.equals(_immSwapNodeIds, other._immSwapNodeIds)
+        && ObjectUtils.equals(_rateFutureNodeIds, other._rateFutureNodeIds)
+        && ObjectUtils.equals(_swapNodeIds, other._swapNodeIds)
+        && ObjectUtils.equals(_threeLegBasisSwapNodeIds, other._threeLegBasisSwapNodeIds)
+        && ObjectUtils.equals(_zeroCouponInflationNodeIds, other._zeroCouponInflationNodeIds);
   }
 
   @Override

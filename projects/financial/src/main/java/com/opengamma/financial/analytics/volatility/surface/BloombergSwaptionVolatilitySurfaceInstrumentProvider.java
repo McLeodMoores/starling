@@ -95,7 +95,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the countryPrefix field.
-   * 
+   *
    * @return the countryPrefix
    */
   public String getCountryPrefix() {
@@ -104,7 +104,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the typePrefix field.
-   * 
+   *
    * @return the typePrefix
    */
   public String getTypePrefix() {
@@ -113,7 +113,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the postfix field.
-   * 
+   *
    * @return the postfix
    */
   public String getPostfix() {
@@ -122,7 +122,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the zeroPadSwaptionMaturityTenor field.
-   * 
+   *
    * @return the zeroPadSwaptionMaturityTenor
    */
   public boolean isZeroPadSwapMaturityTenor() {
@@ -131,7 +131,7 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the zeroPadSwaptionExpiryTenor field.
-   * 
+   *
    * @return the zeroPadSwaptionExpiryTenor
    */
   public boolean isZeroPadSwaptionExpiryTenor() {
@@ -156,13 +156,13 @@ public class BloombergSwaptionVolatilitySurfaceInstrumentProvider implements Sur
     }
     final BloombergSwaptionVolatilitySurfaceInstrumentProvider other = (BloombergSwaptionVolatilitySurfaceInstrumentProvider) o;
     // we can avoid using ObjectUtil.equals because we validated the strings as not null.
-    return getCountryPrefix().equals(other.getCountryPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getTypePrefix().equals(other.getTypePrefix()) &&
-        isZeroPadSwapMaturityTenor() == other.isZeroPadSwapMaturityTenor() &&
-        isZeroPadSwaptionExpiryTenor() == other.isZeroPadSwaptionExpiryTenor() &&
-        getDataFieldName().equals(other.getDataFieldName()) &&
-        _scheme.equals(other._scheme);
+    return getCountryPrefix().equals(other.getCountryPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getTypePrefix().equals(other.getTypePrefix())
+        && isZeroPadSwapMaturityTenor() == other.isZeroPadSwapMaturityTenor()
+        && isZeroPadSwaptionExpiryTenor() == other.isZeroPadSwaptionExpiryTenor()
+        && getDataFieldName().equals(other.getDataFieldName())
+        && _scheme.equals(other._scheme);
   }
 
   @Override

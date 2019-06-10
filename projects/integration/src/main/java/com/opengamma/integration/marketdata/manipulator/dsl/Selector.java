@@ -119,22 +119,22 @@ import com.opengamma.util.money.Currency;
       return false;
     }
     final Selector other = (Selector) obj;
-    return Objects.equals(this._names, other._names) &&
-        Objects.equals(this._currencies, other._currencies) &&
-        Objects.equals(this._nameMatchPattern, other._nameMatchPattern) &&
-        Objects.equals(this._nameLikePattern, other._nameLikePattern) &&
-        Objects.equals(this._calcConfigNames, other._calcConfigNames);
+    return Objects.equals(this._names, other._names)
+        && Objects.equals(this._currencies, other._currencies)
+        && Objects.equals(this._nameMatchPattern, other._nameMatchPattern)
+        && Objects.equals(this._nameLikePattern, other._nameLikePattern)
+        && Objects.equals(this._calcConfigNames, other._calcConfigNames);
   }
 
   @Override
   public String toString() {
-    return "Selector [" +
-        "_names=" + _names +
-        ", _currencies=" + _currencies +
-        ", _nameMatchPattern=" + _nameMatchPattern +
-        ", _nameLikePattern=" + _nameLikePattern +
-        ", _calcConfigNames=" + _calcConfigNames +
-        "]";
+    return "Selector ["
+        + "_names=" + _names
+        + ", _currencies=" + _currencies
+        + ", _nameMatchPattern=" + _nameMatchPattern
+        + ", _nameLikePattern=" + _nameLikePattern
+        + ", _calcConfigNames=" + _calcConfigNames
+        + "]";
   }
 
   /* package */ abstract static class Builder {

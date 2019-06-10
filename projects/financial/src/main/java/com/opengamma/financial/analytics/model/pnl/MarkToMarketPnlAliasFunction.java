@@ -25,8 +25,8 @@ public class MarkToMarketPnlAliasFunction extends ValueRenamingFunction {
     if (!tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_ALL)
         && !tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_OPEN)
         && !tradeTypeConstraint.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_NEW)) {
-      throw new OpenGammaRuntimeException(tradeTypeConstraint + "is not allowed. Looking for one of:" +
-          PnLFunctionUtils.PNL_TRADE_TYPE_ALL + "," + PnLFunctionUtils.PNL_TRADE_TYPE_OPEN + "," + PnLFunctionUtils.PNL_TRADE_TYPE_NEW);
+      throw new OpenGammaRuntimeException(tradeTypeConstraint + "is not allowed. Looking for one of:"
+          + PnLFunctionUtils.PNL_TRADE_TYPE_ALL + "," + PnLFunctionUtils.PNL_TRADE_TYPE_OPEN + "," + PnLFunctionUtils.PNL_TRADE_TYPE_NEW);
     }
   }
 

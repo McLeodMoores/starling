@@ -1213,8 +1213,8 @@ public class DbBatchWriter extends AbstractDbMaster {
       totalCount += count;
     }
     if (totalCount != batchArgsArray.length && totalCount != java.sql.Statement.SUCCESS_NO_INFO) {
-      throw new RuntimeException(rowType + " insert count is wrong: expected = " +
-          batchArgsArray.length + " actual = " + totalCount);
+      throw new RuntimeException(rowType + " insert count is wrong: expected = "
+          + batchArgsArray.length + " actual = " + totalCount);
     }
     return totalCount;
   }

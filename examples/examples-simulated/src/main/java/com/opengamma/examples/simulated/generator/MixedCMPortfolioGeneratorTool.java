@@ -139,9 +139,9 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
       final ExternalId underlyingIdentifier = ExternalSchemes.syntheticSecurityId(ticker);
       final CapFloorSecurity security = new CapFloorSecurity(_tradeDate, maturityDate, _notional, underlyingIdentifier, strike, PeriodFrequency.SEMI_ANNUAL,
           CURRENCY, ACT_360, payer, cap, false);
-      security.setName(CURRENCY.getCode() + " " + FORMAT.format(_notional / 1000000) + (cap ? "MM cap " : "MM floor ") + "@ " + FORMAT.format(strike) +
-          (payer ? "%, pay " : "%, receive ") + tenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
-          " (" + _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+      security.setName(CURRENCY.getCode() + " " + FORMAT.format(_notional / 1000000) + (cap ? "MM cap " : "MM floor ") + "@ " + FORMAT.format(strike)
+          + (payer ? "%, pay " : "%, receive ") + tenor.getPeriod().normalized().getYears() + "Y ISDA fixing"
+          + " (" + _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
       return security;
     }
   }
@@ -210,8 +210,8 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
         security = new SwapSecurity(_tradeDate, _tradeDate, maturityDate, COUNTERPARTY, cmsLeg, iborLeg);
         payIbor = false;
       }
-      security.setName(CURRENCY.getCode() + " " + FORMAT.format(_notional.getAmount() / 1000000) + "MM Swap, pay " +
-          (payIbor ? frequency.getPeriod().getMonths() + "M Libor, receive " + tenor.getPeriod().getYears() + "Y ISDA fixing ("
+      security.setName(CURRENCY.getCode() + " " + FORMAT.format(_notional.getAmount() / 1000000) + "MM Swap, pay "
+          + (payIbor ? frequency.getPeriod().getMonths() + "M Libor, receive " + tenor.getPeriod().getYears() + "Y ISDA fixing ("
               : tenor.getPeriod().getYears() + "Y ISDA fixing, receive " + frequency.getPeriod().getMonths() + "M Libor (")
           +
           _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
@@ -284,10 +284,10 @@ public class MixedCMPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
       final CapFloorCMSSpreadSecurity security = new CapFloorCMSSpreadSecurity(_tradeDate, maturityDate, _notional, payIdentifier, receiveIdentifier, strike,
           PeriodFrequency.ANNUAL, CURRENCY, ACT_360, payer, cap);
       security.setName(
-          CURRENCY.getCode() + " " + FORMAT.format(_notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike) +
-              "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive " +
-              receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
-              " (" + _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+          CURRENCY.getCode() + " " + FORMAT.format(_notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike)
+              + "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive "
+              + receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing"
+              + " (" + _tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
       return security;
     }
   }

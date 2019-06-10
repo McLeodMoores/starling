@@ -33,17 +33,18 @@ public class SaveScenario extends AbstractTool<ToolContext> {
   /** Command line option for specifying the scenario definition object ID. */
   private static final String SCENARIO_ID = "scenarioid";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) {
     new SaveScenario().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final String scriptLocation = getCommandLine().getOptionValue('s');
@@ -70,8 +71,8 @@ public class SaveScenario extends AbstractTool<ToolContext> {
     scriptLocation.setRequired(true);
     options.addOption(scriptLocation);
 
-    final Option scenarioId = new Option("i", SCENARIO_ID, true, "Object ID of the scenario definition. Omit to save as " +
-        "a new definition");
+    final Option scenarioId = new Option("i", SCENARIO_ID, true, "Object ID of the scenario definition. Omit to save as "
+        + "a new definition");
     options.addOption(scenarioId);
 
     return options;

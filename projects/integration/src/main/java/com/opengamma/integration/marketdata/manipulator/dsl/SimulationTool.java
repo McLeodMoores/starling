@@ -58,17 +58,18 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   /** Command line option for the names of the market data sources used for running the view. */
   private static final String MARKET_DATA_OPTION = "m";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) {
     new SimulationTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final ViewProcessor viewProcessor = getToolContext().getViewProcessor();
@@ -103,8 +104,7 @@ public class SimulationTool extends AbstractTool<ToolContext> {
     final String simulationScript = getCommandLine().getOptionValue(SIMULATION_SCRIPT_OPTION);
     final Simulation simulation = SimulationUtils.createSimulationFromDsl(simulationScript, paramValues);
     final VersionCorrection viewDefVersionCorrection = VersionCorrection.LATEST;
-    final Collection<ConfigItem<ViewDefinition>> viewDefs =
-        configSource.get(ViewDefinition.class, viewDefName, viewDefVersionCorrection);
+    final Collection<ConfigItem<ViewDefinition>> viewDefs = configSource.get(ViewDefinition.class, viewDefName, viewDefVersionCorrection);
     if (viewDefs.isEmpty()) {
       throw new IllegalStateException("View definition " + viewDefName + " not found");
     }
@@ -160,8 +160,8 @@ public class SimulationTool extends AbstractTool<ToolContext> {
     batchModeOption.setArgName("batchmode");
     options.addOption(batchModeOption);
 
-    final Option resultListenerClassOption = new Option(RESULT_LISTENER_CLASS_OPTION, true, "Result listener class " +
-        "implementing ViewResultListener");
+    final Option resultListenerClassOption = new Option(RESULT_LISTENER_CLASS_OPTION, true, "Result listener class "
+        + "implementing ViewResultListener");
     resultListenerClassOption.setArgName("resultlistenerclass");
     options.addOption(resultListenerClassOption);
 
@@ -177,11 +177,13 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   private static final String LATEST_HISTORICAL = "latesthistorical";
 
   /**
-   * Parses a string to produce a {@link MarketDataSpecification}. See the output of {@link #getUsageMessage()}
-   * for examples.
-   * @param specStr String representation of a {@link MarketDataSpecification}
+   * Parses a string to produce a {@link MarketDataSpecification}. See the output of {@link #getUsageMessage()} for examples.
+   *
+   * @param specStr
+   *          String representation of a {@link MarketDataSpecification}
    * @return A {@link MarketDataSpecification} instance built from the string
-   * @throws IllegalArgumentException If the string can't be parsed
+   * @throws IllegalArgumentException
+   *           If the string can't be parsed
    */
   /* package */ static MarketDataSpecification parse(final String specStr) {
     if (specStr.startsWith(LIVE)) {
@@ -258,12 +260,12 @@ public class SimulationTool extends AbstractTool<ToolContext> {
   }
 
   /* package */ static String getUsageMessage() {
-    return "Examples of valid market data strings:\n" +
-        "live:Data provider name\n" +
-        "latesthistorical\n" +
-        "latesthistorical:Time series rating name\n" +
-        "fixedhistorical:2011-08-03\n" +
-        "fixedhistorical:2011-08-03,Time series rating name\n" +
-        "snapshot:DbSnp~1234";
+    return "Examples of valid market data strings:\n"
+        + "live:Data provider name\n"
+        + "latesthistorical\n"
+        + "latesthistorical:Time series rating name\n"
+        + "fixedhistorical:2011-08-03\n"
+        + "fixedhistorical:2011-08-03,Time series rating name\n"
+        + "snapshot:DbSnp~1234";
   }
 }

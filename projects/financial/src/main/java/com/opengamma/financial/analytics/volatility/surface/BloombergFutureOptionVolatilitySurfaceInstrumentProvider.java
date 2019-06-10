@@ -196,10 +196,10 @@ public abstract class BloombergFutureOptionVolatilitySurfaceInstrumentProvider i
       return false;
     }
     final BloombergFutureOptionVolatilitySurfaceInstrumentProvider other = (BloombergFutureOptionVolatilitySurfaceInstrumentProvider) obj;
-    return getFutureOptionPrefix().equals(other.getFutureOptionPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        useCallAboveStrike().equals(other.useCallAboveStrike()) &&
-        getDataFieldName().equals(other.getDataFieldName()) &&
-        getExchangeIdName().equals(other.getExchangeIdName());
+    return getFutureOptionPrefix().equals(other.getFutureOptionPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && useCallAboveStrike().equals(other.useCallAboveStrike())
+        && getDataFieldName().equals(other.getDataFieldName())
+        && getExchangeIdName().equals(other.getExchangeIdName());
   }
 }

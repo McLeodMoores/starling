@@ -54,7 +54,7 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
 
   /**
    * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme.
-   * 
+   *
    * @param futurePrefix
    *          Two character string representing future type. e.g ED, ER, IR (See WIR in BBG)
    * @param postfix
@@ -85,7 +85,7 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
    * Note that midcurve options are written on underlying futures that expire some number of quarters after the option's expiry. The logic of this is based on
    * the _futurePrefix.
    * <p>
-   * 
+   *
    * @param futureNumber
    *          n'th future following curve date
    * @param curveDate
@@ -138,9 +138,9 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
       return false;
     }
     final BloombergIRFuturePriceCurveInstrumentProvider other = (BloombergIRFuturePriceCurveInstrumentProvider) obj;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getFuturePrefix().equals(other.getFuturePrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
   @Override

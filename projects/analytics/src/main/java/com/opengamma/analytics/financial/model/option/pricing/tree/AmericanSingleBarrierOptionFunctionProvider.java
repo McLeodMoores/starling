@@ -91,8 +91,8 @@ public class AmericanSingleBarrierOptionFunctionProvider extends BarrierOptionFu
     double assetPrice = baseAssetPrice * Math.pow(downFactor, steps);
     for (int j = 0; j < nNodes; ++j) {
       res[j] = getChecker().checkOut(assetPrice + sumCashDiv) ? 0.
-          : Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]), sign *
-              (assetPrice + sumCashDiv - strike));
+          : Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]), sign
+              * (assetPrice + sumCashDiv - strike));
       assetPrice *= middleOverDown;
     }
     return res;

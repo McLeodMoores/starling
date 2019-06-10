@@ -113,8 +113,8 @@ public class ExampleEquityOptionVolatilitySurfaceDataFunction extends AbstractFu
   @Override
   public String getShortName() {
     return "ExampleEquityOptionVolatilitySurfaceDataFunction " + _underlyingIdentifierAsString + "-" + _definitionName + " for " + _instrumentType + " from "
-        + _specificationName +
-        " Volatility Surface Data";
+        + _specificationName
+        + " Volatility Surface Data";
   }
 
   public static <X, Y> Set<ValueRequirement> buildRequirements(final VolatilitySurfaceSpecification specification,

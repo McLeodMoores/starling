@@ -63,8 +63,7 @@ public class CreditDefaultSwapSecurityConverter extends FinancialSecurityVisitor
       final double recoveryRate, final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(regionSource, "region source");
-    ArgumentChecker.notNull(valuationTime, "valuation time" +
-        "");
+    ArgumentChecker.notNull(valuationTime, "valuation time");
     // ArgumentChecker.notNull(legalEntitySource, "organization source");
     _holidaySource = holidaySource;
     _legalEntitySource = legalEntitySource;

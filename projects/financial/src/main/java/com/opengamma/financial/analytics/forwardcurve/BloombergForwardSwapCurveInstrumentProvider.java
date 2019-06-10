@@ -138,10 +138,10 @@ public class BloombergForwardSwapCurveInstrumentProvider extends ForwardSwapCurv
       return false;
     }
     final BloombergForwardSwapCurveInstrumentProvider other = (BloombergForwardSwapCurveInstrumentProvider) obj;
-    return getPrefix().equals(other.getPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getSpotPrefix().equals(other.getSpotPrefix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getPrefix().equals(other.getPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getSpotPrefix().equals(other.getSpotPrefix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
 }

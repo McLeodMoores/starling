@@ -372,8 +372,8 @@ import com.opengamma.util.paging.PagingRequest;
         _documents.add(doc);
 
       } catch (final Exception ex) {
-        LOGGER.warn("Bad fudge message in database, unable to deserialise docOid:" + docOid + " " + fudgeMsg +
-            " to " + configType, ex);
+        LOGGER.warn("Bad fudge message in database, unable to deserialise docOid:" + docOid + " " + fudgeMsg
+            + " to " + configType, ex);
       }
     }
   }

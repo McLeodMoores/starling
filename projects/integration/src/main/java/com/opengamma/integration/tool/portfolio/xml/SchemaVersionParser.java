@@ -37,23 +37,23 @@ public class SchemaVersionParser {
   private final Reader _reader;
 
   /**
-   * Initialise the parser with a reader holding an XML document. The reader is
-   * expected to be managed by the client, and should be initialised to the start
-   * of the document.
+   * Initialise the parser with a reader holding an XML document. The reader is expected to be managed by the client, and should be initialised to the start of
+   * the document.
    *
-   * @param reader reader to read the XML document from
+   * @param reader
+   *          reader to read the XML document from
    */
   public SchemaVersionParser(final Reader reader) {
     _reader = reader;
   }
 
   /**
-   * Attempt to read the schema version from the XML document. The root element
-   * is found, checked and the version number extracted. If any of these operations
+   * Attempt to read the schema version from the XML document. The root element is found, checked and the version number extracted. If any of these operations
    * fail then an {@link OpenGammaRuntimeException} will be thrown.
    *
    * @return the schema version from the xml document
-   * @throws OpenGammaRuntimeException if parsing the schema version fails
+   * @throws OpenGammaRuntimeException
+   *           if parsing the schema version fails
    */
   public SchemaVersion parseSchemaVersion() {
 
@@ -90,9 +90,9 @@ public class SchemaVersionParser {
   private void checkRootElement(final StartElement element, final String expectedName) {
     final String elementName = element.getName().getLocalPart();
     if (!elementName.equals(expectedName)) {
-      throw new OpenGammaRuntimeException("Root element should have name [" + expectedName +
-          "] but instead found [" + elementName +
-          "] - unable to parse file");
+      throw new OpenGammaRuntimeException("Root element should have name [" + expectedName
+          + "] but instead found [" + elementName
+          + "] - unable to parse file");
     }
   }
 

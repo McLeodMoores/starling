@@ -214,8 +214,9 @@ public final class BondSecurityDiscountingMethod {
       return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / nominal
           * Math.pow(1.0 + yield / bond.getCouponPerYear(), -bond.getFactorToNextCoupon());
     }
-    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD) ||
-        bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND) || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       return dirtyPriceFromYieldStandard(bond, yield);
     }
     throw new UnsupportedOperationException("The convention " + bond.getYieldConvention().getName() + " is not supported.");
@@ -384,8 +385,9 @@ public final class BondSecurityDiscountingMethod {
     if (bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD) && nbCoupon == 1) {
       return bond.getFactorToNextCoupon() / bond.getCouponPerYear() / (1.0 + yield / bond.getCouponPerYear());
     }
-    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD) ||
-        bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND) || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       final double factorOnPeriod = 1 + yield / bond.getCouponPerYear();
       double mdAtFirstCoupon = 0;
       double pvAtFirstCoupon = 0;
@@ -460,8 +462,9 @@ public final class BondSecurityDiscountingMethod {
         && nbCoupon == 1) {
       return bond.getFactorToNextCoupon() / bond.getCouponPerYear();
     }
-    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD) ||
-        bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND) || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
+    if (bond.getYieldConvention().equals(SimpleYieldConvention.US_STREET) || bond.getYieldConvention().equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.GERMAN_BOND)
+        || bond.getYieldConvention().equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       return modifiedDurationFromYield(bond, yield) * (1 + yield / bond.getCouponPerYear());
     }
     throw new UnsupportedOperationException("The convention " + bond.getYieldConvention().getName() + " is not supported for Macaulay duration.");
@@ -518,8 +521,8 @@ public final class BondSecurityDiscountingMethod {
         throw new UnsupportedOperationException("The convention " + yieldConvention.getName() + "with only one coupon is not supported.");
       }
     }
-    if (yieldConvention.equals(SimpleYieldConvention.US_STREET) || yieldConvention.equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD) ||
-        yieldConvention.equals(SimpleYieldConvention.GERMAN_BOND) || yieldConvention.equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
+    if (yieldConvention.equals(SimpleYieldConvention.US_STREET) || yieldConvention.equals(SimpleYieldConvention.UK_BUMP_DMO_METHOD)
+        || yieldConvention.equals(SimpleYieldConvention.GERMAN_BOND) || yieldConvention.equals(SimpleYieldConvention.FRANCE_COMPOUND_METHOD)) {
       final double factorOnPeriod = 1 + yield / bond.getCouponPerYear();
       double cvAtFirstCoupon = 0;
       double pvAtFirstCoupon = 0;

@@ -114,7 +114,7 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
  * Constructs yield curves and the Jacobian from {@link YieldCurveDefinition}s. Multiple curves can be constructed simultaneously using root-finding. The
  * configuration object that control the construction is {@link MultiCurveCalculationConfig}. The root-finder uses present value = 0 as its target, where an
  * appropriate spread is added to the fixed rate or yield of an instrument.
- * 
+ *
  * @deprecated This function uses configuration objects that have been superseded. Use functions that descend from {@link MultiCurveFunction}.
  */
 @Deprecated
@@ -257,8 +257,8 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
             }
             final double t = derivative.accept(LAST_TIME_CALCULATOR);
             if (nInstruments > 0 && CompareUtils.closeEquals(nodeTimes.get(nInstruments - 1), t, 1e-12)) {
-              throw new OpenGammaRuntimeException("Strip " + strip + " has same maturity as one already added (" + previousStrip + ") - will lead to" +
-                  "equal nodes in the curve. Remove one of these strips.");
+              throw new OpenGammaRuntimeException("Strip " + strip + " has same maturity as one already added (" + previousStrip + ") - will lead to"
+                  + "equal nodes in the curve. Remove one of these strips.");
             }
             nodeTimes.add(Math.abs(t));
             marketValues.add(0.0);

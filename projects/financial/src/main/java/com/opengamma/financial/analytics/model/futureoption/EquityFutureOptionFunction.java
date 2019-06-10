@@ -97,8 +97,8 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     final ExternalId underlyingIndexId;
     final Security underlyingFuture = securitySource.getSingle(underlyingFutureId);
     if (underlyingFuture == null) {
-      throw new OpenGammaRuntimeException("The underlying (" + underlyingFutureId.toString() + ") of EquityIndexFutureOption (" + security.getName() +
-          ") was not found in security source. Please try to reload.");
+      throw new OpenGammaRuntimeException("The underlying (" + underlyingFutureId.toString() + ") of EquityIndexFutureOption (" + security.getName()
+          + ") was not found in security source. Please try to reload.");
     } else if (underlyingFuture instanceof EquityFutureSecurity) {
       underlyingIndexId = ((EquityFutureSecurity) underlyingFuture).getUnderlyingId();
     } else if (underlyingFuture instanceof IndexFutureSecurity) {

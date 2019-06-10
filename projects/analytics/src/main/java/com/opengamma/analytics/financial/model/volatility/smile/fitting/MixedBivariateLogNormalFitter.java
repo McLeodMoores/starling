@@ -548,17 +548,17 @@ public class MixedBivariateLogNormalFitter {
       }
       for (int i = 2 * nNorms; i < 3 * nNorms - 1; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdX *
-              (BlackFormulaRepository.price(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true) - relativeForwardsX[l] *
-                  BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true))
+          res[j][i] += -fwdX
+              * (BlackFormulaRepository.price(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true) - relativeForwardsX[l]
+                  * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true))
               * weightsJacobianX[l][i - 2 * nNorms] /
               BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }
       for (int i = 3 * nNorms - 1; i < 4 * nNorms - 2; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdX * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true) *
-              relativeForwardsJacobianX[l][i - (3 * nNorms - 1)] /
+          res[j][i] += -fwdX * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true)
+              * relativeForwardsJacobianX[l][i - (3 * nNorms - 1)] /
               BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }

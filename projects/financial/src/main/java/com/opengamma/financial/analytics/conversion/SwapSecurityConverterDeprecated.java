@@ -62,7 +62,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Converts swaps from {@link SwapSecurity} to the {@link InstrumentDefinition}s.
- * 
+ *
  * @deprecated Replaced by {@link SwapSecurityConverter}, which does not use curve name information
  */
 @Deprecated
@@ -99,7 +99,7 @@ public class SwapSecurityConverterDeprecated extends FinancialSecurityVisitorAda
 
   /**
    * Gets the holiday source.
-   * 
+   *
    * @return The holiday source
    */
   public HolidaySource getHolidaySource() {
@@ -108,7 +108,7 @@ public class SwapSecurityConverterDeprecated extends FinancialSecurityVisitorAda
 
   /**
    * Gets the convention bundle source.
-   * 
+   *
    * @return The convention bundle source
    */
   public ConventionBundleSource getConventionBundleSource() {
@@ -117,7 +117,7 @@ public class SwapSecurityConverterDeprecated extends FinancialSecurityVisitorAda
 
   /**
    * Gets the region source.
-   * 
+   *
    * @return The region source
    */
   public RegionSource getRegionSource() {
@@ -217,8 +217,8 @@ public class SwapSecurityConverterDeprecated extends FinancialSecurityVisitorAda
     final ConventionBundle iborIndexConvention = _conventionSource.getConventionBundle(iborLeg.getFloatingReferenceRateId());
     if (iborIndexConvention == null) {
       throw new OpenGammaRuntimeException(
-          "Could not get Ibor index convention for " + currencyIbor + " using " + iborLeg.getFloatingReferenceRateId() + " from swap " +
-              swapSecurity.getExternalIdBundle());
+          "Could not get Ibor index convention for " + currencyIbor + " using " + iborLeg.getFloatingReferenceRateId() + " from swap "
+              + swapSecurity.getExternalIdBundle());
     }
     final Frequency freqIbor = iborLeg.getFrequency();
     Period tenorIbor;

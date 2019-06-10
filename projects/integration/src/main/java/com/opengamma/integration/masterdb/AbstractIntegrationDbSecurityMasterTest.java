@@ -99,8 +99,8 @@ public abstract class AbstractIntegrationDbSecurityMasterTest extends AbstractLo
       try {
         getSecurityMaster().get(uniqueId);
       } catch (final RuntimeException ex2) {
-        throw new RuntimeException("Unable to load security " + uniqueId + "(" + doc.getName() + ") in " +
-            request.getPagingRequest() + " total " + total, ex);
+        throw new RuntimeException("Unable to load security " + uniqueId + "(" + doc.getName() + ") in "
+            + request.getPagingRequest() + " total " + total, ex);
       }
     }
     throw new RuntimeException("Unable to load securities matching " + request.getPagingRequest(), ex);

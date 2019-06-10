@@ -83,7 +83,7 @@ public class SumUtils {
       final StringLabelledMatrix1D previousMatrix = (StringLabelledMatrix1D) currentTotal;
       final StringLabelledMatrix1D currentMatrix = (StringLabelledMatrix1D) value;
       return previousMatrix.addIgnoringLabel(currentMatrix);
-    } else if (valueName.equals(ValueRequirementNames.PRESENT_VALUE_CURVE_SENSITIVITY)) { //TODO this should probably not be done like this
+    } else if (valueName.equals(ValueRequirementNames.PRESENT_VALUE_CURVE_SENSITIVITY)) { // TODO this should probably not be done like this
       @SuppressWarnings("unchecked")
       final Map<String, List<DoublesPair>> previousMap = (Map<String, List<DoublesPair>>) currentTotal;
       @SuppressWarnings("unchecked")
@@ -180,8 +180,8 @@ public class SumUtils {
     } else if (currentTotal instanceof MultipleCurrencyAmount) {
       return ((MultipleCurrencyAmount) currentTotal).plus(currentAmount);
     } else {
-      throw new IllegalArgumentException("Expected current total to be of type " + CurrencyAmount.class +
-          " or " + MultipleCurrencyAmount.class + " but was: " + currentTotal.getClass());
+      throw new IllegalArgumentException("Expected current total to be of type " + CurrencyAmount.class
+          + " or " + MultipleCurrencyAmount.class + " but was: " + currentTotal.getClass());
     }
   }
 
@@ -195,16 +195,18 @@ public class SumUtils {
     } else if (currentTotal instanceof MultipleCurrencyAmount) {
       return ((MultipleCurrencyAmount) currentTotal).plus(currentAmount);
     } else {
-      throw new IllegalArgumentException("Expected current total to be of type " + CurrencyAmount.class +
-          " or " + MultipleCurrencyAmount.class + " but was: " + currentTotal.getClass());
+      throw new IllegalArgumentException("Expected current total to be of type " + CurrencyAmount.class
+          + " or " + MultipleCurrencyAmount.class + " but was: " + currentTotal.getClass());
     }
   }
 
   /**
    * Gets the intersection of two sets of properties.
    *
-   * @param currentIntersection The current intersection of the properties
-   * @param properties The new set of properties
+   * @param currentIntersection
+   *          The current intersection of the properties
+   * @param properties
+   *          The new set of properties
    * @return The intersection of the two sets of properties
    */
   public static ValueProperties addProperties(final ValueProperties currentIntersection, final ValueProperties properties) {

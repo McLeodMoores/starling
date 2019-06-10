@@ -97,8 +97,8 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       k = 0;
       for (int i = 0; i < nDataPts - 2; ++i) {
         if (first[i + 1] > 0.) {
-          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR |
-              intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
+          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR
+              || intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
             ++k;
             first[i + 1] = firstDerivativesRecalculator(intervals, slopes, aValues, bValues, i + 1);
           }
@@ -187,8 +187,8 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
         k = 0;
         for (int j = 0; j < nDataPts - 2; ++j) {
           if (first[j + 1] > 0.) {
-            if (intervalsA[j + 1][1] + Math.abs(intervalsA[j + 1][1]) * ERROR < intervalsB[j][0] - Math.abs(intervalsB[j][0]) * ERROR |
-                intervalsA[j + 1][0] - Math.abs(intervalsA[j + 1][0]) * ERROR > intervalsB[j][1] + Math.abs(intervalsB[j][1]) * ERROR) {
+            if (intervalsA[j + 1][1] + Math.abs(intervalsA[j + 1][1]) * ERROR < intervalsB[j][0] - Math.abs(intervalsB[j][0]) * ERROR
+                || intervalsA[j + 1][0] - Math.abs(intervalsA[j + 1][0]) * ERROR > intervalsB[j][1] + Math.abs(intervalsB[j][1]) * ERROR) {
               ++k;
               first[j + 1] = firstDerivativesRecalculator(intervals, slopes, aValues, bValues, j + 1);
             }
@@ -284,8 +284,8 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       k = 0;
       for (int i = 0; i < nDataPts - 2; ++i) {
         if (first[i + 1] > 0.) {
-          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR |
-              intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
+          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR
+              || intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
             ++k;
             first[i + 1] = firstDerivativesRecalculator(intervals, slopes, aValues, bValues, i + 1);
           }
@@ -336,8 +336,8 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
           k = 0;
           for (int i = 0; i < nDataPts - 2; ++i) {
             if (firstUpDw[i + 1] > 0.) {
-              if (intervalsAUpDw[i + 1][1] + Math.abs(intervalsAUpDw[i + 1][1]) * ERROR < intervalsBUpDw[i][0] - Math.abs(intervalsBUpDw[i][0]) * ERROR |
-                  intervalsAUpDw[i + 1][0] - Math.abs(intervalsAUpDw[i + 1][0]) * ERROR > intervalsBUpDw[i][1] + Math.abs(intervalsBUpDw[i][1]) * ERROR) {
+              if (intervalsAUpDw[i + 1][1] + Math.abs(intervalsAUpDw[i + 1][1]) * ERROR < intervalsBUpDw[i][0] - Math.abs(intervalsBUpDw[i][0]) * ERROR
+                  || intervalsAUpDw[i + 1][0] - Math.abs(intervalsAUpDw[i + 1][0]) * ERROR > intervalsBUpDw[i][1] + Math.abs(intervalsBUpDw[i][1]) * ERROR) {
                 ++k;
                 firstUpDw[i + 1] = firstDerivativesRecalculator(intervals, slopesUpDw, aValuesUpDw, bValuesUpDw, i + 1);
               }

@@ -61,8 +61,8 @@ public class EquityFutureOptionBlackLognormalDefaults extends DefaultPropertyFun
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(defaultsPerCurrency, "defaults per currency");
     final int n = defaultsPerCurrency.length;
-    ArgumentChecker.isTrue(n % 7 == 0, "Need one discounting curve name, discounting curve calculation config, surface name, surface interpolation method," +
-        "forward curve name and forward curve calculation method per currency");
+    ArgumentChecker.isTrue(n % 7 == 0, "Need one discounting curve name, discounting curve calculation config, surface name, surface interpolation method,"
+        + "forward curve name and forward curve calculation method per currency");
     _priority = PriorityClass.valueOf(priority);
     _currencyToCurveName = new LinkedHashMap<>();
     _currencyToCurveCalculationConfigName = new LinkedHashMap<>();

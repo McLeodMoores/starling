@@ -52,9 +52,9 @@ public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<Val
   @Override
   public ValueRequirement visitSwapSecurity(final SwapSecurity security) {
     final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity(security);
-    if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR &&
-        type != InterestRateInstrumentType.SWAP_FIXED_OIS &&
-        type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD) {
+    if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR
+        && type != InterestRateInstrumentType.SWAP_FIXED_OIS
+        && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD) {
       throw new OpenGammaRuntimeException("Can only get series for fixed / float swaps; have " + type);
     }
     final FloatingInterestRateLeg floatingLeg = (FloatingInterestRateLeg) (security.getPayLeg() instanceof FixedInterestRateLeg ? security.getReceiveLeg()

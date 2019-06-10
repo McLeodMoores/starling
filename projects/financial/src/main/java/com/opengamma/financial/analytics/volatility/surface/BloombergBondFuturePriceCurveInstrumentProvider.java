@@ -81,7 +81,7 @@ public class BloombergBondFuturePriceCurveInstrumentProvider implements FuturePr
   /**
    * Provides ExternalID for Bloomberg ticker, eg RXZ3 Comdty, given a reference date and an integer offset, the n'th subsequent future The format is
    * _futurePrefix + month + year + _postfix
-   * 
+   *
    * @param futureNumber
    *          n'th future following curve date
    * @param curveDate
@@ -128,9 +128,9 @@ public class BloombergBondFuturePriceCurveInstrumentProvider implements FuturePr
       return false;
     }
     final BloombergBondFuturePriceCurveInstrumentProvider other = (BloombergBondFuturePriceCurveInstrumentProvider) obj;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getFuturePrefix().equals(other.getFuturePrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
   @Override

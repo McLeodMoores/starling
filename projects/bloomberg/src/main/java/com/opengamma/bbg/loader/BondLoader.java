@@ -192,7 +192,7 @@ public class BondLoader extends SecurityLoader {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param referenceDataProvider
    *          the provider, not null
    */
@@ -437,7 +437,7 @@ public class BondLoader extends SecurityLoader {
 
   /**
    * Parse the identifiers from the response. Note that we don't populate BLOOMBERG_TICKER because it's always either S or T.
-   * 
+   *
    * @param fieldData
    *          the response, not null
    * @param security
@@ -473,9 +473,9 @@ public class BondLoader extends SecurityLoader {
     if (isValidField(idBbSecNumDes) && isValidField(marketSector)) {
       identifiers.add(ExternalSchemes.bloombergTickerSecurityId(idBbSecNumDes.replaceAll("\\s+", " ").concat(" ").concat(marketSector.trim())));
     } else if (isValidField(parsekyableDes)) {
-      LOGGER.warn("For {} Could not find valid field BB_SEC_NUM_DES and/or MARKET_SECTOR " +
-          "(essentially the Ticker, coupon, maturity + yellow key) so falling back to PARSEKYABLE_DES.  " +
-          " This may mean bond future baskets won't link to the underlying correctly as they are in the TCM format.", parsekyableDes);
+      LOGGER.warn("For {} Could not find valid field BB_SEC_NUM_DES and/or MARKET_SECTOR "
+          + "(essentially the Ticker, coupon, maturity + yellow key) so falling back to PARSEKYABLE_DES.  "
+          + " This may mean bond future baskets won't link to the underlying correctly as they are in the TCM format.", parsekyableDes);
       identifiers.add(ExternalSchemes.bloombergTickerSecurityId(parsekyableDes.replaceAll("\\s+", " ")));
     }
     if (isValidField(ticker) && isValidField(coupon) && isValidField(maturity) && isValidField(marketSector)) {

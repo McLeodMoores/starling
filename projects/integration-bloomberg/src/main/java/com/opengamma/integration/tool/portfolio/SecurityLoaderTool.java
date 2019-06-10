@@ -142,8 +142,8 @@ public class SecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
 
     final Options options = super.createOptions(contextProvided);
 
-    final Option fileNameOption = new Option(FILE_NAME_OPT, "filename", true, "The name of the file containing a column of ExternalIds." +
-        " The header must contain the Scheme, remaining rows the Schemes value");
+    final Option fileNameOption = new Option(FILE_NAME_OPT, "filename", true, "The name of the file containing a column of ExternalIds."
+        + " The header must contain the Scheme, remaining rows the Schemes value");
     fileNameOption.setRequired(true);
     options.addOption(fileNameOption);
 

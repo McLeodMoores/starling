@@ -23,10 +23,10 @@ import com.opengamma.util.PublicAPI;
  * <p>
  * This may be a value a function is capable of producing, or describe a resolved value passed into a function to satisfy a {@link ValueRequirement}.
  * <p>
- * For example the {@code ValueRequirement} for a currency converting function may state a constraint such as "any currency" on its input values.
- * After the graph has been built, the actual value will be specified including the specific currency. Similarly a constraint on a
- * {@link ValueRequirement} might restrict the function to be used (or the default of omission allows any) whereas the {@link ValueSpecification}
- * will indicate which function was used to compute that value.
+ * For example the {@code ValueRequirement} for a currency converting function may state a constraint such as "any currency" on its input values. After the
+ * graph has been built, the actual value will be specified including the specific currency. Similarly a constraint on a {@link ValueRequirement} might restrict
+ * the function to be used (or the default of omission allows any) whereas the {@link ValueSpecification} will indicate which function was used to compute that
+ * value.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -54,12 +54,15 @@ public class ValueSpecification implements Serializable {
   private transient volatile int _hashCode;
 
   /**
-   * Obtains a {@code ValueSpecification} from a target, building the target specification according to the type of object the target refers to.
-   * The properties must include the function identifier.
+   * Obtains a {@code ValueSpecification} from a target, building the target specification according to the type of object the target refers to. The properties
+   * must include the function identifier.
    *
-   * @param valueName the name of the value created, not null
-   * @param computationTargetSpecification the ComputationTargetSpecification, not null
-   * @param properties the value properties, not null and must include the function identifier
+   * @param valueName
+   *          the name of the value created, not null
+   * @param computationTargetSpecification
+   *          the ComputationTargetSpecification, not null
+   * @param properties
+   *          the value properties, not null and must include the function identifier
    * @return the created specification, not null
    */
   public static ValueSpecification of(final String valueName, final ComputationTargetSpecification computationTargetSpecification,
@@ -70,13 +73,17 @@ public class ValueSpecification implements Serializable {
   }
 
   /**
-   * Obtains a {@code ValueSpecification} from a target, building the target specification according to the type of object
-   * the target refers to. The properties must include the function identifier.
+   * Obtains a {@code ValueSpecification} from a target, building the target specification according to the type of object the target refers to. The properties
+   * must include the function identifier.
    *
-   * @param valueName the name of the value created, not null
-   * @param targetType the ComputationTargetType, not null
-   * @param targetId the unique id of the target, not null
-   * @param properties the value properties, not null and must include the function identifier
+   * @param valueName
+   *          the name of the value created, not null
+   * @param targetType
+   *          the ComputationTargetType, not null
+   * @param targetId
+   *          the unique id of the target, not null
+   * @param properties
+   *          the value properties, not null and must include the function identifier
    * @return the created specification, not null
    */
   public static ValueSpecification of(final String valueName, final ComputationTargetType targetType, final UniqueId targetId,
@@ -87,16 +94,21 @@ public class ValueSpecification implements Serializable {
   }
 
   /**
-   * Obtains a {@code ValueSpecification} from a target, building the target specification according to the type of object
-   * the target refers to. The properties must include the function identifier unless it's provided separately in which
-   * case it will be added to the properties if any others are provided.
+   * Obtains a {@code ValueSpecification} from a target, building the target specification according to the type of object the target refers to. The properties
+   * must include the function identifier unless it's provided separately in which case it will be added to the properties if any others are provided.
    *
-   * @param valueName the name of the value created, not null
-   * @param targetType the ComputationTargetType, not null
-   * @param targetId the unique id of the target, not null
-   * @param functionIdentifier the function identifier, may be null
-   * @param currencyISO the currency ISO code, may be null
-   * @param properties the value properties, or can be null if the function identifier provided separately
+   * @param valueName
+   *          the name of the value created, not null
+   * @param targetType
+   *          the ComputationTargetType, not null
+   * @param targetId
+   *          the unique id of the target, not null
+   * @param functionIdentifier
+   *          the function identifier, may be null
+   * @param currencyISO
+   *          the currency ISO code, may be null
+   * @param properties
+   *          the value properties, or can be null if the function identifier provided separately
    * @return the created specification, not null
    */
   public static ValueSpecification of(
@@ -130,9 +142,12 @@ public class ValueSpecification implements Serializable {
    * <p>
    * The properties must include the function identifier.
    *
-   * @param valueName the name of the value created, not null
-   * @param targetSpecification the target specification, not null
-   * @param properties the value properties, not null and must include the function identifier
+   * @param valueName
+   *          the name of the value created, not null
+   * @param targetSpecification
+   *          the target specification, not null
+   * @param properties
+   *          the value properties, not null and must include the function identifier
    */
   public ValueSpecification(final String valueName, final ComputationTargetSpecification targetSpecification, final ValueProperties properties) {
     ArgumentChecker.notNull(valueName, "valueName");
@@ -144,7 +159,7 @@ public class ValueSpecification implements Serializable {
     _properties = properties;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the value name.
    *
@@ -174,15 +189,17 @@ public class ValueSpecification implements Serializable {
     return _properties;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a specific property by name.
    * <p>
    * If multiple values are set for a property then an arbitrary choice is made.
    *
-   * @param propertyName name of the property to search for, not null
+   * @param propertyName
+   *          name of the property to search for, not null
    * @return the matched property value, null if not found
-   * @throws IllegalArgumentException if the property has a wild-card definition
+   * @throws IllegalArgumentException
+   *           if the property has a wild-card definition
    */
   public String getProperty(final String propertyName) {
     final String value = _properties.getSingleValue(propertyName);
@@ -198,8 +215,8 @@ public class ValueSpecification implements Serializable {
    * Creates a maximal {@link ValueRequirement} that would be satisfied by this value specification.
    *
    * @return the value requirement, not null
-   * @deprecated Conversion to a value requirement should not be needed - locations where this is called from should probably be
-   * using value requirements in the first place
+   * @deprecated Conversion to a value requirement should not be needed - locations where this is called from should probably be using value requirements in the
+   *             first place
    */
   @Deprecated
   public ValueRequirement toRequirementSpecification() {
@@ -218,7 +235,8 @@ public class ValueSpecification implements Serializable {
   /**
    * Respecifies the properties to match a tighter requirement.
    *
-   * @param requirement additional requirement to reduce properties against
+   * @param requirement
+   *          additional requirement to reduce properties against
    * @return the value specification based on this with the additional requirement added, not null
    */
   public ValueSpecification compose(final ValueRequirement requirement) {
@@ -232,7 +250,7 @@ public class ValueSpecification implements Serializable {
     return new ValueSpecification(getValueName(), getTargetSpecification(), newProperties);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -241,9 +259,9 @@ public class ValueSpecification implements Serializable {
     if (obj instanceof ValueSpecification) {
       final ValueSpecification other = (ValueSpecification) obj;
       // valueName is interned
-      return _valueName == other._valueName &&
-          ObjectUtils.equals(_targetSpecification, other._targetSpecification) &&
-          ObjectUtils.equals(_properties, other._properties);
+      return _valueName == other._valueName
+          && ObjectUtils.equals(_targetSpecification, other._targetSpecification)
+          && ObjectUtils.equals(_properties, other._properties);
     }
     return false;
   }

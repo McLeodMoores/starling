@@ -29,8 +29,8 @@ public class InterestRateFutureOptionBlackPositionDeltaGammaScaleDefaults extend
   public InterestRateFutureOptionBlackPositionDeltaGammaScaleDefaults(final String... scaleCurrencyCurveConfigAndSurfaceNames) {
     super(Arrays.copyOfRange(scaleCurrencyCurveConfigAndSurfaceNames, 1, scaleCurrencyCurveConfigAndSurfaceNames.length));
     ArgumentChecker.isTrue((scaleCurrencyCurveConfigAndSurfaceNames.length - 1) % 3 == 0,
-        "Input array must begin with a double representing the scale factor to apply, " +
-            "then follow with one curve config and surface name per currency");
+        "Input array must begin with a double representing the scale factor to apply, "
+            + "then follow with one curve config and surface name per currency");
     _defaultScale = scaleCurrencyCurveConfigAndSurfaceNames[0];
   }
 

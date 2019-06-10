@@ -89,11 +89,11 @@ public class ColumnSpecification {
 
   @Override
   public String toString() {
-    return "ColumnSpecification [" +
-        "_calcConfigName='" + _calcConfigName + "'" +
-        ", _valueName='" + _valueName + "'" +
-        ", _valueProperties=" + _valueProperties +
-        ", _header='" + _header + "'" +
-        "]";
+    return "ColumnSpecification ["
+        + "_calcConfigName='" + _calcConfigName + "'"
+        + ", _valueName='" + _valueName + "'"
+        + ", _valueProperties=" + _valueProperties
+        + ", _header='" + _header + "'"
+        + "]";
   }
 }

@@ -169,9 +169,10 @@ public abstract class InterestRateInstrumentCurveSpecificFunction extends Abstra
     if (security instanceof SwapSecurity) {
       try {
         final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity(security);
-        return type == InterestRateInstrumentType.SWAP_FIXED_IBOR || type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
-            || type == InterestRateInstrumentType.SWAP_IBOR_IBOR ||
-            type == InterestRateInstrumentType.SWAP_FIXED_OIS;
+        return type == InterestRateInstrumentType.SWAP_FIXED_IBOR
+            || type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
+            || type == InterestRateInstrumentType.SWAP_IBOR_IBOR
+            || type == InterestRateInstrumentType.SWAP_FIXED_OIS;
       } catch (final OpenGammaRuntimeException ogre) {
         return false;
       }

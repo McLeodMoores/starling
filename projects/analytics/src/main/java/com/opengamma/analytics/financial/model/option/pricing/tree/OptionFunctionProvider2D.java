@@ -42,7 +42,7 @@ public abstract class OptionFunctionProvider2D {
 
   /**
    * For binomial model.
-   * 
+   *
    * @param assetPrice1
    *          Asset price 1 at (nSteps,0), i.e., the price at the lowest node
    * @param assetPrice2
@@ -104,7 +104,7 @@ public abstract class OptionFunctionProvider2D {
 
   /**
    * For trinomial model.
-   * 
+   *
    * @param assetPrice1
    *          Asset price 1 at (nSteps,0), i.e., the price at the lowest node
    * @param assetPrice2
@@ -169,10 +169,10 @@ public abstract class OptionFunctionProvider2D {
     final double[][] res = new double[nNodes][nNodes];
     for (int j = 0; j < nNodes; ++j) {
       for (int i = 0; i < nNodes; ++i) {
-        res[j][i] = discount *
-            (uuProbability * values[j + 2][i + 2] + umProbability * values[j + 2][i + 1] + udProbability * values[j + 2][i]
-                + muProbability * values[j + 1][i + 2] + mmProbability *
-                    values[j + 1][i + 1]
+        res[j][i] = discount
+            * (uuProbability * values[j + 2][i + 2] + umProbability * values[j + 2][i + 1] + udProbability * values[j + 2][i]
+                + muProbability * values[j + 1][i + 2] + mmProbability
+                    * values[j + 1][i + 1]
                 + mdProbability * values[j + 1][i] + duProbability * values[j][i + 2] + dmProbability * values[j][i + 1] + ddProbability * values[j][i]);
       }
     }
@@ -181,7 +181,7 @@ public abstract class OptionFunctionProvider2D {
 
   /**
    * Access strike price.
-   * 
+   *
    * @return _strike
    */
   public double getStrike() {
@@ -190,7 +190,7 @@ public abstract class OptionFunctionProvider2D {
 
   /**
    * Access time to expiry.
-   * 
+   *
    * @return _timeToExpiry
    */
   public double getTimeToExpiry() {
@@ -199,7 +199,7 @@ public abstract class OptionFunctionProvider2D {
 
   /**
    * Access number of steps.
-   * 
+   *
    * @return _steps
    */
   public int getNumberOfSteps() {
@@ -208,7 +208,7 @@ public abstract class OptionFunctionProvider2D {
 
   /**
    * Access signature in payoff formula.
-   * 
+   *
    * @return +1 if call, -1 if put
    */
   public double getSign() {

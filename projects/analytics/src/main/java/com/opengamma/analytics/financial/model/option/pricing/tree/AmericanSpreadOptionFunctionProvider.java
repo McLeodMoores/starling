@@ -105,8 +105,8 @@ public class AmericanSpreadOptionFunctionProvider extends OptionFunctionProvider
       double assetPrice2 = assetPrice2Rest;
       for (int i = 0; i < nNodes; ++i) {
         res[j][i] = discount * (uuProbability * values[j + 2][i + 2] + umProbability * values[j + 2][i + 1] + udProbability * values[j + 2][i]
-            + muProbability * values[j + 1][i + 2] + mmProbability *
-                values[j + 1][i + 1]
+            + muProbability * values[j + 1][i + 2] + mmProbability
+                * values[j + 1][i + 1]
             + mdProbability * values[j + 1][i] + duProbability * values[j][i + 2] + dmProbability * values[j][i + 1] + ddProbability * values[j][i]);
         res[j][i] = Math.max(res[j][i], sign * (assetPrice1 - assetPrice2 - strike));
         assetPrice2 *= middleOverDown2;

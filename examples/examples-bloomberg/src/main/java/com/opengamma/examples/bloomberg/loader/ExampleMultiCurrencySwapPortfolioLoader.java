@@ -101,7 +101,7 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
   static {
     CURRENCIES = new Currency[] { Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF };
     TENORS = new Tenor[] { Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
-        Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20) };
+                  Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20) };
   }
 
   // -------------------------------------------------------------------------
@@ -113,8 +113,8 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
    */
   public static void main(final String[] args) { // CSIGNORE
     try {
-      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleMultiCurrencySwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleMultiCurrencySwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
     } catch (final Throwable ex) {
       ex.printStackTrace();
@@ -242,8 +242,8 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     }
     final SwapSecurity swap = new SwapSecurity(tradeDateTime, tradeDateTime, maturityDateTime, counterparty, payLeg, receiveLeg);
     swap.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    swap.setName("IR Swap " + ccy + " " + PortfolioLoaderHelper.NOTIONAL_FORMATTER.format(notional) + " " +
-        maturityDateTime.format(PortfolioLoaderHelper.OUTPUT_DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
+    swap.setName("IR Swap " + ccy + " " + PortfolioLoaderHelper.NOTIONAL_FORMATTER.format(notional) + " "
+        + maturityDateTime.format(PortfolioLoaderHelper.OUTPUT_DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
     return swap;
   }
 

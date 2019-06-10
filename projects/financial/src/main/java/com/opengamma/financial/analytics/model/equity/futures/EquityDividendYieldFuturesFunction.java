@@ -107,9 +107,9 @@ public class EquityDividendYieldFuturesFunction<T> extends FuturesFunction<T> {
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getTrade().getSecurity();
-    return security instanceof EquityFutureSecurity ||
-        security instanceof EquityIndexDividendFutureSecurity ||
-        security instanceof IndexFutureSecurity;
+    return security instanceof EquityFutureSecurity
+        || security instanceof EquityIndexDividendFutureSecurity
+        || security instanceof IndexFutureSecurity;
   }
 
   @Override

@@ -15,7 +15,7 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Methods for the pricing of interest rate futures option with premium generic to all models.
- * 
+ *
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -28,7 +28,7 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Constructor.
-   * 
+   *
    * @param securityMethod
    *          The method to price the underlying security.
    */
@@ -38,7 +38,7 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Gets the method to price the underlying security.
-   * 
+   *
    * @return The method.
    */
   public InterestRateFutureOptionMarginSecurityMethod getSecurityMethod() {
@@ -47,7 +47,7 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Compute the present value of a future transaction from a quoted price.
-   * 
+   *
    * @param option
    *          The future option.
    * @param price
@@ -55,14 +55,14 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
    * @return The present value.
    */
   public CurrencyAmount presentValueFromPrice(final InterestRateFutureOptionMarginTransaction option, final double price) {
-    final double pv = (price - option.getReferencePrice()) * option.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor() *
-        option.getUnderlyingSecurity().getUnderlyingFuture().getNotional() * option.getQuantity();
+    final double pv = (price - option.getReferencePrice()) * option.getUnderlyingSecurity().getUnderlyingFuture().getPaymentAccrualFactor()
+        * option.getUnderlyingSecurity().getUnderlyingFuture().getNotional() * option.getQuantity();
     return CurrencyAmount.of(option.getUnderlyingSecurity().getCurrency(), pv);
   }
 
   /**
    * Computes the present value of a transaction from the future price and curve/volatility data.
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param curves
@@ -90,7 +90,7 @@ public abstract class InterestRateFutureOptionMarginTransactionMethod implements
 
   /**
    * Computes the present value curve sensitivity of a transaction.
-   * 
+   *
    * @param transaction
    *          The future option transaction.
    * @param curves

@@ -46,9 +46,9 @@ public class ScenarioResultModel {
 
   @Override
   public String toString() {
-    return "ScenarioResultModel [" +
-        ", _results=" + _results +
-        "_parameters=" + _parameters +
-        "]";
+    return "ScenarioResultModel ["
+        + ", _results=" + _results
+        + "_parameters=" + _parameters
+        + "]";
   }
 }

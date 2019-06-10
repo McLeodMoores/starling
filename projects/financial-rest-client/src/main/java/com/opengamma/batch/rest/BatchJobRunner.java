@@ -79,9 +79,9 @@ public class BatchJobRunner {
       } else if (runCreationMode.equalsIgnoreCase("reuse_existing")) {
         return RunCreationMode.REUSE_EXISTING;
       } else {
-        throw new OpenGammaRuntimeException("Unrecognized runCreationMode. " +
-            "Should be one of AUTO, ALWAYS, NEVER. " +
-            "Was " + runCreationMode);
+        throw new OpenGammaRuntimeException("Unrecognized runCreationMode. "
+            + "Should be one of AUTO, ALWAYS, NEVER. "
+            + "Was " + runCreationMode);
       }
     }
     return null;
@@ -269,9 +269,9 @@ public class BatchJobRunner {
     // observationTime.");
     // options.addOption("snapshotObservationDate", true, "Observation date of LiveData snapshot to use. yyyyMMdd. Default - same as observationDate");
 
-    options.addOption("runCreationMode", true, "One of auto, create_new, create_new_overwrite, reuse_existing (case insensitive)." +
-        " Specifies whether to create a new run in the database." +
-        " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
+    options.addOption("runCreationMode", true, "One of auto, create_new, create_new_overwrite, reuse_existing (case insensitive)."
+        + " Specifies whether to create a new run in the database."
+        + " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
 
     // options.addOption("timeZone", true, "Time zone in which times on the command line are given. Default - system time zone.");
 

@@ -35,6 +35,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Market Data Source command line interface
+ * 
  * <pre>
  * There are 3 supported types, live, historical and snapshot.
  * input formats are
@@ -43,8 +44,8 @@ import com.opengamma.util.ArgumentChecker;
  *  snapshot:snapshotName
  * </pre>
  * <p>
- * Order is based on order of options from the command line e.g --dataSource live --dataSource snapshot:test --dataSource historical
- * will build a layered data source of
+ * Order is based on order of options from the command line e.g --dataSource live --dataSource snapshot:test --dataSource historical will build a layered data
+ * source of
  * <p>
  * marketdata live then user snapshot with name = test and then latest historical
  */
@@ -63,14 +64,15 @@ public class MarketDataSourceCli {
   private final Option _option;
 
   public MarketDataSourceCli() {
-    final Option option = new Option("ds", MARKET_DATA_SOURCE_OPTION, true, "the market data source name " +
-        "format is \nlive:<dataSourceName> or \nhistorical:<resolverkey>~<date> date in yyyymmdd or \nsnapshot:snapshotName");
+    final Option option = new Option("ds", MARKET_DATA_SOURCE_OPTION, true, "the market data source name "
+        + "format is \nlive:<dataSourceName> or \nhistorical:<resolverkey>~<date> date in yyyymmdd or \nsnapshot:snapshotName");
     option.setArgName("data source");
     _option = option;
   }
 
   /**
    * Gets the option.
+   * 
    * @return the option
    */
   public Option getOption() {

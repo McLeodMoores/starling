@@ -128,8 +128,8 @@ public class HistoricalViewEvaluationFunction extends ViewEvaluationFunction<His
     // NOTE jonathan 2013-02-28 -- could imagine using constraints
     final List<MarketDataSpecification> marketDataSpecifications = cycleExecutionOptions.getMarketDataSpecifications();
     if (marketDataSpecifications.size() != 1) {
-      throw new OpenGammaRuntimeException("Expected cycle execution options to contain exactly 1 market data specification but found " +
-          marketDataSpecifications.size() + ": " + cycleExecutionOptions);
+      throw new OpenGammaRuntimeException("Expected cycle execution options to contain exactly 1 market data specification but found "
+          + marketDataSpecifications.size() + ": " + cycleExecutionOptions);
     }
     final MarketDataSpecification marketDataSpec = marketDataSpecifications.get(0);
     if (marketDataSpec instanceof FixedHistoricalMarketDataSpecification) {

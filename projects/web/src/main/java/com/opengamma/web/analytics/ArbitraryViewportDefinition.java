@@ -27,8 +27,7 @@ public class ArbitraryViewportDefinition extends ViewportDefinition {
    * @param cells
    *          Cells in the viewport, not empty
    * @param enableLogging
-   *          Whether full logging info should be collected for the viewport's
-   *          cells
+   *          Whether full logging info should be collected for the viewport's cells
    */
   /* package */ ArbitraryViewportDefinition(final int version, final List<GridCell> cells, final boolean enableLogging) {
     super(version, enableLogging);
@@ -45,8 +44,8 @@ public class ArbitraryViewportDefinition extends ViewportDefinition {
   @Override
   public boolean isValidFor(final GridStructure gridStructure) {
     for (final GridCell cell : _cells) {
-      if (cell.getRow() >= gridStructure.getRowCount() ||
-          cell.getColumn() >= gridStructure.getColumnCount()) {
+      if (cell.getRow() >= gridStructure.getRowCount()
+          || cell.getColumn() >= gridStructure.getColumnCount()) {
         return false;
       }
     }

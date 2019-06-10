@@ -124,8 +124,8 @@ public class ResolvingPortfolioCopier implements PortfolioCopier {
       Map<ExternalId, UniqueId> tsMap = null;
       for (final ExternalId id : ids) {
         tsMap = bbgLoader.loadTimeSeries(Collections.singleton(id), dataProvider, dataField, null, null);
-        final String message = "historical time series " + id.toString() + ", fields " + dataField +
-            " from " + dataProvider;
+        final String message = "historical time series " + id.toString() + ", fields " + dataField
+            + " from " + dataProvider;
         if (tsMap.size() > 0) {
           LOGGER.info("Loaded " + message + ": " + tsMap);
           if (visitor != null) {

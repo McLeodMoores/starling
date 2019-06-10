@@ -28,7 +28,7 @@ import com.opengamma.util.money.Currency;
  * Compute the cash flow equivalent of simple instruments (in single or multi-curve framework). The cash-flow equivalent have at most one payment by time and
  * the times are sorted in ascending order. Reference: Henrard, M. The Irony in the derivatives discounting Part II: the crisis. Wilmott Journal, 2010, 2,
  * 301-316
- * 
+ *
  * @deprecated Use {@link com.opengamma.analytics.financial.provider.calculator.discounting.CashFlowEquivalentCalculator}
  */
 @Deprecated
@@ -41,7 +41,7 @@ public class CashFlowEquivalentCalculator extends InstrumentDerivativeVisitorAda
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static CashFlowEquivalentCalculator getInstance() {
@@ -128,8 +128,8 @@ public class CashFlowEquivalentCalculator extends InstrumentDerivativeVisitorAda
             / payment.getFixingAccrualFactor(),
         payment.getFundingCurveName());
     final PaymentFixed paymentEnd = new PaymentFixed(payment.getCurrency(), paymentTime,
-        (-payment.getFactor() / payment.getFixingAccrualFactor() + payment.getSpread()) *
-            payment.getPaymentYearFraction()
+        (-payment.getFactor() / payment.getFixingAccrualFactor() + payment.getSpread())
+            * payment.getPaymentYearFraction()
             * payment.getNotional(),
         payment.getFundingCurveName());
     return new AnnuityPaymentFixed(new PaymentFixed[] { paymentStart, paymentEnd });
@@ -213,7 +213,7 @@ public class CashFlowEquivalentCalculator extends InstrumentDerivativeVisitorAda
 
   /**
    * Add a cash flow amount at a given time in the flow map. If the time is present, the amount is added; if the time is not present a new entry is created.
-   * 
+   *
    * @param flow
    *          The map describing the cash flows.
    * @param time

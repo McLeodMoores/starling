@@ -51,12 +51,10 @@ import com.opengamma.util.paging.Paging;
 /**
  * An exchange master implementation using a database for persistence.
  * <p>
- * This is a full implementation of the exchange master using an SQL database.
- * Full details of the API are in {@link ExchangeMaster}.
+ * This is a full implementation of the exchange master using an SQL database. Full details of the API are in {@link ExchangeMaster}.
  * <p>
- * The SQL is stored externally in {@code DbExchangeMaster.elsql}.
- * Alternate databases or specific SQL requirements can be handled using database
- * specific overrides, such as {@code DbExchangeMaster-MySpecialDB.elsql}.
+ * The SQL is stored externally in {@code DbExchangeMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific
+ * overrides, such as {@code DbExchangeMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
@@ -90,14 +88,15 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbExchangeMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
     setElSqlBundle(ElSqlBundle.of(dbConnector.getDialect().getElSqlConfig(), DbExchangeMaster.class));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ExchangeSearchResult search(final ExchangeSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
@@ -110,16 +109,16 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
 
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
     final List<ObjectId> objectIds = request.getObjectIds();
-    if (objectIds != null && objectIds.size() == 0 ||
-        ExternalIdSearch.canMatch(externalIdSearch) == false) {
+    if (objectIds != null && objectIds.size() == 0
+        || ExternalIdSearch.canMatch(externalIdSearch) == false) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
 
     final DbMapSqlParameterSource args = createParameterSource()
-      .addTimestamp("version_as_of_instant", vc.getVersionAsOf())
-      .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
-      .addValueNullIgnored("name", getDialect().sqlWildcardAdjustValue(request.getName()));
+        .addTimestamp("version_as_of_instant", vc.getVersionAsOf())
+        .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
+        .addValueNullIgnored("name", getDialect().sqlWildcardAdjustValue(request.getName()));
     if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
       int i = 0;
       for (final ExternalId id : externalIdSearch) {
@@ -144,7 +143,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
 
-    final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     doSearch(request.getPagingRequest(), sql, args, new ExchangeDocumentExtractor(), result);
     return result;
   }
@@ -154,7 +153,8 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
    * <p>
    * This is too complex for the elsql mechanism.
    *
-   * @param idSearch  the identifier search, not null
+   * @param idSearch
+   *          the identifier search, not null
    * @return the SQL, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch idSearch) {
@@ -165,29 +165,30 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     return StringUtils.join(list, "OR ");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ExchangeDocument get(final UniqueId uniqueId) {
     return doGet(uniqueId, new ExchangeDocumentExtractor(), "Exchange");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ExchangeDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return doGetByOidInstants(objectId, versionCorrection, new ExchangeDocumentExtractor(), "Exchange");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public ExchangeHistoryResult history(final ExchangeHistoryRequest request) {
     return doHistory(request, new ExchangeHistoryResult(), new ExchangeDocumentExtractor());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Inserts a new document.
    *
-   * @param document  the document, not null
+   * @param document
+   *          the document, not null
    * @return the new document, not null
    */
   @Override
@@ -206,32 +207,32 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     final FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(exchange);
     final byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
     final DbMapSqlParameterSource docArgs = createParameterSource()
-      .addValue("doc_id", docId)
-      .addValue("doc_oid", docOid)
-      .addTimestamp("ver_from_instant", document.getVersionFromInstant())
-      .addTimestampNullFuture("ver_to_instant", document.getVersionToInstant())
-      .addTimestamp("corr_from_instant", document.getCorrectionFromInstant())
-      .addTimestampNullFuture("corr_to_instant", document.getCorrectionToInstant())
-      .addValue("name", document.getName())
-      .addValue("time_zone", exchange.getTimeZone() != null ? exchange.getTimeZone().getId() : null, Types.VARCHAR)
-      .addValue("detail", new SqlLobValue(bytes, getDialect().getLobHandler()), Types.BLOB);
+        .addValue("doc_id", docId)
+        .addValue("doc_oid", docOid)
+        .addTimestamp("ver_from_instant", document.getVersionFromInstant())
+        .addTimestampNullFuture("ver_to_instant", document.getVersionToInstant())
+        .addTimestamp("corr_from_instant", document.getCorrectionFromInstant())
+        .addTimestampNullFuture("corr_to_instant", document.getCorrectionToInstant())
+        .addValue("name", document.getName())
+        .addValue("time_zone", exchange.getTimeZone() != null ? exchange.getTimeZone().getId() : null, Types.VARCHAR)
+        .addValue("detail", new SqlLobValue(bytes, getDialect().getLobHandler()), Types.BLOB);
     // the arguments for inserting into the idkey tables
     final List<DbMapSqlParameterSource> assocList = new ArrayList<>();
     final List<DbMapSqlParameterSource> idKeyList = new ArrayList<>();
     final String sqlSelectIdKey = getElSqlBundle().getSql("SelectIdKey");
     for (final ExternalId id : exchange.getExternalIdBundle()) {
       final DbMapSqlParameterSource assocArgs = createParameterSource()
-        .addValue("doc_id", docId)
-        .addValue("key_scheme", id.getScheme().getName())
-        .addValue("key_value", id.getValue());
+          .addValue("doc_id", docId)
+          .addValue("key_scheme", id.getScheme().getName())
+          .addValue("key_value", id.getValue());
       assocList.add(assocArgs);
       if (getJdbcTemplate().queryForList(sqlSelectIdKey, assocArgs).isEmpty()) {
         // select avoids creating unecessary id, but id may still not be used
         final long idKeyId = nextId("exg_idkey_seq");
         final DbMapSqlParameterSource idkeyArgs = createParameterSource()
-          .addValue("idkey_id", idKeyId)
-          .addValue("key_scheme", id.getScheme().getName())
-          .addValue("key_value", id.getValue());
+            .addValue("idkey_id", idKeyId)
+            .addValue("key_scheme", id.getScheme().getName())
+            .addValue("key_value", id.getValue());
         idKeyList.add(idkeyArgs);
       }
     }
@@ -244,7 +245,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     return document;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a ExchangeDocument.
    */

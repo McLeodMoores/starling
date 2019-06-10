@@ -32,7 +32,6 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
       VOLATILITY_SURFACE,
       BLACK_VOLATILITY_SURFACE);
 
-
   private final Set<String> _calcConfigNames;
   private final Set<String> _names;
   private final PatternWrapper _nameMatchPattern;
@@ -163,15 +162,15 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceSelector [" +
-        "_calcConfigNames=" + _calcConfigNames +
-        ", _names=" + _names +
-        ", _nameMatchPattern=" + _nameMatchPattern +
-        ", _nameLikePattern=" + _nameLikePattern +
-        ", _instrumentTypes=" + _instrumentTypes +
-        ", _quoteTypes=" + _quoteTypes +
-        ", _quoteUnits=" + _quoteUnits +
-        "]";
+    return "VolatilitySurfaceSelector ["
+        + "_calcConfigNames=" + _calcConfigNames
+        + ", _names=" + _names
+        + ", _nameMatchPattern=" + _nameMatchPattern
+        + ", _nameLikePattern=" + _nameLikePattern
+        + ", _instrumentTypes=" + _instrumentTypes
+        + ", _quoteTypes=" + _quoteTypes
+        + ", _quoteUnits=" + _quoteUnits
+        + "]";
   }
 
   public static class Builder {

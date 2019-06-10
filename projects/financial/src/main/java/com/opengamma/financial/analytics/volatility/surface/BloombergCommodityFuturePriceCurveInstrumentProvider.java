@@ -158,9 +158,9 @@ public class BloombergCommodityFuturePriceCurveInstrumentProvider implements Fut
       return false;
     }
     final BloombergCommodityFuturePriceCurveInstrumentProvider other = (BloombergCommodityFuturePriceCurveInstrumentProvider) obj;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getFuturePrefix().equals(other.getFuturePrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
   @Override

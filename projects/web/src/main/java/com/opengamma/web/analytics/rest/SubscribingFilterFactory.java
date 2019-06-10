@@ -29,25 +29,24 @@ import com.sun.jersey.spi.container.ResourceFilter;
 import com.sun.jersey.spi.container.ResourceFilterFactory;
 
 /**
- * Creates {@link EntitySubscriptionFilter}s which create subscriptions for push notifications for changes to entities
- * requested via the REST interface.  If a REST method parameter is annotated with {@link Subscribe} it will be
- * interpreted as a {@link UniqueId} and any changes to the entity will cause an update to be pushed over
- * the long-polling HTTP interface.  The annotated parameter must be a string that can be parsed by
- * {@link UniqueId#parse(String)} and must also have a {@link PathParam} annotation.
+ * Creates {@link EntitySubscriptionFilter}s which create subscriptions for push notifications for changes to entities requested via the REST interface. If a
+ * REST method parameter is annotated with {@link Subscribe} it will be interpreted as a {@link UniqueId} and any changes to the entity will cause an update to
+ * be pushed over the long-polling HTTP interface. The annotated parameter must be a string that can be parsed by {@link UniqueId#parse(String)} and must also
+ * have a {@link PathParam} annotation.
  */
 public class SubscribingFilterFactory implements ResourceFilterFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SubscribingFilterFactory.class);
 
-  /** HTTP context injected by Jersey.  This is a proxy that always points to the context for the current request */
+  /** HTTP context injected by Jersey. This is a proxy that always points to the context for the current request */
   @Context
   private HttpContext _httpContext;
 
-  /** Servlet context injected by Jersey.  This is a proxy that always points to the context for the current request */
+  /** Servlet context injected by Jersey. This is a proxy that always points to the context for the current request */
   @Context
   private ServletContext _servletContext;
 
-  /** Request injected by Jersey.  This is a proxy that always points to the current request */
+  /** Request injected by Jersey. This is a proxy that always points to the current request */
   @Context
   private HttpServletRequest _servletRequest;
 
@@ -75,19 +74,19 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
   }
 
   /**
-   * Creates a filter that creates a subscription for an entity when the method is invoked.  The method must have a
-   * parameter annotated with {@link Subscribe} and {@link PathParam} which is a string that can be parsed by
-   * {@link UniqueId#parse(String)}.  A notification is sent when the object with the specified {@link UniqueId}
-   * changes.
-   * @param abstractMethod A Jersey REST method
-   * @return A filter to set up subscriptions when the method is invoked or null if the method doesn't
-   * need entity subscriptions
+   * Creates a filter that creates a subscription for an entity when the method is invoked. The method must have a parameter annotated with {@link Subscribe}
+   * and {@link PathParam} which is a string that can be parsed by {@link UniqueId#parse(String)}. A notification is sent when the object with the specified
+   * {@link UniqueId} changes.
+   * 
+   * @param abstractMethod
+   *          A Jersey REST method
+   * @return A filter to set up subscriptions when the method is invoked or null if the method doesn't need entity subscriptions
    */
   private ResourceFilter createEntitySubscriptionFilter(final AbstractMethod abstractMethod) {
     final Method method = abstractMethod.getMethod();
     final Annotation[][] annotations = method.getParameterAnnotations();
     final List<String> uidParamNames = new ArrayList<>();
-    // find params annotated with @Subscribe.  must also have @PathParam
+    // find params annotated with @Subscribe. must also have @PathParam
     for (final Annotation[] paramAnnotations : annotations) {
       boolean subscribe = false;
       String paramName = null;
@@ -102,25 +101,26 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
         if (paramName != null) {
           uidParamNames.add(paramName);
         } else {
-          LOGGER.warn("@Subscribe annotation found without matching @PathParam on method {}.{}(), no subscription " +
-              "will be created", method.getDeclaringClass().getSimpleName(), method.getName());
+          LOGGER.warn("@Subscribe annotation found without matching @PathParam on method {}.{}(), no subscription "
+              + "will be created", method.getDeclaringClass().getSimpleName(), method.getName());
         }
       }
     }
     if (!uidParamNames.isEmpty()) {
       LOGGER.debug("Creating subscribing filter for parameters {} on method {}.{}()",
-          new Object[]{uidParamNames, method.getDeclaringClass().getSimpleName(), method.getName()});
+          new Object[] { uidParamNames, method.getDeclaringClass().getSimpleName(), method.getName() });
       return new EntitySubscriptionFilter(uidParamNames, getUpdateManager(), _httpContext, _servletRequest);
     }
     return null;
   }
 
   /**
-   * Creates a filter that creates a subscription for a master when the method is invoked.  The method must be
-   * annotated with {@link SubscribeMaster}.  A notification is sent when any data in the master changes.
-   * @param abstractMethod A Jersey REST method
-   * @return A filter to set up subscriptions when the method is invoked or null if the method doesn't
-   * need master subscriptions
+   * Creates a filter that creates a subscription for a master when the method is invoked. The method must be annotated with {@link SubscribeMaster}. A
+   * notification is sent when any data in the master changes.
+   * 
+   * @param abstractMethod
+   *          A Jersey REST method
+   * @return A filter to set up subscriptions when the method is invoked or null if the method doesn't need master subscriptions
    */
   private ResourceFilter createMasterSubscriptionFilter(final AbstractMethod abstractMethod) {
     final SubscribeMaster annotation = abstractMethod.getAnnotation(SubscribeMaster.class);
@@ -136,4 +136,3 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
     return null;
   }
 }
-

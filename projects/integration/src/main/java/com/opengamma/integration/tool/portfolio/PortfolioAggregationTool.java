@@ -120,15 +120,15 @@ public class PortfolioAggregationTool extends AbstractTool<ToolContext> {
         .hasArgs()
         .isRequired()
         .withValueSeparator(',')
-        .withDescription("The (comma, no space seperated) names of the aggregation" +
-            " styles to use: e.g AssetClass,Currency,DetailedAssetClass")
+        .withDescription("The (comma, no space seperated) names of the aggregation"
+            + " styles to use: e.g AssetClass,Currency,DetailedAssetClass")
         .create(AGGREGATION_OPT);
     options.addOption(aggregationTypesOption);
     @SuppressWarnings("static-access")
     final Option splitPortfoliosOption = OptionBuilder.withLongOpt("split")
         .withDescription(
-            "Split into separate portfolios grouped by the top-level aggregator" +
-                " instead of aggregating the existing portfoliio")
+            "Split into separate portfolios grouped by the top-level aggregator"
+                + " instead of aggregating the existing portfoliio")
         .create(SPLIT_OPT);
     options.addOption(splitPortfoliosOption);
     return options;

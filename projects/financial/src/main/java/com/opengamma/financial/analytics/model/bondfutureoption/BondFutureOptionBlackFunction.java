@@ -196,8 +196,8 @@ public abstract class BondFutureOptionBlackFunction extends AbstractFunction.Non
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
-    if (!curveCalculationConfig.getTarget().getType().isTargetType(ComputationTargetType.CURRENCY) ||
-        !currency.equals(ComputationTargetType.CURRENCY.resolve(curveCalculationConfig.getTarget().getUniqueId()))) {
+    if (!curveCalculationConfig.getTarget().getType().isTargetType(ComputationTargetType.CURRENCY)
+        || !currency.equals(ComputationTargetType.CURRENCY.resolve(curveCalculationConfig.getTarget().getUniqueId()))) {
       LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }

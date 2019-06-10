@@ -81,7 +81,8 @@ public class VolatilitySurfaceSpecification {
 
   /**
    * @deprecated use getTarget()
-   * @throws ClassCastException if target not a currency
+   * @throws ClassCastException
+   *           if target not a currency
    * @return currency assuming that the target is a currency
    */
   @Deprecated
@@ -106,19 +107,18 @@ public class VolatilitySurfaceSpecification {
       return false;
     }
     final VolatilitySurfaceSpecification other = (VolatilitySurfaceSpecification) o;
-    return other.getName().equals(getName()) &&
-        other.getTarget().equals(getTarget()) &&
-        other.getSurfaceInstrumentProvider().equals(getSurfaceInstrumentProvider()) &&
-        other.getSurfaceQuoteType().equals(getSurfaceQuoteType()) &&
-        other.getExerciseType().equals(getExerciseType()) &&
-        other.getQuoteUnits().equals(getQuoteUnits()) &&
-        other.isUseUnderlyingSecurityForExpiry() == isUseUnderlyingSecurityForExpiry();
+    return other.getName().equals(getName())
+        && other.getTarget().equals(getTarget())
+        && other.getSurfaceInstrumentProvider().equals(getSurfaceInstrumentProvider())
+        && other.getSurfaceQuoteType().equals(getSurfaceQuoteType())
+        && other.getExerciseType().equals(getExerciseType())
+        && other.getQuoteUnits().equals(getQuoteUnits())
+        && other.isUseUnderlyingSecurityForExpiry() == isUseUnderlyingSecurityForExpiry();
   }
 
   @Override
   public int hashCode() {
     return getName().hashCode() * getTarget().hashCode() * getSurfaceQuoteType().hashCode() * getQuoteUnits().hashCode() * getExerciseType().hashCode();
   }
-
 
 }

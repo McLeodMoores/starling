@@ -164,8 +164,8 @@ public abstract class InterestRateInstrumentFunction extends AbstractFunction.No
       try {
         final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity(security);
         return type == InterestRateInstrumentType.SWAP_FIXED_IBOR || type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
-            || type == InterestRateInstrumentType.SWAP_IBOR_IBOR ||
-            type == InterestRateInstrumentType.SWAP_FIXED_OIS;
+            || type == InterestRateInstrumentType.SWAP_IBOR_IBOR
+            || type == InterestRateInstrumentType.SWAP_FIXED_OIS;
       } catch (final OpenGammaRuntimeException ogre) {
         return false;
       }

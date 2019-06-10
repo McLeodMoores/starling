@@ -258,8 +258,8 @@ public class ViewRegressionTestTool {
     final Option dbDumpDirOption = new Option(DB_DUMP_DIR,
         "dbdumpdir",
         true,
-        "Directory containing the database dump files." +
-        " If this is omitted the database won't be created or populated, the existing database will be used");
+        "Directory containing the database dump files."
+            + " If this is omitted the database won't be created or populated, the existing database will be used");
     options.addOption(dbDumpDirOption);
 
     final Option logbackConfigOption = new Option(LOGBACK_CONFIG, "logbackconfig", true, "Logback config for the servers");

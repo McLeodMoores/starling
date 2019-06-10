@@ -44,10 +44,10 @@ public class CreditInstrumentCS01PnLDefaults extends DefaultPropertyFunction {
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getPosition().getSecurity();
-    return security instanceof StandardCDSSecurity ||
-        security instanceof LegacyCDSSecurity ||
-        security instanceof CreditDefaultSwapOptionSecurity ||
-        security instanceof CreditDefaultSwapIndexSecurity;
+    return security instanceof StandardCDSSecurity
+        || security instanceof LegacyCDSSecurity
+        || security instanceof CreditDefaultSwapOptionSecurity
+        || security instanceof CreditDefaultSwapIndexSecurity;
   }
 
   @Override

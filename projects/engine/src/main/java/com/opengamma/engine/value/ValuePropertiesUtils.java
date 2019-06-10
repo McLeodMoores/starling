@@ -18,7 +18,7 @@ public class ValuePropertiesUtils {
   /**
    * Returns a copy of the original properties with the given property added and set to optional. If the new property is already present in the original and the
    * property value is not equal to that in the original, throws an exception.
-   * 
+   *
    * @param originalProperties
    *          The original properties, not null
    * @param propertyName
@@ -33,8 +33,8 @@ public class ValuePropertiesUtils {
     ArgumentChecker.notNull(propertyValue, "property value");
     final Set<String> originalPropertyValues = originalProperties.getValues(propertyName);
     if (originalPropertyValues != null && !originalPropertyValues.equals(Collections.singleton(propertyValue))) {
-      throw new IllegalStateException("Property " + propertyName + " already present, but value " +
-          propertyValue + " not equal to " + originalProperties.getValues(propertyName));
+      throw new IllegalStateException("Property " + propertyName + " already present, but value "
+          + propertyValue + " not equal to " + originalProperties.getValues(propertyName));
     }
     final ValueProperties.Builder newProperties = originalProperties.copy()
         .with(propertyName, propertyValue)
@@ -46,7 +46,7 @@ public class ValuePropertiesUtils {
    * Returns a copy of the original properties with all new properties added and set to optional. If the properties to add input is null or empty, returns an
    * unchanged copy of the original. If the new properties contain a value for a property that is already present in the original and the property value is not
    * equal to that in the original, throws an exception.
-   * 
+   *
    * @param originalProperties
    *          The original properties, not null
    * @param propertiesToAdd
@@ -64,8 +64,8 @@ public class ValuePropertiesUtils {
     for (final String propertyName : propertiesToAdd.getProperties()) {
       final Set<String> propertyValue = propertiesToAdd.getValues(propertyName);
       if (originalProperties.getValues(propertyName) != null && !propertyValue.equals(originalProperties.getValues(propertyName))) {
-        throw new IllegalStateException("Property " + propertyName + " already present, but value " +
-            propertyValue + " not equal to " + originalProperties.getValues(propertyName));
+        throw new IllegalStateException("Property " + propertyName + " already present, but value "
+            + propertyValue + " not equal to " + originalProperties.getValues(propertyName));
       }
       if (propertyValue == null || propertyValue.isEmpty()) {
         newProperties.withAny(propertyName).withOptional(propertyName);
@@ -80,7 +80,7 @@ public class ValuePropertiesUtils {
    * Adds all new properties to the original properties and sets them to optional. If the properties to add input is null or empty, the original properties are
    * unchanged. If the new properties contain a value for a property that is already present in the original and the property value is not equal to that in the
    * original, throws an exception.
-   * 
+   *
    * @param properties
    *          The original properties, not null
    * @param propertiesToAdd
@@ -97,8 +97,8 @@ public class ValuePropertiesUtils {
     for (final String propertyName : propertiesToAdd.getProperties()) {
       final Set<String> propertyValue = propertiesToAdd.getValues(propertyName);
       if (originalProperties.getValues(propertyName) != null && !propertyValue.equals(originalProperties.getValues(propertyName))) {
-        throw new IllegalStateException("Property " + propertyName + " already present, but value " +
-            propertyValue + " not equal to " + originalProperties.getValues(propertyName));
+        throw new IllegalStateException("Property " + propertyName + " already present, but value "
+            + propertyValue + " not equal to " + originalProperties.getValues(propertyName));
       }
       if (propertyValue == null || propertyValue.isEmpty()) {
         properties.withAny(propertyName).withOptional(propertyName);
@@ -111,7 +111,7 @@ public class ValuePropertiesUtils {
 
   /**
    * Returns a copy of the original properties with all of the given properties removed if present.
-   * 
+   *
    * @param originalProperties
    *          The original properties, not null
    * @param propertiesToRemove
@@ -132,7 +132,7 @@ public class ValuePropertiesUtils {
 
   /**
    * Returns properties that contain all of the properties that were set to optional in the original properties.
-   * 
+   *
    * @param originalProperties
    *          The original properties, not null
    * @return Properties that contain only those values that were set to optional in the original properties

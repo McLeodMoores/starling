@@ -71,8 +71,8 @@ public class AnalyticBondPricer {
       return 0.0;
     }
     if (bondPrice > zeroRiskPrice) {
-      throw new IllegalArgumentException("Bond price of " + bondPrice + ", is greater that zero-risk price of " + zeroRiskPrice +
-          ". It is not possible to imply a hazard rate for this bond. Please check inputs");
+      throw new IllegalArgumentException("Bond price of " + bondPrice + ", is greater that zero-risk price of " + zeroRiskPrice
+          + ". It is not possible to imply a hazard rate for this bond. Please check inputs");
     }
     final double dp = cleanOrDirty == PriceType.DIRTY ? bondPrice : bondPrice + bond.getAccruedInterest();
     if (dp <= bond.getRecoveryRate()) {

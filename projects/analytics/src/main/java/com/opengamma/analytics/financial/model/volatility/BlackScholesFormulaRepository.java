@@ -645,8 +645,7 @@ public abstract class BlackScholesFormulaRepository {
       } else {
         final double tmp = Math.abs(costOfCarry) < SMALL && lognormalVol < SMALL ? rootT
             : Math.abs(costOfCarry) < SMALL && rootT > LARGE ? 1. / lognormalVol
-                : costOfCarry / lognormalVol *
-                    rootT;
+                : costOfCarry / lognormalVol * rootT;
         d1 = Math.log(spot / strike) / sigmaRootT + tmp + 0.5 * sigmaRootT;
         d2 = d1 - sigmaRootT;
       }
@@ -661,8 +660,7 @@ public abstract class BlackScholesFormulaRepository {
     final double normForStrike = NORMAL.getCDF(sign * d2);
     final double spotTerm = normForSpot < SMALL ? 0.
         : Double.isNaN(rescaledSpot) ? -sign * Math.signum(costOfCarry - interestRate) * rescaledSpot
-            : -sign *
-                ((costOfCarry - interestRate) * rescaledSpot * normForSpot);
+            : -sign * ((costOfCarry - interestRate) * rescaledSpot * normForSpot);
     final double strikeTerm = normForStrike < SMALL ? 0.
         : Double.isNaN(rescaledSpot) ? sign * (-Math.signum(interestRate) * discount) : sign * (-interestRate * rescaledStrike * normForStrike);
 

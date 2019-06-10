@@ -156,8 +156,8 @@ public class Simulation {
   public Scenario scenario(final String name) {
     ArgumentChecker.notEmpty(name, "name");
     if (name.equals(_baseScenarioName)) {
-      throw new IllegalArgumentException("Can't add scenario named " + name + ", a base scenario exists with " +
-          "that name");
+      throw new IllegalArgumentException("Can't add scenario named " + name + ", a base scenario exists with "
+          + "that name");
     }
     if (_scenarios.containsKey(name)) {
       return _scenarios.get(name);
@@ -184,8 +184,8 @@ public class Simulation {
       throw new IllegalStateException("Base scenario already defined with name " + _baseScenarioName);
     }
     if (_scenarios.containsKey(name)) {
-      throw new IllegalArgumentException("Cannot add a base scenario named " + name + ", a scenario already exists " +
-          "with that name");
+      throw new IllegalArgumentException("Cannot add a base scenario named " + name + ", a scenario already exists "
+          + "with that name");
     }
     final Scenario base = new Scenario(this, name);
     _scenarios.put(name, base);
@@ -350,21 +350,21 @@ public class Simulation {
       return false;
     }
     final Simulation other = (Simulation) obj;
-    return Objects.equals(this._name, other._name) &&
-        Objects.equals(this._scenarios, other._scenarios) &&
-        Objects.equals(this._calcConfigNames, other._calcConfigNames) &&
-        Objects.equals(this._valuationTime, other._valuationTime) &&
-        Objects.equals(this._resolverVersionCorrection, other._resolverVersionCorrection) &&
-        Objects.equals(this._baseScenarioName, other._baseScenarioName);
+    return Objects.equals(this._name, other._name)
+        && Objects.equals(this._scenarios, other._scenarios)
+        && Objects.equals(this._calcConfigNames, other._calcConfigNames)
+        && Objects.equals(this._valuationTime, other._valuationTime)
+        && Objects.equals(this._resolverVersionCorrection, other._resolverVersionCorrection)
+        && Objects.equals(this._baseScenarioName, other._baseScenarioName);
   }
 
   @Override
   public String toString() {
-    return "Simulation [" +
-        "_scenarios=" + _scenarios +
-        ", _calcConfigNames=" + _calcConfigNames +
-        ", _valuationTime=" + _valuationTime +
-        ", _resolverVersionCorrection=" + _resolverVersionCorrection +
-        "]";
+    return "Simulation ["
+        + "_scenarios=" + _scenarios
+        + ", _calcConfigNames=" + _calcConfigNames
+        + ", _valuationTime=" + _valuationTime
+        + ", _resolverVersionCorrection=" + _resolverVersionCorrection
+        + "]";
   }
 }

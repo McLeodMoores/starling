@@ -64,10 +64,10 @@ public class DependencyGraphBuildTrace {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       final DependencyGraphBuildTrace other = (DependencyGraphBuildTrace) obj;
-      return JodaBeanUtils.equal(getDependencyGraph(), other.getDependencyGraph()) &&
-          JodaBeanUtils.equal(getExceptionsWithCounts(), other.getExceptionsWithCounts()) &&
-          JodaBeanUtils.equal(getFailures(), other.getFailures()) &&
-          JodaBeanUtils.equal(getMappings(), other.getMappings());
+      return JodaBeanUtils.equal(getDependencyGraph(), other.getDependencyGraph())
+          && JodaBeanUtils.equal(getExceptionsWithCounts(), other.getExceptionsWithCounts())
+          && JodaBeanUtils.equal(getFailures(), other.getFailures())
+          && JodaBeanUtils.equal(getMappings(), other.getMappings());
     }
     return false;
   }
@@ -85,7 +85,7 @@ public class DependencyGraphBuildTrace {
   // -----------------------------------------------------------------------
   /**
    * Gets the dependency graph that was constructed itself.
-   * 
+   *
    * @return the value of the property
    */
   public DependencyGraph getDependencyGraph() {
@@ -94,7 +94,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Sets the dependency graph that was constructed itself.
-   * 
+   *
    * @param depGraph
    *          the new value of the property
    */
@@ -104,7 +104,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Gets a list of exceptions along with counts for them.
-   * 
+   *
    * @return the value of the property
    */
   public Map<Throwable, Integer> getExceptionsWithCounts() {
@@ -113,7 +113,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Sets a list of exceptions along with counts for them.
-   * 
+   *
    * @param exceptionCounts
    *          the new value of the property
    */
@@ -123,7 +123,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Gets a list of resolution failures that occurred.
-   * 
+   *
    * @return the value of the property
    */
   public List<ResolutionFailure> getFailures() {
@@ -132,7 +132,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Sets a list of resolution failures that occurred.
-   * 
+   *
    * @param failures
    *          the new value of the property
    */
@@ -142,7 +142,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Gets a map showing how value requirements were resolved to specifications.
-   * 
+   *
    * @return the value of the property
    */
   public Map<ValueRequirement, ValueSpecification> getMappings() {
@@ -151,7 +151,7 @@ public class DependencyGraphBuildTrace {
 
   /**
    * Sets a map showing how value requirements were resolved to specifications.
-   * 
+   *
    * @param mappings
    *          the new value of the property
    */

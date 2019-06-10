@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -17,13 +17,13 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class BloombergAlternativeFXOptionVolatilitySurfaceInstrumentProvider implements SurfaceInstrumentProvider<Tenor, Pair<Number, FXVolQuoteType>> {
   private static final ExternalScheme SCHEME = ExternalSchemes.BLOOMBERG_TICKER_WEAK;
   private final String _fxPrefix;
-  private final String _postfix; //expecting Curncy
-  private final String _dataFieldName; //expecting MarketDataRequirementNames.MARKET_VALUE
+  private final String _postfix; // expecting Curncy
+  private final String _dataFieldName; // expecting MarketDataRequirementNames.MARKET_VALUE
 
   public BloombergAlternativeFXOptionVolatilitySurfaceInstrumentProvider(final String fxPrefix, final String postfix, final String dataFieldName) {
     ArgumentChecker.notNull(fxPrefix, "fx prefix");
@@ -120,8 +120,8 @@ public class BloombergAlternativeFXOptionVolatilitySurfaceInstrumentProvider imp
       return false;
     }
     final BloombergAlternativeFXOptionVolatilitySurfaceInstrumentProvider other = (BloombergAlternativeFXOptionVolatilitySurfaceInstrumentProvider) obj;
-    return getFXPrefix().equals(other.getFXPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getFXPrefix().equals(other.getFXPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 }

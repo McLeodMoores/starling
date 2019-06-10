@@ -76,9 +76,9 @@ public class XlsSnapshotWriter implements SnapshotWriter {
     for (final ExternalIdBundle eib : snapshot.getTargets()) {
       final Map<String, ValueSnapshot> valueSnapshots = snapshot.getTargetValues(eib);
       if (valueSnapshots.size() > 1) {
-        throw new OpenGammaRuntimeException("XML export only supports a single value snapshot for UnstructuredMarketDataSnapshot. " +
-            eib.toString() + " contains " + valueSnapshots.size() + " ValueSnapshots. " +
-            "Export to CSV in this instance.");
+        throw new OpenGammaRuntimeException("XML export only supports a single value snapshot for UnstructuredMarketDataSnapshot. "
+            + eib.toString() + " contains " + valueSnapshots.size() + " ValueSnapshots. "
+            + "Export to CSV in this instance.");
       }
       final ValueSnapshot valueSnapshot = valueSnapshots.entrySet().iterator().next().getValue();
       final String market = valueSnapshot.getMarketValue() == null ? "" : valueSnapshot.getMarketValue().toString();

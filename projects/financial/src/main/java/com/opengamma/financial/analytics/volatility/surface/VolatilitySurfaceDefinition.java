@@ -18,7 +18,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Hold the valid range of X and Y for a surface. E.g. VolatilitySurfaceDefinition&lt;Tenor, Double&gt; (tenor vs strike, z is volatility), where Tenors go from
  * 1YR..10YR, strikes from 220.0d to 240.0d with deltas of 5
- * 
+ *
  * @param <X>
  *          Type of the x-data
  * @param <Y>
@@ -56,7 +56,8 @@ public class VolatilitySurfaceDefinition<X, Y> {
 
   /**
    * @deprecated use getTarget()
-   * @throws ClassCastException if target not a currency
+   * @throws ClassCastException
+   *           if target not a currency
    * @return currency assuming that the target is a currency
    */
   @Deprecated
@@ -77,10 +78,10 @@ public class VolatilitySurfaceDefinition<X, Y> {
       return false;
     }
     final VolatilitySurfaceDefinition<?, ?> other = (VolatilitySurfaceDefinition<?, ?>) o;
-    return other.getTarget().equals(getTarget()) &&
-        other.getName().equals(getName()) &&
-        Arrays.equals(other.getXs(), getXs()) &&
-        Arrays.equals(other.getYs(), getYs());
+    return other.getTarget().equals(getTarget())
+        && other.getName().equals(getName())
+        && Arrays.equals(other.getXs(), getXs())
+        && Arrays.equals(other.getYs(), getYs());
   }
 
   @Override

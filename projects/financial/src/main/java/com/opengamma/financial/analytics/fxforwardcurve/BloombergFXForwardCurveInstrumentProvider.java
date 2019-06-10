@@ -45,11 +45,9 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
   private final boolean _useSpotRateFromGraph;
 
   /**
-   * Constructor where only FX forward ticker information is supplied. This sets
-   * the _useSpotRateFromGraph field to true, which means that the FX spot rate
-   * will be supplied by
-   * {@link com.opengamma.engine.value.ValueRequirementNames#SPOT_RATE}.
-   * 
+   * Constructor where only FX forward ticker information is supplied. This sets the _useSpotRateFromGraph field to true, which means that the FX spot rate will
+   * be supplied by {@link com.opengamma.engine.value.ValueRequirementNames#SPOT_RATE}.
+   *
    * @param prefix
    *          The FX forward prefix, not null
    * @param postfix
@@ -71,13 +69,17 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
   }
 
   /**
-   * Constructor where the FX forward ticker and FX spot rate ticker information is supplied. This sets the
-   * _useSpotRateFromGraph field to false, which means that the FX spot rate will be requested from
-   * the Bloomberg ticker.
-   * @param prefix The FX forward prefix, not null
-   * @param postfix The FX forward postfix, not null
-   * @param spotPrefix The FX spot prefix, not null
-   * @param dataFieldName The FX spot data field name, not null
+   * Constructor where the FX forward ticker and FX spot rate ticker information is supplied. This sets the _useSpotRateFromGraph field to false, which means
+   * that the FX spot rate will be requested from the Bloomberg ticker.
+   * 
+   * @param prefix
+   *          The FX forward prefix, not null
+   * @param postfix
+   *          The FX forward postfix, not null
+   * @param spotPrefix
+   *          The FX spot prefix, not null
+   * @param dataFieldName
+   *          The FX spot data field name, not null
    */
   public BloombergFXForwardCurveInstrumentProvider(final String prefix, final String postfix, final String spotPrefix, final String dataFieldName) {
     ArgumentChecker.notNull(prefix, "prefix");
@@ -95,6 +97,7 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
 
   /**
    * Gets the FX forward ticker prefix.
+   * 
    * @return The FX forward ticker prefix
    */
   public String getPrefix() {
@@ -103,6 +106,7 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
 
   /**
    * Gets the FX forward ticker postfix.
+   * 
    * @return The FX forward ticker postfix
    */
   public String getPostfix() {
@@ -111,6 +115,7 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
 
   /**
    * Gets the FX spot ticker prefix.
+   * 
    * @return The FX spot ticker prefix
    */
   public String getSpotPrefix() {
@@ -127,6 +132,7 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
 
   /**
    * Gets the spot ticker value e.g. EUR Curncy.
+   * 
    * @return The spot ticker value.
    */
   public String getSpotName() {
@@ -239,9 +245,9 @@ public class BloombergFXForwardCurveInstrumentProvider implements FXForwardCurve
     if (!_useSpotRateFromGraph && !ObjectUtils.equals(getSpotPrefix(), other.getSpotPrefix())) {
       return false;
     }
-    return getPrefix().equals(other.getPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getPrefix().equals(other.getPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
 }

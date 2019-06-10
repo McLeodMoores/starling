@@ -36,8 +36,8 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
   public static boolean isDisplayableInline(final Class<?> type, final ColumnSpecification spec) {
     return type != null &&
         (LocalDateLabelledMatrix1D.class.isAssignableFrom(type) &&
-            LOCAL_DATE_LABELLED_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()) ||
-            TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class.isAssignableFrom(type) &&
+            LOCAL_DATE_LABELLED_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName())
+            || TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class.isAssignableFrom(type) &&
                 TENOR_LABELLED_TIME_SERIES_MATRIX_1D_VALUE_NAMES.contains(spec.getValueName()));
   }
 

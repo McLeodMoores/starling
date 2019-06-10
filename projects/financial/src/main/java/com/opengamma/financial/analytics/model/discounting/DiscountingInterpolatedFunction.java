@@ -69,8 +69,8 @@ public abstract class DiscountingInterpolatedFunction extends DiscountingFunctio
           .withAny(CURVE_EXPOSURES);
       if (isWithCurrency()) {
         final Security security = target.getTrade().getSecurity();
-        if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security) &&
-            InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
+        if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security)
+            && InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
           final SwapSecurity swapSecurity = (SwapSecurity) security;
           if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
             final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();

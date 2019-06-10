@@ -41,7 +41,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Sets the scheme to weak tickers.
-   * 
+   *
    * @param fxPrefix
    *          The FX prefix, not null
    * @param postfix
@@ -70,11 +70,11 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
     ArgumentChecker.notNull(postfix, "postfix");
     ArgumentChecker.notNull(dataFieldName, "data field name");
     ArgumentChecker.notNull(schemeName, "scheme name");
-    final boolean schemeTest = schemeName.equals(ExternalSchemes.BLOOMBERG_BUID.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_BUID_WEAK.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TCM.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
+    final boolean schemeTest = schemeName.equals(ExternalSchemes.BLOOMBERG_BUID.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_BUID_WEAK.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TCM.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
     ArgumentChecker.isTrue(schemeTest, "scheme name {} was not appropriate for Bloomberg data");
     _fxPrefix = fxPrefix;
     _postfix = postfix;
@@ -84,7 +84,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the FX prefix.
-   * 
+   *
    * @return The FX prefix
    */
   public String getFXPrefix() {
@@ -93,7 +93,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the code postfix.
-   * 
+   *
    * @return The code postfix
    */
   public String getPostfix() {
@@ -107,7 +107,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the scheme name.
-   * 
+   *
    * @return The scheme name
    */
   public String getSchemeName() {
@@ -180,9 +180,9 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
       return false;
     }
     final BloombergFXOptionVolatilitySurfaceInstrumentProvider other = (BloombergFXOptionVolatilitySurfaceInstrumentProvider) obj;
-    return getFXPrefix().equals(other.getFXPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName()) &&
-        getSchemeName().equals(other.getSchemeName());
+    return getFXPrefix().equals(other.getFXPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName())
+        && getSchemeName().equals(other.getSchemeName());
   }
 }

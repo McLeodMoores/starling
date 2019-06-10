@@ -70,9 +70,9 @@ public class RedisSimulationSeriesLoaderTool extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() {
     if (!(getToolContext().getHistoricalTimeSeriesSource() instanceof RedisSimulationSeriesSource)) {
-      throw new OpenGammaRuntimeException("HistoricalTimeSeriesSource from conrtext is not a RedisSimulationSeriesSource, got " +
-          getToolContext().getHistoricalTimeSeriesSource() +
-          ": note this tool must be run with a toolcontext config file not via -c http://localhost");
+      throw new OpenGammaRuntimeException("HistoricalTimeSeriesSource from conrtext is not a RedisSimulationSeriesSource, got "
+          + getToolContext().getHistoricalTimeSeriesSource()
+          + ": note this tool must be run with a toolcontext config file not via -c http://localhost");
     }
     final RedisSimulationSeriesSource source = (RedisSimulationSeriesSource) getToolContext().getHistoricalTimeSeriesSource();
 

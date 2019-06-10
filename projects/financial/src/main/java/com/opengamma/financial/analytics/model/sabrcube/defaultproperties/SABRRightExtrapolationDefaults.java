@@ -131,9 +131,9 @@ public class SABRRightExtrapolationDefaults extends DefaultPropertyFunction {
         return false;
       }
       final InterestRateInstrumentType type = SwapSecurityUtils.getSwapType((SwapSecurity) security);
-      if (type != InterestRateInstrumentType.SWAP_FIXED_CMS &&
-          type != InterestRateInstrumentType.SWAP_CMS_CMS &&
-          type != InterestRateInstrumentType.SWAP_IBOR_CMS) {
+      if (type != InterestRateInstrumentType.SWAP_FIXED_CMS
+          && type != InterestRateInstrumentType.SWAP_CMS_CMS
+          && type != InterestRateInstrumentType.SWAP_IBOR_CMS) {
         return false;
       }
     }

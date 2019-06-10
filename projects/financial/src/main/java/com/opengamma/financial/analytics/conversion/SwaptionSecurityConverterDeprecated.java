@@ -45,7 +45,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Converts swaptions from {@link SwaptionSecurity} to the {@link InstrumentDefinition}s.
- * 
+ *
  * @deprecated Replaced by {@link SwaptionSecurityConverter}, which does not use curve name information
  */
 @Deprecated
@@ -149,7 +149,7 @@ public class SwaptionSecurityConverterDeprecated extends FinancialSecurityVisito
 
   /**
    * Creates a fixed / ibor swap definition.
-   * 
+   *
    * @param swapSecurity
    *          The swap security
    * @param payFixed
@@ -169,8 +169,8 @@ public class SwaptionSecurityConverterDeprecated extends FinancialSecurityVisito
     final ConventionBundle iborIndexConvention = _conventionSource.getConventionBundle(iborLeg.getFloatingReferenceRateId());
     if (iborIndexConvention == null) {
       throw new OpenGammaRuntimeException(
-          "Could not get Ibor index convention for " + currency + " using " + iborLeg.getFloatingReferenceRateId() + " from swap " +
-              swapSecurity.getExternalIdBundle());
+          "Could not get Ibor index convention for " + currency + " using " + iborLeg.getFloatingReferenceRateId() + " from swap "
+              + swapSecurity.getExternalIdBundle());
     }
     final Frequency freqIbor = iborLeg.getFrequency();
     final Period tenorIbor;

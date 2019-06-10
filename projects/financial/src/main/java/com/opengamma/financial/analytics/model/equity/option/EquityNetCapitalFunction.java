@@ -28,9 +28,9 @@ public class EquityNetCapitalFunction extends NetCapitalFunction {
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getPositionOrTrade().getSecurity();
-    if (security instanceof EquitySecurity ||
-        security instanceof EquityOptionSecurity ||
-        security instanceof EquityIndexOptionSecurity) {
+    if (security instanceof EquitySecurity
+        || security instanceof EquityOptionSecurity
+        || security instanceof EquityIndexOptionSecurity) {
       return true;
     }
     return false;

@@ -239,8 +239,8 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
 
     final List<ObjectId> objectIds = request.getObjectIds();
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
-    if (objectIds != null && objectIds.size() == 0 ||
-        ExternalIdSearch.canMatch(externalIdSearch) == false) {
+    if (objectIds != null && objectIds.size() == 0
+        || ExternalIdSearch.canMatch(externalIdSearch) == false) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }

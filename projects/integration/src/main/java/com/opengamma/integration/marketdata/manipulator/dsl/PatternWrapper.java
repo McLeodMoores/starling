@@ -38,8 +38,8 @@ public final class PatternWrapper implements Serializable {
       return false;
     }
     final PatternWrapper that = (PatternWrapper) o;
-    return Objects.equals(_pattern.pattern(), that._pattern.pattern()) &&
-        Objects.equals(_pattern.flags(), that._pattern.flags());
+    return Objects.equals(_pattern.pattern(), that._pattern.pattern())
+        && Objects.equals(_pattern.flags(), that._pattern.flags());
   }
 
   @Override
@@ -56,7 +56,7 @@ public final class PatternWrapper implements Serializable {
 
   /**
    * Wraps a {@link Pattern}.
-   * 
+   *
    * @param pattern
    *          The pattern to wrap, may be null
    * @return A wrapped pattern or null if the argument is null

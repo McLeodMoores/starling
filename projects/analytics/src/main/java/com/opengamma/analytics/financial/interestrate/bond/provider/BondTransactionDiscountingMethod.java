@@ -39,7 +39,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * Return the class instance.
-   * 
+   *
    * @return The instance.
    */
   public static BondTransactionDiscountingMethod getInstance() {
@@ -61,7 +61,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * Compute the present value of a fixed coupon bond transaction.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -85,7 +85,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * Compute the present value of a Ibor coupon bond (FRN) transaction.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -108,7 +108,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * Compute the present value of a bond transaction from its clean price.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -140,7 +140,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * Compute the present value of a bond transaction from its conventional yield.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -172,7 +172,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * Compute the present value sensitivity of a bond transaction.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -211,7 +211,7 @@ public final class BondTransactionDiscountingMethod {
   /**
    * The par spread with respect to the trade price for which the present value of the bond transaction is 0. If that spread was added to the transaction price,
    * the new transaction would have a present value of 0.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -235,8 +235,8 @@ public final class BondTransactionDiscountingMethod {
     final Currency ccy = bond.getBondTransaction().getCurrency();
     final PaymentFixed nominalAtSettlement = new PaymentFixed(bond.getBondTransaction().getCurrency(), bond.getBondTransaction().getSettlementTime(),
         bond.getBondTransaction().getCoupon()
-            .getNthPayment(0).getNotional() *
-            bond.getQuantity());
+            .getNthPayment(0).getNotional()
+            * bond.getQuantity());
     final double pvNominalAtSettlement = nominalAtSettlement.accept(PVDC, issuerMulticurves.getMulticurveProvider()).getAmount(ccy);
     return -presentValue(bond, issuerMulticurves).getAmount(ccy) / pvNominalAtSettlement;
   }
@@ -244,7 +244,7 @@ public final class BondTransactionDiscountingMethod {
   /**
    * The par spread with respect to the trade yield for which the present value of the bond transaction is 0. If that spread was added to the transaction yield,
    * the new transaction would have a present value of 0.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -260,7 +260,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * The par spread with respect to price curve sensitivity.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves
@@ -273,8 +273,8 @@ public final class BondTransactionDiscountingMethod {
     final Currency ccy = bond.getBondTransaction().getCurrency();
     final PaymentFixed nominalAtSettlement = new PaymentFixed(bond.getBondTransaction().getCurrency(), bond.getBondTransaction().getSettlementTime(),
         bond.getBondTransaction().getCoupon()
-            .getNthPayment(0).getNotional() *
-            bond.getQuantity());
+            .getNthPayment(0).getNotional()
+            * bond.getQuantity());
     final double pvNominalAtSettlement = nominalAtSettlement.accept(PVDC, issuerMulticurves.getMulticurveProvider()).getAmount(ccy);
     final MulticurveSensitivity pvcsNominalAtSettlement = nominalAtSettlement.accept(PVCSDC, issuerMulticurves.getMulticurveProvider()).getSensitivity(ccy);
     final MulticurveSensitivity pvcsBond = presentValueCurveSensitivity(bond, issuerMulticurves).getSensitivity(ccy);
@@ -289,8 +289,8 @@ public final class BondTransactionDiscountingMethod {
     final Currency ccy = bond.getBondTransaction().getCurrency();
     final PaymentFixed nominalAtSettlement = new PaymentFixed(bond.getBondTransaction().getCurrency(), bond.getBondTransaction().getSettlementTime(),
         bond.getBondTransaction().getCoupon()
-            .getNthPayment(0).getNotional() *
-            bond.getQuantity());
+            .getNthPayment(0).getNotional()
+            * bond.getQuantity());
     final double pvNominalAtSettlement = nominalAtSettlement.accept(PVDC, issuerMulticurves.getMulticurveProvider()).getAmount(ccy);
     final MulticurveSensitivity pvcsNominalAtSettlement = nominalAtSettlement.accept(PVCSDC, issuerMulticurves.getMulticurveProvider()).getSensitivity(ccy);
     final MulticurveSensitivity pvcsBond = presentValueCurveSensitivity(bond, issuerMulticurves).getSensitivity(ccy);
@@ -301,7 +301,7 @@ public final class BondTransactionDiscountingMethod {
 
   /**
    * The par spread with respect to yield curve sensitivity.
-   * 
+   *
    * @param bond
    *          The bond transaction.
    * @param issuerMulticurves

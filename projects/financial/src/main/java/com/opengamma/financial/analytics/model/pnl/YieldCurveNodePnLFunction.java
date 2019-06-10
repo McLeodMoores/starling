@@ -208,8 +208,8 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
       try {
         final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security);
         return type == InterestRateInstrumentType.SWAP_FIXED_IBOR || type == InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
-            || type == InterestRateInstrumentType.SWAP_IBOR_IBOR ||
-            type == InterestRateInstrumentType.SWAP_FIXED_OIS || type == InterestRateInstrumentType.ZERO_COUPON_INFLATION_SWAP;
+            || type == InterestRateInstrumentType.SWAP_IBOR_IBOR
+            || type == InterestRateInstrumentType.SWAP_FIXED_OIS || type == InterestRateInstrumentType.ZERO_COUPON_INFLATION_SWAP;
       } catch (final OpenGammaRuntimeException ogre) {
         return false;
       }

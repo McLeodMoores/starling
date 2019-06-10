@@ -246,8 +246,8 @@ public class RollGeskeWhaleyModel {
     final double d21 = (Math.log((spot - pVal) / strike) + interestRate * timeToExpiry) / sigRootT2 + 0.5 * sigRootT2;
     final double d22 = d21 - sigRootT2;
 
-    return modSpot * getNormalAndBinormal(d11, d21, corr, 1.) - strike * discountFactor * getNormalAndBinormal(d12, d22, corr, factor) + pVal *
-        NORMAL.getCDF(d12);
+    return modSpot * getNormalAndBinormal(d11, d21, corr, 1.) - strike * discountFactor * getNormalAndBinormal(d12, d22, corr, factor) + pVal
+        * NORMAL.getCDF(d12);
   }
 
   /**
@@ -387,8 +387,8 @@ public class RollGeskeWhaleyModel {
     res[0] = BlackScholesFormulaRepository.price(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true);
     res[1] = BlackScholesFormulaRepository.delta(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true);
     res[2] = BlackScholesFormulaRepository.dualDelta(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true);
-    res[3] = BlackScholesFormulaRepository.rho(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true) +
-        BlackScholesFormulaRepository.delta(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true) * pVal * dividendTime;
+    res[3] = BlackScholesFormulaRepository.rho(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true)
+        + BlackScholesFormulaRepository.delta(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true) * pVal * dividendTime;
     res[4] = -BlackScholesFormulaRepository.theta(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true);
     res[5] = BlackScholesFormulaRepository.delta(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate, true) * pVal * interestRate;
     res[6] = BlackScholesFormulaRepository.vega(modSpot, strike, timeToExpiry, volatility, interestRate, interestRate);
@@ -407,8 +407,8 @@ public class RollGeskeWhaleyModel {
           + biAdj[3] * corrAdjoint[i];
     }
     res[7] = factorAdjoint[0] * normAdj[1] * d1Adjoint[7] + factorAdjoint[0] * normAdj[2] * d1Adjoint[1] * d1Adjoint[1] + biAdj[1] * d2Adjoint[7]
-        - biAdj[2] * d1Adjoint[7] + biAdj[4] * d2Adjoint[1] *
-            d2Adjoint[1]
+        - biAdj[2] * d1Adjoint[7] + biAdj[4] * d2Adjoint[1]
+            * d2Adjoint[1]
         + biAdj[5] * d1Adjoint[1] * d1Adjoint[1] - 2. * biAdj[6] * d1Adjoint[1] * d2Adjoint[1];
     return res;
   }
@@ -451,8 +451,8 @@ public class RollGeskeWhaleyModel {
     final double dualDelta = -sStarAdjoint[2] / sigRootT1 / sStarAdjoint[0];
     final double rho = rootT1 * pVal / volatility / modSpot - sStarAdjoint[3] / sStarAdjoint[0] / sigRootT1 + rootT1 / volatility;
     final double theta = -sStarAdjoint[4] / sStarAdjoint[0] / sigRootT1;
-    final double divTheta1 = interestRate * pVal / sigRootT1 / modSpot - sStarAdjoint[5] / sStarAdjoint[0] / sigRootT1 - 0.5 * part1 / dividendTime + 0.5 *
-        (interestRate + 0.5 * volatility * volatility) / sigRootT1;
+    final double divTheta1 = interestRate * pVal / sigRootT1 / modSpot - sStarAdjoint[5] / sStarAdjoint[0] / sigRootT1 - 0.5 * part1 / dividendTime + 0.5
+        * (interestRate + 0.5 * volatility * volatility) / sigRootT1;
     final double divTheta2 = divTheta1 - 0.5 * volatility / rootT1;
     final double vegaPart = -part / volatility - sStarAdjoint[6] / sStarAdjoint[0] / sigRootT1;
     final double vega1 = vegaPart + 0.5 * rootT1;

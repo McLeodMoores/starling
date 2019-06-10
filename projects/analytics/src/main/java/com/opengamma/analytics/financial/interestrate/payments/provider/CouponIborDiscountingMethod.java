@@ -33,7 +33,7 @@ public final class CouponIborDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static CouponIborDiscountingMethod getInstance() {
@@ -48,7 +48,7 @@ public final class CouponIborDiscountingMethod {
 
   /**
    * Compute the present value of a Ibor coupon by discounting.
-   * 
+   *
    * @param coupon
    *          The coupon.
    * @param multicurves
@@ -79,7 +79,7 @@ public final class CouponIborDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to yield for discounting curve and forward rate (in index convention) for forward curve.
-   * 
+   *
    * @param coupon
    *          The coupon.
    * @param multicurve
@@ -125,8 +125,8 @@ public final class CouponIborDiscountingMethod {
     final Map<String, List<ForwardSensitivity>> mapFwd = new HashMap<>();
     final List<ForwardSensitivity> listForward = new ArrayList<>();
     listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTime(), coupon.getFixingPeriodEndTime(), coupon.getFixingAccrualFactor(),
-        -2. * coupon.getPaymentTime() *
-            forwardBar));
+        -2. * coupon.getPaymentTime()
+            * forwardBar));
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);
     return MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));
   }

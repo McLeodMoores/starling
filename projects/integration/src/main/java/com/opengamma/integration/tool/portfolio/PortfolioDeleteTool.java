@@ -98,11 +98,11 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
       if (getCommandLine().hasOption(DELETE_PORTFOLIOS_OPT)) {
         if (getCommandLine().hasOption(WRITE_OPT)) {
           getToolContext().getPortfolioMaster().remove(portfolioDocument.getUniqueId());
-          LOGGER.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId() +
-              " (" + portfolioDocument.getPortfolio().getName() + ")");
+          LOGGER.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId()
+              + " (" + portfolioDocument.getPortfolio().getName() + ")");
         } else {
-          LOGGER.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId() +
-              " (" + portfolioDocument.getPortfolio().getName() + ")");
+          LOGGER.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId()
+              + " (" + portfolioDocument.getPortfolio().getName() + ")");
         }
       }
     }

@@ -49,7 +49,7 @@ public final class CouponCMSHullWhiteApproximationMethod {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static CouponCMSHullWhiteApproximationMethod getInstance() {
@@ -71,7 +71,7 @@ public final class CouponCMSHullWhiteApproximationMethod {
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by approximation.
-   * 
+   *
    * @param cms
    *          The CMS coupon.
    * @param multicurvesHW
@@ -116,7 +116,7 @@ public final class CouponCMSHullWhiteApproximationMethod {
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by approximation.
-   * 
+   *
    * @param cms
    *          The CMS coupon.
    * @param multicurvesHW
@@ -188,8 +188,8 @@ public final class CouponCMSHullWhiteApproximationMethod {
     }
     final double[] dfFixedBar = new double[nbFixed];
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
-      dfFixedBar[loopcf] = swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional() *
-          discountedCashFlowFixedBar[loopcf];
+      dfFixedBar[loopcf] = swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional()
+          * discountedCashFlowFixedBar[loopcf];
     }
 
     final List<DoublesPair> listDfSensi = new ArrayList<>();
@@ -200,8 +200,8 @@ public final class CouponCMSHullWhiteApproximationMethod {
     }
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
       final DoublesPair dfSensi = DoublesPair.of(swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime(),
-          -swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime() * dfFixed[loopcf] *
-              dfFixedBar[loopcf]);
+          -swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime() * dfFixed[loopcf]
+              * dfFixedBar[loopcf]);
       listDfSensi.add(dfSensi);
     }
     final Map<String, List<DoublesPair>> pvsDF = new HashMap<>();

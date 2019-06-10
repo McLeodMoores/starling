@@ -134,9 +134,9 @@ public class BatchRunner {
       } else if (creationMode.equalsIgnoreCase("reuse_existing")) {
         s_runCreationMode = RunCreationMode.REUSE_EXISTING;
       } else {
-        throw new OpenGammaRuntimeException("Unrecognized runCreationMode. " +
-            "Should be one of AUTO, CREATE_NEW, CREATE_NEW_OVERWRITE, REUSE_EXISTING. " +
-            "Was " + creationMode);
+        throw new OpenGammaRuntimeException("Unrecognized runCreationMode. "
+            + "Should be one of AUTO, CREATE_NEW, CREATE_NEW_OVERWRITE, REUSE_EXISTING. "
+            + "Was " + creationMode);
       }
     }
 
@@ -147,9 +147,9 @@ public class BatchRunner {
       } else if (snapshotMode.equalsIgnoreCase("WRITE_THROUGH")) {
         s_snapshotMode = SnapshotMode.WRITE_THROUGH;
       } else {
-        throw new OpenGammaRuntimeException("Unrecognized snapshotMode. " +
-            "Should be one of PREPARED, WRITE_THROUGH. " +
-            "Was " + snapshotMode);
+        throw new OpenGammaRuntimeException("Unrecognized snapshotMode. "
+            + "Should be one of PREPARED, WRITE_THROUGH. "
+            + "Was " + snapshotMode);
       }
     }
 
@@ -197,12 +197,12 @@ public class BatchRunner {
 
     options.addOption("correctedTo", true, "Version corrected to. yyyy-MM-ddTHH:mm:ssZZ - for example, 2011-12-15T14:48:59.323Z.");
 
-    options.addOption("runCreationMode", true, "One of AUTO, CREATE_NEW, CREATE_NEW_OVERWRITE, REUSE_EXISTING (case insensitive)." +
-        " Specifies whether to create a new run in the database." +
-        " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
+    options.addOption("runCreationMode", true, "One of AUTO, CREATE_NEW, CREATE_NEW_OVERWRITE, REUSE_EXISTING (case insensitive)."
+        + " Specifies whether to create a new run in the database."
+        + " See documentation of RunCreationMode Java enum to find out more. Default - auto.");
 
-    options.addOption("snapshotMode", true, "One of PREPARED, WRITE_THROUGH (case insensitive)." +
-        " Specifies whether to save market data in the batch database or such data should be present in advance of batch run.");
+    options.addOption("snapshotMode", true, "One of PREPARED, WRITE_THROUGH (case insensitive)."
+        + " Specifies whether to save market data in the batch database or such data should be present in advance of batch run.");
 
     return options;
   }

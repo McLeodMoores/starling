@@ -392,10 +392,10 @@ public class CrankNicolsonFiniteDifference2D implements ConvectionDiffusionPDESo
             sum -= c * u[index];
             sum -= d * (y2nd[j - 1][0] * u[index - xNodes] + y2nd[j - 1][1] * u[index] + y2nd[j - 1][2] * u[index + xNodes]);
             sum -= e * (x1st[i - 1][0] * (y1st[j - 1][0] * u[index - xNodes - 1] + y1st[j - 1][1] * u[index - 1] + y1st[j - 1][2] * u[index + xNodes - 1])
-                + x1st[i - 1][1] *
-                    (y1st[j - 1][0] * u[index - xNodes] + y1st[j - 1][1] * u[index] + y1st[j - 1][2] * u[index + xNodes])
-                + x1st[i - 1][2] *
-                    (y1st[j - 1][0] * u[index - xNodes + 1] + y1st[j - 1][1] * u[index + 1] + y1st[j - 1][2] * u[index + xNodes + 1]));
+                + x1st[i - 1][1]
+                    * (y1st[j - 1][0] * u[index - xNodes] + y1st[j - 1][1] * u[index] + y1st[j - 1][2] * u[index + xNodes])
+                + x1st[i - 1][2]
+                    * (y1st[j - 1][0] * u[index - xNodes + 1] + y1st[j - 1][1] * u[index + 1] + y1st[j - 1][2] * u[index + xNodes + 1]));
             sum -= f * (y1st[j - 1][0] * u[index - xNodes] + y1st[j - 1][1] * u[index] + y1st[j - 1][2] * u[index + xNodes]);
             sum *= (1 - _theta) * dt[n - 1];
           }

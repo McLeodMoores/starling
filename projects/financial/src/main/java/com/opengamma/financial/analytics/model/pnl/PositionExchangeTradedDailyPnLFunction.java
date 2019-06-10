@@ -89,8 +89,8 @@ public class PositionExchangeTradedDailyPnLFunction extends AbstractTradeOrDaily
   protected LocalDate checkAvailableData(final LocalDate originalTradeDate, final HistoricalTimeSeries markToMarketSeries, final Security security,
       final String markDataField, final String resolutionKey) {
     if (markToMarketSeries.getTimeSeries().isEmpty() || markToMarketSeries.getTimeSeries().getLatestValue() == null) {
-      throw new NullPointerException("Could not get mark to market value for security " +
-          security.getExternalIdBundle() + " for " + markDataField + " using " + resolutionKey + " for " + MAX_DAYS_OLD + " back from " + originalTradeDate);
+      throw new NullPointerException("Could not get mark to market value for security "
+          + security.getExternalIdBundle() + " for " + markDataField + " using " + resolutionKey + " for " + MAX_DAYS_OLD + " back from " + originalTradeDate);
     }
     return markToMarketSeries.getTimeSeries().getLatestTime();
   }

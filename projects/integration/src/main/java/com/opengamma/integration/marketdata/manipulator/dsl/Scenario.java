@@ -55,9 +55,11 @@ public class Scenario {
   private VersionCorrection _resolverVersionCorrection;
 
   /**
-   * Creates a new scenario with a calcuation configuration name of "Default", valuation time of {@code Instant.now()}
-   * and resolver version correction of {@link VersionCorrection#LATEST}.
-   * @param name The scenario name, not null
+   * Creates a new scenario with a calcuation configuration name of "Default", valuation time of {@code Instant.now()} and resolver version correction of
+   * {@link VersionCorrection#LATEST}.
+   *
+   * @param name
+   *          The scenario name, not null
    */
   public Scenario(final String name) {
     ArgumentChecker.notEmpty(name, "name");
@@ -103,7 +105,9 @@ public class Scenario {
 
   /**
    * Updates this scenario to apply to the specified calculation configuration.
-   * @param configNames The calculation configuration name
+   *
+   * @param configNames
+   *          The calculation configuration name
    * @return The modified scenario
    */
   public Scenario calculationConfigurations(final String... configNames) {
@@ -114,7 +118,9 @@ public class Scenario {
 
   /**
    * Updates this scenario to use the specified valuation time.
-   * @param valuationTime The valuation time
+   *
+   * @param valuationTime
+   *          The valuation time
    * @return The modified scenario
    */
   public Scenario valuationTime(final Instant valuationTime) {
@@ -125,7 +131,9 @@ public class Scenario {
 
   /**
    * Updates this scenario to use the specified valuation time.
-   * @param valuationTime The valuation time
+   *
+   * @param valuationTime
+   *          The valuation time
    * @return The modified scenario
    */
   public Scenario valuationTime(final String valuationTime) {
@@ -133,15 +141,17 @@ public class Scenario {
       final LocalDateTime localTime = LocalDateTime.parse(valuationTime, DATE_FORMATTER);
       _valuationTime = ZonedDateTime.of(localTime, OpenGammaClock.getZone()).toInstant();
     } catch (final DateTimeParseException e) {
-      throw new IllegalArgumentException("Valuation time isn't in a valid format. Expected format " +
-                                             "'yyyy-MM-dd HH:mm', value: " + valuationTime);
+      throw new IllegalArgumentException("Valuation time isn't in a valid format. Expected format "
+          + "'yyyy-MM-dd HH:mm', value: " + valuationTime);
     }
     return this;
   }
 
   /**
    * Updates this scenario to use the specified valuation time.
-   * @param valuationTime The valuation time
+   *
+   * @param valuationTime
+   *          The valuation time
    * @return The modified scenario
    */
   public Scenario valuationTime(final ZonedDateTime valuationTime) {
@@ -151,7 +161,9 @@ public class Scenario {
 
   /**
    * Updates this scenario to use the specified version correction in the resolver.
-   * @param resolverVersionCorrection The resolver version correction
+   *
+   * @param resolverVersionCorrection
+   *          The resolver version correction
    * @return The modified scenario
    */
   public Scenario resolverVersionCorrection(final VersionCorrection resolverVersionCorrection) {
@@ -234,21 +246,21 @@ public class Scenario {
       return false;
     }
     final Scenario other = (Scenario) obj;
-    return Objects.equals(this._manipulations, other._manipulations) &&
-        Objects.equals(this._name, other._name) &&
-        Objects.equals(this._calcConfigNames, other._calcConfigNames) &&
-        Objects.equals(this._valuationTime, other._valuationTime) &&
-        Objects.equals(this._resolverVersionCorrection, other._resolverVersionCorrection);
+    return Objects.equals(this._manipulations, other._manipulations)
+        && Objects.equals(this._name, other._name)
+        && Objects.equals(this._calcConfigNames, other._calcConfigNames)
+        && Objects.equals(this._valuationTime, other._valuationTime)
+        && Objects.equals(this._resolverVersionCorrection, other._resolverVersionCorrection);
   }
 
   @Override
   public String toString() {
-    return "Scenario [" +
-        "_name='" + _name + "'" +
-        ", _calcConfigNames=" + _calcConfigNames +
-        ", _valuationTime=" + _valuationTime +
-        ", _resolverVersionCorrection=" + _resolverVersionCorrection +
-        ", _manipulations=" + _manipulations +
-        "]";
+    return "Scenario ["
+        + "_name='" + _name + "'"
+        + ", _calcConfigNames=" + _calcConfigNames
+        + ", _valuationTime=" + _valuationTime
+        + ", _resolverVersionCorrection=" + _resolverVersionCorrection
+        + ", _manipulations=" + _manipulations
+        + "]";
   }
 }

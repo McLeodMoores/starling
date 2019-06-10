@@ -18,9 +18,9 @@ import com.opengamma.master.security.impl.AbstractSecurityLoader;
  */
 public class MockSecurityLoader extends AbstractSecurityLoader {
 
-  private static final String MESSAGE = "This is a placeholder security loader." +
-      "\nFor fully supported implementations supporting major data vendors like Bloomberg and Thomson-Reuters," +
-      "\nPlease contact sales@opengamma.com.";
+  private static final String MESSAGE = "This is a placeholder security loader."
+      + "\nFor fully supported implementations supporting major data vendors like Bloomberg and Thomson-Reuters,"
+      + "\nPlease contact sales@opengamma.com.";
 
   @Override
   protected SecurityLoaderResult doBulkLoad(final SecurityLoaderRequest request) {

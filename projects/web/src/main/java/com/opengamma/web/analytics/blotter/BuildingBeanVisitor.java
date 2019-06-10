@@ -19,9 +19,11 @@ import com.google.common.collect.Maps;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * {@link BeanVisitor} that builds an object by pushing data from a bean into a {@link BeanDataSink sink}.
- * TODO a MUCH better name is required, this and BeanBuildingVisitor are too similar
- * @param <T> Type of object built by this visitor's sink
+ * {@link BeanVisitor} that builds an object by pushing data from a bean into a {@link BeanDataSink sink}. TODO a MUCH better name is required, this and
+ * BeanBuildingVisitor are too similar
+ *
+ * @param <T>
+ *          Type of object built by this visitor's sink
  */
 /* package */ class BuildingBeanVisitor<T> implements BeanVisitor<T> {
 
@@ -40,8 +42,8 @@ import com.opengamma.util.ArgumentChecker;
   @Override
   public void visitMetaBean(final MetaBean metaBean) {
     if (!_bean.getClass().equals(metaBean.beanType())) {
-      throw new IllegalArgumentException("Bean type " + _bean.getClass().getName() + " is not the same as " +
-                                             "MetaBean type " + metaBean.beanType().getName());
+      throw new IllegalArgumentException("Bean type " + _bean.getClass().getName() + " is not the same as "
+          + "MetaBean type " + metaBean.beanType().getName());
     }
     _sink.setBeanData(metaBean, _bean);
   }

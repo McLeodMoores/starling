@@ -89,8 +89,8 @@ public class TimeSeriesDataTestUtils {
         throw new IllegalArgumentException("Time series did not contain the same dates at index " + i);
       }
       if (!CompareUtils.closeEquals(ts1.valuesArrayFast()[i], ts2.valuesArrayFast()[i], maxDifference)) {
-        throw new IllegalArgumentException("Time-series did not contain approximately-equal values at " +
-            ts1.timesArray()[i] + ": " + ts1.valuesArrayFast()[i] + " and " + ts2.valuesArrayFast()[i]);
+        throw new IllegalArgumentException("Time-series did not contain approximately-equal values at "
+            + ts1.timesArray()[i] + ": " + ts1.valuesArrayFast()[i] + " and " + ts2.valuesArrayFast()[i]);
       }
     }
   }

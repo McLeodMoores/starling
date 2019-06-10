@@ -25,8 +25,8 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final String targetScheme = target.getUniqueId().getScheme();
-    return targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER.getName()) ||
-        targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
+    return targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER.getName())
+        || targetScheme.equalsIgnoreCase(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
   }
 
   @Override
@@ -41,7 +41,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
 
   /**
    * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
-   * 
+   *
    * @return ValueProperties specifying any currency, curve name and curve calculation config
    */
   protected ValueProperties getCurrencyProperties() {
@@ -55,7 +55,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
 
   /**
    * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
-   * 
+   *
    * @param desiredValue
    *          ValueRequirement containing "CurveCurrency" and "FundingCurve"
    * @return ValueProperties containing specified values
@@ -74,7 +74,7 @@ public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireL
 
   /**
    * Equity requires an additional three properties. This is to specify the Funding curve used to build the Equity Forwards.
-   * 
+   *
    * @param desiredValue
    *          ValueRequirement containing "CurveCurrency" and "FundingCurve"
    * @return ValueProperties containing specified values

@@ -42,7 +42,7 @@ public class DependencyGraphTraceBuilderProperties {
 
   /**
    * Copy constructor
-   * 
+   *
    * @param other
    *          instance to copy
    */
@@ -194,7 +194,7 @@ public class DependencyGraphTraceBuilderProperties {
 
   /**
    * Add a market data spec.
-   * 
+   *
    * @param marketData
    *          a market data spec
    * @return a newly configured instance
@@ -208,8 +208,8 @@ public class DependencyGraphTraceBuilderProperties {
   @Override
   public String toString() {
     return "DependencyGraphTraceBuilderProperties [getCalculationConfigurationName()=" + getCalculationConfigurationName() + ", getValuationTime()="
-        + getValuationTime() + ", getResolutionTime()=" +
-        getResolutionTime() + ", getDefaultProperties()=" + getDefaultProperties() + ", getRequirements()=" + getRequirements() + ", getMarketData()="
+        + getValuationTime() + ", getResolutionTime()="
+        + getResolutionTime() + ", getDefaultProperties()=" + getDefaultProperties() + ", getRequirements()=" + getRequirements() + ", getMarketData()="
         + getMarketData() + "]";
   }
 

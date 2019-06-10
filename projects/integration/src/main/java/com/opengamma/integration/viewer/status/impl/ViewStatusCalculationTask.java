@@ -218,8 +218,8 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
   }
 
   protected boolean isValidTargetType(final ComputationTargetType computationTargetType) {
-    if (ComputationTargetType.POSITION.isCompatible(computationTargetType) || ComputationTargetType.PORTFOLIO.isCompatible(computationTargetType) ||
-        ComputationTargetType.PORTFOLIO_NODE.isCompatible(computationTargetType) || ComputationTargetType.TRADE.isCompatible(computationTargetType)) {
+    if (ComputationTargetType.POSITION.isCompatible(computationTargetType) || ComputationTargetType.PORTFOLIO.isCompatible(computationTargetType)
+        || ComputationTargetType.PORTFOLIO_NODE.isCompatible(computationTargetType) || ComputationTargetType.TRADE.isCompatible(computationTargetType)) {
       return true;
     }
     return false;

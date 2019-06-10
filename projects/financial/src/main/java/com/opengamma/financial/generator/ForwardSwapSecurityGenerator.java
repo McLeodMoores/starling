@@ -169,8 +169,8 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     }
     final ForwardSwapSecurity swap = new ForwardSwapSecurity(tradeDate, tradeDate, maturityDate, counterparty, payLeg, receiveLeg, forwardDate);
     swap.setName("IR Forward Swap " + ccy + " " + NOTIONAL_FORMATTER.format(notional) + " " + maturity.getPeriod() + " from "
-        + forwardDate.format(DATE_FORMATTER) + " - " + payLegDescription +
-        " / " + receiveLegDescription);
+        + forwardDate.format(DATE_FORMATTER) + " - " + payLegDescription
+        + " / " + receiveLegDescription);
     return swap;
   }
 

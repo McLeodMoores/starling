@@ -44,8 +44,8 @@ public class SwaptionBlackDriftlessThetaCalculator extends InstrumentDerivativeV
   /** Cash-settled swaption methods */
   private static final SwaptionCashFixedIborBlackMethod CASH_SWAPTION = SwaptionCashFixedIborBlackMethod.getInstance();
   /** Physical fixed compounded / overnight compounded methods */
-  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION =
-      SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance();
+  private static final SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod PHYSICAL_COMPOUNDED_SWAPTION = SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod
+      .getInstance();
 
   @Override
   public Double visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final YieldCurveBundle curves) {
@@ -79,7 +79,7 @@ public class SwaptionBlackDriftlessThetaCalculator extends InstrumentDerivativeV
       final YieldCurveWithBlackSwaptionBundle curvesBlack = (YieldCurveWithBlackSwaptionBundle) curves;
       return PHYSICAL_COMPOUNDED_SWAPTION.driftlessThetaTheoretical(swaption, curvesBlack);
     }
-    throw new UnsupportedOperationException("The SwaptionBlackSpotThetaCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded " +
-        "requires a YieldCurveWithBlackSwaptionBundle as data.");
+    throw new UnsupportedOperationException("The SwaptionBlackSpotThetaCalculator visitor visitSwaptionPhysicalFixedCompoundedONCompounded "
+        + "requires a YieldCurveWithBlackSwaptionBundle as data.");
   }
 }

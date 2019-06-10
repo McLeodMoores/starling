@@ -62,8 +62,8 @@ public class DiscountingCurrencyExposureFunction extends DiscountingFunction {
           }
           return false;
         }
-        return security instanceof FXForwardSecurity ||
-            security instanceof NonDeliverableFXForwardSecurity;
+        return security instanceof FXForwardSecurity
+            || security instanceof NonDeliverableFXForwardSecurity;
       }
 
       @SuppressWarnings("synthetic-access")

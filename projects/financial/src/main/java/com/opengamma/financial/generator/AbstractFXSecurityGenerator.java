@@ -111,9 +111,8 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     final String barrierLevelString = RATE_FORMATTER.format(barrierLevel);
     final String barrierUnitString = callCurrency + "/" + putCurrency;
     fxBarrierOptionSecurity.setName((bundle._long ? "Long " : "Short ") + (bundle._up ? "up" : "down") + " knock-in at " + barrierLevelString + " "
-        + barrierUnitString + ", put " + putCurrency +
-        " " +
-        putAmountString + ", call " + callCurrency + " " + callAmountString + " on " + dateString);
+        + barrierUnitString + ", put " + putCurrency
+        + " " + putAmountString + ", call " + callCurrency + " " + callAmountString + " on " + dateString);
     return fxBarrierOptionSecurity;
   }
 

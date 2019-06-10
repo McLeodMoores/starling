@@ -87,8 +87,8 @@ public class ExampleAUDSwapPortfolioLoader extends AbstractTool<IntegrationToolC
    */
   public static void main(final String[] args) { // CSIGNORE
     try {
-      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleAUDSwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleAUDSwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
     } catch (final Throwable ex) {
       ex.printStackTrace();

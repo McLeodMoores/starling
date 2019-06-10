@@ -90,8 +90,8 @@ public class AutoStartViewLoaderTool extends AbstractTool<ToolContext> {
     // Format is expected to be Live:Activ,Snapshot:MySpecialSnap etc.
     final String[] parsed = value.split(":");
     if (parsed.length != 2 || parsed[0].isEmpty() || parsed[1].isEmpty()) {
-      throw new OpenGammaRuntimeException("Unable to parse market data spec from [" + value +
-          "] - needs to be of the form <Type>:<Name> e.g. Live:Bloomberg");
+      throw new OpenGammaRuntimeException("Unable to parse market data spec from [" + value
+          + "] - needs to be of the form <Type>:<Name> e.g. Live:Bloomberg");
     }
 
     switch (parsed[0].toUpperCase()) {

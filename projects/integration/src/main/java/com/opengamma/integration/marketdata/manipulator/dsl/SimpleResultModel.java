@@ -17,9 +17,8 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Result model containing the output of a single calculation cycle in a table.
- * Each row contains the outputs for a single trade, position or node.
- * TODO is this useful enough to live in a more general purpose package?
+ * Result model containing the output of a single calculation cycle in a table. Each row contains the outputs for a single trade, position or node. TODO is this
+ * useful enough to live in a more general purpose package?
  */
 public class SimpleResultModel {
 
@@ -36,9 +35,9 @@ public class SimpleResultModel {
   private final Table<Integer, Integer, Object> _results;
 
   /* package */ SimpleResultModel(final List<UniqueIdentifiable> targets,
-                                  final List<String> columnNames,
-                                  final Table<Integer, Integer, Object> results,
-                                  final ViewCycleExecutionOptions executionOptions) {
+      final List<String> columnNames,
+      final Table<Integer, Integer, Object> results,
+      final ViewCycleExecutionOptions executionOptions) {
     _executionOptions = ArgumentChecker.notNull(executionOptions, "executionOptions");
     _targets = ImmutableList.copyOf(ArgumentChecker.notNull(targets, "targets"));
     _columnNames = ImmutableList.copyOf(ArgumentChecker.notNull(columnNames, "columnNames"));
@@ -89,11 +88,11 @@ public class SimpleResultModel {
 
   @Override
   public String toString() {
-    return "SimpleResultModel [" +
-        "_columnNames=" + _columnNames +
-        ", _results=" + _results +
-        ", _targets=" + _targets +
-        ", _executionOptions=" + _executionOptions +
-        "]";
+    return "SimpleResultModel ["
+        + "_columnNames=" + _columnNames
+        + ", _results=" + _results
+        + ", _targets=" + _targets
+        + ", _executionOptions=" + _executionOptions
+        + "]";
   }
 }

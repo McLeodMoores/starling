@@ -530,16 +530,16 @@ public class G2ppPiecewiseConstantModel {
     double factor321 = 0.0;
     double factor322 = 0.0;
     for (int j = 0; j < indexexpiry; j++) {
-      factor311 += eta[0].getDouble(j) * eta[0].getDouble(j) * (Math.exp(a[0] * r[j + 1]) - Math.exp(a[0] * r[j])) *
-          (2 - Math.exp(-a[0] * (v - r[j + 1])) - Math.exp(-a[0] * (v - r[j])));
-      factor312 += eta[0].getDouble(j) * eta[1].getDouble(j) *
-          ((Math.exp(a[1] * r[j + 1]) - Math.exp(a[1] * r[j])) / a[1]
+      factor311 += eta[0].getDouble(j) * eta[0].getDouble(j) * (Math.exp(a[0] * r[j + 1]) - Math.exp(a[0] * r[j]))
+          * (2 - Math.exp(-a[0] * (v - r[j + 1])) - Math.exp(-a[0] * (v - r[j])));
+      factor312 += eta[0].getDouble(j) * eta[1].getDouble(j)
+          * ((Math.exp(a[1] * r[j + 1]) - Math.exp(a[1] * r[j])) / a[1]
               - (Math.exp(-a[0] * (v - r[j + 1]) + a[1] * r[j + 1]) - Math.exp(-a[0] * (v - r[j]) + a[1] * r[j])) / (a[0] + a[1]));
-      factor321 += eta[1].getDouble(j) * eta[0].getDouble(j) *
-          ((Math.exp(a[0] * r[j + 1]) - Math.exp(a[0] * r[j])) / a[0]
+      factor321 += eta[1].getDouble(j) * eta[0].getDouble(j)
+          * ((Math.exp(a[0] * r[j + 1]) - Math.exp(a[0] * r[j])) / a[0]
               - (Math.exp(-a[1] * (v - r[j + 1]) + a[0] * r[j + 1]) - Math.exp(-a[1] * (v - r[j]) + a[0] * r[j])) / (a[1] + a[0]));
-      factor322 += eta[1].getDouble(j) * eta[1].getDouble(j) * (Math.exp(a[1] * r[j + 1]) - Math.exp(a[1] * r[j])) *
-          (2 - Math.exp(-a[1] * (v - r[j + 1])) - Math.exp(-a[1] * (v - r[j])));
+      factor322 += eta[1].getDouble(j) * eta[1].getDouble(j) * (Math.exp(a[1] * r[j + 1]) - Math.exp(a[1] * r[j]))
+          * (2 - Math.exp(-a[1] * (v - r[j + 1])) - Math.exp(-a[1] * (v - r[j])));
     }
     double convexity = factor111 * factor21 * factor311 + factor112 * factor22 * factor312 + factor121 * factor21 * factor321
         + factor122 * factor22 * factor322;

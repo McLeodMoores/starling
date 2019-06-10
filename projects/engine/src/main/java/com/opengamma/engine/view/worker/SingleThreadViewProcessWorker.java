@@ -1655,8 +1655,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           } else {
             if (!resolverMatch) {
               if (_targetResolverChanges != null) {
-                if (!cached.getResolverVersionCorrection().getVersionAsOf().isBefore(lastResolution.getVersionAsOf()) &&
-                    !cached.getResolverVersionCorrection().getCorrectedTo().isBefore(lastResolution.getCorrectedTo())) {
+                if (!cached.getResolverVersionCorrection().getVersionAsOf().isBefore(lastResolution.getVersionAsOf())
+                    && !cached.getResolverVersionCorrection().getCorrectedTo().isBefore(lastResolution.getCorrectedTo())) {
                   // Cached form was created while we were change subscribed so we can verify it ...
                   if (!valuationMatch && CompiledViewDefinitionWithGraphsImpl.isValidFor(cached, valuationTime)) {
                     // ... and then use it for the valuation time

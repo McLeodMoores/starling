@@ -77,8 +77,8 @@ final class GICSCodeDescription {
     try (Workbook workbook = new HSSFWorkbook(new BufferedInputStream(inputStream))) {
       processGICSExcelWorkbook(workbook, gicsMap);
     } catch (final IOException e) {
-      LOGGER.warn("Unable to find S&P GICS Code Mapping file '" + GICS_FILE_NAME +
-          "' in classpath; unable to use GICS Codes: " + e);
+      LOGGER.warn("Unable to find S&P GICS Code Mapping file '" + GICS_FILE_NAME
+          + "' in classpath; unable to use GICS Codes: " + e);
       return;
     }
   }

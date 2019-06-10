@@ -62,7 +62,7 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Builds the market data requirements for a volatility cube.
-   * 
+   *
    * @param <X>
    *          The type of the x axis data
    * @param <Y>
@@ -93,8 +93,8 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
       throw new OpenGammaRuntimeException("Could not get volatility cube definition named " + definitionName);
     }
     if (!definition.getCubeQuoteType().equals(specification.getCubeQuoteType())) {
-      throw new OpenGammaRuntimeException("Inconsistent cube quote type for definition (" + definition.getCubeQuoteType() +
-          ") and specification (" + specification.getCubeQuoteType() + ")");
+      throw new OpenGammaRuntimeException("Inconsistent cube quote type for definition (" + definition.getCubeQuoteType()
+          + ") and specification (" + specification.getCubeQuoteType() + ")");
     }
     final CubeInstrumentProvider<X, Y, Z> provider = (CubeInstrumentProvider<X, Y, Z>) specification.getCubeInstrumentProvider();
     final Set<ValueRequirement> result = new HashSet<>();

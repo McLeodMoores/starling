@@ -72,15 +72,15 @@ public class FXCurrencyExposureFunction extends AbstractFunction.NonCompiledInvo
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getTrade().getSecurity();
-    if (security instanceof FXForwardSecurity ||
-        security instanceof NonDeliverableFXForwardSecurity ||
-        security instanceof FXOptionSecurity ||
-        security instanceof NonDeliverableFXOptionSecurity ||
-        security instanceof FXDigitalOptionSecurity ||
-        security instanceof NonDeliverableFXDigitalOptionSecurity ||
-        security instanceof FXBarrierOptionSecurity ||
-        security instanceof FXVolatilitySwapSecurity ||
-        security instanceof FXFutureSecurity) {
+    if (security instanceof FXForwardSecurity
+        || security instanceof NonDeliverableFXForwardSecurity
+        || security instanceof FXOptionSecurity
+        || security instanceof NonDeliverableFXOptionSecurity
+        || security instanceof FXDigitalOptionSecurity
+        || security instanceof NonDeliverableFXDigitalOptionSecurity
+        || security instanceof FXBarrierOptionSecurity
+        || security instanceof FXVolatilitySwapSecurity
+        || security instanceof FXFutureSecurity) {
       return false;
     }
     return true;

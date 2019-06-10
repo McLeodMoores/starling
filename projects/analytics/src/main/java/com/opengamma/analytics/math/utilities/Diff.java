@@ -43,8 +43,8 @@ public class Diff {
     ArgumentChecker.notNull(v, "v");
     ArgumentChecker.isTrue(t > -1, "Invalid number of differences requested, t must be positive or 0. The given t was: " + t);
     ArgumentChecker.isTrue(t < v.length,
-        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains " +
-            v.length + " elements.");
+        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains "
+            + v.length + " elements.");
     double[] tmp;
     if (t == 0) { // no differencing done
       tmp = new double[v.length];
@@ -89,8 +89,8 @@ public class Diff {
     ArgumentChecker.notNull(v, "v");
     ArgumentChecker.isTrue(t > -1, "Invalid number of differences requested, t must be positive or 0. The given t was: " + t);
     ArgumentChecker.isTrue(t < v.length,
-        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains " +
-            v.length + " elements.");
+        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains "
+            + v.length + " elements.");
     float[] tmp;
     if (t == 0) { // no differencing done
       tmp = new float[v.length];
@@ -135,8 +135,8 @@ public class Diff {
     ArgumentChecker.notNull(v, "v");
     ArgumentChecker.isTrue(t > -1, "Invalid number of differences requested, t must be positive or 0. The given t was: " + t);
     ArgumentChecker.isTrue(t < v.length,
-        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains " +
-            v.length + " elements.");
+        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains "
+            + v.length + " elements.");
     int[] tmp;
     if (t == 0) { // no differencing done
       tmp = new int[v.length];
@@ -181,8 +181,8 @@ public class Diff {
     ArgumentChecker.notNull(v, "v");
     ArgumentChecker.isTrue(t > -1, "Invalid number of differences requested, t must be positive or 0. The given t was: " + t);
     ArgumentChecker.isTrue(t < v.length,
-        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains " +
-            v.length + " elements.");
+        "Invalid number of differences requested, 't' is greater than the number of elements in 'v'. The given 't' was: " + t + " and 'v' contains "
+            + v.length + " elements.");
     long[] tmp;
     if (t == 0) { // no differencing done
       tmp = new long[v.length];

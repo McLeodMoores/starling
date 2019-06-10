@@ -59,9 +59,9 @@ import com.opengamma.util.money.Currency;
 
   @Override
   public String toString() {
-    return "TradeInfo[quantity=" + getQuantity() + ", security=" + getSecurity() + ", counterparty=" +
-        getCounterparty() + ", tradeDate=" + getTradeDate() + ", tradeTime=" + getTradeTime() + ", premium=" + getPremium() +
-        ", premiumCurrency=" + getPremiumCurrency() + ", premiumDate=" + getPremiumDate() + ", premiumTime=" + getPremiumTime() + ", attributes="
+    return "TradeInfo[quantity=" + getQuantity() + ", security=" + getSecurity() + ", counterparty="
+        + getCounterparty() + ", tradeDate=" + getTradeDate() + ", tradeTime=" + getTradeTime() + ", premium=" + getPremium()
+        + ", premiumCurrency=" + getPremiumCurrency() + ", premiumDate=" + getPremiumDate() + ", premiumTime=" + getPremiumTime() + ", attributes="
         + getAttributes() + "]";
   }
 

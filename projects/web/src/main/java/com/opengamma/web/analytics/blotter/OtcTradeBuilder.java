@@ -47,13 +47,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.OpenGammaClock;
 
 /**
- * Builds and saves trades, securities and underlying securities for OTC securities.
- * TODO the use of VersionCorrection.LATEST in this class is incorrect
- * the weak link between trades, positions and securities is a problem for OTCs because in reality they're a single
- * atomic object. the problem at the moment is there's no way to know which version of the security is being modified
- * given the unique ID of the trade. therefore it's not possible to detect any concurrent modification of securities,
- * the last update wins. there are various potential fixes but it might not be worth doing before the imminent refactor
- * of trades, positions and securities.
+ * Builds and saves trades, securities and underlying securities for OTC securities. TODO the use of VersionCorrection.LATEST in this class is incorrect the
+ * weak link between trades, positions and securities is a problem for OTCs because in reality they're a single atomic object. the problem at the moment is
+ * there's no way to know which version of the security is being modified given the unique ID of the trade. therefore it's not possible to detect any concurrent
+ * modification of securities, the last update wins. there are various potential fixes but it might not be worth doing before the imminent refactor of trades,
+ * positions and securities.
  */
 /* package */ class OtcTradeBuilder extends AbstractTradeBuilder {
 
@@ -74,9 +72,7 @@ import com.opengamma.util.OpenGammaClock;
       final BeanDataSource underlyingData,
       final UniqueId nodeId) {
     /*
-    validate:
-      underlying is present
-      underlying type is correct
+     * validate: underlying is present underlying type is correct
      */
     final ManageableSecurity underlying = buildUnderlying(underlyingData);
     ManageableSecurity security;
@@ -120,15 +116,11 @@ import com.opengamma.util.OpenGammaClock;
       final BeanDataSource securityData,
       final BeanDataSource underlyingData) {
     if (!TRADE_TYPE_NAME.equals(tradeData.getBeanTypeName())) {
-      throw new IllegalArgumentException("Can only build trades of type " + TRADE_TYPE_NAME +
-          ", type name = " + tradeData.getBeanTypeName());
+      throw new IllegalArgumentException("Can only build trades of type " + TRADE_TYPE_NAME
+          + ", type name = " + tradeData.getBeanTypeName());
     }
     /*
-    validate:
-      underlying is present
-      underlying type is correct
-      security type hasn't changed
-      trade ID is versioned
+     * validate: underlying is present underlying type is correct security type hasn't changed trade ID is versioned
      */
     final ManageableTrade trade = buildTrade(tradeData);
     final ManageableTrade previousTrade = getPositionMaster().getTrade(trade.getUniqueId());
@@ -206,37 +198,38 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /**
-   * Checks that the new and old versions of a security have the same type and if the new version specifies an ID
-   * it is the same as the old ID.
-   * @param newVersion The new version of the security
-   * @param previousVersion The previous version of the security
+   * Checks that the new and old versions of a security have the same type and if the new version specifies an ID it is the same as the old ID.
+   * 
+   * @param newVersion
+   *          The new version of the security
+   * @param previousVersion
+   *          The previous version of the security
    */
   private static void validateSecurity(final ManageableSecurity newVersion, final ManageableSecurity previousVersion) {
     if (!newVersion.getClass().equals(previousVersion.getClass())) {
-      throw new IllegalArgumentException("Security type cannot change, new version " + newVersion + ", " +
-          "previousVersion: " + previousVersion);
+      throw new IllegalArgumentException("Security type cannot change, new version " + newVersion + ", "
+          + "previousVersion: " + previousVersion);
     }
     // TODO this should check for equality between the IDs but that's not working ATM
     // needs to be part of the bigger fix for the problem caused by the weak links between the different parts
     // of OTC trades
     if (newVersion.getUniqueId() != null && !newVersion.getUniqueId().equalObjectId(previousVersion.getUniqueId())) {
-      throw new IllegalArgumentException("Cannot update a security with a different ID, " +
-          "new ID: " + newVersion.getUniqueId() + ", " +
-          "previous ID: " + previousVersion.getUniqueId());
+      throw new IllegalArgumentException("Cannot update a security with a different ID, "
+          + "new ID: " + newVersion.getUniqueId() + ", "
+          + "previous ID: " + previousVersion.getUniqueId());
     }
   }
 
   private ManageableTrade buildTrade(final BeanDataSource tradeData) {
     final ManageableTrade.Meta meta = ManageableTrade.meta();
-    final BeanBuilder<? extends ManageableTrade> tradeBuilder =
-        tradeBuilder(tradeData,
-            meta.uniqueId(),
-            meta.tradeDate(),
-            meta.tradeTime(),
-            meta.premium(),
-            meta.premiumCurrency(),
-            meta.premiumDate(),
-            meta.premiumTime());
+    final BeanBuilder<? extends ManageableTrade> tradeBuilder = tradeBuilder(tradeData,
+        meta.uniqueId(),
+        meta.tradeDate(),
+        meta.tradeTime(),
+        meta.premium(),
+        meta.premiumCurrency(),
+        meta.premiumDate(),
+        meta.premiumTime());
     tradeBuilder.set(meta.attributes(), tradeData.getMapValues(meta.attributes().name()));
     tradeBuilder.set(meta.quantity(), BigDecimal.ONE);
     // the link needs to be non-null but the real ID can't be set until the security has been created later
@@ -252,8 +245,11 @@ import com.opengamma.util.OpenGammaClock;
   // TODO move these to a separate class that only extracts data, also handles securities and underlyings
   /**
    * Extracts trade data and populates a data sink.
-   * @param trade The trade
-   * @param sink The sink that should be populated with the trade data
+   * 
+   * @param trade
+   *          The trade
+   * @param sink
+   *          The sink that should be populated with the trade data
    */
   /* package */ void extractTradeData(final ManageableTrade trade, final BeanDataSink<?> sink) {
     sink.setValue("type", TRADE_TYPE_NAME);
@@ -283,8 +279,11 @@ import com.opengamma.util.OpenGammaClock;
 
   /**
    * Creates a builder for a {@link ManageableTrade} and sets the simple properties from the data source.
-   * @param tradeData The trade data
-   * @param properties The trade properties to set
+   * 
+   * @param tradeData
+   *          The trade data
+   * @param properties
+   *          The trade properties to set
    * @return A builder with property values set from the trade data
    */
   private BeanBuilder<? extends ManageableTrade> tradeBuilder(final BeanDataSource tradeData, final MetaProperty<?>... properties) {

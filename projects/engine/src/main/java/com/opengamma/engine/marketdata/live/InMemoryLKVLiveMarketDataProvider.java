@@ -176,7 +176,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     return results;
   }
 
-  /*package*/ InMemoryLKVMarketDataProvider getUnderlyingProvider() {
+  /* package */ InMemoryLKVMarketDataProvider getUnderlyingProvider() {
     return _underlyingProvider;
   }
 
@@ -289,7 +289,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public MarketDataAvailabilityProvider getAvailabilityProvider(final MarketDataSpecification marketDataSpec) {
     return _availabilityProvider;
@@ -300,7 +300,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     return _permissionProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean isCompatible(final MarketDataSpecification marketDataSpec) {
     // We don't look at the live data provider field at the moment
@@ -312,7 +312,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     return new LiveMarketDataSnapshot(_underlyingProvider.snapshot(marketDataSpec), this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void subscriptionResultReceived(final LiveDataSubscriptionResponse subscriptionResult) {
     subscriptionResultsReceived(Collections.singleton(subscriptionResult));
@@ -332,8 +332,8 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
         final LiveDataSpecification fullyQualifiedSpec = subscriptionResult.getFullyQualifiedSpecification();
         final Collection<ValueSpecification> subscribers = _pendingSubscriptionsByRequestedSpec.removeAll(requestedSpec);
         if (subscribers.isEmpty()) {
-          LOGGER.debug("Received subscription result for requested spec {} but there are no pending subscriptions. " +
-              "Either these were unsubscribed in the meantime or this is a duplicate subscription result.", requestedSpec);
+          LOGGER.debug("Received subscription result for requested spec {} but there are no pending subscriptions. "
+              + "Either these were unsubscribed in the meantime or this is a duplicate subscription result.", requestedSpec);
           if (!_activeSubscriptionsByQualifiedSpec.containsKey(fullyQualifiedSpec)) {
             // All pending subscriptions have been unsubscribed from whilst waiting. Additionally, there are no existing
             // active subscriptions for the same fully qualified specification, so the subscription is no longer required.
@@ -376,7 +376,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
     if (!failedSubscriptions.isEmpty()) {
       valuesChanged(failedSubscriptions); // PLAT-1429: wake up the init call
       subscriptionFailed(failedSubscriptions, "TODO: get/concat message(s) from " + failedSubscriptions.size()
-      + " failures"/*subscriptionResult.getUserMessage()*/);
+          + " failures"/* subscriptionResult.getUserMessage() */);
     }
     if (!successfulSubscriptions.isEmpty()) {
       subscriptionsSucceeded(successfulSubscriptions);
@@ -421,7 +421,7 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
           value = msg;
         } else if (!(previousValue instanceof FudgeMsg)) {
           LOGGER.error("Found unexpected previous market value " + previousValue + " of type " + previousValue.getClass()
-          + " for specification " + subscription);
+              + " for specification " + subscription);
           value = msg;
         } else {
           final FudgeMsg currentValueMsg = (FudgeMsg) previousValue;
@@ -469,10 +469,11 @@ public class InMemoryLKVLiveMarketDataProvider extends AbstractMarketDataProvide
   }
 
   /**
-   * Reattempts subscriptions for any data identified by the specified schemes. If a data provider becomes available this method will be
-   * invoked with the schemes handled by the provider. This gives this class the opportunity to reattempt previously failed subscriptions.
+   * Reattempts subscriptions for any data identified by the specified schemes. If a data provider becomes available this method will be invoked with the
+   * schemes handled by the provider. This gives this class the opportunity to reattempt previously failed subscriptions.
    *
-   * @param schemes The schemes for which market data subscriptions should be reattempted.
+   * @param schemes
+   *          The schemes for which market data subscriptions should be reattempted.
    */
   /* package */void resubscribe(final Set<ExternalScheme> schemes) {
     _subscriptionReadLock.lock();

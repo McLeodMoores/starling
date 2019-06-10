@@ -58,10 +58,14 @@ public final class StandAloneScenarioRunner {
 
   /**
    * Runs a set of scenarios defined in a Groovy DSL script against a running server.
-   * @param scriptFileName The file containing the scenario definitions
+   * 
+   * @param scriptFileName
+   *          The file containing the scenario definitions
    * @return The results of running the scenarios
-   * @throws IOException If the script file can't be found or read
-   * @throws IllegalArgumentException If any data in the script is invalid or missing
+   * @throws IOException
+   *           If the script file can't be found or read
+   * @throws IllegalArgumentException
+   *           If any data in the script is invalid or missing
    */
   public static List<ScenarioResultModel> runScenarioScript(final String scriptFileName) throws IOException {
     return runScenarioScript(new File(scriptFileName));
@@ -69,10 +73,14 @@ public final class StandAloneScenarioRunner {
 
   /**
    * Runs a set of scenarios defined in a Groovy DSL script against a running server.
-   * @param scriptFile The file containing the scenario definitions
+   * 
+   * @param scriptFile
+   *          The file containing the scenario definitions
    * @return The results of running the scenarios
-   * @throws IOException If the script file can't be found or read
-   * @throws IllegalArgumentException If any data in the script is invalid or missing
+   * @throws IOException
+   *           If the script file can't be found or read
+   * @throws IllegalArgumentException
+   *           If any data in the script is invalid or missing
    */
   public static List<ScenarioResultModel> runScenarioScript(final File scriptFile) throws IOException {
     final StandAloneScenarioScript script = runScript(scriptFile);
@@ -183,8 +191,8 @@ public final class StandAloneScenarioRunner {
   }
 
   private static void validateScript(final String viewName,
-                                     final String serverUrl,
-                                     final List<MarketDataDelegate.MarketDataSpec> marketDataSpecs) {
+      final String serverUrl,
+      final List<MarketDataDelegate.MarketDataSpec> marketDataSpecs) {
     if (StringUtils.isEmpty(viewName)) {
       throw new IllegalArgumentException("A view name must be specified");
     }
@@ -197,15 +205,17 @@ public final class StandAloneScenarioRunner {
   }
 
   /**
-   * Converts the market data specified by the script into a format usable by the engine.
-   * This is necessary because snapshot data sources must be created with a {@link UniqueId} but we
-   * want to refer to them by name in the script.
-   * @param marketDataSpecs Market data sources defined in the script
-   * @param snapshotMaster For converting snapshot names to IDs
+   * Converts the market data specified by the script into a format usable by the engine. This is necessary because snapshot data sources must be created with a
+   * {@link UniqueId} but we want to refer to them by name in the script.
+   * 
+   * @param marketDataSpecs
+   *          Market data sources defined in the script
+   * @param snapshotMaster
+   *          For converting snapshot names to IDs
    * @return Market data specifications suitable for the engine
    */
   private static List<MarketDataSpecification> convertMarketData(final List<MarketDataDelegate.MarketDataSpec> marketDataSpecs,
-                                                                 final MarketDataSnapshotMaster snapshotMaster) {
+      final MarketDataSnapshotMaster snapshotMaster) {
     final List<MarketDataSpecification> specifications = Lists.newArrayListWithCapacity(marketDataSpecs.size());
     for (final MarketDataDelegate.MarketDataSpec spec : marketDataSpecs) {
       MarketDataSpecification specification;
@@ -218,8 +228,8 @@ public final class StandAloneScenarioRunner {
           try {
             date = LocalDate.parse(spec.getSpec());
           } catch (final DateTimeParseException e) {
-            throw new IllegalArgumentException("Historical market data date isn't in a valid format. Expected format " +
-                                                   "'yyyy-MM-dd', value: " + spec.getSpec());
+            throw new IllegalArgumentException("Historical market data date isn't in a valid format. Expected format "
+                + "'yyyy-MM-dd', value: " + spec.getSpec());
           }
           specification = new FixedHistoricalMarketDataSpecification(date);
           break;

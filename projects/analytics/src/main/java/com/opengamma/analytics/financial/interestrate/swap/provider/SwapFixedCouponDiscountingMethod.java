@@ -34,7 +34,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static SwapFixedCouponDiscountingMethod getInstance() {
@@ -54,7 +54,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Computes the conventional cash annuity of a swap. The computation is relevant only for standard swaps with constant notional and regular payments.
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param forward
@@ -72,7 +72,7 @@ public class SwapFixedCouponDiscountingMethod {
   /**
    * Computes the derivative of cash annuity with respect to the forward. The computation is relevant only for standard swaps with constant notional and regular
    * payments.
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param forward
@@ -91,7 +91,7 @@ public class SwapFixedCouponDiscountingMethod {
   /**
    * Computes the second derivative of cash annuity with respect to the forward. The computation is relevant only for standard swaps with constant notional and
    * regular payments.
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param forward
@@ -106,14 +106,14 @@ public class SwapFixedCouponDiscountingMethod {
     annuityCashDerivative -= 2.0 / (forward * forward * nbFixedPaymentYear) * nbFixedPeriod * Math.pow(1 + forward / nbFixedPaymentYear, -nbFixedPeriod - 1.0)
         * notional;
     annuityCashDerivative -= 1.0 / (forward * nbFixedPaymentYear * nbFixedPaymentYear) * nbFixedPeriod * (nbFixedPeriod + 1.)
-        * Math.pow(1 + forward / nbFixedPaymentYear, -nbFixedPeriod - 2.0) *
-        notional;
+        * Math.pow(1 + forward / nbFixedPaymentYear, -nbFixedPeriod - 2.0)
+        * notional;
     return annuityCashDerivative;
   }
 
   /**
    * Computes the physical annuity (also called PVBP or level) of the fixed leg of a swap.
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param multicurves
@@ -132,7 +132,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Computes the physical annuity (also called PVBP or level) of the fixed leg of a swap modified by a day count.
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param dayCount
@@ -158,7 +158,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Computes the physical annuity (also called PVBP or level) of the fixed leg of a swap modified by a day count.
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param dayCount
@@ -187,7 +187,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to the discounting curve.
-   * 
+   *
    * @param fixedCouponSwap
    *          The swap.
    * @param multicurves
@@ -214,7 +214,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to the discounting curve.
-   * 
+   *
    * @param fixedCouponSwap
    *          The swap.
    * @param dayCount
@@ -247,7 +247,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Compute the second order sensitivity of the PVBP to the discounting curve.
-   * 
+   *
    * @param fixedCouponSwap
    *          The swap.
    * @param dayCount
@@ -281,7 +281,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to the discounting curve.
-   * 
+   *
    * @param fixedCouponSwap
    *          The swap.
    * @param dayCount
@@ -311,7 +311,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Compute the sensitivity of the PVBP to the discounting curve.
-   * 
+   *
    * @param fixedCouponSwap
    *          The swap.
    * @param dayCount
@@ -342,7 +342,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Computes the coupon equivalent of a swap (without margins).
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param pvbp
@@ -357,7 +357,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Computes the coupon equivalent of a swap (without margins).
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param multicurves
@@ -371,7 +371,7 @@ public class SwapFixedCouponDiscountingMethod {
 
   /**
    * Computes the coupon equivalent of a swap (without margins).
-   * 
+   *
    * @param fixedCouponSwap
    *          The underlying swap.
    * @param dayCount

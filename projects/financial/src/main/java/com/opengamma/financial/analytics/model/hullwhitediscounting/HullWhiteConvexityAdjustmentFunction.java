@@ -64,8 +64,8 @@ public class HullWhiteConvexityAdjustmentFunction extends HullWhiteDiscountingFu
       @Override
       public boolean canApplyTo(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Security security = target.getTrade().getSecurity();
-        return security instanceof DeliverableSwapFutureSecurity ||
-            security instanceof InterestRateFutureSecurity;
+        return security instanceof DeliverableSwapFutureSecurity
+            || security instanceof InterestRateFutureSecurity;
       }
 
     };

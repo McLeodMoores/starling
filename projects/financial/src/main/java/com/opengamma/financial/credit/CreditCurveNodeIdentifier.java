@@ -124,8 +124,8 @@ public final class CreditCurveNodeIdentifier {
       final Period term,
       final String seniority,
       final String restructuringClause) {
-    return ticker + SEPARATOR + convertRed(redCode) + SEPARATOR + currency.getCode() + SEPARATOR +
-        seniority + SEPARATOR + restructuringClause + SEPARATOR + term.toString();
+    return ticker + SEPARATOR + convertRed(redCode) + SEPARATOR + currency.getCode() + SEPARATOR
+        + seniority + SEPARATOR + restructuringClause + SEPARATOR + term.toString();
   }
 
   private static String convertRed(final String redCode) {
@@ -174,8 +174,8 @@ public final class CreditCurveNodeIdentifier {
       return true;
     }
 
-    return obj instanceof CreditCurveNodeIdentifier &&
-        _externalId.equals(((CreditCurveNodeIdentifier) obj)._externalId);
+    return obj instanceof CreditCurveNodeIdentifier
+        && _externalId.equals(((CreditCurveNodeIdentifier) obj)._externalId);
   }
 
   /**

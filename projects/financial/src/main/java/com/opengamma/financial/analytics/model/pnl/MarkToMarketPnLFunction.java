@@ -54,7 +54,6 @@ import com.opengamma.util.money.Currency;
  */
 public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
-
   private final String _costOfCarryField;
   private final String _closingPriceField;
 
@@ -100,15 +99,15 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String tradeType = desiredValue.getConstraint(PnLFunctionUtils.PNL_TRADE_TYPE_CONSTRAINT);
     if (tradeType == null) {
-      throw new OpenGammaRuntimeException("TradeType not set for: " + security.getName() +
-          ". Choose one of {" + PnLFunctionUtils.PNL_TRADE_TYPE_OPEN + "," + PnLFunctionUtils.PNL_TRADE_TYPE_NEW + "," + PnLFunctionUtils.PNL_TRADE_TYPE_ALL
+      throw new OpenGammaRuntimeException("TradeType not set for: " + security.getName()
+          + ". Choose one of {" + PnLFunctionUtils.PNL_TRADE_TYPE_OPEN + "," + PnLFunctionUtils.PNL_TRADE_TYPE_NEW + "," + PnLFunctionUtils.PNL_TRADE_TYPE_ALL
           + "}");
     }
 
     // Create output specification. Check for trivial cases
     final ValueSpecification valueSpecification = new ValueSpecification(getValueRequirementName(), target.toSpecification(), desiredValue.getConstraints());
-    if (isNewTrade && tradeType.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_OPEN) ||
-        !isNewTrade && tradeType.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_NEW)) {
+    if (isNewTrade && tradeType.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_OPEN)
+        || !isNewTrade && tradeType.equalsIgnoreCase(PnLFunctionUtils.PNL_TRADE_TYPE_NEW)) {
       return Sets.newHashSet(new ComputedValue(valueSpecification, 0.0));
     }
 
@@ -173,7 +172,6 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
     return Sets.newHashSet(result);
   }
 
-
   protected ValueProperties.Builder createValueProperties(final ComputationTarget target) {
     final ValueProperties.Builder properties = createValueProperties();
     properties.withAny(PnLFunctionUtils.PNL_TRADE_TYPE_CONSTRAINT);
@@ -197,14 +195,15 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
     final Security security = target.getPositionOrTrade().getSecurity();
     requirements.addAll(createLivePriceRequirement(security));
     requirements.addAll(createReferencePriceRequirement(security));
-    if (_costOfCarryField.length() > 0) {     // Cost of Carry, if provided
+    if (_costOfCarryField.length() > 0) { // Cost of Carry, if provided
       requirements.add(HistoricalTimeSeriesFunctionUtils.createHTSLatestRequirement(security, _costOfCarryField, null));
     }
     return requirements;
   }
 
   /**
-   * @param security the target's security
+   * @param security
+   *          the target's security
    * @return Engine Function requirements for the current / live price
    */
   protected Set<ValueRequirement> createLivePriceRequirement(final Security security) {
@@ -214,12 +213,12 @@ public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   /**
-   * @param security the target's security
+   * @param security
+   *          the target's security
    * @return Engine Function requirements for the closing / reference price
    */
   protected Set<ValueRequirement> createReferencePriceRequirement(final Security security) {
-    final ValueRequirement htsReq =
-        HistoricalTimeSeriesFunctionUtils.createHTSLatestRequirement(security, getClosingPriceField(), null);
+    final ValueRequirement htsReq = HistoricalTimeSeriesFunctionUtils.createHTSLatestRequirement(security, getClosingPriceField(), null);
     return Collections.singleton(htsReq);
   }
 

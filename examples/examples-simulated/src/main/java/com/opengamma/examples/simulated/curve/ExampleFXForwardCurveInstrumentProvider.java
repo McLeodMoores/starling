@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.curve;
@@ -45,10 +45,14 @@ public class ExampleFXForwardCurveInstrumentProvider implements FXForwardCurveIn
   private final ExternalId _spotId;
 
   /**
-   * @param prefix The FX forward prefix, not null
-   * @param postfix The postfix, not null
-   * @param spotPrefix The FX spot prefix, not null
-   * @param dataFieldName The data field name, not null
+   * @param prefix
+   *          The FX forward prefix, not null
+   * @param postfix
+   *          The postfix, not null
+   * @param spotPrefix
+   *          The FX spot prefix, not null
+   * @param dataFieldName
+   *          The data field name, not null
    */
   public ExampleFXForwardCurveInstrumentProvider(final String prefix, final String postfix, final String spotPrefix,
       final String dataFieldName) {
@@ -66,6 +70,7 @@ public class ExampleFXForwardCurveInstrumentProvider implements FXForwardCurveIn
 
   /**
    * Gets the prefix.
+   * 
    * @return The prefix
    */
   public String getPrefix() {
@@ -74,6 +79,7 @@ public class ExampleFXForwardCurveInstrumentProvider implements FXForwardCurveIn
 
   /**
    * Gets the postfix.
+   * 
    * @return The postfix
    */
   public String getPostfix() {
@@ -82,6 +88,7 @@ public class ExampleFXForwardCurveInstrumentProvider implements FXForwardCurveIn
 
   /**
    * Gets the spot prefix.
+   * 
    * @return The spot prefix
    */
   public String getSpotPrefix() {
@@ -95,6 +102,7 @@ public class ExampleFXForwardCurveInstrumentProvider implements FXForwardCurveIn
 
   /**
    * Gets the spot name.
+   * 
    * @return The spot name
    */
   public String getSpotName() {
@@ -197,10 +205,10 @@ public class ExampleFXForwardCurveInstrumentProvider implements FXForwardCurveIn
       return false;
     }
     final ExampleFXForwardCurveInstrumentProvider other = (ExampleFXForwardCurveInstrumentProvider) obj;
-    return getPrefix().equals(other.getPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getSpotPrefix().equals(other.getSpotPrefix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getPrefix().equals(other.getPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getSpotPrefix().equals(other.getSpotPrefix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
 }

@@ -114,8 +114,8 @@ public class DbPortfolioMaster
 
     final List<ObjectId> portfolioObjectIds = request.getPortfolioObjectIds();
     final List<ObjectId> nodeObjectIds = request.getNodeObjectIds();
-    if (portfolioObjectIds != null && portfolioObjectIds.size() == 0 ||
-        nodeObjectIds != null && nodeObjectIds.size() == 0) {
+    if (portfolioObjectIds != null && portfolioObjectIds.size() == 0
+        || nodeObjectIds != null && nodeObjectIds.size() == 0) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }

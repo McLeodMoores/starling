@@ -114,8 +114,8 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
    */
   public static void main(final String[] args) { // CSIGNORE
     try {
-      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleMixedCMCapFloorPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleMixedCMCapFloorPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
     } catch (final Throwable ex) {
       ex.printStackTrace();
@@ -220,9 +220,9 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     final CapFloorSecurity security = new CapFloorSecurity(TRADE_DATE.atStartOfDay(ZoneOffset.UTC), maturityDate, notional, underlyingId, strike,
         PeriodFrequency.SEMI_ANNUAL,
         Currency.USD, ACT_360, payer, cap, false);
-    security.setName("USD " + FORMAT.format(notional / 1000000) + (cap ? "MM cap " : "MM floor ") + "@ " + FORMAT.format(strike) +
-        (payer ? "%, pay " : "%, receive ") + tenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
-        " (" + TRADE_DATE.toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+    security.setName("USD " + FORMAT.format(notional / 1000000) + (cap ? "MM cap " : "MM floor ") + "@ " + FORMAT.format(strike)
+        + (payer ? "%, pay " : "%, receive ") + tenor.getPeriod().normalized().getYears() + "Y ISDA fixing"
+        + " (" + TRADE_DATE.toString() + " - " + maturityDate.toLocalDate().toString() + ")");
     security.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     return security;
   }
@@ -276,10 +276,10 @@ public class ExampleMixedCMCapFloorPortfolioLoader extends AbstractTool<Integrat
     final CapFloorCMSSpreadSecurity security = new CapFloorCMSSpreadSecurity(tradeDate, maturityDate, notional, payIdentifier, receiveIdentifier, strike,
         PeriodFrequency.ANNUAL, CURRENCY, ACT_360, payer, cap);
     security
-        .setName(CURRENCY.getCode() + " " + FORMAT.format(notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike) +
-            "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive " +
-            receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" +
-            " (" + tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
+        .setName(CURRENCY.getCode() + " " + FORMAT.format(notional / 1000000) + (cap ? "MM cap spread " : "MM floor spread ") + "@ " + FORMAT.format(strike)
+            + "%, pay " + payTenor.getPeriod().normalized().getYears() + "Y ISDA fixing" + ", receive "
+            + receiveTenor.getPeriod().normalized().getYears() + "Y ISDA fixing"
+            + " (" + tradeDate.toLocalDate().toString() + " - " + maturityDate.toLocalDate().toString() + ")");
     security.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     return security;
   }
