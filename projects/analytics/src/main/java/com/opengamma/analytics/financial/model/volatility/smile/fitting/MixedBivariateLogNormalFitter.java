@@ -542,8 +542,8 @@ public class MixedBivariateLogNormalFitter {
       final double impVolX = getVolatility(option, fwdX, dataX);
       for (int i = 0; i < nNorms; ++i) {
         for (int l = i; l < nNorms; ++l) {
-          res[j][i] += -fwdX * weightsX[l] * BlackFormulaRepository.vega(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l]) /
-              BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
+          res[j][i] += -fwdX * weightsX[l] * BlackFormulaRepository.vega(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l])
+              / BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }
       for (int i = 2 * nNorms; i < 3 * nNorms - 1; ++i) {
@@ -551,15 +551,15 @@ public class MixedBivariateLogNormalFitter {
           res[j][i] += -fwdX
               * (BlackFormulaRepository.price(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true) - relativeForwardsX[l]
                   * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true))
-              * weightsJacobianX[l][i - 2 * nNorms] /
-              BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
+              * weightsJacobianX[l][i - 2 * nNorms]
+              / BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }
       for (int i = 3 * nNorms - 1; i < 4 * nNorms - 2; ++i) {
         for (int l = 0; l < nNorms; ++l) {
           res[j][i] += -fwdX * BlackFormulaRepository.delta(relativeForwardsX[l], dataStrs[j] / fwdX, time, sigmasX[l], true)
-              * relativeForwardsJacobianX[l][i - (3 * nNorms - 1)] /
-              BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
+              * relativeForwardsJacobianX[l][i - (3 * nNorms - 1)]
+              / BlackFormulaRepository.vega(fwdX, dataStrs[j], time, impVolX);
         }
       }
     }
@@ -576,16 +576,16 @@ public class MixedBivariateLogNormalFitter {
       }
       for (int i = 2 * nNorms; i < 3 * nNorms - 1; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdY * (BlackFormulaRepository.price(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true) - relativeForwardsY[l] *
-              BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true)) * weightsJacobianY[l][i - 2 * nNorms] /
-              BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
+          res[j][i] += -fwdY * (BlackFormulaRepository.price(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true) - relativeForwardsY[l]
+              * BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true)) * weightsJacobianY[l][i - 2 * nNorms]
+              / BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
         }
       }
       for (int i = 4 * nNorms - 2; i < 5 * nNorms - 3; ++i) {
         for (int l = 0; l < nNorms; ++l) {
-          res[j][i] += -fwdY * BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true) *
-              relativeForwardsJacobianY[l][i - (4 * nNorms - 2)] /
-              BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
+          res[j][i] += -fwdY * BlackFormulaRepository.delta(relativeForwardsY[l], dataStrs[j] / fwdY, time, sigmasY[l], true)
+              * relativeForwardsJacobianY[l][i - (4 * nNorms - 2)]
+              / BlackFormulaRepository.vega(fwdY, dataStrs[j], time, impVolY);
         }
       }
     }

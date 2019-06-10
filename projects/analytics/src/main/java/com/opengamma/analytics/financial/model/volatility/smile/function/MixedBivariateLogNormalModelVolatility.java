@@ -280,8 +280,8 @@ public class MixedBivariateLogNormalModelVolatility {
     final int nNormals = wght.length;
     double tmp = 0.;
     for (int i = 0; i < nNormals; i++) {
-      tmp += wght[i] *
-          Math.exp(Math.log(rpfX[i]) - Math.log(rpfY[i]) + sigY[i] * sigY[i] - rhos[i] * sigX[i] * sigY[i]);
+      tmp += wght[i]
+          * Math.exp(Math.log(rpfX[i]) - Math.log(rpfY[i]) + sigY[i] * sigY[i] - rhos[i] * sigX[i] * sigY[i]);
     }
 
     return 1. / tmp;

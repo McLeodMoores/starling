@@ -127,7 +127,7 @@ public class LocalVolatilityForwardPDEGreekCalculator1<T> {
   /**
    * Run a forward PDE solver to get model prices (and thus implied vols) and compare these with the market data. Also output the (model) implied volatility as
    * a function of strike for each tenor.
-   * 
+   *
    * @param ps
    *          The print stream
    */
@@ -363,8 +363,8 @@ public class LocalVolatilityForwardPDEGreekCalculator1<T> {
   private double getSurfaceVanna(final PDEResults1D pdeResForwardUpVolUp, final PDEFullResults1D pdeResForwardUpVolDown,
       final PDEFullResults1D pdeResForwardDownVolUp,
       final PDEFullResults1D pdeResForwardDownVolDown, final double volShift, final double forwardShift, final int i) {
-    return (pdeResForwardUpVolUp.getFunctionValue(i) + pdeResForwardDownVolDown.getFunctionValue(i) -
-        pdeResForwardUpVolDown.getFunctionValue(i) - pdeResForwardDownVolUp.getFunctionValue(i)) / 4 / forwardShift / volShift;
+    return (pdeResForwardUpVolUp.getFunctionValue(i) + pdeResForwardDownVolDown.getFunctionValue(i)
+        - pdeResForwardUpVolDown.getFunctionValue(i) - pdeResForwardDownVolUp.getFunctionValue(i)) / 4 / forwardShift / volShift;
   }
 
   private double getModelVanna(final double xVanna, final double surfaceVanna) {

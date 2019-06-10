@@ -225,12 +225,10 @@ public class ConstrainedCubicSplineInterpolator extends PiecewisePolynomialInter
           } else {
             if (sign == 0.) {
               sense[i][k] = (slopes[i] * slopes[i] * slopeSensitivity[i - 1][k] + slopes[i - 1] * slopes[i - 1] * slopeSensitivity[i][k])
-                  / (slopes[i] + slopes[i - 1]) /
-                  (slopes[i] + slopes[i - 1]);
+                  / (slopes[i] + slopes[i - 1]) / (slopes[i] + slopes[i - 1]);
             } else {
               sense[i][k] = 2. * (slopes[i] * slopes[i] * slopeSensitivity[i - 1][k] + slopes[i - 1] * slopes[i - 1] * slopeSensitivity[i][k])
-                  / (slopes[i] + slopes[i - 1]) /
-                  (slopes[i] + slopes[i - 1]);
+                  / (slopes[i] + slopes[i - 1]) / (slopes[i] + slopes[i - 1]);
             }
           }
         }

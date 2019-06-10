@@ -510,11 +510,11 @@ public class MonotonicityPreservingCubicSplineInterpolator extends PiecewisePoly
         Arrays.fill(right[i], 0.);
       }
       for (int k = 0; k < nData; ++k) {
-        left[i][k] = sigLeft * (slopeSensitivity[i + 1][k] * (2. * intervals[i + 1] + intervals[i]) - slopeSensitivity[i][k] * intervals[i + 1]) /
-            (intervals[i] + intervals[i + 1]);
+        left[i][k] = sigLeft * (slopeSensitivity[i + 1][k] * (2. * intervals[i + 1] + intervals[i]) - slopeSensitivity[i][k] * intervals[i + 1])
+            / (intervals[i] + intervals[i + 1]);
         center[i][k] = sigCenter * (slopeSensitivity[i][k] * intervals[i + 1] + slopeSensitivity[i + 1][k] * intervals[i]) / (intervals[i] + intervals[i + 1]);
-        right[i][k] = sigRight * (slopeSensitivity[i + 1][k] * (2. * intervals[i + 1] + intervals[i + 2]) - slopeSensitivity[i + 2][k] * intervals[i + 1]) /
-            (intervals[i + 1] + intervals[i + 2]);
+        right[i][k] = sigRight * (slopeSensitivity[i + 1][k] * (2. * intervals[i + 1] + intervals[i + 2]) - slopeSensitivity[i + 2][k] * intervals[i + 1])
+            / (intervals[i + 1] + intervals[i + 2]);
       }
     }
     final double sigCenterFin = Math.signum(parabolaSlopes[nData - 3][1]);
@@ -522,8 +522,8 @@ public class MonotonicityPreservingCubicSplineInterpolator extends PiecewisePoly
       Arrays.fill(center[nData - 3], 0.);
     }
     for (int k = 0; k < nData; ++k) {
-      center[nData - 3][k] = sigCenterFin * (slopeSensitivity[nData - 3][k] * intervals[nData - 2] + slopeSensitivity[nData - 2][k] * intervals[nData - 3]) /
-          (intervals[nData - 3] + intervals[nData - 2]);
+      center[nData - 3][k] = sigCenterFin * (slopeSensitivity[nData - 3][k] * intervals[nData - 2] + slopeSensitivity[nData - 2][k] * intervals[nData - 3])
+          / (intervals[nData - 3] + intervals[nData - 2]);
     }
     res[0] = new DoubleMatrix2D(left);
     res[1] = new DoubleMatrix2D(center);

@@ -209,8 +209,8 @@ public class SemiLocalCubicSplineInterpolator extends PiecewisePolynomialInterpo
         if (Math.abs(slopesExt[i + 1] - slopesExt[i]) == 0.) {
           res[i] = slopesExt[i];
         } else {
-          res[i] = (Math.abs(slopesExt[i + 3] - slopesExt[i + 2]) * slopesExt[i + 1] + Math.abs(slopesExt[i + 1] - slopesExt[i]) * slopesExt[i + 2]) /
-              (Math.abs(slopesExt[i + 3] - slopesExt[i + 2]) + Math.abs(slopesExt[i + 1] - slopesExt[i]));
+          res[i] = (Math.abs(slopesExt[i + 3] - slopesExt[i + 2]) * slopesExt[i + 1] + Math.abs(slopesExt[i + 1] - slopesExt[i]) * slopesExt[i + 2])
+              / (Math.abs(slopesExt[i + 3] - slopesExt[i + 2]) + Math.abs(slopesExt[i + 1] - slopesExt[i]));
         }
       }
     }
@@ -257,11 +257,11 @@ public class SemiLocalCubicSplineInterpolator extends PiecewisePolynomialInterpo
         for (int k = 0; k < nData; ++k) {
           tmp[k] = (modSlopesWithSensitivity[0].getData()[i + 2] * slopeSensitivityExtTransp[k][i + 1]
               + modSlopesWithSensitivity[0].getData()[i] * slopeSensitivityExtTransp[k][i + 2]) / den
-              + (slopesExt[i + 2] - slopesExt[i + 1]) *
-              (modSlopesWithSensitivity[0].getData()[i + 2] * modSlopesWithSensitivity[i + 1].getData()[k]
-                  - modSlopesWithSensitivity[0].getData()[i] * modSlopesWithSensitivity[i + 3].getData()[k])
-              /
-              den / den;
+              + (slopesExt[i + 2] - slopesExt[i + 1])
+                  * (modSlopesWithSensitivity[0].getData()[i + 2] * modSlopesWithSensitivity[i + 1].getData()[k]
+                      - modSlopesWithSensitivity[0].getData()[i] * modSlopesWithSensitivity[i + 3].getData()[k])
+                  /
+                  den / den;
         }
       }
       res[i + 1] = new DoubleMatrix1D(tmp);

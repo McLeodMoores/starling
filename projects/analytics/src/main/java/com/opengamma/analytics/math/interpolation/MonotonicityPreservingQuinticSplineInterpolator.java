@@ -496,8 +496,8 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
   private double firstDerivativesRecalculator(final double[] intervals, final double[] slopes, final double[] aValues, final double[] bValues,
       final int position) {
     return ((20. - 2. * bValues[position]) * slopes[position] / intervals[position]
-        + (20. - 2. * aValues[position - 1]) * slopes[position - 1] / intervals[position - 1]) /
-        ((8. + 0.48 * bValues[position]) / intervals[position] + (8. + 0.48 * aValues[position - 1]) / intervals[position - 1]);
+        + (20. - 2. * aValues[position - 1]) * slopes[position - 1] / intervals[position - 1])
+        / ((8. + 0.48 * bValues[position]) / intervals[position] + (8. + 0.48 * aValues[position - 1]) / intervals[position - 1]);
   }
 
   private double[] secondDerivativeCalculator(final double[] initialSecond, final double[][] intervalsA, final double[][] intervalsB) {

@@ -141,8 +141,8 @@ public abstract class LocalVolatilityForwardPDEVolatilityGreeksGridCalculator im
       final double xVanna = (pdeGridUp.getFunctionValue(index) - pdeGridDown.getFunctionValue(index)
           - x * (pdeGridUp.getFirstSpatialDerivative(index) - pdeGridDown.getFirstSpatialDerivative(index))) / 2 / VOL_SHIFT;
       // this is the vanna coming purely from deformation of the local volatility surface
-      final double surfaceVanna = (pdeGridUpUp.getFunctionValue(index) + pdeGridDownDown.getFunctionValue(index) -
-          pdeGridUpDown.getFunctionValue(index) - pdeGridDownUp.getFunctionValue(index)) / 4 / FWD_SHIFT / VOL_SHIFT;
+      final double surfaceVanna = (pdeGridUpUp.getFunctionValue(index) + pdeGridDownDown.getFunctionValue(index)
+          - pdeGridUpDown.getFunctionValue(index) - pdeGridDownUp.getFunctionValue(index)) / 4 / FWD_SHIFT / VOL_SHIFT;
       return xVanna + surfaceVanna;
     }
   }

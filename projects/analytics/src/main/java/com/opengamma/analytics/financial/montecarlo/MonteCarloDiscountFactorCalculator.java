@@ -28,7 +28,7 @@ public class MonteCarloDiscountFactorCalculator extends InstrumentDerivativeVisi
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static MonteCarloDiscountFactorCalculator getInstance() {
@@ -99,8 +99,8 @@ public class MonteCarloDiscountFactorCalculator extends InstrumentDerivativeVisi
         if (annuity.getNthPayment(loopcpn) instanceof CouponIborRatchet) {
           final CouponIborRatchet cpn = (CouponIborRatchet) annuity.getNthPayment(loopcpn);
           for (int looppath = 0; looppath < nbPath; looppath++) {
-            ibor = (-impactAmount[loopcpn][0] * pathDiscountFactors[looppath][loopcpn][0] / (impactAmount[loopcpn][1] *
-                pathDiscountFactors[looppath][loopcpn][1]) - 1.0) / cpn.getFixingAccrualFactor();
+            ibor = (-impactAmount[loopcpn][0] * pathDiscountFactors[looppath][loopcpn][0] / (impactAmount[loopcpn][1]
+                * pathDiscountFactors[looppath][loopcpn][1]) - 1.0) / cpn.getFixingAccrualFactor();
             final double cpnMain = cpn.getMainCoefficients()[0] * cpnRate[loopcpn - 1][looppath] + cpn.getMainCoefficients()[1] * ibor
                 + cpn.getMainCoefficients()[2];
             final double cpnFloor = cpn.getFloorCoefficients()[0] * cpnRate[loopcpn - 1][looppath] + cpn.getFloorCoefficients()[1] * ibor

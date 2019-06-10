@@ -40,7 +40,7 @@ public class CashFlowEquivalentCalculator extends InstrumentDerivativeVisitorAda
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static CashFlowEquivalentCalculator getInstance() {
@@ -117,8 +117,8 @@ public class CashFlowEquivalentCalculator extends InstrumentDerivativeVisitorAda
         payment.getFactor() * beta * payment.getNotional() * payment.getPaymentYearFraction()
             / payment.getFixingAccrualFactor());
     final PaymentFixed paymentEnd = new PaymentFixed(payment.getCurrency(), paymentTime,
-        (-payment.getFactor() / payment.getFixingAccrualFactor() + payment.getSpread()) *
-            payment.getPaymentYearFraction() * payment.getNotional());
+        (-payment.getFactor() / payment.getFixingAccrualFactor() + payment.getSpread())
+            * payment.getPaymentYearFraction() * payment.getNotional());
     return new AnnuityPaymentFixed(new PaymentFixed[] { paymentStart, paymentEnd });
   }
 
@@ -200,7 +200,7 @@ public class CashFlowEquivalentCalculator extends InstrumentDerivativeVisitorAda
 
   /**
    * Add a cash flow amount at a given time in the flow map. If the time is present, the amount is added; if the time is not present a new entry is created.
-   * 
+   *
    * @param flow
    *          The map describing the cash flows.
    * @param time

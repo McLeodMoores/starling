@@ -323,8 +323,8 @@ public class NonnegativityPreservingQuinticSplineInterpolator extends PiecewiseP
         : Math.min(5. * tauIni * yValues[0] / intervals[0], Math.max(-5. * tauIni * yValues[0] / intervals[0], tauIni * initialFirst[0])) / tauIni;
     res[nDataPts - 1] = tauFin == 0. ? initialFirst[nDataPts - 1]
         : Math.min(5. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2],
-            Math.max(-5. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2], tauFin * initialFirst[nDataPts - 1])) /
-            tauFin;
+            Math.max(-5. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2], tauFin * initialFirst[nDataPts - 1]))
+            / tauFin;
 
     return res;
   }
@@ -353,10 +353,10 @@ public class NonnegativityPreservingQuinticSplineInterpolator extends PiecewiseP
     res[nDataPts - 1] = tauFin == 0. ? initialSecond[nDataPts - 1]
         : Math.max(
             initialSecond[nDataPts - 1] * tauFin,
-            tauFin *
-                Math.max(8. * first[nDataPts - 1] / intervals[nDataPts - 2] - 20. * yValues[nDataPts - 1] / intervals[nDataPts - 2] / intervals[nDataPts - 2],
-                    -8. * first[nDataPts - 1] /
-                        intervals[nDataPts - 2] - 20. * yValues[nDataPts - 1] / intervals[nDataPts - 2] / intervals[nDataPts - 2]))
+            tauFin
+                * Math.max(8. * first[nDataPts - 1] / intervals[nDataPts - 2] - 20. * yValues[nDataPts - 1] / intervals[nDataPts - 2] / intervals[nDataPts - 2],
+                    -8. * first[nDataPts - 1]
+                        / intervals[nDataPts - 2] - 20. * yValues[nDataPts - 1] / intervals[nDataPts - 2] / intervals[nDataPts - 2]))
             / tauFin;
 
     return res;

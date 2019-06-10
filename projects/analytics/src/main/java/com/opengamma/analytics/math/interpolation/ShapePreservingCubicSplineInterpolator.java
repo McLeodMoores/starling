@@ -545,12 +545,12 @@ public class ShapePreservingCubicSplineInterpolator extends PiecewisePolynomialI
     final double[] secNewKnots2 = new double[nData - 1];
     for (int i = 0; i < nData - 1; ++i) {
       secNewKnots1[i] = 6. * slopes[i] / intervals[i] / (1. - tau[i]) - 4. * first[i] / intervals[i] / (1. - tau[i])
-          - 2. * first[i + 1] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i]) *
-              second[i] / (1. - tau[i])
+          - 2. * first[i + 1] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i])
+              * second[i] / (1. - tau[i])
           + tau[i] * second[i + 1];
       secNewKnots2[i] = -6. * slopes[i] / intervals[i] / (1. - tau[i]) + 4. * first[i + 1] / intervals[i] / (1. - tau[i])
-          + 2. * first[i] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i]) *
-              second[i + 1] / (1. - tau[i])
+          + 2. * first[i] / intervals[i] / (1. - tau[i]) - tau[i] * (2. - tau[i])
+              * second[i + 1] / (1. - tau[i])
           + tau[i] * second[i];
     }
 

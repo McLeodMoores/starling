@@ -113,8 +113,7 @@ public class HermiteCoefficientsProvider {
       res[i][1] = 0.5 * (3. * second[i] - 2. * second[i + 1]) / intervals[i] / intervals[i]
           + (8. * first[i] + 7. * first[i + 1] - 15. * slopes[i]) / intervals[i] / intervals[i] / intervals[i];
       res[i][0] = 0.5 * (second[i + 1] - second[i]) / intervals[i] / intervals[i] / intervals[i]
-          + 3. * (2. * slopes[i] - first[i + 1] - first[i]) / intervals[i] / intervals[i] / intervals[i] /
-              intervals[i];
+          + 3. * (2. * slopes[i] - first[i + 1] - first[i]) / intervals[i] / intervals[i] / intervals[i] / intervals[i];
     }
 
     return res;
@@ -160,8 +159,8 @@ public class HermiteCoefficientsProvider {
             +
             (8. * firstWithSensitivity[i + 1].getData()[k] + 7. * firstWithSensitivity[i + 2].getData()[k] - 15. * slopeSensitivity[i][k]) / intervals[i]
                 / intervals[i] / intervals[i];
-        coefSense[2][k] = 0.5 * (secondWithSensitivity[i + 2].getData()[k] - 3. * secondWithSensitivity[i + 1].getData()[k]) / intervals[i] + 2. *
-            (5. * slopeSensitivity[i][k] - 3. * firstWithSensitivity[i + 1].getData()[k] - 2. * firstWithSensitivity[i + 2].getData()[k]) / intervals[i]
+        coefSense[2][k] = 0.5 * (secondWithSensitivity[i + 2].getData()[k] - 3. * secondWithSensitivity[i + 1].getData()[k]) / intervals[i] + 2.
+            * (5. * slopeSensitivity[i][k] - 3. * firstWithSensitivity[i + 1].getData()[k] - 2. * firstWithSensitivity[i + 2].getData()[k]) / intervals[i]
             / intervals[i];
         coefSense[3][k] = 0.5 * secondWithSensitivity[i + 1].getData()[k];
         coefSense[4][k] = firstWithSensitivity[i + 1].getData()[k];

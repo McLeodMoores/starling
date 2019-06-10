@@ -264,8 +264,8 @@ public class NonnegativityPreservingCubicSplineInterpolator extends PiecewisePol
         : Math.min(3. * tauIni * yValues[0] / intervals[0], Math.max(-3. * tauIni * yValues[0] / intervals[0], tauIni * initialFirst[0])) / tauIni;
     res[nDataPts - 1] = tauFin == 0. ? initialFirst[nDataPts - 1]
         : Math.min(3. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2],
-            Math.max(-3. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2], tauFin * initialFirst[nDataPts - 1])) /
-            tauFin;
+            Math.max(-3. * tauFin * yValues[nDataPts - 1] / intervals[nDataPts - 2], tauFin * initialFirst[nDataPts - 1]))
+            / tauFin;
 
     return res;
   }
