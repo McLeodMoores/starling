@@ -23,7 +23,7 @@ public class DummyTimeSeriesWriter implements TimeSeriesWriter {
   @Override
   public LocalDateDoubleTimeSeries writeDataPoints(final ExternalId htsId, final String dataSource, final String dataProvider, final String dataField,
       final String observationTime, final LocalDateDoubleTimeSeries series) {
-    LOGGER.info("Time Series: (id " + htsId + ", Field " + dataField + ") " + series.timesArray().toString() + Arrays.toString(series.valuesArray()));
+    LOGGER.info("Time Series: (id " + htsId + ", Field " + dataField + ") " + Arrays.toString(series.timesArray()) + Arrays.toString(series.valuesArray()));
     return series;
   }
 

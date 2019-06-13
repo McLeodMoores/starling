@@ -5,7 +5,6 @@
  */
 package com.opengamma.batch.rest;
 
-
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.Mockito.doNothing;
@@ -54,27 +53,26 @@ public class DataBatchRunResourceTest {
   @BeforeMethod
   public void setUp() {
     _riskRun = new RiskRun(
-      new MarketData(UniqueId.of(BatchMaster.BATCH_IDENTIFIER_SCHEME, "market-data")),
-      Instant.now(),
-      Instant.now(),
-      0,
-      newHashSet(new CalculationConfiguration("calc-config")),
-      newHashSet(new RiskRunProperty()),
-      false,
-      VersionCorrection.LATEST,
-      UniqueId.of("Scheme", "view-def"),
-      "cycle_name"
-    );
-    
+        new MarketData(UniqueId.of(BatchMaster.BATCH_IDENTIFIER_SCHEME, "market-data")),
+        Instant.now(),
+        Instant.now(),
+        0,
+        newHashSet(new CalculationConfiguration("calc-config")),
+        newHashSet(new RiskRunProperty()),
+        false,
+        VersionCorrection.LATEST,
+        UniqueId.of("Scheme", "view-def"),
+        "cycle_name");
+
     _underlying = mock(BatchMaster.class);
     _resource = new DataBatchRunResource(RISK_RUN_ID, _underlying);
     when(_underlying.getRiskRun(RISK_RUN_ID)).thenReturn(_riskRun);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test
   public void testGet() {
-    Response test = _resource.get();
+    final Response test = _resource.get();
     assertEquals(Status.OK.getStatusCode(), test.getStatus());
     assertSame(_riskRun, test.getEntity());
   }
@@ -90,21 +88,21 @@ public class DataBatchRunResourceTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testGetBatchValues() {
-    PagingRequest pagingRequest = PagingRequest.FIRST_PAGE;
-    ViewResultEntry mockViewResultEntry = mock(ViewResultEntry.class);
-    
-    List<ViewResultEntry> viewResultEntries = newArrayList(mockViewResultEntry);
-    Paging paging = Paging.of(pagingRequest, viewResultEntries);
-    
+    final PagingRequest pagingRequest = PagingRequest.FIRST_PAGE;
+    final ViewResultEntry mockViewResultEntry = mock(ViewResultEntry.class);
+
+    final List<ViewResultEntry> viewResultEntries = newArrayList(mockViewResultEntry);
+    final Paging paging = Paging.of(pagingRequest, viewResultEntries);
+
     when(_underlying.getBatchValues(RISK_RUN_ID, pagingRequest)).thenReturn(Pairs.of(viewResultEntries, paging));
-    Response response = _resource.getBatchValues(pagingRequest);
-    
+    final Response response = _resource.getBatchValues(pagingRequest);
+
     Object entity = response.getEntity();
     entity = FudgeResponse.unwrap(entity);
-    Pair<List<ViewResultEntry>, Paging> result = (Pair<List<ViewResultEntry>, Paging>) entity;
-    
+    final Pair<List<ViewResultEntry>, Paging> result = (Pair<List<ViewResultEntry>, Paging>) entity;
+
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    assertSame(result.getFirst().size(), 1);
+    assertEquals(result.getFirst().size(), 1);
     assertSame(result.getFirst().get(0), mockViewResultEntry);
     assertSame(result.getSecond(), paging);
   }

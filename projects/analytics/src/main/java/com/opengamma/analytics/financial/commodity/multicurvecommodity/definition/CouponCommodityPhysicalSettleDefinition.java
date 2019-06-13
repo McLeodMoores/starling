@@ -7,11 +7,14 @@ package com.opengamma.analytics.financial.commodity.multicurvecommodity.definiti
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative.CouponCommodity;
+import com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative.CouponCommodityCashSettle;
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative.CouponCommodityPhysicalSettle;
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.underlying.CommodityUnderlying;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.PaymentFixed;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.DoubleTimeSeries;
@@ -108,11 +111,6 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
     return toDerivative(date);
   }
 
-  /**
-   * {@inheritDoc}
-   * @deprecated Use the method that does not take yield curve names
-   */
-  @Deprecated
   @Override
   public CouponCommodity toDerivative(final ZonedDateTime date) {
     ArgumentChecker.inOrderOrEqual(date, getSettlementDate(), "date", "expiry date");
@@ -128,6 +126,12 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
 
   public Payment toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> priceIndexTimeSeries, final String... yieldCurveNames) {
     return toDerivative(date, priceIndexTimeSeries);
+  }
+
+  public Payment toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> commoIndexTimeSeries) {
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(commoIndexTimeSeries, "Index fixing time series");
+    return toDerivative(date);
   }
 
   @Override

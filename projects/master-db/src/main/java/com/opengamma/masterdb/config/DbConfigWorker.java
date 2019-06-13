@@ -250,7 +250,7 @@ import com.opengamma.util.paging.PagingRequest;
 
       final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
       final ConfigDocumentExtractor configDocumentExtractor = new ConfigDocumentExtractor();
-      if (request.equals(PagingRequest.ALL)) {
+      if (request.getPagingRequest().equals(PagingRequest.ALL)) {
         final List<ConfigDocument> queryResult = namedJdbc.query(sql[0], args, configDocumentExtractor);
         for (final ConfigDocument configDocument : queryResult) {
           if (request.getType().isInstance(configDocument.getConfig().getValue())) {

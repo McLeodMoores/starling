@@ -5,6 +5,7 @@
  */
 package com.opengamma.financial.analytics.cashflow;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -91,7 +92,7 @@ public class FixedPaymentMatrix {
       final CurrencyAmount[] ca = mca.getCurrencyAmounts();
       for (int j = 0; j < getMaxCurrencyAmounts(); j++) {
         if (j < mca.size()) {
-          matrix[i][j] = ca.toString();
+          matrix[i][j] = Arrays.toString(ca);
         } else {
           matrix[i][j] = StringUtils.EMPTY;
         }

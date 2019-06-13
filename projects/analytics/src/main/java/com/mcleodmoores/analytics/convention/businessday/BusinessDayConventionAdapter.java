@@ -15,7 +15,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 /**
  *
  */
-public class BusinessDayConventionAdapter implements BusinessDayConvention {
+public final class BusinessDayConventionAdapter implements BusinessDayConvention {
 
   public static BusinessDayConvention of(final com.opengamma.financial.convention.businessday.BusinessDayConvention convention) {
     return new BusinessDayConventionAdapter(convention);

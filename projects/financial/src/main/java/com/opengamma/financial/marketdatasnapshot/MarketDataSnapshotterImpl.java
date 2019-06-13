@@ -220,7 +220,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
     for (int i = 0; i < outputs; i++) {
       final ValueSpecification output = node.getOutputValue(i);
       for (final StructuredSnapper snapper : _structuredSnappers) {
-        if (output.getValueName() == snapper.getRequirementName()) {
+        if (output.getValueName().equals(snapper.getRequirementName())) {
           if (outputs != 1) {
             // TODO this is a bit fragile, but if this isn't true all sorts of things are broken
             LOGGER.error("Structured market data node produced more than one output {} - {}", node, DependencyNodeImpl.getOutputValues(node));

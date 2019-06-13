@@ -474,13 +474,9 @@ public class CapFloorInflationZeroCouponInterpolationDefinition extends CouponIn
       return false;
     }
     if (!Arrays.equals(_referenceEndDates, other._referenceEndDates)) {
-      return false;
-    }
-    if (_referenceStartDates == null) {
-      if (other._referenceStartDates != null) {
         return false;
       }
-    } else if (!_referenceStartDates.equals(other._referenceStartDates)) {
+    if (!Arrays.equals(_referenceStartDates, other._referenceStartDates)) {
       return false;
     }
     if (Double.doubleToLongBits(_strike) != Double.doubleToLongBits(other._strike)) {

@@ -557,7 +557,7 @@ public class ViewCalculationConfiguration implements Serializable {
       }
       final Column other = (Column) obj;
       return ObjectUtils.equals(_header, other._header)
-          && ObjectUtils.equals(_valueName, other._valueName)
+          && ObjectUtils.equals(_properties, other._properties)
           && ObjectUtils.equals(_valueName, other._valueName);
     }
 
@@ -632,7 +632,7 @@ public class ViewCalculationConfiguration implements Serializable {
       if (this == obj) {
         return true;
       }
-      if (!(obj instanceof ViewCalculationConfiguration)) {
+      if (!(obj instanceof MergedOutput)) {
         return false;
       }
       final MergedOutput other = (MergedOutput) obj;

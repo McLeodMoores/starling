@@ -33,9 +33,6 @@ public abstract class AnalyticsTestBase {
    * @param variables The variables
    * @param variableClasses The variable classes
    * @param notNull Indicates whether a variable can be nullable
-   * @throws NoSuchMethodException 
-   * @throws IllegalAccessException 
-   * @throws InstantiationException 
    */
   public void testNullInputs(final Class<?> clazz, final Object[] variables, final Class<?>[] variableClasses, final boolean[] notNull)
       throws NoSuchMethodException, IllegalAccessException, InstantiationException {

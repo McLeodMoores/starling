@@ -201,7 +201,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
         @Override
         public UserPrincipal getUser() {
-          return getUser();
+          return AnalyticServiceServer.this._user;
         }
 
         @Override

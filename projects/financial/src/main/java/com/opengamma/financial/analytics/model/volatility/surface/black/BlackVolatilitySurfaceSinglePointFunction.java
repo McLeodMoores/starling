@@ -81,7 +81,7 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
     final double spot = forwardCurve.getForward(0.0);
 
     // The Volatility Surface is simply a single point, which must be inferred from the market value
-    final Object optionPriceObject = inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE);
+    final Object optionPriceObject = inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     if (optionPriceObject == null) {
       throw new OpenGammaRuntimeException("Could not get market value of underlying option");
     }

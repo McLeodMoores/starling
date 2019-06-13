@@ -27,6 +27,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
+import cern.colt.Arrays;
+
 /**
  * Calculates the z-spread of an annuity to a curve. The z-spread is defined as
  * the flat spread over the curve that is required to make the present value
@@ -97,7 +99,7 @@ public class ZSpreadCalculator<T extends ParameterProviderInterface> {
       payment = annuity.getNthPayment(i);
       final MultipleCurrencyAmount pvs = payment.accept(_pvCalculator, curves);
       if (pvs.size() != 1) {
-        throw new IllegalStateException("Had more than one currency in result: " + pvs.getCurrencyAmounts());
+        throw new IllegalStateException("Had more than one currency in result: " + Arrays.toString(pvs.getCurrencyAmounts()));
       }
       final double pv = Iterables.getOnlyElement(pvs).getAmount();
       sum += pv * Math.exp(-zSpread * payment.getPaymentTime());
@@ -124,7 +126,7 @@ public class ZSpreadCalculator<T extends ParameterProviderInterface> {
       payment = annuity.getNthPayment(i);
       final MultipleCurrencyAmount pvs = payment.accept(_pvCalculator, curves);
       if (pvs.size() != 1) {
-        throw new IllegalStateException("Had more than one currency in result: " + pvs.getCurrencyAmounts());
+        throw new IllegalStateException("Had more than one currency in result: " + Arrays.toString(pvs.getCurrencyAmounts()));
       }
       final double pv = Iterables.getOnlyElement(pvs).getAmount();
       final double time = payment.getPaymentTime();

@@ -154,9 +154,9 @@ public final class ExecutionFlags {
     }
 
     private static void remove(final EnumSet<ViewExecutionFlags> flags) {
-      flags.remove(PARALLEL_EXECUTION);
-      flags.remove(DEFERRED_EXECUTION);
-      flags.remove(IMMEDIATE_EXECUTION);
+      flags.remove(PARALLEL_EXECUTION._flag);
+      flags.remove(DEFERRED_EXECUTION._flag);
+      flags.remove(IMMEDIATE_EXECUTION._flag);
     }
 
     private void apply(final EnumSet<ViewExecutionFlags> flags) {

@@ -8,10 +8,8 @@ package com.opengamma.financial.analytics.timeseries;
 import java.util.Collections;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Iterables;
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
 import com.opengamma.engine.function.FunctionCompilationContext;
@@ -34,14 +32,12 @@ import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeries;
  */
 public class HistoricalTimeSeriesSecurityFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesSecurityFunction.class);
-
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
       final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final ComputedValue htsValue = inputs.getComputedValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
     if (htsValue == null) {
-      LOGGER.warn("Cannot get time series for {}", target);
+      throw new OpenGammaRuntimeException("Cannot get time series for " + target);
     }
     final ManageableHistoricalTimeSeries mhts = (ManageableHistoricalTimeSeries) htsValue.getValue();
     final ValueRequirement desiredValue = desiredValues.iterator().next();

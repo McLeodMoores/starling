@@ -13,6 +13,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.test.TestGroup;
 
+import cern.colt.Arrays;
+
 /**
  * Test.
  */
@@ -959,7 +961,7 @@ public class CubicSplineInterpolatorTest {
 
     CubicSplineInterpolator interp = new CubicSplineInterpolator();
 
-    System.out.println(interp.interpolate(xValues, yValues, key));
+    System.out.println(Arrays.toString(interp.interpolate(xValues, yValues, key)));
 
   }
 

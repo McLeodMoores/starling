@@ -50,8 +50,10 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
   private static final PositionGreekContractMultiplier CONTRACT_MULTIPLIER = PositionGreekContractMultiplier.getInstance();
 
   /**
-   * @param positionReqName The output requirement name, not null
-   * @param securityReqName The input requirement name, not null
+   * @param positionReqName
+   *          The output requirement name, not null
+   * @param securityReqName
+   *          The input requirement name, not null
    */
   public PositionGreeksFunction(final String positionReqName, final String securityReqName) {
     ArgumentChecker.notNull(positionReqName, "position requirement name");
@@ -105,7 +107,7 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
       final Map<ValueSpecification, ValueRequirement> inputs) {
     // inputs provide the properties of the required security greek. These we pass through to the position
     final ValueSpecification secGreekSpec = inputs.keySet().iterator().next();
-    if (secGreekSpec.getValueName() != getSecurityReqName()) {
+    if (!secGreekSpec.getValueName().equals(getSecurityReqName())) {
       return null;
     }
     final Security security = target.getPositionOrTrade().getSecurity();
@@ -123,15 +125,16 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
       return null;
     }
 
-    final ValueRequirement secGreekReq =
-        new ValueRequirement(getSecurityReqName(), ComputationTargetSpecification.of(target.getPositionOrTrade().getSecurity()),
-            desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION));
+    final ValueRequirement secGreekReq = new ValueRequirement(getSecurityReqName(),
+        ComputationTargetSpecification.of(target.getPositionOrTrade().getSecurity()),
+        desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION));
     final Set<ValueRequirement> requirements = Sets.newHashSet(secGreekReq);
     return requirements;
   }
 
   /**
    * Gets the output (position) requirement name.
+   * 
    * @return The output requirement name
    */
   public String getPositionReqName() {
@@ -140,6 +143,7 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the input (security) requirement name.
+   * 
    * @return The input requirement name
    */
   public String getSecurityReqName() {

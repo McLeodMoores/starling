@@ -27,20 +27,25 @@ public abstract class DividendFunctionProvider {
    * @param dividends
    *          The dividend payment amount/ratio
    */
-  public DividendFunctionProvider(final double[] dividendTimes, final double[] dividends) {
+  public DividendFunctionProvider(final double[] dividendTimes,
+      final double[] dividends) {
     ArgumentChecker.notNull(dividendTimes, "dividendTimes");
     ArgumentChecker.notNull(dividends, "dividends");
 
     final int nDiv = dividendTimes.length;
     ArgumentChecker.isTrue(nDiv == dividends.length, "Wrong data length");
     for (int i = 0; i < nDiv; ++i) {
-      ArgumentChecker.isTrue(dividendTimes[i] > 0., "dividendTimes should be positive");
-      ArgumentChecker.isTrue(Doubles.isFinite(dividendTimes[i]), "dividendTimes should be finite");
+      ArgumentChecker.isTrue(dividendTimes[i] > 0.,
+          "dividendTimes should be positive");
+      ArgumentChecker.isTrue(Doubles.isFinite(dividendTimes[i]),
+          "dividendTimes should be finite");
       ArgumentChecker.isTrue(dividends[i] > 0., "dividends should be positive");
-      ArgumentChecker.isTrue(Doubles.isFinite(dividends[i]), "dividends should be finite");
+      ArgumentChecker.isTrue(Doubles.isFinite(dividends[i]),
+          "dividends should be finite");
     }
     for (int i = 1; i < nDiv; ++i) {
-      ArgumentChecker.isTrue(dividendTimes[i] - dividendTimes[i - 1] > 0., "dividendTimes should be in ascending order");
+      ArgumentChecker.isTrue(dividendTimes[i] - dividendTimes[i - 1] > 0.,
+          "dividendTimes should be in ascending order");
     }
 
     _dividendTimes = Arrays.copyOf(dividendTimes, nDiv);
@@ -72,7 +77,8 @@ public abstract class DividendFunctionProvider {
    *          the k-th payment
    * @return The correction
    */
-  public abstract double dividendCorrections(double assetPrice, double interestRate, double offset, int k);
+  public abstract double dividendCorrections(double assetPrice,
+      double interestRate, double offset, int k);
 
   /**
    * Asset prices in the 1st layer, i.e., S_{10} and S_{11}.
@@ -91,7 +97,9 @@ public abstract class DividendFunctionProvider {
    *          Sum of discounted (cash) dividends
    * @return { S_{10}, S_{11} }
    */
-  public abstract double[] getAssetPricesForDelta(double spot, double interestRate, int[] divSteps, double upFactor, double downFactor, double sumDiscountDiv);
+  public abstract double[] getAssetPricesForDelta(double spot,
+      double interestRate, int[] divSteps, double upFactor, double downFactor,
+      double sumDiscountDiv);
 
   /**
    * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}.
@@ -110,7 +118,9 @@ public abstract class DividendFunctionProvider {
    *          Sum of discounted (cash) dividends
    * @return { S_{20}, S_{21}, S_{22} }
    */
-  public abstract double[] getAssetPricesForGamma(double spot, double interestRate, int[] divSteps, double upFactor, double downFactor, double sumDiscountDiv);
+  public abstract double[] getAssetPricesForGamma(double spot,
+      double interestRate, int[] divSteps, double upFactor, double downFactor,
+      double sumDiscountDiv);
 
   /**
    * Asset prices in the 1st layer, i.e., S_{10} and S_{11}.
@@ -131,8 +141,9 @@ public abstract class DividendFunctionProvider {
    *          Sum of discounted (cash) dividends
    * @return { S_{10}, S_{11}, S_{12} }
    */
-  public abstract double[] getAssetPricesForDelta(double spot, double interestRate, int[] divSteps, double upFactor, double middleFactor, double downFactor,
-      double sumDiscountDiv);
+  public abstract double[] getAssetPricesForDelta(double spot,
+      double interestRate, int[] divSteps, double upFactor, double middleFactor,
+      double downFactor, double sumDiscountDiv);
 
   /**
    * Asset prices in the second layer, i.e., S_{20}, S_{21} and S_{22}.
@@ -153,8 +164,9 @@ public abstract class DividendFunctionProvider {
    *          Sum of discounted (cash) dividends
    * @return { S_{20}, S_{21}, S_{22}, S_{23}, S_{24} }
    */
-  public abstract double[] getAssetPricesForGamma(double spot, double interestRate, int[] divSteps, double upFactor, double middleFactor, double downFactor,
-      double sumDiscountDiv);
+  public abstract double[] getAssetPricesForGamma(double spot,
+      double interestRate, int[] divSteps, double upFactor, double middleFactor,
+      double downFactor, double sumDiscountDiv);
 
   /**
    * @param dt
@@ -176,7 +188,8 @@ public abstract class DividendFunctionProvider {
    *
    * @param dt
    *          Time step width
-   * @return True if (time step width) &lt; (payment time width) for all dividends
+   * @return True if (time step width) &lt; (payment time width) for all
+   *         dividends
    */
   public boolean checkTimeSteps(final double dt) {
     final int nDivM = _nDividends - 1;
@@ -191,7 +204,8 @@ public abstract class DividendFunctionProvider {
   /**
    * @param timeToExpiry
    *          Time to expiry
-   * @return True if all of the dividend times are before expiry, false otherwise
+   * @return True if all of the dividend times are before expiry, false
+   *         otherwise
    */
   public boolean checkDividendBeforeExpiry(final double timeToExpiry) {
     final int nDiv = _nDividends;
@@ -242,9 +256,9 @@ public abstract class DividendFunctionProvider {
 
   @Override
   public boolean equals(final Object obj) {
-    /*
-     * This case is always successful because this equals() is necessarily called by a subclass
-     */
+    if (!(obj instanceof DividendFunctionProvider)) {
+      return false;
+    }
     final DividendFunctionProvider other = (DividendFunctionProvider) obj;
     if (!Arrays.equals(_dividendTimes, other._dividendTimes)) {
       return false;

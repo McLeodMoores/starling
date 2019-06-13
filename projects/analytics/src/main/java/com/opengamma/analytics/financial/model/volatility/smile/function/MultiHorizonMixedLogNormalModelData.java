@@ -68,7 +68,7 @@ public class MultiHorizonMixedLogNormalModelData {
       ArgumentChecker.isTrue(_nParams % 3 == 2, "Wrong length of parameters - length {}, but must be 3n-2, where n is an integer", _nParams);
       n = (_nParams + 1) / 3;
     } else {
-      ArgumentChecker.isTrue(_nParams % 2 == 1, "Wrong length of parameters - length {}, but must be 2n-1, where n is an integer", _nParams);
+      ArgumentChecker.isTrue(_nParams % 2 != 0, "Wrong length of parameters - length {}, but must be 2n-1, where n is an integer", _nParams);
       n = (_nParams + 1) / 2;
     }
     _nNorms = n;

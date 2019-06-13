@@ -67,7 +67,7 @@ public class InflationIssuerProviderIssuerDecoratedSpread implements InflationIs
 
   @Override
   public IssuerProviderInterface getIssuerProvider() {
-    return this.getIssuerProvider();
+    return _inflationIssuerProvider.getIssuerProvider();
   }
 
   @Override

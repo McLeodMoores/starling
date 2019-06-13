@@ -105,7 +105,7 @@ public final class SwaptionCashFixedCompoundedONCompoundedBlackMethod implements
   public CurrencyAmount presentValue(final InstrumentDerivative instrument, final YieldCurveBundle curves) {
     ArgumentChecker.isTrue(instrument instanceof SwaptionCashFixedIbor, "Physical delivery swaption");
     ArgumentChecker.isTrue(curves instanceof YieldCurveWithBlackSwaptionBundle, "Bundle should contain Black Swaption data");
-    return presentValue(instrument, curves);
+    return presentValue((SwaptionCashFixedIbor) instrument, (YieldCurveWithBlackSwaptionBundle) curves);
   }
 
   /**

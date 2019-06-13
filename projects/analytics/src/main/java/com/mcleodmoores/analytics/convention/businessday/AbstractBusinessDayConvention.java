@@ -24,6 +24,8 @@ import com.opengamma.financial.convention.calendar.Calendar;
  */
 public abstract class AbstractBusinessDayConvention extends com.opengamma.financial.convention.businessday.AbstractBusinessDayConvention
     implements BusinessDayConvention {
+  /** Serialization version. */
+  private static final long serialVersionUID = 1L;
 
   @Override
   public LocalDate adjustDate(final Calendar calendar, final LocalDate date) {

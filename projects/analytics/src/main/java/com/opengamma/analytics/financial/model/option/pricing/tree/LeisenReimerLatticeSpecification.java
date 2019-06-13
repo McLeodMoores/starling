@@ -17,7 +17,7 @@ public class LeisenReimerLatticeSpecification extends LatticeSpecification {
   @Override
   public double[] getParameters(final double spot, final double strike, final double timeToExpiry, final double volatility, final double interestRate,
       final int nSteps, final double dt) {
-    Validate.isTrue(nSteps % 2 == 1, "The number of steps should be odd");
+    Validate.isTrue(nSteps % 2 != 0, "The number of steps should be odd");
     final double sigmaRootT = volatility * Math.sqrt(timeToExpiry);
     final double d1 = (Math.log(spot / strike) + interestRate * timeToExpiry) / sigmaRootT + 0.5 * sigmaRootT;
     final double d2 = d1 - sigmaRootT;

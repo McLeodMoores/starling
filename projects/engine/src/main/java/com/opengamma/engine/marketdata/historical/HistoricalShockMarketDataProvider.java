@@ -96,14 +96,14 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
 
   /**
    * Returns true if marketDataSpec is equal to this object. This method isn't used anyway so it's academic.
-   * 
+   *
    * @param marketDataSpec
    *          describes the market data, not null
    * @return true if marketDataSpec is equal to this object
    */
   @Override
   public boolean isCompatible(final MarketDataSpecification marketDataSpec) {
-    return equals(marketDataSpec);
+    return false;
   }
 
   @Override

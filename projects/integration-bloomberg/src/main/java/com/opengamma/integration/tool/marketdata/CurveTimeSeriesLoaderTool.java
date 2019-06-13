@@ -46,8 +46,7 @@ import com.opengamma.master.security.SecuritySearchResult;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Tool to load required time series for curve construction (for post 2.1.0
- * multi-curve framework).
+ * Tool to load required time series for curve construction (for post 2.1.0 multi-curve framework).
  */
 @Scriptable
 public final class CurveTimeSeriesLoaderTool
@@ -126,8 +125,7 @@ public final class CurveTimeSeriesLoaderTool
   }
 
   /**
-   * go through the curve construction configuration and make a list of all the
-   * referenced ids that may need loading.
+   * go through the curve construction configuration and make a list of all the referenced ids that may need loading.
    *
    * @param curveConstructionConfig
    * @return
@@ -148,7 +146,7 @@ public final class CurveTimeSeriesLoaderTool
             final IborCurveTypeConfiguration iborCurveTypeConfiguration = (IborCurveTypeConfiguration) curveTypeConfiguration;
             final ExternalId convention = iborCurveTypeConfiguration
                 .getConvention();
-            if (!convention.getScheme().equals("CONVENTION")) {
+            if (!convention.getScheme().getName().equals("CONVENTION")) {
               externalIds.add(convention);
             }
           } else if (curveTypeConfiguration instanceof InflationCurveTypeConfiguration) {
@@ -184,8 +182,7 @@ public final class CurveTimeSeriesLoaderTool
   }
 
   /**
-   * Search the security master for indices of the specified type and return the
-   * bloomberg tickers for each.
+   * Search the security master for indices of the specified type and return the bloomberg tickers for each.
    *
    * @param secMaster
    *          the security master
@@ -223,7 +220,7 @@ public final class CurveTimeSeriesLoaderTool
    * @param externalIdSets
    *          a varargs list of sets of external ids
    */
-  @SafeVarargs
+  // @SafeVarargs
   private void loadHistoricalData(final boolean write,
       final String[] dataFields, final String dataProvider,
       final Set<ExternalId>... externalIdSets) {

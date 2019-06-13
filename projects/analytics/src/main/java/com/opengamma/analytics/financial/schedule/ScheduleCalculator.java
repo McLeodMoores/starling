@@ -808,7 +808,7 @@ public final class ScheduleCalculator {
       final Calendar calendar,
       final RollDateAdjuster adjuster) {
     final ZonedDateTime[] unadjustedDateSchedule = getUnadjustedDateSchedule(startDate, endDate, schedulePeriod, stub);
-    final boolean eomApply = RollDateAdjusterFactory.END_OF_MONTH_ROLL_STRING.equals(adjuster)
+    final boolean eomApply = adjuster == null ? false : RollDateAdjusterFactory.END_OF_MONTH_ROLL_STRING.equals(adjuster.getName())
         && getAdjustedDate(startDate, 1, calendar).getMonth() != startDate.getMonth();
     return getAdjustedDateSchedule(unadjustedDateSchedule, convention, calendar, eomApply, adjuster);
   }

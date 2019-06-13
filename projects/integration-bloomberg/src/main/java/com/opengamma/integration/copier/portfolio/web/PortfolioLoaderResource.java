@@ -121,6 +121,9 @@ public class PortfolioLoaderResource {
       return Response.ok("Upload complete").build();
     }
     final Object fileEntity = fileBodyPart.getEntity();
+    if (fileEntity == null) {
+      throw new WebApplicationException(Response.Status.BAD_REQUEST);
+    }
     final String fileName = fileBodyPart.getFormDataContentDisposition().getFileName();
     final InputStream fileStream = new WorkaroundInputStream(((BodyPartEntity) fileEntity).getInputStream());
     final String dataField = getString(formData, "dataField");
@@ -132,9 +135,6 @@ public class PortfolioLoaderResource {
 
     LOGGER.info("Portfolio uploaded. fileName: {}, portfolioName: {}, dataField: {}, dataProvider: {}", fileName, portfolioName, dataField, dataProvider);
 
-    if (fileEntity == null) {
-      throw new WebApplicationException(Response.Status.BAD_REQUEST);
-    }
     final ResolvingPortfolioCopier copier = new ResolvingPortfolioCopier(_historicalTimeSeriesMaster, _historicalTimeSeriesProvider, _referenceDataProvider,
         dataProvider, dataFields);
     final PositionWriter positionWriter = new MasterPositionWriter(portfolioName, _portfolioMaster, _positionMaster, _securityMaster, false, false, true);
@@ -207,7 +207,7 @@ public class PortfolioLoaderResource {
    * {@code read()} method of the file upload stream to throw an exception if it is called twice at the end of the stream which violates the contract of
    * {@link InputStream}. It ought to keep returning {@code -1} indefinitely. This class restores that behaviour. TODO Check if this can be removed when we
    * upgrade Jersey. It is a problem when the CSV file doesn't end with a new line
-   * 
+   *
    * @see <a href="http://java.net/jira/browse/JAX_WS-965">The bug report</a>
    */
   private static class WorkaroundInputStream extends FilterInputStream {

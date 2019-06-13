@@ -156,7 +156,7 @@ public abstract class EquityOptionBlackBasicFunction extends EquityOptionFunctio
     final double discountFactor = getDiscountingCurve(inputs).getDiscountFactor(timeToExpiry);
 
     // From the market value, we can then invert the Black formula
-    final Object optionPriceObject = inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE);
+    final Object optionPriceObject = inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     if (optionPriceObject == null) {
       throw new OpenGammaRuntimeException("Could not get market value of underlying option");
     }

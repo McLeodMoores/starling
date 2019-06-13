@@ -547,7 +547,7 @@ public class DbBatchWriter extends AbstractDbMaster {
 
   protected Long getId(final Map<String, Object> attribs, final String selectSql) {
     final Map<String, Object> attributes = getAttributes(attribs, selectSql);
-    if (attribs != null) {
+    if (attributes != null) {
       return (Long) attributes.get("ID");
     }
     return null;

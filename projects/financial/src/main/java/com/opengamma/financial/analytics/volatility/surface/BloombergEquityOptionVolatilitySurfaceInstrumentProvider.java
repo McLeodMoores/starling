@@ -19,7 +19,7 @@ import com.opengamma.id.ExternalScheme;
 // CSOFF
 /**
  * Generates equity option Bloomberg ticker codes from ATM strike (set via init()), tenor, double and date).
- * 
+ *
  * @deprecated This has been replaced by BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider
  */
 @Deprecated
@@ -72,6 +72,7 @@ public class BloombergEquityOptionVolatilitySurfaceInstrumentProvider implements
   private ExternalId createEquityOptionVolatilityCode(final LocalDate expiry, final Double strike) {
     if (_generatePuts == null) {
       LOGGER.error("Cannot create option volatility code until atm strike is set (use init method)");
+      return null;
     }
     final StringBuffer ticker = new StringBuffer();
     ticker.append(_underlyingPrefix);

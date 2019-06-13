@@ -34,7 +34,7 @@ public class BrentSingleRootFinder extends RealSingleRootFinder {
   @Override
   public Double getRoot(final Function1D<Double, Double> function, final Double xLower, final Double xUpper) {
     checkInputs(function, xLower, xUpper);
-    if (xLower == xUpper) {
+    if (Double.compare(xLower, xUpper) == 0) {
       return xLower;
     }
     double x1 = xLower;

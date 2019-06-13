@@ -145,17 +145,17 @@ public class CommodityProviderDiscount implements CommodityProviderInterface {
   }
 
   /**
-   * Gets the price index curve associated to a given price index in the market.
+   * Gets the commodity curve associated with a given underlying in the market.
    * 
-   * @param index
-   *          The Price index.
+   * @param underlying
+   *          The underlying commodity
    * @return The curve.
    */
-  public CommodityForwardCurve getCurve(final IndexPrice index) {
-    if (_commodityForwardCurves.containsKey(index)) {
-      return _commodityForwardCurves.get(index);
+  public CommodityForwardCurve getCurve(final CommodityUnderlying underlying) {
+    if (_commodityForwardCurves.containsKey(underlying)) {
+      return _commodityForwardCurves.get(underlying);
     }
-    throw new IllegalArgumentException("Price index curve not found: " + index);
+    throw new IllegalArgumentException("Commodity underlying curve not found: " + underlying);
   }
 
   @Override

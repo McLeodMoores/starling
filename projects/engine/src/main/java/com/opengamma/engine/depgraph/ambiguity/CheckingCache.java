@@ -50,6 +50,9 @@ import com.opengamma.engine.value.ValueRequirement;
       if (o == this) {
         return false;
       }
+      if (!(o instanceof VisitedKey)) {
+        return false;
+      }
       final VisitedKey other = (VisitedKey) o;
       if (other._key != _key) {
         return false;

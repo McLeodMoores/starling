@@ -52,7 +52,7 @@ public class FxOptionTradeSecurityExtractor extends TradeSecurityExtractor<FxOpt
             calculator.getSettlementDate(),
             calculator.isLong(),
             exerciseType,
-            trade.getSettlementCurrency().equals(calculator.getCallCurrency().getCode()));
+            trade.getSettlementCurrency().equals(calculator.getCallCurrency()));
     return securityArray(addIdentifier(security));
   }
 

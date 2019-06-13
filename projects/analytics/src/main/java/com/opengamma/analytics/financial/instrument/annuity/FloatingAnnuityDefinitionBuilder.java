@@ -485,10 +485,9 @@ public class FloatingAnnuityDefinitionBuilder extends AbstractAnnuityDefinitionB
     final CouponDefinition coupon;
     if (isCompounding()) {
       // This is common to compounding coupons
-
-      final ZonedDateTime[] compoundingAccrualEndDates = ScheduleCalculator.getAdjustedDateSchedule(unadjustedAccrualStartDate, // Pass in the unadjusted date -
-                                                                                                                                // it will come out adjusted
-          unadjustedAccrualEndDate, // Pass in the adjusted date - it will come out adjusted
+    	// Pass in the unadjusted dates - they will come out adjusted
+      final ZonedDateTime[] compoundingAccrualEndDates = ScheduleCalculator.getAdjustedDateSchedule(unadjustedAccrualStartDate, 
+          unadjustedAccrualEndDate, 
           ((IborIndex) _index).getTenor(), StubType.SHORT_START, getAccrualPeriodAdjustmentParameters().getBusinessDayConvention(),
           getAccrualPeriodAdjustmentParameters().getCalendar(), getRollDateAdjuster() instanceof GeneralRollDateAdjuster ? null : getRollDateAdjuster());
       // using DoM adjuster is messing up maturity date

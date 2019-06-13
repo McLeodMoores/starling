@@ -55,7 +55,8 @@ import net.sf.ehcache.CacheManager;
 /**
  * Times the building of dependency graphs for all views in the system; that is if they can be built.
  * <p>
- * Although timings can be reported, the repeated attempts to build the graph are more useful to detect faults with the graph building algorithm - for example inconsistent behaviors.
+ * Although timings can be reported, the repeated attempts to build the graph are more useful to detect faults with the graph building algorithm - for example
+ * inconsistent behaviors.
  */
 @Test
 public class ExampleGraphBuildingSpeedTest {
@@ -94,12 +95,12 @@ public class ExampleGraphBuildingSpeedTest {
 
   protected void configureDependencyGraphBuilder(final DependencyGraphBuilderFactory dependencyGraphBuilder) {
     dependencyGraphBuilder.setEnableFailureReporting(false);
-    //dependencyGraphBuilder.setRunQueueFactory(RunQueueFactory.getOrdered());
-    //dependencyGraphBuilder.setRunQueueFactory(RunQueueFactory.getConcurrentLinkedQueue());
-    //dependencyGraphBuilder.setRunQueueFactory(RunQueueFactory.getConcurrentStack());
-    //dependencyGraphBuilder.setTargetDigests(new NoTargetDigests());
-    //dependencyGraphBuilder.setTargetDigests(new SecurityTypeTargetDigests());
-    //dependencyGraphBuilder.setTargetDigests(new FinancialSecurityTargetDigests());
+    // dependencyGraphBuilder.setRunQueueFactory(RunQueueFactory.getOrdered());
+    // dependencyGraphBuilder.setRunQueueFactory(RunQueueFactory.getConcurrentLinkedQueue());
+    // dependencyGraphBuilder.setRunQueueFactory(RunQueueFactory.getConcurrentStack());
+    // dependencyGraphBuilder.setTargetDigests(new NoTargetDigests());
+    // dependencyGraphBuilder.setTargetDigests(new SecurityTypeTargetDigests());
+    // dependencyGraphBuilder.setTargetDigests(new FinancialSecurityTargetDigests());
   }
 
   private ViewCompilationServices createViewCompilationServices() {
@@ -147,13 +148,16 @@ public class ExampleGraphBuildingSpeedTest {
               assertEquals(terminalOutputs.get(graph.getCalculationConfigurationName()).size(), 0);
             }
           } else {
-            LOGGER.debug("{} graph = {} output specifications from {} nodes", new Object[] {graph.getCalculationConfigurationName(), graph.getTerminalOutputs().size(), graph.getSize() });
+            LOGGER.debug("{} graph = {} output specifications from {} nodes",
+                new Object[] { graph.getCalculationConfigurationName(), graph.getTerminalOutputs().size(), graph.getSize() });
             nodeCounts.put(graph.getCalculationConfigurationName(), graph.getTerminalOutputs().size() + ", " + graph.getSize());
             if (terminalOutputs.get(graph.getCalculationConfigurationName()) == null) {
               terminalOutputs.put(graph.getCalculationConfigurationName(), graph.getTerminalOutputs().keySet());
             } else {
-              final Set<ValueSpecification> missing = Sets.difference(terminalOutputs.get(graph.getCalculationConfigurationName()), graph.getTerminalOutputs().keySet());
-              final Set<ValueSpecification> extra = Sets.difference(graph.getTerminalOutputs().keySet(), terminalOutputs.get(graph.getCalculationConfigurationName()));
+              final Set<ValueSpecification> missing = Sets.difference(terminalOutputs.get(graph.getCalculationConfigurationName()),
+                  graph.getTerminalOutputs().keySet());
+              final Set<ValueSpecification> extra = Sets.difference(graph.getTerminalOutputs().keySet(),
+                  terminalOutputs.get(graph.getCalculationConfigurationName()));
               if (!missing.isEmpty()) {
                 if (missing.size() < 8) {
                   LOGGER.info("Missing = {}", missing);
@@ -179,7 +183,7 @@ public class ExampleGraphBuildingSpeedTest {
                 final Iterator<ValueSpecification> itr = extraCopy.iterator();
                 while (itr.hasNext()) {
                   final ValueSpecification vs2 = itr.next();
-                  if (vs1.getValueName() == vs2.getValueName()) {
+                  if (vs1.getValueName().equals(vs2.getValueName())) {
                     if (vs1.getTargetSpecification().equals(vs2.getTargetSpecification())) {
                       LOGGER.info("Paired {} with {}", vs1, vs2);
                       itr.remove();
@@ -198,7 +202,8 @@ public class ExampleGraphBuildingSpeedTest {
         final List<String> configs = new ArrayList<>(nodeCounts.keySet());
         Collections.sort(configs);
         final StringBuilder sb = new StringBuilder();
-        sb.append("Compilation ").append(j).append("/").append(i).append(" of ").append(view.getName()).append(" in ").append((tStop - tStart) / 1e6).append("ms");
+        sb.append("Compilation ").append(j).append("/").append(i).append(" of ").append(view.getName()).append(" in ").append((tStop - tStart) / 1e6)
+            .append("ms");
         for (final String config : configs) {
           sb.append(' ').append(config).append('=').append(nodeCounts.get(config));
         }

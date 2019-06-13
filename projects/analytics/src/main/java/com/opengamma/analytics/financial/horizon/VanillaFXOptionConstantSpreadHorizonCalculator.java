@@ -30,7 +30,7 @@ public class VanillaFXOptionConstantSpreadHorizonCalculator
   public MultipleCurrencyAmount getTheta(final ForexOptionVanillaDefinition definition, final ZonedDateTime date, final String[] yieldCurveNames,
       final SmileDeltaTermStructureDataBundle data,
       final int daysForward, final Calendar calendar) {
-    return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar);
+    return getTheta(definition, date, yieldCurveNames, data, daysForward, calendar, null);
   }
 
   @Override
